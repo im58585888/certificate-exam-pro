@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { requireAdmin } from "@/lib/auth";
 import { one, query } from "@/lib/db";
+import { paymentsMode } from "@/lib/billing";
 import { FREE_TRIAL_QUESTIONS } from "@/lib/exams";
 
 function Stat({ label, value, note }: { label: string; value: string; note?: string }) {
@@ -36,7 +37,9 @@ export default async function AdminOverview() {
       (select coalesce(sum(amount_cents), 0)::int from entitlements where source = 'stripe' and created_at > now() - interval '30 days') as revenue_30d,
       (select count(*)::int from attempts where created_at > now() - interval '7 days') as answers_7d,
       (select count(distinct coalesce(user_id::text, anon_id))::int from attempts where created_at > now() - interval '7 days') as learners_7d,
-      (select count(*)::int from question_reports where status = 'open') as open_reports
+      (select count(*)::int from question_reports where status = 'open') as open_reports,
+      (select count(*)::int from waitlist) as waitlist,
+      (select count(*)::int from waitlist where created_at > now() - interval '7 days') as waitlist_7d
   `))!;
 
   const days = await query<{ day: string; signups: number; purchases: number; revenue: number; answers: number }>(`
@@ -48,8 +51,25 @@ export default async function AdminOverview() {
       (select count(*)::int from attempts a where a.created_at::date = d.day) as answers
     from d order by d.day desc`);
 
+  const waitlist = await query<{ email: string; created_at: Date; source: string | null }>(
+    `select email, created_at, source from waitlist order by created_at desc limit 50`);
+
   return (
     <div className="space-y-6">
+      {paymentsMode !== "stripe" && (
+        <section className="card p-5">
+          <div className="flex flex-wrap items-baseline justify-between gap-2">
+            <h2 className="font-extrabold">Pass waitlist: {m.waitlist} {m.waitlist === 1 ? "person" : "people"} <span className="text-sm font-semibold text-muted">({m.waitlist_7d} this week)</span></h2>
+            <span className="pill bg-warn-soft text-warn">Payments off: {paymentsMode === "waitlist" ? "pricing shows the waitlist" : "local simulated checkout"}</span>
+          </div>
+          <p className="mt-1 text-sm text-soft">Connect Stripe (STRIPE_SECRET_KEY) to start selling passes. These people asked to be notified.</p>
+          {waitlist.length > 0 && (
+            <ul className="mt-3 grid gap-1 text-sm sm:grid-cols-2">
+              {waitlist.map((w) => <li key={w.email} className="flex justify-between gap-2 border-t border-line py-1"><span>{w.email}</span><span className="text-muted">{new Date(w.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric" })}</span></li>)}
+            </ul>
+          )}
+        </section>
+      )}
       <section className="grid grid-cols-2 gap-4 md:grid-cols-4">
         <Stat label="Revenue (30 days)" value={money(m.revenue_30d)} note={`${money(m.revenue)} all time`} />
         <Stat label="Paying customers" value={m.payers.toLocaleString()} note={`${m.payers_30d} in the last 30 days`} />

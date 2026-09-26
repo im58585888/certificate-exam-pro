@@ -5,6 +5,14 @@ import { PASS_DAYS } from "./exams";
 
 export const stripe = process.env.STRIPE_SECRET_KEY ? new Stripe(process.env.STRIPE_SECRET_KEY) : null;
 
+/**
+ * stripe: real checkout. waitlist: passes not on sale yet, so collect interest (default in production without Stripe).
+ * simulated: local development checkout at /checkout/dev.
+ */
+export const paymentsMode: "stripe" | "waitlist" | "simulated" = stripe
+  ? "stripe"
+  : process.env.NODE_ENV === "production" || process.env.PAYMENTS_MODE === "waitlist" ? "waitlist" : "simulated";
+
 export interface Access {
   active: boolean;
   endsAt: Date | null;

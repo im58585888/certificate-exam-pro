@@ -2,7 +2,8 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { checkoutAction, startQuizAction } from "../actions";
 import { getUser } from "@/lib/auth";
-import { getAccess } from "@/lib/billing";
+import { getAccess, paymentsMode } from "@/lib/billing";
+import { WaitlistForm } from "@/components/WaitlistForm";
 import { FREE_TRIAL_QUESTIONS, PASS_DAYS, PASS_PRICE_CENTS } from "@/lib/exams";
 
 export const metadata: Metadata = { title: "Pricing" };
@@ -55,7 +56,12 @@ export default async function PricingPage({ searchParams }: PageProps<"/pricing"
           <p className="text-sm text-muted">One-time payment · doesn&apos;t auto-renew</p>
           <ul className="mt-6 space-y-2 text-soft">{PAID.map((f) => <li key={f}>✓ {f}</li>)}</ul>
           <div className="mt-7">
-            {access.active ? (
+            {paymentsMode === "waitlist" ? (
+              <div className="space-y-3">
+                <p className="rounded-xl bg-brand-soft px-4 py-3 text-sm font-semibold text-brand">Passes are launching soon. The free trial is open now.</p>
+                <WaitlistForm signedInEmail={user?.email} />
+              </div>
+            ) : access.active ? (
               <div className="space-y-2">
                 <p className="rounded-xl bg-ok-soft px-4 py-3 text-sm font-semibold text-ok">Active until {access.endsAt!.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}</p>
                 <form action={checkoutAction}><button className="btn-ghost w-full">Add {PASS_DAYS} more days</button></form>
@@ -65,7 +71,7 @@ export default async function PricingPage({ searchParams }: PageProps<"/pricing"
             ) : (
               <Link href="/register?next=/pricing" className="btn-primary w-full !py-3">Create account to unlock</Link>
             )}
-            <p className="mt-2 text-center text-xs text-muted">Secure checkout by Stripe. Extra time stacks on any days you have left.</p>
+            {paymentsMode !== "waitlist" && <p className="mt-2 text-center text-xs text-muted">Secure checkout by Stripe. Extra time stacks on any days you have left.</p>}
           </div>
         </div>
       </div>

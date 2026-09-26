@@ -37,7 +37,7 @@ if (!env.DATABASE_URL) {
   try {
     await client.connect();
     const { rows } = await client.query("select current_setting('server_version') as v");
-    const tables = ["users", "sessions", "quiz_sessions", "attempts", "entitlements", "password_resets", "auth_throttle", "question_reports", "question_overrides"];
+    const tables = ["users", "sessions", "quiz_sessions", "attempts", "entitlements", "password_resets", "auth_throttle", "question_reports", "question_overrides", "waitlist"];
     const t = await client.query("select tablename, rowsecurity from pg_tables where schemaname = 'public' and tablename = any($1)", [tables]);
     if (t.rows.length === 0) skip("Database tables", "not created yet: they appear after the first page load with this DATABASE_URL");
     else if (t.rows.some((r) => !r.rowsecurity)) bad("Database security", `row-level security is off for: ${t.rows.filter((r) => !r.rowsecurity).map((r) => r.tablename).join(", ")} (restart the app to apply migrations)`);
@@ -52,7 +52,7 @@ if (!env.DATABASE_URL) {
 
 // Stripe
 if (!env.STRIPE_SECRET_KEY) {
-  skip("Stripe", "STRIPE_SECRET_KEY not set: checkout is simulated locally");
+  skip("Stripe", "STRIPE_SECRET_KEY not set: the live site shows a pass waitlist instead of checkout (local dev simulates checkout)");
 } else {
   const mode = env.STRIPE_SECRET_KEY.startsWith("sk_live_") ? "LIVE" : env.STRIPE_SECRET_KEY.startsWith("sk_test_") ? "test" : null;
   if (!mode) bad("Stripe key", "should start with sk_test_ or sk_live_ (use the Secret key, not the Publishable key)");

@@ -1,11 +1,11 @@
 import { notFound, redirect } from "next/navigation";
 import { devGrantAction } from "../../actions";
 import { getUser } from "@/lib/auth";
-import { stripe } from "@/lib/billing";
+import { paymentsMode } from "@/lib/billing";
 
 // Stand-in for Stripe Checkout while developing without Stripe keys. Never available in production.
 export default async function DevCheckout() {
-  if (process.env.NODE_ENV === "production" || stripe) notFound();
+  if (paymentsMode !== "simulated") notFound();
   if (!(await getUser())) redirect("/login?next=/pricing");
   return (
     <div className="mx-auto max-w-md px-4 py-20 text-center">

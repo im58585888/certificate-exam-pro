@@ -6,7 +6,7 @@ import { one, query } from "@/lib/db";
 import { ensureAnonId, getUser, hashPassword, ownerClause, sha256, signIn, signOut, signOutEverywhere, verifyPassword, type Owner } from "@/lib/auth";
 import { mailConfigured, sendMail } from "@/lib/mailer";
 import { allowAttempt, appOrigin, clientIpHash, recordAttempt } from "@/lib/request";
-import { getAccess, grantPass, stripe } from "@/lib/billing";
+import { getAccess, grantPass, paymentsMode, stripe } from "@/lib/billing";
 import { answeredCount, attemptsFor, selectQuestions, type Mode } from "@/lib/engine";
 import { FREE_TRIAL_QUESTIONS, getExam, TRIAL_NETWORK_CAP, PASS_DAYS, PASS_PRICE_CENTS, type DomainId } from "@/lib/exams";
 import { ensureBank, feedbackFor, getQuestion, grade, type Feedback } from "@/lib/questions";
@@ -240,6 +240,7 @@ export async function finishQuizAction(sessionId: string) {
 export async function checkoutAction() {
   const user = await getUser();
   if (!user) redirect(`/register?next=${encodeURIComponent("/pricing")}`);
+  if (paymentsMode === "waitlist") redirect("/pricing");
   if (!stripe) {
     if (process.env.NODE_ENV === "production") throw new Error("Payments are not configured.");
     redirect("/checkout/dev");
@@ -266,7 +267,7 @@ export async function checkoutAction() {
 
 /** Local development stand-in for Stripe Checkout. Disabled in production. */
 export async function devGrantAction() {
-  if (process.env.NODE_ENV === "production" || stripe) throw new Error("Not available.");
+  if (paymentsMode !== "simulated") throw new Error("Not available.");
   const user = await getUser();
   if (!user) redirect("/login");
   await grantPass(user.id, `dev_${Date.now()}`, PASS_PRICE_CENTS, "dev");
@@ -290,4 +291,26 @@ export async function reportQuestionAction(questionId: string, reason: string, m
     [questionId, user?.id ?? null, anon, reason, message.trim().slice(0, 2000) || null],
   );
   return { ok: true };
+}
+
+// ---------- Waitlist (while paid passes aren't on sale) ----------
+
+export interface WaitlistState {
+  joined?: boolean;
+  error?: string;
+}
+
+export async function joinWaitlistAction(_: WaitlistState, form: FormData): Promise<WaitlistState> {
+  const user = await getUser();
+  const email = (user?.email ?? String(form.get("email") ?? "")).trim().toLowerCase();
+  if (!EMAIL_RE.test(email)) return { error: "Enter a valid email address." };
+  const ipKey = `waitlist:${await clientIpHash()}`;
+  if (!(await allowAttempt(ipKey, 10, 3600))) return { error: "Too many requests. Please try again later." };
+  await recordAttempt(ipKey);
+  await query(
+    `insert into waitlist (email, user_id, source) values ($1, $2, $3)
+     on conflict (email) do update set user_id = coalesce(waitlist.user_id, excluded.user_id)`,
+    [email, user?.id ?? null, String(form.get("source") ?? "pricing").slice(0, 40)],
+  );
+  return { joined: true };
 }

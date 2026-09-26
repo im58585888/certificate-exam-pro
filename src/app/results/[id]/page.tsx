@@ -3,7 +3,7 @@ import { notFound, redirect } from "next/navigation";
 import type { Metadata } from "next";
 import { ReportQuestion } from "@/components/ReportQuestion";
 import { DOMAIN_LABEL, ExplanationPanel, OptionList, QuestionMeta, QuestionText } from "@/components/QuestionParts";
-import { getAccess } from "@/lib/billing";
+import { getAccess, paymentsMode } from "@/lib/billing";
 import { getExam, PASS_DAYS, PASS_PRICE_CENTS } from "@/lib/exams";
 import { ensureBank, feedbackFor, getQuestion, toPublic } from "@/lib/questions";
 import { loadOwnedSession, sessionAttempts } from "@/lib/quiz";
@@ -85,8 +85,8 @@ export default async function ResultsPage({ params }: PageProps<"/results/[id]">
             <li>✓ Timed 65-question mock exams and readiness analytics</li>
           </ul>
           <div className="mt-5 flex flex-wrap items-center gap-3">
-            <Link className="btn !bg-white !px-6 !py-3 !text-[#4338CA]" href={owner.userId ? "/pricing" : "/register?next=/pricing"}>
-              Get {PASS_DAYS} days for ${(PASS_PRICE_CENTS / 100).toFixed(2)}
+            <Link className="btn !bg-white !px-6 !py-3 !text-[#4338CA]" href={owner.userId || paymentsMode === "waitlist" ? "/pricing" : "/register?next=/pricing"}>
+              {paymentsMode === "waitlist" ? "Get notified when passes launch" : `Get ${PASS_DAYS} days for $${(PASS_PRICE_CENTS / 100).toFixed(2)}`}
             </Link>
             {!owner.userId && <Link className="font-bold text-white underline underline-offset-4" href="/register?next=/dashboard">Or create a free account to save these results</Link>}
           </div>

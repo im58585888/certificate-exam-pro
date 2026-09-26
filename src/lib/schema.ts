@@ -112,4 +112,13 @@ alter table password_resets enable row level security;
 alter table auth_throttle enable row level security;
 alter table question_reports enable row level security;
 alter table question_overrides enable row level security;
+
+-- v3: waitlist for when paid passes aren't switched on yet
+create table if not exists waitlist (
+  email text primary key,
+  user_id uuid references users(id) on delete set null,
+  source text,
+  created_at timestamptz not null default now()
+);
+alter table waitlist enable row level security;
 `;

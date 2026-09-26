@@ -1,5 +1,6 @@
 import { notFound, redirect } from "next/navigation";
 import type { Metadata } from "next";
+import { paymentsMode } from "@/lib/billing";
 import { QuizPlayer, type QuizPlayerProps } from "@/components/QuizPlayer";
 import { query } from "@/lib/db";
 import { ensureBank, feedbackFor, getQuestion, toPublic } from "@/lib/questions";
@@ -34,6 +35,7 @@ export default async function QuizPage({ params }: PageProps<"/quiz/[id]">) {
       initial={initial}
       deadline={session.time_limit_sec ? new Date(session.created_at).getTime() + session.time_limit_sec * 1000 : null}
       signedIn={!!owner.userId}
+      waitlist={paymentsMode === "waitlist"}
     />
   );
 }
