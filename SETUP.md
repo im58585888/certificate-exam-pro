@@ -11,7 +11,7 @@ Never paste keys into chat, email or the code itself. `.env.local` is excluded f
 ## 1. Supabase (database)
 
 1. In Supabase, create a **new project** (e.g. `certificate-exam-pro`). Pick the Region closest to your users (US East if unsure) and save the **database password** somewhere safe.
-2. Open the project → click **Connect** (top bar) → **Transaction pooler**. Copy the URI. It looks like
+2. Open the project → click **Connect** (top bar) → choose the **Direct** tab ("Connection string") → set the connection type to **Transaction pooler**. Copy the URI. (Ignore the "Framework" tab: this site doesn't use `@supabase/supabase-js` or the `NEXT_PUBLIC_SUPABASE_*` keys.) It looks like
    `postgresql://postgres.<project-ref>:[YOUR-PASSWORD]@aws-0-<region>.pooler.supabase.com:6543/postgres`
 3. Replace `[YOUR-PASSWORD]` with your database password and paste it as `DATABASE_URL=`.
    - If the password has special characters (`@ : / ? #`), reset it to letters and digits only (Project Settings → Database → Reset database password).
