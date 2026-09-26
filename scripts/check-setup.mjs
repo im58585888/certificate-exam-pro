@@ -1,9 +1,12 @@
 // Checks every external integration using the values in .env.local (or the real environment).
 // Run: npm run check:setup   — secrets are never printed.
+import nextEnv from "@next/env";
 import pg from "pg";
 import Stripe from "stripe";
 import nodemailer from "nodemailer";
 
+// Load .env files exactly as Next.js does (including $ expansion), so this check matches the running app.
+nextEnv.loadEnvConfig(process.cwd(), process.env.NODE_ENV !== "production", { info() {}, error: console.error });
 const env = process.env;
 const results = [];
 const ok = (name, detail) => results.push(["✓", name, detail]);

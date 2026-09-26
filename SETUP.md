@@ -14,7 +14,7 @@ Never paste keys into chat, email or the code itself. `.env.local` is excluded f
 2. Open the project → click **Connect** (top bar) → choose the **Direct** tab ("Connection string") → set the connection type to **Transaction pooler**. Copy the URI. (Ignore the "Framework" tab: this site doesn't use `@supabase/supabase-js` or the `NEXT_PUBLIC_SUPABASE_*` keys.) It looks like
    `postgresql://postgres.<project-ref>:[YOUR-PASSWORD]@aws-0-<region>.pooler.supabase.com:6543/postgres`
 3. Replace `[YOUR-PASSWORD]` with your database password and paste it as `DATABASE_URL=`.
-   - If the password has special characters (`@ : / ? #`), reset it to letters and digits only (Project Settings → Database → Reset database password).
+   - If the password contains `$`, write each one as `\$` in `.env.local` (Next.js otherwise treats `$` as a variable). Other special characters (`@ : / ? #`) break the URL. If you have those, reset the password to letters and digits (Project Settings → Database → Reset database password).
 4. Optional, recommended: Project Settings → Database → **SSL Configuration** → Download certificate. Paste its contents into `DATABASE_CA_CERT` (keep the quotes; replace line breaks with `\n`).
 5. Restart the dev server. Tables are created automatically on the first request.
 
