@@ -61,6 +61,8 @@ export default async function PricingPage({ searchParams }: PageProps<"/pricing"
                 <p className="rounded-xl bg-brand-soft px-4 py-3 text-sm font-semibold text-brand">Passes are launching soon. The free trial is open now.</p>
                 <WaitlistForm signedInEmail={user?.email} />
               </div>
+            ) : access.admin ? (
+              <p className="rounded-xl bg-ok-soft px-4 py-3 text-sm font-semibold text-ok">You&apos;re an admin, so everything is already unlocked.</p>
             ) : access.active ? (
               <div className="space-y-2">
                 <p className="rounded-xl bg-ok-soft px-4 py-3 text-sm font-semibold text-ok">Active until {access.endsAt!.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}</p>

@@ -113,7 +113,11 @@ const adminEmails = () =>
 
 /** Admin needs a proven email (Google sign-in or a reset link), so registering someone else's address with a password isn't enough. */
 export function isAdmin(user: User | null): boolean {
-  return !!user && user.emailVerified && adminEmails().includes(user.email.toLowerCase());
+  return !!user && isAdminEmail(user.email, user.emailVerified);
+}
+
+export function isAdminEmail(email: string, emailVerified: boolean): boolean {
+  return emailVerified && adminEmails().includes(email.toLowerCase());
 }
 
 /** For admin pages and actions: returns the admin user or throws a 404 so the area's existence isn't revealed. */

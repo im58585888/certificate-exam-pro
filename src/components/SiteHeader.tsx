@@ -14,7 +14,7 @@ export async function SiteHeader() {
         <nav className="flex flex-wrap items-center gap-1 text-sm font-semibold text-soft">
           <Link className="rounded-lg px-3 py-2 hover:text-ink" href="/practice/saa-c03">Practice</Link>
           {user && <Link className="rounded-lg px-3 py-2 hover:text-ink" href="/dashboard">Dashboard</Link>}
-          {!access.active && <Link className="rounded-lg px-3 py-2 hover:text-ink" href="/pricing">Pricing</Link>}
+          {(!access.active || access.admin) && <Link className="rounded-lg px-3 py-2 hover:text-ink" href="/pricing">Pricing</Link>}
           {user ? (
             <>
               {isAdmin(user) && <Link className="rounded-lg px-3 py-2 font-bold text-brand hover:text-ink" href="/admin">Admin</Link>}

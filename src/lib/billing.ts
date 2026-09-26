@@ -1,5 +1,6 @@
 import "server-only";
 import Stripe from "stripe";
+import { isAdminEmail } from "./auth";
 import { one, query } from "./db";
 import { PASS_DAYS } from "./exams";
 
@@ -15,17 +16,23 @@ export const paymentsMode: "stripe" | "waitlist" | "simulated" = stripe
 
 export interface Access {
   active: boolean;
+  /** End of the latest paid or comp pass (null if none). Admins are active without one. */
   endsAt: Date | null;
+  admin: boolean;
 }
 
 export async function getAccess(userId: string | undefined): Promise<Access> {
-  if (!userId) return { active: false, endsAt: null };
-  const row = await one<{ ends_at: Date }>(
-    `select max(ends_at) as ends_at from entitlements where user_id = $1 and starts_at <= now()`,
+  if (!userId) return { active: false, endsAt: null, admin: false };
+  const row = await one<{ ends_at: Date | null; email: string; email_verified: boolean }>(
+    `select u.email, u.email_verified,
+       (select max(ends_at) from entitlements where user_id = u.id and starts_at <= now()) as ends_at
+     from users u where u.id = $1`,
     [userId],
   );
   const endsAt = row?.ends_at ? new Date(row.ends_at) : null;
-  return { active: !!endsAt && endsAt > new Date(), endsAt };
+  // Admins get everything unlocked so they can test every mode without buying a pass.
+  const admin = !!row && isAdminEmail(row.email, row.email_verified);
+  return { active: admin || (!!endsAt && endsAt > new Date()), endsAt, admin };
 }
 
 /**

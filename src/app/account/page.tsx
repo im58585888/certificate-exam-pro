@@ -25,7 +25,9 @@ export default async function AccountPage() {
       </div>
       <div className="card mt-4 p-6">
         <p className="eyebrow">Access</p>
-        {access.active ? (
+        {access.admin ? (
+          <p className="mt-1 text-lg font-bold text-ok">Admin: every exam and mode is unlocked</p>
+        ) : access.active ? (
           <p className="mt-1 text-lg font-bold text-ok">All-access pass active until {fmt(access.endsAt!)}</p>
         ) : (
           <p className="mt-1 text-lg font-bold">Free plan {access.endsAt && <span className="font-normal text-muted">(last pass ended {fmt(access.endsAt)})</span>}</p>
