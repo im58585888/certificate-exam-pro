@@ -15,6 +15,7 @@ export interface User {
   id: string;
   email: string;
   name: string | null;
+  emailVerified: boolean;
 }
 
 export async function hashPassword(pw: string): Promise<string> {
@@ -67,7 +68,7 @@ export const getUser = cache(async (): Promise<User | null> => {
   const token = (await cookies()).get(SESSION_COOKIE)?.value;
   if (!token) return null;
   const row = await one<User>(
-    `select u.id, u.email, u.name from sessions s join users u on u.id = s.user_id where s.token_hash = $1 and s.expires_at > now()`,
+    `select u.id, u.email, u.name, u.email_verified as "emailVerified" from sessions s join users u on u.id = s.user_id where s.token_hash = $1 and s.expires_at > now()`,
     [sha256(token)],
   );
   return row ?? null;
@@ -110,8 +111,9 @@ export async function signOutEverywhere(userId: string): Promise<void> {
 const adminEmails = () =>
   (process.env.ADMIN_EMAILS ?? "").split(",").map((e) => e.trim().toLowerCase()).filter(Boolean);
 
+/** Admin needs a proven email (Google sign-in or a reset link), so registering someone else's address with a password isn't enough. */
 export function isAdmin(user: User | null): boolean {
-  return !!user && adminEmails().includes(user.email.toLowerCase());
+  return !!user && user.emailVerified && adminEmails().includes(user.email.toLowerCase());
 }
 
 /** For admin pages and actions: returns the admin user or throws a 404 so the area's existence isn't revealed. */

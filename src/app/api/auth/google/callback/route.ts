@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { signIn } from "@/lib/auth";
+import { signIn, signOutEverywhere } from "@/lib/auth";
 import { one, query } from "@/lib/db";
 import { exchangeCode, GOOGLE_STATE_COOKIE, googleConfigured } from "@/lib/google";
 import { appOrigin } from "@/lib/request";
@@ -29,15 +29,21 @@ export async function GET(req: Request) {
   let user = await one<{ id: string }>(`select id from users where google_sub = $1`, [profile.sub]);
   if (!user) {
     // Link to an existing account with the same (Google-verified) email, or create a new one.
-    user = await one<{ id: string }>(
-      `update users set google_sub = $1, email_verified = true, name = coalesce(name, $3) where email = $2 returning id`,
-      [profile.sub, profile.email, profile.name],
+    // If that account's email was never proven, someone else may have registered it first: drop its password and sessions.
+    const linked = await one<{ id: string; was_verified: boolean }>(
+      `update users u set google_sub = $1, email_verified = true, name = coalesce(u.name, $3),
+         password_hash = case when old.email_verified then u.password_hash end
+       from users old where old.id = u.id and u.email = $2
+       returning u.id, old.email_verified as was_verified`,
+      [profile.sub, profile.email.toLowerCase(), profile.name],
     );
+    if (linked && !linked.was_verified) await signOutEverywhere(linked.id);
+    user = linked;
   }
   if (!user) {
     user = await one<{ id: string }>(
       `insert into users (email, name, google_sub, email_verified) values ($1, $2, $3, true) returning id`,
-      [profile.email, profile.name, profile.sub],
+      [profile.email.toLowerCase(), profile.name, profile.sub],
     );
   }
   await query(`update users set email_verified = true where id = $1`, [user!.id]);

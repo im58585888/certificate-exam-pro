@@ -110,7 +110,7 @@ export async function resetPasswordAction(_: FormState, form: FormData): Promise
     [sha256(token)],
   );
   if (!reset) return { error: "This reset link is invalid, expired or already used." };
-  await query(`update users set password_hash = $2 where id = $1`, [reset.user_id, await hashPassword(password)]);
+  await query(`update users set password_hash = $2, email_verified = true where id = $1`, [reset.user_id, await hashPassword(password)]);
   await query(`update password_resets set used_at = coalesce(used_at, now()) where user_id = $1`, [reset.user_id]);
   await signOutEverywhere(reset.user_id);
   await signIn(reset.user_id);
