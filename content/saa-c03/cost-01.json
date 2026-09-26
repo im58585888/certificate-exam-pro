@@ -1,0 +1,536 @@
+[
+  {
+    "id": "saa-cost-001",
+    "domain": "cost",
+    "topic": "EC2 Pricing",
+    "tags": [
+      "savings-plans",
+      "compute-savings-plan",
+      "commitment",
+      "flexibility"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A logistics company runs a steady, 24/7 compute footprint that costs roughly $40 per hour. Over the next three years, the company plans to move some workloads from EC2 to AWS Fargate and AWS Lambda, change instance families as new generations launch, and possibly shift some workloads to another Region.",
+    "prompt": "Which purchasing option provides significant savings while preserving this flexibility?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Compute Savings Plans",
+        "correct": true,
+        "why": "Compute Savings Plans apply automatically to EC2 usage regardless of family, size, AZ, Region, OS or tenancy, and also to Fargate and Lambda, in exchange for an hourly spend commitment."
+      },
+      {
+        "key": "B",
+        "text": "Standard Reserved Instances",
+        "correct": false,
+        "why": "Standard RIs are tied to instance attributes such as family and Region (with limited size flexibility) and don't apply to Fargate or Lambda."
+      },
+      {
+        "key": "C",
+        "text": "EC2 Instance Savings Plans",
+        "correct": false,
+        "why": "EC2 Instance Savings Plans give the deepest Savings Plan discount but lock the commitment to one instance family in one Region. They don't cover Fargate or Lambda."
+      },
+      {
+        "key": "D",
+        "text": "Spot Instances for all workloads",
+        "correct": false,
+        "why": "Spot can be interrupted with two minutes' notice. It is unsuitable as the sole option for a steady 24/7 footprint that must stay up."
+      }
+    ],
+    "explanation": {
+      "answer": "Savings Plans trade a 1- or 3-year commitment to a consistent $/hour spend for lower prices. Compute Savings Plans are the most flexible: the discount follows your usage across EC2 instance families, sizes, Regions and operating systems, as well as AWS Fargate and AWS Lambda. That fits a company that is modernizing and moving between compute types.",
+      "concept": "Discount ladder, from most flexible to deepest discount: On-Demand (no commitment), Compute Savings Plans (up to about 66% off), Convertible RIs, EC2 Instance Savings Plans and Standard RIs (up to about 72% off), and Spot (up to 90% off, but interruptible). The more you commit to specific attributes, the larger the discount.",
+      "examTip": "Steady usage with 'flexibility across families/Regions' or 'includes Lambda/Fargate' means Compute Savings Plans.",
+      "references": [
+        {
+          "title": "What are Savings Plans?",
+          "url": "https://docs.aws.amazon.com/savingsplans/latest/userguide/what-is-savings-plans.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-cost-002",
+    "domain": "cost",
+    "topic": "EC2 Pricing",
+    "tags": [
+      "spot-instances",
+      "batch",
+      "fault-tolerant",
+      "interruptible"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A pharmaceutical research team runs thousands of independent molecular-simulation jobs each week. Each job takes 20-40 minutes, writes checkpoints to Amazon S3, and can be restarted from its last checkpoint if interrupted. There is no fixed deadline for any single job, and the team wants to minimize compute cost.",
+    "prompt": "Which EC2 purchasing option is MOST cost-effective for this workload?",
+    "options": [
+      {
+        "key": "A",
+        "text": "On-Demand Instances",
+        "correct": false,
+        "why": "On-Demand is flexible but the most expensive per hour. You pay for guaranteed capacity the workload doesn't need."
+      },
+      {
+        "key": "B",
+        "text": "Spot Instances, using a diversified set of instance types",
+        "correct": true,
+        "why": "Spot gives up to 90% off On-Demand for spare capacity. The jobs are fault-tolerant, checkpointed and flexible on timing, which is the ideal Spot profile, and diversifying instance types improves capacity availability."
+      },
+      {
+        "key": "C",
+        "text": "Dedicated Hosts",
+        "correct": false,
+        "why": "Dedicated Hosts are for licensing or compliance needs that require a physical server. They are among the most expensive options."
+      },
+      {
+        "key": "D",
+        "text": "3-year All Upfront Reserved Instances",
+        "correct": false,
+        "why": "RIs suit steady, predictable baseline usage. Committing for three years to a bursty, flexible batch workload risks paying for unused capacity."
+      }
+    ],
+    "explanation": {
+      "answer": "Spot Instances use spare EC2 capacity at steep discounts. AWS can reclaim them with a two-minute interruption notice, so they suit stateless, fault-tolerant, flexible workloads: batch processing, CI/CD, rendering, big data and HPC with checkpointing. Diversify across instance types and AZs, and use the price-capacity-optimized allocation strategy.",
+      "concept": "Match pricing to workload shape: steady baseline suits Savings Plans or RIs, spiky and unpredictable suits On-Demand, and interruptible and flexible suits Spot. Many production fleets mix all three in one Auto Scaling group.",
+      "examTip": "'Can tolerate interruption', 'checkpoints' or 'flexible start/end times' means Spot Instances.",
+      "references": [
+        {
+          "title": "Spot Instances",
+          "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-spot-instances.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-cost-003",
+    "domain": "cost",
+    "topic": "S3 Storage Classes",
+    "tags": [
+      "s3-intelligent-tiering",
+      "unknown-access-pattern",
+      "storage-cost"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A data platform team stores 800 TB of datasets in Amazon S3 Standard. Some datasets are queried daily for weeks and then not touched for months, while others are rarely accessed but unpredictably become hot again. The team cannot predict access patterns and wants to reduce storage costs without adding retrieval fees or operational work.",
+    "prompt": "Which storage class should the team use?",
+    "options": [
+      {
+        "key": "A",
+        "text": "S3 Standard-Infrequent Access",
+        "correct": false,
+        "why": "Standard-IA has a lower storage price but charges per-GB retrieval fees and has a 30-day minimum. Data that becomes hot again could cost more than it saves."
+      },
+      {
+        "key": "B",
+        "text": "S3 Glacier Deep Archive",
+        "correct": false,
+        "why": "Deep Archive is the cheapest storage, but retrievals take up to 12 hours or more, which is unacceptable for data that becomes hot unpredictably."
+      },
+      {
+        "key": "C",
+        "text": "S3 Intelligent-Tiering",
+        "correct": true,
+        "why": "Intelligent-Tiering automatically moves each object between access tiers based on its actual access pattern, with no retrieval fees and no operational effort. It is built for unknown or changing access patterns."
+      },
+      {
+        "key": "D",
+        "text": "S3 One Zone-Infrequent Access",
+        "correct": false,
+        "why": "One Zone-IA stores data in a single AZ with retrieval fees. It is less resilient and still penalizes unpredictable re-access."
+      }
+    ],
+    "explanation": {
+      "answer": "S3 Intelligent-Tiering monitors access per object and automatically moves objects not accessed for 30 days to an Infrequent Access tier, and after 90 days to an Archive Instant Access tier. Objects move back to Frequent Access when read. There are no retrieval fees; you pay a small monthly monitoring and automation charge per object. Objects smaller than 128 KB are not monitored and always stay in the frequent tier.",
+      "concept": "Known access patterns suit lifecycle rules to specific classes. Unknown or changing patterns suit Intelligent-Tiering. You can also opt in to the asynchronous Archive Access and Deep Archive Access tiers for further savings on truly cold data.",
+      "examTip": "'Unknown', 'unpredictable' or 'changing' access patterns in S3 mean Intelligent-Tiering.",
+      "references": [
+        {
+          "title": "How S3 Intelligent-Tiering works",
+          "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/intelligent-tiering-overview.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-cost-004",
+    "domain": "cost",
+    "topic": "S3 Storage Classes",
+    "tags": [
+      "glacier-deep-archive",
+      "compliance",
+      "long-term-retention",
+      "archive"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "An insurance company must retain scanned claim documents for 10 years to satisfy regulators. After the first 90 days the documents are almost never accessed. If an auditor requests a document, the company has two business days to produce it.",
+    "prompt": "Which is the MOST cost-effective storage solution for documents older than 90 days?",
+    "options": [
+      {
+        "key": "A",
+        "text": "S3 Glacier Instant Retrieval",
+        "correct": false,
+        "why": "Instant Retrieval gives millisecond access, a capability the company is paying for but doesn't need given a two-day window. Its storage price is higher than Deep Archive."
+      },
+      {
+        "key": "B",
+        "text": "S3 Standard-Infrequent Access",
+        "correct": false,
+        "why": "Standard-IA gives millisecond access at a much higher storage price than any Glacier class. That is poor value for 10-year archives."
+      },
+      {
+        "key": "C",
+        "text": "S3 Glacier Flexible Retrieval",
+        "correct": false,
+        "why": "Flexible Retrieval (minutes to hours) is cheaper than Instant but still more expensive to store than Deep Archive, and the faster retrieval isn't needed."
+      },
+      {
+        "key": "D",
+        "text": "S3 Glacier Deep Archive",
+        "correct": true,
+        "why": "Deep Archive is S3's lowest-cost storage class. Standard retrievals complete within 12 hours and bulk within 48 hours, well within a two-business-day SLA."
+      }
+    ],
+    "explanation": {
+      "answer": "S3 Glacier Deep Archive is designed for long-term retention (7-10+ years) of rarely accessed data, such as regulatory, financial and media archives, at the lowest storage cost in AWS. Retrieval takes hours (standard within 12 hours, bulk within 48 hours), and it has a 180-day minimum storage duration, which is fine for 10-year retention.",
+      "concept": "Archive classes: Glacier Instant Retrieval (milliseconds, about quarterly access, 90-day minimum), Glacier Flexible Retrieval (expedited 1-5 minutes, standard 3-5 hours, bulk 5-12 hours, 90-day minimum), and Glacier Deep Archive (12-48 hours, 180-day minimum, cheapest). Combine with S3 Object Lock for write-once-read-many (WORM) compliance.",
+      "examTip": "'Retain for years', 'rarely accessed' and 'retrieval within 12-48 hours is acceptable' mean Glacier Deep Archive.",
+      "references": [
+        {
+          "title": "Understanding and managing Amazon S3 storage classes",
+          "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-cost-005",
+    "domain": "cost",
+    "topic": "S3 Lifecycle",
+    "tags": [
+      "lifecycle-policy",
+      "standard-ia",
+      "expiration",
+      "logs"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A SaaS company writes application logs to Amazon S3 Standard. Engineers query logs frequently during the first 30 days for troubleshooting, occasionally between 30 and 365 days for trend analysis (they need them within milliseconds when they do), and the logs can be deleted after one year.",
+    "prompt": "Which solution is the MOST cost-effective?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Create an S3 Lifecycle rule to transition objects to S3 Standard-IA after 30 days and expire them after 365 days.",
+        "correct": true,
+        "why": "This matches the known pattern exactly: Standard for the hot period, Standard-IA (millisecond access, cheaper storage) for occasional access, and automatic deletion at one year."
+      },
+      {
+        "key": "B",
+        "text": "Keep all logs in S3 Standard and have engineers delete old logs manually each month.",
+        "correct": false,
+        "why": "This misses the storage savings of IA and relies on manual effort that is easily forgotten."
+      },
+      {
+        "key": "C",
+        "text": "Create an S3 Lifecycle rule to transition objects to S3 Glacier Deep Archive after 30 days and expire them after 365 days.",
+        "correct": false,
+        "why": "Deep Archive retrievals take hours, which violates the millisecond access requirement for trend analysis."
+      },
+      {
+        "key": "D",
+        "text": "Create an S3 Lifecycle rule to transition objects to S3 One Zone-IA after 7 days.",
+        "correct": false,
+        "why": "Lifecycle transitions to Standard-IA or One Zone-IA require objects to be at least 30 days old. The logs are also still frequently accessed at day 7."
+      }
+    ],
+    "explanation": {
+      "answer": "When access patterns are known and time-based, S3 Lifecycle rules are the cheapest, zero-effort tool. Transition actions move objects to cheaper storage classes as they age, and expiration actions delete them. Standard-IA keeps millisecond access at roughly half the storage price, with a per-GB retrieval fee that is small for occasional access.",
+      "concept": "Lifecycle constraints to remember: an object must be stored at least 30 days before transitioning to Standard-IA or One Zone-IA, and IA classes have a 30-day minimum storage charge and a 128 KB minimum billable object size. For small objects, IA can cost more than Standard.",
+      "examTip": "Predictable, age-based access means lifecycle rules. 'Millisecond access, infrequent' means Standard-IA (or Glacier Instant Retrieval for very rare access).",
+      "references": [
+        {
+          "title": "Managing the lifecycle of objects",
+          "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lifecycle-mgmt.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-cost-006",
+    "domain": "cost",
+    "topic": "Network Costs",
+    "tags": [
+      "nat-gateway",
+      "gateway-endpoint",
+      "dynamodb",
+      "data-processing-charges"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company's cost report shows that NAT gateway data processing charges are its third-largest AWS expense. Investigation reveals that most of the traffic is from application servers in private subnets reading and writing to Amazon DynamoDB tables in the same Region.",
+    "prompt": "What is the MOST cost-effective way to reduce these charges?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Create a DynamoDB interface VPC endpoint in each subnet.",
+        "correct": false,
+        "why": "Interface endpoints for DynamoDB also bypass NAT but carry hourly and per-GB charges. When the traffic originates inside the VPC, the free gateway endpoint is the cheaper option."
+      },
+      {
+        "key": "B",
+        "text": "Create a DynamoDB gateway VPC endpoint and add it to the private subnets' route tables.",
+        "correct": true,
+        "why": "Gateway endpoints for DynamoDB (and S3) are free. Traffic to DynamoDB is routed privately through the endpoint instead of through the NAT gateway, eliminating those per-GB NAT charges."
+      },
+      {
+        "key": "C",
+        "text": "Replace the NAT gateway with NAT instances on smaller EC2 instance types.",
+        "correct": false,
+        "why": "NAT instances avoid the per-GB processing fee but add instance costs, bandwidth limits, patching and HA work. The traffic still takes an unnecessary path."
+      },
+      {
+        "key": "D",
+        "text": "Move the application servers into public subnets with public IP addresses.",
+        "correct": false,
+        "why": "This avoids NAT but exposes the servers to the internet and adds public IPv4 address charges. It trades cost for a worse security posture."
+      }
+    ],
+    "explanation": {
+      "answer": "NAT gateways charge per hour and per GB processed. Traffic from private subnets to S3 or DynamoDB doesn't need to go through NAT at all: a gateway VPC endpoint adds a prefix-list route that sends it directly to the service over the AWS network at no additional charge. This is one of the most common quick cost wins on AWS.",
+      "concept": "Hidden network costs: NAT processing, inter-AZ data transfer, cross-Region transfer, and internet egress. Remedies include gateway endpoints, AZ-local routing, CloudFront for egress, and keeping chatty services in the same AZ where resilience allows.",
+      "examTip": "'NAT gateway costs are high' plus 'traffic to S3/DynamoDB' means a gateway VPC endpoint.",
+      "references": [
+        {
+          "title": "Gateway endpoints for Amazon DynamoDB",
+          "url": "https://docs.aws.amazon.com/vpc/latest/privatelink/vpc-endpoints-ddb.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-cost-007",
+    "domain": "cost",
+    "topic": "Serverless Cost",
+    "tags": [
+      "api-gateway",
+      "lambda",
+      "dynamodb-on-demand",
+      "low-traffic"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A nonprofit is launching a volunteer sign-up API. Traffic is expected to be very low (a few thousand requests per day) with occasional unpredictable spikes around fundraising events. The organization has no operations staff and wants the lowest possible cost when the API is idle.",
+    "prompt": "Which architecture is MOST cost-effective?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon ECS on EC2 with an Auto Scaling group of at least two instances and Amazon Aurora provisioned",
+        "correct": false,
+        "why": "Container hosts and a provisioned Aurora cluster carry fixed hourly costs and operational work, which is overkill for this traffic."
+      },
+      {
+        "key": "B",
+        "text": "Two t3.small EC2 instances behind an Application Load Balancer with Amazon RDS for MySQL",
+        "correct": false,
+        "why": "The instances, ALB and RDS all bill hourly even with zero traffic, and they need patching and scaling. That is expensive at idle and needs operations staff."
+      },
+      {
+        "key": "C",
+        "text": "Amazon API Gateway, AWS Lambda, and Amazon DynamoDB with on-demand capacity",
+        "correct": true,
+        "why": "All three bill per request and are fully managed. At a few thousand requests a day, the cost is small (often within free-tier allowances), and each component scales automatically for spikes."
+      },
+      {
+        "key": "D",
+        "text": "Amazon Lightsail instance with a self-managed database on the same instance",
+        "correct": false,
+        "why": "Cheap, but it has a fixed monthly cost, no automatic scaling for spikes, a single point of failure, and self-managed patching and backups."
+      }
+    ],
+    "explanation": {
+      "answer": "A serverless stack of API Gateway, Lambda and DynamoDB on-demand has no idle cost: you pay only per request, per invocation-millisecond, and per read/write request. It scales automatically for spikes and requires no servers to patch, which is ideal for low, spiky traffic and teams without operations staff.",
+      "concept": "Cost-optimization principle: adopt a consumption model. For consistently high, steady traffic, provisioned resources with Savings Plans can become cheaper than per-request pricing, so evaluate the break-even point. API Gateway HTTP APIs cost less than REST APIs when you don't need REST-only features.",
+      "examTip": "'Low or unpredictable traffic', 'no ops team' or 'pay nothing when idle' means API Gateway plus Lambda plus DynamoDB on-demand.",
+      "references": [
+        {
+          "title": "What is Amazon API Gateway?",
+          "url": "https://docs.aws.amazon.com/apigateway/latest/developerguide/welcome.html"
+        },
+        {
+          "title": "DynamoDB on-demand capacity mode",
+          "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/on-demand-capacity-mode.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-cost-008",
+    "domain": "cost",
+    "topic": "Rightsizing",
+    "tags": [
+      "compute-optimizer",
+      "rightsizing",
+      "over-provisioned",
+      "recommendations"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A retailer migrated 300 on-premises servers to Amazon EC2 using a like-for-like sizing approach. Six months later, the finance team suspects many instances are over-provisioned. The company wants data-driven recommendations for better instance types and sizes based on actual utilization, with minimal effort.",
+    "prompt": "Which AWS service should the company use?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Pricing Calculator",
+        "correct": false,
+        "why": "Pricing Calculator estimates the cost of architectures you design. It doesn't look at your actual usage."
+      },
+      {
+        "key": "B",
+        "text": "AWS Budgets",
+        "correct": false,
+        "why": "Budgets alerts you when spend or usage crosses thresholds. It doesn't analyse utilization or recommend instance changes."
+      },
+      {
+        "key": "C",
+        "text": "Amazon Inspector",
+        "correct": false,
+        "why": "Inspector scans for software vulnerabilities, which is security rather than cost optimization."
+      },
+      {
+        "key": "D",
+        "text": "AWS Compute Optimizer",
+        "correct": true,
+        "why": "Compute Optimizer analyses CloudWatch utilization metrics with machine learning and recommends optimal EC2 instance types and sizes (and settings for EBS, Lambda, ECS on Fargate and Auto Scaling groups), with estimated savings and performance risk."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Compute Optimizer uses historical utilization data (CPU, network, disk, and memory if the CloudWatch agent is installed) to classify resources as over-provisioned, under-provisioned or optimized, and recommends specific alternative instance types, including Graviton options, with projected savings.",
+      "concept": "Cost tools: Cost Explorer (visualize and forecast spend, RI and Savings Plan recommendations), Budgets (alerts and actions), Compute Optimizer (rightsizing), Trusted Advisor (idle resources and other checks), Cost Anomaly Detection (ML alerts on unusual spend), and Cost and Usage Reports / Data Exports (detailed billing data).",
+      "examTip": "'Rightsize', 'over-provisioned' or 'recommend instance types based on utilization' means Compute Optimizer.",
+      "references": [
+        {
+          "title": "What is AWS Compute Optimizer?",
+          "url": "https://docs.aws.amazon.com/compute-optimizer/latest/ug/what-is-compute-optimizer.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-cost-009",
+    "domain": "cost",
+    "topic": "Cost Governance",
+    "tags": [
+      "aws-budgets",
+      "alerts",
+      "forecast",
+      "budget-actions"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A university gives each research group its own AWS account with a fixed monthly allowance of $2,000. Group leaders want an email alert when their forecasted spend for the month is expected to exceed the allowance, so they can act before the money runs out.",
+    "prompt": "Which solution meets this requirement with the LEAST effort?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Create an AWS Budgets cost budget of $2,000 per account with an alert on forecasted spend exceeding 100%, notifying the group leader by email.",
+        "correct": true,
+        "why": "AWS Budgets natively supports alerts on both actual and forecasted cost thresholds, with email or SNS notifications. It is configuration only, with no code."
+      },
+      {
+        "key": "B",
+        "text": "Create a CloudWatch billing alarm on EstimatedCharges in each account.",
+        "correct": false,
+        "why": "Billing alarms fire on actual accumulated charges, not forecasts, so leaders would be alerted only after the allowance is already spent."
+      },
+      {
+        "key": "C",
+        "text": "Enable Cost Explorer and ask group leaders to check it daily.",
+        "correct": false,
+        "why": "Cost Explorer shows spend and forecasts but doesn't send threshold alerts, and relying on manual daily checks is error-prone."
+      },
+      {
+        "key": "D",
+        "text": "Write a Lambda function that calls the Cost Explorer API daily and emails a report.",
+        "correct": false,
+        "why": "This works but is custom code to build and maintain for something Budgets does out of the box."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Budgets lets you set cost, usage, RI or Savings Plans budgets and send alerts when actual or forecasted values cross thresholds. Budget Actions can also apply an IAM or SCP policy, or stop EC2 and RDS instances, automatically when a threshold is reached, which is useful for hard caps in sandbox accounts.",
+      "concept": "Forecast-based alerts are proactive; actual-based alerts are reactive. Combine Budgets with Cost Anomaly Detection to catch unexpected spikes early.",
+      "examTip": "'Alert when forecasted spend exceeds X' means AWS Budgets. 'Automatically stop resources at a threshold' means Budget Actions.",
+      "references": [
+        {
+          "title": "Managing your costs with AWS Budgets",
+          "url": "https://docs.aws.amazon.com/cost-management/latest/userguide/budgets-managing-costs.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-cost-010",
+    "domain": "cost",
+    "topic": "EC2 Cost Optimization",
+    "tags": [
+      "instance-scheduler",
+      "rightsizing",
+      "dev-test",
+      "stop-start"
+    ],
+    "difficulty": "medium",
+    "type": "multi",
+    "selectCount": 2,
+    "stem": "A software company runs 150 On-Demand EC2 instances for development and QA. The environments are used only on weekdays from 8 AM to 8 PM, but they currently run 24/7. CloudWatch shows most instances average under 10% CPU utilization during working hours.",
+    "prompt": "Which combination of actions will reduce costs the MOST with the least impact on developers? (Select TWO.)",
+    "options": [
+      {
+        "key": "A",
+        "text": "Change all EBS volumes to Provisioned IOPS io2.",
+        "correct": false,
+        "why": "io2 costs more than gp3, and these low-utilization dev instances have no need for provisioned IOPS."
+      },
+      {
+        "key": "B",
+        "text": "Move the instances to Dedicated Hosts.",
+        "correct": false,
+        "why": "Dedicated Hosts increase cost and are used for licensing or compliance needs, not savings."
+      },
+      {
+        "key": "C",
+        "text": "Rightsize the instances to smaller types based on AWS Compute Optimizer recommendations.",
+        "correct": true,
+        "why": "Consistently low utilization means the instances are over-provisioned. Smaller instances cut the hourly rate for the hours they do run."
+      },
+      {
+        "key": "D",
+        "text": "Purchase 3-year All Upfront Standard Reserved Instances for all 150 instances.",
+        "correct": false,
+        "why": "RIs bill for every hour of the term whether instances run or not. For instances needed only about 36% of the week, that means paying for idle time, and it locks in the current oversized types."
+      },
+      {
+        "key": "E",
+        "text": "Automatically stop the instances outside working hours and on weekends using the Instance Scheduler on AWS solution (or EventBridge Scheduler).",
+        "correct": true,
+        "why": "Running 60 of 168 hours a week reduces running time by about 64%. Stopped EBS-backed instances incur no compute charges (EBS storage is still billed)."
+      }
+    ],
+    "explanation": {
+      "answer": "The two biggest levers for non-production EC2 are running less (schedule stop and start around working hours) and running smaller (rightsize to actual utilization). Combined, they can cut dev/test compute costs by 70% or more with no long-term commitment and minimal impact on developers.",
+      "concept": "Commitment discounts (RIs and Savings Plans) are for steady, always-on usage. For part-time workloads, eliminate idle hours first, then consider commitments only for the true baseline. Tag resources by environment so schedules and policies can target them.",
+      "examTip": "Dev/test resources 'used only during business hours' mean scheduled stop/start. 'Low utilization' means rightsizing. Avoid RIs for part-time usage.",
+      "references": [
+        {
+          "title": "Instance Scheduler on AWS",
+          "url": "https://aws.amazon.com/solutions/implementations/instance-scheduler-on-aws/"
+        },
+        {
+          "title": "What is AWS Compute Optimizer?",
+          "url": "https://docs.aws.amazon.com/compute-optimizer/latest/ug/what-is-compute-optimizer.html"
+        }
+      ]
+    }
+  }
+]

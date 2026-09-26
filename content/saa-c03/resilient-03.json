@@ -1,0 +1,2002 @@
+[
+  {
+    "id": "saa-res-053",
+    "domain": "resilient",
+    "topic": "Storage",
+    "tags": [
+      "s3-standard",
+      "durability",
+      "multi-az"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A legal firm is choosing an S3 storage class for original case evidence that can't be recreated if lost. The data is accessed daily, and it must survive the complete loss of an Availability Zone.",
+    "prompt": "Which storage class should be used?",
+    "options": [
+      {
+        "key": "A",
+        "text": "S3 One Zone-IA",
+        "correct": false,
+        "why": "One Zone-IA keeps data in a single AZ, so irreplaceable data would be lost if that AZ were destroyed. It's also priced for infrequent access."
+      },
+      {
+        "key": "B",
+        "text": "S3 Express One Zone",
+        "correct": false,
+        "why": "Express One Zone is a single-AZ performance class and doesn't survive the loss of an AZ."
+      },
+      {
+        "key": "C",
+        "text": "Amazon EBS gp3 volumes",
+        "correct": false,
+        "why": "EBS volumes live in one AZ and would need extra replication to survive an AZ loss."
+      },
+      {
+        "key": "D",
+        "text": "S3 Standard",
+        "correct": true,
+        "why": "S3 Standard stores data redundantly across at least three Availability Zones, is designed for 11 nines of durability, and is priced for frequent access."
+      }
+    ],
+    "explanation": {
+      "answer": "Most S3 storage classes (Standard, Standard-IA, Intelligent-Tiering, and the Glacier classes) store data across at least three AZs. The One Zone classes trade that resilience for lower cost or higher performance. For irreplaceable, frequently accessed data, S3 Standard is the right default, and versioning plus replication add further protection.",
+      "concept": "Durability (not losing data) and availability (being able to access it) are designed separately. Both depend on how many AZs hold the data.",
+      "examTip": "'Irreplaceable' plus 'survive AZ loss' means a multi-AZ class (Standard, or Standard-IA if infrequent). Never One Zone.",
+      "references": [
+        {
+          "title": "Data protection in Amazon S3",
+          "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/DataDurability.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-res-054",
+    "domain": "resilient",
+    "topic": "Block Storage",
+    "tags": [
+      "ebs",
+      "az-scoped",
+      "snapshot-restore"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "An engineer needs to move an application running on a single EC2 instance, with a 500 GB EBS data volume, from us-east-1a to us-east-1c after an AZ-specific capacity problem.",
+    "prompt": "How can the EBS data be made available in us-east-1c?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Create an EBS snapshot of the volume and create a new volume from the snapshot in us-east-1c.",
+        "correct": true,
+        "why": "EBS volumes are bound to one AZ, but snapshots are stored regionally. A new volume can be created from a snapshot in any AZ in the Region."
+      },
+      {
+        "key": "B",
+        "text": "Change the volume's Availability Zone property.",
+        "correct": false,
+        "why": "You can't change a volume's AZ after creation."
+      },
+      {
+        "key": "C",
+        "text": "Enable EBS Multi-Attach across AZs.",
+        "correct": false,
+        "why": "Multi-Attach is limited to io1 and io2 volumes and instances in the same AZ."
+      },
+      {
+        "key": "D",
+        "text": "Detach the volume and attach it to an instance in us-east-1c.",
+        "correct": false,
+        "why": "An EBS volume can only attach to instances in its own Availability Zone."
+      }
+    ],
+    "explanation": {
+      "answer": "EBS volumes replicate within their AZ for durability but are AZ-scoped resources. Snapshots are incremental backups stored in Amazon S3 (managed by AWS) at the Regional level, so they're the mechanism for moving data to another AZ, or with a snapshot copy, to another Region or account.",
+      "concept": "Design for AZ independence: keep state on multi-AZ services (EFS, RDS Multi-AZ, S3, DynamoDB) or replicate or snapshot regularly, so instances can be relaunched anywhere.",
+      "examTip": "'Move EBS data to another AZ' means snapshot, then create a volume in the target AZ.",
+      "references": [
+        {
+          "title": "Amazon EBS snapshots",
+          "url": "https://docs.aws.amazon.com/ebs/latest/userguide/ebs-snapshots.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-res-055",
+    "domain": "resilient",
+    "topic": "EC2 Resilience",
+    "tags": [
+      "auto-recovery",
+      "single-instance",
+      "system-status-check"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A legacy licensing server must run as exactly one EC2 instance, because the license is bound to its private IP address and instance metadata. If the underlying host hardware fails, the company wants the instance back automatically with the same instance ID, private IP and Elastic IP.",
+    "prompt": "Which feature provides this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "An Auto Scaling group with min and max of 1",
+        "correct": false,
+        "why": "The ASG would launch a new instance with a new instance ID and private IP, which breaks the license binding."
+      },
+      {
+        "key": "B",
+        "text": "EC2 automatic instance recovery (default auto-recovery or a CloudWatch alarm with the recover action on StatusCheckFailed_System)",
+        "correct": true,
+        "why": "Recovery moves the instance to healthy hardware while keeping its instance ID, private IPs, Elastic IPs and metadata. That's ideal for single instances that can't be replaced by a new one."
+      },
+      {
+        "key": "C",
+        "text": "A spread placement group",
+        "correct": false,
+        "why": "Spread placement lowers correlated failure between instances but doesn't recover a failed one."
+      },
+      {
+        "key": "D",
+        "text": "Enable termination protection",
+        "correct": false,
+        "why": "This prevents accidental termination but doesn't recover from hardware failure."
+      }
+    ],
+    "explanation": {
+      "answer": "EC2 automatic recovery (the simplified default behavior on supported instance types, or an explicit CloudWatch alarm action) handles underlying system failures such as loss of power, network or host hardware by migrating the instance to new hardware. Identity and addressing stay the same. Instances with instance store volumes aren't supported.",
+      "concept": "Prefer stateless designs with Auto Scaling. Use auto recovery for the rare legacy workloads that must keep a fixed identity.",
+      "examTip": "'Single instance must keep the same ID/IP after hardware failure' means EC2 auto recovery.",
+      "references": [
+        {
+          "title": "Recover your instance",
+          "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-recover.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-res-056",
+    "domain": "resilient",
+    "topic": "Load Balancing",
+    "tags": [
+      "slow-start",
+      "cache-warmup",
+      "alb"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "When new instances join an ALB target group during scale-out, they immediately receive a full share of traffic. Because their local caches are empty, their response times spike and some requests time out for the first few minutes.",
+    "prompt": "Which ALB feature addresses this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Increase the deregistration delay.",
+        "correct": false,
+        "why": "The deregistration delay applies to targets leaving the group, not joining it."
+      },
+      {
+        "key": "B",
+        "text": "Disable cross-zone load balancing.",
+        "correct": false,
+        "why": "This affects distribution across AZs, not ramp-up of new targets."
+      },
+      {
+        "key": "C",
+        "text": "Enable slow start mode on the target group with an appropriate duration.",
+        "correct": true,
+        "why": "Slow start ramps up a new target's share of requests linearly over the configured period, giving it time to warm caches and JIT compilers."
+      },
+      {
+        "key": "D",
+        "text": "Enable sticky sessions.",
+        "correct": false,
+        "why": "Stickiness doesn't limit the initial flood of new sessions to fresh targets."
+      }
+    ],
+    "explanation": {
+      "answer": "ALB slow start mode (30 to 900 seconds) linearly increases the number of requests sent to a newly registered target. It works with round robin and weighted random routing, and pairs well with a health-check grace period and warm pools.",
+      "concept": "Newly launched capacity often needs a warm-up period. Plan for it with slow start, warm pools and pre-warmed caches.",
+      "examTip": "'New targets get overwhelmed right after registering' means ALB slow start.",
+      "references": [
+        {
+          "title": "Slow start mode for target groups",
+          "url": "https://docs.aws.amazon.com/elasticloadbalancing/latest/application/edit-target-group-attributes.html#slow-start-mode"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-res-057",
+    "domain": "resilient",
+    "topic": "Multi-Region",
+    "tags": [
+      "active-active",
+      "latency-routing",
+      "global-tables"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A global SaaS company wants its customer-facing API to run in us-east-1 and eu-west-1 at the same time, with each user routed to the closer healthy Region and automatic failover to the other Region if one fails. Data must be writable in both Regions.",
+    "prompt": "Which architecture meets these requirements?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Run in us-east-1 with a cross-Region read replica in eu-west-1.",
+        "correct": false,
+        "why": "Read replicas can't accept writes, and there's no automatic failover of the application."
+      },
+      {
+        "key": "B",
+        "text": "Use a single Region with Multi-AZ everywhere.",
+        "correct": false,
+        "why": "Multi-AZ doesn't survive a Regional failure or give EU users local latency."
+      },
+      {
+        "key": "C",
+        "text": "Use Route 53 simple routing with both Regions' ALBs.",
+        "correct": false,
+        "why": "Simple routing has no health checks or latency awareness."
+      },
+      {
+        "key": "D",
+        "text": "Deploy the full stack (ALB, compute, DynamoDB global table replicas) in both Regions, and use Route 53 latency-based routing with health checks (or Global Accelerator) to direct users.",
+        "correct": true,
+        "why": "Latency routing sends users to the nearest Region, health checks remove a failed Region automatically, and global tables allow local reads and writes in both."
+      }
+    ],
+    "explanation": {
+      "answer": "A multi-site active-active design runs production in multiple Regions at once. It needs a multi-Region data layer (DynamoDB global tables, or Aurora Global Database with write forwarding for read-mostly apps) and a global traffic layer (Route 53 latency or geoproximity routing with health checks, or Global Accelerator) that routes around failures.",
+      "concept": "Active-active gives the lowest RTO and RPO but the highest cost and complexity, including conflict resolution, data residency and deployment coordination.",
+      "examTip": "'Both Regions serve traffic and accept writes, nearest Region, auto failover' means active-active with latency routing plus DynamoDB global tables.",
+      "references": [
+        {
+          "title": "Multi-site active/active",
+          "url": "https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/disaster-recovery-options-in-the-cloud.html#multi-site-activeactive"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-res-058",
+    "domain": "resilient",
+    "topic": "Route 53",
+    "tags": [
+      "application-recovery-controller",
+      "routing-controls"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A payments company runs a warm-standby DR environment in a second Region. Operators want a highly reliable, manually triggered 'big red switch' to shift all traffic between Regions during an incident, which works even if the primary Region's control plane is impaired, and readiness checks confirming the standby has matching capacity and configuration.",
+    "prompt": "Which service provides this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Route 53 Application Recovery Controller (routing controls and readiness checks)",
+        "correct": true,
+        "why": "ARC routing controls act as on/off switches wired to Route 53 health checks, served by a highly available multi-Region cluster, and readiness checks audit that the recovery environment is prepared."
+      },
+      {
+        "key": "B",
+        "text": "Route 53 weighted routing edited in the console",
+        "correct": false,
+        "why": "Console edits depend on the Route 53 control plane and are error-prone during incidents."
+      },
+      {
+        "key": "C",
+        "text": "AWS Elastic Disaster Recovery",
+        "correct": false,
+        "why": "DRS replicates servers for recovery. It doesn't provide traffic switches and readiness auditing for multi-Region apps."
+      },
+      {
+        "key": "D",
+        "text": "CloudFront origin failover",
+        "correct": false,
+        "why": "Origin failover is automatic per request for CloudFront origins, not a managed, operator-controlled Regional traffic switch."
+      }
+    ],
+    "explanation": {
+      "answer": "Route 53 Application Recovery Controller provides routing controls (switches that flip health checks to move traffic), safety rules to prevent unsafe states, readiness checks that continuously audit capacity and configuration, and zonal shift and autoshift to move traffic away from an impaired AZ.",
+      "concept": "Reliable recovery depends on data-plane operations, such as health-check-driven DNS, rather than control-plane changes that may be unavailable during large incidents.",
+      "examTip": "'Reliable, operator-controlled Regional failover switch' plus 'readiness checks' means Route 53 ARC.",
+      "references": [
+        {
+          "title": "What is Amazon Route 53 Application Recovery Controller?",
+          "url": "https://docs.aws.amazon.com/r53recovery/latest/dg/what-is-route53-recovery.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-res-059",
+    "domain": "resilient",
+    "topic": "Route 53",
+    "tags": [
+      "dns-ttl",
+      "failover-time",
+      "health-check-interval"
+    ],
+    "difficulty": "medium",
+    "type": "multi",
+    "selectCount": 2,
+    "stem": "A company uses Route 53 failover routing between two Regions. During a test, clients kept connecting to the failed primary for almost an hour after it went down. The records have a TTL of 3600 seconds, and the health check uses the standard 30-second interval with a failure threshold of 3.",
+    "prompt": "Which TWO changes will MOST reduce the time for clients to move to the secondary Region? (Select TWO.)",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use fast (10-second) health checks and a lower failure threshold.",
+        "correct": true,
+        "why": "Faster checks and a lower threshold detect the failure sooner, so Route 53 starts returning the secondary record earlier."
+      },
+      {
+        "key": "B",
+        "text": "Switch to simple routing.",
+        "correct": false,
+        "why": "Simple routing has no health-based failover at all."
+      },
+      {
+        "key": "C",
+        "text": "Lower the TTL on the failover records (for example, to 60 seconds).",
+        "correct": true,
+        "why": "Resolvers and clients cache DNS answers for the TTL. A one-hour TTL means clients may keep using the old answer for up to an hour after failover."
+      },
+      {
+        "key": "D",
+        "text": "Increase the TTL to reduce DNS query costs.",
+        "correct": false,
+        "why": "A higher TTL makes failover even slower."
+      },
+      {
+        "key": "E",
+        "text": "Enable DNSSEC signing.",
+        "correct": false,
+        "why": "DNSSEC protects DNS integrity but doesn't speed up failover."
+      }
+    ],
+    "explanation": {
+      "answer": "DNS failover time is roughly detection time (health check interval multiplied by the failure threshold) plus propagation (record TTL and client caching). Lowering both speeds up recovery. Alias records to AWS resources use the target's TTL, and some clients cache beyond the TTL, which is one reason Global Accelerator (anycast IPs, no DNS change) can fail over faster.",
+      "concept": "There's a trade-off: lower TTLs mean more DNS queries (slightly higher cost) but faster failover. Choose TTLs per record based on criticality.",
+      "examTip": "'DNS failover is slow' means lower the TTL plus faster health checks (or use Global Accelerator).",
+      "references": [
+        {
+          "title": "How Amazon Route 53 determines whether a health check is healthy",
+          "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-failover-determining-health-of-endpoints.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-res-060",
+    "domain": "resilient",
+    "topic": "Global Networking",
+    "tags": [
+      "global-accelerator",
+      "regional-failover",
+      "no-dns-caching"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A multiplayer game's clients hardcode connection targets and are known to ignore DNS TTLs. The company runs game servers behind NLBs in two Regions and needs traffic to fail over to the healthy Region within seconds of an outage.",
+    "prompt": "Which solution meets these requirements?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Route 53 failover routing with a 60-second TTL",
+        "correct": false,
+        "why": "Clients ignore TTLs and would keep connecting to the old IP addresses."
+      },
+      {
+        "key": "B",
+        "text": "AWS Global Accelerator with endpoint groups for both Regions' NLBs and health checks",
+        "correct": true,
+        "why": "Clients connect to two static anycast IPs that never change. Global Accelerator detects unhealthy endpoints and reroutes traffic to the healthy Region within seconds, with no DNS involved."
+      },
+      {
+        "key": "C",
+        "text": "CloudFront with origin failover",
+        "correct": false,
+        "why": "CloudFront handles HTTP(S) content delivery, not arbitrary game protocols to NLBs."
+      },
+      {
+        "key": "D",
+        "text": "Route 53 multivalue answer routing",
+        "correct": false,
+        "why": "This still relies on DNS resolution and client behavior."
+      }
+    ],
+    "explanation": {
+      "answer": "Global Accelerator's static anycast IPs decouple clients from Regional endpoints. Failover happens inside the AWS network based on endpoint health, typically within seconds, independent of DNS caching. Traffic dials can also shift percentages between Regions for blue/green or maintenance.",
+      "concept": "Choosing a failover mechanism: DNS-based (Route 53) is simple and cheap but depends on caching. Anycast-based (Global Accelerator) is fast and has static IPs, at extra cost.",
+      "examTip": "'Clients ignore DNS TTLs' or 'failover in seconds' means Global Accelerator.",
+      "references": [
+        {
+          "title": "How AWS Global Accelerator works",
+          "url": "https://docs.aws.amazon.com/global-accelerator/latest/dg/introduction-how-it-works.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-res-061",
+    "domain": "resilient",
+    "topic": "Decoupling",
+    "tags": [
+      "sns-fifo",
+      "sqs-fifo",
+      "ordered-fanout"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A brokerage publishes price-update events that three downstream systems (risk, ledger and reporting) must each receive, independently, in the exact order published per stock symbol, with no duplicates.",
+    "prompt": "Which messaging design meets these requirements?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Three SQS standard queues written separately by the publisher",
+        "correct": false,
+        "why": "Standard queues don't guarantee order or deduplication, and the publisher becomes coupled to the consumers."
+      },
+      {
+        "key": "B",
+        "text": "An SNS standard topic with three SQS FIFO queues",
+        "correct": false,
+        "why": "Standard topics don't guarantee ordering or exactly-once delivery, so ordering is lost before the messages reach the queues."
+      },
+      {
+        "key": "C",
+        "text": "An Amazon SNS FIFO topic with three subscribed Amazon SQS FIFO queues, using the stock symbol as the message group ID",
+        "correct": true,
+        "why": "SNS FIFO preserves ordering and deduplication per message group and fans out to SQS FIFO queues, so each consumer gets an ordered, deduplicated copy."
+      },
+      {
+        "key": "D",
+        "text": "A single SQS FIFO queue read by all three systems",
+        "correct": false,
+        "why": "Each message would be consumed by only one of the systems, not all three."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon SNS FIFO topics provide strict ordering and message deduplication, and can only deliver to SQS FIFO queues. Combined, they give ordered, exactly-once fan-out to multiple independent consumers, with ordering scoped by message group ID.",
+      "concept": "The fan-out pattern carries over to FIFO: SNS FIFO plus SQS FIFO for ordered fan-out, and SNS standard plus SQS standard for high-throughput fan-out.",
+      "examTip": "'Fan-out' plus 'strict ordering' plus 'no duplicates' means SNS FIFO to SQS FIFO.",
+      "references": [
+        {
+          "title": "Amazon SNS FIFO topics",
+          "url": "https://docs.aws.amazon.com/sns/latest/dg/sns-fifo-topics.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-res-062",
+    "domain": "resilient",
+    "topic": "Serverless Resilience",
+    "tags": [
+      "eventbridge-scheduler",
+      "cron",
+      "single-point-of-failure"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A company runs 40 nightly and hourly maintenance scripts from cron on a single EC2 instance. When that instance failed last month, none of the jobs ran for two days. The scripts can be packaged as Lambda functions or ECS tasks.",
+    "prompt": "Which solution removes this single point of failure with the LEAST operational overhead?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Move cron to the developers' laptops.",
+        "correct": false,
+        "why": "Laptops sleep, go offline and leave with employees, so they're less reliable than the single server they'd replace, and they aren't secure."
+      },
+      {
+        "key": "B",
+        "text": "Run cron on two EC2 instances.",
+        "correct": false,
+        "why": "Every job would run twice unless you build locking, and you'd still manage servers."
+      },
+      {
+        "key": "C",
+        "text": "Use an Auto Scaling group of one instance running cron.",
+        "correct": false,
+        "why": "It recovers the host, but jobs scheduled during replacement are missed, and servers still need managing."
+      },
+      {
+        "key": "D",
+        "text": "Use Amazon EventBridge Scheduler to invoke the Lambda functions or ECS tasks on their cron schedules, with retry policies and dead-letter queues.",
+        "correct": true,
+        "why": "EventBridge Scheduler is a serverless, highly available scheduler with cron and rate expressions, built-in retries and DLQs. There's no server to fail."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon EventBridge Scheduler creates one-time or recurring schedules (cron, rate, time zones) that invoke many AWS targets directly, including Lambda, ECS RunTask, Step Functions and SQS. It offers flexible time windows, retries and DLQs, and scales to millions of schedules.",
+      "concept": "Replace pet servers running cron with managed schedulers plus serverless or container tasks, removing a classic single point of failure.",
+      "examTip": "'Cron jobs on one server' means EventBridge Scheduler plus Lambda, ECS or Step Functions.",
+      "references": [
+        {
+          "title": "What is Amazon EventBridge Scheduler?",
+          "url": "https://docs.aws.amazon.com/scheduler/latest/UserGuide/what-is-scheduler.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-res-063",
+    "domain": "resilient",
+    "topic": "Orchestration",
+    "tags": [
+      "step-functions-express",
+      "high-volume",
+      "short-workflows"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "An IoT platform must run a short, three-step validation and enrichment workflow for each of about 50,000 device events per second. Each workflow completes in under 2 seconds, and occasional re-execution (at-least-once) is acceptable because the steps are idempotent.",
+    "prompt": "Which Step Functions workflow type is MOST suitable and cost-effective?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Express workflows",
+        "correct": true,
+        "why": "Express workflows are designed for high-volume, short-duration (up to 5 minutes) event processing, are priced by requests and duration, and support at-least-once semantics for asynchronous execution."
+      },
+      {
+        "key": "B",
+        "text": "Standard workflows",
+        "correct": false,
+        "why": "Standard workflows are exactly-once and durable for up to a year, but they're priced per state transition and have lower start rates, so they'd be costly at 50,000 per second."
+      },
+      {
+        "key": "C",
+        "text": "Amazon SWF",
+        "correct": false,
+        "why": "SWF is a legacy workflow service. Step Functions is the recommended choice."
+      },
+      {
+        "key": "D",
+        "text": "Activity tasks with EC2 workers",
+        "correct": false,
+        "why": "This adds servers to manage and doesn't suit this scale of short workflows."
+      }
+    ],
+    "explanation": {
+      "answer": "Step Functions offers Standard workflows (long-running, exactly-once, full visual history, per-transition pricing) and Express workflows (up to 5 minutes, very high event rates, per-request and duration pricing, logs to CloudWatch). Choose Express for streaming and IoT ingestion, and Standard for business processes and human approvals.",
+      "concept": "Workflows can nest: a Standard workflow can call Express child workflows for high-volume sub-steps.",
+      "examTip": "'High volume, short, idempotent workflows' means Express. 'Long-running, exactly-once, auditable' means Standard.",
+      "references": [
+        {
+          "title": "Choosing workflow type in Step Functions",
+          "url": "https://docs.aws.amazon.com/step-functions/latest/dg/choosing-workflow-type.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-res-064",
+    "domain": "resilient",
+    "topic": "Serverless Resilience",
+    "tags": [
+      "kinesis-lambda",
+      "bisect-batch",
+      "poison-record"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A Lambda function processes a Kinesis data stream in batches of 500 records. One malformed record makes the function throw an error. Lambda keeps retrying the same batch, so processing of the shard is stuck and consumer lag grows for hours.",
+    "prompt": "Which event source mapping settings BEST address this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Configure a dead-letter queue on the Kinesis stream.",
+        "correct": false,
+        "why": "Kinesis streams don't have DLQs. Failure handling is configured on the Lambda event source mapping."
+      },
+      {
+        "key": "B",
+        "text": "Enable BisectBatchOnFunctionError, set MaximumRetryAttempts (and/or MaximumRecordAgeInSeconds), and configure an on-failure destination (SQS or SNS) for records that still fail.",
+        "correct": true,
+        "why": "Bisecting splits failing batches to isolate the bad record, the retry limits stop endless retries, and the failed record's metadata goes to the destination so the shard keeps moving."
+      },
+      {
+        "key": "C",
+        "text": "Increase the stream's retention period.",
+        "correct": false,
+        "why": "Longer retention delays data loss but doesn't unblock the shard."
+      },
+      {
+        "key": "D",
+        "text": "Increase the batch size to 10,000.",
+        "correct": false,
+        "why": "Bigger batches still contain the bad record and make each retry more expensive."
+      }
+    ],
+    "explanation": {
+      "answer": "For stream sources (Kinesis, DynamoDB Streams), Lambda processes each shard in order and retries failed batches until success or expiry by default, which blocks the shard. Error-handling options include bisect-on-error, maximum retry attempts, maximum record age, on-failure destinations, and partial batch responses (ReportBatchItemFailures).",
+      "concept": "Poison-pill handling differs by source: SQS uses a redrive policy and DLQ on the queue, streams use event source mapping settings, and async invocations use destinations or a Lambda DLQ.",
+      "examTip": "'Lambda stuck on a bad Kinesis record' means bisect batch, retry limits and an on-failure destination.",
+      "references": [
+        {
+          "title": "Configuring error handling for Kinesis event sources",
+          "url": "https://docs.aws.amazon.com/lambda/latest/dg/kinesis-on-failure-destination.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-res-065",
+    "domain": "resilient",
+    "topic": "Serverless Resilience",
+    "tags": [
+      "lambda-async",
+      "retry-attempts",
+      "event-age"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "An S3-triggered Lambda function sends notification emails through a third-party API. When the API has an outage, Lambda's automatic retries sometimes deliver emails hours later, which confuses customers. The business prefers that notifications older than 15 minutes be dropped and captured for review instead.",
+    "prompt": "What should be configured on the function's asynchronous invocation settings?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Enable provisioned concurrency.",
+        "correct": false,
+        "why": "It reduces cold starts but doesn't affect async retry behavior."
+      },
+      {
+        "key": "B",
+        "text": "Increase the function timeout to 15 minutes.",
+        "correct": false,
+        "why": "The timeout controls how long one invocation can run, not how long Lambda keeps retrying an event."
+      },
+      {
+        "key": "C",
+        "text": "Set MaximumEventAgeInSeconds to 900 and configure an on-failure destination (such as SQS) to capture discarded events.",
+        "correct": true,
+        "why": "Maximum event age discards events older than the limit instead of retrying them, and the on-failure destination keeps a record of them for review."
+      },
+      {
+        "key": "D",
+        "text": "Set reserved concurrency to 0.",
+        "correct": false,
+        "why": "This throttles all invocations, so no emails would be sent at all."
+      }
+    ],
+    "explanation": {
+      "answer": "For asynchronous invocations, Lambda queues events and retries failures up to two times with backoff. It keeps events for up to 6 hours by default when the function is throttled or erroring. MaximumRetryAttempts (0–2) and MaximumEventAgeInSeconds (60 seconds to 6 hours) tune this, and destinations or a DLQ capture events that are discarded.",
+      "concept": "Timeliness is part of correctness. Stale retries can be worse than failing fast for time-sensitive side effects.",
+      "examTip": "'Don't process async events after X minutes' means MaximumEventAgeInSeconds plus an on-failure destination.",
+      "references": [
+        {
+          "title": "Configuring error handling for asynchronous invocation",
+          "url": "https://docs.aws.amazon.com/lambda/latest/dg/invocation-async-error-handling.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-res-066",
+    "domain": "resilient",
+    "topic": "Application Design",
+    "tags": [
+      "exponential-backoff",
+      "jitter",
+      "throttling"
+    ],
+    "difficulty": "medium",
+    "type": "multi",
+    "selectCount": 2,
+    "stem": "Hundreds of workers call a rate-limited downstream API. When it returns throttling errors, all workers retry immediately and in lockstep, causing repeated waves of throttling that prolong the outage.",
+    "prompt": "Which TWO client-side practices will MOST improve resilience? (Select TWO.)",
+    "options": [
+      {
+        "key": "A",
+        "text": "Add random jitter to the backoff delays.",
+        "correct": true,
+        "why": "Jitter spreads retries out so clients don't retry in synchronized waves (the thundering herd problem)."
+      },
+      {
+        "key": "B",
+        "text": "Retry with exponential backoff (increasing wait times between retries).",
+        "correct": true,
+        "why": "Backoff reduces the retry load on a struggling dependency over time, giving it room to recover."
+      },
+      {
+        "key": "C",
+        "text": "Increase the number of workers during throttling.",
+        "correct": false,
+        "why": "More callers make the rate-limit problem worse."
+      },
+      {
+        "key": "D",
+        "text": "Disable timeouts on client calls.",
+        "correct": false,
+        "why": "Without timeouts, clients hang indefinitely and resources pile up."
+      },
+      {
+        "key": "E",
+        "text": "Retry immediately in a tight loop until success.",
+        "correct": false,
+        "why": "Tight retry loops amplify load and make the overload worse."
+      }
+    ],
+    "explanation": {
+      "answer": "Exponential backoff with jitter is AWS's recommended retry strategy. Wait increasingly longer between retries, add randomness, cap the retry count and maximum delay, and use timeouts. AWS SDKs implement this by default. For persistent failures, add circuit breakers to stop calling a failing dependency for a while.",
+      "concept": "Retries are selfish: they help one caller but add load. Make them polite with backoff, jitter and limits, and only for idempotent or safe operations.",
+      "examTip": "'Retries cause waves of throttling' means exponential backoff plus jitter.",
+      "references": [
+        {
+          "title": "Timeouts, retries, and backoff with jitter (Amazon Builders' Library)",
+          "url": "https://aws.amazon.com/builders-library/timeouts-retries-and-backoff-with-jitter/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-res-067",
+    "domain": "resilient",
+    "topic": "Aurora",
+    "tags": [
+      "aurora-backtrack",
+      "rewind",
+      "human-error"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "An engineer accidentally ran a DELETE without a WHERE clause on an Aurora MySQL production cluster 20 minutes ago. The company wants to return the existing cluster to its state just before the mistake as fast as possible, without restoring to a new cluster and changing application endpoints.",
+    "prompt": "Which feature should be used?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Promote an Aurora Replica",
+        "correct": false,
+        "why": "Replicas already contain the deleted state, because replication is near-instant."
+      },
+      {
+        "key": "B",
+        "text": "Restore last night's snapshot",
+        "correct": false,
+        "why": "This loses almost a day of changes and also creates a new cluster."
+      },
+      {
+        "key": "C",
+        "text": "Point-in-time restore to a new cluster",
+        "correct": false,
+        "why": "PITR works, but it creates a new cluster with new endpoints, which takes longer and requires an application cutover."
+      },
+      {
+        "key": "D",
+        "text": "Aurora Backtrack, rewinding the cluster to a point just before the DELETE",
+        "correct": true,
+        "why": "Backtrack rewinds an Aurora MySQL cluster in place to an earlier time, typically within minutes, keeping the same cluster and endpoints. It must have been enabled beforehand."
+      }
+    ],
+    "explanation": {
+      "answer": "Aurora Backtrack (Aurora MySQL-compatible) keeps change records for a configured window (up to 72 hours) and rewinds the database to a chosen timestamp without a restore, which is ideal for quickly undoing logical errors. PITR and snapshots remain the backup mechanisms, and they create new clusters.",
+      "concept": "Recovering from human error fast: Backtrack (in-place rewind), PITR (new instance), Aurora cloning (quick copy for investigation), and DynamoDB PITR.",
+      "examTip": "'Undo a bad Aurora MySQL change in place, quickly' means Aurora Backtrack.",
+      "references": [
+        {
+          "title": "Backtracking an Aurora DB cluster",
+          "url": "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/AuroraMySQL.Managing.Backtrack.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-res-068",
+    "domain": "resilient",
+    "topic": "RDS Backup",
+    "tags": [
+      "automated-backups",
+      "pitr",
+      "retention"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A retailer's RDS for PostgreSQL database must be recoverable to any point within the last 14 days, to the second, in case of data corruption. The team currently only takes manual snapshots weekly.",
+    "prompt": "What should the solutions architect configure?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Enable automated backups with a 14-day (or longer) retention period, and use point-in-time restore when needed.",
+        "correct": true,
+        "why": "Automated backups combine daily snapshots with transaction logs, allowing restores to any second within the retention period (up to 35 days)."
+      },
+      {
+        "key": "B",
+        "text": "Enable Multi-AZ.",
+        "correct": false,
+        "why": "Multi-AZ replicates corruption to the standby and isn't a backup."
+      },
+      {
+        "key": "C",
+        "text": "Create a read replica.",
+        "correct": false,
+        "why": "Read replicas mirror changes, including corruption, so they can't recover past states."
+      },
+      {
+        "key": "D",
+        "text": "Take manual snapshots every day.",
+        "correct": false,
+        "why": "Daily snapshots only allow restores to snapshot times, not to any second."
+      }
+    ],
+    "explanation": {
+      "answer": "RDS automated backups create a daily storage snapshot and continuously back up transaction logs to S3. Point-in-time recovery restores to a new DB instance at any second in the retention window (1–35 days), typically up to about the last five minutes. Manual snapshots persist until deleted and suit long-term retention.",
+      "concept": "Recovery needs differ: HA (Multi-AZ) for infrastructure failure, backups (automated and PITR) for data errors, and cross-Region copies for Regional disasters.",
+      "examTip": "'Restore to any point in the last N days' means RDS automated backups with PITR (retention up to 35 days).",
+      "references": [
+        {
+          "title": "Introduction to backups (Amazon RDS)",
+          "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_WorkingWithAutomatedBackups.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-res-069",
+    "domain": "resilient",
+    "topic": "RDS Backup",
+    "tags": [
+      "cross-region-automated-backups",
+      "dr"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company's RDS for MySQL database in eu-central-1 must be restorable in eu-west-1 to a recent point in time if eu-central-1 becomes unavailable. The company wants the lowest-cost approach, with no running database in eu-west-1.",
+    "prompt": "Which solution meets these requirements?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Enable Multi-AZ in eu-central-1.",
+        "correct": false,
+        "why": "Multi-AZ protects against AZ failures, not Regional ones."
+      },
+      {
+        "key": "B",
+        "text": "Enable cross-Region automated backup replication to eu-west-1, and restore with point-in-time recovery there when needed.",
+        "correct": true,
+        "why": "RDS can replicate automated snapshots and transaction logs to another Region, which enables PITR in the DR Region without running a replica."
+      },
+      {
+        "key": "C",
+        "text": "Create a cross-Region read replica in eu-west-1.",
+        "correct": false,
+        "why": "A replica gives a lower RTO but means paying for a running instance, which is more than the lowest-cost requirement allows."
+      },
+      {
+        "key": "D",
+        "text": "Export the database to S3 in the same Region monthly.",
+        "correct": false,
+        "why": "Same-Region, monthly exports don't survive a Regional outage and have a poor RPO."
+      }
+    ],
+    "explanation": {
+      "answer": "RDS cross-Region automated backups copy snapshots and transaction logs to a destination Region, enabling point-in-time restore there. This is a backup-and-restore DR approach: low cost, with an RTO of the restore time. AWS Backup cross-Region copy is an alternative for snapshot-level copies.",
+      "concept": "Pick the DR mechanism by RTO and RPO: cross-Region backups (cheapest, RTO in hours), cross-Region read replicas (minutes), and Aurora Global Database (about a minute).",
+      "examTip": "'Restore RDS in another Region, lowest cost, no running replica' means cross-Region automated backup replication.",
+      "references": [
+        {
+          "title": "Replicating automated backups to another AWS Region",
+          "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ReplicateBackups.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-res-070",
+    "domain": "resilient",
+    "topic": "Disaster Recovery",
+    "tags": [
+      "cross-region-read-replica",
+      "promotion"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "An RDS for PostgreSQL primary runs in us-east-1 with a cross-Region read replica in us-west-2 for disaster recovery. us-east-1 suffers a prolonged outage.",
+    "prompt": "What must the operations team do to resume writes in us-west-2?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Nothing. The replica fails over automatically like Multi-AZ.",
+        "correct": false,
+        "why": "Cross-Region RDS read replicas don't fail over automatically. Promotion is required."
+      },
+      {
+        "key": "B",
+        "text": "Restore last night's snapshot in us-west-2.",
+        "correct": false,
+        "why": "This loses a day of data when an up-to-date replica is available."
+      },
+      {
+        "key": "C",
+        "text": "Promote the read replica in us-west-2 to a standalone DB instance, and point the application to its endpoint.",
+        "correct": true,
+        "why": "Promotion converts the replica into an independent, writable instance. It's a manual (or scripted) step, and the endpoint differs from the old primary's."
+      },
+      {
+        "key": "D",
+        "text": "Enable Multi-AZ on the replica first.",
+        "correct": false,
+        "why": "Multi-AZ adds AZ-level HA after promotion. It doesn't make the replica writable."
+      }
+    ],
+    "explanation": {
+      "answer": "RDS read replicas (including cross-Region ones) use asynchronous replication and are read-only until promoted. Promotion breaks replication and makes the instance writable. Automate it with runbooks, update DNS or config, and then create new replicas and Multi-AZ for the new primary.",
+      "concept": "RPO depends on replica lag at failure time. Aurora Global Database offers managed switchover and failover with faster recovery.",
+      "examTip": "'Cross-Region RDS replica DR' means promote the replica manually and update endpoints.",
+      "references": [
+        {
+          "title": "Promoting a read replica to be a standalone DB instance",
+          "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ReadRepl.Promote.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-res-071",
+    "domain": "resilient",
+    "topic": "Aurora",
+    "tags": [
+      "aurora-storage",
+      "six-copies",
+      "az-loss"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A CTO asks why an Aurora cluster with only a single writer instance, and no replicas, didn't lose any committed data during an Availability Zone outage, even though the writer had to be recreated in another AZ.",
+    "prompt": "Which Aurora characteristic explains this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Aurora writes data to S3 synchronously on each commit.",
+        "correct": false,
+        "why": "Backups go to S3 continuously, but commits are acknowledged by the distributed storage quorum, not S3."
+      },
+      {
+        "key": "B",
+        "text": "Aurora uses EBS Multi-Attach across AZs.",
+        "correct": false,
+        "why": "Aurora doesn't use EBS volumes for its cluster storage."
+      },
+      {
+        "key": "C",
+        "text": "Aurora automatically creates a hidden Multi-AZ standby instance.",
+        "correct": false,
+        "why": "Without Aurora Replicas, there's no standby instance. Availability comes from the storage layer plus instance recreation."
+      },
+      {
+        "key": "D",
+        "text": "Aurora's cluster volume stores six copies of data across three Availability Zones, independent of the DB instances.",
+        "correct": true,
+        "why": "Aurora separates compute from a distributed storage layer that replicates six ways across three AZs, so committed data survives an AZ loss even if the only instance must be replaced."
+      }
+    ],
+    "explanation": {
+      "answer": "Aurora storage is a distributed, self-healing cluster volume. Data is written to six storage nodes across three AZs, and writes need a quorum of four of six. It tolerates losing an AZ (two copies) without data loss. Adding Aurora Replicas in other AZs adds fast compute failover, typically seconds instead of minutes for instance recreation.",
+      "concept": "Aurora's storage handles durability. Replicas handle availability of compute and read scaling.",
+      "examTip": "Aurora means 6 copies across 3 AZs. Add replicas in other AZs for fast failover.",
+      "references": [
+        {
+          "title": "Amazon Aurora storage",
+          "url": "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/Aurora.Overview.StorageReliability.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-res-072",
+    "domain": "resilient",
+    "topic": "Caching",
+    "tags": [
+      "elasticache-global-datastore",
+      "cross-region"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A global gaming company uses ElastiCache for Redis OSS in us-east-1 for session and leaderboard data. It wants low-latency reads from a second Region, and the ability to promote that Region to primary within about a minute if us-east-1 fails.",
+    "prompt": "Which feature meets these requirements?",
+    "options": [
+      {
+        "key": "A",
+        "text": "ElastiCache Global Datastore with a secondary cluster in the second Region",
+        "correct": true,
+        "why": "Global Datastore replicates across Regions with typically sub-second lag, serves local reads in secondary Regions, and lets you promote a secondary to primary for DR."
+      },
+      {
+        "key": "B",
+        "text": "ElastiCache Multi-AZ with automatic failover",
+        "correct": false,
+        "why": "Multi-AZ automatic failover protects against node and AZ failures within one Region only. It gives no copy in a second Region."
+      },
+      {
+        "key": "C",
+        "text": "Amazon DAX",
+        "correct": false,
+        "why": "DAX caches DynamoDB, not Redis workloads, and is Regional."
+      },
+      {
+        "key": "D",
+        "text": "Daily ElastiCache snapshots copied to the second Region",
+        "correct": false,
+        "why": "Snapshots have poor RPO and a slow restore RTO, and give no live local reads."
+      }
+    ],
+    "explanation": {
+      "answer": "ElastiCache Global Datastore (for Redis OSS and Valkey) provides fully managed cross-Region replication from a primary cluster to up to two secondary Regions. Secondaries serve low-latency local reads and can be promoted to primary during a Regional disruption.",
+      "concept": "Cross-Region options by data store: Aurora Global Database, DynamoDB global tables, ElastiCache Global Datastore, S3 CRR, EFS replication and RDS cross-Region replicas.",
+      "examTip": "'Redis/ElastiCache across Regions with promotion' means Global Datastore.",
+      "references": [
+        {
+          "title": "Replication across AWS Regions using global datastores",
+          "url": "https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/Redis-Global-Datastore.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-res-073",
+    "domain": "resilient",
+    "topic": "Backup",
+    "tags": [
+      "aws-backup",
+      "dynamodb",
+      "cross-account-copy"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A fintech company must keep DynamoDB backups in a separate AWS account and a different Region, so that backups survive both a compromised production account and a Regional outage. Retention must be enforced centrally.",
+    "prompt": "Which solution meets these requirements with the LEAST effort?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Export the tables to an S3 bucket in the same account nightly.",
+        "correct": false,
+        "why": "A same-account bucket is exposed if the account is compromised, and a custom pipeline means more effort."
+      },
+      {
+        "key": "B",
+        "text": "Use an AWS Backup plan for the DynamoDB tables with copy rules that copy recovery points to a backup vault in a separate account and Region, ideally with Vault Lock.",
+        "correct": true,
+        "why": "AWS Backup supports cross-account and cross-Region copies of DynamoDB backups with centrally managed retention, and Vault Lock makes the copies immutable."
+      },
+      {
+        "key": "C",
+        "text": "Enable DynamoDB global tables.",
+        "correct": false,
+        "why": "Global tables replicate data, including deletes and corruption, and live in the same account. They aren't backups."
+      },
+      {
+        "key": "D",
+        "text": "Enable PITR only.",
+        "correct": false,
+        "why": "PITR backups stay in the same account and Region."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Backup centrally manages backups for DynamoDB and many other services. Copy actions in a backup plan can send recovery points to vaults in other Regions and other accounts within your organization, with separate retention. Vault Lock adds WORM protection.",
+      "concept": "Account isolation is a key ransomware and insider-threat control: keep backup copies where production credentials can't delete them.",
+      "examTip": "'Backups in another account AND Region with central retention' means AWS Backup copy rules (plus Vault Lock).",
+      "references": [
+        {
+          "title": "Creating backup copies across AWS accounts",
+          "url": "https://docs.aws.amazon.com/aws-backup/latest/devguide/create-cross-account-backup.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-res-074",
+    "domain": "resilient",
+    "topic": "S3 Replication",
+    "tags": [
+      "replication-time-control",
+      "sla",
+      "compliance"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A financial regulator requires that 99.99% of trade records written to an S3 bucket be replicated to another Region within 15 minutes, and that the company be alerted if replication falls behind.",
+    "prompt": "Which feature should be enabled?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Standard Cross-Region Replication without RTC",
+        "correct": false,
+        "why": "Standard CRR is usually fast but has no time-based SLA or guaranteed 15-minute replication."
+      },
+      {
+        "key": "B",
+        "text": "S3 Batch Operations run every 15 minutes",
+        "correct": false,
+        "why": "Batch jobs are a custom, delayed approach without the SLA or built-in monitoring."
+      },
+      {
+        "key": "C",
+        "text": "S3 Replication Time Control (S3 RTC) on the Cross-Region Replication rule, with replication metrics and event notifications",
+        "correct": true,
+        "why": "S3 RTC is backed by an SLA to replicate 99.99% of objects within 15 minutes, and provides metrics and events for objects that exceed the threshold."
+      },
+      {
+        "key": "D",
+        "text": "S3 Transfer Acceleration",
+        "correct": false,
+        "why": "Acceleration affects client uploads, not bucket-to-bucket replication."
+      }
+    ],
+    "explanation": {
+      "answer": "S3 Replication Time Control adds predictable replication time: most objects replicate in seconds, and 99.99% within 15 minutes, backed by an SLA. It includes replication metrics (pending bytes, operations, latency) and S3 event notifications for objects that miss the threshold.",
+      "concept": "Replication options: CRR or SRR (asynchronous), RTC (SLA-backed timing), Batch Replication (existing objects), and replica modification sync plus delete-marker replication (optional behaviors).",
+      "examTip": "'Replicate within 15 minutes with an SLA/alerts' means S3 Replication Time Control.",
+      "references": [
+        {
+          "title": "Meeting compliance requirements with S3 Replication Time Control",
+          "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/replication-time-control.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-res-075",
+    "domain": "resilient",
+    "topic": "S3 Replication",
+    "tags": [
+      "same-region-replication",
+      "log-aggregation",
+      "account-isolation"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company wants application logs written to buckets in several production accounts to be automatically copied into a single bucket in a separate security account in the same Region, for isolated retention and analysis.",
+    "prompt": "Which S3 feature meets this requirement?",
+    "options": [
+      {
+        "key": "A",
+        "text": "S3 Lifecycle transitions",
+        "correct": false,
+        "why": "Lifecycle rules change storage classes or expire objects. They can't copy to other buckets."
+      },
+      {
+        "key": "B",
+        "text": "S3 Cross-Region Replication",
+        "correct": false,
+        "why": "CRR copies to a different Region, but here the destination is in the same Region."
+      },
+      {
+        "key": "C",
+        "text": "S3 Transfer Acceleration",
+        "correct": false,
+        "why": "It speeds up client transfers and doesn't copy objects between buckets."
+      },
+      {
+        "key": "D",
+        "text": "S3 Same-Region Replication (SRR) from each source bucket to the central bucket, with ownership override to the destination account",
+        "correct": true,
+        "why": "SRR asynchronously copies new objects to a bucket in the same Region, including in another account. Ownership override makes the security account own the replicas."
+      }
+    ],
+    "explanation": {
+      "answer": "S3 Same-Region Replication copies objects between buckets in the same Region, for log aggregation, live replication between production and test accounts, or data-sovereignty compliance while keeping a separate copy. Like CRR, it requires versioning and a replication IAM role.",
+      "concept": "Replicating to another account with ownership override protects copies from source-account compromise, which is common for security logs.",
+      "examTip": "'Copy objects automatically to another bucket in the same Region/account' means SRR.",
+      "references": [
+        {
+          "title": "Replicating objects within and across Regions",
+          "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/replication.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-res-076",
+    "domain": "resilient",
+    "topic": "S3 Resilience",
+    "tags": [
+      "multi-region-access-points",
+      "failover",
+      "global-endpoint"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A media company replicates its S3 content buckets between us-east-1 and eu-west-1. Applications worldwide should use a single S3 endpoint that routes each request to the lowest-latency bucket, and the company wants to be able to fail all traffic over to one Region within minutes if the other becomes impaired.",
+    "prompt": "Which S3 feature meets these requirements?",
+    "options": [
+      {
+        "key": "A",
+        "text": "S3 Multi-Region Access Points with failover controls (active/passive routing configuration)",
+        "correct": true,
+        "why": "Multi-Region Access Points provide a global endpoint that routes to the nearest bucket over the AWS network, and failover controls can shift traffic between Regions within minutes."
+      },
+      {
+        "key": "B",
+        "text": "S3 Transfer Acceleration",
+        "correct": false,
+        "why": "Acceleration optimizes transfers to one bucket and doesn't route or fail over between Regions."
+      },
+      {
+        "key": "C",
+        "text": "CloudFront with one bucket as the origin",
+        "correct": false,
+        "why": "A single origin gives no Regional failover for S3 API access."
+      },
+      {
+        "key": "D",
+        "text": "Route 53 latency-based routing to the two bucket website endpoints",
+        "correct": false,
+        "why": "This only works for public website endpoints, doesn't support authenticated S3 API requests, and gives no S3-native failover controls."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon S3 Multi-Region Access Points give applications one global hostname for S3 requests. Requests are routed through Global Accelerator-based infrastructure to the closest bucket, and replication rules keep the buckets in sync. Failover controls set buckets active or passive for fast Regional failover.",
+      "concept": "Multi-Region storage patterns: CRR for data copies, Multi-Region Access Points for routing and failover, and CloudFront origin groups for read-only CDN failover.",
+      "examTip": "'Single global S3 endpoint' plus 'route to nearest' plus 'Regional failover' means S3 Multi-Region Access Points.",
+      "references": [
+        {
+          "title": "Multi-Region Access Points in Amazon S3",
+          "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/MultiRegionAccessPoints.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-res-077",
+    "domain": "resilient",
+    "topic": "File Storage",
+    "tags": [
+      "efs-replication",
+      "cross-region",
+      "dr"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company stores shared application data on Amazon EFS in us-east-1. For disaster recovery, it needs a continuously updated, read-only copy of the file system in us-west-2 that can be made writable during failover, without building custom sync jobs.",
+    "prompt": "Which feature should be used?",
+    "options": [
+      {
+        "key": "A",
+        "text": "S3 Cross-Region Replication",
+        "correct": false,
+        "why": "CRR replicates S3 objects, not EFS file systems."
+      },
+      {
+        "key": "B",
+        "text": "Amazon EFS replication to a destination file system in us-west-2",
+        "correct": true,
+        "why": "EFS replication continuously and automatically keeps a replica in another Region (or AZ) in sync, with an RPO measured in minutes. Failover makes the replica writable."
+      },
+      {
+        "key": "C",
+        "text": "EFS lifecycle management",
+        "correct": false,
+        "why": "Lifecycle moves files between storage classes. It doesn't replicate across Regions."
+      },
+      {
+        "key": "D",
+        "text": "An hourly rsync cron job on EC2",
+        "correct": false,
+        "why": "This is custom sync that needs managing, with worse RPO and more failure modes."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon EFS replication creates and maintains a read-only replica file system in the chosen Region or AZ, with no extra infrastructure. On failover you delete the replication configuration, which makes the destination writable, and point clients to it. AWS Backup can provide additional point-in-time copies.",
+      "concept": "Replication and backup are complementary: replication gives a low RPO copy for DR, and backups give historical versions for recovering from corruption.",
+      "examTip": "'Keep an EFS copy in another Region for DR' means EFS replication.",
+      "references": [
+        {
+          "title": "Amazon EFS replication",
+          "url": "https://docs.aws.amazon.com/efs/latest/ug/efs-replication.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-res-078",
+    "domain": "resilient",
+    "topic": "File Storage",
+    "tags": [
+      "efs-one-zone",
+      "efs-standard",
+      "resilience-tradeoff"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A company runs a production content management system on EC2 instances in three AZs sharing an EFS file system. To save money, an engineer proposes switching from EFS Standard (Regional) to EFS One Zone storage.",
+    "prompt": "What is the MAIN resilience risk of this change?",
+    "options": [
+      {
+        "key": "A",
+        "text": "One Zone file systems can't be mounted by more than one instance.",
+        "correct": false,
+        "why": "One Zone file systems can be mounted concurrently by many instances."
+      },
+      {
+        "key": "B",
+        "text": "One Zone doesn't support NFS.",
+        "correct": false,
+        "why": "Every EFS file system, One Zone included, uses NFSv4. Protocol support isn't what changes."
+      },
+      {
+        "key": "C",
+        "text": "One Zone file systems store data in a single AZ, so an AZ outage makes the data unavailable (and it could be lost), and instances in other AZs incur cross-AZ access.",
+        "correct": true,
+        "why": "EFS One Zone trades multi-AZ redundancy for lower cost. It suits development or easily recreated data, not a multi-AZ production system."
+      },
+      {
+        "key": "D",
+        "text": "One Zone file systems can't be backed up.",
+        "correct": false,
+        "why": "One Zone file systems support AWS Backup (and have automatic backups enabled by default)."
+      }
+    ],
+    "explanation": {
+      "answer": "EFS Regional (Standard) storage classes replicate data across multiple AZs. EFS One Zone classes store data in one AZ at a lower price. For production workloads spread across AZs, a One Zone file system becomes a single point of failure tied to its AZ.",
+      "concept": "Always check a cost optimization against resilience requirements. One Zone options appear across services: S3 One Zone-IA, EFS One Zone, Express One Zone, and single-AZ RDS.",
+      "examTip": "One Zone means lower cost, one AZ, and not for resilient multi-AZ production.",
+      "references": [
+        {
+          "title": "EFS file system types",
+          "url": "https://docs.aws.amazon.com/efs/latest/ug/availability-durability.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-res-079",
+    "domain": "resilient",
+    "topic": "Disaster Recovery",
+    "tags": [
+      "ecr-replication",
+      "ami-copy",
+      "dr-artifacts"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "During a DR drill, a company's ECS services couldn't start in the recovery Region because the container images existed only in the primary Region's Amazon ECR registry.",
+    "prompt": "What is the MOST reliable way to prevent this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Store images on EBS volumes.",
+        "correct": false,
+        "why": "EBS volumes are AZ-scoped and aren't a container registry."
+      },
+      {
+        "key": "B",
+        "text": "Pull images from the primary Region during failover.",
+        "correct": false,
+        "why": "If the primary Region is down, its registry may be unreachable, which is exactly what happened in the drill."
+      },
+      {
+        "key": "C",
+        "text": "Rebuild images from source in the DR Region during an incident.",
+        "correct": false,
+        "why": "This is slow, depends on build pipelines and dependencies, and is error-prone under pressure."
+      },
+      {
+        "key": "D",
+        "text": "Configure ECR cross-Region replication so that images pushed to the primary registry are automatically replicated to the DR Region, and reference the local registry in DR task definitions.",
+        "correct": true,
+        "why": "ECR replication copies images automatically on push, so they're already available in the DR Region when the primary Region is impaired."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon ECR supports private image replication across Regions and accounts, based on replication rules and repository filters. DR plans must pre-position all artifacts in the recovery Region: container images, AMIs (copy them), Lambda code (deploy it), secrets and keys (replicate them), and infrastructure templates.",
+      "concept": "Dependencies on the primary Region's control plane or data during failover are a common DR anti-pattern. Aim for static stability in the recovery Region.",
+      "examTip": "'Containers can't start in DR Region' means ECR cross-Region replication (and copy AMIs, replicate secrets and keys).",
+      "references": [
+        {
+          "title": "Private image replication in Amazon ECR",
+          "url": "https://docs.aws.amazon.com/AmazonECR/latest/userguide/replication.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-res-080",
+    "domain": "resilient",
+    "topic": "Infrastructure as Code",
+    "tags": [
+      "deletion-policy",
+      "cloudformation",
+      "data-protection"
+    ],
+    "difficulty": "medium",
+    "type": "multi",
+    "selectCount": 2,
+    "stem": "A developer accidentally deleted a CloudFormation stack, which also deleted the production RDS database and an S3 bucket's data created by the stack. The company wants future stack deletions or replacements to preserve these data resources.",
+    "prompt": "Which TWO measures help prevent data loss? (Select TWO.)",
+    "options": [
+      {
+        "key": "A",
+        "text": "Increase the stack's timeout.",
+        "correct": false,
+        "why": "Timeouts affect how long operations can take, not data preservation."
+      },
+      {
+        "key": "B",
+        "text": "Use CloudFormation drift detection.",
+        "correct": false,
+        "why": "Drift detection finds manual changes but doesn't prevent deletion."
+      },
+      {
+        "key": "C",
+        "text": "Set DeletionPolicy: Snapshot (or Retain) on the RDS resource, and DeletionPolicy: Retain on the S3 bucket, plus UpdateReplacePolicy for replacements.",
+        "correct": true,
+        "why": "DeletionPolicy and UpdateReplacePolicy tell CloudFormation to keep the resource, or take a final snapshot, instead of deleting it when the stack or resource is removed or replaced."
+      },
+      {
+        "key": "D",
+        "text": "Enable stack termination protection, and use a stack policy to protect critical resources from updates.",
+        "correct": true,
+        "why": "Termination protection prevents accidental stack deletion, and stack policies block unintended updates or replacements of protected resources."
+      },
+      {
+        "key": "E",
+        "text": "Enable CloudFormation rollback triggers.",
+        "correct": false,
+        "why": "Rollback triggers roll back failed updates based on alarms. They don't prevent stack deletion."
+      }
+    ],
+    "explanation": {
+      "answer": "Protect stateful resources in infrastructure as code: DeletionPolicy (Retain, Snapshot or Delete) and UpdateReplacePolicy control what happens to the physical resource. Stack termination protection and stack policies add guardrails against accidental operations. RDS deletion protection and S3 versioning add service-level safety.",
+      "concept": "Separating stateful resources (databases, buckets) into their own stacks, with restricted permissions, also reduces blast radius.",
+      "examTip": "'Stack deletion removed my database' means DeletionPolicy Snapshot/Retain plus termination protection.",
+      "references": [
+        {
+          "title": "DeletionPolicy attribute",
+          "url": "https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-attribute-deletionpolicy.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-res-081",
+    "domain": "resilient",
+    "topic": "Deployment",
+    "tags": [
+      "blue-green",
+      "weighted-target-groups",
+      "rollback"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company's releases occasionally introduce bugs that take 30 minutes to roll back because instances must be redeployed. The company wants to shift production traffic gradually to a new version and roll back almost instantly if errors rise.",
+    "prompt": "Which deployment approach BEST meets these requirements?",
+    "options": [
+      {
+        "key": "A",
+        "text": "A blue/green deployment: run the new version in a separate target group (or environment) and shift traffic using ALB weighted target groups, shifting back immediately if needed.",
+        "correct": true,
+        "why": "Blue/green keeps the old version running, so rollback is just shifting traffic back. Weighted target groups allow gradual, controlled cutover."
+      },
+      {
+        "key": "B",
+        "text": "An in-place deployment to all instances at once",
+        "correct": false,
+        "why": "In-place, all-at-once deployments affect every user, and rollback requires redeploying."
+      },
+      {
+        "key": "C",
+        "text": "Manually SSH into instances to update code",
+        "correct": false,
+        "why": "Manual changes are slow, error-prone and hard to roll back."
+      },
+      {
+        "key": "D",
+        "text": "Increase the Auto Scaling group's capacity",
+        "correct": false,
+        "why": "More capacity doesn't reduce deployment risk."
+      }
+    ],
+    "explanation": {
+      "answer": "Blue/green deployments reduce risk by running two environments. Traffic moves from blue (current) to green (new) through ALB weighted target groups, Route 53 weighted records, or CodeDeploy, and rollback is a traffic shift rather than a redeployment. Canary and linear strategies shift traffic in steps with monitoring.",
+      "concept": "Deployment safety toolkit: blue/green, canary, feature flags (AWS AppConfig), automatic rollback on CloudWatch alarms, and immutable infrastructure.",
+      "examTip": "'Near-instant rollback' plus 'gradual traffic shift' means blue/green with weighted routing.",
+      "references": [
+        {
+          "title": "Blue/Green Deployments on AWS (whitepaper)",
+          "url": "https://docs.aws.amazon.com/whitepapers/latest/blue-green-deployments/welcome.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-res-082",
+    "domain": "resilient",
+    "topic": "Deployment",
+    "tags": [
+      "codedeploy",
+      "lambda-canary",
+      "automatic-rollback"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A team deploys new versions of a critical Lambda function several times a day. They want each deployment to send 10% of traffic to the new version for 10 minutes, then shift fully if the error-rate CloudWatch alarm stays OK, and roll back automatically otherwise.",
+    "prompt": "Which solution provides this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use Lambda reserved concurrency",
+        "correct": false,
+        "why": "Concurrency controls don't split traffic between versions."
+      },
+      {
+        "key": "B",
+        "text": "AWS CodeDeploy with a Lambda alias and a Canary10Percent10Minutes deployment configuration, with the CloudWatch alarm configured for automatic rollback",
+        "correct": true,
+        "why": "CodeDeploy shifts alias traffic between Lambda versions using canary or linear configurations, monitors alarms, and rolls back automatically on failure."
+      },
+      {
+        "key": "C",
+        "text": "Deploy to a separate function and change the API Gateway integration manually",
+        "correct": false,
+        "why": "A manual switch isn't gradual, isn't monitored, and doesn't roll back automatically."
+      },
+      {
+        "key": "D",
+        "text": "Publish a new version and update the alias to 100% immediately",
+        "correct": false,
+        "why": "All-at-once deployments expose every user to a bad release."
+      }
+    ],
+    "explanation": {
+      "answer": "Lambda aliases support weighted routing between two versions. CodeDeploy automates the traffic shifting (canary, linear or all-at-once), runs optional pre- and post-traffic hook functions, watches CloudWatch alarms, and rolls back by resetting the alias weights. AWS SAM makes this a few lines of configuration.",
+      "concept": "Progressive delivery limits blast radius: small exposure first, automated health evaluation, then automatic promotion or rollback.",
+      "examTip": "'Canary Lambda deployment with automatic rollback' means CodeDeploy plus aliases plus alarms.",
+      "references": [
+        {
+          "title": "Deployments on an AWS Lambda compute platform",
+          "url": "https://docs.aws.amazon.com/codedeploy/latest/userguide/deployment-steps-lambda.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-res-083",
+    "domain": "resilient",
+    "topic": "Auto Scaling",
+    "tags": [
+      "instance-refresh",
+      "rolling-update",
+      "ami-update"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company bakes a new AMI every week with OS patches. It needs to replace all 60 instances in an Auto Scaling group with the new AMI while keeping at least 90% of capacity in service at all times, and stop automatically if new instances fail health checks.",
+    "prompt": "Which feature should be used?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Update the launch template only",
+        "correct": false,
+        "why": "Existing instances keep the old AMI until they're replaced. Updating the template alone does nothing to them."
+      },
+      {
+        "key": "B",
+        "text": "Terminate all instances and let the group relaunch them",
+        "correct": false,
+        "why": "This drops capacity to zero, causing an outage."
+      },
+      {
+        "key": "C",
+        "text": "An Auto Scaling instance refresh with a minimum healthy percentage of 90%, using the updated launch template, with automatic rollback enabled",
+        "correct": true,
+        "why": "Instance refresh replaces instances in batches while keeping the minimum healthy percentage, waits for health checks, and can roll back if replacements fail."
+      },
+      {
+        "key": "D",
+        "text": "Create a second ASG and delete the first manually",
+        "correct": false,
+        "why": "This can work as a blue/green approach, but it's manual and slower than the built-in instance refresh."
+      }
+    ],
+    "explanation": {
+      "answer": "EC2 Auto Scaling instance refresh performs rolling replacements of instances to apply launch template or AMI changes. You set the minimum healthy percentage (and optionally maximum healthy percentage for launch-before-terminate), warm-up time, checkpoints, and automatic rollback on failure or on CloudWatch alarms.",
+      "concept": "Immutable infrastructure means patching by replacing instances with new images (EC2 Image Builder pipelines plus instance refresh), not by modifying running servers.",
+      "examTip": "'Roll new AMI across an ASG while keeping capacity' means instance refresh.",
+      "references": [
+        {
+          "title": "Use an instance refresh to update instances in an Auto Scaling group",
+          "url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-instance-refresh.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-res-084",
+    "domain": "resilient",
+    "topic": "Immutable Infrastructure",
+    "tags": [
+      "ec2-image-builder",
+      "golden-ami"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A company's instances install software and patches at boot from the internet, so launches sometimes fail when a repository is unavailable and take 15 minutes when they do succeed. The company wants consistent, fast, reliable launches.",
+    "prompt": "Which approach BEST addresses this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Disable health checks during launch.",
+        "correct": false,
+        "why": "Disabling health checks only hides failed launches. Broken instances would then receive traffic."
+      },
+      {
+        "key": "B",
+        "text": "Use larger instance types.",
+        "correct": false,
+        "why": "Instance size doesn't fix repository availability."
+      },
+      {
+        "key": "C",
+        "text": "Add more retries to the user data script.",
+        "correct": false,
+        "why": "Retries mask the problem but still depend on external repositories and slow boots."
+      },
+      {
+        "key": "D",
+        "text": "Build and test golden AMIs with the software pre-installed using EC2 Image Builder pipelines, and launch instances from those AMIs.",
+        "correct": true,
+        "why": "Pre-baked, tested images remove the dependency on external repositories at boot and shorten launch time. Image Builder automates building, patching, testing and distributing them."
+      }
+    ],
+    "explanation": {
+      "answer": "Golden images (baked AMIs or container images) move slow, failure-prone setup from launch time to build time. EC2 Image Builder provides managed pipelines that build, harden (for example with CIS components), test and distribute AMIs across Regions and accounts on a schedule.",
+      "concept": "Balance baking and bootstrapping: bake stable dependencies into the image, and inject only environment-specific configuration at boot (user data, Parameter Store).",
+      "examTip": "'Slow or unreliable boot due to installs' means golden AMIs with EC2 Image Builder.",
+      "references": [
+        {
+          "title": "What is EC2 Image Builder?",
+          "url": "https://docs.aws.amazon.com/imagebuilder/latest/userguide/what-is-image-builder.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-res-085",
+    "domain": "resilient",
+    "topic": "Resilience Testing",
+    "tags": [
+      "fault-injection-service",
+      "chaos-engineering"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "An e-commerce company believes its architecture survives an AZ failure and the loss of its ElastiCache primary node, but has never tested it. It wants to run controlled experiments, such as stopping instances in one AZ or failing over databases, with guardrails that stop the experiment if customer-facing alarms fire.",
+    "prompt": "Which AWS service is designed for this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Fault Injection Service (FIS)",
+        "correct": true,
+        "why": "FIS runs managed fault-injection experiments (stopping instances, AZ power interruption scenarios, failing over databases, injecting API errors) with stop conditions tied to CloudWatch alarms."
+      },
+      {
+        "key": "B",
+        "text": "AWS Trusted Advisor",
+        "correct": false,
+        "why": "Trusted Advisor reviews configurations but doesn't inject failures."
+      },
+      {
+        "key": "C",
+        "text": "Amazon Inspector",
+        "correct": false,
+        "why": "Amazon Inspector scans workloads for software vulnerabilities. It can't simulate AZ outages or node failovers."
+      },
+      {
+        "key": "D",
+        "text": "AWS Config",
+        "correct": false,
+        "why": "Config tracks configuration compliance and doesn't run chaos experiments."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Fault Injection Service is a managed chaos engineering service. Experiment templates define targets, actions and stop conditions. A scenario library includes complex events such as AZ power interruption and cross-Region connectivity loss. Experiments prove, rather than assume, that recovery mechanisms work.",
+      "concept": "AWS Resilience Hub assesses workloads against RTO and RPO targets and recommends improvements and FIS experiments. Together they close the resilience feedback loop.",
+      "examTip": "'Test resilience by injecting failures safely' means AWS Fault Injection Service.",
+      "references": [
+        {
+          "title": "What is AWS Fault Injection Service?",
+          "url": "https://docs.aws.amazon.com/fis/latest/userguide/what-is.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-res-086",
+    "domain": "resilient",
+    "topic": "Resilience Assessment",
+    "tags": [
+      "resilience-hub",
+      "rto-rpo-policy"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company has defined RTO and RPO targets for 30 applications. Leadership wants a continuous assessment of whether each application's current AWS architecture can meet its targets, with recommendations when it can't, integrated into the release pipeline.",
+    "prompt": "Which service should be used?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Health Dashboard",
+        "correct": false,
+        "why": "The Health Dashboard reports AWS service events and scheduled changes. It doesn't assess your architecture against RTO and RPO."
+      },
+      {
+        "key": "B",
+        "text": "AWS Resilience Hub",
+        "correct": true,
+        "why": "Resilience Hub models applications from IaC or tags, assesses them against resiliency policies (RTO and RPO for AZ, infrastructure, application and Region disruptions), and recommends fixes, alarms and tests. It can also run in CI/CD."
+      },
+      {
+        "key": "C",
+        "text": "Amazon CloudWatch Synthetics",
+        "correct": false,
+        "why": "Synthetics monitors endpoints with canaries. It doesn't assess recovery objectives."
+      },
+      {
+        "key": "D",
+        "text": "AWS Cost Explorer",
+        "correct": false,
+        "why": "Cost Explorer analyses spending. It has no model of your architecture's recovery time or recovery point."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Resilience Hub gives a central place to define, validate and track application resilience. It estimates achievable RTO and RPO, flags gaps (for example a single-AZ database or missing backups), suggests alarms, SOPs and FIS experiments, and tracks resilience scores over time.",
+      "concept": "Resilience is continuous: define objectives, assess, improve, test (FIS), monitor, and repeat after every change.",
+      "examTip": "'Check if apps meet RTO/RPO continuously' means AWS Resilience Hub.",
+      "references": [
+        {
+          "title": "What is AWS Resilience Hub?",
+          "url": "https://docs.aws.amazon.com/resilience-hub/latest/userguide/what-is.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-res-087",
+    "domain": "resilient",
+    "topic": "Operations",
+    "tags": [
+      "aws-health",
+      "scheduled-maintenance",
+      "eventbridge"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "AWS occasionally schedules EC2 instance retirements and maintenance events that affect specific instances. The operations team missed one such notice, and an important instance stopped. They want automatic notifications, and optionally automated actions, for Health events that affect their resources.",
+    "prompt": "Which solution meets this requirement?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Enable VPC Flow Logs.",
+        "correct": false,
+        "why": "Flow logs capture network traffic, not Health events."
+      },
+      {
+        "key": "B",
+        "text": "Enable detailed monitoring on the instance.",
+        "correct": false,
+        "why": "Metrics don't include AWS scheduled maintenance notices."
+      },
+      {
+        "key": "C",
+        "text": "Create Amazon EventBridge rules for AWS Health events (such as scheduled instance retirement) that notify through SNS and optionally trigger automation.",
+        "correct": true,
+        "why": "AWS Health publishes account-specific events to EventBridge, so teams can alert and automate responses such as stop/starting or replacing affected instances."
+      },
+      {
+        "key": "D",
+        "text": "Check the AWS status page weekly.",
+        "correct": false,
+        "why": "The public status page shows broad service status, not account-specific scheduled events, and weekly checks are too infrequent."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Health provides personalized information about events affecting your resources: issues, scheduled changes such as instance retirement or maintenance, and account notifications. Through EventBridge integration (and organizational views), you can route these to chat, ticketing or automation.",
+      "concept": "Operational excellence and reliability overlap: proactive handling of scheduled events avoids surprise downtime.",
+      "examTip": "'Get alerted/automate on AWS scheduled maintenance for my resources' means AWS Health plus EventBridge.",
+      "references": [
+        {
+          "title": "Monitoring AWS Health events with Amazon EventBridge",
+          "url": "https://docs.aws.amazon.com/health/latest/ug/cloudwatch-events-health.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-res-088",
+    "domain": "resilient",
+    "topic": "Hybrid Connectivity",
+    "tags": [
+      "direct-connect-gateway",
+      "multi-region-vpcs"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A company has one AWS Direct Connect connection in Frankfurt. It needs private connectivity from its data center to VPCs in eu-central-1, eu-west-1 and us-east-1, without ordering additional Direct Connect connections for each Region.",
+    "prompt": "Which solution meets this requirement?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Order a Direct Connect connection per Region.",
+        "correct": false,
+        "why": "This works but is costly and unnecessary when a Direct Connect gateway exists."
+      },
+      {
+        "key": "B",
+        "text": "Create a Site-to-Site VPN to each VPC instead.",
+        "correct": false,
+        "why": "This loses Direct Connect's consistent performance and doesn't use the existing DX."
+      },
+      {
+        "key": "C",
+        "text": "Peer the three VPCs and connect Direct Connect to only one.",
+        "correct": false,
+        "why": "VPC peering is non-transitive, so on-premises traffic can't route through one VPC to peered VPCs."
+      },
+      {
+        "key": "D",
+        "text": "Create a Direct Connect gateway, attach a private or transit virtual interface to it, and associate the VPCs' virtual private gateways (or Transit Gateways) in each Region.",
+        "correct": true,
+        "why": "A Direct Connect gateway is a global resource that connects a DX connection to VPCs or Transit Gateways in multiple Regions (outside China) through one virtual interface."
+      }
+    ],
+    "explanation": {
+      "answer": "Direct Connect gateways let a single DX connection (through private or transit VIFs) reach VPCs in any AWS Region, excluding China, and accounts. With a transit VIF plus Transit Gateways, you can scale to many VPCs per Region. Traffic stays on the AWS global network.",
+      "concept": "Hybrid network building blocks: DX connection, then VIF (private, public or transit), then DX gateway, then VGW or Transit Gateway, then VPCs. Add a VPN or a second DX for resiliency.",
+      "examTip": "'One DX, VPCs in multiple Regions' means a Direct Connect gateway.",
+      "references": [
+        {
+          "title": "Direct Connect gateways",
+          "url": "https://docs.aws.amazon.com/directconnect/latest/UserGuide/direct-connect-gateways-intro.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-res-089",
+    "domain": "resilient",
+    "topic": "Messaging",
+    "tags": [
+      "amazon-mq",
+      "active-standby",
+      "jms"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company is migrating a Java application that uses JMS with an on-premises Apache ActiveMQ broker. It wants a managed broker on AWS that keeps working if an Availability Zone fails, with minimal application changes.",
+    "prompt": "Which solution meets these requirements?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon MQ for ActiveMQ with an active/standby deployment across two AZs",
+        "correct": true,
+        "why": "Amazon MQ runs ActiveMQ as a managed service with JMS compatibility. Active/standby brokers in two AZs with shared storage fail over automatically."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Kinesis Data Streams",
+        "correct": false,
+        "why": "Kinesis Data Streams is a streaming data log with its own API. It doesn't speak JMS or act as an ActiveMQ-compatible broker."
+      },
+      {
+        "key": "C",
+        "text": "Amazon SQS",
+        "correct": false,
+        "why": "SQS isn't JMS-native. Migrating would require code changes, although a JMS client library exists."
+      },
+      {
+        "key": "D",
+        "text": "A single ActiveMQ broker on EC2",
+        "correct": false,
+        "why": "A single self-managed broker is a single point of failure that you'd have to run yourself."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon MQ is a managed message broker for Apache ActiveMQ and RabbitMQ. It supports industry-standard APIs and protocols (JMS, AMQP, MQTT, OpenWire, STOMP), which makes lift-and-shift of existing messaging easy. ActiveMQ active/standby and RabbitMQ cluster deployments provide multi-AZ high availability.",
+      "concept": "Existing broker protocols point to Amazon MQ. New cloud-native messaging points to SQS, SNS or EventBridge for scale and simplicity.",
+      "examTip": "'Existing JMS/ActiveMQ/RabbitMQ app, minimal changes, HA' means Amazon MQ (active/standby or cluster).",
+      "references": [
+        {
+          "title": "What is Amazon MQ?",
+          "url": "https://docs.aws.amazon.com/amazon-mq/latest/developer-guide/welcome.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-res-090",
+    "domain": "resilient",
+    "topic": "Load Balancing",
+    "tags": [
+      "health-check-endpoint",
+      "dependency-failure"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "An API's ALB health check calls /health, which queries the database. During a brief database failover, every instance failed its health check at once. The ALB marked all targets unhealthy and the Auto Scaling group started replacing every instance, turning a 30-second database blip into a 15-minute outage.",
+    "prompt": "What is the BEST way to improve the health-check design?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Remove health checks entirely.",
+        "correct": false,
+        "why": "Without health checks, truly failed instances would keep receiving traffic."
+      },
+      {
+        "key": "B",
+        "text": "Make the ELB health check a shallow liveness check of the instance and app process only, and monitor dependencies separately with alarms, so shared dependency failures don't mark every instance unhealthy.",
+        "correct": true,
+        "why": "Deep health checks that include shared dependencies can fail everywhere at once, causing mass replacement. Shallow checks replace only genuinely broken instances."
+      },
+      {
+        "key": "C",
+        "text": "Make the health check query every dependency more often.",
+        "correct": false,
+        "why": "This amplifies the problem and adds load on the dependencies."
+      },
+      {
+        "key": "D",
+        "text": "Point the health check at the database endpoint directly.",
+        "correct": false,
+        "why": "Load balancer health checks must target the registered targets, and the failure mode would remain."
+      }
+    ],
+    "explanation": {
+      "answer": "Health checks should decide whether a specific target should receive traffic. If a check depends on something shared by all targets, like a database, a dependency blip fails every target together. ELB 'fails open' when all targets are unhealthy, but Auto Scaling may still churn instances. Use liveness-style checks for replacement decisions, and handle dependency failures with retries, circuit breakers, and degraded modes.",
+      "concept": "This is from the Amazon Builders' Library guidance 'Implementing health checks': balance local and dependency checks, and avoid correlated failures triggering mass replacement.",
+      "examTip": "'Dependency blip caused all instances to be replaced' means use shallow health checks and monitor dependencies separately.",
+      "references": [
+        {
+          "title": "Implementing health checks (Amazon Builders' Library)",
+          "url": "https://aws.amazon.com/builders-library/implementing-health-checks/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-res-091",
+    "domain": "resilient",
+    "topic": "Static Stability",
+    "tags": [
+      "overprovision-per-az",
+      "static-stability"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "An application needs 12 instances to handle peak load and runs across three AZs with 4 instances each. If an AZ fails, the Auto Scaling group must launch 4 replacement instances in the remaining AZs, but during large-scale events, launching capacity can be delayed. The business requires full peak capacity even during an AZ failure.",
+    "prompt": "Which design provides this 'static stability'?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use Spot Instances for the extra capacity.",
+        "correct": false,
+        "why": "Spot capacity may be scarce or interrupted exactly when it's needed during regional events."
+      },
+      {
+        "key": "B",
+        "text": "Run all 12 instances in one AZ.",
+        "correct": false,
+        "why": "An AZ failure would then take out everything."
+      },
+      {
+        "key": "C",
+        "text": "Provision 6 instances in each of the three AZs (18 total), so the remaining two AZs can handle peak load without launching new instances.",
+        "correct": true,
+        "why": "Pre-provisioning enough capacity in the surviving AZs means the system doesn't depend on launching instances during an incident, which is the definition of static stability."
+      },
+      {
+        "key": "D",
+        "text": "Keep 4 per AZ and rely on Auto Scaling to replace capacity.",
+        "correct": false,
+        "why": "This depends on the EC2 control plane and capacity being available during an incident, which isn't guaranteed."
+      }
+    ],
+    "explanation": {
+      "answer": "Static stability means a system keeps working through a dependency's failure without needing to make changes. For AZ resilience, provision enough capacity in N-1 AZs to carry peak load: with three AZs, each needs 50% of peak, a total of 150%. Capacity Reservations can back the surge plan.",
+      "concept": "This is a cost versus resilience trade-off: over-provisioning costs more but removes reliance on control-plane actions during incidents. Match it to business criticality.",
+      "examTip": "'Must keep full capacity during an AZ failure without launching instances' means provision for N-1 AZs (static stability).",
+      "references": [
+        {
+          "title": "Static stability using Availability Zones (Amazon Builders' Library)",
+          "url": "https://aws.amazon.com/builders-library/static-stability-using-availability-zones/"
+        }
+      ]
+    }
+  }
+]

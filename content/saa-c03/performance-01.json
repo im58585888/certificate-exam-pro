@@ -1,0 +1,636 @@
+[
+  {
+    "id": "saa-perf-001",
+    "domain": "performance",
+    "topic": "Database Scaling",
+    "tags": [
+      "rds",
+      "read-replica",
+      "read-heavy",
+      "reporting"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A news website uses Amazon RDS for PostgreSQL. Article pages generate a heavy volume of read queries, and every morning the editorial team runs long analytical reports against the same database. During reporting, page load times triple. Write volume is low and steady.",
+    "prompt": "Which solution will MOST effectively improve page performance?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Create one or more read replicas, direct the reporting queries and article reads to the replicas, and keep writes on the primary.",
+        "correct": true,
+        "why": "Read replicas offload read traffic, including heavy reporting, from the primary. The reports no longer compete with page reads on the same instance."
+      },
+      {
+        "key": "B",
+        "text": "Enable automated backups with a 35-day retention period.",
+        "correct": false,
+        "why": "Backups have no effect on query performance."
+      },
+      {
+        "key": "C",
+        "text": "Increase the allocated storage of the DB instance.",
+        "correct": false,
+        "why": "More storage (and the gp2 IOPS that come with it) does not address CPU and memory contention caused by heavy analytical queries."
+      },
+      {
+        "key": "D",
+        "text": "Enable Multi-AZ on the DB instance.",
+        "correct": false,
+        "why": "In the Multi-AZ instance deployment, the standby cannot serve reads. It improves availability, not read performance."
+      }
+    ],
+    "explanation": {
+      "answer": "RDS read replicas use asynchronous replication to maintain read-only copies of the primary. Sending reporting and read-heavy traffic to replicas reduces load on the primary. RDS supports up to 15 read replicas for PostgreSQL and MySQL, and replicas can live in other AZs or Regions.",
+      "concept": "Scale reads with replicas or caching (ElastiCache). Scale writes with a bigger instance (vertical), sharding, or a different data store such as DynamoDB. For Aurora, use the reader endpoint to load-balance across up to 15 Aurora Replicas, and consider custom endpoints to isolate reporting workloads.",
+      "examTip": "'Read-heavy' or 'reporting queries slow down the app' means read replicas. Remember that Multi-AZ is for availability, not performance.",
+      "references": [
+        {
+          "title": "Working with DB instance read replicas",
+          "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ReadRepl.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-perf-002",
+    "domain": "performance",
+    "topic": "Caching",
+    "tags": [
+      "dynamodb",
+      "dax",
+      "microsecond",
+      "read-cache"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A mobile gaming company stores player profiles and leaderboards in Amazon DynamoDB. During tournaments, millions of players repeatedly read the same leaderboard items, and the company needs read latency in microseconds rather than single-digit milliseconds. The team wants to avoid changing application logic significantly.",
+    "prompt": "Which solution meets these requirements?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Create a global secondary index on the leaderboard attribute.",
+        "correct": false,
+        "why": "A GSI changes which query patterns are efficient but does not reduce latency below DynamoDB's normal millisecond range."
+      },
+      {
+        "key": "B",
+        "text": "Add Amazon DynamoDB Accelerator (DAX) in front of the table and use the DAX client in the application.",
+        "correct": true,
+        "why": "DAX is an in-memory, write-through cache that speaks the DynamoDB API. Cached eventually consistent reads return in microseconds, and the application only swaps in the DAX client."
+      },
+      {
+        "key": "C",
+        "text": "Enable DynamoDB Streams and process leaderboard updates with Lambda.",
+        "correct": false,
+        "why": "Streams capture item changes for event-driven processing. They do not speed up reads."
+      },
+      {
+        "key": "D",
+        "text": "Switch the table to provisioned capacity with a higher read capacity setting.",
+        "correct": false,
+        "why": "More capacity raises throughput limits but DynamoDB still returns in single-digit milliseconds. It won't reach microseconds."
+      }
+    ],
+    "explanation": {
+      "answer": "DynamoDB Accelerator (DAX) is a fully managed, highly available in-memory cache for DynamoDB. Because it is API-compatible, applications switch to the DAX SDK client with minimal code changes. Repeated reads of hot items are served from memory in microseconds, which also reduces the read capacity consumed on the table.",
+      "concept": "DAX caches eventually consistent reads (GetItem, Query, Scan results). Strongly consistent reads pass through to DynamoDB. For general-purpose caching of computed results or data from other databases, choose ElastiCache.",
+      "examTip": "'DynamoDB' plus 'microsecond' plus 'minimal code change' means DAX.",
+      "references": [
+        {
+          "title": "In-memory acceleration with DynamoDB Accelerator (DAX)",
+          "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DAX.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-perf-003",
+    "domain": "performance",
+    "topic": "Content Delivery",
+    "tags": [
+      "cloudfront",
+      "cdn",
+      "static-content",
+      "global-latency"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "An online furniture retailer hosts product images, videos and JavaScript bundles in an Amazon S3 bucket in us-east-1. Customers in Australia and Brazil report slow page loads, and S3 request costs are rising quickly as traffic grows.",
+    "prompt": "Which solution will improve load times for global users and reduce S3 request volume?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Enable S3 Cross-Region Replication to buckets in every Region where customers live.",
+        "correct": false,
+        "why": "This reduces latency for some Regions but adds storage, replication and routing complexity, and it doesn't reduce request volume the way edge caching does."
+      },
+      {
+        "key": "B",
+        "text": "Move the assets to Amazon EFS and serve them from EC2 instances.",
+        "correct": false,
+        "why": "This adds servers to manage, keeps content in a single Region, and doesn't bring it closer to users."
+      },
+      {
+        "key": "C",
+        "text": "Create an Amazon CloudFront distribution with the S3 bucket as the origin and serve assets through CloudFront.",
+        "correct": true,
+        "why": "CloudFront caches content at hundreds of edge locations close to users. Repeated requests are served from cache, which improves latency and cuts origin (S3) requests."
+      },
+      {
+        "key": "D",
+        "text": "Enable S3 Transfer Acceleration for downloads.",
+        "correct": false,
+        "why": "Transfer Acceleration optimizes the network path to the bucket, mainly for uploads. It does not cache content, so every request still hits S3."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon CloudFront is AWS's content delivery network. It caches static (and can accelerate dynamic) content at edge locations worldwide, so users receive assets from a nearby point of presence. Cache hits never reach S3, which lowers S3 request charges, and data transfer from S3 to CloudFront is free.",
+      "concept": "Tune caching with cache policies (TTL, which headers, cookies and query strings form the cache key). Use versioned file names for deployments instead of frequent invalidations. Secure the origin with origin access control. Add Lambda@Edge or CloudFront Functions for lightweight logic at the edge.",
+      "examTip": "'Global users', 'static content' and 'reduce latency' together mean CloudFront.",
+      "references": [
+        {
+          "title": "What is Amazon CloudFront?",
+          "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-perf-004",
+    "domain": "performance",
+    "topic": "S3 Performance",
+    "tags": [
+      "s3-transfer-acceleration",
+      "multipart-upload",
+      "large-files",
+      "upload-speed"
+    ],
+    "difficulty": "medium",
+    "type": "multi",
+    "selectCount": 2,
+    "stem": "A genomics lab in Sydney uploads sequencing files of 20-50 GB each to an Amazon S3 bucket in us-east-1 over the public internet. Uploads are slow and frequently fail near the end, forcing the whole file to be re-sent. The lab wants faster, more reliable uploads without buying dedicated network circuits.",
+    "prompt": "Which combination of actions will BEST meet these requirements? (Select TWO.)",
+    "options": [
+      {
+        "key": "A",
+        "text": "Serve the bucket through Amazon CloudFront with caching enabled.",
+        "correct": false,
+        "why": "CloudFront caching speeds up downloads of repeatedly requested content. It does not help one-time, large uploads."
+      },
+      {
+        "key": "B",
+        "text": "Change the bucket's storage class to S3 Standard-IA.",
+        "correct": false,
+        "why": "Storage class affects storage pricing and retrieval fees, not upload performance."
+      },
+      {
+        "key": "C",
+        "text": "Provision an AWS Direct Connect connection from Sydney to us-east-1.",
+        "correct": false,
+        "why": "The lab explicitly wants to avoid dedicated circuits. Direct Connect also has long lead times and ongoing port costs."
+      },
+      {
+        "key": "D",
+        "text": "Use S3 multipart upload to upload each file in parallel parts.",
+        "correct": true,
+        "why": "Multipart upload sends parts in parallel for higher throughput. A failed part is retried on its own instead of restarting the whole file, which fixes the 'fails near the end' problem. It is recommended for objects over 100 MB."
+      },
+      {
+        "key": "E",
+        "text": "Enable S3 Transfer Acceleration on the bucket and use the accelerate endpoint.",
+        "correct": true,
+        "why": "Transfer Acceleration routes uploads to the nearest CloudFront edge location and then across the optimized AWS backbone to us-east-1, often greatly improving long-distance throughput."
+      }
+    ],
+    "explanation": {
+      "answer": "Two complementary features fix this. Multipart upload parallelizes the transfer and isolates failures to individual parts. Transfer Acceleration shortens the slow, lossy public-internet path by entering the AWS network at a nearby edge location. Together they give faster and more resilient long-distance uploads with no new infrastructure.",
+      "concept": "S3 performance toolkit: multipart upload (large objects), byte-range fetches (parallel downloads), Transfer Acceleration (long distance), prefix parallelism (S3 scales per prefix to thousands of requests per second), and CloudFront (repeated downloads). For offline bulk migrations of terabytes to petabytes, use AWS Snowball Edge.",
+      "examTip": "'Large files' means multipart. 'Far from the bucket's Region' means Transfer Acceleration.",
+      "references": [
+        {
+          "title": "Configuring fast, secure file transfers using Amazon S3 Transfer Acceleration",
+          "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/transfer-acceleration.html"
+        },
+        {
+          "title": "Uploading and copying objects using multipart upload",
+          "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/mpuoverview.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-perf-005",
+    "domain": "performance",
+    "topic": "Global Networking",
+    "tags": [
+      "global-accelerator",
+      "udp",
+      "static-ip",
+      "anycast"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A multiplayer game uses a custom UDP protocol and runs game servers behind Network Load Balancers in three AWS Regions. Players worldwide experience jitter over the public internet. Some corporate customers also need a small, fixed set of IP addresses to allow-list in their firewalls, and those addresses must not change if the company adds Regions.",
+    "prompt": "Which service should a solutions architect use?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Transit Gateway inter-Region peering",
+        "correct": false,
+        "why": "Transit Gateway connects VPCs and on-premises networks. It is not a service for accelerating internet users to applications."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Route 53 latency-based routing",
+        "correct": false,
+        "why": "Route 53 returns Region-specific IPs via DNS, so the IPs change as Regions are added. Traffic still crosses the public internet, and DNS caching slows failover."
+      },
+      {
+        "key": "C",
+        "text": "Amazon CloudFront",
+        "correct": false,
+        "why": "CloudFront is built for HTTP(S) and WebSocket content delivery. It does not proxy arbitrary UDP game traffic, and it does not give you two static anycast IPs for allow-listing."
+      },
+      {
+        "key": "D",
+        "text": "AWS Global Accelerator",
+        "correct": true,
+        "why": "Global Accelerator provides two static anycast IPv4 addresses, supports TCP and UDP, brings traffic onto the AWS global network at the nearest edge, and routes to the closest healthy Regional endpoint."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Global Accelerator gives your application two static anycast IP addresses advertised from AWS edge locations. User traffic enters the AWS backbone at the closest edge and is routed to the optimal healthy endpoint (NLB, ALB, EC2 or Elastic IP) across Regions. It supports TCP and UDP, fails over in seconds without DNS caching issues, and its IPs stay the same as endpoints change.",
+      "concept": "CloudFront versus Global Accelerator: both use the edge network. CloudFront caches HTTP content. Global Accelerator does not cache. It accelerates any TCP/UDP traffic and provides static IPs and fast regional failover.",
+      "examTip": "'UDP', 'gaming/IoT/VoIP', 'static IP addresses to allow-list' or 'fast regional failover without DNS' means Global Accelerator.",
+      "references": [
+        {
+          "title": "What is AWS Global Accelerator?",
+          "url": "https://docs.aws.amazon.com/global-accelerator/latest/dg/what-is-global-accelerator.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-perf-006",
+    "domain": "performance",
+    "topic": "EC2 Placement",
+    "tags": [
+      "placement-group",
+      "cluster",
+      "hpc",
+      "low-latency"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "An engineering firm runs computational fluid dynamics simulations on a tightly coupled cluster of 32 Amazon EC2 instances. Nodes exchange data constantly using MPI, and the simulation speed is limited by network latency between nodes.",
+    "prompt": "How should the instances be launched to achieve the LOWEST inter-node latency and highest throughput?",
+    "options": [
+      {
+        "key": "A",
+        "text": "In a cluster placement group in a single Availability Zone, using instances that support enhanced networking (and EFA for MPI)",
+        "correct": true,
+        "why": "Cluster placement groups pack instances close together within one AZ on a low-latency, high-bisection-bandwidth network segment. Elastic Fabric Adapter further accelerates MPI."
+      },
+      {
+        "key": "B",
+        "text": "In a spread placement group across multiple Availability Zones",
+        "correct": false,
+        "why": "Spread placement groups put each instance on distinct hardware to reduce correlated failure. They are designed for a small number of critical instances, and they increase distance between nodes rather than reducing it."
+      },
+      {
+        "key": "C",
+        "text": "Across three Availability Zones behind a Network Load Balancer",
+        "correct": false,
+        "why": "Cross-AZ traffic adds latency, and a load balancer is not part of node-to-node MPI communication."
+      },
+      {
+        "key": "D",
+        "text": "In a partition placement group with one instance per partition",
+        "correct": false,
+        "why": "Partition groups isolate groups of instances on separate racks for large distributed systems like HDFS, Cassandra or Kafka. They optimize fault isolation, not minimum latency."
+      }
+    ],
+    "explanation": {
+      "answer": "A cluster placement group places instances in close physical proximity inside one Availability Zone, providing the lowest latency and highest per-flow throughput between instances. This is exactly what tightly coupled HPC workloads need. Pair it with Elastic Fabric Adapter (EFA) for OS-bypass MPI and NCCL communication.",
+      "concept": "Placement group types: Cluster gives performance but a single AZ (larger blast radius). Partition gives rack-level isolation for big distributed data systems. Spread gives each instance its own hardware, with a maximum of 7 running instances per AZ per group. Launch all cluster instances at once, with the same type, to reduce insufficient-capacity errors.",
+      "examTip": "'HPC', 'tightly coupled' or 'lowest latency between instances' means a cluster placement group. 'Critical instances must not share hardware' means spread.",
+      "references": [
+        {
+          "title": "Placement strategies for your placement groups",
+          "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-strategies.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-perf-007",
+    "domain": "performance",
+    "topic": "Block Storage",
+    "tags": [
+      "ebs",
+      "io2-block-express",
+      "iops",
+      "database"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A bank runs a self-managed Oracle database on Amazon EC2. The database requires sustained, consistent sub-millisecond I/O latency and very high IOPS for its transaction logs, and the storage must offer the highest durability available for EBS.",
+    "prompt": "Which EBS volume type should be used?",
+    "options": [
+      {
+        "key": "A",
+        "text": "General Purpose SSD (gp3)",
+        "correct": false,
+        "why": "gp3 is excellent for most workloads, but for sustained, consistent sub-millisecond latency at the highest IOPS and 99.999% durability, Provisioned IOPS io2 is the purpose-built choice."
+      },
+      {
+        "key": "B",
+        "text": "Provisioned IOPS SSD (io2 Block Express)",
+        "correct": true,
+        "why": "io2 Block Express offers the highest IOPS and throughput of any EBS volume, sub-millisecond latency, and 99.999% durability, which suits mission-critical databases."
+      },
+      {
+        "key": "C",
+        "text": "Cold HDD (sc1)",
+        "correct": false,
+        "why": "sc1 is the lowest-cost HDD option for infrequently accessed data. It is the opposite of what this workload needs."
+      },
+      {
+        "key": "D",
+        "text": "Throughput Optimized HDD (st1)",
+        "correct": false,
+        "why": "st1 is designed for large, sequential throughput workloads such as big data and log processing. Its random IOPS and latency are far too poor for transaction logs."
+      }
+    ],
+    "explanation": {
+      "answer": "Provisioned IOPS SSD io2 Block Express volumes are designed for the most demanding, latency-sensitive workloads such as SAP HANA, Oracle, SQL Server and large transactional databases. You provision the exact IOPS you need, and the volumes deliver consistent sub-millisecond latency with 99.999% durability (compared with 99.8-99.9% for other EBS types).",
+      "concept": "EBS families: SSD (gp3 and io2) for random I/O and IOPS-bound workloads, HDD (st1 and sc1) for sequential, throughput-bound workloads. HDD volumes cannot be boot volumes. gp3 lets you set IOPS and throughput independently of size and is usually the cost-effective default.",
+      "examTip": "'Mission-critical database', 'highest IOPS', 'consistent sub-millisecond' or 'highest durability' means io2 Block Express. 'Cost-effective general purpose' means gp3.",
+      "references": [
+        {
+          "title": "Amazon EBS volume types",
+          "url": "https://docs.aws.amazon.com/ebs/latest/userguide/ebs-volume-types.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-perf-008",
+    "domain": "performance",
+    "topic": "Instance Storage",
+    "tags": [
+      "instance-store",
+      "ephemeral",
+      "scratch",
+      "high-iops"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A video-rendering service processes each job on an EC2 instance. During rendering, the job writes and reads hundreds of gigabytes of temporary frame data at extremely high IOPS. The final video is saved to Amazon S3, and the temporary data is worthless after the job completes. The company wants the highest possible I/O performance at the lowest cost.",
+    "prompt": "Which storage option should be used for the temporary frame data?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon S3 Express One Zone",
+        "correct": false,
+        "why": "S3 Express One Zone is a very fast object store, but it is still accessed over the network through an API. Scratch frame data written as a file system is best served by local NVMe."
+      },
+      {
+        "key": "B",
+        "text": "Amazon EBS io2 volumes with the maximum provisioned IOPS",
+        "correct": false,
+        "why": "io2 gives high, durable performance, but you pay for provisioned IOPS and persistence you don't need for throwaway data."
+      },
+      {
+        "key": "C",
+        "text": "Instance store volumes on an instance type with local NVMe SSDs",
+        "correct": true,
+        "why": "Instance store is physically attached NVMe storage with very high IOPS and low latency, and its cost is included in the instance price. Its ephemeral nature doesn't matter for scratch data."
+      },
+      {
+        "key": "D",
+        "text": "Amazon EFS with Max I/O performance mode",
+        "correct": false,
+        "why": "EFS is network-attached shared storage. Its per-operation latency is higher than local NVMe, and you pay per GB stored and transferred."
+      }
+    ],
+    "explanation": {
+      "answer": "Instance store volumes provide temporary block-level storage on disks physically attached to the host. They deliver the highest IOPS and lowest latency available to EC2 at no extra charge beyond the instance itself. Data is lost when the instance stops, hibernates or terminates, or if the underlying disk fails, which is acceptable for scratch, cache and buffer data.",
+      "concept": "Choose storage by durability need: ephemeral scratch uses instance store, persistent block uses EBS, shared file uses EFS or FSx, and durable objects use S3. Never keep the only copy of important data on instance store.",
+      "examTip": "'Temporary', 'scratch', 'buffer/cache' plus 'highest IOPS' and 'lowest cost' means instance store.",
+      "references": [
+        {
+          "title": "Instance store temporary block storage for EC2 instances",
+          "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/InstanceStorage.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-perf-009",
+    "domain": "performance",
+    "topic": "Streaming",
+    "tags": [
+      "kinesis-data-streams",
+      "real-time",
+      "replay",
+      "multiple-consumers"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A ride-sharing company collects GPS updates from 200,000 vehicles every second. Several applications must consume the same stream in real time: a surge-pricing engine, a fraud detector, and an archiver. Records for each vehicle must be processed in order, and the fraud team occasionally needs to re-process the last 24 hours of data after deploying a new model.",
+    "prompt": "Which service best meets these requirements?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon SNS standard topic",
+        "correct": false,
+        "why": "SNS pushes and forgets. It has no retention for replay and no per-key ordering in standard topics."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Data Firehose",
+        "correct": false,
+        "why": "Firehose is a delivery service that buffers and loads data into destinations such as S3 or Redshift. It does not support multiple custom real-time consumers or replay."
+      },
+      {
+        "key": "C",
+        "text": "Amazon SQS standard queue",
+        "correct": false,
+        "why": "A message in SQS is deleted after one consumer processes it. It cannot serve multiple independent consumers of the same data, doesn't guarantee order, and can't replay data."
+      },
+      {
+        "key": "D",
+        "text": "Amazon Kinesis Data Streams",
+        "correct": true,
+        "why": "Kinesis Data Streams keeps records for a configurable retention period, preserves order per partition key (vehicle ID), and allows multiple consumer applications to read the same data independently. Consumers can rewind to re-process records."
+      }
+    ],
+    "explanation": {
+      "answer": "Kinesis Data Streams is a durable, ordered, replayable stream. Records with the same partition key go to the same shard in order. Data is retained for 24 hours by default (extendable up to 365 days), so any consumer can re-read from a timestamp. Enhanced fan-out gives each consumer its own dedicated read throughput.",
+      "concept": "Kinesis Data Streams is for real-time, custom consumers, replay and ordering. Amazon Data Firehose is for near-real-time, no-code delivery to S3, Redshift, OpenSearch or Splunk. Amazon MSK is for managed Apache Kafka when teams already use Kafka APIs. SQS provides work queues.",
+      "examTip": "'Multiple consumers', 'replay' or 'ordered per key' in real time means Kinesis Data Streams. 'Load into S3/Redshift with no code' means Firehose.",
+      "references": [
+        {
+          "title": "What is Amazon Kinesis Data Streams?",
+          "url": "https://docs.aws.amazon.com/streams/latest/dev/introduction.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-perf-010",
+    "domain": "performance",
+    "topic": "Analytics",
+    "tags": [
+      "athena",
+      "serverless-sql",
+      "s3",
+      "ad-hoc-query"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A marketing team stores clickstream logs in Amazon S3 as compressed Parquet files partitioned by date. Analysts occasionally need to run ad-hoc SQL queries against the logs. The company does not want to manage any servers or load the data into a database.",
+    "prompt": "Which solution meets these requirements with the LEAST operational overhead?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use Amazon Athena with an AWS Glue Data Catalog table defined over the S3 location.",
+        "correct": true,
+        "why": "Athena is serverless interactive SQL directly on S3. You define a table (manually or with a Glue crawler) and pay only for data scanned, which Parquet and partitioning keep small."
+      },
+      {
+        "key": "B",
+        "text": "Import the files into Amazon RDS for PostgreSQL and query them with SQL.",
+        "correct": false,
+        "why": "RDS is an OLTP database. Loading clickstream data into it adds ETL, storage cost and instance management."
+      },
+      {
+        "key": "C",
+        "text": "Launch an Amazon EMR cluster with Presto whenever analysts need to query.",
+        "correct": false,
+        "why": "EMR works but requires provisioning, configuring and terminating clusters, which is significant operational effort for ad-hoc use."
+      },
+      {
+        "key": "D",
+        "text": "Load the data into an Amazon Redshift provisioned cluster nightly and query it there.",
+        "correct": false,
+        "why": "Redshift is powerful for frequent, complex BI, but it requires loading data and managing a cluster, which is more overhead than needed for occasional ad-hoc queries."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Athena runs standard SQL (Trino/Presto engine) directly against data in S3 with no infrastructure to manage. Tables are defined in the AWS Glue Data Catalog. Because Athena bills per TB scanned, columnar formats (Parquet or ORC), compression and partitioning dramatically reduce both cost and query time.",
+      "concept": "Querying S3 data: Athena for ad-hoc and serverless use, Redshift Spectrum to join S3 data with a Redshift warehouse, S3 Select (legacy) for filtering within one object, and EMR for heavy custom Spark or Hadoop processing.",
+      "examTip": "'Ad-hoc SQL on S3', 'serverless' or 'no data loading' means Athena.",
+      "references": [
+        {
+          "title": "What is Amazon Athena?",
+          "url": "https://docs.aws.amazon.com/athena/latest/ug/what-is.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-perf-011",
+    "domain": "performance",
+    "topic": "Serverless",
+    "tags": [
+      "s3-event-notification",
+      "lambda",
+      "event-driven",
+      "image-processing"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A real-estate listing site lets agents upload property photos to an Amazon S3 bucket. Each photo must be resized into three thumbnail sizes within seconds of upload. Upload volume is unpredictable, ranging from zero to thousands per minute, and the company wants to pay nothing when no photos are uploaded.",
+    "prompt": "Which solution meets these requirements?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Enable S3 Object Lambda to resize images on every GET request.",
+        "correct": false,
+        "why": "Object Lambda transforms data at read time, so the resize work repeats on every request. The requirement is to create thumbnails once, on upload."
+      },
+      {
+        "key": "B",
+        "text": "Configure an S3 event notification for ObjectCreated events that invokes an AWS Lambda function to generate the thumbnails.",
+        "correct": true,
+        "why": "S3 events trigger Lambda within seconds of each upload. Lambda scales automatically with the number of uploads and bills per request and per millisecond, so idle time costs nothing."
+      },
+      {
+        "key": "C",
+        "text": "Run a cron job on an EC2 instance every minute that lists new objects and resizes them.",
+        "correct": false,
+        "why": "Polling adds delay and wastes list requests. The instance costs money around the clock, and one instance may not keep up with bursts."
+      },
+      {
+        "key": "D",
+        "text": "Use AWS Batch with a compute environment that is always running.",
+        "correct": false,
+        "why": "An always-on compute environment costs money when idle, and Batch is designed for queued batch jobs, not per-object, near-instant processing."
+      }
+    ],
+    "explanation": {
+      "answer": "S3 event notifications (sent directly or through EventBridge) can invoke AWS Lambda for every new object. This event-driven pattern processes each photo within seconds, scales automatically with upload volume, and has no idle cost. Write thumbnails to a different bucket or prefix so the function doesn't trigger itself recursively.",
+      "concept": "Serverless means paying per use and scaling automatically. For heavier processing, S3 events can feed SQS (a buffer) and then Lambda or ECS workers. Lambda limits to remember: 15-minute maximum duration, up to 10 GB memory, and up to 10 GB ephemeral /tmp storage.",
+      "examTip": "'Process each file on upload', 'unpredictable volume' or 'no cost when idle' means an S3 event invoking Lambda.",
+      "references": [
+        {
+          "title": "Process Amazon S3 event notifications with Lambda",
+          "url": "https://docs.aws.amazon.com/lambda/latest/dg/with-s3.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-perf-012",
+    "domain": "performance",
+    "topic": "Serverless Databases",
+    "tags": [
+      "aurora-serverless-v2",
+      "variable-workload",
+      "auto-scaling-db"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A SaaS company launches a new internal reporting application backed by a MySQL-compatible database. Usage is highly unpredictable: near zero overnight, with sharp spikes when month-end reports run. The company wants the database to scale capacity automatically in fine-grained increments without manual instance resizing or connection interruptions.",
+    "prompt": "Which database option is MOST suitable?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Redshift with concurrency scaling",
+        "correct": false,
+        "why": "Redshift is a data warehouse, not a MySQL-compatible transactional database. It is a mismatch for this application's requirements."
+      },
+      {
+        "key": "B",
+        "text": "Amazon DynamoDB with on-demand capacity",
+        "correct": false,
+        "why": "DynamoDB scales automatically but is a NoSQL key-value store, not MySQL-compatible. The reporting application would need to be rewritten."
+      },
+      {
+        "key": "C",
+        "text": "Amazon Aurora Serverless v2 (MySQL-compatible)",
+        "correct": true,
+        "why": "Aurora Serverless v2 automatically adjusts capacity in fine-grained Aurora Capacity Unit (ACU) increments within seconds, in place and without dropping connections, matching capacity to the spiky demand."
+      },
+      {
+        "key": "D",
+        "text": "Amazon RDS for MySQL on the largest available instance class",
+        "correct": false,
+        "why": "Sizing for peak wastes money most of the time, and changing instance class later means a modification with a brief interruption."
+      }
+    ],
+    "explanation": {
+      "answer": "Aurora Serverless v2 is an on-demand, auto-scaling configuration of Amazon Aurora. You set minimum and maximum ACUs, and Aurora scales capacity up and down in small increments based on load, without failovers or connection drops. You pay per ACU-hour consumed, which suits intermittent and unpredictable workloads. It supports Multi-AZ, read replicas and Global Database.",
+      "concept": "Choose the database by data model first (relational versus key-value, document, graph or time-series), then by scaling model: provisioned instances for steady load, Serverless v2 for variable load, and a mix of provisioned writer with serverless readers for combined patterns.",
+      "examTip": "'Relational', 'unpredictable or intermittent traffic' and 'scale automatically' together mean Aurora Serverless v2.",
+      "references": [
+        {
+          "title": "Using Aurora Serverless v2",
+          "url": "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-serverless-v2.html"
+        }
+      ]
+    }
+  }
+]

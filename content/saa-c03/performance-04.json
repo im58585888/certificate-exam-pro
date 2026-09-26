@@ -1,0 +1,1834 @@
+[
+  {
+    "id": "saa-perf-085",
+    "domain": "performance",
+    "topic": "Database Selection",
+    "tags": [
+      "dynamodb",
+      "key-value",
+      "massive-scale"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A streaming service must look up user profiles and viewing preferences by user ID with consistent single-digit-millisecond latency at millions of requests per second. The access pattern is always 'get or update this user's item', with no joins or complex queries.",
+    "prompt": "Which database is the BEST fit?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon RDS for MySQL",
+        "correct": false,
+        "why": "A relational database can do key lookups, but scaling to millions of requests per second needs heavy sharding and operational work."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Redshift",
+        "correct": false,
+        "why": "Redshift is built for analytical queries, not high-rate single-item lookups."
+      },
+      {
+        "key": "C",
+        "text": "Amazon DynamoDB",
+        "correct": true,
+        "why": "DynamoDB is a serverless key-value and document database that delivers consistent single-digit-millisecond performance at virtually any scale for key-based access patterns."
+      },
+      {
+        "key": "D",
+        "text": "Amazon Neptune",
+        "correct": false,
+        "why": "Neptune is a graph database for relationship queries, which isn't needed here."
+      }
+    ],
+    "explanation": {
+      "answer": "DynamoDB is designed for high-scale, low-latency key-value and document access with no servers to manage. Partition-key-based access scales horizontally. Add DAX for microsecond reads, and global tables for multi-Region.",
+      "concept": "Purpose-built databases: relational (RDS, Aurora), key-value (DynamoDB), in-memory (ElastiCache, MemoryDB), document (DocumentDB), wide-column (Keyspaces), graph (Neptune), search (OpenSearch) and warehouse (Redshift).",
+      "examTip": "'Key-based lookups at massive scale, single-digit ms' means DynamoDB.",
+      "references": [
+        {
+          "title": "What is Amazon DynamoDB?",
+          "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-perf-086",
+    "domain": "performance",
+    "topic": "Database Selection",
+    "tags": [
+      "neptune",
+      "graph",
+      "relationships"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A professional networking site needs to answer queries such as 'find second- and third-degree connections who work at company X and share a skill' in milliseconds. In the current relational database these multi-level self-joins take seconds and get slower as data grows.",
+    "prompt": "Which database is purpose-built for these queries?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon DynamoDB",
+        "correct": false,
+        "why": "DynamoDB excels at key-based access but has no efficient native way to traverse many-hop relationships."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Redshift",
+        "correct": false,
+        "why": "Redshift targets analytical aggregations, not low-latency relationship traversals."
+      },
+      {
+        "key": "C",
+        "text": "Amazon ElastiCache for Memcached",
+        "correct": false,
+        "why": "Memcached is a simple cache with no graph query capability."
+      },
+      {
+        "key": "D",
+        "text": "Amazon Neptune",
+        "correct": true,
+        "why": "Neptune is a managed graph database optimized for traversing highly connected data, using Gremlin, openCypher or SPARQL, in milliseconds."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Neptune stores data as nodes and edges and is optimized for graph traversals such as social networks, recommendations, fraud rings, knowledge graphs and network topology. It offers read replicas, Multi-AZ and serverless options.",
+      "concept": "When queries are mostly about relationships (friends of friends, paths, patterns), a graph database outperforms relational joins.",
+      "examTip": "'Relationships, multi-hop connections, recommendations, fraud rings' means Amazon Neptune.",
+      "references": [
+        {
+          "title": "What is Amazon Neptune?",
+          "url": "https://docs.aws.amazon.com/neptune/latest/userguide/intro.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-perf-087",
+    "domain": "performance",
+    "topic": "Database Selection",
+    "tags": [
+      "documentdb",
+      "mongodb-compatible"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A content platform runs a self-managed MongoDB replica set on EC2, storing flexible JSON documents. The team wants a managed, scalable service compatible with its existing MongoDB drivers and queries, with minimal code changes.",
+    "prompt": "Which service should it migrate to?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon DocumentDB (with MongoDB compatibility)",
+        "correct": true,
+        "why": "DocumentDB is a managed document database that supports MongoDB APIs and drivers, with storage that scales automatically and read replicas."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Neptune",
+        "correct": false,
+        "why": "Neptune is a graph database with graph query languages. It isn't compatible with MongoDB drivers or queries."
+      },
+      {
+        "key": "C",
+        "text": "Amazon Keyspaces",
+        "correct": false,
+        "why": "Keyspaces is Apache Cassandra-compatible, not MongoDB-compatible."
+      },
+      {
+        "key": "D",
+        "text": "Amazon RDS for PostgreSQL",
+        "correct": false,
+        "why": "Moving to RDS for PostgreSQL would require rewriting data access code away from MongoDB APIs."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon DocumentDB provides a fully managed JSON document database compatible with MongoDB workloads. It separates compute from distributed, replicated storage (similar to Aurora), supports up to 15 read replicas, and offers elastic clusters for sharding at scale.",
+      "concept": "Compatibility-driven migrations: MongoDB to DocumentDB, Cassandra to Keyspaces, Redis to ElastiCache or MemoryDB, Kafka to MSK, and ActiveMQ or RabbitMQ to Amazon MQ.",
+      "examTip": "'Existing MongoDB app, managed' means Amazon DocumentDB.",
+      "references": [
+        {
+          "title": "What is Amazon DocumentDB?",
+          "url": "https://docs.aws.amazon.com/documentdb/latest/developerguide/what-is.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-perf-088",
+    "domain": "performance",
+    "topic": "Database Selection",
+    "tags": [
+      "keyspaces",
+      "cassandra-compatible",
+      "serverless"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "An IoT company runs a self-managed Apache Cassandra cluster that's hard to scale and patch. It wants to keep using CQL and existing Cassandra drivers, but pay per request with no servers or nodes to manage.",
+    "prompt": "Which AWS service meets these requirements?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Aurora",
+        "correct": false,
+        "why": "Aurora is relational and would require a redesign away from CQL."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Keyspaces (for Apache Cassandra)",
+        "correct": true,
+        "why": "Keyspaces is a serverless, Cassandra-compatible database. Existing CQL code and drivers work, and it offers on-demand capacity with no nodes to manage."
+      },
+      {
+        "key": "C",
+        "text": "Amazon DocumentDB",
+        "correct": false,
+        "why": "DocumentDB is MongoDB-compatible, not CQL-compatible."
+      },
+      {
+        "key": "D",
+        "text": "Cassandra self-managed on larger EC2 instances",
+        "correct": false,
+        "why": "This keeps the operational burden the company wants to remove."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Keyspaces provides a scalable, highly available, serverless Cassandra-compatible database. Tables scale automatically in on-demand mode (or use provisioned capacity with auto scaling), data is replicated across three AZs, and it supports point-in-time recovery and encryption.",
+      "concept": "Wide-column stores such as Cassandra and Keyspaces suit high-write, time-ordered data (IoT, messaging, user activity) with predictable query patterns.",
+      "examTip": "'Existing Cassandra/CQL, serverless' means Amazon Keyspaces.",
+      "references": [
+        {
+          "title": "What is Amazon Keyspaces?",
+          "url": "https://docs.aws.amazon.com/keyspaces/latest/devguide/what-is-keyspaces.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-perf-089",
+    "domain": "performance",
+    "topic": "Database Selection",
+    "tags": [
+      "memorydb",
+      "durable-in-memory"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A gaming company wants a Redis-compatible data store as its primary database for player inventories, not just a cache. It needs microsecond read latency, and durability so that acknowledged writes survive node failures without depending on a separate backing database.",
+    "prompt": "Which service BEST meets these requirements?",
+    "options": [
+      {
+        "key": "A",
+        "text": "ElastiCache for Redis OSS with no replicas",
+        "correct": false,
+        "why": "ElastiCache is designed as a cache, and without replicas a node failure risks losing recent writes."
+      },
+      {
+        "key": "B",
+        "text": "Amazon DynamoDB with DAX only",
+        "correct": false,
+        "why": "DAX gives microsecond reads for DynamoDB but isn't Redis-compatible, which the requirement specifies."
+      },
+      {
+        "key": "C",
+        "text": "Amazon MemoryDB",
+        "correct": true,
+        "why": "MemoryDB is a Redis OSS and Valkey-compatible, durable in-memory database. Writes are stored in a Multi-AZ transactional log, and reads are served in microseconds."
+      },
+      {
+        "key": "D",
+        "text": "ElastiCache for Memcached",
+        "correct": false,
+        "why": "Memcached has no durability or replication, so data is lost on node failure."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon MemoryDB stores the entire dataset in memory for ultra-fast performance, and persists every write to a distributed, Multi-AZ transactional log before acknowledging it. It can serve as a durable primary database with Redis OSS or Valkey APIs and data structures.",
+      "concept": "Use ElastiCache as a cache in front of another database. Use MemoryDB when an in-memory Redis- or Valkey-compatible store must be the system of record.",
+      "examTip": "'Redis-compatible primary database with durability' means Amazon MemoryDB.",
+      "references": [
+        {
+          "title": "What is Amazon MemoryDB?",
+          "url": "https://docs.aws.amazon.com/memorydb/latest/devguide/what-is-memorydb.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-perf-090",
+    "domain": "performance",
+    "topic": "Databases",
+    "tags": [
+      "aurora",
+      "rds-migration",
+      "throughput"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "An RDS for MySQL database is reaching its limits: read replicas lag during write peaks, storage must be expanded manually, and the team needs more read replicas with low replication lag. It wants to stay MySQL-compatible.",
+    "prompt": "Which migration BEST addresses these issues?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Migrate to Amazon Redshift.",
+        "correct": false,
+        "why": "Redshift is a data warehouse, not an OLTP database."
+      },
+      {
+        "key": "B",
+        "text": "Move to Amazon DynamoDB.",
+        "correct": false,
+        "why": "DynamoDB isn't MySQL-compatible, so the application would need a redesign."
+      },
+      {
+        "key": "C",
+        "text": "Add more RDS read replicas.",
+        "correct": false,
+        "why": "More binlog-based replicas can make lag worse and don't fix manual storage management."
+      },
+      {
+        "key": "D",
+        "text": "Migrate to Amazon Aurora MySQL-Compatible Edition.",
+        "correct": true,
+        "why": "Aurora uses shared, distributed storage that grows automatically, supports up to 15 low-lag replicas that read the same storage, and typically delivers higher throughput than standard MySQL."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Aurora's cluster storage is shared between the writer and replicas, so replicas don't replay binlogs. Replica lag is typically in milliseconds. Storage scales automatically, and failover to a replica is fast. Migration from RDS MySQL can use an Aurora read replica of the RDS instance, then promotion.",
+      "concept": "Aurora extras include Global Database, Serverless v2, Backtrack (MySQL), fast cloning, zero-ETL to Redshift, and I/O-Optimized pricing.",
+      "examTip": "'RDS MySQL/PostgreSQL hitting replica lag and scaling limits' means migrate to Aurora.",
+      "references": [
+        {
+          "title": "What is Amazon Aurora?",
+          "url": "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-perf-091",
+    "domain": "performance",
+    "topic": "Analytics",
+    "tags": [
+      "zero-etl",
+      "aurora-to-redshift",
+      "near-real-time"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "An e-commerce company wants near real-time analytics in Amazon Redshift on transactional data from its Aurora MySQL database, without building and maintaining ETL pipelines, and without impacting the production database's performance.",
+    "prompt": "Which solution meets these requirements?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Configure an Aurora zero-ETL integration with Amazon Redshift.",
+        "correct": true,
+        "why": "Zero-ETL integrations replicate Aurora data into Redshift within seconds, without pipelines to build or run, using storage-level replication that minimizes impact on the source."
+      },
+      {
+        "key": "B",
+        "text": "Export nightly CSV dumps to S3 and COPY them into Redshift.",
+        "correct": false,
+        "why": "Nightly batches aren't near real-time, and they're pipelines to maintain."
+      },
+      {
+        "key": "C",
+        "text": "Use AWS DataSync.",
+        "correct": false,
+        "why": "DataSync moves files and objects, not database change streams, into Redshift."
+      },
+      {
+        "key": "D",
+        "text": "Run analytics queries directly on the Aurora writer.",
+        "correct": false,
+        "why": "Heavy analytics on the writer would hurt transactional performance."
+      }
+    ],
+    "explanation": {
+      "answer": "Zero-ETL integrations from Aurora (MySQL and PostgreSQL), RDS and DynamoDB into Amazon Redshift continuously replicate data and schema changes into Redshift, where it's available for analytics within seconds. This removes custom CDC pipelines and their operational burden.",
+      "concept": "The 'zero-ETL' direction reduces glue code: Aurora or DynamoDB to Redshift, DynamoDB to OpenSearch, and Redshift federated or Spectrum queries.",
+      "examTip": "'Near real-time analytics on Aurora data in Redshift, no pipelines' means Aurora zero-ETL integration.",
+      "references": [
+        {
+          "title": "Aurora zero-ETL integrations with Amazon Redshift",
+          "url": "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/zero-etl.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-perf-092",
+    "domain": "performance",
+    "topic": "DynamoDB",
+    "tags": [
+      "sparse-index",
+      "gsi",
+      "subset-query"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "An orders table contains 500 million items, but at any moment only about 5,000 orders are 'OPEN'. A dashboard must list open orders quickly and cheaply. Scanning the table with a filter on status is slow and expensive.",
+    "prompt": "Which DynamoDB design BEST supports this query?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Enable DynamoDB Streams.",
+        "correct": false,
+        "why": "Streams capture changes but don't provide a queryable view of open orders on their own."
+      },
+      {
+        "key": "B",
+        "text": "Add an attribute (such as OpenFlag) that exists only on open items, removed when an order closes, and create a GSI on it, a sparse index containing just the open orders.",
+        "correct": true,
+        "why": "GSIs only include items that have the index key attributes. A sparse GSI holds only the few thousand open orders, so queries are fast and cheap."
+      },
+      {
+        "key": "C",
+        "text": "Keep scanning, with a larger page size.",
+        "correct": false,
+        "why": "Scans still read all 500 million items and charge for them."
+      },
+      {
+        "key": "D",
+        "text": "Create an LSI on status.",
+        "correct": false,
+        "why": "LSIs must be created at table creation, keep the same partition key, and wouldn't give a compact global view of open orders."
+      }
+    ],
+    "explanation": {
+      "answer": "Sparse indexes use the fact that a GSI includes only items that have the index's key attributes. By writing a GSI key attribute only on items of interest (open, flagged, pending), you get a small, efficient index for that subset, which reduces both latency and cost.",
+      "concept": "DynamoDB design patterns: sparse indexes, overloaded GSIs, composite sort keys (STATUS#DATE), write sharding, and single-table design for related entities.",
+      "examTip": "'Query a small subset of a huge DynamoDB table' means a sparse GSI.",
+      "references": [
+        {
+          "title": "Take advantage of sparse indexes",
+          "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/bp-indexes-general-sparse-indexes.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-perf-093",
+    "domain": "performance",
+    "topic": "Content Delivery",
+    "tags": [
+      "cloudfront-compression",
+      "gzip",
+      "brotli"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A single-page application's JavaScript and CSS bundles are served uncompressed through CloudFront from S3. Mobile users on slow networks see long load times, and the files are text-based and compress well.",
+    "prompt": "What is the SIMPLEST way to reduce transfer size and improve load times?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Disable HTTP/2.",
+        "correct": false,
+        "why": "HTTP/2 generally improves performance. Disabling it would hurt."
+      },
+      {
+        "key": "B",
+        "text": "Move the files to S3 Glacier Instant Retrieval.",
+        "correct": false,
+        "why": "Storage class changes don't compress files and add retrieval charges."
+      },
+      {
+        "key": "C",
+        "text": "Enable automatic compression (Gzip and Brotli) in the CloudFront cache behavior's cache policy.",
+        "correct": true,
+        "why": "CloudFront can compress eligible text objects at the edge when viewers support it, which greatly reduces bytes transferred and speeds up page loads."
+      },
+      {
+        "key": "D",
+        "text": "Increase the origin's EC2 instance size.",
+        "correct": false,
+        "why": "The origin is S3, and transfer size is the problem."
+      }
+    ],
+    "explanation": {
+      "answer": "CloudFront compresses objects of eligible types and sizes (roughly 1 KB to 10 MB) with Gzip or Brotli when the viewer's Accept-Encoding header allows it and compression is enabled in the cache policy. Compressed objects are cached separately by encoding. Pre-compressing files at build time is another option.",
+      "concept": "Web performance quick wins: compression, HTTP/2 and HTTP/3, long TTLs with versioned file names, and edge caching of static assets.",
+      "examTip": "'Reduce size of text assets through CloudFront' means enable automatic compression.",
+      "references": [
+        {
+          "title": "Serve compressed files",
+          "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/ServingCompressedFiles.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-perf-094",
+    "domain": "performance",
+    "topic": "EC2 Instance Types",
+    "tags": [
+      "inferentia",
+      "ml-inference",
+      "price-performance"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company serves a large language model for customer support chat on GPU instances, and inference cost is its biggest AWS expense. The team wants the best price performance for high-throughput deep learning inference on EC2 while keeping standard ML frameworks.",
+    "prompt": "Which EC2 instance family is purpose-built for this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "T instances (burstable)",
+        "correct": false,
+        "why": "Burstable CPUs are unsuitable for sustained, heavy inference."
+      },
+      {
+        "key": "B",
+        "text": "R instances (memory optimized)",
+        "correct": false,
+        "why": "R instances have large memory but no ML accelerators, so they're inefficient for deep learning inference."
+      },
+      {
+        "key": "C",
+        "text": "D instances (dense HDD storage)",
+        "correct": false,
+        "why": "D instances are optimized for storage, not ML compute."
+      },
+      {
+        "key": "D",
+        "text": "Inf2 instances powered by AWS Inferentia2 (using the AWS Neuron SDK)",
+        "correct": true,
+        "why": "Inferentia chips are purpose-built for deep learning inference, offering high throughput and low cost per inference, with Neuron integration for PyTorch and TensorFlow."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS-designed ML chips: Inferentia (Inf1 and Inf2) for inference, and Trainium (Trn1 and Trn2) for training. Both offer strong price performance compared with general GPU instances for supported models. GPU families (P for ML training and HPC, G for graphics and inference) remain options when CUDA-specific tooling is required.",
+      "concept": "Match the accelerator to the job: training needs Trainium or P; inference needs Inferentia, G or P; graphics and rendering need G.",
+      "examTip": "'Lowest-cost high-throughput DL inference on EC2' means Inf2 (Inferentia). 'Training' means Trn (Trainium) or P.",
+      "references": [
+        {
+          "title": "Amazon EC2 Inf2 instances",
+          "url": "https://aws.amazon.com/ec2/instance-types/inf2/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-perf-095",
+    "domain": "performance",
+    "topic": "EC2 Instance Types",
+    "tags": [
+      "g-instances",
+      "graphics",
+      "remote-workstations"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "An architecture firm wants to give designers cloud-based 3D modeling workstations that need powerful graphics acceleration for rendering and visualization, streamed to thin clients.",
+    "prompt": "Which EC2 instance family should be used?",
+    "options": [
+      {
+        "key": "A",
+        "text": "G family (graphics-accelerated GPU instances)",
+        "correct": true,
+        "why": "G instances provide NVIDIA or AMD GPUs optimized for graphics-intensive work such as 3D visualization, rendering, game streaming and remote workstations."
+      },
+      {
+        "key": "B",
+        "text": "I family (storage optimized)",
+        "correct": false,
+        "why": "I instances target local NVMe I/O, not graphics."
+      },
+      {
+        "key": "C",
+        "text": "X family (memory optimized)",
+        "correct": false,
+        "why": "X instances provide very large memory, not GPU graphics."
+      },
+      {
+        "key": "D",
+        "text": "C family (compute optimized)",
+        "correct": false,
+        "why": "C instances have powerful CPUs but no GPUs for graphics acceleration."
+      }
+    ],
+    "explanation": {
+      "answer": "Accelerated computing families include G (graphics and cost-effective inference), P (high-end ML training and HPC GPUs), Inf (Inferentia inference), Trn (Trainium training) and F (FPGAs). For virtual workstations, combine G instances with streaming protocols such as NICE DCV, or with Amazon WorkSpaces graphics bundles.",
+      "concept": "Read instance names: family letter (G, P, C, M, R), generation number, processor or capability suffix (g for Graviton, a for AMD, n for network, d for local NVMe), and size.",
+      "examTip": "'3D graphics/visualization/remote workstations' means G instances.",
+      "references": [
+        {
+          "title": "Accelerated computing instances",
+          "url": "https://docs.aws.amazon.com/ec2/latest/instancetypes/ac.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-perf-096",
+    "domain": "performance",
+    "topic": "Edge Infrastructure",
+    "tags": [
+      "wavelength",
+      "5g",
+      "ultra-low-latency"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "An augmented reality app for stadium visitors must process video frames from 5G mobile devices with single-digit-millisecond latency. Traffic from devices to a Regional endpoint traverses the carrier's network and the internet, adding too much delay.",
+    "prompt": "Which AWS infrastructure option BEST meets this requirement?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use a larger instance in the nearest Region.",
+        "correct": false,
+        "why": "Instance size doesn't reduce network path latency."
+      },
+      {
+        "key": "B",
+        "text": "Deploy the processing tier in AWS Wavelength Zones within the 5G carrier's network.",
+        "correct": true,
+        "why": "Wavelength places AWS compute and storage inside carrier 5G networks, so traffic from mobile devices reaches the application without leaving the telecom network."
+      },
+      {
+        "key": "C",
+        "text": "Use Amazon CloudFront.",
+        "correct": false,
+        "why": "CloudFront caches and delivers content, and isn't meant for real-time processing of device video frames."
+      },
+      {
+        "key": "D",
+        "text": "Use AWS Snowball Edge.",
+        "correct": false,
+        "why": "Snowball is for data transfer and edge compute in disconnected sites, not a 5G mobile edge platform."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Wavelength Zones embed AWS compute and storage in telecommunications providers' 5G data centers. Mobile devices connect through the carrier network directly to the application, which minimizes latency for AR/VR, connected vehicles, live video analytics and gaming.",
+      "concept": "Latency tiers: Region, Local Zone (metro), Wavelength (inside 5G networks) and Outposts (on premises).",
+      "examTip": "'5G mobile devices + ultra-low latency' means AWS Wavelength.",
+      "references": [
+        {
+          "title": "What is AWS Wavelength?",
+          "url": "https://docs.aws.amazon.com/wavelength/latest/developerguide/what-is-wavelength.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-perf-097",
+    "domain": "performance",
+    "topic": "Route 53",
+    "tags": [
+      "latency-routing",
+      "multi-region-performance"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A company has deployed the same web application in us-east-1, eu-west-1 and ap-southeast-1. It wants each user to be directed to the Region that provides the lowest network latency for them.",
+    "prompt": "Which Route 53 routing policy should be used?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Simple routing",
+        "correct": false,
+        "why": "Simple routing returns records without regard to latency or health."
+      },
+      {
+        "key": "B",
+        "text": "Failover routing",
+        "correct": false,
+        "why": "Failover is active-passive, so all users go to the primary while it's healthy."
+      },
+      {
+        "key": "C",
+        "text": "Latency-based routing",
+        "correct": true,
+        "why": "Latency-based routing answers each query with the Region that has the lowest measured latency for the user's resolver."
+      },
+      {
+        "key": "D",
+        "text": "Weighted routing",
+        "correct": false,
+        "why": "Weighted routing splits traffic by percentage regardless of latency."
+      }
+    ],
+    "explanation": {
+      "answer": "Route 53 latency-based routing uses AWS's latency measurements between user networks and AWS Regions to return the lowest-latency endpoint. Combined with health checks, it also routes around unhealthy Regions.",
+      "concept": "Latency is dynamic, so 'closest' by distance (geoproximity) isn't always 'fastest' by latency.",
+      "examTip": "'Route users to the lowest-latency Region' means latency-based routing.",
+      "references": [
+        {
+          "title": "Latency-based routing",
+          "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy-latency.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-perf-098",
+    "domain": "performance",
+    "topic": "Messaging",
+    "tags": [
+      "sqs-fifo-high-throughput",
+      "message-groups"
+    ],
+    "difficulty": "hard",
+    "type": "multi",
+    "selectCount": 2,
+    "stem": "An order-processing system uses an SQS FIFO queue with one message group ID for all messages. As volume grew, throughput plateaued and consumers sit idle waiting for messages. Ordering only matters per customer, not globally.",
+    "prompt": "Which TWO changes will increase throughput while preserving per-customer ordering? (Select TWO.)",
+    "options": [
+      {
+        "key": "A",
+        "text": "Enable high throughput mode for the FIFO queue (per-message-group throughput limit and deduplication scope).",
+        "correct": true,
+        "why": "High throughput FIFO raises the queue's supported transactions per second, scaling with the number of message groups."
+      },
+      {
+        "key": "B",
+        "text": "Use the customer ID as the message group ID, so many groups can be processed in parallel.",
+        "correct": true,
+        "why": "FIFO processes messages within a group in order, one at a time. More groups allow parallel consumption while each customer's messages stay ordered."
+      },
+      {
+        "key": "C",
+        "text": "Enable long polling for 60 seconds.",
+        "correct": false,
+        "why": "Long polling is capped at 20 seconds and doesn't lift FIFO group serialization."
+      },
+      {
+        "key": "D",
+        "text": "Increase the visibility timeout.",
+        "correct": false,
+        "why": "The visibility timeout doesn't increase throughput."
+      },
+      {
+        "key": "E",
+        "text": "Convert to a standard queue.",
+        "correct": false,
+        "why": "Standard queues don't guarantee ordering, which breaks the per-customer requirement."
+      }
+    ],
+    "explanation": {
+      "answer": "SQS FIFO throughput depends on message group parallelism: messages in one group are delivered strictly in order and can't be processed concurrently. Choosing a fine-grained group ID (customer, device, account) and enabling high throughput mode lets FIFO queues scale much further while keeping the ordering guarantees you actually need.",
+      "concept": "Scope ordering to the smallest unit that needs it. Global ordering is expensive and rarely required.",
+      "examTip": "'FIFO queue throughput plateau' means more message group IDs plus high throughput mode.",
+      "references": [
+        {
+          "title": "High throughput for FIFO queues",
+          "url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/high-throughput-fifo.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-perf-099",
+    "domain": "performance",
+    "topic": "Serverless Performance",
+    "tags": [
+      "lambda-snapstart",
+      "java-cold-start"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A Java 21 Lambda function using a large framework takes 6–8 seconds to initialize on cold starts. Traffic is unpredictable, so the team doesn't want to pay for provisioned concurrency all day, but needs cold starts cut dramatically.",
+    "prompt": "Which feature BEST addresses this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Lower memory",
+        "correct": false,
+        "why": "Less memory means less CPU, which usually makes initialization slower."
+      },
+      {
+        "key": "B",
+        "text": "Reserved concurrency",
+        "correct": false,
+        "why": "Reserved concurrency guarantees and caps capacity but doesn't make initialization faster."
+      },
+      {
+        "key": "C",
+        "text": "A longer function timeout",
+        "correct": false,
+        "why": "The timeout doesn't affect cold-start duration."
+      },
+      {
+        "key": "D",
+        "text": "Lambda SnapStart on published function versions",
+        "correct": true,
+        "why": "SnapStart snapshots the initialized execution environment when you publish a version and resumes from that snapshot, cutting startup latency for Java (and other supported runtimes) without provisioned concurrency's always-on cost."
+      }
+    ],
+    "explanation": {
+      "answer": "Lambda SnapStart (for Java, Python and .NET) takes a Firecracker microVM snapshot after initialization and caches it. New execution environments resume from the snapshot, often reducing cold starts from seconds to sub-second. Make sure code handles uniqueness (random seeds, connections) correctly after restore, using runtime hooks.",
+      "concept": "Cold start options: SnapStart (cheap, per version), provisioned concurrency (guaranteed warm, paid hourly), and optimizing initialization code and package size.",
+      "examTip": "'Java Lambda cold starts, unpredictable traffic, avoid always-on cost' means SnapStart.",
+      "references": [
+        {
+          "title": "Improving startup performance with Lambda SnapStart",
+          "url": "https://docs.aws.amazon.com/lambda/latest/dg/snapstart.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-perf-100",
+    "domain": "performance",
+    "topic": "Serverless Performance",
+    "tags": [
+      "lambda-ephemeral-storage",
+      "tmp"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A Lambda function downloads a 4 GB machine-learning model file and several large input files from S3 to disk for processing. It fails with 'No space left on device' using the default configuration.",
+    "prompt": "What is the SIMPLEST fix?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Increase the function's ephemeral storage (/tmp) up to the needed size (up to 10,240 MB).",
+        "correct": true,
+        "why": "Lambda's /tmp defaults to 512 MB and can be configured up to 10 GB, which is enough for these temporary files."
+      },
+      {
+        "key": "B",
+        "text": "Enable provisioned concurrency.",
+        "correct": false,
+        "why": "Provisioned concurrency doesn't change storage limits."
+      },
+      {
+        "key": "C",
+        "text": "Attach an EBS volume to the Lambda function.",
+        "correct": false,
+        "why": "Lambda doesn't support EBS. The options are larger /tmp or mounting EFS."
+      },
+      {
+        "key": "D",
+        "text": "Increase the function timeout.",
+        "correct": false,
+        "why": "A longer timeout gives the function more time but no more disk space, so the write still fails."
+      }
+    ],
+    "explanation": {
+      "answer": "Lambda functions get configurable ephemeral storage in /tmp, from 512 MB to 10,240 MB, billed by the amount configured. For shared or persistent large files across invocations or functions, mount Amazon EFS. Container image functions can also package models up to 10 GB in the image.",
+      "concept": "Know Lambda's resource dimensions: memory (128 MB–10 GB, with CPU proportional), /tmp (up to 10 GB), timeout (up to 15 minutes), and package size.",
+      "examTip": "'Lambda out of disk space for temp files' means increase ephemeral storage (or use EFS).",
+      "references": [
+        {
+          "title": "Configure ephemeral storage for Lambda functions",
+          "url": "https://docs.aws.amazon.com/lambda/latest/dg/configuration-ephemeral-storage.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-perf-101",
+    "domain": "performance",
+    "topic": "API Performance",
+    "tags": [
+      "api-gateway-sqs-integration",
+      "direct-integration"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A telemetry ingestion API receives bursts of 50,000 small POST requests per second. Each request is simply forwarded by a Lambda function to an SQS queue for later processing. Lambda concurrency limits and cost have become problems.",
+    "prompt": "Which change removes the Lambda layer while preserving buffering?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Increase Lambda reserved concurrency.",
+        "correct": false,
+        "why": "This keeps an unnecessary layer and its cost, and still has account limits."
+      },
+      {
+        "key": "B",
+        "text": "Configure API Gateway with a direct AWS service integration to SQS (SendMessage), using a mapping template to transform the request.",
+        "correct": true,
+        "why": "API Gateway can call SQS directly through a service integration, which removes the pass-through Lambda and its concurrency limits and cost, while SQS still buffers the load."
+      },
+      {
+        "key": "C",
+        "text": "Replace SQS with synchronous database writes.",
+        "correct": false,
+        "why": "Bursts would overwhelm the database, and the buffering would be lost."
+      },
+      {
+        "key": "D",
+        "text": "Add CloudFront caching for POST requests.",
+        "correct": false,
+        "why": "CloudFront doesn't cache POSTs, so this doesn't help ingestion."
+      }
+    ],
+    "explanation": {
+      "answer": "API Gateway (REST APIs, and HTTP APIs through first-class integrations) can integrate directly with AWS services such as SQS, Kinesis, DynamoDB, Step Functions and EventBridge. Removing 'Lambda as glue' reduces latency, cost and concurrency constraints for simple forwarding patterns.",
+      "concept": "'Use functions to transform, not to transport.' Prefer direct service integrations, EventBridge Pipes, and Step Functions SDK integrations.",
+      "examTip": "'Lambda only forwards requests to SQS/Kinesis' means an API Gateway direct service integration.",
+      "references": [
+        {
+          "title": "Tutorial: Create a REST API as an Amazon SQS proxy",
+          "url": "https://docs.aws.amazon.com/apigateway/latest/developerguide/integrating-api-with-aws-services-sqs.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-perf-102",
+    "domain": "performance",
+    "topic": "Caching",
+    "tags": [
+      "redis-sorted-sets",
+      "leaderboard"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A mobile game needs a real-time global leaderboard showing each player's rank and the top 100 players. Scores change thousands of times per second. Computing ranks with ORDER BY queries on the relational database is too slow.",
+    "prompt": "Which solution provides the BEST performance?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Scan the relational table more often.",
+        "correct": false,
+        "why": "More frequent heavy queries make the load worse."
+      },
+      {
+        "key": "B",
+        "text": "Use DynamoDB Scan sorted by score.",
+        "correct": false,
+        "why": "Scans don't return results sorted globally, and they're costly at this scale."
+      },
+      {
+        "key": "C",
+        "text": "Store scores in an ElastiCache (Valkey or Redis OSS) sorted set, and use sorted-set commands for score updates, rank lookups and top-N queries.",
+        "correct": true,
+        "why": "Sorted sets keep members ordered by score in memory, so updates and rank or range queries are logarithmic-time operations with sub-millisecond latency."
+      },
+      {
+        "key": "D",
+        "text": "Store scores in S3 and query with Athena.",
+        "correct": false,
+        "why": "Athena queries take seconds and aren't suited to real-time ranking."
+      }
+    ],
+    "explanation": {
+      "answer": "Redis-compatible sorted sets (ZADD, ZINCRBY, ZREVRANK, ZREVRANGE) are the canonical leaderboard data structure. ElastiCache or MemoryDB provide managed, highly available clusters. Persist results periodically to a durable store if needed.",
+      "concept": "Choose data structures for access patterns: sorted sets for ranking, HyperLogLog for unique counts, and geospatial indexes for 'near me' queries.",
+      "examTip": "'Real-time leaderboard/ranking' means Redis/Valkey sorted sets (ElastiCache or MemoryDB).",
+      "references": [
+        {
+          "title": "Common ElastiCache use cases (leaderboards)",
+          "url": "https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/elasticache-use-cases.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-perf-103",
+    "domain": "performance",
+    "topic": "DynamoDB",
+    "tags": [
+      "batchgetitem",
+      "round-trips"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A product page loads 60 items from a DynamoDB table by primary key, using 60 sequential GetItem calls. Page latency is dominated by network round trips.",
+    "prompt": "Which change will MOST reduce latency?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Increase the table's write capacity.",
+        "correct": false,
+        "why": "The problem is read round trips, not write capacity."
+      },
+      {
+        "key": "B",
+        "text": "Enable Point-in-time recovery.",
+        "correct": false,
+        "why": "PITR is a backup feature and doesn't affect read latency."
+      },
+      {
+        "key": "C",
+        "text": "Switch to Scan with a filter.",
+        "correct": false,
+        "why": "Scanning reads the entire table, which is far slower and more expensive."
+      },
+      {
+        "key": "D",
+        "text": "Use BatchGetItem to retrieve the items in one request (up to 100 items per call), handling any unprocessed keys.",
+        "correct": true,
+        "why": "BatchGetItem fetches many items in parallel on the service side in one round trip, which cuts total latency sharply."
+      }
+    ],
+    "explanation": {
+      "answer": "BatchGetItem retrieves up to 100 items (up to 16 MB) across one or more tables in a single call, and returns UnprocessedKeys when throttled, which the caller retries with backoff. BatchWriteItem does the same for puts and deletes. For atomicity, use transactions instead.",
+      "concept": "Reduce chattiness by batching and parallelizing calls, and model data so related items can be fetched with one Query.",
+      "examTip": "'Many sequential GetItem calls' means BatchGetItem (or a Query on a shared partition key).",
+      "references": [
+        {
+          "title": "BatchGetItem",
+          "url": "https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_BatchGetItem.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-perf-104",
+    "domain": "performance",
+    "topic": "Databases",
+    "tags": [
+      "performance-insights",
+      "database-insights",
+      "top-sql"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "An Aurora PostgreSQL database shows periodic latency spikes. CloudWatch shows high CPU at those times, but the team can't tell which queries or wait events are responsible.",
+    "prompt": "Which tool helps identify the SQL statements and waits driving the database load?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon CloudWatch Database Insights (Performance Insights), which visualizes database load by top SQL, wait events, users and hosts",
+        "correct": true,
+        "why": "This tooling breaks database load (average active sessions) down by SQL, waits and dimensions, so the queries behind the spikes are easy to find."
+      },
+      {
+        "key": "B",
+        "text": "AWS Trusted Advisor",
+        "correct": false,
+        "why": "Trusted Advisor provides account-level checks, not query-level diagnostics."
+      },
+      {
+        "key": "C",
+        "text": "VPC Flow Logs",
+        "correct": false,
+        "why": "Flow logs show network flows, not SQL workload analysis."
+      },
+      {
+        "key": "D",
+        "text": "AWS Config",
+        "correct": false,
+        "why": "Config records configuration history, not database performance."
+      }
+    ],
+    "explanation": {
+      "answer": "Performance Insights, now part of CloudWatch Database Insights, measures database load in average active sessions, sliced by wait events, SQL statements, hosts and users. It helps pinpoint the queries to optimize, such as missing indexes, locking or inefficient plans, before scaling hardware.",
+      "concept": "Fix the workload before adding hardware: tune queries and indexes, add caching, then scale reads with replicas or scale up the instance.",
+      "examTip": "'Which SQL is causing DB load?' means Performance Insights / Database Insights.",
+      "references": [
+        {
+          "title": "Monitoring DB load with Performance Insights on Amazon Aurora",
+          "url": "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/USER_PerfInsights.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-perf-105",
+    "domain": "performance",
+    "topic": "Databases",
+    "tags": [
+      "cross-region-read-replica",
+      "global-reads"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company's RDS for MySQL primary runs in us-east-1. A growing base of users in Europe experiences slow page loads, because every read query crosses the Atlantic. Writes can stay in us-east-1.",
+    "prompt": "Which change BEST improves read performance for European users?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Enable Multi-AZ.",
+        "correct": false,
+        "why": "Multi-AZ adds a standby in the same Region, which doesn't serve reads or reduce distance."
+      },
+      {
+        "key": "B",
+        "text": "Create a cross-Region read replica in eu-west-1 and route European read traffic to it.",
+        "correct": true,
+        "why": "A replica in Europe serves reads locally with low latency, while writes continue to go to the primary in us-east-1."
+      },
+      {
+        "key": "C",
+        "text": "Enable RDS storage autoscaling.",
+        "correct": false,
+        "why": "Storage size doesn't affect network latency."
+      },
+      {
+        "key": "D",
+        "text": "Increase the primary instance size.",
+        "correct": false,
+        "why": "A bigger instance doesn't remove transatlantic network latency."
+      }
+    ],
+    "explanation": {
+      "answer": "Cross-Region read replicas place read capacity near users in other Regions, and can also serve as DR. For global, low-lag reads with fast Regional failover, Aurora Global Database is the more capable option (typically under a second of replication lag).",
+      "concept": "Move data closer to users: CloudFront (static), cross-Region replicas or Aurora Global Database (relational reads), and DynamoDB global tables (read and write).",
+      "examTip": "'Slow reads for users in another continent' means a cross-Region read replica (or Aurora Global Database).",
+      "references": [
+        {
+          "title": "Creating a read replica in a different AWS Region",
+          "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ReadRepl.XRgn.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-perf-106",
+    "domain": "performance",
+    "topic": "Block Storage",
+    "tags": [
+      "gp3-throughput",
+      "streaming-io"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A video-processing application on EC2 streams large files sequentially from a 2 TB gp3 volume. It needs about 600 MiB/s of throughput, but monitoring shows it's capped at 125 MiB/s. IOPS demands are modest.",
+    "prompt": "What is the MOST cost-effective way to raise throughput?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Enable EBS encryption.",
+        "correct": false,
+        "why": "Encryption protects data at rest. It doesn't raise the volume's throughput ceiling."
+      },
+      {
+        "key": "B",
+        "text": "Switch to io2 with very high IOPS.",
+        "correct": false,
+        "why": "The need is throughput, not IOPS, and io2 costs more."
+      },
+      {
+        "key": "C",
+        "text": "Modify the gp3 volume to provision additional throughput (for example 600 MiB/s), keeping the same size and IOPS.",
+        "correct": true,
+        "why": "gp3 lets you provision throughput independently of size and IOPS, beyond the 125 MiB/s baseline, and the change happens online."
+      },
+      {
+        "key": "D",
+        "text": "Double the volume size.",
+        "correct": false,
+        "why": "gp3 throughput doesn't grow automatically with size. It's provisioned separately."
+      }
+    ],
+    "explanation": {
+      "answer": "gp3 volumes include a baseline of 3,000 IOPS and 125 MiB/s at any size. You can provision additional IOPS and throughput independently, up to the gp3 maximums, and change them with Elastic Volumes. Also check that the instance's EBS bandwidth can support the target throughput.",
+      "concept": "Know the dimension you're short of: IOPS (small random I/O) versus throughput (large sequential I/O). Provision that dimension specifically.",
+      "examTip": "'gp3 stuck at 125 MiB/s' means provision more gp3 throughput (and check instance EBS limits).",
+      "references": [
+        {
+          "title": "Amazon EBS General Purpose SSD volumes (gp3)",
+          "url": "https://docs.aws.amazon.com/ebs/latest/userguide/general-purpose.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-perf-107",
+    "domain": "performance",
+    "topic": "File Access to S3",
+    "tags": [
+      "mountpoint-for-s3",
+      "read-heavy"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A data-processing application on EC2 reads terabytes of large existing files from an S3 bucket using standard file operations (open and read), and writes new output files. It doesn't need to modify files in place, rename directories or hold file locks. The team wants high throughput without copying data to EBS or EFS first.",
+    "prompt": "Which option is the BEST fit?",
+    "options": [
+      {
+        "key": "A",
+        "text": "S3 Glacier Deep Archive",
+        "correct": false,
+        "why": "Archived objects need restores and can't be read directly."
+      },
+      {
+        "key": "B",
+        "text": "S3 Transfer Acceleration",
+        "correct": false,
+        "why": "Acceleration optimizes long-distance transfers, not local file-system access."
+      },
+      {
+        "key": "C",
+        "text": "Copy all data to an EBS volume before processing",
+        "correct": false,
+        "why": "Copying terabytes adds time and storage cost, which the team wants to avoid."
+      },
+      {
+        "key": "D",
+        "text": "Mountpoint for Amazon S3, mounting the bucket as a local file system on the instances",
+        "correct": true,
+        "why": "Mountpoint translates file reads and new-file writes into S3 API calls with high throughput. It's designed for read-heavy workloads that don't need full POSIX semantics such as in-place edits or locking."
+      }
+    ],
+    "explanation": {
+      "answer": "Mountpoint for Amazon S3 is an open-source file client optimized for high-throughput access to S3 from Linux, including EC2, containers and EKS through a CSI driver. It supports sequential and random reads and sequential writes of new files, but not full POSIX operations like modifying existing files or directory renames.",
+      "concept": "For full POSIX shared file systems use EFS or FSx. For HPC with S3 integration use FSx for Lustre. For read-heavy S3 access through file APIs use Mountpoint.",
+      "examTip": "'Read S3 data as files at high throughput, no in-place edits' means Mountpoint for Amazon S3.",
+      "references": [
+        {
+          "title": "Mountpoint for Amazon S3",
+          "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/mountpoint.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-perf-108",
+    "domain": "performance",
+    "topic": "Auto Scaling",
+    "tags": [
+      "alb-request-count-per-target",
+      "target-tracking"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A web tier's instances become slow when each handles more than about 1,000 requests per minute, although CPU stays moderate because the app is I/O-bound. Scaling on CPU utilization reacts too late.",
+    "prompt": "Which scaling metric should be used for target tracking?",
+    "options": [
+      {
+        "key": "A",
+        "text": "ALBRequestCountPerTarget, with a target of about 1,000",
+        "correct": true,
+        "why": "Request count per target directly measures the load that degrades performance, so the group scales out before instances saturate."
+      },
+      {
+        "key": "B",
+        "text": "NetworkIn on a single instance",
+        "correct": false,
+        "why": "A single instance's network metric doesn't represent group load in a controllable way."
+      },
+      {
+        "key": "C",
+        "text": "Average CPU utilization at 90%",
+        "correct": false,
+        "why": "CPU doesn't reflect this I/O-bound bottleneck, and 90% reacts even later."
+      },
+      {
+        "key": "D",
+        "text": "EBS free storage",
+        "correct": false,
+        "why": "Storage has nothing to do with request load."
+      }
+    ],
+    "explanation": {
+      "answer": "Target tracking supports predefined metrics, including ASGAverageCPUUtilization, ASGAverageNetworkIn/Out and ALBRequestCountPerTarget, plus custom metrics. When per-instance request volume is the bottleneck, ALBRequestCountPerTarget keeps each instance within its known comfortable load.",
+      "concept": "Load-test to find each instance's saturation point in the metric that matters, then set targets below it.",
+      "examTip": "'Scale on requests per instance behind an ALB' means ALBRequestCountPerTarget target tracking.",
+      "references": [
+        {
+          "title": "Target tracking scaling policies for Amazon EC2 Auto Scaling",
+          "url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-scaling-target-tracking.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-perf-109",
+    "domain": "performance",
+    "topic": "Containers",
+    "tags": [
+      "ecs-service-auto-scaling",
+      "target-tracking"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "An ECS service on Fargate runs a fixed 4 tasks. During business hours, CPU on all tasks exceeds 85% and response times degrade. At night, the tasks are nearly idle.",
+    "prompt": "What should the solutions architect configure?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Scale manually each morning and evening",
+        "correct": false,
+        "why": "Manual scaling is error-prone and can't respond to unexpected peaks."
+      },
+      {
+        "key": "B",
+        "text": "ECS Service Auto Scaling with a target tracking policy (for example, average CPU at 60% or ALB requests per target), with sensible minimum and maximum task counts",
+        "correct": true,
+        "why": "Service Auto Scaling adjusts the desired task count to keep the metric at its target, adding tasks under load and removing them when idle."
+      },
+      {
+        "key": "C",
+        "text": "Switch to a larger EC2 instance",
+        "correct": false,
+        "why": "Fargate tasks don't run on your instances, and this doesn't add elasticity."
+      },
+      {
+        "key": "D",
+        "text": "Increase the task CPU permanently",
+        "correct": false,
+        "why": "Bigger tasks cost more at night and may still saturate at peak."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon ECS Service Auto Scaling (through Application Auto Scaling) supports target tracking (CPU, memory, ALB request count per target), step scaling and scheduled scaling for task counts. On Fargate, capacity follows automatically. On EC2, pair it with capacity provider managed scaling.",
+      "concept": "Elasticity at the application layer (tasks and pods) delivers both performance under load and cost savings when idle.",
+      "examTip": "'ECS tasks overloaded by day, idle at night' means ECS Service Auto Scaling (target tracking).",
+      "references": [
+        {
+          "title": "Automatically scale your Amazon ECS service",
+          "url": "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/service-auto-scaling.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-perf-110",
+    "domain": "performance",
+    "topic": "Load Balancing",
+    "tags": [
+      "alb-grpc",
+      "http2"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company's microservices communicate with gRPC over HTTP/2. It wants a managed layer-7 load balancer that can route gRPC traffic by service and method path, and health-check targets using gRPC status codes.",
+    "prompt": "Which load balancer supports this natively?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Route 53",
+        "correct": false,
+        "why": "Route 53 resolves DNS names and can't inspect or route by gRPC service and method paths."
+      },
+      {
+        "key": "B",
+        "text": "Classic Load Balancer",
+        "correct": false,
+        "why": "CLB doesn't support gRPC routing or HTTP/2 to targets."
+      },
+      {
+        "key": "C",
+        "text": "Application Load Balancer with a gRPC target group protocol version",
+        "correct": true,
+        "why": "ALB supports end-to-end HTTP/2 and gRPC, routing on gRPC service and method paths, and gRPC-specific health checks."
+      },
+      {
+        "key": "D",
+        "text": "Gateway Load Balancer",
+        "correct": false,
+        "why": "GWLB inserts network appliances at layer 3 and doesn't do layer-7 gRPC routing."
+      }
+    ],
+    "explanation": {
+      "answer": "Application Load Balancers support HTTP/2 and gRPC end to end. Target groups can use the gRPC protocol version, listener rules can route on paths such as /package.Service/Method, and health checks can evaluate gRPC status codes. NLB can pass gRPC through at layer 4 without method-aware routing.",
+      "concept": "Use ALB for protocol-aware routing (HTTP, gRPC, WebSockets). Use NLB for raw TCP, UDP or TLS performance and static IPs.",
+      "examTip": "'Load-balance gRPC with method-based routing' means ALB (gRPC target groups).",
+      "references": [
+        {
+          "title": "Target group protocol version (gRPC)",
+          "url": "https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-target-groups.html#target-group-protocol-version"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-perf-111",
+    "domain": "performance",
+    "topic": "Analytics",
+    "tags": [
+      "athena-federated-query",
+      "cross-source"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "Analysts want to run a single SQL query that joins clickstream data in S3 with customer records in an Amazon RDS for PostgreSQL database and product data in DynamoDB, without first copying the RDS and DynamoDB data into S3.",
+    "prompt": "Which feature enables this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "S3 Inventory",
+        "correct": false,
+        "why": "S3 Inventory lists objects and can't query databases."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Macie",
+        "correct": false,
+        "why": "Macie finds sensitive data and isn't a query engine."
+      },
+      {
+        "key": "C",
+        "text": "AWS DataSync",
+        "correct": false,
+        "why": "DataSync copies files and objects, which is the opposite of querying in place."
+      },
+      {
+        "key": "D",
+        "text": "Amazon Athena federated query, using data source connectors (Lambda-based) for RDS and DynamoDB",
+        "correct": true,
+        "why": "Federated queries let Athena query data in place across relational, NoSQL and other sources through connectors, and join the results with S3 data."
+      }
+    ],
+    "explanation": {
+      "answer": "Athena federated query uses data source connectors, which run on Lambda, to scan external sources such as RDS, Aurora, DynamoDB, Redshift, OpenSearch, CloudWatch Logs and on-premises databases, and join them with data in S3 using standard SQL. Redshift offers similar federated queries for RDS and Aurora PostgreSQL and MySQL.",
+      "concept": "Query in place for ad-hoc joins, and replicate with zero-ETL or ETL when performance and repeated heavy use justify it.",
+      "examTip": "'One SQL query across S3 + RDS + DynamoDB without copying' means Athena federated query.",
+      "references": [
+        {
+          "title": "Using Amazon Athena Federated Query",
+          "url": "https://docs.aws.amazon.com/athena/latest/ug/connect-to-a-data-source.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-perf-112",
+    "domain": "performance",
+    "topic": "Analytics",
+    "tags": [
+      "redshift-materialized-views",
+      "dashboards"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "Executive dashboards on Amazon Redshift run the same complex aggregation queries (joins across five large tables with GROUP BY) hundreds of times per hour. Each run takes about 40 seconds, while the underlying data changes only every 15 minutes.",
+    "prompt": "Which Redshift feature will MOST improve dashboard response times?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Create materialized views for the aggregations, with automatic refresh, and point the dashboards at them (or rely on automatic query rewrite).",
+        "correct": true,
+        "why": "Materialized views precompute and store the results, so dashboard queries read small precomputed tables in milliseconds to seconds, and refresh keeps them current."
+      },
+      {
+        "key": "B",
+        "text": "Increase the WLM query timeout.",
+        "correct": false,
+        "why": "Longer timeouts don't make queries faster."
+      },
+      {
+        "key": "C",
+        "text": "Export results to CSV nightly.",
+        "correct": false,
+        "why": "Nightly exports would leave the dashboards stale."
+      },
+      {
+        "key": "D",
+        "text": "Enable Redshift Spectrum.",
+        "correct": false,
+        "why": "Spectrum queries S3 data. It doesn't precompute repeated aggregations."
+      }
+    ],
+    "explanation": {
+      "answer": "Redshift materialized views store precomputed query results and can be refreshed automatically, incrementally where possible. Automatic query rewrite can use them transparently. Result caching helps identical queries too, while materialized views help broader repeated patterns.",
+      "concept": "For repeated expensive analytics, precompute (materialized views, aggregate tables, QuickSight SPICE) instead of recalculating each time.",
+      "examTip": "'Same heavy aggregations repeatedly, data changes periodically' means Redshift materialized views.",
+      "references": [
+        {
+          "title": "Materialized views in Amazon Redshift",
+          "url": "https://docs.aws.amazon.com/redshift/latest/dg/materialized-view-overview.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-perf-113",
+    "domain": "performance",
+    "topic": "Analytics",
+    "tags": [
+      "redshift-distribution",
+      "sort-keys"
+    ],
+    "difficulty": "hard",
+    "type": "multi",
+    "selectCount": 2,
+    "stem": "In an Amazon Redshift warehouse, queries that join a 5-billion-row sales fact table to a 50-million-row customer table on customer_id spend most of their time redistributing data between nodes. Most queries also filter sales by a recent date range.",
+    "prompt": "Which TWO table design changes will MOST improve these queries? (Select TWO.)",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use KEY distribution on customer_id for both the sales and customer tables, so matching rows are co-located on the same slices.",
+        "correct": true,
+        "why": "Co-locating join keys avoids shuffling billions of rows across the network during joins."
+      },
+      {
+        "key": "B",
+        "text": "Define sale_date as the sort key on the sales table.",
+        "correct": true,
+        "why": "A date sort key lets Redshift skip blocks outside the filtered range (zone maps), which reduces I/O dramatically."
+      },
+      {
+        "key": "C",
+        "text": "Convert the tables to CSV files in S3.",
+        "correct": false,
+        "why": "This loses Redshift's columnar storage optimizations for these frequent joins."
+      },
+      {
+        "key": "D",
+        "text": "Use ALL distribution for the 5-billion-row sales table.",
+        "correct": false,
+        "why": "ALL copies the entire table to every node. It suits small dimension tables, not huge fact tables."
+      },
+      {
+        "key": "E",
+        "text": "Remove all compression encodings.",
+        "correct": false,
+        "why": "Compression reduces I/O. Removing it generally hurts performance."
+      }
+    ],
+    "explanation": {
+      "answer": "Redshift performance depends on data distribution (AUTO, EVEN, KEY or ALL) and sort keys. KEY distribution on common join columns co-locates related rows. ALL suits small, frequently joined dimensions. Sort keys on common filter columns, such as dates, enable block skipping. Automatic table optimization can recommend and apply these.",
+      "concept": "Minimize data movement (distribution) and data scanned (sort keys and compression), the same principles behind partitioning and columnar formats in Athena.",
+      "examTip": "'Redshift joins shuffle data' means KEY distribution on the join column. 'Date-range filters are slow' means a sort key on the date.",
+      "references": [
+        {
+          "title": "Working with data distribution styles",
+          "url": "https://docs.aws.amazon.com/redshift/latest/dg/t_Distributing_data.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-perf-114",
+    "domain": "performance",
+    "topic": "Search & Analytics",
+    "tags": [
+      "opensearch-serverless",
+      "variable-load"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A startup is adding log search and a product search feature. Query volume is unpredictable, spiking during launches and very low otherwise. The team doesn't want to size, scale or manage OpenSearch clusters, shards or instance types.",
+    "prompt": "Which option BEST meets these requirements?",
+    "options": [
+      {
+        "key": "A",
+        "text": "A provisioned OpenSearch domain sized for peak",
+        "correct": false,
+        "why": "This pays for peak capacity all the time and requires cluster management."
+      },
+      {
+        "key": "B",
+        "text": "Amazon OpenSearch Serverless collections (search and time-series types)",
+        "correct": true,
+        "why": "OpenSearch Serverless scales compute capacity automatically for indexing and search, with no clusters or shards to manage, which suits variable workloads."
+      },
+      {
+        "key": "C",
+        "text": "DynamoDB Scan with contains()",
+        "correct": false,
+        "why": "This is slow, costly and lacks relevance ranking."
+      },
+      {
+        "key": "D",
+        "text": "Amazon Athena",
+        "correct": false,
+        "why": "Athena isn't built for low-latency interactive product search."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon OpenSearch Serverless provides on-demand, auto-scaling OpenSearch collections. Capacity is measured in OpenSearch Compute Units (OCUs) and scales automatically for ingestion and search. Collections are optimized for search or time-series use cases, and are compatible with OpenSearch APIs and Dashboards.",
+      "concept": "Another example of choosing serverless versions of data services when workloads are unpredictable and operational simplicity matters.",
+      "examTip": "'Search with unpredictable load, no cluster management' means OpenSearch Serverless.",
+      "references": [
+        {
+          "title": "Amazon OpenSearch Serverless",
+          "url": "https://docs.aws.amazon.com/opensearch-service/latest/developerguide/serverless.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-perf-115",
+    "domain": "performance",
+    "topic": "Streaming",
+    "tags": [
+      "kpl-aggregation",
+      "producer-throughput"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "IoT gateways send millions of tiny (200-byte) records per second to Kinesis Data Streams using individual PutRecord calls. The stream hits the 1,000 records per second per shard limit long before reaching the 1 MB per second limit, forcing the company to over-provision shards.",
+    "prompt": "Which change improves throughput efficiency the MOST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Increase the stream's retention.",
+        "correct": false,
+        "why": "Retention controls how long records are kept, not how many records per second a shard accepts."
+      },
+      {
+        "key": "B",
+        "text": "Enable enhanced fan-out.",
+        "correct": false,
+        "why": "Enhanced fan-out improves reads, not the write record rate."
+      },
+      {
+        "key": "C",
+        "text": "Use the Kinesis Producer Library (KPL) with record aggregation (and collection), deaggregating on the consumer side (for example with the KCL).",
+        "correct": true,
+        "why": "Aggregation packs many small user records into each Kinesis record, which uses the per-shard byte capacity instead of hitting the record-count limit, so far fewer shards are needed."
+      },
+      {
+        "key": "D",
+        "text": "Use single PutRecord calls with retries.",
+        "correct": false,
+        "why": "Single PutRecord calls with retries are the current inefficient pattern that hits the record-count limit."
+      }
+    ],
+    "explanation": {
+      "answer": "Each shard accepts up to 1,000 records or 1 MB per second of writes. With tiny records, the record-count limit binds first. KPL aggregation combines multiple user records into one Kinesis record (up to the size limit), and collection batches multiple records into each PutRecords call. Consumers using the KCL deaggregate automatically.",
+      "concept": "Efficient producers batch and aggregate: Kinesis KPL, Firehose PutRecordBatch, SQS SendMessageBatch and DynamoDB BatchWriteItem.",
+      "examTip": "'Tiny records hit Kinesis record limits' means KPL aggregation.",
+      "references": [
+        {
+          "title": "KPL key concepts (aggregation)",
+          "url": "https://docs.aws.amazon.com/streams/latest/dev/kinesis-kpl-concepts.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-perf-116",
+    "domain": "performance",
+    "topic": "IoT",
+    "tags": [
+      "iot-core",
+      "mqtt",
+      "device-ingestion"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A utility company is connecting 2 million smart meters that send small readings every minute over MQTT and occasionally receive commands. It needs secure device authentication, a managed message broker that scales to millions of connections, and routing of messages to AWS services.",
+    "prompt": "Which service should be the device entry point?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Application Load Balancer to EC2 MQTT brokers",
+        "correct": false,
+        "why": "Self-managing brokers for 2 million devices adds major operational burden."
+      },
+      {
+        "key": "B",
+        "text": "Amazon API Gateway REST API",
+        "correct": false,
+        "why": "REST polling doesn't fit persistent MQTT device connections and commands."
+      },
+      {
+        "key": "C",
+        "text": "Amazon SQS",
+        "correct": false,
+        "why": "SQS doesn't speak MQTT and doesn't manage device identities or bidirectional messaging."
+      },
+      {
+        "key": "D",
+        "text": "AWS IoT Core",
+        "correct": true,
+        "why": "IoT Core provides a managed MQTT broker for millions of devices, X.509 certificate-based authentication, and a rules engine that routes messages to services like Kinesis, S3, DynamoDB and Lambda."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS IoT Core connects IoT devices securely at scale using MQTT, HTTPS or LoRaWAN. It includes a device gateway, message broker, device shadows (state) and a rules engine for routing and transformation. Other IoT services (Greengrass, Device Management, Device Defender) add edge compute and fleet management.",
+      "concept": "Device ingestion (IoT Core) feeds streaming (Kinesis), then storage and analytics (S3, OpenSearch, and so on).",
+      "examTip": "'Millions of devices using MQTT' means AWS IoT Core.",
+      "references": [
+        {
+          "title": "What is AWS IoT Core?",
+          "url": "https://docs.aws.amazon.com/iot/latest/developerguide/what-is-aws-iot.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-perf-117",
+    "domain": "performance",
+    "topic": "Streaming",
+    "tags": [
+      "firehose-opensearch",
+      "log-analytics"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company wants application logs from hundreds of services to be searchable in Amazon OpenSearch Service within about a minute of being generated, with failed deliveries backed up to S3, and without writing or managing consumer applications.",
+    "prompt": "Which ingestion approach BEST fits?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Data Firehose with OpenSearch Service as the destination and an S3 backup for failed records",
+        "correct": true,
+        "why": "Firehose buffers and delivers streaming data to OpenSearch automatically, with retries, optional Lambda transformation and S3 backup, and needs no consumer code."
+      },
+      {
+        "key": "B",
+        "text": "Amazon SQS with manual polling",
+        "correct": false,
+        "why": "This needs custom polling and loading code."
+      },
+      {
+        "key": "C",
+        "text": "Nightly batch uploads to OpenSearch",
+        "correct": false,
+        "why": "Nightly batches don't meet the roughly one-minute freshness requirement."
+      },
+      {
+        "key": "D",
+        "text": "A custom Kinesis Client Library application on EC2",
+        "correct": false,
+        "why": "This works but requires building and operating consumers, which the team wants to avoid."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Data Firehose supports OpenSearch Service (and OpenSearch Serverless) as a destination. It handles buffering by size and time, retries, index rotation, and backup of all or failed documents to S3. Sources include direct PUTs, Kinesis Data Streams, CloudWatch Logs subscription filters and more.",
+      "concept": "An alternative is Amazon OpenSearch Ingestion (managed Data Prepper pipelines) for richer transformation and routing into OpenSearch.",
+      "examTip": "'Stream logs into OpenSearch with no consumer code' means Firehose (or OpenSearch Ingestion).",
+      "references": [
+        {
+          "title": "Choose OpenSearch Service for your destination",
+          "url": "https://docs.aws.amazon.com/firehose/latest/dev/create-destination.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-perf-118",
+    "domain": "performance",
+    "topic": "Analytics",
+    "tags": [
+      "glue-job-bookmarks",
+      "incremental-processing"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "An hourly AWS Glue ETL job reprocesses all files in an S3 prefix every run, although only new files arrived since the last run. Runtime and cost grow as the prefix accumulates data.",
+    "prompt": "Which Glue feature enables processing only new data?",
+    "options": [
+      {
+        "key": "A",
+        "text": "S3 Transfer Acceleration",
+        "correct": false,
+        "why": "Acceleration doesn't affect which files are processed."
+      },
+      {
+        "key": "B",
+        "text": "Glue job bookmarks",
+        "correct": true,
+        "why": "Job bookmarks persist state about processed data, so later runs process only new or changed files, which cuts runtime and cost."
+      },
+      {
+        "key": "C",
+        "text": "Increasing the number of Glue workers",
+        "correct": false,
+        "why": "More workers speed up reprocessing but still process everything."
+      },
+      {
+        "key": "D",
+        "text": "Glue crawlers running more often",
+        "correct": false,
+        "why": "Crawlers update catalog schemas and partitions but don't control which data an ETL job processes."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Glue job bookmarks track data already processed by previous runs (for S3 and JDBC sources), which enables incremental ETL. You can enable, disable or pause bookmarks, and reset them for reprocessing. Partitioned layouts and event-driven triggers further limit what each run touches.",
+      "concept": "Design pipelines to be incremental and idempotent. Reprocessing everything each time doesn't scale.",
+      "examTip": "'Glue job keeps reprocessing old files' means job bookmarks.",
+      "references": [
+        {
+          "title": "Tracking processed data using job bookmarks",
+          "url": "https://docs.aws.amazon.com/glue/latest/dg/monitor-continuations.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-perf-119",
+    "domain": "performance",
+    "topic": "Analytics",
+    "tags": [
+      "emr-serverless",
+      "occasional-spark"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A data science team runs Apache Spark jobs a few times per week, with widely varying sizes. Keeping an EMR cluster running between jobs is wasteful, and the team doesn't want to tune cluster sizes for each job.",
+    "prompt": "Which option BEST fits?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Lambda",
+        "correct": false,
+        "why": "Lambda's time and memory limits don't fit large Spark jobs."
+      },
+      {
+        "key": "B",
+        "text": "Amazon RDS",
+        "correct": false,
+        "why": "RDS is a relational database service. It can't run Apache Spark jobs."
+      },
+      {
+        "key": "C",
+        "text": "Amazon EMR Serverless",
+        "correct": true,
+        "why": "EMR Serverless runs Spark and Hive jobs without provisioning clusters, scaling resources automatically per job and billing only for resources used during execution."
+      },
+      {
+        "key": "D",
+        "text": "A permanently running EMR cluster sized for the largest job",
+        "correct": false,
+        "why": "This pays for idle capacity between infrequent jobs."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon EMR Serverless lets you submit Spark or Hive jobs to an application that provisions workers automatically, scales them during the job, and releases them afterwards. Pre-initialized capacity can reduce startup time for latency-sensitive jobs.",
+      "concept": "For infrequent or variable big-data jobs, serverless options (EMR Serverless, Glue, Athena) avoid idle cluster cost.",
+      "examTip": "'Occasional Spark jobs, no cluster management' means EMR Serverless (or Glue).",
+      "references": [
+        {
+          "title": "What is Amazon EMR Serverless?",
+          "url": "https://docs.aws.amazon.com/emr/latest/EMR-Serverless-UserGuide/emr-serverless.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-perf-120",
+    "domain": "performance",
+    "topic": "Well-Architected",
+    "tags": [
+      "performance-efficiency-principles"
+    ],
+    "difficulty": "medium",
+    "type": "multi",
+    "selectCount": 2,
+    "stem": "A company's engineering team spends months building and operating a self-managed search cluster, a custom message queue and a homegrown ML inference server, and deploys only in one Region even though half its users are overseas.",
+    "prompt": "Which TWO Well-Architected performance efficiency design principles would MOST help? (Select TWO.)",
+    "options": [
+      {
+        "key": "A",
+        "text": "Democratize advanced technologies: consume managed services (OpenSearch, SQS, SageMaker or Bedrock) instead of building and operating them.",
+        "correct": true,
+        "why": "Managed services let teams use complex technology as a service, freeing time for product work."
+      },
+      {
+        "key": "B",
+        "text": "Run everything on self-managed EC2 for maximum control.",
+        "correct": false,
+        "why": "This contradicts the principle of using serverless and managed services where they fit."
+      },
+      {
+        "key": "C",
+        "text": "Go global in minutes: deploy in multiple Regions or use edge services to reduce latency for overseas users.",
+        "correct": true,
+        "why": "AWS's global footprint lets you serve users close to where they are, with lower latency, quickly."
+      },
+      {
+        "key": "D",
+        "text": "Avoid experimentation to reduce risk.",
+        "correct": false,
+        "why": "The principle is to experiment more often, which is cheap and fast in the cloud."
+      },
+      {
+        "key": "E",
+        "text": "Always choose the largest instance types to be safe.",
+        "correct": false,
+        "why": "Over-provisioning isn't a performance efficiency principle. It wastes resources."
+      }
+    ],
+    "explanation": {
+      "answer": "Performance efficiency design principles: democratize advanced technologies, go global in minutes, use serverless architectures, experiment more often, and consider mechanical sympathy (use the technology that best fits the access pattern).",
+      "concept": "Choose resources by data-driven selection and continuous review: benchmark, monitor and revisit choices as new services and instance types appear.",
+      "examTip": "Performance efficiency principles: democratize tech, go global, serverless, experiment, mechanical sympathy.",
+      "references": [
+        {
+          "title": "Performance efficiency pillar: design principles",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/performance-efficiency-pillar/design-principles.html"
+        }
+      ]
+    }
+  }
+]

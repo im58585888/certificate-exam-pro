@@ -1,0 +1,1529 @@
+[
+  {
+    "id": "saa-cost-071",
+    "domain": "cost",
+    "topic": "Well-Architected",
+    "tags": [
+      "cost-optimization-principles"
+    ],
+    "difficulty": "medium",
+    "type": "multi",
+    "selectCount": 2,
+    "stem": "A company's AWS bill has doubled in a year. No one owns cloud costs, teams can't see what they spend, and most workloads run on always-on EC2 instances sized for peak load.",
+    "prompt": "Which TWO Well-Architected cost optimization design principles address these problems MOST directly? (Select TWO.)",
+    "options": [
+      {
+        "key": "A",
+        "text": "Implement cloud financial management, and analyze and attribute expenditure (ownership, tagging, showback).",
+        "correct": true,
+        "why": "Establishing ownership and visibility of costs lets teams understand and act on their spending."
+      },
+      {
+        "key": "B",
+        "text": "Adopt a consumption model: pay only for what you use, scaling and stopping resources based on demand.",
+        "correct": true,
+        "why": "Moving from always-on, peak-sized capacity to demand-based consumption removes waste."
+      },
+      {
+        "key": "C",
+        "text": "Review costs once a year.",
+        "correct": false,
+        "why": "Cost optimization is continuous, not an annual event."
+      },
+      {
+        "key": "D",
+        "text": "Build all components yourself to avoid service fees.",
+        "correct": false,
+        "why": "The principle is to stop spending on undifferentiated heavy lifting and use managed services."
+      },
+      {
+        "key": "E",
+        "text": "Provision for peak demand everywhere to avoid performance risk.",
+        "correct": false,
+        "why": "This is the waste pattern causing the problem, not a cost principle."
+      }
+    ],
+    "explanation": {
+      "answer": "The cost optimization pillar's design principles are: implement cloud financial management, adopt a consumption model, measure overall efficiency, stop spending money on undifferentiated heavy lifting, and analyze and attribute expenditure.",
+      "concept": "FinOps practices in AWS: account structure and tagging, Cost Explorer and Data Exports, Budgets and anomaly detection, Cost Optimization Hub, and commitment management.",
+      "examTip": "Cost principles: financial management, consumption model, measure efficiency, no undifferentiated heavy lifting, attribute spend.",
+      "references": [
+        {
+          "title": "Cost optimization pillar: design principles",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/cost-optimization-pillar/design-principles.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-cost-072",
+    "domain": "cost",
+    "topic": "Managed Services",
+    "tags": [
+      "tco",
+      "undifferentiated-heavy-lifting",
+      "rds"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A company runs MySQL on self-managed EC2 instances. Two DBAs spend most of their time on patching, backups, replication setup and failover testing. Management wants to lower the total cost of ownership, including staff time.",
+    "prompt": "Which change BEST reduces total cost of ownership?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Hire more DBAs.",
+        "correct": false,
+        "why": "Hiring more DBAs adds salary cost to do the same undifferentiated work a managed service automates."
+      },
+      {
+        "key": "B",
+        "text": "Migrate to Amazon RDS for MySQL (or Aurora), which automates patching, backups, Multi-AZ failover and monitoring.",
+        "correct": true,
+        "why": "Managed databases take on undifferentiated operational work, freeing DBAs for higher-value tasks and often lowering overall TCO even if hourly prices are higher."
+      },
+      {
+        "key": "C",
+        "text": "Move MySQL to larger EC2 instances.",
+        "correct": false,
+        "why": "This increases infrastructure cost without reducing operational effort."
+      },
+      {
+        "key": "D",
+        "text": "Run MySQL on Spot Instances.",
+        "correct": false,
+        "why": "Interruptions are unacceptable for a primary database and add operational risk."
+      }
+    ],
+    "explanation": {
+      "answer": "Total cost of ownership includes people, time and risk, not just instance prices. Managed services (RDS, Aurora, DynamoDB, Fargate, Lambda and others) remove patching, backups, scaling and HA engineering, so staff can focus on application improvements.",
+      "concept": "Compare options with TCO in mind: infrastructure, licensing, operations staff, downtime risk and time to market.",
+      "examTip": "'Staff spend time on DB operations' means a managed service (lower TCO).",
+      "references": [
+        {
+          "title": "Stop spending money on undifferentiated heavy lifting",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/cost-optimization-pillar/design-principles.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-cost-073",
+    "domain": "cost",
+    "topic": "Storage Cost",
+    "tags": [
+      "s3-vs-ebs",
+      "static-datasets"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A research team keeps 200 TB of reference datasets on provisioned EBS gp3 volumes attached to a few EC2 instances, although the data is read only a few times a month and is also used by other teams.",
+    "prompt": "Which storage change would MOST reduce cost while keeping the data accessible?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Convert the volumes to io2.",
+        "correct": false,
+        "why": "io2 costs more per GB than gp3 and adds per-IOPS charges, which makes rarely read data even more expensive."
+      },
+      {
+        "key": "B",
+        "text": "Create more EBS snapshots.",
+        "correct": false,
+        "why": "Snapshots add storage cost and don't remove the provisioned volumes."
+      },
+      {
+        "key": "C",
+        "text": "Move the datasets to Amazon S3 (with an appropriate storage class or Intelligent-Tiering), and access them from compute on demand.",
+        "correct": true,
+        "why": "S3 charges only for data stored, with no provisioned capacity, at a lower per-GB price than EBS. Many consumers can share it, and cold data can tier down automatically."
+      },
+      {
+        "key": "D",
+        "text": "Attach the volumes to larger instances.",
+        "correct": false,
+        "why": "This raises compute cost and doesn't change storage cost."
+      }
+    ],
+    "explanation": {
+      "answer": "EBS bills for provisioned capacity whether data is read or not, and a volume attaches to a limited number of instances. S3 is object storage with pay-per-use pricing, very high durability, lifecycle and tiering options, and broad shared access, making it more economical for large, infrequently read datasets.",
+      "concept": "Use the cheapest storage that meets the access requirements: EBS for block I/O, EFS or FSx for shared POSIX, and S3 for everything else.",
+      "examTip": "'Large, rarely read datasets on EBS' means move to S3 (with tiering).",
+      "references": [
+        {
+          "title": "Amazon S3 storage classes",
+          "url": "https://aws.amazon.com/s3/storage-classes/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-cost-074",
+    "domain": "cost",
+    "topic": "Data Transfer",
+    "tags": [
+      "same-region",
+      "data-gravity",
+      "cross-region-charges"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "An analytics cluster in us-west-2 processes 300 TB per month of data stored in an S3 bucket in us-east-1. The company pays substantial cross-Region data transfer charges, and nothing requires the two to be in different Regions.",
+    "prompt": "What is the MOST effective way to eliminate these charges?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Compress the data after transfer.",
+        "correct": false,
+        "why": "Compressing after transfer doesn't reduce the bytes already transferred."
+      },
+      {
+        "key": "B",
+        "text": "Use a larger instance type.",
+        "correct": false,
+        "why": "Instance size doesn't affect data transfer pricing."
+      },
+      {
+        "key": "C",
+        "text": "Enable S3 Transfer Acceleration.",
+        "correct": false,
+        "why": "Acceleration adds charges and doesn't remove inter-Region transfer."
+      },
+      {
+        "key": "D",
+        "text": "Run the analytics compute in us-east-1, the same Region as the data (or move the data to us-west-2).",
+        "correct": true,
+        "why": "Data transfer between S3 and EC2 in the same Region is free, while inter-Region transfer is billed per GB. Co-locating compute and data removes the charge."
+      }
+    ],
+    "explanation": {
+      "answer": "Data transfer pricing favors keeping compute and data together. Transfers into AWS are free, transfers between S3 and EC2 in the same Region are free, and cross-Region and internet egress are billed. Place processing where the data lives ('data gravity') unless latency or compliance requires otherwise.",
+      "concept": "If cross-Region access is unavoidable, reduce the bytes: compress, filter, aggregate, use columnar formats, or replicate only needed prefixes.",
+      "examTip": "'Paying cross-Region transfer between compute and data' means co-locate them in one Region.",
+      "references": [
+        {
+          "title": "Overview of data transfer costs for common architectures",
+          "url": "https://aws.amazon.com/blogs/architecture/overview-of-data-transfer-costs-for-common-architectures/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-cost-075",
+    "domain": "cost",
+    "topic": "S3 Replication",
+    "tags": [
+      "replication-filters",
+      "selective-replication"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company replicates an entire 1.2 PB bucket to another Region for DR, but only the contracts/ and records/ prefixes (about 15% of the data) are critical. The rest is scratch data that can be regenerated. Replication storage and transfer costs are high.",
+    "prompt": "How can replication costs be reduced while protecting the critical data?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Change the replication configuration to use filters, so only the critical prefixes (or objects with a specific tag) are replicated, optionally to a lower-cost storage class in the destination.",
+        "correct": true,
+        "why": "Replication rules can filter by prefix or tags and set the destination storage class, so only needed data is copied and stored economically."
+      },
+      {
+        "key": "B",
+        "text": "Disable versioning on the source bucket.",
+        "correct": false,
+        "why": "Replication requires versioning, so disabling it would break replication entirely."
+      },
+      {
+        "key": "C",
+        "text": "Use S3 Transfer Acceleration for replication.",
+        "correct": false,
+        "why": "Replication doesn't use Transfer Acceleration, and it would add cost."
+      },
+      {
+        "key": "D",
+        "text": "Replicate everything to S3 Standard in two more Regions.",
+        "correct": false,
+        "why": "Replicating everything into more Regions multiplies storage and transfer costs instead of reducing them."
+      }
+    ],
+    "explanation": {
+      "answer": "S3 Replication rules support filters (prefix, tags, or both) and can specify the destination storage class, for example S3 Standard-IA or Glacier Instant Retrieval for DR copies. Replicate what you need at the cheapest acceptable storage class.",
+      "concept": "Classify data by criticality: protect critical data strongly, and don't pay to protect data that can be recreated.",
+      "examTip": "'Only some data needs replication' means replication rule filters (prefix or tag) plus a cheaper destination storage class.",
+      "references": [
+        {
+          "title": "Replication configuration file elements",
+          "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/replication-add-config.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-cost-076",
+    "domain": "cost",
+    "topic": "Logging Cost",
+    "tags": [
+      "vpc-flow-logs-s3",
+      "parquet"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company publishes VPC Flow Logs from 60 VPCs to CloudWatch Logs for occasional security investigations. Flow log ingestion is now one of its largest CloudWatch charges.",
+    "prompt": "Which change would MOST reduce cost while keeping the logs queryable?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Send flow logs to both CloudWatch Logs and S3.",
+        "correct": false,
+        "why": "Duplicating destinations increases cost."
+      },
+      {
+        "key": "B",
+        "text": "Publish flow logs directly to Amazon S3 (in Parquet format with hourly partitions) and query them with Athena when needed.",
+        "correct": true,
+        "why": "Delivering flow logs to S3 costs less than CloudWatch Logs ingestion, and Parquet plus partitions keeps Athena queries fast and cheap."
+      },
+      {
+        "key": "C",
+        "text": "Increase the CloudWatch Logs retention.",
+        "correct": false,
+        "why": "Longer retention increases storage costs."
+      },
+      {
+        "key": "D",
+        "text": "Disable flow logs entirely.",
+        "correct": false,
+        "why": "This removes important security visibility."
+      }
+    ],
+    "explanation": {
+      "answer": "VPC Flow Logs can be published to CloudWatch Logs, S3 or Amazon Data Firehose. For large volumes used mainly for investigations, S3 delivery (with Parquet, custom fields and Hive-compatible partitions) is typically much cheaper, and Athena or Security Lake can query it on demand.",
+      "concept": "Route high-volume telemetry by use: real-time alerting to CloudWatch, and forensics and analytics to S3 with Athena.",
+      "examTip": "'Flow logs too expensive in CloudWatch' means deliver to S3 (Parquet) and query with Athena.",
+      "references": [
+        {
+          "title": "Publish flow logs to Amazon S3",
+          "url": "https://docs.aws.amazon.com/vpc/latest/userguide/flow-logs-s3.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-cost-077",
+    "domain": "cost",
+    "topic": "Network Costs",
+    "tags": [
+      "centralized-interface-endpoints",
+      "shared-services-vpc"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A company has 80 VPCs, each with interface VPC endpoints for the same 10 AWS services, in three AZs. The hourly charges for these 2,400 endpoint ENIs are significant, although traffic through most endpoints is light. All VPCs are already connected to a Transit Gateway.",
+    "prompt": "Which design reduces endpoint costs while keeping private access to AWS services?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Replace interface endpoints with NAT gateways in each VPC.",
+        "correct": false,
+        "why": "NAT gateways also bill hourly and per GB, and they send traffic toward public endpoints, which may violate private-access requirements."
+      },
+      {
+        "key": "B",
+        "text": "Use gateway endpoints for all 10 services.",
+        "correct": false,
+        "why": "Gateway endpoints exist only for S3 and DynamoDB."
+      },
+      {
+        "key": "C",
+        "text": "Centralize the interface endpoints in a shared-services VPC, and share private DNS resolution to the spoke VPCs (using Route 53 private hosted zones or Resolver rules), routing traffic over the Transit Gateway.",
+        "correct": true,
+        "why": "One set of endpoints serves all VPCs, which cuts the number of billed endpoint ENIs dramatically. Weigh the savings against the Transit Gateway data processing cost for the traffic."
+      },
+      {
+        "key": "D",
+        "text": "Add more interface endpoints for redundancy.",
+        "correct": false,
+        "why": "More interface endpoints mean more billed ENI-hours, the exact cost the company wants to cut."
+      }
+    ],
+    "explanation": {
+      "answer": "Interface endpoints are billed per endpoint per AZ-hour plus per GB processed. In hub-and-spoke networks, centralizing endpoints in a shared VPC and resolving service DNS names to them from spokes (private hosted zones associated with spokes, or Resolver forwarding) cuts hourly charges substantially, at the cost of Transit Gateway processing for that traffic.",
+      "concept": "Centralization trade-off: fewer billed resources against extra hops and data processing. Run the numbers for your traffic.",
+      "examTip": "'Same interface endpoints in many VPCs' means centralize them in a shared VPC via Transit Gateway plus private DNS.",
+      "references": [
+        {
+          "title": "Centralized access to VPC private endpoints",
+          "url": "https://docs.aws.amazon.com/whitepapers/latest/building-scalable-secure-multi-vpc-network-infrastructure/centralized-access-to-vpc-private-endpoints.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-cost-078",
+    "domain": "cost",
+    "topic": "Caching Cost",
+    "tags": [
+      "elasticache-reserved-nodes"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A company's production ElastiCache for Redis OSS cluster runs 24/7 on the same node type and is expected to keep running for at least three more years.",
+    "prompt": "What is the MOST cost-effective purchasing option for these nodes?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Spot Instances",
+        "correct": false,
+        "why": "ElastiCache doesn't run on Spot, and a production cache needs stable capacity."
+      },
+      {
+        "key": "B",
+        "text": "Compute Savings Plans",
+        "correct": false,
+        "why": "Compute Savings Plans cover EC2, Fargate and Lambda, not ElastiCache nodes."
+      },
+      {
+        "key": "C",
+        "text": "Keep On-Demand pricing",
+        "correct": false,
+        "why": "On-Demand is the most expensive option for a predictable 24/7 workload."
+      },
+      {
+        "key": "D",
+        "text": "Purchase ElastiCache reserved nodes (1- or 3-year term) for the node type",
+        "correct": true,
+        "why": "Reserved nodes give a significant discount over On-Demand pricing for steady, long-running cache clusters."
+      }
+    ],
+    "explanation": {
+      "answer": "Many managed data services offer reserved capacity for steady workloads: ElastiCache reserved nodes, RDS Reserved Instances, OpenSearch reserved instances, Redshift reserved nodes and DynamoDB reserved capacity. Match the commitment to service, Region and node type, and use size flexibility where supported.",
+      "concept": "Savings Plans cover compute (EC2, Fargate, Lambda, and SageMaker through SageMaker Savings Plans). For databases and caches, check each service's reservation model.",
+      "examTip": "'Steady ElastiCache for years' means ElastiCache reserved nodes.",
+      "references": [
+        {
+          "title": "ElastiCache reserved nodes",
+          "url": "https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/CacheNodes.Reserved.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-cost-079",
+    "domain": "cost",
+    "topic": "Search Cost",
+    "tags": [
+      "opensearch-ultrawarm",
+      "cold-storage"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "An Amazon OpenSearch Service domain stores 90 days of logs on hot, SSD-backed data nodes. Engineers mostly search the last 7 days, but must occasionally query older logs. The hot storage footprint drives most of the domain's cost.",
+    "prompt": "Which change reduces cost while keeping older logs searchable?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use Index State Management to move indexes older than 7 days to UltraWarm (and older ones to cold storage), keeping only recent indexes on hot nodes.",
+        "correct": true,
+        "why": "UltraWarm and cold storage use S3-backed storage at much lower cost per GB, and data remains queryable (cold storage after reattaching), so hot nodes can be downsized."
+      },
+      {
+        "key": "B",
+        "text": "Switch hot nodes to larger instances.",
+        "correct": false,
+        "why": "This increases cost without addressing the storage tiering."
+      },
+      {
+        "key": "C",
+        "text": "Add more hot data nodes.",
+        "correct": false,
+        "why": "More hot data nodes add expensive SSD-backed capacity, which increases the bill."
+      },
+      {
+        "key": "D",
+        "text": "Delete logs older than 7 days.",
+        "correct": false,
+        "why": "Deleting older logs breaks the requirement that they stay searchable for occasional investigations."
+      }
+    ],
+    "explanation": {
+      "answer": "OpenSearch Service storage tiers: hot (fastest, most expensive), UltraWarm (read-only indexes on S3-backed nodes with caching, much cheaper), and cold (detached indexes in S3 at minimal cost, attached on demand). Index State Management policies automate the movement by age or size.",
+      "concept": "Tier data by access frequency: the same idea as S3 storage classes, EFS IA, and DynamoDB Standard-IA.",
+      "examTip": "'OpenSearch older logs rarely searched' means UltraWarm or cold storage with ISM.",
+      "references": [
+        {
+          "title": "UltraWarm storage for Amazon OpenSearch Service",
+          "url": "https://docs.aws.amazon.com/opensearch-service/latest/developerguide/ultrawarm.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-cost-080",
+    "domain": "cost",
+    "topic": "Analytics Cost",
+    "tags": [
+      "redshift-pause-resume",
+      "dev-cluster"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A development Amazon Redshift provisioned cluster is used by engineers only during business hours on weekdays, but runs 24/7. The team prefers to keep the provisioned cluster rather than migrating to Serverless right now.",
+    "prompt": "Which action reduces its compute cost with the LEAST effort?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Add concurrency scaling.",
+        "correct": false,
+        "why": "Concurrency scaling can add cost and doesn't reduce idle time."
+      },
+      {
+        "key": "B",
+        "text": "Schedule pause and resume actions for the cluster outside business hours.",
+        "correct": true,
+        "why": "While paused, you pay only for storage, not compute. Scheduled actions pause and resume automatically."
+      },
+      {
+        "key": "C",
+        "text": "Buy 3-year reserved nodes for the dev cluster.",
+        "correct": false,
+        "why": "Reservations bill every hour and aren't worth it for a cluster used about a third of the week."
+      },
+      {
+        "key": "D",
+        "text": "Resize to more nodes.",
+        "correct": false,
+        "why": "Adding nodes raises the hourly compute bill and does nothing about the idle nights and weekends."
+      }
+    ],
+    "explanation": {
+      "answer": "Redshift provisioned clusters can be paused and resumed manually or on a schedule. During a pause, on-demand compute billing stops and only storage is charged. This suits development and test clusters with predictable idle periods. Redshift Serverless is the alternative when usage is sporadic.",
+      "concept": "Scheduling non-production resources (EC2, RDS stop/start, Redshift pause, Aurora Serverless auto-pause) is one of the fastest cost wins.",
+      "examTip": "'Redshift used only in business hours' means scheduled pause/resume (or Serverless).",
+      "references": [
+        {
+          "title": "Pausing and resuming Amazon Redshift clusters",
+          "url": "https://docs.aws.amazon.com/redshift/latest/mgmt/rs-mgmt-pause-resume-cluster.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-cost-081",
+    "domain": "cost",
+    "topic": "Analytics Cost",
+    "tags": [
+      "glue-flex",
+      "non-urgent-etl"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company runs dozens of nightly AWS Glue Spark ETL jobs that must finish by 8 AM. Start times and run durations are flexible as long as that deadline is met, and the team wants to reduce Glue costs.",
+    "prompt": "Which option is MOST appropriate?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Run the jobs continuously all day.",
+        "correct": false,
+        "why": "Running jobs all day multiplies DPU-hours billed for work that only needs to finish by morning."
+      },
+      {
+        "key": "B",
+        "text": "Increase the number of DPUs for every job.",
+        "correct": false,
+        "why": "More DPUs cost more, and may not shorten jobs proportionally."
+      },
+      {
+        "key": "C",
+        "text": "Run the non-urgent jobs with the Glue Flex execution class.",
+        "correct": true,
+        "why": "Flex runs jobs on spare capacity at a lower price per DPU-hour. It suits time-insensitive workloads that can tolerate variable start and run times."
+      },
+      {
+        "key": "D",
+        "text": "Move the ETL to Amazon RDS stored procedures.",
+        "correct": false,
+        "why": "This is a re-architecture that doesn't fit Spark-scale data processing."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Glue offers Standard and Flex execution classes for Spark jobs. Flex uses spare compute capacity, so jobs may take longer to start or run, at a reduced price. Combine it with right-sized worker types and counts, auto scaling, and job bookmarks for incremental processing.",
+      "concept": "Flexible timing trades for discounts across AWS: Spot, Fargate Spot, Glue Flex, and S3 Glacier bulk retrievals.",
+      "examTip": "'Non-urgent Glue jobs, reduce cost' means the Glue Flex execution class.",
+      "references": [
+        {
+          "title": "Glue job execution class: Flex",
+          "url": "https://docs.aws.amazon.com/glue/latest/dg/add-job.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-cost-082",
+    "domain": "cost",
+    "topic": "Serverless Cost",
+    "tags": [
+      "lambda-power-tuning",
+      "memory-optimization"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A team runs 300 Lambda functions, all set to 1,024 MB of memory by default. Some are CPU-heavy and slow, while others mostly wait on I/O. The team wants data-driven memory settings that minimize cost without hurting latency.",
+    "prompt": "Which approach should the team use?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Set every function to the maximum memory.",
+        "correct": false,
+        "why": "I/O-bound functions would cost more without getting faster."
+      },
+      {
+        "key": "B",
+        "text": "Set every function to 128 MB.",
+        "correct": false,
+        "why": "CPU-bound functions would run much longer, often costing more and increasing latency."
+      },
+      {
+        "key": "C",
+        "text": "Enable provisioned concurrency on all functions.",
+        "correct": false,
+        "why": "Provisioned concurrency adds hourly charges for pre-warmed environments and doesn't change memory settings."
+      },
+      {
+        "key": "D",
+        "text": "Use AWS Lambda Power Tuning (and Compute Optimizer Lambda recommendations) to test each function at several memory sizes and choose the best cost/performance setting.",
+        "correct": true,
+        "why": "Power Tuning runs the function at multiple memory configurations and reports cost and duration, revealing the optimal setting. Compute Optimizer recommends sizes based on usage."
+      }
+    ],
+    "explanation": {
+      "answer": "Lambda cost is memory multiplied by duration. More memory adds CPU, which can shorten duration, so the cheapest setting is found empirically. AWS Lambda Power Tuning, an open-source Step Functions state machine, and AWS Compute Optimizer both help identify optimal memory per function.",
+      "concept": "Measure, then right-size. Blanket defaults are rarely optimal for either cost or performance.",
+      "examTip": "'Find the optimal Lambda memory for cost' means Lambda Power Tuning or Compute Optimizer.",
+      "references": [
+        {
+          "title": "Lambda memory and cost optimization (Compute Optimizer)",
+          "url": "https://docs.aws.amazon.com/compute-optimizer/latest/ug/view-lambda-recommendations.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-cost-083",
+    "domain": "cost",
+    "topic": "Compute Choice",
+    "tags": [
+      "lambda-vs-containers",
+      "steady-high-throughput"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "An image-thumbnail API began on Lambda when traffic was low and spiky. It now receives a steady 3,000 requests per second, 24/7, with each invocation running about 400 ms at 2 GB. The monthly Lambda bill has grown very large.",
+    "prompt": "Which option is MOST likely to reduce compute cost significantly?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Run the service as containers on ECS or EKS (Fargate or EC2), right-sized and covered by Compute Savings Plans, behind a load balancer.",
+        "correct": true,
+        "why": "At sustained high utilization, always-on containers with commitment discounts usually cost less than per-request Lambda pricing, while still scaling with Auto Scaling."
+      },
+      {
+        "key": "B",
+        "text": "Enable provisioned concurrency without Savings Plans.",
+        "correct": false,
+        "why": "Provisioned concurrency adds cost unless its utilization is high and it's covered by a Savings Plan. On its own, it doesn't guarantee savings."
+      },
+      {
+        "key": "C",
+        "text": "Increase Lambda memory to 10 GB.",
+        "correct": false,
+        "why": "Higher memory raises the price per millisecond. Unless duration falls proportionally, cost rises."
+      },
+      {
+        "key": "D",
+        "text": "Move the function into a VPC.",
+        "correct": false,
+        "why": "VPC attachment doesn't reduce Lambda pricing."
+      }
+    ],
+    "explanation": {
+      "answer": "Serverless pay-per-use pricing is ideal for low, spiky or unpredictable traffic. As workloads become steady and highly utilized, there's usually a break-even point where containers or instances (especially with Savings Plans, Graviton and right-sizing) become cheaper. Re-evaluate architecture as usage patterns change.",
+      "concept": "Measure overall efficiency (cost per request) and revisit decisions as scale grows. Architecture choices aren't permanent.",
+      "examTip": "'Lambda at sustained high throughput is expensive' means consider containers or EC2 with Savings Plans.",
+      "references": [
+        {
+          "title": "Lambda pricing and cost optimization",
+          "url": "https://aws.amazon.com/lambda/pricing/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-cost-084",
+    "domain": "cost",
+    "topic": "Content Delivery Cost",
+    "tags": [
+      "static-offload",
+      "s3-cloudfront",
+      "ec2-reduction"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A news site's EC2 web fleet serves both dynamic pages and about 70% of its traffic in static assets (images, CSS and JS) directly from instance disks. The fleet has 30 instances largely to handle static file traffic.",
+    "prompt": "Which change would MOST reduce infrastructure cost?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Add an EFS file system for static files.",
+        "correct": false,
+        "why": "EFS adds storage cost, and the instances still have to serve the traffic."
+      },
+      {
+        "key": "B",
+        "text": "Move static assets to Amazon S3 and serve them through Amazon CloudFront, and scale the EC2 fleet down to what dynamic traffic needs.",
+        "correct": true,
+        "why": "Offloading static content to S3 and CloudFront removes most of the load from EC2, so far fewer instances are needed, while edge caching improves performance."
+      },
+      {
+        "key": "C",
+        "text": "Buy Reserved Instances for all 30 instances.",
+        "correct": false,
+        "why": "This discounts an oversized fleet instead of shrinking it."
+      },
+      {
+        "key": "D",
+        "text": "Move to larger instances.",
+        "correct": false,
+        "why": "Bigger instances don't address the misplaced workload."
+      }
+    ],
+    "explanation": {
+      "answer": "Static content doesn't need compute to serve it. S3 plus CloudFront delivers it cheaply and scalably, and origin fetches from S3 to CloudFront are free. The web fleet then handles only dynamic requests, which reduces instance count and cost.",
+      "concept": "Offload work to the most cost-efficient layer: the CDN for static content, caches for repeated reads, queues for asynchronous work, and serverless for spiky jobs.",
+      "examTip": "'EC2 fleet mostly serves static files' means S3 plus CloudFront, then shrink the fleet.",
+      "references": [
+        {
+          "title": "Hosting a static website using Amazon S3",
+          "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/WebsiteHosting.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-cost-085",
+    "domain": "cost",
+    "topic": "DynamoDB Pricing",
+    "tags": [
+      "reserved-capacity",
+      "provisioned-steady"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A DynamoDB table in provisioned capacity mode runs a very steady baseline of 20,000 WCUs and 60,000 RCUs around the clock, with auto scaling handling small peaks. The table uses the Standard table class, and the workload will stay for years.",
+    "prompt": "How can the company reduce the cost of this baseline capacity?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Buy Compute Savings Plans.",
+        "correct": false,
+        "why": "Compute Savings Plans don't apply to DynamoDB throughput."
+      },
+      {
+        "key": "B",
+        "text": "Switch to on-demand mode.",
+        "correct": false,
+        "why": "On-demand usually costs more per request for steady, predictable throughput."
+      },
+      {
+        "key": "C",
+        "text": "Purchase DynamoDB reserved capacity (1- or 3-year) for the steady baseline of read and write capacity units.",
+        "correct": true,
+        "why": "Reserved capacity gives a significant discount on provisioned throughput for Standard-class tables in exchange for an upfront commitment."
+      },
+      {
+        "key": "D",
+        "text": "Add DAX.",
+        "correct": false,
+        "why": "DAX may reduce reads but adds node costs. It isn't a discount mechanism for baseline capacity."
+      }
+    ],
+    "explanation": {
+      "answer": "DynamoDB reserved capacity lets you commit to a minimum level of provisioned throughput (RCUs and WCUs) in a Region for 1 or 3 years at a discount. It applies to provisioned mode with the Standard table class. Keep auto scaling above the reserved baseline for peaks.",
+      "concept": "The capacity strategy is on-demand for unknown traffic, provisioned plus auto scaling for predictable traffic, and reserved capacity for the steady floor.",
+      "examTip": "'Steady provisioned DynamoDB throughput for years' means reserved capacity.",
+      "references": [
+        {
+          "title": "DynamoDB reserved capacity",
+          "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/reserved-capacity.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-cost-086",
+    "domain": "cost",
+    "topic": "DynamoDB Pricing",
+    "tags": [
+      "export-to-s3",
+      "analytics-offload"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "Every night, a reporting job scans an entire 8 TB DynamoDB table to build analytics reports, consuming large amounts of read capacity and sometimes throttling production traffic.",
+    "prompt": "Which approach reduces cost and removes the impact on production?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Run the scan more slowly throughout the day.",
+        "correct": false,
+        "why": "This spreads the impact but still consumes capacity."
+      },
+      {
+        "key": "B",
+        "text": "Increase provisioned read capacity during the job.",
+        "correct": false,
+        "why": "This pays for more capacity and still loads the table."
+      },
+      {
+        "key": "C",
+        "text": "Add a GSI covering all attributes.",
+        "correct": false,
+        "why": "A GSI duplicates storage and write costs, and the job would still read everything."
+      },
+      {
+        "key": "D",
+        "text": "Use DynamoDB export to S3 (point-in-time export, full or incremental), and run the analytics with Athena on the exported data.",
+        "correct": true,
+        "why": "Exports to S3 don't consume table read capacity or affect performance, and Athena queries the data in S3 cheaply."
+      }
+    ],
+    "explanation": {
+      "answer": "DynamoDB export to S3 uses point-in-time recovery data to produce full or incremental exports, in DynamoDB JSON or Amazon Ion format, without consuming read capacity. Analytics then run on S3 with Athena, Glue or EMR. Zero-ETL integrations to Redshift or OpenSearch are other options.",
+      "concept": "Separate OLTP from OLAP. Never run heavy analytics directly against production transactional tables.",
+      "examTip": "'Nightly full-table DynamoDB scans for reports' means export to S3 plus Athena.",
+      "references": [
+        {
+          "title": "DynamoDB data export to Amazon S3",
+          "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/S3DataExport.HowItWorks.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-cost-087",
+    "domain": "cost",
+    "topic": "Database Pricing",
+    "tags": [
+      "aurora-provisioned-vs-serverless",
+      "steady-load"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A company moved its main Aurora PostgreSQL database to Aurora Serverless v2 for flexibility. After six months, metrics show capacity is consistently near 64 ACUs, 24/7, with little variation, and costs are higher than expected.",
+    "prompt": "What should the solutions architect recommend to reduce cost?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Move the writer to a provisioned Aurora instance class that matches the steady load, and purchase Reserved Instances for it (keeping Serverless v2 only for variable readers, if useful).",
+        "correct": true,
+        "why": "For steady, predictable load, provisioned instances with RIs are usually cheaper than paying per ACU-hour for constant capacity."
+      },
+      {
+        "key": "B",
+        "text": "Enable Aurora Backtrack.",
+        "correct": false,
+        "why": "Backtrack adds cost for change records and is unrelated to compute pricing."
+      },
+      {
+        "key": "C",
+        "text": "Add more Serverless v2 readers.",
+        "correct": false,
+        "why": "Extra Serverless v2 readers add ACU-hours of capacity and don't make the steady writer load any cheaper."
+      },
+      {
+        "key": "D",
+        "text": "Increase the Serverless v2 maximum ACUs.",
+        "correct": false,
+        "why": "This allows more scaling and doesn't reduce steady-state cost."
+      }
+    ],
+    "explanation": {
+      "answer": "Aurora Serverless v2 bills per ACU-hour and excels at variable or intermittent workloads. When usage is flat and high, provisioned instances, discounted with Reserved Instances, deliver the same capacity for less. Mixed clusters, with a provisioned writer and serverless readers, can combine both benefits.",
+      "concept": "Revisit pricing models as workloads mature. The best choice at launch may not be best at steady state.",
+      "examTip": "'Serverless DB running constantly high' means provisioned plus Reserved Instances.",
+      "references": [
+        {
+          "title": "Aurora Serverless v2 capacity and billing",
+          "url": "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-serverless-v2.how-it-works.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-cost-088",
+    "domain": "cost",
+    "topic": "Database Pricing",
+    "tags": [
+      "non-production",
+      "single-az",
+      "right-size"
+    ],
+    "difficulty": "easy",
+    "type": "multi",
+    "selectCount": 2,
+    "stem": "A company's development and QA environments each run an RDS for PostgreSQL Multi-AZ deployment on db.r6g.2xlarge instances, identical to production. Utilization in these environments is under 10%, and short outages are acceptable.",
+    "prompt": "Which TWO actions reduce cost the MOST for these environments? (Select TWO.)",
+    "options": [
+      {
+        "key": "A",
+        "text": "Enable Performance Insights long-term retention.",
+        "correct": false,
+        "why": "Longer Performance Insights retention is an added paid feature, and it does nothing to shrink instance costs."
+      },
+      {
+        "key": "B",
+        "text": "Use Single-AZ deployments for development and QA.",
+        "correct": true,
+        "why": "Multi-AZ roughly doubles instance cost for a standby, and non-production environments that tolerate brief outages rarely need it."
+      },
+      {
+        "key": "C",
+        "text": "Right-size to smaller instance classes (or Aurora Serverless v2) that match the actual low utilization.",
+        "correct": true,
+        "why": "Under 10% utilization means the instances are heavily oversized, so smaller classes or serverless capacity cut cost significantly."
+      },
+      {
+        "key": "D",
+        "text": "Add read replicas for QA.",
+        "correct": false,
+        "why": "Read replicas add more database instances to pay for, and QA has no read scaling need."
+      },
+      {
+        "key": "E",
+        "text": "Buy 3-year Reserved Instances matching production.",
+        "correct": false,
+        "why": "This locks in oversized capacity for environments that should shrink."
+      }
+    ],
+    "explanation": {
+      "answer": "Non-production environments don't need production-grade redundancy or sizing. Use Single-AZ, smaller or burstable instance classes, Aurora Serverless v2 or scheduled stop/start, and shorter backup retention, while keeping production fully resilient.",
+      "concept": "Define environment tiers with different resilience and cost profiles, and encode them in infrastructure-as-code parameters.",
+      "examTip": "'Dev/QA mirrors production and is idle' means Single-AZ plus right-size (or serverless or scheduling).",
+      "references": [
+        {
+          "title": "Amazon RDS pricing (Single-AZ vs Multi-AZ)",
+          "url": "https://aws.amazon.com/rds/pricing/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-cost-089",
+    "domain": "cost",
+    "topic": "Backup Cost",
+    "tags": [
+      "aws-backup-cold-storage",
+      "lifecycle"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company keeps daily AWS Backup recovery points of its EFS file systems and DynamoDB tables for 7 years for compliance. Recovery points older than 3 months are almost never restored, but backup storage costs keep climbing.",
+    "prompt": "Which change reduces backup storage cost while meeting retention requirements?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Delete backups older than 3 months.",
+        "correct": false,
+        "why": "This violates the 7-year compliance retention requirement."
+      },
+      {
+        "key": "B",
+        "text": "Configure the backup plan lifecycle to transition recovery points to cold storage after 90 days (for supported resource types), and keep the total retention at 7 years.",
+        "correct": true,
+        "why": "AWS Backup cold storage is much cheaper for long-term retention of rarely restored backups, and the lifecycle automates the transition."
+      },
+      {
+        "key": "C",
+        "text": "Take backups more frequently.",
+        "correct": false,
+        "why": "More recovery points increase storage costs."
+      },
+      {
+        "key": "D",
+        "text": "Copy all backups to a second Region.",
+        "correct": false,
+        "why": "This doubles storage costs, unless it's required for DR."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Backup lifecycle rules move recovery points from warm to cold storage after a set number of days, for supported services such as EFS, DynamoDB (with advanced features), EBS, and VMware and Timestream backups. Cold storage has a 90-day minimum and lower storage cost. Retention and deletion stay automated.",
+      "concept": "Tier backup storage like primary data: warm for recent, likely restores, and cold or archive for long-term compliance.",
+      "examTip": "'Years of backups, rarely restored' means AWS Backup lifecycle to cold storage.",
+      "references": [
+        {
+          "title": "Backup lifecycle and cold storage",
+          "url": "https://docs.aws.amazon.com/aws-backup/latest/devguide/plan-options-and-configuration.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-cost-090",
+    "domain": "cost",
+    "topic": "Storage Cost",
+    "tags": [
+      "ebs-snapshots-incremental",
+      "deletion"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A team keeps 365 daily EBS snapshots of a 2 TB volume and wants to delete all but the last 30 to save money. A team member worries that deleting old snapshots will corrupt the newer ones, because snapshots are incremental.",
+    "prompt": "What happens when older snapshots are deleted?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Deleting snapshots doesn't reduce cost, because all blocks are kept forever.",
+        "correct": false,
+        "why": "Blocks no longer referenced by any snapshot are removed, which does reduce storage cost."
+      },
+      {
+        "key": "B",
+        "text": "All newer snapshots become unusable, because they depend on the first snapshot.",
+        "correct": false,
+        "why": "EBS preserves referenced blocks, so newer snapshots don't break."
+      },
+      {
+        "key": "C",
+        "text": "Only data blocks not referenced by any remaining snapshot are removed. The remaining snapshots stay complete and restorable, so deleting old snapshots is safe.",
+        "correct": true,
+        "why": "EBS tracks block references between snapshots. Deleting a snapshot keeps blocks still needed by others, so every remaining snapshot remains a full point-in-time copy."
+      },
+      {
+        "key": "D",
+        "text": "Snapshots can only be deleted in creation order.",
+        "correct": false,
+        "why": "Any snapshot can be deleted independently."
+      }
+    ],
+    "explanation": {
+      "answer": "EBS snapshots are incremental: each stores only blocks changed since the previous snapshot, but references earlier blocks as needed. When you delete a snapshot, only blocks exclusively used by that snapshot are removed. Savings may be smaller than the snapshot's apparent size if the data is shared. Automate retention with DLM or AWS Backup.",
+      "concept": "Understanding incremental storage helps predict cost: large daily change rates produce bigger incremental snapshots, while static data adds little.",
+      "examTip": "'Will deleting old incremental EBS snapshots break newer ones?' No. Only unreferenced blocks are removed.",
+      "references": [
+        {
+          "title": "How Amazon EBS snapshots work",
+          "url": "https://docs.aws.amazon.com/ebs/latest/userguide/how_snapshots_work.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-cost-091",
+    "domain": "cost",
+    "topic": "Load Balancing Cost",
+    "tags": [
+      "alb-consolidation",
+      "host-based-routing"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company runs 25 small internal web applications, each behind its own Application Load Balancer. Each receives little traffic, yet each ALB incurs a fixed hourly charge plus capacity units.",
+    "prompt": "Which change reduces load balancer costs with minimal impact?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Replace each ALB with a Network Load Balancer.",
+        "correct": false,
+        "why": "NLBs also carry hourly charges, and they lose layer-7 routing."
+      },
+      {
+        "key": "B",
+        "text": "Add more ALBs for redundancy.",
+        "correct": false,
+        "why": "This increases cost, and ALBs are already multi-AZ."
+      },
+      {
+        "key": "C",
+        "text": "Assign public IPs to the instances and remove the ALBs entirely.",
+        "correct": false,
+        "why": "This loses health checks and TLS termination, and exposes the instances directly."
+      },
+      {
+        "key": "D",
+        "text": "Consolidate the applications behind one (or a few) ALBs, using host-based listener rules (app1.example.com, app2.example.com) to route to separate target groups.",
+        "correct": true,
+        "why": "One ALB can route to many applications by host header or path. Consolidating removes most per-ALB hourly charges while keeping the applications isolated at the target group level."
+      }
+    ],
+    "explanation": {
+      "answer": "An ALB supports up to 100 listener rules by default, routing on host header, path, headers and more to different target groups. Consolidating low-traffic applications onto shared ALBs reduces fixed costs. Use separate ALBs only where isolation, scale or security boundaries justify them.",
+      "concept": "Consolidating resources with fixed hourly charges (load balancers, NAT gateways, interface endpoints, idle clusters) is a common cost-optimization pattern.",
+      "examTip": "'Many low-traffic apps each with its own ALB' means consolidate with host-based or path-based rules.",
+      "references": [
+        {
+          "title": "Listener rules (host header conditions)",
+          "url": "https://docs.aws.amazon.com/elasticloadbalancing/latest/application/rule-condition-types.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-cost-092",
+    "domain": "cost",
+    "topic": "Container Cost",
+    "tags": [
+      "bin-packing",
+      "ecs-placement",
+      "consolidation"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company runs 40 small, low-utilization services, each on its own dedicated EC2 instance averaging 5% CPU. It is containerizing them and running them on a shared Amazon ECS cluster on EC2.",
+    "prompt": "Which ECS configuration maximizes cost savings from consolidation?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use a binpack task placement strategy (on memory or CPU) with capacity provider managed scaling, so tasks are packed densely onto as few instances as possible.",
+        "correct": true,
+        "why": "Binpack placement fills instances before using new ones, and managed scaling removes idle instances, which minimizes the number of instances paid for."
+      },
+      {
+        "key": "B",
+        "text": "Use a spread placement strategy across instances.",
+        "correct": false,
+        "why": "Spreading tasks improves availability but uses more instances."
+      },
+      {
+        "key": "C",
+        "text": "Keep one task per instance.",
+        "correct": false,
+        "why": "One task per instance repeats the original waste of dedicated, mostly idle instances."
+      },
+      {
+        "key": "D",
+        "text": "Use the largest instance types with no scaling.",
+        "correct": false,
+        "why": "Fixed large capacity wastes money when demand is low."
+      }
+    ],
+    "explanation": {
+      "answer": "ECS task placement strategies include binpack (fewest instances, cost-optimized), spread (distribute across AZs or instances for availability) and random. A common production pattern is to spread across AZs, then binpack on memory within each AZ, balancing resilience and cost. On Fargate, consolidation happens automatically at the task level.",
+      "concept": "Containerization improves utilization by sharing hosts. Placement and autoscaling settings determine how much of that saving you capture.",
+      "examTip": "'Pack containers onto fewest instances to save cost' means the binpack placement strategy.",
+      "references": [
+        {
+          "title": "Amazon ECS task placement strategies",
+          "url": "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-placement-strategies.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-cost-093",
+    "domain": "cost",
+    "topic": "Managed Service Cost",
+    "tags": [
+      "graviton-managed-services",
+      "rds",
+      "elasticache"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A company runs dozens of RDS for PostgreSQL, ElastiCache and OpenSearch Service clusters on x86-based instance classes. It wants a broad price-performance improvement with minimal application changes.",
+    "prompt": "What should the solutions architect recommend?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Switch to the largest x86 instance classes.",
+        "correct": false,
+        "why": "This increases cost without improving price performance."
+      },
+      {
+        "key": "B",
+        "text": "Move the managed database, cache and search clusters to AWS Graviton-based instance classes (such as db.r7g, cache.r7g and r7g.search).",
+        "correct": true,
+        "why": "Managed services on Graviton typically offer better price performance, and because AWS manages the engine software, applications need no code changes to switch."
+      },
+      {
+        "key": "C",
+        "text": "Disable Multi-AZ everywhere.",
+        "correct": false,
+        "why": "This reduces cost but sacrifices production resilience."
+      },
+      {
+        "key": "D",
+        "text": "Move all clusters to Dedicated Hosts.",
+        "correct": false,
+        "why": "Managed services don't run on customer Dedicated Hosts, and it would cost more anyway."
+      }
+    ],
+    "explanation": {
+      "answer": "Many managed services (RDS, Aurora, ElastiCache, MemoryDB, OpenSearch, EMR, MSK, Lambda and Fargate) offer Graviton options. Because AWS manages the engine binaries, switching is typically an instance class modification (with a short maintenance event), with no application changes.",
+      "concept": "Graviton is one of the easiest broad price-performance levers, especially for managed services.",
+      "examTip": "'Improve price performance of managed DBs/caches with no code changes' means Graviton instance classes.",
+      "references": [
+        {
+          "title": "AWS Graviton-based instances for managed services",
+          "url": "https://aws.amazon.com/ec2/graviton/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-cost-094",
+    "domain": "cost",
+    "topic": "Licensing Cost",
+    "tags": [
+      "babelfish",
+      "sql-server-licensing"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A company pays substantial Microsoft SQL Server Enterprise license fees for an RDS for SQL Server database that backs an in-house application written in T-SQL. It wants to reduce licensing costs without rewriting most of the application's queries.",
+    "prompt": "Which option BEST addresses this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Run SQL Server on Spot Instances.",
+        "correct": false,
+        "why": "Interruptions are unacceptable for a primary database, and licensing still applies."
+      },
+      {
+        "key": "B",
+        "text": "Move the data to DynamoDB unchanged.",
+        "correct": false,
+        "why": "DynamoDB doesn't support T-SQL, so the application would need a major rewrite."
+      },
+      {
+        "key": "C",
+        "text": "Migrate to Amazon Aurora PostgreSQL with Babelfish, which understands SQL Server's T-SQL and TDS wire protocol, so the application needs minimal changes.",
+        "correct": true,
+        "why": "Babelfish lets Aurora PostgreSQL accept T-SQL and SQL Server client connections, which removes SQL Server license costs while reducing migration effort."
+      },
+      {
+        "key": "D",
+        "text": "Move to RDS for SQL Server Enterprise on larger instances.",
+        "correct": false,
+        "why": "This keeps, or increases, the license costs."
+      }
+    ],
+    "explanation": {
+      "answer": "Babelfish for Aurora PostgreSQL adds a SQL Server-compatible endpoint that understands T-SQL, SQL Server data types and the TDS protocol, so many SQL Server applications can move to Aurora with limited code changes. Other license-saving options include downgrading edition (Enterprise to Standard) where features allow, BYOL with Dedicated Hosts, and license-included versus BYOL comparisons.",
+      "concept": "Commercial database licenses are often the largest database cost. Modernizing to open-source engines, helped by tools such as Babelfish and DMS Schema Conversion, can save substantially.",
+      "examTip": "'Cut SQL Server licensing, keep T-SQL app mostly unchanged' means Aurora PostgreSQL with Babelfish.",
+      "references": [
+        {
+          "title": "Working with Babelfish for Aurora PostgreSQL",
+          "url": "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/babelfish.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-cost-095",
+    "domain": "cost",
+    "topic": "Capacity Planning Cost",
+    "tags": [
+      "capacity-reservations-billing",
+      "unused"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "Months ago, a team created On-Demand Capacity Reservations for 50 m6i.xlarge instances for a product launch. The launch ended, and the instances were terminated, but the monthly bill still shows charges for m6i.xlarge capacity.",
+    "prompt": "What is the MOST likely cause?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Terminated instances continue billing for 30 days.",
+        "correct": false,
+        "why": "EC2 billing stops when instances terminate."
+      },
+      {
+        "key": "B",
+        "text": "Savings Plans charge per terminated instance.",
+        "correct": false,
+        "why": "Savings Plans charge the committed hourly amount, not per terminated instance, and aren't mentioned here."
+      },
+      {
+        "key": "C",
+        "text": "EBS snapshots are billed as instance hours.",
+        "correct": false,
+        "why": "Snapshots are billed as storage, not instance capacity."
+      },
+      {
+        "key": "D",
+        "text": "The Capacity Reservations are still active. They are billed at the On-Demand rate whether or not instances run in them, and must be cancelled.",
+        "correct": true,
+        "why": "Capacity Reservations charge for reserved capacity until cancelled or expired, even when unused."
+      }
+    ],
+    "explanation": {
+      "answer": "On-Demand Capacity Reservations guarantee capacity and bill at On-Demand rates for the reserved instances regardless of usage, unless covered by Savings Plans or Regional RIs. Set end dates when creating reservations for events, monitor utilization in Cost Explorer or CloudWatch, and cancel unused reservations.",
+      "concept": "Anything reserved or provisioned (Capacity Reservations, provisioned IOPS, provisioned concurrency, provisioned throughput) keeps costing money until you release it.",
+      "examTip": "'Paying for instances after termination' means check for active Capacity Reservations.",
+      "references": [
+        {
+          "title": "Capacity Reservation pricing and billing",
+          "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/capacity-reservations-pricing-billing.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-cost-096",
+    "domain": "cost",
+    "topic": "Container Cost",
+    "tags": [
+      "ecr-lifecycle-policies",
+      "image-cleanup"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A CI pipeline pushes a new container image to Amazon ECR on every commit. After two years, the repositories hold hundreds of thousands of old images, and ECR storage costs are growing, although only the last few versions of each service are ever deployed.",
+    "prompt": "What is the SIMPLEST way to control this cost?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Configure ECR lifecycle policies to expire untagged images and keep only the most recent N tagged images per repository.",
+        "correct": true,
+        "why": "Lifecycle policies automatically clean up images by age or count, keeping storage limited to what's needed."
+      },
+      {
+        "key": "B",
+        "text": "Enable ECR image scanning.",
+        "correct": false,
+        "why": "Scanning improves security but doesn't reduce storage."
+      },
+      {
+        "key": "C",
+        "text": "Replicate images to another Region.",
+        "correct": false,
+        "why": "Replicating images to another Region doubles the stored images and increases ECR storage cost."
+      },
+      {
+        "key": "D",
+        "text": "Delete the repositories and recreate them monthly.",
+        "correct": false,
+        "why": "This is disruptive and risks deleting images still in use."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon ECR lifecycle policies define rules such as 'expire untagged images older than 14 days' or 'keep only the last 30 images tagged prod-*'. They run automatically, and can be previewed before being applied.",
+      "concept": "Automate cleanup of build artifacts everywhere: ECR lifecycle policies, S3 lifecycle rules for artifacts, old AMIs and snapshots through DLM, and CloudWatch Logs retention.",
+      "examTip": "'Too many old container images in ECR' means ECR lifecycle policies.",
+      "references": [
+        {
+          "title": "Automate the cleanup of images by using lifecycle policies in Amazon ECR",
+          "url": "https://docs.aws.amazon.com/AmazonECR/latest/userguide/LifecyclePolicies.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-cost-097",
+    "domain": "cost",
+    "topic": "Region Selection",
+    "tags": [
+      "regional-pricing",
+      "cost-vs-latency"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A company is choosing a Region for a new batch analytics platform that processes internal data overnight. There are no latency requirements, and compliance allows any Region within the United States.",
+    "prompt": "Which factor should MOST influence the Region choice from a cost perspective?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Choose the Region closest to the CEO's office.",
+        "correct": false,
+        "why": "Latency doesn't matter for overnight batch jobs, so proximity isn't a cost factor."
+      },
+      {
+        "key": "B",
+        "text": "Choose the US Region with the lowest prices for the required services (for example, compare with the Pricing Calculator), and keep data and compute in the same Region.",
+        "correct": true,
+        "why": "Prices vary by Region. With no latency requirement, a lower-cost US Region, with data and compute co-located, minimizes cost."
+      },
+      {
+        "key": "C",
+        "text": "Choose the newest Region.",
+        "correct": false,
+        "why": "Newness doesn't imply lower cost and may mean fewer services."
+      },
+      {
+        "key": "D",
+        "text": "Spread the platform across all US Regions.",
+        "correct": false,
+        "why": "This adds inter-Region data transfer and complexity without benefit."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS service prices differ between Regions. When latency, data residency and service availability permit, choosing a lower-cost Region, and avoiding cross-Region data transfer, can materially reduce spend. The AWS Pricing Calculator compares Regional costs for the same architecture.",
+      "concept": "Region selection criteria: compliance and data residency, latency to users, service availability, and cost.",
+      "examTip": "'No latency constraint, any Region allowed' means choose the lowest-cost Region (co-locate data and compute).",
+      "references": [
+        {
+          "title": "Selecting a Region: cost considerations (Cost optimization pillar)",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/cost-optimization-pillar/select-the-best-pricing-model.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-cost-098",
+    "domain": "cost",
+    "topic": "Cost Visibility",
+    "tags": [
+      "data-exports",
+      "cur",
+      "athena",
+      "quicksight"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A FinOps team needs line-item, resource-level billing data across all accounts, refreshed daily, to build custom dashboards such as cost per customer, per application and per environment, beyond what Cost Explorer's views provide.",
+    "prompt": "Which solution provides this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Pricing Calculator",
+        "correct": false,
+        "why": "The calculator estimates planned costs, not actual billing."
+      },
+      {
+        "key": "B",
+        "text": "AWS Budgets email alerts",
+        "correct": false,
+        "why": "Budgets send threshold alerts, not detailed line-item data for custom analysis."
+      },
+      {
+        "key": "C",
+        "text": "Configure AWS Data Exports (Cost and Usage Report 2.0) to deliver detailed billing data to S3, query it with Athena, and visualize it with QuickSight (for example, the Cloud Intelligence Dashboards).",
+        "correct": true,
+        "why": "CUR 2.0 through Data Exports provides the most granular billing data (including resource IDs and tags), which Athena and QuickSight can analyze flexibly."
+      },
+      {
+        "key": "D",
+        "text": "CloudTrail logs",
+        "correct": false,
+        "why": "CloudTrail records API activity, not billing line items."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Data Exports delivers the Cost and Usage Report (CUR 2.0) and other exports (such as FOCUS-format data) to S3 in Parquet, with daily or hourly granularity, resource IDs, tags and cost categories. Athena and QuickSight, including the open-source Cloud Intelligence Dashboards (CUDOS), turn it into custom FinOps reporting.",
+      "concept": "Cost data maturity: Cost Explorer (built-in views), then Budgets and Anomaly Detection, then Data Exports with BI for custom analytics.",
+      "examTip": "'Most detailed billing data for custom dashboards' means Data Exports (CUR 2.0) to S3, with Athena and QuickSight.",
+      "references": [
+        {
+          "title": "What is AWS Data Exports?",
+          "url": "https://docs.aws.amazon.com/cur/latest/userguide/what-is-data-exports.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-cost-099",
+    "domain": "cost",
+    "topic": "Cost Visibility",
+    "tags": [
+      "cost-categories",
+      "business-mapping"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "Finance wants AWS costs reported by business unit. Some units map to whole accounts, others to specific tags, and shared services should be split proportionally. Rebuilding this mapping in every report is error-prone.",
+    "prompt": "Which feature helps define these mappings once and use them across Cost Explorer, Budgets and cost exports?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Config aggregators",
+        "correct": false,
+        "why": "Aggregators centralize configuration compliance, not billing."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Macie",
+        "correct": false,
+        "why": "Macie classifies sensitive data in S3. It has no role in mapping costs to business units."
+      },
+      {
+        "key": "C",
+        "text": "IAM groups",
+        "correct": false,
+        "why": "IAM groups manage permissions, not cost mappings."
+      },
+      {
+        "key": "D",
+        "text": "AWS Cost Categories, with rules mapping accounts, tags and services to business units, and split charge rules for shared costs",
+        "correct": true,
+        "why": "Cost Categories apply consistent business mappings to costs, including split charges, and appear as a dimension in Cost Explorer, Budgets and Data Exports."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Cost Categories let you create rules that group costs by account, tag, service, charge type or other cost categories into meaningful business dimensions. Split charge rules allocate shared costs, such as support or networking, proportionally, evenly or by fixed percentages.",
+      "concept": "Consistent cost attribution (accounts, tags, Cost Categories) is the foundation for showback, chargeback and unit economics.",
+      "examTip": "'Map costs to business units with complex rules and split shared costs' means Cost Categories.",
+      "references": [
+        {
+          "title": "Organizing costs using AWS Cost Categories",
+          "url": "https://docs.aws.amazon.com/cost-management/latest/userguide/manage-cost-categories.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-cost-100",
+    "domain": "cost",
+    "topic": "Data Lake Cost",
+    "tags": [
+      "intelligent-tiering",
+      "columnar-compression"
+    ],
+    "difficulty": "medium",
+    "type": "multi",
+    "selectCount": 2,
+    "stem": "A company's 3 PB S3 data lake stores raw JSON logs uncompressed in S3 Standard. Access patterns vary by dataset and are hard to predict. Athena is used for analysis, and both storage and query costs are rising.",
+    "prompt": "Which TWO changes will reduce BOTH storage and query costs the MOST? (Select TWO.)",
+    "options": [
+      {
+        "key": "A",
+        "text": "Replicate the data to three additional Regions.",
+        "correct": false,
+        "why": "This multiplies storage and transfer costs."
+      },
+      {
+        "key": "B",
+        "text": "Convert data to compressed columnar formats (Parquet or ORC) with partitioning.",
+        "correct": true,
+        "why": "Compression shrinks stored bytes, and columnar formats plus partitions reduce the data Athena scans per query."
+      },
+      {
+        "key": "C",
+        "text": "Enable S3 Transfer Acceleration on the bucket.",
+        "correct": false,
+        "why": "It affects transfer speed, not storage or query cost."
+      },
+      {
+        "key": "D",
+        "text": "Store the data in S3 Intelligent-Tiering so that objects move automatically to cheaper tiers as access drops.",
+        "correct": true,
+        "why": "Intelligent-Tiering reduces storage cost for unpredictable access without retrieval fees or manual lifecycle tuning."
+      },
+      {
+        "key": "E",
+        "text": "Copy the data to Amazon EBS volumes for faster queries.",
+        "correct": false,
+        "why": "EBS is more expensive and Athena can't query EBS directly."
+      }
+    ],
+    "explanation": {
+      "answer": "Data lake cost levers include format (compressed columnar files, often shrinking data dramatically and cutting scans), layout (partitioning and appropriately sized files), and storage class (Intelligent-Tiering or lifecycle rules). Add Athena workgroup limits and query result reuse for further control.",
+      "concept": "Every byte avoided (stored or scanned) saves money. Optimize the data itself before buying more compute.",
+      "examTip": "'Data lake storage + Athena costs high' means compressed columnar formats plus partitioning, and Intelligent-Tiering.",
+      "references": [
+        {
+          "title": "Columnar storage formats (Amazon Athena)",
+          "url": "https://docs.aws.amazon.com/athena/latest/ug/columnar-storage.html"
+        }
+      ]
+    }
+  }
+]

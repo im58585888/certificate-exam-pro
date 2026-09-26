@@ -6,16 +6,27 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "predev": "node scripts/build-content-index.mjs",
+    "prebuild": "node scripts/build-content-index.mjs",
+    "validate:questions": "node scripts/validate-questions.mjs",
+    "check:setup": "node --env-file-if-exists=.env.local scripts/check-setup.mjs"
   },
   "dependencies": {
+    "@electric-sql/pglite": "^0.5.8",
     "next": "16.3.6",
+    "nodemailer": "^10.0.10",
+    "pg": "^8.23.0",
     "react": "19.2.8",
-    "react-dom": "19.2.8"
+    "react-dom": "19.2.8",
+    "server-only": "^0.0.1",
+    "stripe": "^22.6.2"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
+    "@types/nodemailer": "^8.0.2",
+    "@types/pg": "^8.23.1",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",

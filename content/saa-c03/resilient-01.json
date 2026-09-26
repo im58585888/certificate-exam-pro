@@ -1,0 +1,696 @@
+[
+  {
+    "id": "saa-res-001",
+    "domain": "resilient",
+    "topic": "Decoupling",
+    "tags": [
+      "sqs",
+      "decoupling",
+      "traffic-spikes",
+      "buffer"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A ticketing company's web tier sends purchase requests directly to a fleet of order-processing EC2 instances over HTTP. When popular concerts go on sale, traffic jumps 20-fold within seconds, the processing tier becomes overwhelmed, and orders are lost. The processing tier can take several minutes to scale out.",
+    "prompt": "Which solution will prevent lost orders during these spikes?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Put an Application Load Balancer in front of the processing tier.",
+        "correct": false,
+        "why": "An ALB distributes requests but does not buffer them. When all targets are saturated, requests still fail."
+      },
+      {
+        "key": "B",
+        "text": "Increase the instance size of the processing tier to handle peak load at all times.",
+        "correct": false,
+        "why": "Permanent over-provisioning is expensive, and it still fails if a spike exceeds the chosen size. The tiers remain tightly coupled."
+      },
+      {
+        "key": "C",
+        "text": "Use Amazon SNS to push orders to the processing instances over HTTP.",
+        "correct": false,
+        "why": "SNS is push-based. If subscribers are overwhelmed, it retries and eventually drops messages, or sends them to a DLQ, which is not a work queue. Consumers cannot pull at their own pace."
+      },
+      {
+        "key": "D",
+        "text": "Place an Amazon SQS queue between the web tier and the processing tier, and scale the processing tier based on queue depth.",
+        "correct": true,
+        "why": "SQS durably stores every order until a worker processes it, absorbing the spike while the processing tier scales out. Scaling on ApproximateNumberOfMessagesVisible (or backlog per instance) matches capacity to the actual work waiting."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon SQS decouples producers from consumers. The web tier writes messages quickly and the processing tier pulls messages at its own pace. Messages are stored redundantly across AZs for up to 14 days, so nothing is lost while Auto Scaling adds capacity. Scaling on queue backlog per instance keeps processing latency predictable.",
+      "concept": "Loose coupling is a core Well-Architected reliability principle: a failure or slowdown in one component should not cascade. Queues (SQS), streams (Kinesis) and event buses (EventBridge) are the standard decoupling building blocks.",
+      "examTip": "'Traffic spikes', 'lost requests' or 'the downstream tier can't keep up' means put SQS in between.",
+      "references": [
+        {
+          "title": "What is Amazon SQS?",
+          "url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/welcome.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-res-002",
+    "domain": "resilient",
+    "topic": "Decoupling",
+    "tags": [
+      "sqs-fifo",
+      "ordering",
+      "exactly-once",
+      "message-group"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A stock brokerage processes customer trade instructions. For each customer account, instructions must be processed in the exact order they were submitted, and no instruction may be processed twice. Instructions for different accounts can be processed in parallel.",
+    "prompt": "Which messaging design meets these requirements?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon SQS FIFO queue using the customer account ID as the message group ID and content-based or explicit deduplication",
+        "correct": true,
+        "why": "FIFO queues guarantee strict ordering within each message group and exactly-once processing within the deduplication window. Using the account ID as the group ID keeps each account ordered while different accounts are processed in parallel."
+      },
+      {
+        "key": "B",
+        "text": "Amazon SNS standard topic with multiple SQS standard queue subscribers",
+        "correct": false,
+        "why": "Standard SNS and SQS provide no ordering or deduplication guarantees."
+      },
+      {
+        "key": "C",
+        "text": "Amazon SQS standard queue with long polling",
+        "correct": false,
+        "why": "Standard queues offer at-least-once delivery and best-effort ordering, so duplicates and out-of-order messages are possible."
+      },
+      {
+        "key": "D",
+        "text": "Amazon SQS FIFO queue using a single, fixed message group ID for all messages",
+        "correct": false,
+        "why": "This preserves order and exactly-once delivery, but it forces every message into one sequential stream and throws away the allowed parallelism across accounts."
+      }
+    ],
+    "explanation": {
+      "answer": "SQS FIFO queues provide first-in-first-out delivery per message group and exactly-once processing, because duplicates with the same deduplication ID within a 5-minute window are discarded. The message group ID is the unit of ordering. Choosing a natural key such as the account ID gives strict per-account order with parallelism across accounts.",
+      "concept": "Standard queues give nearly unlimited throughput with at-least-once, best-effort ordering. FIFO queues give ordered, exactly-once delivery with lower (but high-throughput-mode-capable) limits. Queue names must end in .fifo. SNS FIFO topics can fan out to SQS FIFO queues when ordered fan-out is needed.",
+      "examTip": "'Order matters' or 'no duplicates' means FIFO. 'Per customer/device ordering with parallelism' means message group ID equals that key.",
+      "references": [
+        {
+          "title": "Amazon SQS FIFO queues",
+          "url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queues.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-res-003",
+    "domain": "resilient",
+    "topic": "RDS High Availability",
+    "tags": [
+      "rds",
+      "multi-az",
+      "failover",
+      "high-availability"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A healthcare scheduling application uses a single-AZ Amazon RDS for MySQL DB instance. During a recent Availability Zone disruption the application was down for four hours. The company wants the database to fail over automatically to another Availability Zone with no data loss and without changing the application's connection string.",
+    "prompt": "What should a solutions architect do?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Create a read replica in another Availability Zone and point the application to it if the primary fails.",
+        "correct": false,
+        "why": "Read replicas use asynchronous replication, so some data loss is possible, and promotion is manual. The replica also has a different endpoint, so the connection string would change."
+      },
+      {
+        "key": "B",
+        "text": "Convert the DB instance to a Multi-AZ deployment.",
+        "correct": true,
+        "why": "Multi-AZ keeps a synchronously replicated standby in another AZ. On failure, RDS automatically fails over and flips the same DNS endpoint to the standby, with no committed-data loss and no connection-string change."
+      },
+      {
+        "key": "C",
+        "text": "Migrate the database to MySQL on two EC2 instances with a custom replication script.",
+        "correct": false,
+        "why": "This adds significant operational burden, and building reliable automatic failover yourself is hard. Managed Multi-AZ already solves it."
+      },
+      {
+        "key": "D",
+        "text": "Take automated snapshots every hour and restore to a new AZ during an outage.",
+        "correct": false,
+        "why": "Restoring from snapshots is manual, loses up to an hour of data, and creates a new endpoint."
+      }
+    ],
+    "explanation": {
+      "answer": "RDS Multi-AZ (DB instance deployment) maintains a synchronous standby replica in a different AZ. If the primary, its AZ or its storage fails, or during certain maintenance, RDS automatically fails over, typically in 60-120 seconds, by updating the DB endpoint's DNS record to point to the standby. Applications reconnect to the same endpoint.",
+      "concept": "Multi-AZ is for availability: it is synchronous, and in the instance deployment the standby cannot serve reads. Read replicas are for read scaling: they are asynchronous, readable, and can be cross-Region. A Multi-AZ DB cluster deployment (two readable standbys) blends both for MySQL and PostgreSQL.",
+      "examTip": "'Automatic failover', 'high availability' or 'no data loss' means Multi-AZ. 'Offload reads' or 'reporting' means read replicas.",
+      "references": [
+        {
+          "title": "Configuring and managing a Multi-AZ deployment",
+          "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZ.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-res-004",
+    "domain": "resilient",
+    "topic": "Disaster Recovery",
+    "tags": [
+      "aurora-global-database",
+      "cross-region",
+      "rpo",
+      "rto"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A global payments company runs its core ledger on Amazon Aurora PostgreSQL in us-east-1. A new regulation requires the company to survive the loss of an entire AWS Region with a recovery point objective (RPO) of about one second and a recovery time objective (RTO) of about one minute. Read traffic from Europe should also be served locally with low latency.",
+    "prompt": "Which solution meets these requirements?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use AWS Database Migration Service to continuously replicate the cluster to an RDS for PostgreSQL instance in eu-west-1.",
+        "correct": false,
+        "why": "DMS change-data-capture adds replication lag and operational overhead, and cutting over to a different engine configuration within a minute is not realistic."
+      },
+      {
+        "key": "B",
+        "text": "Take hourly Aurora snapshots and copy them to eu-west-1.",
+        "correct": false,
+        "why": "An RPO of up to one hour, plus a restore that takes far longer than one minute, falls short of both objectives."
+      },
+      {
+        "key": "C",
+        "text": "Convert the cluster to an Amazon Aurora Global Database with a secondary cluster in eu-west-1.",
+        "correct": true,
+        "why": "Aurora Global Database replicates at the storage layer with typical lag under one second. The secondary Region serves local reads and can be promoted in about a minute, meeting both RPO and RTO."
+      },
+      {
+        "key": "D",
+        "text": "Enable Aurora Multi-AZ by adding Aurora Replicas in two additional Availability Zones in us-east-1.",
+        "correct": false,
+        "why": "Aurora Replicas in the same Region protect against AZ failures, not a full Region outage, and they do not help European read latency."
+      }
+    ],
+    "explanation": {
+      "answer": "Aurora Global Database spans multiple Regions: one primary Region for writes and up to several secondary Regions. Replication uses dedicated storage-level infrastructure with typical latency under one second, which gives an RPO of about one second. In a Regional outage a secondary can be promoted to full read/write in roughly a minute. Secondaries also serve low-latency local reads.",
+      "concept": "DR strategies from cheapest and slowest to most expensive and fastest: backup and restore (hours), pilot light (tens of minutes), warm standby (minutes), and multi-site active/active (near zero). Aurora Global Database and DynamoDB global tables are the managed building blocks for the fast end.",
+      "examTip": "'Cross-Region' with 'RPO in seconds' and 'RTO in about a minute' on a relational database means Aurora Global Database. For NoSQL, the equivalent is DynamoDB global tables.",
+      "references": [
+        {
+          "title": "Using Amazon Aurora Global Database",
+          "url": "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-global-database.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-res-005",
+    "domain": "resilient",
+    "topic": "Route 53",
+    "tags": [
+      "route53",
+      "failover-routing",
+      "health-check",
+      "active-passive"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company runs its main website on an Application Load Balancer in us-west-2. It has built a static 'we'll be right back' site in an Amazon S3 bucket configured for static website hosting. If the primary site becomes unhealthy, users should be redirected automatically to the static site until the primary recovers.",
+    "prompt": "Which Amazon Route 53 configuration meets this requirement?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Weighted routing with a 50/50 split between the ALB and the S3 website",
+        "correct": false,
+        "why": "Weighted routing splits live traffic by weight, so half of all users would see the maintenance page even while the main site is perfectly healthy."
+      },
+      {
+        "key": "B",
+        "text": "Simple routing with both the ALB and S3 website endpoints in one record",
+        "correct": false,
+        "why": "Simple routing returns values at random and does not support health checks, so users could land on either site at any time."
+      },
+      {
+        "key": "C",
+        "text": "Latency-based routing between the ALB and the S3 website",
+        "correct": false,
+        "why": "Latency routing picks the lowest-latency Region for each user. Some users would be sent to the maintenance page even while the main site is healthy."
+      },
+      {
+        "key": "D",
+        "text": "Failover routing with the ALB as the primary record (with a health check) and the S3 website endpoint as the secondary record",
+        "correct": true,
+        "why": "Failover routing returns the primary while its health check passes and automatically returns the secondary when it fails. This is the textbook active-passive design."
+      }
+    ],
+    "explanation": {
+      "answer": "Route 53 failover routing implements active-passive failover. The primary record is associated with a health check (or uses Evaluate Target Health for an alias to an ALB). When Route 53 determines the primary is unhealthy, it answers DNS queries with the secondary record: here, an alias to the S3 website endpoint. When the primary recovers, traffic returns automatically.",
+      "concept": "Route 53 routing policies: simple, failover (active-passive), weighted (A/B or canary), latency, geolocation (compliance and localization), geoproximity (bias traffic by distance), IP-based, and multivalue answer (up to 8 healthy records). Alias records can point to AWS resources, including the zone apex, at no query charge.",
+      "examTip": "'Active-passive' or 'redirect to a backup/static site when unhealthy' means failover routing plus health checks.",
+      "references": [
+        {
+          "title": "Configuring DNS failover",
+          "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-failover.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-res-006",
+    "domain": "resilient",
+    "topic": "High Availability",
+    "tags": [
+      "auto-scaling",
+      "multi-az",
+      "alb",
+      "fault-tolerance"
+    ],
+    "difficulty": "easy",
+    "type": "multi",
+    "selectCount": 2,
+    "stem": "A marketing agency hosts a stateless web application on two Amazon EC2 instances in a single Availability Zone. Both instances were unreachable during a recent AZ event. The agency wants the application to remain available if an Availability Zone fails and to replace failed instances automatically.",
+    "prompt": "Which combination of actions will meet these requirements? (Select TWO.)",
+    "options": [
+      {
+        "key": "A",
+        "text": "Place an Application Load Balancer, enabled in the same Availability Zones, in front of the Auto Scaling group and use ELB health checks.",
+        "correct": true,
+        "why": "The ALB is itself highly available across the enabled AZs, routes only to healthy targets, and lets the ASG use ELB health checks so unhealthy instances are replaced."
+      },
+      {
+        "key": "B",
+        "text": "Upgrade to larger instance types.",
+        "correct": false,
+        "why": "Bigger instances in the same AZ still fail together during an AZ event."
+      },
+      {
+        "key": "C",
+        "text": "Create an Auto Scaling group that spans subnets in at least two Availability Zones with a minimum capacity of two instances.",
+        "correct": true,
+        "why": "An ASG across multiple AZs rebalances capacity and replaces unhealthy instances automatically. With minimum 2 spread across AZs, one AZ can fail and capacity is restored in the healthy AZ."
+      },
+      {
+        "key": "D",
+        "text": "Move both instances into a cluster placement group.",
+        "correct": false,
+        "why": "Cluster placement groups pack instances close together in one AZ for low latency, which reduces fault tolerance."
+      },
+      {
+        "key": "E",
+        "text": "Assign Elastic IP addresses and move them manually during an outage.",
+        "correct": false,
+        "why": "This is manual, slow and error-prone, and it does not create capacity in another AZ."
+      }
+    ],
+    "explanation": {
+      "answer": "The core high-availability pattern for stateless EC2 web tiers is an Application Load Balancer in front of an Auto Scaling group, both spanning at least two Availability Zones. The ALB spreads traffic across healthy targets, and the ASG keeps the desired capacity by launching replacements, including in the surviving AZ if one AZ is impaired.",
+      "concept": "Availability Zones are physically separate data centres with independent power and networking. Spreading across AZs is the single most important resilience decision on AWS. With ELB health checks enabled on the ASG, instances that fail application-level checks, not just EC2 status checks, are replaced.",
+      "examTip": "'Survive an AZ failure' plus 'replace instances automatically' means a Multi-AZ ALB with a Multi-AZ Auto Scaling group.",
+      "references": [
+        {
+          "title": "What is Amazon EC2 Auto Scaling?",
+          "url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-res-007",
+    "domain": "resilient",
+    "topic": "Stateless Design",
+    "tags": [
+      "session-state",
+      "elasticache",
+      "stateless",
+      "auto-scaling"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "An online learning platform runs on EC2 instances in an Auto Scaling group behind an Application Load Balancer. User login sessions are stored in memory on each instance. Whenever the group scales in or an instance is replaced, affected users are logged out and lose their quiz progress.",
+    "prompt": "What should a solutions architect do to keep users signed in regardless of which instance serves them?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Store session data in Amazon ElastiCache (Redis OSS or Valkey) and make the web instances stateless.",
+        "correct": true,
+        "why": "A shared, low-latency, in-memory store externalizes session state. Any instance can serve any request, and instances can be added or removed freely without logging anyone out."
+      },
+      {
+        "key": "B",
+        "text": "Store session data on each instance's EBS volume.",
+        "correct": false,
+        "why": "EBS volumes are attached to a single instance, and the data is lost to other instances when that instance is terminated."
+      },
+      {
+        "key": "C",
+        "text": "Enable sticky sessions (session affinity) on the ALB target group.",
+        "correct": false,
+        "why": "Stickiness keeps a user on the same instance but does not survive that instance being terminated. It also creates uneven load. It hides the problem rather than fixing it."
+      },
+      {
+        "key": "D",
+        "text": "Disable scale-in on the Auto Scaling group.",
+        "correct": false,
+        "why": "This avoids some logouts but wastes money and still fails when an instance is replaced for health reasons."
+      }
+    ],
+    "explanation": {
+      "answer": "Externalizing session state to a shared store such as ElastiCache (or Amazon DynamoDB) makes the web tier stateless. Stateless instances are interchangeable, which is what allows Auto Scaling, rolling deployments and instance replacement to happen without affecting users.",
+      "concept": "ElastiCache gives sub-millisecond in-memory access, with replication and Multi-AZ failover for Redis OSS and Valkey. DynamoDB offers durable, serverless session storage with TTL for automatic expiry. Both are standard session-store answers. Sticky sessions are a stop-gap, not a resilience strategy.",
+      "examTip": "'Users logged out when instances scale in' means externalize session state to ElastiCache or DynamoDB.",
+      "references": [
+        {
+          "title": "Session management (AWS caching overview)",
+          "url": "https://aws.amazon.com/caching/session-management/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-res-008",
+    "domain": "resilient",
+    "topic": "Decoupling",
+    "tags": [
+      "sns",
+      "sqs",
+      "fan-out",
+      "event-driven"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "When a customer places an order on an e-commerce site, three independent systems must each receive a copy of the order event: inventory, shipping and a fraud-analytics service. Each system processes at a different speed, and if one system is down for maintenance it must be able to catch up later without affecting the others.",
+    "prompt": "Which architecture meets these requirements?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Have the order service call each downstream system's API synchronously.",
+        "correct": false,
+        "why": "This tightly couples the systems. If shipping is down, orders fail or need custom retry logic, and a slow system slows every order."
+      },
+      {
+        "key": "B",
+        "text": "Publish the order to an Amazon SNS topic that has three Amazon SQS queues subscribed, one per downstream system.",
+        "correct": true,
+        "why": "SNS fans each message out to every subscribed queue, and each SQS queue durably buffers messages so its consumer can process at its own pace or catch up after downtime, independently of the others."
+      },
+      {
+        "key": "C",
+        "text": "Send the order to a single Amazon SQS queue that all three systems poll.",
+        "correct": false,
+        "why": "With one queue, each message is consumed by only one consumer. The three systems would compete for messages instead of each getting a copy."
+      },
+      {
+        "key": "D",
+        "text": "Publish to an Amazon SNS topic with each system subscribed through an HTTPS endpoint.",
+        "correct": false,
+        "why": "SNS retries HTTP deliveries for a limited time. A system that is down for maintenance could miss events unless a DLQ and replay process are built. There is no durable per-consumer buffer."
+      }
+    ],
+    "explanation": {
+      "answer": "The SNS-to-SQS fan-out pattern combines pub/sub (one message, many subscribers) with queuing (durable, pull-based, per-consumer buffering). Each downstream system gets its own queue, its own retry and DLQ settings, and its own scaling, while the publisher stays unaware of how many consumers exist.",
+      "concept": "Queue (SQS) means one message goes to one consumer. Topic (SNS) means one message goes to many subscribers, pushed. SNS plus SQS gives many subscribers, each with durability. Amazon EventBridge is an alternative when you need content-based routing rules, schema discovery or SaaS integrations.",
+      "examTip": "'Same message to multiple independent consumers' plus 'process independently or catch up later' means SNS fan-out to multiple SQS queues.",
+      "references": [
+        {
+          "title": "Fanout Amazon SNS notifications to Amazon SQS queues",
+          "url": "https://docs.aws.amazon.com/sns/latest/dg/sns-sqs-as-subscriber.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-res-009",
+    "domain": "resilient",
+    "topic": "Storage",
+    "tags": [
+      "efs",
+      "shared-file-system",
+      "multi-az",
+      "linux"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A content management system runs on Linux EC2 instances in an Auto Scaling group spread across three Availability Zones. All instances must read and write the same set of uploaded media files concurrently using standard file-system semantics. The storage must grow and shrink automatically and remain available if an AZ fails.",
+    "prompt": "Which storage solution should be used?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Instance store volumes on each instance, synchronized with rsync",
+        "correct": false,
+        "why": "Instance store is ephemeral, since data is lost when an instance stops or terminates, and custom sync scripts are fragile and not truly concurrent."
+      },
+      {
+        "key": "B",
+        "text": "Amazon EBS General Purpose SSD (gp3) volumes attached to each instance",
+        "correct": false,
+        "why": "An EBS volume lives in one AZ and (apart from io1/io2 Multi-Attach within a single AZ) attaches to one instance. Each instance would see different files."
+      },
+      {
+        "key": "C",
+        "text": "Amazon EFS file system with the Standard (Regional) storage class and mount targets in each AZ",
+        "correct": true,
+        "why": "EFS is a fully managed, elastic NFS file system that many Linux instances across AZs can mount at the same time. Regional storage stores data redundantly across multiple AZs."
+      },
+      {
+        "key": "D",
+        "text": "Amazon FSx for Windows File Server",
+        "correct": false,
+        "why": "FSx for Windows provides SMB shares with Active Directory integration for Windows workloads. EFS is the native fit for Linux NFS workloads."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon EFS provides a shared POSIX file system over NFSv4 that scales capacity automatically with no provisioning. With Regional (Standard) storage and a mount target in every AZ, instances in any AZ can read and write the same files, and the file system survives the loss of an AZ.",
+      "concept": "Shared storage options: EFS for Linux/NFS with elastic scaling; FSx for Windows File Server for SMB and AD; FSx for Lustre for HPC and ML scratch or throughput with S3 integration; FSx for NetApp ONTAP for multi-protocol and NetApp features. S3 is object storage, not a mountable file system (Mountpoint for S3 exists but does not offer full POSIX semantics).",
+      "examTip": "'Shared file system' plus 'Linux' plus 'multiple AZs' means EFS. 'Windows' or 'SMB' means FSx for Windows.",
+      "references": [
+        {
+          "title": "What is Amazon Elastic File System?",
+          "url": "https://docs.aws.amazon.com/efs/latest/ug/whatisefs.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-res-010",
+    "domain": "resilient",
+    "topic": "Backup",
+    "tags": [
+      "aws-backup",
+      "centralized",
+      "cross-account",
+      "compliance"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company runs workloads that use Amazon EBS, Amazon RDS, Amazon DynamoDB and Amazon EFS across 12 AWS accounts. Each team currently configures backups differently, and auditors found inconsistent retention. The company needs a single place to define backup schedules and retention, copy backups to another Region, and report on compliance across all accounts.",
+    "prompt": "Which solution meets these requirements with the LEAST operational overhead?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use AWS DataSync to copy all data to Amazon S3 in another Region nightly.",
+        "correct": false,
+        "why": "DataSync moves file and object data. It does not create application-consistent backups of RDS or DynamoDB, and it does not manage retention or compliance."
+      },
+      {
+        "key": "B",
+        "text": "Enable Amazon Data Lifecycle Manager for EBS and rely on each service's native backups for the rest.",
+        "correct": false,
+        "why": "DLM covers only EBS snapshots and AMIs. The other services would still be configured inconsistently, with no central compliance view."
+      },
+      {
+        "key": "C",
+        "text": "Write AWS Lambda functions in each account that call each service's snapshot API on a schedule.",
+        "correct": false,
+        "why": "Custom scripts per service and per account mean a lot of code to build, maintain and audit, which is the opposite of least overhead."
+      },
+      {
+        "key": "D",
+        "text": "Use AWS Backup with backup plans deployed through AWS Organizations backup policies, including cross-Region copy rules, and use AWS Backup Audit Manager for compliance reporting.",
+        "correct": true,
+        "why": "AWS Backup centrally manages backups for EBS, RDS, DynamoDB, EFS and many other services. Organization-level backup policies enforce consistent plans in every account, copy rules handle cross-Region copies, and Audit Manager reports on compliance."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Backup is a fully managed, policy-based backup service covering EC2/EBS, RDS and Aurora, DynamoDB, EFS, FSx, S3, Storage Gateway and more. Backup plans define frequency, retention and lifecycle. Organizations backup policies push them to member accounts. Copy rules replicate recovery points to other Regions or accounts. Backup Vault Lock can make backups immutable, and Audit Manager provides compliance reports.",
+      "concept": "Centralize and standardize. When a question spans many services or many accounts, look for the managed, organization-aware service rather than per-service tooling.",
+      "examTip": "'Centralized backup across services/accounts', 'retention compliance' or 'cross-Region backup copies' means AWS Backup.",
+      "references": [
+        {
+          "title": "What is AWS Backup?",
+          "url": "https://docs.aws.amazon.com/aws-backup/latest/devguide/whatisbackup.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-res-011",
+    "domain": "resilient",
+    "topic": "S3 Replication",
+    "tags": [
+      "s3-crr",
+      "versioning",
+      "disaster-recovery",
+      "cross-region"
+    ],
+    "difficulty": "medium",
+    "type": "multi",
+    "selectCount": 2,
+    "stem": "A biotech research company stores genomic data in an Amazon S3 bucket in us-east-1. For disaster recovery, a regulator requires that all newly uploaded objects be copied automatically to a bucket in us-west-2, owned by the same account.",
+    "prompt": "Which combination of steps must a solutions architect perform? (Select TWO.)",
+    "options": [
+      {
+        "key": "A",
+        "text": "Enable S3 Versioning on both the source and destination buckets.",
+        "correct": true,
+        "why": "S3 Replication requires versioning to be enabled on both the source and destination buckets."
+      },
+      {
+        "key": "B",
+        "text": "Create a VPC peering connection between VPCs in the two Regions.",
+        "correct": false,
+        "why": "S3 replication is a managed service-to-service operation and does not use your VPCs."
+      },
+      {
+        "key": "C",
+        "text": "Enable S3 Transfer Acceleration on the destination bucket.",
+        "correct": false,
+        "why": "Transfer Acceleration speeds up client transfers over the internet. It is not used or required for replication."
+      },
+      {
+        "key": "D",
+        "text": "Configure an S3 lifecycle rule that copies objects to us-west-2.",
+        "correct": false,
+        "why": "Lifecycle rules transition objects between storage classes or expire them. They cannot copy objects to another Region."
+      },
+      {
+        "key": "E",
+        "text": "Create an S3 Cross-Region Replication rule on the source bucket with an IAM role that S3 can assume to replicate objects to the destination bucket.",
+        "correct": true,
+        "why": "The replication configuration defines what to replicate and where, and S3 uses the specified IAM role to read from the source and write to the destination."
+      }
+    ],
+    "explanation": {
+      "answer": "S3 Cross-Region Replication (CRR) asynchronously copies new objects from a source bucket to a destination bucket in another Region. The prerequisites are versioning on both buckets and an IAM role that grants S3 permission to replicate. Replication Time Control (RTC) can add an SLA of 99.99% of objects replicated within 15 minutes.",
+      "concept": "Replication applies to objects uploaded after the rule is created. Use S3 Batch Replication to copy existing objects. Delete markers are not replicated by default. Same-Region Replication (SRR) is used for log aggregation or separate-account copies in the same Region.",
+      "examTip": "Any S3 replication question means 'versioning on both buckets' is required. 'Existing objects too' means S3 Batch Replication.",
+      "references": [
+        {
+          "title": "Replicating objects within and across Regions",
+          "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/replication.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-res-012",
+    "domain": "resilient",
+    "topic": "Serverless Resilience",
+    "tags": [
+      "lambda",
+      "sqs",
+      "dead-letter-queue",
+      "redrive-policy"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "An insurance company uses an AWS Lambda function with an Amazon SQS standard queue as its event source to process claim documents. A small number of malformed messages cause the function to fail every time. These messages are retried repeatedly, consume capacity and delay valid claims. The company wants failed messages set aside for later investigation after a few attempts.",
+    "prompt": "What should a solutions architect do?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Configure a redrive policy on the source SQS queue that moves messages to a dead-letter queue after a maxReceiveCount of 3.",
+        "correct": true,
+        "why": "With SQS as the event source, the retry behaviour is controlled by the queue. After a message has been received maxReceiveCount times without being deleted, SQS moves it to the DLQ, freeing capacity for valid messages."
+      },
+      {
+        "key": "B",
+        "text": "Configure a dead-letter queue as the Lambda function's asynchronous invocation on-failure destination.",
+        "correct": false,
+        "why": "Lambda's own DLQ and on-failure destination settings apply to asynchronous invocations. An SQS event source mapping invokes the function synchronously, so failed batches stay in the source queue and this setting is not used."
+      },
+      {
+        "key": "C",
+        "text": "Increase the Lambda function timeout to the maximum of 15 minutes.",
+        "correct": false,
+        "why": "The messages fail because they are malformed, not because they time out. A longer timeout only wastes more compute per failed attempt."
+      },
+      {
+        "key": "D",
+        "text": "Reduce the queue's message retention period to 1 minute.",
+        "correct": false,
+        "why": "This would delete valid messages too, and the bad messages would be lost rather than kept for investigation."
+      }
+    ],
+    "explanation": {
+      "answer": "For an SQS event source mapping, Lambda polls the queue and invokes the function synchronously with a batch. If processing fails, the messages become visible again after the visibility timeout and are retried. A redrive policy on the source queue (deadLetterTargetArn plus maxReceiveCount) moves 'poison-pill' messages to a DLQ after N receives. Enable ReportBatchItemFailures so only the failed messages in a batch are retried.",
+      "concept": "Where the DLQ goes depends on the invocation model. Asynchronous invocations (S3 or SNS events) use Lambda's DLQ or on-failure destination. Poll-based sources (SQS) use the source queue's redrive policy. Streams (Kinesis, DynamoDB Streams) use an on-failure destination on the event source mapping plus bisect-on-error. Set the queue visibility timeout to at least 6× the function timeout.",
+      "examTip": "'Lambda + SQS + poison messages' means a redrive policy with a DLQ on the source SQS queue.",
+      "references": [
+        {
+          "title": "Using dead-letter queues in Amazon SQS",
+          "url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-dead-letter-queues.html"
+        },
+        {
+          "title": "Using Lambda with Amazon SQS",
+          "url": "https://docs.aws.amazon.com/lambda/latest/dg/with-sqs.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-res-013",
+    "domain": "resilient",
+    "topic": "VPC Networking",
+    "tags": [
+      "nat-gateway",
+      "availability-zone",
+      "high-availability",
+      "route-table"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company's application runs in private subnets across two Availability Zones and uses a single NAT gateway in AZ-a to download software updates and call third-party APIs. During an AZ-a outage, the instances in AZ-b were healthy but could not reach the internet.",
+    "prompt": "How should the architecture be changed to remove this single point of failure?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Add a second Elastic IP address to the existing NAT gateway.",
+        "correct": false,
+        "why": "Extra IPs increase port capacity for connections, not availability. The gateway still lives only in AZ-a."
+      },
+      {
+        "key": "B",
+        "text": "Create a NAT gateway in a public subnet in each Availability Zone and configure each private subnet's route table to use the NAT gateway in its own AZ.",
+        "correct": true,
+        "why": "NAT gateways are redundant within one AZ but are zonal resources. One per AZ, with AZ-local routing, means an AZ failure only affects that AZ's instances, and cross-AZ data charges are avoided."
+      },
+      {
+        "key": "C",
+        "text": "Replace the NAT gateway with a larger NAT instance in AZ-a.",
+        "correct": false,
+        "why": "A NAT instance in AZ-a is still a single point of failure in the same AZ, and it adds patching and scaling work."
+      },
+      {
+        "key": "D",
+        "text": "Attach an internet gateway directly to the private subnets.",
+        "correct": false,
+        "why": "Routing private subnets to an internet gateway makes them public subnets, which requires public IPs and exposes instances. That is not the goal."
+      }
+    ],
+    "explanation": {
+      "answer": "A NAT gateway is highly available only within the Availability Zone where it is created. For a zone-independent architecture, deploy one NAT gateway per AZ (each in that AZ's public subnet) and point each private subnet's 0.0.0.0/0 route at the NAT gateway in the same AZ.",
+      "concept": "Look for hidden single-AZ dependencies: NAT gateways, a single RDS instance, a lone EC2 bastion, EBS volumes. AZ-local routing also avoids inter-AZ data transfer charges, so the per-AZ pattern improves both resilience and cost.",
+      "examTip": "'Instances in one AZ lost internet when another AZ failed' means one NAT gateway per AZ with AZ-specific route tables.",
+      "references": [
+        {
+          "title": "NAT gateways",
+          "url": "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-gateway.html"
+        }
+      ]
+    }
+  }
+]

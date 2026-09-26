@@ -1,0 +1,1855 @@
+[
+  {
+    "id": "saa-perf-013",
+    "domain": "performance",
+    "topic": "EC2 Instance Types",
+    "tags": [
+      "memory-optimized",
+      "in-memory-database"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A retailer is moving a self-managed in-memory analytics database to Amazon EC2. The database needs about 1 TB of RAM per node but only moderate CPU. Benchmarks show performance is limited entirely by available memory.",
+    "prompt": "Which EC2 instance family is the BEST fit?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Storage optimized (I family)",
+        "correct": false,
+        "why": "I instances target high local NVMe I/O, not very large RAM."
+      },
+      {
+        "key": "B",
+        "text": "Compute optimized (C family)",
+        "correct": false,
+        "why": "C instances maximize CPU per dollar with relatively little memory per vCPU, the opposite of this workload's profile."
+      },
+      {
+        "key": "C",
+        "text": "Burstable (T family)",
+        "correct": false,
+        "why": "T instances suit low, spiky CPU workloads and top out far below 1 TB of memory."
+      },
+      {
+        "key": "D",
+        "text": "Memory optimized (for example, R or X family)",
+        "correct": true,
+        "why": "Memory-optimized families offer the highest memory-to-vCPU ratios, which suits in-memory databases, large caches and real-time big data analytics."
+      }
+    ],
+    "explanation": {
+      "answer": "Match the instance family to the bottleneck. Memory-optimized instances (R for general memory-intensive work, X and High Memory for very large in-memory databases such as SAP HANA) provide large RAM footprints per vCPU.",
+      "concept": "Families: general purpose (M, T), compute optimized (C), memory optimized (R, X, z), storage optimized (I, D, Im/Is), and accelerated computing (P, G, Inf, Trn). A 'g' suffix means Graviton. Compute Optimizer helps validate the choice from real metrics.",
+      "examTip": "'Memory-bound' or 'in-memory DB/cache' means R/X. 'CPU-bound batch/HPC' means C. 'High local IOPS' means I.",
+      "references": [
+        {
+          "title": "Amazon EC2 instance types",
+          "url": "https://docs.aws.amazon.com/ec2/latest/instancetypes/instance-types.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-perf-014",
+    "domain": "performance",
+    "topic": "EC2 Instance Types",
+    "tags": [
+      "graviton",
+      "price-performance",
+      "arm"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A SaaS company runs a Java microservice fleet on x86 M-family instances. The code has no native x86 dependencies. The company wants better price performance for the same workload with minimal changes.",
+    "prompt": "What should a solutions architect recommend?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Migrate to AWS Graviton-based instances (for example, M7g) after testing the application on Arm",
+        "correct": true,
+        "why": "Graviton processors offer better price performance than comparable x86 instances for many workloads, and JVM-based apps usually run on Arm with little or no change."
+      },
+      {
+        "key": "B",
+        "text": "Add more instances of the same type",
+        "correct": false,
+        "why": "This adds capacity at the same unit price rather than improving price performance."
+      },
+      {
+        "key": "C",
+        "text": "Move to burstable T instances",
+        "correct": false,
+        "why": "Steady microservice traffic would exhaust CPU credits, and performance or cost would suffer."
+      },
+      {
+        "key": "D",
+        "text": "Switch to Dedicated Hosts",
+        "correct": false,
+        "why": "Dedicated Hosts address licensing or compliance and cost more. They don't improve price performance."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Graviton (Arm64) instances deliver better price performance and energy efficiency for a broad range of workloads, including web services, containers, microservices, databases and caches. Managed services like RDS, ElastiCache, Lambda and Fargate also offer Graviton options.",
+      "concept": "Interpreted and JIT-compiled languages (Java, Python, Node.js, .NET 6+) usually port easily. Compiled native dependencies need Arm builds. Multi-architecture container images simplify rollout.",
+      "examTip": "'Better price performance with minimal change' often means Graviton.",
+      "references": [
+        {
+          "title": "AWS Graviton processors",
+          "url": "https://aws.amazon.com/ec2/graviton/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-perf-015",
+    "domain": "performance",
+    "topic": "EC2 Networking",
+    "tags": [
+      "enhanced-networking",
+      "ena",
+      "pps"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A financial data feed handler on EC2 needs the highest possible packets per second, lower network jitter and higher bandwidth between instances. The team is using an older instance type with default networking.",
+    "prompt": "Which change will MOST improve network performance?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Place the instances in different Regions",
+        "correct": false,
+        "why": "Placing instances in different Regions adds geographic distance and latency, the opposite of what a feed handler needs."
+      },
+      {
+        "key": "B",
+        "text": "Use a current-generation instance type with enhanced networking through the Elastic Network Adapter (ENA)",
+        "correct": true,
+        "why": "Enhanced networking uses SR-IOV to give higher bandwidth, higher packets per second and consistently lower latency and jitter than traditional virtualized networking."
+      },
+      {
+        "key": "C",
+        "text": "Attach additional Elastic IP addresses",
+        "correct": false,
+        "why": "More public IPs don't change the underlying network throughput or latency."
+      },
+      {
+        "key": "D",
+        "text": "Use a larger EBS volume",
+        "correct": false,
+        "why": "EBS size affects storage performance, not inter-instance networking."
+      }
+    ],
+    "explanation": {
+      "answer": "Enhanced networking with ENA is supported on all current-generation instances and delivers high bandwidth, depending on instance size, along with high PPS and low jitter. For tightly coupled HPC or ML, Elastic Fabric Adapter (EFA) adds OS-bypass capabilities on top of ENA.",
+      "concept": "Network performance levers: instance type and size (bandwidth scales with size), enhanced networking (ENA), EFA for MPI/NCCL, placement groups (cluster), and jumbo frames (MTU 9001) within the VPC.",
+      "examTip": "'Higher PPS/lower jitter' means ENA enhanced networking. 'MPI/HPC' means EFA plus a cluster placement group.",
+      "references": [
+        {
+          "title": "Enhanced networking on Amazon EC2 instances",
+          "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/enhanced-networking.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-perf-016",
+    "domain": "performance",
+    "topic": "EC2 Placement",
+    "tags": [
+      "spread-placement-group",
+      "critical-instances"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company runs five critical ZooKeeper nodes in one Availability Zone for low latency. It wants to minimize the risk that a single hardware failure takes down more than one node.",
+    "prompt": "Which placement strategy should be used?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Partition placement group with one partition",
+        "correct": false,
+        "why": "Putting all nodes in one partition means they can share racks, which gives no isolation."
+      },
+      {
+        "key": "B",
+        "text": "No placement group",
+        "correct": false,
+        "why": "Default placement doesn't guarantee that nodes are on separate hardware."
+      },
+      {
+        "key": "C",
+        "text": "Spread placement group",
+        "correct": true,
+        "why": "A spread placement group places each instance on distinct underlying hardware (separate racks with their own network and power), so one hardware failure affects at most one node. The limit is 7 running instances per AZ per group."
+      },
+      {
+        "key": "D",
+        "text": "Cluster placement group",
+        "correct": false,
+        "why": "Cluster groups pack instances close together, which increases the chance that one failure affects several nodes."
+      }
+    ],
+    "explanation": {
+      "answer": "Spread placement groups are designed for a small number of critical instances that must be kept separate from each other. Each instance runs on distinct racks. Spread groups can span AZs, but are limited to 7 running instances per AZ per group.",
+      "concept": "Placement group types: Cluster (performance), Partition (large distributed systems grouped into rack-isolated partitions), and Spread (maximum isolation for few instances).",
+      "examTip": "'Small number of critical instances on separate hardware' means a spread placement group.",
+      "references": [
+        {
+          "title": "Placement strategies for your placement groups",
+          "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-strategies.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-perf-017",
+    "domain": "performance",
+    "topic": "EC2 Placement",
+    "tags": [
+      "partition-placement-group",
+      "hdfs",
+      "cassandra"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A company runs a 150-node Apache Cassandra cluster. Cassandra can place data replicas on different racks if it knows the rack topology. The company wants to limit the impact of rack-level hardware failures and let Cassandra see which nodes share racks.",
+    "prompt": "Which placement strategy should be used?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Spread placement group",
+        "correct": false,
+        "why": "Spread groups allow only 7 running instances per AZ, far too few for 150 nodes."
+      },
+      {
+        "key": "B",
+        "text": "Cluster placement group",
+        "correct": false,
+        "why": "Cluster groups optimize for low latency and don't isolate racks. A rack failure could hit many nodes."
+      },
+      {
+        "key": "C",
+        "text": "Dedicated Hosts",
+        "correct": false,
+        "why": "Dedicated Hosts provide physical server isolation for licensing. They don't manage rack-level fault domains for a large cluster."
+      },
+      {
+        "key": "D",
+        "text": "Partition placement group, exposing partition numbers to the application as rack information",
+        "correct": true,
+        "why": "Partition groups divide instances into partitions that don't share racks, and each instance's partition number is visible through metadata. Cassandra can use it for replica placement."
+      }
+    ],
+    "explanation": {
+      "answer": "Partition placement groups spread instances across logical partitions (up to 7 per AZ), each on separate racks. They support hundreds of instances, and applications such as HDFS, HBase, Cassandra and Kafka can read the partition ID to make topology-aware replication decisions.",
+      "concept": "Choose placement by goal: latency (cluster), few critical isolated nodes (spread), or large topology-aware distributed systems (partition).",
+      "examTip": "'Large distributed data store' plus 'rack awareness' means a partition placement group.",
+      "references": [
+        {
+          "title": "Placement strategies for your placement groups",
+          "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-strategies.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-perf-018",
+    "domain": "performance",
+    "topic": "Block Storage",
+    "tags": [
+      "gp3",
+      "provisioned-iops",
+      "independent-scaling"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A MySQL database on EC2 uses a 100 GiB gp2 volume and is constantly exhausting its burst credits. It needs a sustained 10,000 IOPS, but the data will stay around 100 GiB. The team wants the most cost-effective SSD option.",
+    "prompt": "What should the solutions architect do?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Migrate the volume to gp3 and provision 10,000 IOPS without increasing its size.",
+        "correct": true,
+        "why": "gp3 lets you provision IOPS and throughput independently of capacity, so a 100 GiB volume can deliver a sustained 10,000 IOPS cheaply, with no burst credits."
+      },
+      {
+        "key": "B",
+        "text": "Switch to st1.",
+        "correct": false,
+        "why": "st1 is HDD, optimized for sequential throughput. Random database I/O would perform poorly."
+      },
+      {
+        "key": "C",
+        "text": "Switch to io2 Block Express with 10,000 IOPS.",
+        "correct": false,
+        "why": "io2 would work, but it costs more than gp3 for this moderate, non-mission-critical requirement."
+      },
+      {
+        "key": "D",
+        "text": "Increase the gp2 volume to about 3,400 GiB to get 10,000 baseline IOPS.",
+        "correct": false,
+        "why": "gp2 IOPS scale with size (3 IOPS per GiB), so you'd pay for more than 3 TB of storage you don't need."
+      }
+    ],
+    "explanation": {
+      "answer": "gp3 volumes include a 3,000 IOPS and 125 MiB/s baseline at any size, and you can provision more IOPS and throughput independently of capacity. gp2 ties IOPS to size and relies on burst credits for small volumes. Migrating gp2 to gp3 is an online modification, with no detach required.",
+      "concept": "gp3 is the default choice for most workloads and is typically cheaper per GiB than gp2. Choose io2 Block Express when you need the highest IOPS, sub-millisecond consistency or 99.999% durability.",
+      "examTip": "'Need more IOPS but not more storage' means gp3 with provisioned IOPS.",
+      "references": [
+        {
+          "title": "Amazon EBS General Purpose SSD volumes",
+          "url": "https://docs.aws.amazon.com/ebs/latest/userguide/general-purpose.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-perf-019",
+    "domain": "performance",
+    "topic": "Block Storage",
+    "tags": [
+      "st1",
+      "sequential-throughput",
+      "big-data"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A log-analytics cluster on EC2 performs large, sequential reads and writes of multi-gigabyte files and needs high throughput at the lowest storage cost. Random I/O performance and boot capability aren't required for these data volumes.",
+    "prompt": "Which EBS volume type is MOST appropriate?",
+    "options": [
+      {
+        "key": "A",
+        "text": "General Purpose SSD (gp3)",
+        "correct": false,
+        "why": "gp3 works but costs more per GB than st1 for large, throughput-oriented sequential data."
+      },
+      {
+        "key": "B",
+        "text": "Throughput Optimized HDD (st1)",
+        "correct": true,
+        "why": "st1 delivers high sequential throughput at a low price per GB, which suits big data, data warehouses, log processing and ETL."
+      },
+      {
+        "key": "C",
+        "text": "Cold HDD (sc1)",
+        "correct": false,
+        "why": "sc1 is cheaper but has much lower throughput. It's meant for infrequently accessed data, not an active analytics cluster."
+      },
+      {
+        "key": "D",
+        "text": "Provisioned IOPS SSD (io2)",
+        "correct": false,
+        "why": "io2 is optimized for random IOPS and costs far more per GB. That's wasted here."
+      }
+    ],
+    "explanation": {
+      "answer": "HDD-backed st1 volumes are optimized for large, sequential I/O measured in MiB/s rather than IOPS, at a low cost per GB. They can't be boot volumes. sc1 is the lowest-cost option for colder data with fewer scans per day.",
+      "concept": "Think in terms of I/O pattern. Small random I/O needs SSD (gp3/io2) and is measured in IOPS. Large sequential I/O can use HDD (st1/sc1) and is measured in throughput.",
+      "examTip": "'Big data/log processing' plus 'sequential' plus 'low cost' means st1. 'Cold, rarely accessed' means sc1.",
+      "references": [
+        {
+          "title": "Amazon EBS volume types",
+          "url": "https://docs.aws.amazon.com/ebs/latest/userguide/ebs-volume-types.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-perf-020",
+    "domain": "performance",
+    "topic": "File Storage",
+    "tags": [
+      "efs",
+      "elastic-throughput",
+      "spiky"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A small (200 GB) Amazon EFS file system backs a CI/CD system. Throughput demand is very spiky: near zero most of the day, then bursts to several GB/s during builds. In Bursting mode the file system runs out of burst credits and builds slow down dramatically.",
+    "prompt": "Which EFS configuration BEST fits this pattern?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Provisioned throughput set to the peak",
+        "correct": false,
+        "why": "This meets the peak but pays for peak throughput 24/7 while the system sits idle most of the day."
+      },
+      {
+        "key": "B",
+        "text": "Switch to EFS One Zone storage",
+        "correct": false,
+        "why": "The storage class affects cost and durability, not throughput limits."
+      },
+      {
+        "key": "C",
+        "text": "Elastic throughput mode",
+        "correct": true,
+        "why": "Elastic throughput scales up and down automatically with the workload, and you pay for the throughput you use. That suits spiky, unpredictable patterns on small file systems."
+      },
+      {
+        "key": "D",
+        "text": "Keep Bursting mode but add 10 TB of dummy data",
+        "correct": false,
+        "why": "Inflating storage to earn more burst credits is wasteful and awkward."
+      }
+    ],
+    "explanation": {
+      "answer": "EFS throughput modes: Elastic (automatic, pay per use, recommended for spiky or unpredictable workloads), Provisioned (a fixed throughput independent of size, for steady known needs), and Bursting (throughput scales with stored data plus burst credits).",
+      "concept": "EFS performance also depends on the performance mode (General Purpose for most workloads; Max I/O is a legacy option for highly parallel workloads) and on client parallelism.",
+      "examTip": "'Spiky/unpredictable EFS throughput' means Elastic throughput. 'Steady high throughput on a small FS' means Provisioned.",
+      "references": [
+        {
+          "title": "Amazon EFS throughput modes",
+          "url": "https://docs.aws.amazon.com/efs/latest/ug/performance.html#throughput-modes"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-perf-021",
+    "domain": "performance",
+    "topic": "File Storage",
+    "tags": [
+      "fsx-lustre",
+      "hpc",
+      "s3-integration"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A research institute runs large genomics simulations on hundreds of EC2 instances. Input datasets live in Amazon S3. The compute jobs need a shared POSIX file system with sub-millisecond latency and hundreds of GB/s of aggregate throughput, and results should be written back to S3.",
+    "prompt": "Which storage solution should be used?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon EFS with General Purpose mode",
+        "correct": false,
+        "why": "EFS is a general-purpose shared file system. It doesn't target the extreme parallel throughput and latency of HPC workloads the way Lustre does."
+      },
+      {
+        "key": "B",
+        "text": "Mount the S3 bucket directly on every instance",
+        "correct": false,
+        "why": "S3 is object storage. Mounting tools don't provide full POSIX semantics or HPC-grade latency."
+      },
+      {
+        "key": "C",
+        "text": "Amazon FSx for Windows File Server",
+        "correct": false,
+        "why": "This is an SMB file system for Windows workloads, not an HPC parallel file system."
+      },
+      {
+        "key": "D",
+        "text": "Amazon FSx for Lustre linked to the S3 bucket as a data repository",
+        "correct": true,
+        "why": "FSx for Lustre is a high-performance parallel file system for HPC. It can lazily load data from S3 and export results back to it."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon FSx for Lustre provides a fully managed Lustre file system with sub-millisecond latencies and throughput that scales to hundreds of GB/s. Data repository associations with S3 make objects appear as files, loaded on first access, and can export changes back to S3.",
+      "concept": "FSx deployment options: scratch (temporary, cheapest, no replication) for short jobs, and persistent (replicated, longer-lived) for ongoing workloads.",
+      "examTip": "'HPC', 'ML training', 'parallel file system' or 'S3-linked high-performance file system' means FSx for Lustre.",
+      "references": [
+        {
+          "title": "What is Amazon FSx for Lustre?",
+          "url": "https://docs.aws.amazon.com/fsx/latest/LustreGuide/what-is.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-perf-022",
+    "domain": "performance",
+    "topic": "File Storage",
+    "tags": [
+      "fsx-windows",
+      "smb",
+      "active-directory"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A company is migrating Windows-based line-of-business applications to EC2. The applications use SMB file shares with NTFS permissions tied to the company's Microsoft Active Directory, and need a fully managed, highly available file service.",
+    "prompt": "Which AWS service should be used?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon FSx for Windows File Server (Multi-AZ)",
+        "correct": true,
+        "why": "It provides fully managed native Windows file shares over SMB, integrates with AD for NTFS ACLs, and offers Multi-AZ deployments for high availability."
+      },
+      {
+        "key": "B",
+        "text": "Amazon FSx for Lustre",
+        "correct": false,
+        "why": "Lustre is designed for HPC on Linux clients."
+      },
+      {
+        "key": "C",
+        "text": "Amazon S3",
+        "correct": false,
+        "why": "S3 is object storage, not an SMB file share."
+      },
+      {
+        "key": "D",
+        "text": "Amazon EFS",
+        "correct": false,
+        "why": "EFS is an NFS file system for Linux and doesn't provide SMB with AD-integrated NTFS permissions."
+      }
+    ],
+    "explanation": {
+      "answer": "FSx for Windows File Server is built on Windows Server and supports SMB, NTFS, DFS namespaces, shadow copies and AD integration (AWS Managed Microsoft AD or self-managed AD). Multi-AZ deployments replicate synchronously and fail over automatically.",
+      "concept": "Picking managed file storage: Linux NFS means EFS; Windows SMB means FSx for Windows; HPC means FSx for Lustre; NetApp features or multi-protocol means FSx for ONTAP; ZFS means FSx for OpenZFS.",
+      "examTip": "'SMB' plus 'Active Directory' plus 'Windows' means FSx for Windows File Server.",
+      "references": [
+        {
+          "title": "What is FSx for Windows File Server?",
+          "url": "https://docs.aws.amazon.com/fsx/latest/WindowsGuide/what-is.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-perf-023",
+    "domain": "performance",
+    "topic": "File Storage",
+    "tags": [
+      "fsx-ontap",
+      "multi-protocol",
+      "netapp"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "An engineering company is migrating from on-premises NetApp storage. The same datasets must be accessed concurrently by Linux clients over NFS and Windows clients over SMB, and the storage team relies on NetApp snapshots, cloning and SnapMirror replication.",
+    "prompt": "Which AWS service is the BEST fit?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon FSx for Windows File Server",
+        "correct": false,
+        "why": "FSx for Windows is SMB-focused and lacks ONTAP features such as SnapMirror."
+      },
+      {
+        "key": "B",
+        "text": "Amazon FSx for NetApp ONTAP",
+        "correct": true,
+        "why": "FSx for ONTAP supports NFS, SMB and iSCSI on the same data, plus NetApp features like snapshots, FlexClone and SnapMirror, which makes migration straightforward."
+      },
+      {
+        "key": "C",
+        "text": "Amazon EFS",
+        "correct": false,
+        "why": "EFS supports NFS only and has no NetApp data-management features."
+      },
+      {
+        "key": "D",
+        "text": "Amazon S3 with S3 File Gateway",
+        "correct": false,
+        "why": "It doesn't offer ONTAP-native snapshots, cloning or SnapMirror workflows."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon FSx for NetApp ONTAP is a fully managed ONTAP file system. It offers multi-protocol access, storage efficiency (deduplication, compression, thin provisioning), automatic tiering to a capacity pool, and SnapMirror for replication and migration from on-premises NetApp.",
+      "concept": "When the scenario names existing NetApp, ONTAP features or multi-protocol access to the same data, FSx for ONTAP is usually the answer.",
+      "examTip": "'NFS + SMB on the same data' or 'NetApp features' means FSx for NetApp ONTAP.",
+      "references": [
+        {
+          "title": "What is Amazon FSx for NetApp ONTAP?",
+          "url": "https://docs.aws.amazon.com/fsx/latest/ONTAPGuide/what-is-fsx-ontap.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-perf-024",
+    "domain": "performance",
+    "topic": "S3 Performance",
+    "tags": [
+      "s3-prefixes",
+      "request-rate",
+      "parallelization"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "An IoT platform writes sensor readings to one Amazon S3 bucket under a single prefix, raw/, at about 15,000 PUT requests per second during peaks. The application receives many HTTP 503 Slow Down responses.",
+    "prompt": "Which change will MOST effectively increase the sustainable request rate?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Enable S3 Transfer Acceleration.",
+        "correct": false,
+        "why": "Acceleration improves long-distance transfer speed, not per-prefix request limits."
+      },
+      {
+        "key": "B",
+        "text": "Switch to S3 Standard-IA.",
+        "correct": false,
+        "why": "Storage classes don't raise request rates, and Standard-IA adds retrieval fees."
+      },
+      {
+        "key": "C",
+        "text": "Distribute objects across multiple prefixes (for example, raw/<device-hash>/...) so requests spread over more partitions.",
+        "correct": true,
+        "why": "S3 supports at least 3,500 PUT/COPY/POST/DELETE requests per second per partitioned prefix. Spreading keys across more prefixes raises aggregate throughput, and S3 scales partitions as load grows."
+      },
+      {
+        "key": "D",
+        "text": "Enable S3 Versioning.",
+        "correct": false,
+        "why": "Versioning doesn't increase throughput and can add overhead on hot keys."
+      }
+    ],
+    "explanation": {
+      "answer": "S3 automatically scales to high request rates: at least 3,500 writes and 5,500 reads per second per partitioned prefix. There's no limit on the number of prefixes, so spreading keys across prefixes parallelizes the load. Clients should also retry 503s with exponential backoff while S3 scales.",
+      "concept": "S3 throughput tips: parallelize across prefixes and connections, use multipart upload and byte-range GETs, and put CloudFront in front of hot reads. S3 Express One Zone suits the most latency-sensitive, high-request workloads.",
+      "examTip": "'S3 503 Slow Down at high request rates' means spread across more prefixes (and retry with backoff).",
+      "references": [
+        {
+          "title": "Best practices design patterns: optimizing Amazon S3 performance",
+          "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/optimizing-performance.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-perf-025",
+    "domain": "performance",
+    "topic": "S3 Performance",
+    "tags": [
+      "byte-range-fetch",
+      "parallel-download"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A video analytics application on EC2 downloads 40 GB objects from Amazon S3 in the same Region before processing. Single-stream downloads are taking too long, and the instances have plenty of unused network bandwidth.",
+    "prompt": "How can download time be reduced?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Move the objects to S3 Glacier Instant Retrieval.",
+        "correct": false,
+        "why": "That storage class adds retrieval costs and doesn't speed up downloads."
+      },
+      {
+        "key": "B",
+        "text": "Put CloudFront in front of the bucket.",
+        "correct": false,
+        "why": "CloudFront helps with repeated reads by distributed users, not one-time downloads by in-Region instances."
+      },
+      {
+        "key": "C",
+        "text": "Enable S3 Transfer Acceleration.",
+        "correct": false,
+        "why": "Acceleration targets long-distance transfers over the internet. EC2 in the same Region already has a short path."
+      },
+      {
+        "key": "D",
+        "text": "Use byte-range GET requests to download parts of each object in parallel over multiple connections.",
+        "correct": true,
+        "why": "Byte-range fetches split an object into parts that are retrieved concurrently, which uses more of the available bandwidth and isolates retries to individual ranges."
+      }
+    ],
+    "explanation": {
+      "answer": "The Range HTTP header lets you fetch specific byte ranges of an S3 object. Downloading many ranges concurrently (as the AWS CLI and SDK transfer managers do) increases aggregate throughput, mirroring multipart upload on the download side.",
+      "concept": "An object's single-connection throughput is limited, so parallelism (ranges, prefixes, connections) is the key S3 performance lever.",
+      "examTip": "'Speed up large S3 downloads' means byte-range fetches in parallel.",
+      "references": [
+        {
+          "title": "Optimizing Amazon S3 performance: using byte-range fetches",
+          "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/optimizing-performance-guidelines.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-perf-026",
+    "domain": "performance",
+    "topic": "S3 Performance",
+    "tags": [
+      "s3-express-one-zone",
+      "low-latency",
+      "ml-training"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "An ML team trains models on EC2 instances in a single Availability Zone. Training repeatedly reads millions of small files from S3 and is bottlenecked by per-request latency. The data can be recreated from a source bucket if lost, so single-AZ durability is acceptable.",
+    "prompt": "Which storage option will MOST reduce data access latency while keeping S3 APIs?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon S3 Express One Zone directory buckets in the same AZ as the compute",
+        "correct": true,
+        "why": "S3 Express One Zone delivers consistent single-digit-millisecond access and very high request rates by storing data in one AZ, co-located with the compute, using S3 APIs."
+      },
+      {
+        "key": "B",
+        "text": "S3 Standard with Transfer Acceleration",
+        "correct": false,
+        "why": "Acceleration doesn't reduce per-request latency for in-Region access."
+      },
+      {
+        "key": "C",
+        "text": "S3 Glacier Instant Retrieval",
+        "correct": false,
+        "why": "This is an archive class for rarely accessed data, a poor fit for hot training reads."
+      },
+      {
+        "key": "D",
+        "text": "S3 One Zone-IA",
+        "correct": false,
+        "why": "One Zone-IA lowers storage cost for infrequent access but doesn't offer the low-latency performance tier, and it adds retrieval fees."
+      }
+    ],
+    "explanation": {
+      "answer": "S3 Express One Zone is a high-performance storage class that uses directory buckets in a single chosen AZ. It's designed for latency-sensitive, request-intensive workloads such as ML training, interactive analytics and media processing, and offers much lower latency than S3 Standard.",
+      "concept": "Trade-off: Express One Zone gives up multi-AZ resilience for speed. Keep a durable copy in S3 Standard when data isn't easily recreated.",
+      "examTip": "'Single-digit-millisecond S3 access' plus 'compute in one AZ' means S3 Express One Zone.",
+      "references": [
+        {
+          "title": "S3 Express One Zone",
+          "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-express-one-zone.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-perf-027",
+    "domain": "performance",
+    "topic": "Content Delivery",
+    "tags": [
+      "cloudfront",
+      "cache-key",
+      "cache-hit-ratio"
+    ],
+    "difficulty": "hard",
+    "type": "multi",
+    "selectCount": 2,
+    "stem": "A news site's CloudFront distribution has a cache hit ratio of only 20%. Investigation shows the cache policy forwards all headers, all cookies and all query strings to the origin, even though article pages only vary by the page query parameter. Articles are rarely updated after publication.",
+    "prompt": "Which TWO changes will MOST improve the cache hit ratio? (Select TWO.)",
+    "options": [
+      {
+        "key": "A",
+        "text": "Enable field-level encryption.",
+        "correct": false,
+        "why": "Field-level encryption protects sensitive POST fields and has no effect on caching efficiency."
+      },
+      {
+        "key": "B",
+        "text": "Add more origin servers behind the ALB.",
+        "correct": false,
+        "why": "This helps the origin cope with misses but doesn't increase the hit ratio."
+      },
+      {
+        "key": "C",
+        "text": "Change the cache policy so the cache key includes only the page query string, with no headers or cookies unless required.",
+        "correct": true,
+        "why": "Every forwarded value becomes part of the cache key. Removing unnecessary headers and cookies stops near-identical requests from being cached separately."
+      },
+      {
+        "key": "D",
+        "text": "Increase the default and maximum TTLs for article paths, since content rarely changes.",
+        "correct": true,
+        "why": "Longer TTLs keep objects cached longer, so more requests are served from the edge without revalidating at the origin."
+      },
+      {
+        "key": "E",
+        "text": "Disable compression.",
+        "correct": false,
+        "why": "Compression reduces transfer size. Disabling it hurts performance and doesn't improve hit ratio."
+      }
+    ],
+    "explanation": {
+      "answer": "The CloudFront cache key determines whether two requests are 'the same object'. Forwarding everything creates a unique key for nearly every request. Use a cache policy that includes only the values the content actually varies by, and send other needed values to the origin with an origin request policy (which doesn't affect the cache key). Then tune TTLs to how often content changes.",
+      "concept": "Other hit-ratio levers: Origin Shield, versioned file names instead of invalidations, normalizing headers such as Accept-Encoding, and separate cache behaviors for static and dynamic paths.",
+      "examTip": "'Low CloudFront cache hit ratio' means trim the cache key (headers, cookies, query strings) and raise TTLs.",
+      "references": [
+        {
+          "title": "Increasing the proportion of requests served directly from CloudFront caches",
+          "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cache-hit-ratio.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-perf-028",
+    "domain": "performance",
+    "topic": "Edge Compute",
+    "tags": [
+      "cloudfront-functions",
+      "header-manipulation",
+      "url-rewrite"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A global e-commerce site needs to add security headers to every response and rewrite URLs such as /product/123 to /product?id=123 on each viewer request. The logic is simple, must run at very high request volumes with sub-millisecond latency, and needs no network calls.",
+    "prompt": "Which option is the MOST cost-effective and performant?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Lambda@Edge on origin request",
+        "correct": false,
+        "why": "Lambda@Edge works but costs more and has higher latency, and it's intended for heavier logic or network access, which isn't needed here."
+      },
+      {
+        "key": "B",
+        "text": "CloudFront Functions on viewer request and viewer response events",
+        "correct": true,
+        "why": "CloudFront Functions run lightweight JavaScript at edge locations with sub-millisecond startup, scale to millions of requests per second, and cost a fraction of Lambda@Edge. That's ideal for header manipulation and URL rewrites."
+      },
+      {
+        "key": "C",
+        "text": "An AWS Lambda function behind API Gateway",
+        "correct": false,
+        "why": "This adds a Regional hop for every request and isn't designed to modify CDN requests inline."
+      },
+      {
+        "key": "D",
+        "text": "Rewrite URLs on the origin web servers",
+        "correct": false,
+        "why": "Rewriting at the origin adds origin load and latency, and misses the edge caching benefits."
+      }
+    ],
+    "explanation": {
+      "answer": "CloudFront Functions are built for short, simple, high-scale edge logic: header manipulation, URL rewrites and redirects, cache-key normalization and simple token validation. They run only on viewer events, can't make network calls, and have tight execution limits.",
+      "concept": "Lambda@Edge supports viewer and origin events, Node.js and Python, network calls, larger packages and longer runtimes. Use it for things like authentication against external services, image transformation or dynamic origin selection.",
+      "examTip": "'Simple, high-volume, sub-millisecond edge logic' means CloudFront Functions. 'Network calls/complex logic/origin events' means Lambda@Edge.",
+      "references": [
+        {
+          "title": "Differences between CloudFront Functions and Lambda@Edge",
+          "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/edge-functions-choosing.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-perf-029",
+    "domain": "performance",
+    "topic": "Edge Compute",
+    "tags": [
+      "lambda-edge",
+      "origin-selection",
+      "network-calls"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A streaming company wants CloudFront to choose the origin dynamically for each cache miss, based on the viewer's subscription tier. The tier must be looked up in a DynamoDB table using a token in the request.",
+    "prompt": "Which solution meets this requirement?",
+    "options": [
+      {
+        "key": "A",
+        "text": "A CloudFront Function on the viewer request event",
+        "correct": false,
+        "why": "CloudFront Functions can't make network calls and can't run on origin events, so they can't query DynamoDB or change the origin dynamically."
+      },
+      {
+        "key": "B",
+        "text": "An origin group with failover",
+        "correct": false,
+        "why": "Origin groups provide failover based on errors, not per-request routing by user attributes."
+      },
+      {
+        "key": "C",
+        "text": "A Lambda@Edge function on the origin request event that looks up the tier and modifies the request's origin",
+        "correct": true,
+        "why": "Lambda@Edge can run on origin request events (only on cache misses), make network calls such as to DynamoDB, and change the origin for the request."
+      },
+      {
+        "key": "D",
+        "text": "CloudFront geo-restriction",
+        "correct": false,
+        "why": "Geo-restriction blocks countries. It doesn't route by subscription tier."
+      }
+    ],
+    "explanation": {
+      "answer": "Lambda@Edge functions can be attached to four CloudFront events: viewer request, viewer response, origin request and origin response. Origin-facing events run only on cache misses, which keeps costs down, and they support richer logic, including network calls and dynamic origin selection.",
+      "concept": "Keep edge logic minimal and cache what you can, for example by caching the tier lookup result or encoding it in a signed token, so fewer requests need a database call.",
+      "examTip": "'Edge logic that needs to call a database/API or pick an origin' means Lambda@Edge.",
+      "references": [
+        {
+          "title": "Customize at the edge with Lambda@Edge",
+          "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/lambda-at-the-edge.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-perf-030",
+    "domain": "performance",
+    "topic": "Content Delivery",
+    "tags": [
+      "origin-shield",
+      "origin-load"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A live-sports video platform serves viewers worldwide through CloudFront. During popular events, many edge locations request the same new video segments at the same moment, and the packaging origin is overwhelmed by simultaneous cache misses from different Regional edge caches.",
+    "prompt": "Which CloudFront feature reduces load on the origin in this situation?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Geo-restriction",
+        "correct": false,
+        "why": "Blocking countries reduces the audience, not duplicate misses."
+      },
+      {
+        "key": "B",
+        "text": "Signed cookies",
+        "correct": false,
+        "why": "Signed cookies restrict access and have no effect on origin load."
+      },
+      {
+        "key": "C",
+        "text": "Field-level encryption",
+        "correct": false,
+        "why": "This protects specific form fields and doesn't reduce origin requests."
+      },
+      {
+        "key": "D",
+        "text": "Origin Shield in the AWS Region closest to the origin",
+        "correct": true,
+        "why": "Origin Shield adds a centralized caching layer in front of the origin, collapsing requests from all Regional edge caches into one, which greatly reduces duplicate origin fetches."
+      }
+    ],
+    "explanation": {
+      "answer": "Origin Shield is an additional caching tier within CloudFront, located in a Region you choose near your origin. All Regional edge caches fetch through it, so the origin sees one request per object instead of many, which improves cache hit ratio, protects the origin and reduces egress from it.",
+      "concept": "CloudFront has layers: edge locations, then Regional edge caches, then Origin Shield (optional), then the origin. Each layer absorbs misses from the layer before it.",
+      "examTip": "'Reduce origin load from many edge locations' or 'collapse simultaneous requests' means Origin Shield.",
+      "references": [
+        {
+          "title": "Using Amazon CloudFront Origin Shield",
+          "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/origin-shield.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-perf-031",
+    "domain": "performance",
+    "topic": "Caching",
+    "tags": [
+      "write-through",
+      "lazy-loading",
+      "ttl",
+      "stale-data"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "An e-commerce product catalog caches items from an RDS database in ElastiCache using lazy loading: read from the cache, and on a miss load from the database and populate the cache. When prices change in the database, customers sometimes see old prices for hours.",
+    "prompt": "Which caching approach BEST reduces stale prices while keeping reads fast?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Add a write-through strategy that updates the cache whenever a price is written to the database, and keep a TTL on keys as a safety net",
+        "correct": true,
+        "why": "Write-through keeps the cache in sync on every update, so reads see new prices immediately. The TTL expires anything missed and limits memory spent on unused keys."
+      },
+      {
+        "key": "B",
+        "text": "Switch to ElastiCache for Memcached",
+        "correct": false,
+        "why": "The engine doesn't matter here. Staleness comes from the caching strategy."
+      },
+      {
+        "key": "C",
+        "text": "Stop caching and always read from RDS",
+        "correct": false,
+        "why": "This removes staleness but loses the performance benefit and loads the database."
+      },
+      {
+        "key": "D",
+        "text": "Remove TTLs so items never expire",
+        "correct": false,
+        "why": "Without TTLs, stale items would stay cached forever under lazy loading, which makes the problem worse."
+      }
+    ],
+    "explanation": {
+      "answer": "Lazy loading only caches what's requested, but data can go stale until it expires. Write-through updates the cache on every write, so reads are always current, at the cost of extra writes and caching data that may never be read. Combining write-through with a TTL is a common best practice.",
+      "concept": "Caching strategies: lazy loading (cache-aside), write-through, and TTL-based expiry. Also consider cache invalidation on write (delete the key) and the thundering-herd problem on popular keys.",
+      "examTip": "'Cache serves stale data after DB updates' means write-through (or invalidate on write) plus a TTL.",
+      "references": [
+        {
+          "title": "Caching strategies for ElastiCache",
+          "url": "https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/Strategies.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-perf-032",
+    "domain": "performance",
+    "topic": "Caching",
+    "tags": [
+      "memcached",
+      "redis",
+      "engine-choice"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A web application needs a simple object cache for rendered HTML fragments. The data can be regenerated if lost, so persistence and replication aren't required. The team wants to use multiple CPU cores per node and scale out by adding or removing nodes.",
+    "prompt": "Which ElastiCache engine is the BEST fit?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon MemoryDB",
+        "correct": false,
+        "why": "MemoryDB is a durable, Multi-AZ in-memory database. Durability isn't needed and costs more."
+      },
+      {
+        "key": "B",
+        "text": "ElastiCache for Memcached",
+        "correct": true,
+        "why": "Memcached is a simple, multi-threaded key-value cache that uses multiple cores per node and scales horizontally, with no persistence or replication overhead. That matches these requirements."
+      },
+      {
+        "key": "C",
+        "text": "ElastiCache for Redis OSS with cluster mode and Multi-AZ",
+        "correct": false,
+        "why": "Redis works, but its replication, persistence and data-structure features are unnecessary for a disposable fragment cache."
+      },
+      {
+        "key": "D",
+        "text": "Amazon DynamoDB with DAX",
+        "correct": false,
+        "why": "DAX accelerates DynamoDB reads. It isn't a general-purpose HTML fragment cache."
+      }
+    ],
+    "explanation": {
+      "answer": "Choose Memcached for a simple cache with multi-threaded performance, easy horizontal scaling and no need for persistence or replication. Choose Redis OSS or Valkey for rich data structures (sorted sets, pub/sub, streams), replication and Multi-AZ, backups, persistence, or geospatial and transaction support.",
+      "concept": "Common Redis use cases: leaderboards (sorted sets), session stores with high availability, rate limiting, queues and pub/sub. Memcached is the plain cache-aside choice.",
+      "examTip": "'Simple, multi-threaded, no persistence/replication' means Memcached. Anything needing HA, persistence or data structures means Redis OSS or Valkey.",
+      "references": [
+        {
+          "title": "Comparing Valkey, Memcached, and Redis OSS self-designed caches",
+          "url": "https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/SelectEngine.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-perf-033",
+    "domain": "performance",
+    "topic": "Databases",
+    "tags": [
+      "rds-proxy",
+      "lambda",
+      "connection-pooling"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A serverless API uses AWS Lambda functions that each open a new connection to an Amazon Aurora PostgreSQL database. During traffic spikes, thousands of concurrent Lambda executions exhaust the database's connection limit, causing errors and high CPU on the database.",
+    "prompt": "Which solution BEST addresses this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Enable Aurora Multi-AZ.",
+        "correct": false,
+        "why": "Aurora replicas add availability and read capacity but don't pool client connections."
+      },
+      {
+        "key": "B",
+        "text": "Increase the Lambda function timeout.",
+        "correct": false,
+        "why": "Longer-running functions hold connections longer, which makes exhaustion worse."
+      },
+      {
+        "key": "C",
+        "text": "Place Amazon RDS Proxy between Lambda and Aurora, and connect through the proxy endpoint.",
+        "correct": true,
+        "why": "RDS Proxy pools and reuses database connections across many Lambda invocations, protecting the database from connection storms. It also speeds up failover and supports IAM authentication."
+      },
+      {
+        "key": "D",
+        "text": "Move the database to a larger instance class only.",
+        "correct": false,
+        "why": "A larger instance raises the connection limit somewhat but doesn't fix the one-connection-per-invocation pattern at scale."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon RDS Proxy is a fully managed database proxy for RDS and Aurora. It maintains a pool of established connections, multiplexes application connections onto them, reduces the CPU and memory overhead of connection churn, and preserves connections during failovers (reducing failover time by up to 66% for Aurora and RDS).",
+      "concept": "Serverless compute scales out quickly, but relational databases have finite connections. Use a pooler (RDS Proxy), limit concurrency (reserved concurrency), or use the RDS Data API for connectionless access where supported.",
+      "examTip": "'Lambda + RDS/Aurora + too many connections' means RDS Proxy.",
+      "references": [
+        {
+          "title": "Amazon RDS Proxy",
+          "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-proxy.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-perf-034",
+    "domain": "performance",
+    "topic": "Databases",
+    "tags": [
+      "aurora-custom-endpoint",
+      "workload-isolation"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "An Aurora MySQL cluster has four replicas. The company wants heavy analytics queries to run only on two large replicas, while the customer-facing application's reads are balanced across the other two smaller replicas, so analytics can never slow down customer reads.",
+    "prompt": "How should the architect route the traffic?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Point both workloads at the reader endpoint.",
+        "correct": false,
+        "why": "The reader endpoint balances across all replicas, so analytics would share instances with customer reads."
+      },
+      {
+        "key": "B",
+        "text": "Create a separate Aurora cluster restored from snapshots every night.",
+        "correct": false,
+        "why": "This adds cost and staleness when custom endpoints solve the problem in real time."
+      },
+      {
+        "key": "C",
+        "text": "Point analytics at the cluster (writer) endpoint.",
+        "correct": false,
+        "why": "That puts heavy queries on the writer and hurts write performance."
+      },
+      {
+        "key": "D",
+        "text": "Create two Aurora custom endpoints, one containing the analytics replicas and one containing the application replicas, and point each workload to its endpoint.",
+        "correct": true,
+        "why": "Custom endpoints load-balance connections across a chosen subset of instances, which isolates workloads within one cluster."
+      }
+    ],
+    "explanation": {
+      "answer": "Aurora provides a cluster (writer) endpoint, a reader endpoint (all replicas) and instance endpoints. Custom endpoints group specific instances, for example by size or purpose, and distribute connections among them. This is the standard way to isolate reporting or analytics from OLTP reads.",
+      "concept": "Other options for analytics on Aurora: zero-ETL integration with Amazon Redshift, Aurora cloning for ad-hoc copies, and Aurora Serverless v2 readers.",
+      "examTip": "'Route specific workloads to specific Aurora replicas' means custom endpoints.",
+      "references": [
+        {
+          "title": "Amazon Aurora endpoint connections",
+          "url": "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/Aurora.Overview.Endpoints.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-perf-035",
+    "domain": "performance",
+    "topic": "DynamoDB",
+    "tags": [
+      "hot-partition",
+      "partition-key",
+      "write-sharding"
+    ],
+    "difficulty": "hard",
+    "type": "multi",
+    "selectCount": 2,
+    "stem": "A voting application stores votes in DynamoDB with partition key CandidateId. There are only 5 candidates, and during live TV events one candidate receives most votes. The table has plenty of total provisioned capacity, but writes are throttled.",
+    "prompt": "Which TWO changes will reduce throttling? (Select TWO.)",
+    "options": [
+      {
+        "key": "A",
+        "text": "Add a global secondary index on CandidateId.",
+        "correct": false,
+        "why": "A GSI with the same low-cardinality key has the same hot-partition problem and adds write cost."
+      },
+      {
+        "key": "B",
+        "text": "Buffer votes in Amazon SQS or Kinesis and write aggregated counts to DynamoDB in batches.",
+        "correct": true,
+        "why": "Aggregating before writing turns thousands of tiny updates on a hot item into fewer writes, relieving the hot partition."
+      },
+      {
+        "key": "C",
+        "text": "Add a random or calculated suffix to the partition key (for example CandidateId#1..N) to spread writes across partitions, and aggregate the counts when reading.",
+        "correct": true,
+        "why": "Write sharding spreads a hot logical key across many physical partitions, avoiding per-partition throughput limits."
+      },
+      {
+        "key": "D",
+        "text": "Enable DynamoDB Streams.",
+        "correct": false,
+        "why": "Streams capture changes and have no effect on write throttling."
+      },
+      {
+        "key": "E",
+        "text": "Increase the table's total provisioned write capacity.",
+        "correct": false,
+        "why": "Throttling is caused by one hot partition's limits, not by the table total. More capacity spread across partitions doesn't fully fix a single hot key."
+      }
+    ],
+    "explanation": {
+      "answer": "DynamoDB spreads data across partitions by the hash of the partition key. Each partition supports up to 3,000 RCUs and 1,000 WCUs. A low-cardinality or skewed key concentrates traffic on one partition. Fixes include higher-cardinality keys, write sharding with suffixes, and pre-aggregating writes. Adaptive capacity helps, but can't exceed per-partition limits for a single item.",
+      "concept": "Good partition keys have many distinct values with evenly distributed access, such as user ID or device ID. Bad keys include status flags, dates alone, or a handful of categories.",
+      "examTip": "'Throttling despite enough total capacity' means a hot partition: fix the key design with sharding or aggregation.",
+      "references": [
+        {
+          "title": "Best practices for designing and using partition keys effectively",
+          "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/bp-partition-key-design.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-perf-036",
+    "domain": "performance",
+    "topic": "DynamoDB",
+    "tags": [
+      "gsi",
+      "query-pattern",
+      "access-pattern"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "An orders table in DynamoDB uses OrderId as the partition key. A new feature must efficiently list all orders for a given CustomerId, sorted by OrderDate. Today the application uses Scan with a filter, which is slow and expensive.",
+    "prompt": "What should the solutions architect do?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Create a global secondary index with CustomerId as the partition key and OrderDate as the sort key, and Query the index.",
+        "correct": true,
+        "why": "A GSI provides an alternative key schema, so the application can query by customer with results sorted by date, efficiently and without a table scan. It can be added to an existing table."
+      },
+      {
+        "key": "B",
+        "text": "Create a local secondary index with CustomerId as the partition key.",
+        "correct": false,
+        "why": "An LSI must share the table's partition key (OrderId), and LSIs can only be created with the table."
+      },
+      {
+        "key": "C",
+        "text": "Enable DAX to cache the scan results.",
+        "correct": false,
+        "why": "Caching scans doesn't fix the underlying inefficient access pattern."
+      },
+      {
+        "key": "D",
+        "text": "Increase read capacity to make scans faster.",
+        "correct": false,
+        "why": "Scans still read the whole table, so they stay expensive and slow as the table grows."
+      }
+    ],
+    "explanation": {
+      "answer": "Global secondary indexes let you query on attributes other than the base table's primary key. They have their own partition and sort keys and throughput, are eventually consistent, and can be created at any time. Design indexes around your access patterns.",
+      "concept": "GSI: any partition and sort key, eventually consistent reads only, can be added anytime. LSI: same partition key but a different sort key, supports strongly consistent reads, must be defined at table creation, with a 10 GB limit per partition key value.",
+      "examTip": "'Query DynamoDB by a different attribute' means a GSI. 'Same partition key, different sort order with strong consistency' means an LSI (at creation).",
+      "references": [
+        {
+          "title": "Using global secondary indexes in DynamoDB",
+          "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/GSI.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-perf-037",
+    "domain": "performance",
+    "topic": "DynamoDB",
+    "tags": [
+      "dynamodb-streams",
+      "lambda",
+      "real-time-reaction"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "Whenever a new item is inserted into a DynamoDB table of customer sign-ups, the company wants to send a welcome email and update a search index in near real time, without changing the application that writes to the table.",
+    "prompt": "Which solution meets these requirements?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Enable DynamoDB point-in-time recovery.",
+        "correct": false,
+        "why": "PITR is for backups, not change notifications."
+      },
+      {
+        "key": "B",
+        "text": "Enable DynamoDB Streams on the table and configure a Lambda function as a trigger to process new-item events.",
+        "correct": true,
+        "why": "Streams capture item-level changes in order, and Lambda polls the stream and reacts to inserts within seconds, with no changes to the writing application."
+      },
+      {
+        "key": "C",
+        "text": "Scan the table every minute with a scheduled Lambda function.",
+        "correct": false,
+        "why": "Frequent scans are expensive and slow, and need custom tracking of what's new."
+      },
+      {
+        "key": "D",
+        "text": "Add a global secondary index on SignupDate.",
+        "correct": false,
+        "why": "An index improves queries. It doesn't push notifications when items change."
+      }
+    ],
+    "explanation": {
+      "answer": "DynamoDB Streams provide a time-ordered sequence of item-level modifications (insert, modify, remove) kept for 24 hours. Lambda event source mappings process stream records in batches, which enables change-data-capture patterns such as notifications, search indexing, aggregations and replication.",
+      "concept": "An alternative is Kinesis Data Streams for DynamoDB, which offers longer retention and more consumers, and integrates with Firehose. Use EventBridge Pipes to filter and route stream events to many targets.",
+      "examTip": "'React to DynamoDB item changes without changing the writer' means DynamoDB Streams plus Lambda.",
+      "references": [
+        {
+          "title": "Change data capture for DynamoDB Streams",
+          "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Streams.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-perf-038",
+    "domain": "performance",
+    "topic": "Analytics",
+    "tags": [
+      "redshift",
+      "data-warehouse",
+      "olap"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A retail company wants to run complex SQL queries with large joins and aggregations across several years of sales, inventory and marketing data (about 50 TB) to power daily business-intelligence dashboards with fast response times.",
+    "prompt": "Which AWS service is designed for this workload?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon RDS for MySQL",
+        "correct": false,
+        "why": "RDS is optimized for transactional (OLTP) workloads. Large analytical joins over 50 TB would be slow."
+      },
+      {
+        "key": "B",
+        "text": "Amazon DynamoDB",
+        "correct": false,
+        "why": "DynamoDB is a key-value store for known access patterns and doesn't support ad-hoc SQL joins and aggregations."
+      },
+      {
+        "key": "C",
+        "text": "Amazon Redshift",
+        "correct": true,
+        "why": "Redshift is a columnar, massively parallel data warehouse optimized for complex analytical (OLAP) queries over large datasets, and integrates with BI tools."
+      },
+      {
+        "key": "D",
+        "text": "Amazon ElastiCache",
+        "correct": false,
+        "why": "ElastiCache is an in-memory cache, not a data warehouse."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Redshift stores data in columns and distributes queries across nodes, so aggregations scan only the needed columns in parallel. Redshift Serverless removes cluster management. RA3 nodes separate compute from managed storage. Materialized views and result caching speed up repeated dashboard queries.",
+      "concept": "OLTP (many small transactions) belongs in RDS, Aurora or DynamoDB. OLAP (large scans and aggregations) belongs in Redshift, Athena or EMR.",
+      "examTip": "'Data warehouse', 'complex analytical SQL' or 'BI dashboards over TBs' means Redshift.",
+      "references": [
+        {
+          "title": "What is Amazon Redshift?",
+          "url": "https://docs.aws.amazon.com/redshift/latest/mgmt/welcome.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-perf-039",
+    "domain": "performance",
+    "topic": "Analytics",
+    "tags": [
+      "redshift-spectrum",
+      "data-lake",
+      "s3"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company keeps the most recent 12 months of sales data in Amazon Redshift, and 10 years of historical data as Parquet files in an S3 data lake. Analysts want single SQL queries that join current data in Redshift with historical data in S3, without loading the history into the cluster.",
+    "prompt": "Which feature enables this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Redshift COPY commands every night",
+        "correct": false,
+        "why": "COPY loads data into the cluster, which the company wants to avoid for 10 years of history."
+      },
+      {
+        "key": "B",
+        "text": "Amazon ElastiCache",
+        "correct": false,
+        "why": "ElastiCache is an in-memory cache for application data. It can't query Parquet files in an S3 data lake."
+      },
+      {
+        "key": "C",
+        "text": "S3 Select",
+        "correct": false,
+        "why": "S3 Select filters within a single object and can't join with Redshift tables."
+      },
+      {
+        "key": "D",
+        "text": "Amazon Redshift Spectrum with external tables defined in the AWS Glue Data Catalog",
+        "correct": true,
+        "why": "Spectrum lets Redshift query data directly in S3 through external tables and join it with local Redshift tables, with scanning offloaded to a separate fleet."
+      }
+    ],
+    "explanation": {
+      "answer": "Redshift Spectrum extends Redshift queries to exabytes of data in S3 without loading it. External schemas reference the Glue Data Catalog, and columnar formats plus partitioning minimize data scanned and cost.",
+      "concept": "Lake house pattern: keep hot data in Redshift and warm or cold data in S3, and query both together with Spectrum. Athena can query the same S3 tables serverlessly for ad-hoc use.",
+      "examTip": "'Join Redshift tables with S3 data without loading' means Redshift Spectrum.",
+      "references": [
+        {
+          "title": "Querying external data using Amazon Redshift Spectrum",
+          "url": "https://docs.aws.amazon.com/redshift/latest/dg/c-using-spectrum.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-perf-040",
+    "domain": "performance",
+    "topic": "Streaming",
+    "tags": [
+      "firehose",
+      "parquet-conversion",
+      "s3-delivery"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A mobile gaming company streams JSON gameplay events and wants them delivered to Amazon S3 in near real time, converted to Apache Parquet and partitioned by date for efficient Athena queries. The team doesn't want to write or manage consumer code.",
+    "prompt": "Which solution meets these requirements?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Data Firehose with record format conversion to Parquet (using a Glue Data Catalog schema) and dynamic partitioning to S3",
+        "correct": true,
+        "why": "Firehose is fully managed delivery. It buffers, converts JSON to Parquet or ORC, partitions by keys such as date, and writes to S3 without consumer code."
+      },
+      {
+        "key": "B",
+        "text": "Amazon SQS with Lambda writing JSON files",
+        "correct": false,
+        "why": "This needs custom code, and you'd still have to build the Parquet conversion and partitioning yourself."
+      },
+      {
+        "key": "C",
+        "text": "Amazon SNS to S3",
+        "correct": false,
+        "why": "SNS doesn't deliver directly to S3 with format conversion."
+      },
+      {
+        "key": "D",
+        "text": "Kinesis Data Streams with a custom consumer on EC2",
+        "correct": false,
+        "why": "This requires building, scaling and operating consumer code, which the team wants to avoid."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Data Firehose captures, optionally transforms (with Lambda), converts format, compresses and delivers streaming data to S3, Redshift, OpenSearch, Splunk, Snowflake, Iceberg tables and HTTP endpoints. It scales automatically with no shards to manage.",
+      "concept": "Converting to columnar formats (Parquet or ORC) at ingest greatly reduces Athena and Redshift Spectrum scan cost and improves query speed.",
+      "examTip": "'Stream to S3 as Parquet with no code' means Firehose record format conversion.",
+      "references": [
+        {
+          "title": "Convert input data format in Amazon Data Firehose",
+          "url": "https://docs.aws.amazon.com/firehose/latest/dev/record-format-conversion.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-perf-041",
+    "domain": "performance",
+    "topic": "Streaming",
+    "tags": [
+      "kinesis-shards",
+      "throughput-exceeded",
+      "on-demand"
+    ],
+    "difficulty": "hard",
+    "type": "multi",
+    "selectCount": 2,
+    "stem": "Producers writing clickstream data to a provisioned-mode Kinesis data stream with 4 shards receive ProvisionedThroughputExceededException errors during peaks. Metrics show that one shard gets far more traffic than the others, because most records use the partition key 'web'.",
+    "prompt": "Which TWO actions will resolve the throttling? (Select TWO.)",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use a high-cardinality partition key, such as session ID, so records spread evenly across shards.",
+        "correct": true,
+        "why": "The partition key decides the shard. A single common key sends most traffic to one shard, whatever the total shard count."
+      },
+      {
+        "key": "B",
+        "text": "Enable enhanced fan-out for consumers.",
+        "correct": false,
+        "why": "Enhanced fan-out increases read throughput per consumer. It doesn't raise shard write limits."
+      },
+      {
+        "key": "C",
+        "text": "Increase capacity by resharding, or switch the stream to on-demand capacity mode.",
+        "correct": true,
+        "why": "Each shard supports 1 MB/s or 1,000 records/s of writes. Adding shards (or on-demand mode) raises total write capacity for the peaks."
+      },
+      {
+        "key": "D",
+        "text": "Enable server-side encryption.",
+        "correct": false,
+        "why": "Encryption doesn't affect throughput limits."
+      },
+      {
+        "key": "E",
+        "text": "Increase the stream's data retention period.",
+        "correct": false,
+        "why": "Retention controls how long data is kept, not write throughput."
+      }
+    ],
+    "explanation": {
+      "answer": "Kinesis write throughput is per shard (1 MB/s or 1,000 records/s). Hot shards come from skewed partition keys. Fix the distribution with a high-cardinality key and make sure there's enough total capacity through resharding or on-demand mode, which scales automatically. Producers should also retry with backoff and batch using PutRecords or the KPL.",
+      "concept": "The same pattern as DynamoDB hot partitions: capacity is partitioned, so key design matters as much as total capacity.",
+      "examTip": "'Kinesis throttling on one shard' means fix the partition key. 'Throttling across shards' means add shards or use on-demand mode.",
+      "references": [
+        {
+          "title": "Kinesis Data Streams quotas and limits",
+          "url": "https://docs.aws.amazon.com/streams/latest/dev/service-sizes-and-limits.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-perf-042",
+    "domain": "performance",
+    "topic": "Streaming",
+    "tags": [
+      "msk",
+      "kafka",
+      "migration"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A logistics company runs a self-managed Apache Kafka cluster on premises with dozens of producer and consumer applications that use the Kafka APIs. It wants to move to AWS with minimal code changes and without managing Kafka brokers and ZooKeeper.",
+    "prompt": "Which service should be used?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon SQS",
+        "correct": false,
+        "why": "SQS is a message queue, not a Kafka-compatible distributed log."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Managed Streaming for Apache Kafka (Amazon MSK)",
+        "correct": true,
+        "why": "MSK runs Apache Kafka as a managed service, so existing Kafka clients work with little or no change, while AWS handles broker provisioning, patching and recovery."
+      },
+      {
+        "key": "C",
+        "text": "Amazon MQ",
+        "correct": false,
+        "why": "Amazon MQ runs ActiveMQ and RabbitMQ for JMS, AMQP and MQTT workloads, not Kafka."
+      },
+      {
+        "key": "D",
+        "text": "Amazon Kinesis Data Streams",
+        "correct": false,
+        "why": "Kinesis has its own APIs, so every producer and consumer would need rewriting."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon MSK provides fully managed, highly available Apache Kafka clusters (provisioned or serverless) that are compatible with open-source Kafka tools and clients. MSK Connect runs Kafka Connect connectors.",
+      "concept": "Lift existing messaging with minimal change: Kafka to MSK, and ActiveMQ or RabbitMQ to Amazon MQ. For new cloud-native designs, consider Kinesis, SQS, SNS or EventBridge.",
+      "examTip": "'Existing Kafka applications' means Amazon MSK. 'Existing JMS/AMQP/MQTT' means Amazon MQ.",
+      "references": [
+        {
+          "title": "What is Amazon MSK?",
+          "url": "https://docs.aws.amazon.com/msk/latest/developerguide/what-is-msk.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-perf-043",
+    "domain": "performance",
+    "topic": "Search & Analytics",
+    "tags": [
+      "opensearch",
+      "full-text-search",
+      "log-analytics"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "An online marketplace needs fast full-text search across millions of product descriptions, with relevance ranking, fuzzy matching, faceted filtering and autocomplete. Product data is stored in DynamoDB.",
+    "prompt": "Which service should power the search feature?",
+    "options": [
+      {
+        "key": "A",
+        "text": "DynamoDB Scan with a contains() filter",
+        "correct": false,
+        "why": "Scans read the whole table, are slow and costly, and offer no relevance ranking or fuzzy matching."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Athena",
+        "correct": false,
+        "why": "Athena runs ad-hoc SQL over S3 with seconds of latency, which isn't suitable for interactive search-as-you-type."
+      },
+      {
+        "key": "C",
+        "text": "Amazon OpenSearch Service, fed from DynamoDB (for example, through the zero-ETL integration or DynamoDB Streams)",
+        "correct": true,
+        "why": "OpenSearch is built for full-text search, relevance scoring, fuzzy queries, aggregations and facets, and it can be kept in sync with DynamoDB changes."
+      },
+      {
+        "key": "D",
+        "text": "Amazon RDS with LIKE queries",
+        "correct": false,
+        "why": "LIKE '%term%' queries don't scale and lack relevance and fuzziness."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon OpenSearch Service (managed or serverless) provides search and analytics engines for full-text search, log analytics and observability. A common pattern keeps the system of record in DynamoDB or RDS and indexes searchable fields into OpenSearch.",
+      "concept": "Purpose-built databases: pick the engine for the access pattern (key-value, relational, search, graph with Neptune, time series with Timestream, ledger) rather than forcing one database to do everything.",
+      "examTip": "'Full-text search', 'relevance' or 'log analytics dashboards' means OpenSearch.",
+      "references": [
+        {
+          "title": "What is Amazon OpenSearch Service?",
+          "url": "https://docs.aws.amazon.com/opensearch-service/latest/developerguide/what-is.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-perf-044",
+    "domain": "performance",
+    "topic": "API Performance",
+    "tags": [
+      "api-gateway-caching",
+      "latency",
+      "repeated-reads"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A weather API on Amazon API Gateway (REST API) backed by Lambda serves forecasts that update every 10 minutes. Most requests ask for the same popular cities, and each backend call takes 800 ms. The company wants lower latency and fewer Lambda invocations with minimal changes.",
+    "prompt": "What should the solutions architect do?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Switch to an HTTP API.",
+        "correct": false,
+        "why": "HTTP APIs cost less but don't support built-in response caching."
+      },
+      {
+        "key": "B",
+        "text": "Increase the Lambda function's memory.",
+        "correct": false,
+        "why": "This might speed up each invocation slightly, but every request still triggers a backend call."
+      },
+      {
+        "key": "C",
+        "text": "Enable provisioned concurrency.",
+        "correct": false,
+        "why": "It removes cold starts but not the 800 ms of backend work per request."
+      },
+      {
+        "key": "D",
+        "text": "Enable API Gateway stage caching with a TTL of about 10 minutes, including the city parameter in the cache key.",
+        "correct": true,
+        "why": "API caching returns stored responses for identical requests until the TTL expires, which cuts latency and backend invocations. Including the city parameter keeps responses correct per city."
+      }
+    ],
+    "explanation": {
+      "answer": "API Gateway REST APIs support stage-level caching, with cache sizes from 0.5 GB to 237 GB and configurable TTLs (default 300 seconds, maximum 3600). Cache keys can include query strings and headers, and per-method overrides are available. Clients can be allowed to invalidate entries with a Cache-Control header, protected by authorization.",
+      "concept": "Caching layers in a serverless API: CloudFront at the edge, API Gateway cache at the API, DAX or ElastiCache at the data layer. Pick the layer closest to the user that can still serve correct data.",
+      "examTip": "'Same responses requested repeatedly through API Gateway' means enable API caching (REST API).",
+      "references": [
+        {
+          "title": "Cache settings for REST APIs in API Gateway",
+          "url": "https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-caching.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-perf-045",
+    "domain": "performance",
+    "topic": "Serverless Performance",
+    "tags": [
+      "provisioned-concurrency",
+      "cold-start",
+      "latency"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A trading dashboard's API uses Java Lambda functions. Users complain that the first requests after idle periods take several seconds because of cold starts. The company needs consistently low latency during market hours (9:30 AM to 4 PM).",
+    "prompt": "Which solution BEST meets this requirement?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Configure provisioned concurrency on the function alias, scheduled with Application Auto Scaling to increase during market hours",
+        "correct": true,
+        "why": "Provisioned concurrency keeps initialized execution environments ready, which removes cold starts. Scheduling it only for market hours controls cost."
+      },
+      {
+        "key": "B",
+        "text": "Increase the function timeout",
+        "correct": false,
+        "why": "A longer timeout doesn't change cold-start duration."
+      },
+      {
+        "key": "C",
+        "text": "Decrease the function's memory",
+        "correct": false,
+        "why": "Less memory also means less CPU, which usually makes initialization slower."
+      },
+      {
+        "key": "D",
+        "text": "Configure reserved concurrency",
+        "correct": false,
+        "why": "Reserved concurrency guarantees and caps capacity but doesn't pre-initialize environments."
+      }
+    ],
+    "explanation": {
+      "answer": "Provisioned concurrency initializes a requested number of execution environments ahead of time so they respond in double-digit milliseconds. Application Auto Scaling can schedule or track it. For Java, Lambda SnapStart can also greatly cut startup time at low cost.",
+      "concept": "Cold start reducers: provisioned concurrency, SnapStart (Java, Python, .NET), smaller deployment packages, lazy initialization, and more memory (more CPU).",
+      "examTip": "'Eliminate Lambda cold starts during known periods' means provisioned concurrency (scheduled). 'Java cold starts, low cost' means consider SnapStart.",
+      "references": [
+        {
+          "title": "Configuring provisioned concurrency for a function",
+          "url": "https://docs.aws.amazon.com/lambda/latest/dg/provisioned-concurrency.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-perf-046",
+    "domain": "performance",
+    "topic": "Serverless Performance",
+    "tags": [
+      "lambda-memory",
+      "cpu-allocation",
+      "compute-bound"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A Lambda function that resizes and watermarks images is CPU-bound and takes 9 seconds per image at 512 MB of memory. The team wants faster processing and is willing to pay slightly more per millisecond.",
+    "prompt": "Which change will MOST directly speed up the function?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Enable reserved concurrency.",
+        "correct": false,
+        "why": "Reserved concurrency affects how many run at once, not how fast each runs."
+      },
+      {
+        "key": "B",
+        "text": "Increase the function's memory allocation, which also increases its CPU allocation proportionally.",
+        "correct": true,
+        "why": "Lambda allocates CPU in proportion to memory, so a CPU-bound function runs faster with more memory. Total cost can even drop if duration falls enough."
+      },
+      {
+        "key": "C",
+        "text": "Attach the function to a VPC.",
+        "correct": false,
+        "why": "VPC attachment affects networking, not CPU."
+      },
+      {
+        "key": "D",
+        "text": "Increase the function timeout.",
+        "correct": false,
+        "why": "The timeout only raises the maximum run time. It doesn't add compute power."
+      }
+    ],
+    "explanation": {
+      "answer": "Lambda memory ranges from 128 MB to 10,240 MB, and CPU power scales linearly with it (about one full vCPU at 1,769 MB, up to 6 vCPUs at the top). Because you pay for memory multiplied by duration, raising memory for CPU-bound work often reduces duration enough to keep cost flat or lower it.",
+      "concept": "Use AWS Lambda Power Tuning or Compute Optimizer to find the best memory setting. Graviton (arm64) functions can also give better price performance.",
+      "examTip": "'CPU-bound Lambda is slow' means increase memory (which raises CPU).",
+      "references": [
+        {
+          "title": "Configure Lambda function memory",
+          "url": "https://docs.aws.amazon.com/lambda/latest/dg/configuration-memory.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-perf-047",
+    "domain": "performance",
+    "topic": "Edge Infrastructure",
+    "tags": [
+      "local-zones",
+      "single-digit-latency",
+      "metro"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A visual-effects studio in Los Angeles wants its artists to use remote workstations on EC2 with single-digit-millisecond latency. The nearest AWS Region is several hundred miles away and adds noticeable lag.",
+    "prompt": "Which AWS infrastructure option BEST meets this requirement?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use Amazon CloudFront",
+        "correct": false,
+        "why": "CloudFront caches and accelerates content delivery. It doesn't host interactive EC2 workstations."
+      },
+      {
+        "key": "B",
+        "text": "Use a larger instance type in the Region",
+        "correct": false,
+        "why": "Instance size doesn't reduce network distance latency."
+      },
+      {
+        "key": "C",
+        "text": "Deploy the workstations in the AWS Local Zone in Los Angeles",
+        "correct": true,
+        "why": "Local Zones place compute, storage and select services close to large population and industry centers, giving single-digit-millisecond latency to local users while connecting back to the parent Region."
+      },
+      {
+        "key": "D",
+        "text": "Use AWS Global Accelerator to the nearest Region",
+        "correct": false,
+        "why": "Global Accelerator improves the network path but can't overcome the physical distance to a far Region for single-digit-millisecond needs."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Local Zones extend a Region into metro areas, offering EC2, EBS, VPC subnets and other services near end users. They suit latency-sensitive workloads such as media rendering, real-time gaming, AR/VR and hybrid migrations.",
+      "concept": "Edge infrastructure options: Local Zones (metro proximity), Wavelength (inside 5G carrier networks for mobile devices), and Outposts (AWS racks in your own data center for on-premises low latency or data residency).",
+      "examTip": "'Single-digit-ms latency for users in a specific city' means Local Zones. '5G mobile' means Wavelength. 'On-premises' means Outposts.",
+      "references": [
+        {
+          "title": "What is AWS Local Zones?",
+          "url": "https://docs.aws.amazon.com/local-zones/latest/ug/what-is-aws-local-zones.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "saa-perf-048",
+    "domain": "performance",
+    "topic": "Batch Processing",
+    "tags": [
+      "aws-batch",
+      "job-queues",
+      "managed-compute"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A bioinformatics team submits thousands of containerized analysis jobs per day. Each job needs between 2 and 64 vCPUs and may take minutes to hours. They want jobs queued and scheduled automatically onto right-sized compute, including Spot Instances, without managing a scheduler.",
+    "prompt": "Which service is the BEST fit?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Lambda",
+        "correct": false,
+        "why": "Lambda has a 15-minute maximum duration and limited CPU, which doesn't fit multi-hour, 64-vCPU jobs."
+      },
+      {
+        "key": "B",
+        "text": "A single large EC2 instance running cron",
+        "correct": false,
+        "why": "This doesn't scale and wastes capacity between jobs."
+      },
+      {
+        "key": "C",
+        "text": "Amazon SQS alone",
+        "correct": false,
+        "why": "SQS can queue work but doesn't provision or schedule compute."
+      },
+      {
+        "key": "D",
+        "text": "AWS Batch with managed compute environments",
+        "correct": true,
+        "why": "AWS Batch queues jobs, provisions and scales EC2 (including Spot) or Fargate capacity based on each job's requirements, and handles scheduling and retries."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Batch is a managed batch computing service. You define job definitions (container, vCPU, memory, GPU), job queues with priorities, and compute environments. Batch dynamically provisions the optimal quantity and type of compute, including Spot for cost savings.",
+      "concept": "Batch orchestration options: AWS Batch for queued jobs at scale, Step Functions (including Distributed Map) for workflows, and EMR for Spark and Hadoop.",
+      "examTip": "'Many containerized batch jobs' plus 'managed scheduling' plus 'Spot' means AWS Batch.",
+      "references": [
+        {
+          "title": "What is AWS Batch?",
+          "url": "https://docs.aws.amazon.com/batch/latest/userguide/what-is-batch.html"
+        }
+      ]
+    }
+  }
+]
