@@ -7,7 +7,9 @@ import { ensureAnonId, getUser, hashPassword, ownerClause, sha256, signIn, signO
 import { mailConfigured, sendMail } from "@/lib/mailer";
 import { allowAttempt, appOrigin, clientIpHash, recordAttempt } from "@/lib/request";
 import { getAccess, grantPass, paymentsMode, stripe } from "@/lib/billing";
-import { answeredCount, attemptsFor, selectQuestions, type Mode } from "@/lib/engine";
+import { isArea } from "@/lib/areas";
+import { answeredCount, attemptsFor, selectQuestions, type Mode, type Scope } from "@/lib/engine";
+import { flagPromptDue, flagsFor, keepFlag, setFlag } from "@/lib/flags";
 import { FREE_TRIAL_QUESTIONS, getExam, TRIAL_NETWORK_CAP, PASS_DAYS, PASS_PRICE_CENTS, type DomainId } from "@/lib/exams";
 import { ensureBank, feedbackFor, getQuestion, grade, type Feedback } from "@/lib/questions";
 import { isExpired, loadOwnedSession } from "@/lib/quiz";
@@ -138,6 +140,7 @@ const COUNTS: Record<Mode, number[]> = {
   practice: [10, 20, 30],
   reinforce: [10, 20],
   review: [10, 20, 50],
+  flagged: [10, 20, 50],
   exam: [65],
 };
 
@@ -147,8 +150,9 @@ export async function startQuizAction(form: FormData) {
   const mode = String(form.get("mode") ?? "") as Mode;
   const exam = getExam(examSlug);
   if (!exam || !(mode in COUNTS)) redirect("/practice");
-  const domainRaw = String(form.get("domain") ?? "");
-  const domain = exam.domains.some((d) => d.id === domainRaw) ? (domainRaw as DomainId) : undefined;
+  // Scope: checked domains and study areas. All or none checked both mean "everything".
+  const domains = form.getAll("domains").map(String).filter((v): v is DomainId => exam.domains.some((d) => d.id === v));
+  const scope: Scope = { domains: [...new Set(domains)], areas: [...new Set(form.getAll("areas").map(String).filter(isArea))] };
   const requested = Number(form.get("count")) || COUNTS[mode][0];
   let count = COUNTS[mode].includes(requested) ? requested : COUNTS[mode][0];
 
@@ -174,7 +178,8 @@ export async function startQuizAction(form: FormData) {
   }
 
   const attempts = await attemptsFor(owner, examSlug);
-  const picked = selectQuestions({ exam: examSlug, mode: mode === "trial" && access.active ? "practice" : mode, count, domain, attempts });
+  const flags = await flagsFor(owner, examSlug);
+  const picked = selectQuestions({ exam: examSlug, mode: mode === "trial" && access.active ? "practice" : mode, count, scope, attempts, flags });
   if (picked.length === 0) redirect(`/practice/${examSlug}?empty=${mode}`);
 
   const row = await one<{ id: string }>(
@@ -185,7 +190,7 @@ export async function startQuizAction(form: FormData) {
 }
 
 export type SubmitResult =
-  | { status: "graded"; feedback: Feedback }
+  | { status: "graded"; feedback: Feedback; flagPrompt?: boolean }
   | { status: "saved" }
   | { status: "paywall" }
   | { status: "error"; message: string };
@@ -225,7 +230,24 @@ export async function submitAnswerAction(sessionId: string, questionId: string, 
     [owner.userId ?? null, owner.anonId ?? null, sessionId, session.exam, questionId, cleanPicks, grade(q, cleanPicks), Math.max(0, Math.min(Math.round(timeMs), 3_600_000)), ipHash],
   );
   // Exam mode withholds feedback until the end, like the real test.
-  return session.mode === "exam" ? { status: "saved" } : { status: "graded", feedback: feedbackFor(q, cleanPicks) };
+  if (session.mode === "exam") return { status: "saved" };
+  return { status: "graded", feedback: feedbackFor(q, cleanPicks), flagPrompt: await flagPromptDue(owner, questionId) };
+}
+
+/** Flag or unflag a question as a weak spot. Works for any question in a session the visitor owns. */
+export async function setFlagAction(sessionId: string, questionId: string, on: boolean): Promise<{ ok: boolean }> {
+  const loaded = await loadOwnedSession(sessionId);
+  if (!loaded || !loaded.session.question_ids.includes(questionId)) return { ok: false };
+  await setFlag(loaded.owner, loaded.session.exam, questionId, on);
+  return { ok: true };
+}
+
+/** "Still weak?" → keep: restart the correct-answer streak that triggers the prompt. */
+export async function keepFlagAction(sessionId: string, questionId: string): Promise<{ ok: boolean }> {
+  const loaded = await loadOwnedSession(sessionId);
+  if (!loaded || !loaded.session.question_ids.includes(questionId)) return { ok: false };
+  await keepFlag(loaded.owner, questionId);
+  return { ok: true };
 }
 
 export async function finishQuizAction(sessionId: string) {

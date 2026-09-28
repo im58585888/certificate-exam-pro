@@ -121,4 +121,18 @@ create table if not exists waitlist (
   created_at timestamptz not null default now()
 );
 alter table waitlist enable row level security;
+
+-- v4: questions a learner flagged as weak (kept_at: last time they chose to keep the flag after the "still weak?" prompt)
+create table if not exists flags (
+  id bigserial primary key,
+  user_id uuid references users(id) on delete cascade,
+  anon_id text,
+  exam text not null,
+  question_id text not null,
+  created_at timestamptz not null default now(),
+  kept_at timestamptz
+);
+create unique index if not exists flags_user_q on flags (user_id, question_id) where user_id is not null;
+create unique index if not exists flags_anon_q on flags (anon_id, question_id) where user_id is null;
+alter table flags enable row level security;
 `;

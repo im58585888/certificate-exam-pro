@@ -2,22 +2,26 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState, useTransition } from "react";
-import { finishQuizAction, submitAnswerAction } from "@/app/actions";
+import { finishQuizAction, keepFlagAction, setFlagAction, submitAnswerAction } from "@/app/actions";
+import type { Mode } from "@/lib/engine";
 import type { Feedback, PublicQuestion } from "@/lib/questions";
 import { ExplanationPanel, OptionList, QuestionMeta, QuestionText, Verdict } from "./QuestionParts";
+import { FlagButton } from "./FlagButton";
 import { ReportQuestion } from "./ReportQuestion";
 
 export interface QuizPlayerProps {
   sessionId: string;
-  mode: "trial" | "practice" | "reinforce" | "review" | "exam";
+  mode: Mode;
   questions: PublicQuestion[];
+  /** Questions in this session the visitor has flagged as weak. */
+  initialFlags: string[];
   initial: Record<string, { picks: string[]; feedback?: Feedback }>;
   deadline: number | null;
   signedIn: boolean;
   waitlist?: boolean;
 }
 
-const MODE_LABEL = { trial: "Free trial", practice: "Practice", reinforce: "Strengthen weak areas", review: "Review mistakes", exam: "Timed mock exam" };
+const MODE_LABEL: Record<Mode, string> = { trial: "Free trial", practice: "Practice", reinforce: "Strengthen weak areas", review: "Review mistakes", flagged: "Flagged questions", exam: "Timed mock exam" };
 
 function formatClock(ms: number) {
   const s = Math.max(0, Math.floor(ms / 1000));
@@ -25,12 +29,13 @@ function formatClock(ms: number) {
   return `${h ? `${h}:` : ""}${String(m).padStart(h ? 2 : 1, "0")}:${String(sec).padStart(2, "0")}`;
 }
 
-export function QuizPlayer({ sessionId, mode, questions, initial, deadline, signedIn, waitlist }: QuizPlayerProps) {
+export function QuizPlayer({ sessionId, mode, questions, initialFlags, initial, deadline, signedIn, waitlist }: QuizPlayerProps) {
   const isExam = mode === "exam";
   const [answers, setAnswers] = useState(initial);
   const [index, setIndex] = useState(() => Math.max(0, questions.findIndex((q) => !initial[q.id])));
   const [draft, setDraft] = useState<string[]>(() => initial[questions[Math.max(0, questions.findIndex((q) => !initial[q.id]))]?.id]?.picks ?? []);
-  const [flags, setFlags] = useState<Set<string>>(new Set());
+  const [flags, setFlags] = useState<Set<string>>(() => new Set(initialFlags));
+  const [stillWeak, setStillWeak] = useState<string | null>(null); // question id showing the "still weak?" prompt
   const [paywall, setPaywall] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [now, setNow] = useState(() => Date.now());
@@ -59,6 +64,7 @@ export function QuizPlayer({ sessionId, mode, questions, initial, deadline, sign
     if (res.status === "paywall") { setPaywall(true); return false; }
     if (res.status === "error") { setError(res.message); return false; }
     setAnswers((a) => ({ ...a, [qid]: { picks: p, feedback: res.status === "graded" ? res.feedback : undefined } }));
+    if (res.status === "graded" && res.flagPrompt) setStillWeak(qid);
     return true;
   }, [sessionId]);
 
@@ -71,6 +77,13 @@ export function QuizPlayer({ sessionId, mode, questions, initial, deadline, sign
     if (prev && prev.length === draft.length && prev.every((k) => draft.includes(k))) return true;
     return submit(q.id, draft);
   }, [isExam, draft, q, answers, submit]);
+
+  // Optimistic: the flag shows immediately and rolls back if the server refuses.
+  const setFlag = useCallback((qid: string, on: boolean) => {
+    const apply = (v: boolean) => setFlags((f) => { const n = new Set(f); if (v) n.add(qid); else n.delete(qid); return n; });
+    apply(on);
+    setFlagAction(sessionId, qid, on).then((r) => { if (!r.ok) apply(!on); }, () => apply(!on));
+  }, [sessionId]);
 
   const toggle = (key: string) => {
     setError(null);
@@ -102,9 +115,10 @@ export function QuizPlayer({ sessionId, mode, questions, initial, deadline, sign
   // Keyboard: 1–5 choose, Enter checks/advances.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.target instanceof HTMLInputElement || e.metaKey || e.ctrlKey || pending || paywall) return;
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement || e.target instanceof HTMLSelectElement || e.metaKey || e.ctrlKey || pending || paywall) return;
       const n = Number(e.key);
       if (n >= 1 && n <= q.options.length && !feedback) toggle(q.options[n - 1].key);
+      if (e.key === "f" || e.key === "F") setFlag(q.id, !flags.has(q.id));
       if (e.key === "Enter") {
         if (feedback || isExam) next();
         else if (complete) check();
@@ -129,10 +143,22 @@ export function QuizPlayer({ sessionId, mode, questions, initial, deadline, sign
           )}
         </div>
 
-        <div className="mt-5"><QuestionMeta q={q} /></div>
+        <div className="mt-5 flex flex-wrap items-start justify-between gap-2">
+          <QuestionMeta q={q} />
+          <FlagButton flagged={flags.has(q.id)} onChange={(on) => setFlag(q.id, on)} />
+        </div>
         <QuestionText q={q} />
         {feedback && <div className="mt-4"><Verdict correct={feedback.correct} /></div>}
         <div className="mt-4"><OptionList q={q} picks={picks} feedback={feedback} onToggle={toggle} disabled={pending} /></div>
+        {feedback && stillWeak === q.id && flags.has(q.id) && (
+          <div className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-xl bg-warn-soft px-4 py-3 text-sm">
+            <p className="font-semibold text-warn">You&apos;ve now answered this flagged question correctly twice in a row. Still weak?</p>
+            <div className="flex gap-2">
+              <button className="btn-ghost !py-1.5" onClick={() => { keepFlagAction(sessionId, q.id); setStillWeak(null); }}>Keep flag</button>
+              <button className="btn-primary !py-1.5" onClick={() => { setFlag(q.id, false); setStillWeak(null); }}>Clear flag</button>
+            </div>
+          </div>
+        )}
         {feedback && <ExplanationPanel feedback={feedback} />}
         {feedback && <ReportQuestion key={q.id} questionId={q.id} />}
         {error && <p className="mt-4 rounded-xl bg-bad-soft px-4 py-2 text-sm font-semibold text-bad">{error}</p>}
@@ -140,11 +166,6 @@ export function QuizPlayer({ sessionId, mode, questions, initial, deadline, sign
         <div className="mt-6 flex flex-wrap items-center justify-between gap-3">
           <div className="flex gap-2">
             <button className="btn-ghost" onClick={() => jump(index - 1)} disabled={index === 0 || pending}>Previous</button>
-            {isExam && (
-              <button className="btn-ghost" onClick={() => setFlags((f) => { const n = new Set(f); if (n.has(q.id)) n.delete(q.id); else n.add(q.id); return n; })}>
-                {flags.has(q.id) ? "Unflag" : "Flag for review"}
-              </button>
-            )}
           </div>
           {isExam ? (
             <div className="flex gap-2">
@@ -179,6 +200,7 @@ export function QuizPlayer({ sessionId, mode, questions, initial, deadline, sign
             const tone = !a ? "bg-surface text-soft border-line" : isExam ? "bg-brand-soft text-brand border-transparent" : a.feedback?.correct ? "bg-ok-soft text-ok border-transparent" : "bg-bad-soft text-bad border-transparent";
             return (
               <button key={x.id} onClick={() => jump(i)} disabled={pending}
+                aria-label={`Question ${i + 1}${flags.has(x.id) ? ", flagged" : ""}`}
                 className={`relative h-[34px] rounded-lg border text-xs font-bold ${tone} ${i === index ? "outline-2 outline-offset-1 outline-brand" : ""}`}>
                 {i + 1}
                 {flags.has(x.id) && <span className="absolute -top-1 -right-1 h-2.5 w-2.5 rounded-full bg-warn" />}
@@ -189,7 +211,12 @@ export function QuizPlayer({ sessionId, mode, questions, initial, deadline, sign
         {!isExam && answeredCount > 0 && (
           <button className="btn-ghost mt-5 w-full" onClick={finish} disabled={pending}>End session &amp; see results</button>
         )}
-        <p className="mt-4 text-xs text-muted">Tip: press 1–5 to choose, Enter to check.</p>
+        {flags.size > 0 && (
+          <p className="mt-4 flex items-center gap-2 text-xs text-muted">
+            <span className="h-2.5 w-2.5 rounded-full bg-warn" aria-hidden /> {flags.size} flagged{isExam ? ": jump back before submitting" : ""}
+          </p>
+        )}
+        <p className="mt-4 text-xs text-muted">Tip: press 1–5 to choose, Enter to check, F to flag.</p>
       </aside>
 
       {paywall && (

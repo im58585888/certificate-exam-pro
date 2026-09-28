@@ -1,13 +1,14 @@
 import "server-only";
 import { one, query } from "./db";
 import { currentOwner, type Owner } from "./auth";
+import type { Mode } from "./engine";
 
 export interface QuizSession {
   id: string;
   user_id: string | null;
   anon_id: string | null;
   exam: string;
-  mode: "trial" | "practice" | "reinforce" | "review" | "exam";
+  mode: Mode;
   question_ids: string[];
   time_limit_sec: number | null;
   created_at: Date;

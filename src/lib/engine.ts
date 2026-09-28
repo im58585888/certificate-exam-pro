@@ -1,10 +1,12 @@
 import "server-only";
 import { query } from "./db";
 import { ownerClause, type Owner } from "./auth";
+import { areaOf, type AreaId } from "./areas";
 import { getExam, type DomainId } from "./exams";
+import type { FlagRow } from "./flags";
 import { questionsFor, type Question } from "./questions";
 
-export type Mode = "trial" | "practice" | "reinforce" | "review" | "exam";
+export type Mode = "trial" | "practice" | "reinforce" | "review" | "flagged" | "exam";
 
 export interface AttemptRow {
   question_id: string;
@@ -43,28 +45,38 @@ export interface ReviewItem {
   dueAt: Date;
   misses: number;
   lastWrong: Date;
+  flagged: boolean;
 }
 
 /**
  * A question enters the review queue the first time it is missed. Each later correct answer moves it
  * up a box (1 → 3 → 7 → 14 → 30 days); a miss sends it back to box 1. After box 5 it graduates.
+ * Flagging counts like a miss at the moment of flagging, and a flagged question never graduates
+ * while the flag is on (it stays at the longest interval instead).
  */
-export function reviewQueue(attempts: AttemptRow[]): ReviewItem[] {
-  const byQ = new Map<string, AttemptRow[]>();
-  for (const a of attempts) byQ.set(a.question_id, [...(byQ.get(a.question_id) ?? []), a]);
+export function reviewQueue(attempts: AttemptRow[], flags: FlagRow[] = []): ReviewItem[] {
+  type Event = { t: Date; correct: boolean; flag?: boolean };
+  const byQ = new Map<string, Event[]>();
+  const push = (id: string, e: Event) => byQ.set(id, [...(byQ.get(id) ?? []), e]);
+  for (const a of attempts) push(a.question_id, { t: new Date(a.created_at), correct: a.correct });
+  const flagged = new Set<string>();
+  for (const f of flags) { flagged.add(f.question_id); push(f.question_id, { t: new Date(f.created_at), correct: false, flag: true }); }
   const items: ReviewItem[] = [];
-  for (const [questionId, rows] of byQ) {
+  for (const [questionId, events] of byQ) {
+    events.sort((a, b) => a.t.getTime() - b.t.getTime());
+    const isFlagged = flagged.has(questionId);
     let box = 0, misses = 0, dueAt = new Date(0), lastWrong: Date | null = null;
-    for (const r of rows) {
-      const t = new Date(r.created_at);
-      if (!r.correct) {
-        box = 1; misses++; lastWrong = t;
+    for (const e of events) {
+      if (!e.correct) {
+        box = 1; lastWrong = e.t;
+        if (!e.flag) misses++;
       } else if (box > 0) {
-        box++;
+        box = isFlagged ? Math.min(box + 1, GRADUATED_BOX - 1) : box + 1;
       }
-      dueAt = new Date(t.getTime() + REVIEW_INTERVAL_DAYS[Math.min(box, GRADUATED_BOX - 1)] * 86400000);
+      // A flag set after answering makes the question due now; answers schedule the next review.
+      dueAt = e.flag ? e.t : new Date(e.t.getTime() + REVIEW_INTERVAL_DAYS[Math.min(box, GRADUATED_BOX - 1)] * 86400000);
     }
-    if (box > 0 && box < GRADUATED_BOX && lastWrong) items.push({ questionId, box, dueAt, misses, lastWrong });
+    if (box > 0 && box < GRADUATED_BOX && lastWrong) items.push({ questionId, box, dueAt, misses, lastWrong, flagged: isFlagged });
   }
   return items.sort((a, b) => a.dueAt.getTime() - b.dueAt.getTime());
 }
@@ -125,6 +137,19 @@ export function readiness(attempts: AttemptRow[], examSlug: string) {
   return { ratio: r, scaled: Math.round(100 + 900 * r), confident: attempts.length >= 30 };
 }
 
+/** Topics ordered weakest first: flagged topics lead (most flags first), then lowest mastery. */
+export function weakestTopics(attempts: AttemptRow[], bank: Question[], flags: FlagRow[] = []): string[] {
+  const topicOf = new Map(bank.map((q) => [q.id, q.topic]));
+  const flagCount = new Map<string, number>();
+  for (const f of flags) {
+    const t = topicOf.get(f.question_id);
+    if (t) flagCount.set(t, (flagCount.get(t) ?? 0) + 1);
+  }
+  const mastery = new Map(masteryBy(attempts, bank, "topic").map((m) => [m.key, m.score]));
+  const topics = [...new Set([...flagCount.keys(), ...mastery.keys()])];
+  return topics.sort((a, b) => (flagCount.get(b) ?? 0) - (flagCount.get(a) ?? 0) || (mastery.get(a) ?? 0.5) - (mastery.get(b) ?? 0.5));
+}
+
 // ---------- Question selection ----------
 
 function shuffle<T>(xs: T[]): T[] {
@@ -143,12 +168,17 @@ function freshestFirst(pool: Question[], lastSeen: Map<string, number>): Questio
   return [...unseen, ...seen];
 }
 
-/** Picks from each domain in proportion to exam weights, so short sets still mirror the real blueprint. */
+/**
+ * Picks from each domain in proportion to exam weights, so short sets still mirror the real blueprint.
+ * With a narrowed scope, the weights are rescaled over the domains that are present.
+ */
 function blueprintPick(pool: Question[], n: number, examSlug: string, lastSeen: Map<string, number>): Question[] {
   const exam = getExam(examSlug)!;
+  const present = exam.domains.filter((d) => pool.some((q) => q.domain === d.id));
+  const totalWeight = present.reduce((s, d) => s + d.weight, 0);
   const out: Question[] = [];
-  for (const d of exam.domains) {
-    const k = Math.round(n * d.weight);
+  for (const d of present) {
+    const k = Math.round((n * d.weight) / totalWeight);
     out.push(...freshestFirst(pool.filter((q) => q.domain === d.id), lastSeen).slice(0, k));
   }
   const used = new Set(out.map((q) => q.id));
@@ -156,28 +186,46 @@ function blueprintPick(pool: Question[], n: number, examSlug: string, lastSeen: 
   return shuffle(out.slice(0, n));
 }
 
+/** Which part of the bank a session draws from. Empty lists mean "all". */
+export interface Scope {
+  domains: DomainId[];
+  areas: AreaId[];
+}
+
+export const FULL_SCOPE: Scope = { domains: [], areas: [] };
+
+export function inScope(q: Question, scope: Scope): boolean {
+  return (!scope.domains.length || scope.domains.includes(q.domain)) && (!scope.areas.length || scope.areas.includes(areaOf(q.topic)));
+}
+
 export interface SelectOptions {
   exam: string;
   mode: Mode;
   count: number;
-  domain?: DomainId;
+  scope?: Scope;
   attempts: AttemptRow[];
+  flags?: FlagRow[];
 }
 
-export function selectQuestions({ exam, mode, count, domain, attempts }: SelectOptions): Question[] {
+export function selectQuestions({ exam, mode, count, scope = FULL_SCOPE, attempts, flags = [] }: SelectOptions): Question[] {
   const bank = questionsFor(exam);
   const lastSeen = new Map<string, number>();
   for (const a of attempts) lastSeen.set(a.question_id, new Date(a.created_at).getTime());
-  const pool = domain ? bank.filter((q) => q.domain === domain) : bank;
+  // The mock exam always uses the whole bank, like the real test.
+  const pool = mode === "exam" || mode === "trial" ? bank : bank.filter((q) => inScope(q, scope));
 
-  if (mode === "trial" || mode === "exam" || (mode === "practice" && !domain)) return blueprintPick(pool, count, exam, lastSeen);
-  if (mode === "practice") return freshestFirst(pool, lastSeen).slice(0, count);
+  if (mode === "trial" || mode === "exam" || mode === "practice") return blueprintPick(pool, count, exam, lastSeen);
 
-  const byId = new Map(bank.map((q) => [q.id, q]));
-  const queue = reviewQueue(attempts);
+  const byId = new Map(pool.map((q) => [q.id, q]));
+  const queue = reviewQueue(attempts, flags);
   if (mode === "review") {
     // Due items first, then the rest of the queue (earliest due first).
-    return queue.slice(0, count).map((r) => byId.get(r.questionId)!).filter(Boolean);
+    return queue.map((r) => byId.get(r.questionId)).filter((q) => !!q).slice(0, count);
+  }
+  if (mode === "flagged") {
+    // Longest-unseen flagged questions first.
+    const flaggedQs = flags.map((f) => byId.get(f.question_id)).filter((q) => !!q);
+    return flaggedQs.sort((a, b) => (lastSeen.get(a.id) ?? 0) - (lastSeen.get(b.id) ?? 0)).slice(0, count);
   }
 
   // reinforce: ~40% due mistakes, ~40% weakest topics (new questions preferred), ~20% fresh mixed.
@@ -189,9 +237,9 @@ export function selectQuestions({ exam, mode, count, domain, attempts }: SelectO
       picked.set(q.id, q);
     }
   };
-  add(queue.filter((r) => r.dueAt.getTime() <= now).map((r) => byId.get(r.questionId)!).filter(Boolean), Math.round(count * 0.4));
-  const weakTopics = masteryBy(attempts, bank, "topic").sort((a, b) => a.score - b.score).slice(0, 4).map((m) => m.key);
-  add(freshestFirst(bank.filter((q) => weakTopics.includes(q.topic) && !picked.has(q.id)), lastSeen), Math.round(count * 0.8));
-  add(freshestFirst(bank.filter((q) => !picked.has(q.id)), lastSeen), count);
+  add(queue.filter((r) => r.dueAt.getTime() <= now).map((r) => byId.get(r.questionId)).filter((q) => !!q), Math.round(count * 0.4));
+  const weakTopics = weakestTopics(attempts, pool, flags).slice(0, 4);
+  add(freshestFirst(pool.filter((q) => weakTopics.includes(q.topic) && !picked.has(q.id)), lastSeen), Math.round(count * 0.8));
+  add(freshestFirst(pool.filter((q) => !picked.has(q.id)), lastSeen), count);
   return shuffle([...picked.values()]);
 }

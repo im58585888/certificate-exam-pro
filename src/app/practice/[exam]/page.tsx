@@ -2,10 +2,13 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { startQuizAction } from "../../actions";
+import { ScopePicker, type ScopeCell } from "@/components/ScopePicker";
+import { areaOf, AREAS } from "@/lib/areas";
 import { currentOwner, getUser } from "@/lib/auth";
 import { getAccess } from "@/lib/billing";
 import { answeredCount, attemptsFor, dueCount, reviewQueue } from "@/lib/engine";
 import { FREE_TRIAL_QUESTIONS, getExam } from "@/lib/exams";
+import { flagsFor } from "@/lib/flags";
 import { ensureBank, questionsFor } from "@/lib/questions";
 
 export const metadata: Metadata = { title: "Practice" };
@@ -34,9 +37,27 @@ export default async function PracticeHub({ params, searchParams }: PageProps<"/
   const owner = await currentOwner();
   const attempts = owner ? await attemptsFor(owner, slug) : [];
   const used = owner ? await answeredCount(owner, slug) : 0;
-  const queue = reviewQueue(attempts);
+  const flags = owner ? await flagsFor(owner, slug) : [];
+  const queue = reviewQueue(attempts, flags);
   const due = dueCount(queue);
-  const bank = questionsFor(slug).length;
+  const questions = questionsFor(slug);
+  const bank = questions.length;
+
+  // Question counts per (domain, study area) so the scope picker can show the pool size live.
+  const seen = new Set(attempts.map((a) => a.question_id));
+  const cellMap = new Map<string, ScopeCell>();
+  for (const q of questions) {
+    const area = areaOf(q.topic);
+    const key = `${q.domain}|${area}`;
+    const c = cellMap.get(key) ?? { domain: q.domain, area, total: 0, unseen: 0 };
+    c.total++;
+    if (!seen.has(q.id)) c.unseen++;
+    cellMap.set(key, c);
+  }
+  const cells = [...cellMap.values()];
+  const domainChips = exam.domains.map((d) => ({ id: d.id, label: d.name.replace("Design ", "").replace(" Architectures", "") }));
+  const areaList = AREAS.map((a) => ({ id: a.id, name: a.name }));
+  const liveFlags = flags.filter((f) => questions.some((q) => q.id === f.question_id)).length;
   const unlock = <Link className="btn-ghost w-full" href={user ? "/pricing" : "/register?next=/pricing"}>Unlock with a pass</Link>;
 
   return (
@@ -46,7 +67,7 @@ export default async function PracticeHub({ params, searchParams }: PageProps<"/
       <p className="mt-2 text-soft">{bank} questions · {exam.examQuestions}-question exam in {exam.examMinutes} minutes · passing score {exam.passingScaled}/1000</p>
       {empty && <p className="mt-4 rounded-xl bg-warn-soft px-4 py-3 font-semibold text-warn">Nothing to review yet. Missed questions will appear here after you practice.</p>}
 
-      <div className="mt-8 grid gap-5 md:grid-cols-2">
+      <div className="mt-8 grid items-start gap-5 md:grid-cols-2">
         {!access.active && (
           <ModeCard title="Free trial" body={used >= FREE_TRIAL_QUESTIONS ? "You've used all your free questions. Get a pass to keep practicing." : `${FREE_TRIAL_QUESTIONS - used} of ${FREE_TRIAL_QUESTIONS} free questions left, with full explanations.`}>
             {used >= FREE_TRIAL_QUESTIONS ? (
@@ -60,37 +81,32 @@ export default async function PracticeHub({ params, searchParams }: PageProps<"/
           </ModeCard>
         )}
 
-        <ModeCard title="Practice set" body="Fresh questions you haven't seen yet, with instant feedback. Mix all domains or focus on one." locked={!access.active}>
+        <ModeCard title="Practice set" body="Fresh questions you haven't seen yet, with instant feedback. Choose any mix of domains, and narrow to specific topics if you like." locked={!access.active}>
           {access.active ? (
-            <form action={startQuizAction} className="flex flex-wrap gap-2">
-              <input type="hidden" name="exam" value={slug} /><input type="hidden" name="mode" value="practice" />
-              <select name="domain" className="input !w-auto flex-1" aria-label="Domain">
-                <option value="">All domains</option>
-                {exam.domains.map((d) => <option key={d.id} value={d.id}>{d.name.replace("Design ", "")}</option>)}
-              </select>
-              <select name="count" className="input !w-auto" aria-label="Number of questions">
-                {[10, 20, 30].map((n) => <option key={n} value={n}>{n} questions</option>)}
-              </select>
-              <button className="btn-primary">Start</button>
-            </form>
+            <ScopePicker exam={slug} mode="practice" domains={domainChips} areas={areaList} cells={cells} counts={[10, 20, 30]} submitLabel="Start" />
           ) : unlock}
         </ModeCard>
 
-        <ModeCard title="Strengthen weak areas" body={`Built from your history: due mistakes, new questions on your weakest topics, and a mixed set to catch regressions.${attempts.length < 5 && access.active ? " Answer a few more questions first so we can find your weak spots." : ""}`} locked={!access.active}>
+        <ModeCard title="Strengthen weak areas" body={`Built from your history: due mistakes, your flagged topics, new questions on your weakest topics, and a mixed set to catch regressions.${attempts.length < 5 && !liveFlags && access.active ? " Answer a few more questions (or flag some) first so we can find your weak spots." : ""}`} locked={!access.active}>
           {access.active ? (
-            <form action={startQuizAction} className="flex gap-2">
-              <input type="hidden" name="exam" value={slug} /><input type="hidden" name="mode" value="reinforce" />
-              <select name="count" className="input !w-auto" aria-label="Number of questions">{[10, 20].map((n) => <option key={n} value={n}>{n} questions</option>)}</select>
-              <button className="btn-primary flex-1" disabled={attempts.length < 5}>Start targeted session</button>
-            </form>
+            <ScopePicker exam={slug} mode="reinforce" domains={domainChips} areas={areaList} cells={cells} counts={[10, 20]} submitLabel="Start targeted session" disabled={attempts.length < 5 && !liveFlags} />
           ) : unlock}
         </ModeCard>
 
-        <ModeCard title="Review mistakes" body={queue.length ? `${queue.length} question${queue.length > 1 ? "s" : ""} in your review queue, ${due} due now. Each one returns after 1, 3, 7 and 14 days until you've got it.` : "Questions you miss land here and come back on a spaced schedule."} locked={!access.active}>
+        <ModeCard title="Review mistakes" body={queue.length ? `${queue.length} question${queue.length > 1 ? "s" : ""} in your review queue (missed or flagged), ${due} due now. Each one returns after 1, 3, 7 and 14 days until you've got it.` : "Questions you miss or flag land here and come back on a spaced schedule."} locked={!access.active}>
           {access.active ? (
             <form action={startQuizAction}>
               <input type="hidden" name="exam" value={slug} /><input type="hidden" name="mode" value="review" /><input type="hidden" name="count" value="20" />
               <button className="btn-primary w-full" disabled={!queue.length}>Review {Math.min(20, queue.length) || ""} mistakes</button>
+            </form>
+          ) : unlock}
+        </ModeCard>
+
+        <ModeCard title="Flagged questions" body={liveFlags ? `${liveFlags} question${liveFlags > 1 ? "s" : ""} you flagged as weak. Practice just these, longest-unseen first. Flag or unflag any question with 🚩 while you practice.` : "Tap 🚩 Flag as weak on any question you're unsure about, even if you got it right. Flagged questions collect here."} locked={!access.active}>
+          {access.active ? (
+            <form action={startQuizAction}>
+              <input type="hidden" name="exam" value={slug} /><input type="hidden" name="mode" value="flagged" /><input type="hidden" name="count" value="50" />
+              <button className="btn-primary w-full" disabled={!liveFlags}>{liveFlags ? `Practice ${Math.min(50, liveFlags)} flagged` : "Nothing flagged yet"}</button>
             </form>
           ) : unlock}
         </ModeCard>

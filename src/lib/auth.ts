@@ -54,6 +54,12 @@ export async function signIn(userId: string): Promise<void> {
   if (anon) {
     await query(`update quiz_sessions set user_id = $1 where anon_id = $2 and user_id is null`, [userId, anon]);
     await query(`update attempts set user_id = $1 where anon_id = $2 and user_id is null`, [userId, anon]);
+    // Flags the account already has win; the rest move over.
+    await query(
+      `delete from flags f where f.anon_id = $2 and f.user_id is null and exists (select 1 from flags u where u.user_id = $1 and u.question_id = f.question_id)`,
+      [userId, anon],
+    );
+    await query(`update flags set user_id = $1 where anon_id = $2 and user_id is null`, [userId, anon]);
   }
 }
 

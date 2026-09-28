@@ -6,8 +6,9 @@ import { AccuracyLine, DailyColumns, DomainBars, type DayPoint } from "@/compone
 import { getUser } from "@/lib/auth";
 import { getAccess } from "@/lib/billing";
 import { query } from "@/lib/db";
-import { attemptsFor, dueCount, masteryBy, readiness, reviewQueue } from "@/lib/engine";
+import { attemptsFor, dueCount, masteryBy, readiness, reviewQueue, weakestTopics } from "@/lib/engine";
 import { getExam } from "@/lib/exams";
+import { flagsFor } from "@/lib/flags";
 import { ensureBank, questionsFor } from "@/lib/questions";
 
 export const metadata: Metadata = { title: "Dashboard" };
@@ -42,7 +43,8 @@ export default async function Dashboard({ searchParams }: PageProps<"/dashboard"
   const avgSec = timed.length ? Math.round(timed.reduce((s, a) => s + a.time_ms!, 0) / timed.length / 1000) : 0;
   const seen = new Set(attempts.map((a) => a.question_id)).size;
   const ready = readiness(attempts, EXAM);
-  const queue = reviewQueue(attempts);
+  const flags = await flagsFor({ userId: user.id }, EXAM);
+  const queue = reviewQueue(attempts, flags);
   const due = dueCount(queue);
 
   // Daily series (UTC days) for the last 30 days, zero-filled.
@@ -66,7 +68,12 @@ export default async function Dashboard({ searchParams }: PageProps<"/dashboard"
 
   const domainM = new Map(masteryBy(attempts, bank, "domain").map((m) => [m.key, m]));
   const domainRows = exam.domains.map((d) => ({ id: d.id, label: d.name.replace("Design ", ""), weight: d.weight, score: domainM.get(d.id)?.score ?? null, attempts: domainM.get(d.id)?.attempts ?? 0 }));
-  const topics = masteryBy(attempts, bank, "topic").sort((a, b) => a.score - b.score);
+  // Same order "Strengthen weak areas" uses: flagged topics first, then lowest mastery.
+  const topicMastery = new Map(masteryBy(attempts, bank, "topic").map((m) => [m.key, m]));
+  const topicOf = new Map(bank.map((q) => [q.id, q.topic]));
+  const flagsByTopic = new Map<string, number>();
+  for (const f of flags) { const t = topicOf.get(f.question_id); if (t) flagsByTopic.set(t, (flagsByTopic.get(t) ?? 0) + 1); }
+  const topics = weakestTopics(attempts, bank, flags).map((t) => ({ key: t, mastery: topicMastery.get(t), flags: flagsByTopic.get(t) ?? 0 }));
 
   const sessions = await query<{ id: string; mode: string; created_at: Date; n: number; ok: number; total: number }>(
     `select s.id, s.mode, s.created_at, cardinality(s.question_ids) as total,
@@ -126,7 +133,7 @@ export default async function Dashboard({ searchParams }: PageProps<"/dashboard"
               <Stat label="Avg time per question" value={`${avgSec}s`} note="Real exam allows ~120s" />
               <Stat label="Study streak" value={`${streak} day${streak === 1 ? "" : "s"}`} />
               <Stat label="Question bank seen" value={`${Math.round((seen / bank.length) * 100)}%`} note={`${seen} of ${bank.length}`} />
-              <Stat label="Mistakes to review" value={String(queue.length)} note={`${due} due now`} />
+              <Stat label="To review" value={String(queue.length)} note={`${due} due now · ${flags.length} flagged`} />
             </div>
           </div>
 
@@ -138,20 +145,23 @@ export default async function Dashboard({ searchParams }: PageProps<"/dashboard"
             </section>
             <section className="card p-6">
               <h2 className="font-extrabold">Weakest topics</h2>
-              <p className="mb-4 text-sm text-muted">&ldquo;Strengthen weak areas&rdquo; sessions pull from the top of this list.</p>
+              <p className="mb-4 text-sm text-muted">Flagged topics first, then lowest mastery. &ldquo;Strengthen weak areas&rdquo; sessions pull from the top of this list.</p>
               <table className="w-full text-left text-sm">
-                <thead className="text-xs text-muted"><tr><th className="pb-2 font-semibold">Topic</th><th className="pb-2 font-semibold">Mastery</th><th className="pb-2 text-right font-semibold">Answered</th></tr></thead>
+                <thead className="text-xs text-muted"><tr><th className="pb-2 font-semibold">Topic</th><th className="pb-2 font-semibold">Mastery</th><th className="pb-2 text-right font-semibold">Flagged</th><th className="pb-2 text-right font-semibold">Answered</th></tr></thead>
                 <tbody>
                   {topics.slice(0, 8).map((t) => (
                     <tr key={t.key} className="border-t border-line">
-                      <td className="py-2 pr-2 font-semibold">{t.label}</td>
+                      <td className="py-2 pr-2 font-semibold">{t.key}</td>
                       <td className="py-2">
-                        <span className="flex items-center gap-2">
-                          <span className="h-2 w-20 overflow-hidden rounded-full bg-brand-soft"><span className="block h-full rounded-full bg-chart" style={{ width: `${t.score * 100}%` }} /></span>
-                          <span className="tabular-nums">{Math.round(t.score * 100)}%</span>
-                        </span>
+                        {t.mastery ? (
+                          <span className="flex items-center gap-2">
+                            <span className="h-2 w-20 overflow-hidden rounded-full bg-brand-soft"><span className="block h-full rounded-full bg-chart" style={{ width: `${t.mastery.score * 100}%` }} /></span>
+                            <span className="tabular-nums">{Math.round(t.mastery.score * 100)}%</span>
+                          </span>
+                        ) : <span className="text-muted">–</span>}
                       </td>
-                      <td className="py-2 text-right tabular-nums text-soft">{t.correct}/{t.attempts}</td>
+                      <td className="py-2 text-right tabular-nums text-soft">{t.flags ? <span className="font-bold text-warn">🚩 {t.flags}</span> : "–"}</td>
+                      <td className="py-2 text-right tabular-nums text-soft">{t.mastery ? `${t.mastery.correct}/${t.mastery.attempts}` : "–"}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -190,7 +200,7 @@ export default async function Dashboard({ searchParams }: PageProps<"/dashboard"
                 {sessions.map((s) => (
                   <tr key={s.id} className="border-t border-line">
                     <td className="py-2">{new Date(s.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric" })}</td>
-                    <td className="py-2 capitalize">{s.mode === "exam" ? "Mock exam" : s.mode === "reinforce" ? "Weak areas" : s.mode}</td>
+                    <td className="py-2 capitalize">{s.mode === "exam" ? "Mock exam" : s.mode === "reinforce" ? "Weak areas" : s.mode === "flagged" ? "Flagged" : s.mode}</td>
                     <td className="py-2 text-right tabular-nums">{s.ok}/{s.mode === "exam" ? s.total : s.n}</td>
                     <td className="py-2 text-right"><Link className="font-bold text-brand" href={`/results/${s.id}`}>Review</Link></td>
                   </tr>

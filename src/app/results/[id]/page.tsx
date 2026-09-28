@@ -1,11 +1,13 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import type { Metadata } from "next";
+import { SessionFlagButton } from "@/components/FlagButton";
 import { ReportQuestion } from "@/components/ReportQuestion";
 import { DOMAIN_LABEL, ExplanationPanel, OptionList, QuestionMeta, QuestionText } from "@/components/QuestionParts";
 import { getAccess, paymentsMode } from "@/lib/billing";
 import { getExam, PASS_DAYS, PASS_PRICE_CENTS } from "@/lib/exams";
 import { ensureBank, feedbackFor, getQuestion, toPublic } from "@/lib/questions";
+import { flagsFor } from "@/lib/flags";
 import { loadOwnedSession, sessionAttempts } from "@/lib/quiz";
 
 export const metadata: Metadata = { title: "Results", robots: { index: false } };
@@ -20,6 +22,7 @@ export default async function ResultsPage({ params }: PageProps<"/results/[id]">
   if (!session.finished_at && session.mode === "exam") redirect(`/quiz/${id}`);
   const exam = getExam(session.exam)!;
   const access = await getAccess(owner.userId);
+  const flagged = new Set((await flagsFor(owner, session.exam)).map((f) => f.question_id));
 
   const byQ = new Map(attempts.map((a) => [a.question_id, a]));
   const items = session.question_ids.map((qid) => ({ q: getQuestion(qid)!, a: byQ.get(qid) })).filter((x) => x.q);
@@ -39,7 +42,7 @@ export default async function ResultsPage({ params }: PageProps<"/results/[id]">
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-10">
-      <p className="eyebrow">{exam.code} · {session.mode === "exam" ? "Timed mock exam" : session.mode === "trial" ? "Free trial" : "Practice session"} results</p>
+      <p className="eyebrow">{exam.code} · {session.mode === "exam" ? "Timed mock exam" : session.mode === "trial" ? "Free trial" : session.mode === "flagged" ? "Flagged questions" : "Practice session"} results</p>
       <div className="mt-3 grid gap-5 md:grid-cols-[auto_1fr] md:items-center">
         <div className="grid h-36 w-36 place-items-center rounded-full" style={{ background: `conic-gradient(var(--brand) ${pct * 360}deg, var(--line) 0)` }}>
           <div className="grid h-28 w-28 place-items-center rounded-full bg-bg text-center">
@@ -99,7 +102,7 @@ export default async function ResultsPage({ params }: PageProps<"/results/[id]">
       )}
 
       <h2 className="mt-12 text-2xl font-extrabold">Review every question</h2>
-      <p className="mt-1 text-soft">Mistakes are listed first. Open any question for the full reasoning.</p>
+      <p className="mt-1 text-soft">Mistakes are listed first. Open any question for the full reasoning, and flag the ones you&apos;re unsure about so they come back in review.</p>
       <div className="mt-5 space-y-3">
         {ordered.map(({ q, a }, i) => {
           const pub = toPublic(q, id);
@@ -110,10 +113,14 @@ export default async function ResultsPage({ params }: PageProps<"/results/[id]">
                 <span className={`pill mt-0.5 shrink-0 ${!a ? "bg-surface-2 text-muted" : a.correct ? "bg-ok-soft text-ok" : "bg-bad-soft text-bad"}`}>
                   {!a ? "Skipped" : a.correct ? "Correct" : "Missed"}
                 </span>
-                <span className="font-semibold leading-snug">{q.prompt} <span className="font-normal text-muted">· {q.topic}</span></span>
+                <span className="flex-1 font-semibold leading-snug">{q.prompt} <span className="font-normal text-muted">· {q.topic}</span></span>
+                {flagged.has(q.id) && <span className="pill shrink-0 bg-warn-soft text-warn" aria-label="Flagged">🚩</span>}
               </summary>
               <div className="mt-4 border-t border-line pt-4">
-                <QuestionMeta q={pub} />
+                <div className="flex flex-wrap items-start justify-between gap-2">
+                  <QuestionMeta q={pub} />
+                  <SessionFlagButton sessionId={id} questionId={q.id} initial={flagged.has(q.id)} />
+                </div>
                 <QuestionText q={pub} />
                 {a || access.active ? (
                   <>
