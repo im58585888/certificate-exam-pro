@@ -1,0 +1,1309 @@
+[
+  {
+    "id": "aif-gen-001",
+    "domain": "genai",
+    "topic": "Tokens & Embeddings",
+    "tags": [
+      "tokens",
+      "tokenization"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A developer notices that a large language model's usage report counts \"tokens\" rather than words or characters.",
+    "prompt": "What is a token in the context of a large language model?",
+    "options": [
+      {
+        "key": "A",
+        "text": "A numeric score of how confident the model is",
+        "correct": false,
+        "why": "Confidence is expressed as probabilities, not tokens. Tokens are pieces of text."
+      },
+      {
+        "key": "B",
+        "text": "A unit of text, such as a word or part of a word, that the model processes",
+        "correct": true,
+        "why": "Models break text into tokens, often whole words, sub-words or punctuation. Input and output length and pricing are measured in tokens."
+      },
+      {
+        "key": "C",
+        "text": "An API key used to authenticate requests to the model",
+        "correct": false,
+        "why": "The word token is sometimes used for credentials, but in LLM usage reports it means a unit of text, not an authentication secret."
+      },
+      {
+        "key": "D",
+        "text": "A complete sentence of input text",
+        "correct": false,
+        "why": "A sentence is usually split into many tokens. Tokens are much smaller units of text."
+      }
+    ],
+    "explanation": {
+      "answer": "A token is the basic unit of text an LLM reads and writes. Tokenizers split text into tokens, which may be whole words, parts of words or characters. As a rough guide for English, one token is about four characters or three quarters of a word.",
+      "concept": "Context window limits, input and output length limits, and pricing for most generative AI services are all measured in tokens.",
+      "examTip": "Token = a chunk of text (often a sub-word). Cost and limits are counted in tokens.",
+      "references": [
+        {
+          "title": "What is a large language model?",
+          "url": "https://aws.amazon.com/what-is/large-language-model/"
+        },
+        {
+          "title": "Amazon Bedrock pricing",
+          "url": "https://aws.amazon.com/bedrock/pricing/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-002",
+    "domain": "genai",
+    "topic": "Tokens & Embeddings",
+    "tags": [
+      "embeddings",
+      "vectors",
+      "semantic-search"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A search team wants to find documents with similar meaning to a user's question, even when the documents use different words. For example, \"car\" should match \"automobile\".",
+    "prompt": "Which generative AI concept makes this possible?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Tokenization alone, which splits text into pieces",
+        "correct": false,
+        "why": "Tokenization splits text into units but does not capture that two different words mean the same thing."
+      },
+      {
+        "key": "B",
+        "text": "Diffusion, which generates images from noise",
+        "correct": false,
+        "why": "Diffusion is an image-generation technique and is unrelated to text similarity search."
+      },
+      {
+        "key": "C",
+        "text": "Embeddings, which represent text as numeric vectors that capture meaning",
+        "correct": true,
+        "why": "Embedding models map text to vectors so that items with similar meaning are close together, enabling semantic search beyond exact keywords."
+      },
+      {
+        "key": "D",
+        "text": "Temperature, which controls randomness in generated text",
+        "correct": false,
+        "why": "Temperature affects how varied a model's generated output is. It does not help match documents by meaning."
+      }
+    ],
+    "explanation": {
+      "answer": "Embeddings are numerical vector representations of data (text, images and more) produced by an embedding model. Semantically similar items have vectors that are close together, measured with distance or cosine similarity, which powers semantic search and RAG retrieval.",
+      "concept": "Vectors are stored in vector databases or vector-capable stores (for example Amazon OpenSearch Service, Aurora PostgreSQL with pgvector, Amazon S3 Vectors) for fast similarity search.",
+      "examTip": "Match by meaning, not keywords = embeddings + vector similarity search.",
+      "references": [
+        {
+          "title": "What are embeddings in machine learning?",
+          "url": "https://aws.amazon.com/what-is/embeddings-in-machine-learning/"
+        },
+        {
+          "title": "What is a vector database?",
+          "url": "https://aws.amazon.com/what-is/vector-databases/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-003",
+    "domain": "genai",
+    "topic": "Tokens & Embeddings",
+    "tags": [
+      "chunking",
+      "rag"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company is preparing 400-page policy manuals for a retrieval augmented generation (RAG) application. The team splits each manual into smaller passages of a few hundred tokens each before creating embeddings.",
+    "prompt": "What is this step called, and why is it done?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Fine-tuning, to change the model's weights with the manuals",
+        "correct": false,
+        "why": "Fine-tuning trains a model on data. Splitting documents for retrieval does not change any model weights."
+      },
+      {
+        "key": "B",
+        "text": "Distillation, to compress the manuals into a smaller model",
+        "correct": false,
+        "why": "Distillation trains a smaller model to mimic a larger one. It does not split documents."
+      },
+      {
+        "key": "C",
+        "text": "Tokenization, to translate the manuals into another language",
+        "correct": false,
+        "why": "Tokenization splits text into tokens for the model. It does not translate, and splitting into passages is chunking."
+      },
+      {
+        "key": "D",
+        "text": "Chunking, so that relevant passages can be retrieved precisely and fit within the model's context window",
+        "correct": true,
+        "why": "Chunking divides documents into passages that are embedded separately. Retrieval then returns only the most relevant passages, which fit in the prompt."
+      }
+    ],
+    "explanation": {
+      "answer": "Chunking is the process of splitting large documents into smaller pieces before generating embeddings. Smaller, focused chunks improve retrieval precision and ensure that the retrieved context fits within the model's context window.",
+      "concept": "Chunk size and overlap are trade-offs: chunks that are too small lose context, and chunks that are too large dilute relevance and use more tokens. Amazon Bedrock Knowledge Bases supports fixed-size, hierarchical, semantic and custom chunking strategies.",
+      "examTip": "Splitting documents into passages before embedding = chunking.",
+      "references": [
+        {
+          "title": "How content chunking works for knowledge bases",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/kb-chunking.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-004",
+    "domain": "genai",
+    "topic": "Model Architectures",
+    "tags": [
+      "transformer",
+      "self-attention"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A student asks which neural network architecture underlies most modern large language models and what key mechanism makes it effective.",
+    "prompt": "Which answer is correct?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Transformers, using a self-attention mechanism to weigh how each token relates to the others",
+        "correct": true,
+        "why": "Transformer models use self-attention to capture relationships between all tokens in a sequence and process tokens in parallel, which enables training at massive scale."
+      },
+      {
+        "key": "B",
+        "text": "Decision trees, using information gain to split text",
+        "correct": false,
+        "why": "Decision trees are a traditional ML method for tabular data. They are not the architecture behind modern LLMs."
+      },
+      {
+        "key": "C",
+        "text": "K-means, grouping words into clusters",
+        "correct": false,
+        "why": "K-means is an unsupervised clustering algorithm. It cannot generate language."
+      },
+      {
+        "key": "D",
+        "text": "Convolutional neural networks, using image filters",
+        "correct": false,
+        "why": "CNNs are mainly used for images. LLMs are built on a different architecture designed for sequences."
+      }
+    ],
+    "explanation": {
+      "answer": "Modern LLMs are transformer-based. The transformer's self-attention mechanism lets the model weigh the relevance of every token to every other token in the input, capturing context and long-range relationships, while parallel processing makes training on huge datasets practical.",
+      "concept": "Transformers power LLMs and many multimodal models. Image generators often use diffusion models, sometimes combined with transformers.",
+      "examTip": "LLMs → transformers → self-attention.",
+      "references": [
+        {
+          "title": "What are transformers in artificial intelligence?",
+          "url": "https://aws.amazon.com/what-is/transformers-in-artificial-intelligence/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-005",
+    "domain": "genai",
+    "topic": "Model Architectures",
+    "tags": [
+      "diffusion",
+      "image-generation"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A design agency uses a model that creates images from text descriptions. The model starts from random noise and, over many steps, gradually removes the noise until a detailed image matching the description appears.",
+    "prompt": "Which type of model is this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "A text embedding model",
+        "correct": false,
+        "why": "An embedding model converts input into vectors. It does not generate images."
+      },
+      {
+        "key": "B",
+        "text": "A diffusion model",
+        "correct": true,
+        "why": "Diffusion models learn to reverse a noising process, generating images by iteratively denoising random noise guided by a text prompt."
+      },
+      {
+        "key": "C",
+        "text": "A recommendation model",
+        "correct": false,
+        "why": "Recommendation models rank items for users. They do not synthesize images from text."
+      },
+      {
+        "key": "D",
+        "text": "A linear regression model",
+        "correct": false,
+        "why": "Linear regression predicts a number and cannot generate images."
+      }
+    ],
+    "explanation": {
+      "answer": "Diffusion models generate data, most often images, by starting with noise and removing it step by step. During training they learn how noise is added to real images; at generation time they reverse that process, conditioned on a prompt.",
+      "concept": "Other generative architectures include transformers (text and multimodal), generative adversarial networks (a generator versus a discriminator), and variational autoencoders.",
+      "examTip": "Image from noise through repeated denoising = diffusion model.",
+      "references": [
+        {
+          "title": "What is Stable Diffusion?",
+          "url": "https://aws.amazon.com/what-is/stable-diffusion/"
+        },
+        {
+          "title": "What is generative AI?",
+          "url": "https://aws.amazon.com/what-is/generative-ai/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-006",
+    "domain": "genai",
+    "topic": "Model Architectures",
+    "tags": [
+      "gan"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A research paper describes a generative model built from two neural networks trained together: one network creates synthetic images, and the other tries to tell synthetic images from real ones. Each network improves by competing with the other.",
+    "prompt": "Which type of model is described?",
+    "options": [
+      {
+        "key": "A",
+        "text": "A k-nearest neighbors model",
+        "correct": false,
+        "why": "k-NN classifies points by their nearest neighbors. It does not generate new data."
+      },
+      {
+        "key": "B",
+        "text": "A decision tree ensemble",
+        "correct": false,
+        "why": "Tree ensembles are traditional ML models for prediction and do not generate images."
+      },
+      {
+        "key": "C",
+        "text": "A generative adversarial network (GAN)",
+        "correct": true,
+        "why": "A GAN pairs a generator with a discriminator. The adversarial competition pushes the generator to produce increasingly realistic outputs."
+      },
+      {
+        "key": "D",
+        "text": "A transformer encoder",
+        "correct": false,
+        "why": "A transformer encoder is a single network using self-attention. It does not involve two competing networks."
+      }
+    ],
+    "explanation": {
+      "answer": "A generative adversarial network (GAN) has a generator that creates synthetic data and a discriminator that judges whether data is real or generated. Training them against each other improves realism.",
+      "concept": "GANs, variational autoencoders, diffusion models and transformers are the main generative architectures. Diffusion and transformers dominate current image and text generation.",
+      "examTip": "Two networks competing (generator vs discriminator) = GAN.",
+      "references": [
+        {
+          "title": "What is a GAN?",
+          "url": "https://aws.amazon.com/what-is/gan/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-007",
+    "domain": "genai",
+    "topic": "Foundation Models",
+    "tags": [
+      "foundation-model",
+      "adaptability"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A company's architect describes a model that was trained on a very broad dataset and can be adapted to many downstream tasks, such as summarization, classification and question answering, rather than being built for one task.",
+    "prompt": "What is this kind of model called?",
+    "options": [
+      {
+        "key": "A",
+        "text": "A single-purpose classifier",
+        "correct": false,
+        "why": "A single-purpose classifier is trained for one task, the opposite of a broadly adaptable model."
+      },
+      {
+        "key": "B",
+        "text": "A feature store",
+        "correct": false,
+        "why": "A feature store holds engineered features for ML. It is not a model."
+      },
+      {
+        "key": "C",
+        "text": "A rule engine",
+        "correct": false,
+        "why": "A rule engine executes hand-written rules and is not trained on broad data."
+      },
+      {
+        "key": "D",
+        "text": "A foundation model",
+        "correct": true,
+        "why": "Foundation models are large models pre-trained on broad data that serve as a starting point for many tasks."
+      }
+    ],
+    "explanation": {
+      "answer": "A foundation model (FM) is a large model pre-trained on vast, broad data, typically with self-supervised learning. It can be adapted to many tasks through prompting, retrieval augmented generation or fine-tuning.",
+      "concept": "Large language models are FMs for text. Multimodal FMs handle several data types, and diffusion-based FMs generate images.",
+      "examTip": "Broad pre-training + many downstream tasks = foundation model.",
+      "references": [
+        {
+          "title": "What are foundation models?",
+          "url": "https://aws.amazon.com/what-is/foundation-models/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-008",
+    "domain": "genai",
+    "topic": "FM Lifecycle",
+    "tags": [
+      "fm-lifecycle"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A team documents the lifecycle of building a generative AI solution based on a foundation model.",
+    "prompt": "Which sequence BEST represents the foundation model lifecycle?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Data selection, model selection, pre-training, fine-tuning, evaluation, deployment, feedback",
+        "correct": true,
+        "why": "This follows the logical order: choose data and model, pre-train, adapt with fine-tuning, evaluate, deploy, then gather feedback to improve."
+      },
+      {
+        "key": "B",
+        "text": "Evaluation, deployment, model selection, fine-tuning, data selection",
+        "correct": false,
+        "why": "Evaluation and deployment come after models are selected and adapted, not first."
+      },
+      {
+        "key": "C",
+        "text": "Fine-tuning, pre-training, feedback, deployment, data selection",
+        "correct": false,
+        "why": "Pre-training must happen before fine-tuning, and data selection comes at the start."
+      },
+      {
+        "key": "D",
+        "text": "Deployment, pre-training, data selection, feedback, evaluation",
+        "correct": false,
+        "why": "A model cannot be deployed before it exists, and data selection must come before pre-training."
+      }
+    ],
+    "explanation": {
+      "answer": "The FM lifecycle typically includes data selection, model selection, pre-training, fine-tuning (or other adaptation), evaluation, deployment and feedback. Feedback from users and monitoring loops back into further improvements.",
+      "concept": "Most organizations skip pre-training by selecting an existing pre-trained FM, then adapt it with prompting, RAG or fine-tuning.",
+      "examTip": "Data → model → pre-train → fine-tune → evaluate → deploy → feedback.",
+      "references": [
+        {
+          "title": "What are foundation models?",
+          "url": "https://aws.amazon.com/what-is/foundation-models/"
+        },
+        {
+          "title": "Generative AI Lens: AWS Well-Architected",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/generative-ai-lens.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-009",
+    "domain": "genai",
+    "topic": "Token Pricing",
+    "tags": [
+      "token-pricing",
+      "cost"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A chatbot built on an on-demand foundation model costs more than expected. Analysis shows that every request includes a 6,000-token system prompt and the full chat history, while responses average only 150 tokens.",
+    "prompt": "Which change would MOST directly reduce inference cost?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Increase the temperature setting",
+        "correct": false,
+        "why": "Temperature changes how random the output is. It does not reduce the number of tokens billed."
+      },
+      {
+        "key": "B",
+        "text": "Reduce the number of input tokens per request, for example by shortening the system prompt and summarizing older chat history",
+        "correct": true,
+        "why": "On-demand FMs are billed per input and output token. Most tokens here are input, so trimming them lowers cost directly."
+      },
+      {
+        "key": "C",
+        "text": "Switch to a model with a larger context window",
+        "correct": false,
+        "why": "A larger context window allows more tokens but does not make each token cheaper. It may even encourage sending more tokens."
+      },
+      {
+        "key": "D",
+        "text": "Ask users to type longer messages",
+        "correct": false,
+        "why": "Longer messages add input tokens and increase cost."
+      }
+    ],
+    "explanation": {
+      "answer": "With token-based pricing, cost depends on the number of input tokens sent and output tokens generated. Long system prompts and full conversation histories inflate input tokens on every call, so reducing them (or caching repeated prefixes with prompt caching) lowers cost and often latency.",
+      "concept": "Input and output tokens are usually priced differently, with output tokens typically costing more per token. More tokens also increase latency.",
+      "examTip": "Token pricing: fewer tokens in and out = lower cost and faster responses.",
+      "references": [
+        {
+          "title": "Amazon Bedrock pricing",
+          "url": "https://aws.amazon.com/bedrock/pricing/"
+        },
+        {
+          "title": "Prompt caching for faster model inference",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-caching.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-010",
+    "domain": "genai",
+    "topic": "Token Pricing",
+    "tags": [
+      "context-window",
+      "tokens"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A user pastes a very long contract into a chatbot and receives an error saying the input is too long for the model.",
+    "prompt": "Which model limit has been exceeded?",
+    "options": [
+      {
+        "key": "A",
+        "text": "The model's temperature",
+        "correct": false,
+        "why": "Temperature is a setting that controls randomness. It is not a size limit."
+      },
+      {
+        "key": "B",
+        "text": "The model's training dataset size",
+        "correct": false,
+        "why": "Training data size is fixed during training and does not limit a single request."
+      },
+      {
+        "key": "C",
+        "text": "The model's context window, measured in tokens",
+        "correct": true,
+        "why": "The context window is the maximum number of tokens the model can process in one request, including input and generated output."
+      },
+      {
+        "key": "D",
+        "text": "The model's number of parameters",
+        "correct": false,
+        "why": "Parameter count describes the model's size, not how much text a request can contain."
+      }
+    ],
+    "explanation": {
+      "answer": "The context window is the maximum number of tokens a model can consider at once, covering the prompt, any included documents and history, and the generated response. Exceeding it causes errors or truncation.",
+      "concept": "Workarounds include chunking documents and retrieving only relevant parts (RAG), summarizing earlier content, or choosing a model with a larger context window, which may cost more.",
+      "examTip": "\"Input too long\" = context window (token limit).",
+      "references": [
+        {
+          "title": "What is a large language model?",
+          "url": "https://aws.amazon.com/what-is/large-language-model/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-011",
+    "domain": "genai",
+    "topic": "GenAI Use Cases",
+    "tags": [
+      "summarization",
+      "use-case"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A legal firm's associates spend hours reading long deposition transcripts to produce one-page overviews for partners.",
+    "prompt": "Which generative AI use case addresses this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Speech synthesis",
+        "correct": false,
+        "why": "Speech synthesis reads text aloud. It does not shorten it."
+      },
+      {
+        "key": "B",
+        "text": "Anomaly detection",
+        "correct": false,
+        "why": "Anomaly detection finds unusual data points and does not produce written overviews."
+      },
+      {
+        "key": "C",
+        "text": "Image generation",
+        "correct": false,
+        "why": "Image generation creates pictures. It does not condense long transcripts."
+      },
+      {
+        "key": "D",
+        "text": "Text summarization",
+        "correct": true,
+        "why": "Summarization condenses long documents into concise overviews, one of the most common LLM business use cases."
+      }
+    ],
+    "explanation": {
+      "answer": "Summarization uses LLMs to condense long text into key points, saving time for knowledge workers. Summaries of legal, medical or financial content should still be reviewed by professionals because models can omit or misstate details.",
+      "concept": "Other common generative AI use cases: content creation, chat assistants, translation, code generation, search and question answering, image, audio and video generation, and recommendations.",
+      "examTip": "Long text → short overview = summarization.",
+      "references": [
+        {
+          "title": "What is generative AI?",
+          "url": "https://aws.amazon.com/what-is/generative-ai/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-012",
+    "domain": "genai",
+    "topic": "GenAI Use Cases",
+    "tags": [
+      "code-generation",
+      "use-case"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A software team wants AI assistance that suggests code, writes unit tests and explains unfamiliar code inside their development environment.",
+    "prompt": "Which generative AI use case is this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Code generation and developer assistance",
+        "correct": true,
+        "why": "Generative AI models trained on code can suggest, write, explain and test code, which is a major productivity use case."
+      },
+      {
+        "key": "B",
+        "text": "Speech recognition",
+        "correct": false,
+        "why": "Speech recognition converts audio to text and does not write or explain code."
+      },
+      {
+        "key": "C",
+        "text": "Demand forecasting",
+        "correct": false,
+        "why": "Forecasting predicts future quantities and does not help write code."
+      },
+      {
+        "key": "D",
+        "text": "Image moderation",
+        "correct": false,
+        "why": "Image moderation flags unsafe images and has nothing to do with programming."
+      }
+    ],
+    "explanation": {
+      "answer": "Code generation is a leading generative AI use case. AI coding assistants and agentic development environments (such as Kiro and Amazon Q Developer) suggest code, generate tests, explain code and help implement features.",
+      "concept": "Generated code should be reviewed, tested and scanned for security issues and license concerns before use.",
+      "examTip": "Suggesting, writing or explaining code = code generation use case.",
+      "references": [
+        {
+          "title": "What is Amazon Q Developer?",
+          "url": "https://docs.aws.amazon.com/amazonq/latest/qdeveloper-ug/what-is.html"
+        },
+        {
+          "title": "Kiro documentation",
+          "url": "https://kiro.dev/docs/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-013",
+    "domain": "genai",
+    "topic": "Context Engineering",
+    "tags": [
+      "context-engineering",
+      "context-window"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "An assistant gives inconsistent answers. The team finds that its context window is crowded with outdated conversation turns, raw tool outputs and irrelevant documents, while the most important instructions and facts are sometimes missing.",
+    "prompt": "Which practice BEST addresses this problem?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Increasing the temperature so the model explores more answers",
+        "correct": false,
+        "why": "Higher temperature adds randomness and would make answers less consistent, not more."
+      },
+      {
+        "key": "B",
+        "text": "Context engineering: deliberately selecting, ordering, summarizing and limiting what goes into the context, such as relevant retrieved facts, concise memory and essential instructions",
+        "correct": true,
+        "why": "Context engineering curates the information the model sees at each step, so the right instructions, facts and history are present without noise."
+      },
+      {
+        "key": "C",
+        "text": "Pre-training a new model from scratch",
+        "correct": false,
+        "why": "Pre-training is extremely costly and does not fix what is placed in the context window at inference time."
+      },
+      {
+        "key": "D",
+        "text": "Removing the system prompt to free up space",
+        "correct": false,
+        "why": "The system prompt carries key instructions. Removing it makes behavior worse."
+      }
+    ],
+    "explanation": {
+      "answer": "Context engineering is the practice of designing and managing everything that fills a model's context window: system instructions, retrieved knowledge, conversation memory, tool definitions and tool results. Curating and compressing this context improves accuracy, consistency, latency and cost.",
+      "concept": "Prompt engineering focuses on how a single prompt is worded. Context engineering covers the whole information pipeline that assembles the prompt, which is critical for agents and long conversations.",
+      "examTip": "Right information, right amount, right order in the context window = context engineering.",
+      "references": [
+        {
+          "title": "Generative AI Lens: AWS Well-Architected",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/generative-ai-lens.html"
+        },
+        {
+          "title": "Agentic AI patterns (AWS Prescriptive Guidance)",
+          "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/agentic-ai-patterns/introduction.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-014",
+    "domain": "genai",
+    "topic": "Foundation Models",
+    "tags": [
+      "multimodal"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A retailer wants a single model that can read a product photo and its description, then generate an improved listing title and a short video advertisement.",
+    "prompt": "What type of model capability is needed?",
+    "options": [
+      {
+        "key": "A",
+        "text": "A regression model",
+        "correct": false,
+        "why": "Regression predicts numbers and cannot interpret images or generate media."
+      },
+      {
+        "key": "B",
+        "text": "A text-only language model",
+        "correct": false,
+        "why": "A text-only model cannot read the photo or generate video."
+      },
+      {
+        "key": "C",
+        "text": "Multimodal generative AI",
+        "correct": true,
+        "why": "Multimodal models process and generate multiple data types, such as images, text and video."
+      },
+      {
+        "key": "D",
+        "text": "A clustering model",
+        "correct": false,
+        "why": "Clustering groups data and does not generate titles or videos."
+      }
+    ],
+    "explanation": {
+      "answer": "Multimodal models work across data types. Some accept images, video and text as input; others generate images or video. Combining understanding and generation across modalities enables use cases such as automated product content.",
+      "concept": "Amazon Bedrock provides multimodal models, including Amazon Nova models for understanding text, images and video and for generating images and video.",
+      "examTip": "Several data types in the same task = multimodal.",
+      "references": [
+        {
+          "title": "What is Amazon Nova?",
+          "url": "https://docs.aws.amazon.com/nova/latest/userguide/what-is-nova.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-015",
+    "domain": "genai",
+    "topic": "Tokens & Embeddings",
+    "tags": [
+      "embeddings",
+      "similarity"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "An engineer stores embeddings for 1 million support articles. When a new question arrives, the system converts it to an embedding and returns the articles whose vectors are closest to it.",
+    "prompt": "What is this retrieval technique called?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Reinforcement learning",
+        "correct": false,
+        "why": "Reinforcement learning trains agents with rewards and is not a retrieval method."
+      },
+      {
+        "key": "B",
+        "text": "Keyword (lexical) search",
+        "correct": false,
+        "why": "Keyword search matches exact words. Comparing vectors by distance is a different technique."
+      },
+      {
+        "key": "C",
+        "text": "Model distillation",
+        "correct": false,
+        "why": "Distillation trains a smaller model from a larger one and does not retrieve documents."
+      },
+      {
+        "key": "D",
+        "text": "Vector similarity (semantic) search",
+        "correct": true,
+        "why": "Comparing the query embedding with stored embeddings by distance or cosine similarity finds the semantically closest articles."
+      }
+    ],
+    "explanation": {
+      "answer": "Vector similarity search, also called semantic search or k-nearest neighbor (k-NN) search, finds the stored vectors closest to a query vector. Because embeddings capture meaning, it retrieves relevant content even when wording differs.",
+      "concept": "Hybrid search combines keyword and vector search to get the benefits of both exact matching and semantic matching.",
+      "examTip": "Closest vectors to the query embedding = vector (semantic) similarity search.",
+      "references": [
+        {
+          "title": "k-NN search in Amazon OpenSearch Service",
+          "url": "https://docs.aws.amazon.com/opensearch-service/latest/developerguide/knn.html"
+        },
+        {
+          "title": "What is a vector database?",
+          "url": "https://aws.amazon.com/what-is/vector-databases/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-016",
+    "domain": "genai",
+    "topic": "Prompt Basics",
+    "tags": [
+      "prompt-engineering"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A marketing analyst gets vague answers from an LLM. A colleague suggests rewriting the requests with clear instructions, the target audience, the desired format and an example of a good answer.",
+    "prompt": "What is this practice called?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Prompt engineering",
+        "correct": true,
+        "why": "Prompt engineering is designing inputs (instructions, context, examples, format) to guide a model toward better outputs without retraining it."
+      },
+      {
+        "key": "B",
+        "text": "Data labeling",
+        "correct": false,
+        "why": "Data labeling attaches answers to training examples. It does not improve requests to a deployed model."
+      },
+      {
+        "key": "C",
+        "text": "Fine-tuning",
+        "correct": false,
+        "why": "Fine-tuning changes model weights with training data. Rewriting requests does not change the model."
+      },
+      {
+        "key": "D",
+        "text": "Pre-training",
+        "correct": false,
+        "why": "Pre-training builds a model from scratch on huge datasets, which is unrelated to improving individual requests."
+      }
+    ],
+    "explanation": {
+      "answer": "Prompt engineering is crafting and refining prompts, including instructions, context, examples, constraints and output format, to steer a foundation model's responses. It is the fastest and cheapest way to improve output quality.",
+      "concept": "Domain 3 covers prompt techniques in depth: zero-shot, few-shot, chain-of-thought, prompt templates and negative prompts.",
+      "examTip": "Better answers by changing the input, not the model = prompt engineering.",
+      "references": [
+        {
+          "title": "What is prompt engineering?",
+          "url": "https://aws.amazon.com/what-is/prompt-engineering/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-017",
+    "domain": "genai",
+    "topic": "GenAI Use Cases",
+    "tags": [
+      "customer-service",
+      "ai-assistant"
+    ],
+    "difficulty": "easy",
+    "type": "multi",
+    "selectCount": 2,
+    "stem": "A bank is brainstorming generative AI projects.",
+    "prompt": "Which ideas are generative AI use cases? (Select TWO.)",
+    "options": [
+      {
+        "key": "A",
+        "text": "A batch job that sums daily transaction totals",
+        "correct": false,
+        "why": "Summing numbers is deterministic arithmetic, not generative AI."
+      },
+      {
+        "key": "B",
+        "text": "Sorting transactions by date",
+        "correct": false,
+        "why": "Sorting is a deterministic data operation that standard code handles perfectly."
+      },
+      {
+        "key": "C",
+        "text": "A virtual assistant that answers customer questions in natural, conversational language",
+        "correct": true,
+        "why": "Conversational assistants generate natural-language responses, a core generative AI use case."
+      },
+      {
+        "key": "D",
+        "text": "Encrypting customer records at rest",
+        "correct": false,
+        "why": "Encryption is a security control, not a generative AI use case."
+      },
+      {
+        "key": "E",
+        "text": "Drafting personalized marketing emails for different customer segments",
+        "correct": true,
+        "why": "Creating new, tailored text content is a generative AI task."
+      }
+    ],
+    "explanation": {
+      "answer": "Generative AI use cases involve creating content or conversing: AI assistants and chatbots, customer service agents, personalized content, summarization, translation, code generation, search and question answering, and media generation.",
+      "concept": "Deterministic operations (arithmetic, sorting, encryption) are handled by standard software, not generative models.",
+      "examTip": "Generative AI produces new content or natural conversation.",
+      "references": [
+        {
+          "title": "What is generative AI?",
+          "url": "https://aws.amazon.com/what-is/generative-ai/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-018",
+    "domain": "genai",
+    "topic": "Foundation Models",
+    "tags": [
+      "pre-training",
+      "fine-tuning"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A product owner asks how pre-training differs from fine-tuning for foundation models.",
+    "prompt": "Which statement is correct?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Pre-training uses a small labeled dataset; fine-tuning uses huge unlabeled datasets.",
+        "correct": false,
+        "why": "This is reversed. Pre-training uses massive, broad, mostly unlabeled data; fine-tuning uses a smaller, task-specific dataset."
+      },
+      {
+        "key": "B",
+        "text": "Pre-training builds general capabilities from massive broad data; fine-tuning further trains the pre-trained model on a smaller, targeted dataset to specialize it.",
+        "correct": true,
+        "why": "Pre-training gives the model broad knowledge, and fine-tuning adapts it to a domain, task or style with far less data and compute."
+      },
+      {
+        "key": "C",
+        "text": "Pre-training and fine-tuning are both done at inference time.",
+        "correct": false,
+        "why": "Both are training processes that update model weights. Inference uses the trained model without updating it."
+      },
+      {
+        "key": "D",
+        "text": "Fine-tuning creates a model from scratch, and pre-training adjusts an existing model.",
+        "correct": false,
+        "why": "This swaps the definitions. Pre-training builds the base model; fine-tuning adapts it."
+      }
+    ],
+    "explanation": {
+      "answer": "Pre-training trains a foundation model from scratch on enormous, diverse datasets, usually with self-supervised learning, creating general capabilities. Fine-tuning continues training that model on a smaller, curated dataset to specialize it for particular tasks, domains or styles.",
+      "concept": "Fine-tuning is far cheaper than pre-training but still costs more than prompt engineering or RAG, and the fine-tuned model must be hosted and maintained.",
+      "examTip": "Pre-training = broad and huge, from scratch. Fine-tuning = narrow and smaller, adapts an existing model.",
+      "references": [
+        {
+          "title": "Customize your model (Amazon Bedrock)",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/custom-models.html"
+        },
+        {
+          "title": "What are foundation models?",
+          "url": "https://aws.amazon.com/what-is/foundation-models/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-019",
+    "domain": "genai",
+    "topic": "GenAI Use Cases",
+    "tags": [
+      "search",
+      "recommendation"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "An online furniture store wants shoppers to type requests such as \"cozy reading chair for a small apartment under $300\" and see relevant products, even when product descriptions use different wording.",
+    "prompt": "Which generative AI capability BEST supports this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Exact keyword matching only",
+        "correct": false,
+        "why": "Exact keyword matching misses products that use different words with the same meaning."
+      },
+      {
+        "key": "B",
+        "text": "A GAN that generates new furniture images",
+        "correct": false,
+        "why": "Generating images does not retrieve real products that match a request."
+      },
+      {
+        "key": "C",
+        "text": "Semantic search using embeddings of product descriptions and shopper queries",
+        "correct": true,
+        "why": "Embeddings capture meaning, so a query about a cozy, compact reading chair can match products described differently."
+      },
+      {
+        "key": "D",
+        "text": "A text-to-speech engine",
+        "correct": false,
+        "why": "Text to speech reads text aloud and does not find products."
+      }
+    ],
+    "explanation": {
+      "answer": "Semantic search embeds both the catalog and the shopper's query into vectors and returns the closest matches by meaning. Filters such as price can be combined with vector search, and an LLM can explain why products fit.",
+      "concept": "Generative AI improves search and recommendations through embeddings, natural language understanding of complex requests, and generated explanations.",
+      "examTip": "Natural-language shopping queries that must match by meaning = semantic search with embeddings.",
+      "references": [
+        {
+          "title": "What are embeddings in machine learning?",
+          "url": "https://aws.amazon.com/what-is/embeddings-in-machine-learning/"
+        },
+        {
+          "title": "What is a vector database?",
+          "url": "https://aws.amazon.com/what-is/vector-databases/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-020",
+    "domain": "genai",
+    "topic": "Tokens & Embeddings",
+    "tags": [
+      "embedding-model",
+      "titan"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A team building a RAG application on Amazon Bedrock needs to convert its document chunks into vectors before storing them.",
+    "prompt": "Which kind of model should the team use for this step?",
+    "options": [
+      {
+        "key": "A",
+        "text": "A speech recognition model",
+        "correct": false,
+        "why": "Speech recognition converts audio to text. The documents are already text and need to be turned into vectors."
+      },
+      {
+        "key": "B",
+        "text": "A text-generation model with high temperature",
+        "correct": false,
+        "why": "Text-generation models produce words, and temperature only affects randomness. Vectors come from embedding models."
+      },
+      {
+        "key": "C",
+        "text": "An image-generation model",
+        "correct": false,
+        "why": "Image-generation models create pictures, not vector representations of text."
+      },
+      {
+        "key": "D",
+        "text": "A text embedding model, such as Amazon Titan Text Embeddings",
+        "correct": true,
+        "why": "Embedding models output vectors that represent meaning, which is exactly what is stored and searched in a RAG application."
+      }
+    ],
+    "explanation": {
+      "answer": "RAG uses two kinds of models: an embedding model to convert documents and queries into vectors for retrieval, and a generation model (an LLM) to write the answer from the retrieved context. Amazon Bedrock offers embedding models such as Amazon Titan Text Embeddings and Cohere Embed.",
+      "concept": "The same embedding model must be used for both documents and queries so that their vectors are comparable.",
+      "examTip": "Turning text into vectors = embedding model. Writing the answer = text-generation model.",
+      "references": [
+        {
+          "title": "Amazon Titan Text Embeddings models",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/titan-embedding-models.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-021",
+    "domain": "genai",
+    "topic": "GenAI Use Cases",
+    "tags": [
+      "translation",
+      "localization"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A software company must localize marketing copy into 15 languages. Beyond literal translation, it wants the tone adapted to each culture and idioms rewritten naturally.",
+    "prompt": "Why might a generative AI model be useful here alongside or instead of traditional machine translation?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Generative models can follow instructions to adapt tone, style and idioms for each audience, not only translate word meaning.",
+        "correct": true,
+        "why": "LLMs can be prompted to rewrite content for cultural context and brand voice, going beyond literal translation."
+      },
+      {
+        "key": "B",
+        "text": "Generative models guarantee legally accurate translations without review.",
+        "correct": false,
+        "why": "No model guarantees accuracy. Important content still needs human review."
+      },
+      {
+        "key": "C",
+        "text": "Generative models only work with images.",
+        "correct": false,
+        "why": "LLMs work with text, and many models are multimodal."
+      },
+      {
+        "key": "D",
+        "text": "Generative models cannot work with languages other than English.",
+        "correct": false,
+        "why": "Many foundation models are multilingual and handle many languages."
+      }
+    ],
+    "explanation": {
+      "answer": "Generative AI supports translation and localization: multilingual LLMs can translate while following instructions about tone, formality, brand voice and cultural adaptation. Purpose-built services such as Amazon Translate remain strong for fast, consistent, high-volume translation with custom terminology.",
+      "concept": "Choose based on need: literal, consistent, high-volume translation → Amazon Translate; creative adaptation and style control → a multilingual FM with prompts.",
+      "examTip": "Adapt tone or style while translating → generative AI with instructions.",
+      "references": [
+        {
+          "title": "What is Amazon Translate?",
+          "url": "https://docs.aws.amazon.com/translate/latest/dg/what-is.html"
+        },
+        {
+          "title": "What is generative AI?",
+          "url": "https://aws.amazon.com/what-is/generative-ai/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-022",
+    "domain": "genai",
+    "topic": "Token Pricing",
+    "tags": [
+      "output-tokens",
+      "max-tokens",
+      "cost"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A summarization application occasionally produces extremely long responses, which increases both latency and cost. The team wants to cap the length of each response.",
+    "prompt": "Which setting should the team adjust?",
+    "options": [
+      {
+        "key": "A",
+        "text": "The number of training epochs",
+        "correct": false,
+        "why": "Epochs apply to training, not to how long a deployed model's responses are."
+      },
+      {
+        "key": "B",
+        "text": "The maximum output tokens (max tokens) inference parameter",
+        "correct": true,
+        "why": "Max tokens limits how many tokens the model can generate per response, capping output cost and latency."
+      },
+      {
+        "key": "C",
+        "text": "The chunk overlap in the knowledge base",
+        "correct": false,
+        "why": "Chunk overlap affects how documents are split for retrieval, not response length."
+      },
+      {
+        "key": "D",
+        "text": "The embedding dimension",
+        "correct": false,
+        "why": "Embedding dimension affects vector size for retrieval, not the length of generated responses."
+      }
+    ],
+    "explanation": {
+      "answer": "The maximum tokens (or maximum output length) inference parameter sets an upper bound on the number of tokens generated. Because output tokens are billed and take time to generate, limiting them controls cost and latency. Prompt instructions about length also help produce complete answers within the cap.",
+      "concept": "Inference parameters include temperature, top-p and top-k (randomness), maximum tokens (length), and stop sequences (where to stop).",
+      "examTip": "Response too long → lower max tokens and ask for concise answers in the prompt.",
+      "references": [
+        {
+          "title": "Influence response generation with inference parameters",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/inference-parameters.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-023",
+    "domain": "genai",
+    "topic": "Foundation Models",
+    "tags": [
+      "llm",
+      "next-token-prediction"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A teacher wants a simple, accurate description of how a large language model generates a response.",
+    "prompt": "Which description is MOST accurate?",
+    "options": [
+      {
+        "key": "A",
+        "text": "It retrains itself on every user question before answering.",
+        "correct": false,
+        "why": "Inference does not change the model's weights. The model is not retrained per question."
+      },
+      {
+        "key": "B",
+        "text": "It looks up the answer in a database of verified facts and copies it exactly.",
+        "correct": false,
+        "why": "LLMs do not look up verified facts unless connected to retrieval. They generate text from learned patterns, which is why they can hallucinate."
+      },
+      {
+        "key": "C",
+        "text": "It generates text one token at a time, each time predicting a likely next token based on the prompt and the tokens generated so far.",
+        "correct": true,
+        "why": "LLMs are autoregressive: they predict the next token repeatedly, using probabilities learned during training, until a stop condition is reached."
+      },
+      {
+        "key": "D",
+        "text": "It runs a fixed set of hand-written grammar rules.",
+        "correct": false,
+        "why": "LLMs learn language patterns from data rather than following hand-written grammar rules."
+      }
+    ],
+    "explanation": {
+      "answer": "LLMs generate output autoregressively: given the input tokens, the model computes a probability distribution over possible next tokens, selects one (influenced by settings such as temperature and top-p), appends it, and repeats.",
+      "concept": "Because generation is probabilistic and based on patterns rather than verified facts, outputs can be nondeterministic and occasionally incorrect (hallucinations). Grounding with RAG improves factual accuracy.",
+      "examTip": "LLM = predict the next token, over and over.",
+      "references": [
+        {
+          "title": "What is a large language model?",
+          "url": "https://aws.amazon.com/what-is/large-language-model/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-024",
+    "domain": "genai",
+    "topic": "GenAI Use Cases",
+    "tags": [
+      "audio-generation",
+      "video-generation"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A small game studio wants to quickly create concept art, background music and short promotional video clips from text descriptions during early prototyping.",
+    "prompt": "Which statement about generative AI best fits this need?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Generative AI requires the studio to label millions of images first.",
+        "correct": false,
+        "why": "Pre-trained generative models can be used immediately through prompts without the studio labeling data."
+      },
+      {
+        "key": "B",
+        "text": "Generative AI can only produce text.",
+        "correct": false,
+        "why": "Generative AI also produces images, audio, video and code."
+      },
+      {
+        "key": "C",
+        "text": "Generative AI cannot be used for creative work.",
+        "correct": false,
+        "why": "Creative content generation is one of generative AI's most prominent uses."
+      },
+      {
+        "key": "D",
+        "text": "Generative AI can create images, audio and video from text prompts, speeding up prototyping.",
+        "correct": true,
+        "why": "Image, audio and video generation models turn text prompts into media, which helps teams iterate quickly on creative ideas."
+      }
+    ],
+    "explanation": {
+      "answer": "Generative AI covers many modalities: image generation, video generation, audio and music generation, as well as text and code. These help with prototyping, marketing and creative exploration.",
+      "concept": "Commercial use of generated media requires attention to licensing terms, intellectual property risk, and responsible-use features such as watermarking of AI-generated images.",
+      "examTip": "Generative AI = text, images, audio, video and code.",
+      "references": [
+        {
+          "title": "What is generative AI?",
+          "url": "https://aws.amazon.com/what-is/generative-ai/"
+        },
+        {
+          "title": "Amazon Nova",
+          "url": "https://aws.amazon.com/nova/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-025",
+    "domain": "genai",
+    "topic": "Tokens & Embeddings",
+    "tags": [
+      "vectors",
+      "dimensions"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "An architect is choosing an embedding configuration. Option 1 produces 1,024-dimension vectors; Option 2 produces 256-dimension vectors from the same model family.",
+    "prompt": "Which trade-off is MOST accurate?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Higher-dimension vectors can capture more nuance but cost more to store and search; lower dimensions reduce cost and latency at some possible loss of accuracy.",
+        "correct": true,
+        "why": "This is the usual trade-off: dimensionality balances retrieval quality against storage, memory and query cost."
+      },
+      {
+        "key": "B",
+        "text": "Dimension only matters for image-generation models.",
+        "correct": false,
+        "why": "Dimension is a property of embeddings for text, images and other data used in retrieval, not of image generators."
+      },
+      {
+        "key": "C",
+        "text": "Lower-dimension vectors always give more accurate retrieval.",
+        "correct": false,
+        "why": "Fewer dimensions usually capture somewhat less nuance. They are chosen to save storage and speed up search, not for better accuracy."
+      },
+      {
+        "key": "D",
+        "text": "Vector dimension has no effect on storage or search cost.",
+        "correct": false,
+        "why": "Larger vectors take more storage and memory and make similarity calculations more expensive."
+      }
+    ],
+    "explanation": {
+      "answer": "Embedding dimensionality is a trade-off between representational detail and efficiency. More dimensions can encode finer semantic distinctions, while fewer dimensions reduce vector storage, memory use and search latency. Some embedding models let you choose the output dimension.",
+      "concept": "Evaluate retrieval quality for your data at different dimensions before choosing. Storage choices (for example S3 Vectors versus in-memory vector indexes) also affect cost and latency.",
+      "examTip": "More dimensions = more nuance and more cost. Fewer = cheaper and faster, possibly less precise.",
+      "references": [
+        {
+          "title": "Amazon Titan Text Embeddings models",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/titan-embedding-models.html"
+        },
+        {
+          "title": "Amazon S3 Vectors",
+          "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-vectors.html"
+        }
+      ]
+    }
+  }
+]

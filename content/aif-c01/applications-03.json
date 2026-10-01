@@ -1,0 +1,1171 @@
+[
+  {
+    "id": "aif-app-049",
+    "domain": "applications",
+    "topic": "Prompt Techniques",
+    "tags": [
+      "zero-shot"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A developer asks an LLM: \"Classify the sentiment of this review as positive, negative or neutral: 'The delivery was late but the product is great.'\" The prompt includes no examples.",
+    "prompt": "Which prompting technique is this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Zero-shot prompting",
+        "correct": true,
+        "why": "Zero-shot prompting asks the model to perform a task with instructions only and no examples."
+      },
+      {
+        "key": "B",
+        "text": "Fine-tuning",
+        "correct": false,
+        "why": "Fine-tuning trains the model. This is a single prompt at inference time."
+      },
+      {
+        "key": "C",
+        "text": "Few-shot prompting",
+        "correct": false,
+        "why": "Few-shot prompting includes several examples, but this prompt includes none."
+      },
+      {
+        "key": "D",
+        "text": "Chain-of-thought prompting",
+        "correct": false,
+        "why": "Chain-of-thought asks the model to reason step by step. This prompt simply asks for a label."
+      }
+    ],
+    "explanation": {
+      "answer": "Zero-shot prompting gives the model a task description without examples, relying on its pre-trained knowledge. It works well for common tasks that the model already understands.",
+      "concept": "If zero-shot results are inconsistent, add one example (one-shot / single-shot) or several (few-shot) to demonstrate the expected output.",
+      "examTip": "No examples = zero-shot. One = one-shot. Several = few-shot.",
+      "references": [
+        {
+          "title": "What is prompt engineering?",
+          "url": "https://aws.amazon.com/what-is/prompt-engineering/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-050",
+    "domain": "applications",
+    "topic": "Prompt Techniques",
+    "tags": [
+      "few-shot"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A team wants an LLM to convert informal customer notes into a strict internal ticket format. Zero-shot results vary in format. They add three examples of notes with correctly formatted tickets to the prompt.",
+    "prompt": "Which technique are they now using?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Negative prompting",
+        "correct": false,
+        "why": "Negative prompting states what to avoid. These are positive examples of the desired output."
+      },
+      {
+        "key": "B",
+        "text": "Few-shot prompting",
+        "correct": true,
+        "why": "Including several input-output examples demonstrates the expected pattern, which is few-shot prompting."
+      },
+      {
+        "key": "C",
+        "text": "Zero-shot prompting",
+        "correct": false,
+        "why": "Zero-shot uses no examples, but the prompt now includes three."
+      },
+      {
+        "key": "D",
+        "text": "Continued pre-training",
+        "correct": false,
+        "why": "Continued pre-training is a training process on unlabeled data, not a prompting technique."
+      }
+    ],
+    "explanation": {
+      "answer": "Few-shot prompting includes a small number of examples in the prompt to show the model the desired format, style or reasoning. It is especially effective for enforcing consistent structure.",
+      "concept": "Choose diverse, representative examples, and keep them consistent with the instructions. Examples add tokens to every request.",
+      "examTip": "Inconsistent format → add few-shot examples.",
+      "references": [
+        {
+          "title": "What is prompt engineering?",
+          "url": "https://aws.amazon.com/what-is/prompt-engineering/"
+        },
+        {
+          "title": "Prompt engineering concepts (Amazon Bedrock)",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-engineering-guidelines.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-051",
+    "domain": "applications",
+    "topic": "Prompt Techniques",
+    "tags": [
+      "chain-of-thought",
+      "reasoning"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "An LLM often gets multi-step word problems wrong when asked for just the final answer. Accuracy improves when the prompt adds \"Think through the problem step by step before giving the final answer.\"",
+    "prompt": "Which technique does this use?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Negative prompting",
+        "correct": false,
+        "why": "Negative prompting tells the model what to avoid, not how to reason."
+      },
+      {
+        "key": "B",
+        "text": "Zero-shot classification",
+        "correct": false,
+        "why": "The key change is asking for step-by-step reasoning, not classification."
+      },
+      {
+        "key": "C",
+        "text": "Chain-of-thought prompting",
+        "correct": true,
+        "why": "Chain-of-thought prompting asks the model to reason through intermediate steps, which improves performance on multi-step problems."
+      },
+      {
+        "key": "D",
+        "text": "Prompt caching",
+        "correct": false,
+        "why": "Prompt caching reduces cost and latency for repeated prefixes and does not improve reasoning."
+      }
+    ],
+    "explanation": {
+      "answer": "Chain-of-thought (CoT) prompting encourages a model to produce intermediate reasoning steps before the answer. It improves accuracy on arithmetic, logic and multi-step tasks. It can be zero-shot (\"think step by step\") or few-shot (examples that show reasoning).",
+      "concept": "CoT increases output tokens, adding cost and latency. Many applications hide the reasoning and show only the final answer.",
+      "examTip": "Step-by-step reasoning in the prompt = chain-of-thought.",
+      "references": [
+        {
+          "title": "What is prompt engineering?",
+          "url": "https://aws.amazon.com/what-is/prompt-engineering/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-052",
+    "domain": "applications",
+    "topic": "Prompt Techniques",
+    "tags": [
+      "one-shot",
+      "single-shot"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A prompt includes exactly one example of a product description rewritten in the company's brand voice, followed by a new description to rewrite.",
+    "prompt": "Which technique is this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Distillation",
+        "correct": false,
+        "why": "Distillation trains a smaller model. It is not a prompting technique."
+      },
+      {
+        "key": "B",
+        "text": "Zero-shot prompting",
+        "correct": false,
+        "why": "Zero-shot includes no examples, but this prompt has one."
+      },
+      {
+        "key": "C",
+        "text": "Few-shot prompting with many examples",
+        "correct": false,
+        "why": "Few-shot typically means several examples. This prompt has only one."
+      },
+      {
+        "key": "D",
+        "text": "One-shot (single-shot) prompting",
+        "correct": true,
+        "why": "Providing exactly one example before the task is one-shot (single-shot) prompting."
+      }
+    ],
+    "explanation": {
+      "answer": "One-shot (single-shot) prompting provides one example of the desired input and output before the actual task. It can be enough to show the expected style or format with fewer tokens than few-shot prompting.",
+      "concept": "Choose the number of examples by testing: add examples until quality stops improving or token cost becomes too high.",
+      "examTip": "Exactly one example = one-shot / single-shot.",
+      "references": [
+        {
+          "title": "What is prompt engineering?",
+          "url": "https://aws.amazon.com/what-is/prompt-engineering/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-053",
+    "domain": "applications",
+    "topic": "Prompt Constructs",
+    "tags": [
+      "context",
+      "instruction"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A prompt reads: \"You are a customer-support assistant for an airline. Our baggage policy allows one free checked bag on international flights. Answer the customer's question in two sentences. Question: Can I check a bag for free to Tokyo?\"",
+    "prompt": "Which prompt components does this include?",
+    "options": [
+      {
+        "key": "A",
+        "text": "A role, context (the policy), an instruction (answer in two sentences) and the input question",
+        "correct": true,
+        "why": "The prompt sets a role, supplies relevant context, gives an explicit instruction with a constraint, and provides the input."
+      },
+      {
+        "key": "B",
+        "text": "A negative prompt only",
+        "correct": false,
+        "why": "There is no instruction about what to avoid."
+      },
+      {
+        "key": "C",
+        "text": "Only an input question",
+        "correct": false,
+        "why": "The prompt includes much more than the question: a role, context and instructions."
+      },
+      {
+        "key": "D",
+        "text": "Model weights and hyperparameters",
+        "correct": false,
+        "why": "Prompts do not contain weights or hyperparameters."
+      }
+    ],
+    "explanation": {
+      "answer": "Effective prompts commonly include: a role or persona, instructions (the task), context (background information or retrieved data), input data (the user's question), output format and constraints, and sometimes examples and negative instructions.",
+      "concept": "Clear separation of these parts, for example with headings or XML-style tags, helps the model distinguish instructions from data.",
+      "examTip": "Prompt anatomy: role, instruction, context, input, output format, examples.",
+      "references": [
+        {
+          "title": "Prompt engineering concepts (Amazon Bedrock)",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-engineering-guidelines.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-054",
+    "domain": "applications",
+    "topic": "Prompt Constructs",
+    "tags": [
+      "negative-prompt",
+      "image-generation"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A designer generating product images keeps getting results with blurry backgrounds and text watermarks. The image model supports a separate field describing what should not appear.",
+    "prompt": "What is this field called?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Embedding",
+        "correct": false,
+        "why": "Embeddings are vector representations, not instructions about what to avoid."
+      },
+      {
+        "key": "B",
+        "text": "Negative prompt",
+        "correct": true,
+        "why": "A negative prompt lists elements the model should avoid, such as blur or text, steering generation away from them."
+      },
+      {
+        "key": "C",
+        "text": "System prompt",
+        "correct": false,
+        "why": "A system prompt sets overall instructions or persona, not a dedicated list of elements to exclude."
+      },
+      {
+        "key": "D",
+        "text": "Stop sequence",
+        "correct": false,
+        "why": "Stop sequences end text generation and do not apply to image content."
+      }
+    ],
+    "explanation": {
+      "answer": "Negative prompts specify what the model should not include. They are common in image generation (for example \"blurry, watermark, text\") and the same idea appears in text prompts as explicit instructions about what to avoid.",
+      "concept": "In text prompts, positive instructions (what to do) are often more effective than long lists of what not to do, but clear constraints still help.",
+      "examTip": "What to exclude from the output = negative prompt.",
+      "references": [
+        {
+          "title": "Prompt engineering concepts (Amazon Bedrock)",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-engineering-guidelines.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-055",
+    "domain": "applications",
+    "topic": "Prompt Techniques",
+    "tags": [
+      "prompt-templates"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company has dozens of applications that summarize documents. Each team writes its own prompt from scratch, leading to inconsistent quality. The company wants a standardized prompt with placeholders, such as {{document}} and {{audience}}, filled in at runtime.",
+    "prompt": "What is this standardized prompt called?",
+    "options": [
+      {
+        "key": "A",
+        "text": "A vector index",
+        "correct": false,
+        "why": "A vector index stores embeddings for retrieval."
+      },
+      {
+        "key": "B",
+        "text": "A stop sequence",
+        "correct": false,
+        "why": "A stop sequence ends generation and is not a reusable prompt structure."
+      },
+      {
+        "key": "C",
+        "text": "A prompt template",
+        "correct": true,
+        "why": "A prompt template is a reusable prompt with variables that are filled in at runtime, giving consistent structure across applications."
+      },
+      {
+        "key": "D",
+        "text": "A training dataset",
+        "correct": false,
+        "why": "Training datasets are used to train models, not to structure runtime prompts."
+      }
+    ],
+    "explanation": {
+      "answer": "Prompt templates are reusable prompts with variables. They standardize instructions and formatting, make quality consistent and allow centralized improvements. Amazon Bedrock Prompt Management stores templates with variables and versions.",
+      "concept": "Templates combine well with few-shot examples and RAG (a variable for retrieved context).",
+      "examTip": "Reusable prompt with placeholders = prompt template.",
+      "references": [
+        {
+          "title": "Construct and store reusable prompts with Prompt management",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-management.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-056",
+    "domain": "applications",
+    "topic": "Prompt Best Practices",
+    "tags": [
+      "specificity",
+      "concision"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A user's prompt \"Write about our product\" produces generic, unhelpful text.",
+    "prompt": "Which rewrite follows prompt engineering best practices?",
+    "options": [
+      {
+        "key": "A",
+        "text": "\"Write about our product in any length, any tone, for anyone.\"",
+        "correct": false,
+        "why": "Removing constraints keeps the output generic."
+      },
+      {
+        "key": "B",
+        "text": "\"Write something good.\"",
+        "correct": false,
+        "why": "This is even vaguer and gives the model no useful direction."
+      },
+      {
+        "key": "C",
+        "text": "\"Product. Write. Now. Fast.\"",
+        "correct": false,
+        "why": "Terse fragments lack the context and constraints the model needs."
+      },
+      {
+        "key": "D",
+        "text": "\"Write a 100-word description of our SmartThermo thermostat for homeowners, highlighting energy savings and app control, in a friendly tone, as one paragraph.\"",
+        "correct": true,
+        "why": "This is specific about subject, audience, key points, length, tone and format, giving the model clear direction."
+      }
+    ],
+    "explanation": {
+      "answer": "Prompt best practices include being specific and concise: state the task, audience, key content, length, tone and format. Specific prompts produce more relevant, consistent outputs.",
+      "concept": "Other best practices: provide context, give examples, break complex tasks into steps, use delimiters for data, iterate with experimentation, and use guardrails.",
+      "examTip": "Vague prompt → be specific about task, audience, format, length, tone.",
+      "references": [
+        {
+          "title": "Prompt engineering concepts (Amazon Bedrock)",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-engineering-guidelines.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-057",
+    "domain": "applications",
+    "topic": "Prompt Best Practices",
+    "tags": [
+      "experimentation",
+      "iteration"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A team wants to improve a prompt's output quality in a disciplined way.",
+    "prompt": "Which practice is MOST effective?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Iteratively test prompt variations against a fixed set of representative inputs and compare results with defined quality criteria",
+        "correct": true,
+        "why": "Systematic experimentation with consistent test inputs and criteria shows which changes actually improve quality."
+      },
+      {
+        "key": "B",
+        "text": "Change the prompt randomly in production and hope for the best",
+        "correct": false,
+        "why": "Untested changes in production risk degrading quality for real users."
+      },
+      {
+        "key": "C",
+        "text": "Test each change on a single input only",
+        "correct": false,
+        "why": "A single input cannot show whether a change helps across the variety of real requests."
+      },
+      {
+        "key": "D",
+        "text": "Write the longest prompt possible",
+        "correct": false,
+        "why": "Longer is not automatically better; unnecessary length adds cost and can confuse the model."
+      }
+    ],
+    "explanation": {
+      "answer": "Prompt engineering is iterative: define success criteria, build a representative test set, try variations, measure results, and keep the best version. Versioning prompts makes this repeatable.",
+      "concept": "Amazon Bedrock Prompt Management supports comparing prompt variants, and Bedrock Model Evaluation can score outputs at scale.",
+      "examTip": "Improve prompts by experimenting against a test set, not by guessing.",
+      "references": [
+        {
+          "title": "Construct and store reusable prompts with Prompt management",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-management.html"
+        },
+        {
+          "title": "Evaluate the performance of Amazon Bedrock resources",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/evaluation.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-058",
+    "domain": "applications",
+    "topic": "Prompt Best Practices",
+    "tags": [
+      "output-format",
+      "json"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "An application parses LLM responses with code. The model sometimes returns prose instead of the JSON the code expects, causing errors.",
+    "prompt": "Which prompt change MOST directly addresses this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Ask the model to be creative",
+        "correct": false,
+        "why": "Creativity works against strict formatting."
+      },
+      {
+        "key": "B",
+        "text": "Specify the exact JSON schema in the instructions, include an example of valid output, and ask for JSON only with no extra text",
+        "correct": true,
+        "why": "Explicit format instructions plus an example make the expected structure unambiguous."
+      },
+      {
+        "key": "C",
+        "text": "Increase the temperature",
+        "correct": false,
+        "why": "More randomness makes format compliance less reliable."
+      },
+      {
+        "key": "D",
+        "text": "Remove all instructions and rely on the model to guess",
+        "correct": false,
+        "why": "Without instructions, the model has no reason to return JSON."
+      }
+    ],
+    "explanation": {
+      "answer": "When output must be machine-readable, state the exact format and schema, show an example, ask for only that output, and use low temperature. Validating outputs in code and retrying on failure adds robustness.",
+      "concept": "Some models and APIs also support structured output or tool-use schemas that constrain responses to a defined JSON structure.",
+      "examTip": "Need parseable output → explicit schema + example + low temperature + validation.",
+      "references": [
+        {
+          "title": "Prompt engineering concepts (Amazon Bedrock)",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-engineering-guidelines.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-059",
+    "domain": "applications",
+    "topic": "Prompt Best Practices",
+    "tags": [
+      "task-decomposition",
+      "prompt-chaining"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A single, very long prompt asks the model to extract data from a contract, check it against company policy, draft a summary and translate it into Spanish. Results are inconsistent.",
+    "prompt": "Which approach is MOST likely to improve reliability?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Remove the policy so there is less to check",
+        "correct": false,
+        "why": "The policy check is a required part of the task."
+      },
+      {
+        "key": "B",
+        "text": "Add more tasks to the same prompt",
+        "correct": false,
+        "why": "More tasks in one prompt increase confusion and inconsistency."
+      },
+      {
+        "key": "C",
+        "text": "Break the task into smaller steps, each with its own focused prompt, and pass outputs from one step to the next (prompt chaining)",
+        "correct": true,
+        "why": "Focused prompts per step are easier for the model to follow and allow checking intermediate results."
+      },
+      {
+        "key": "D",
+        "text": "Increase the temperature",
+        "correct": false,
+        "why": "Higher temperature adds randomness, which makes a long multi-part prompt even less consistent."
+      }
+    ],
+    "explanation": {
+      "answer": "Decomposing complex tasks into sequential, focused prompts (prompt chaining) improves reliability and makes each step testable. Workflows such as Amazon Bedrock Flows can orchestrate the chain.",
+      "concept": "Chaining also lets you use different models per step, for example a cheaper model for translation and a stronger model for policy reasoning.",
+      "examTip": "Complex multi-part prompt → split into a chain of focused prompts.",
+      "references": [
+        {
+          "title": "Amazon Bedrock Flows",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/flows.html"
+        },
+        {
+          "title": "What is prompt engineering?",
+          "url": "https://aws.amazon.com/what-is/prompt-engineering/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-060",
+    "domain": "applications",
+    "topic": "Prompt Best Practices",
+    "tags": [
+      "delimiters",
+      "structure"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A summarization prompt includes a long customer email. Sometimes the model treats sentences inside the email (such as \"Please reply in French\") as instructions to follow.",
+    "prompt": "Which prompt practice helps the model distinguish instructions from data?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use a higher temperature",
+        "correct": false,
+        "why": "Randomness does not help separate data from instructions."
+      },
+      {
+        "key": "B",
+        "text": "Put the email before any instructions with no separation",
+        "correct": false,
+        "why": "Mixing data and instructions without separation increases confusion."
+      },
+      {
+        "key": "C",
+        "text": "Increase max tokens",
+        "correct": false,
+        "why": "Output length does not affect how the model interprets embedded text."
+      },
+      {
+        "key": "D",
+        "text": "Wrap the email in clear delimiters or tags (for example <email>...</email>) and instruct the model to treat that content only as data to summarize",
+        "correct": true,
+        "why": "Delimiters separate untrusted data from instructions and make the model's task clearer, reducing accidental instruction following."
+      }
+    ],
+    "explanation": {
+      "answer": "Using delimiters or tags to separate instructions from input data is a prompt engineering best practice. It also helps mitigate prompt injection, where text inside data tries to override instructions, though it should be combined with other controls such as guardrails.",
+      "concept": "Treat all user-provided and retrieved content as untrusted data.",
+      "examTip": "Separate data from instructions with delimiters/tags.",
+      "references": [
+        {
+          "title": "Prompt engineering concepts (Amazon Bedrock)",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-engineering-guidelines.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-061",
+    "domain": "applications",
+    "topic": "Prompt Techniques",
+    "tags": [
+      "role-prompting",
+      "persona"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A prompt begins: \"You are an experienced pediatric nurse explaining things to worried parents in simple language.\"",
+    "prompt": "What is the purpose of this opening?",
+    "options": [
+      {
+        "key": "A",
+        "text": "It assigns a role or persona that shapes the tone, vocabulary and perspective of the response",
+        "correct": true,
+        "why": "Role prompting sets context for how the model should respond, influencing style and level of detail."
+      },
+      {
+        "key": "B",
+        "text": "It sets the temperature to zero",
+        "correct": false,
+        "why": "Temperature is an inference parameter, not set through prompt text."
+      },
+      {
+        "key": "C",
+        "text": "It retrains the model as a medical model",
+        "correct": false,
+        "why": "Prompts do not retrain models. The role only affects the current response."
+      },
+      {
+        "key": "D",
+        "text": "It certifies the response as medical advice",
+        "correct": false,
+        "why": "A persona does not make output authoritative or certified."
+      }
+    ],
+    "explanation": {
+      "answer": "Assigning a role or persona (often in a system prompt) guides the model's tone, audience awareness and framing. It is part of providing context in prompt engineering.",
+      "concept": "A persona does not make the model an expert or guarantee accuracy; high-stakes domains still need grounding and human review.",
+      "examTip": "\"You are a...\" = role/persona prompting.",
+      "references": [
+        {
+          "title": "What is prompt engineering?",
+          "url": "https://aws.amazon.com/what-is/prompt-engineering/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-062",
+    "domain": "applications",
+    "topic": "Prompt Techniques",
+    "tags": [
+      "techniques"
+    ],
+    "difficulty": "medium",
+    "type": "multi",
+    "selectCount": 2,
+    "stem": "A team is choosing prompt engineering techniques for two needs: (1) the model must follow a specific output format consistently, and (2) the model must solve multi-step logic problems more accurately.",
+    "prompt": "Which techniques address these needs? (Select TWO.)",
+    "options": [
+      {
+        "key": "A",
+        "text": "Using an image-generation model",
+        "correct": false,
+        "why": "Image generation is irrelevant to text format and logic tasks."
+      },
+      {
+        "key": "B",
+        "text": "Removing all instructions",
+        "correct": false,
+        "why": "Instructions are essential to communicate the task."
+      },
+      {
+        "key": "C",
+        "text": "Few-shot prompting with examples of the required format",
+        "correct": true,
+        "why": "Examples demonstrate the exact format, improving consistency."
+      },
+      {
+        "key": "D",
+        "text": "Raising temperature to the maximum",
+        "correct": false,
+        "why": "High randomness hurts both format consistency and reasoning accuracy."
+      },
+      {
+        "key": "E",
+        "text": "Chain-of-thought prompting for the logic problems",
+        "correct": true,
+        "why": "Step-by-step reasoning improves accuracy on multi-step problems."
+      }
+    ],
+    "explanation": {
+      "answer": "Few-shot prompting is effective for consistent formats and styles; chain-of-thought prompting is effective for multi-step reasoning. They can be combined, for example few-shot examples that include reasoning steps.",
+      "concept": "Prompt techniques: zero-shot, single-shot, few-shot, chain-of-thought and prompt templates, plus context and negative instructions.",
+      "examTip": "Format → few-shot. Reasoning → chain-of-thought.",
+      "references": [
+        {
+          "title": "What is prompt engineering?",
+          "url": "https://aws.amazon.com/what-is/prompt-engineering/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-063",
+    "domain": "applications",
+    "topic": "Prompt Best Practices",
+    "tags": [
+      "guardrails",
+      "best-practice"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A team relies only on a system-prompt instruction, \"Never discuss competitors' products\", to keep its assistant on-brand. Testers can still sometimes get it to discuss competitors.",
+    "prompt": "What is the BEST additional safeguard?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Remove the system prompt",
+        "correct": false,
+        "why": "This removes the existing instruction and weakens control further."
+      },
+      {
+        "key": "B",
+        "text": "Configure Amazon Bedrock Guardrails with a denied topic for competitor discussions, applied to inputs and outputs",
+        "correct": true,
+        "why": "Guardrails enforce policies independently of the prompt, adding a second layer that is harder to bypass."
+      },
+      {
+        "key": "C",
+        "text": "Repeat the instruction ten times in the prompt",
+        "correct": false,
+        "why": "Repetition adds tokens and is still a soft instruction that can be bypassed."
+      },
+      {
+        "key": "D",
+        "text": "Increase the temperature",
+        "correct": false,
+        "why": "Randomness makes behavior less predictable."
+      }
+    ],
+    "explanation": {
+      "answer": "Prompt instructions are a useful first layer but can be circumvented. Using guardrails as a prompt engineering best practice adds configurable, model-independent controls, such as denied topics, content filters and PII filters, on both user inputs and model outputs.",
+      "concept": "Defense in depth: clear prompts + guardrails + monitoring + human review where needed.",
+      "examTip": "Prompt instruction not enough → add Bedrock Guardrails (denied topics).",
+      "references": [
+        {
+          "title": "Detect and filter harmful content with Amazon Bedrock Guardrails",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-064",
+    "domain": "applications",
+    "topic": "Prompt Best Practices",
+    "tags": [
+      "discovery",
+      "experimentation"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A product team is not yet sure what an FM can do well for its legal-research use case. It wants to learn the model's strengths and weaknesses before designing the product.",
+    "prompt": "Which prompt engineering benefit does this describe?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Distillation: shrinking the model before testing it",
+        "correct": false,
+        "why": "Distillation is an optimization step, not an exploration method."
+      },
+      {
+        "key": "B",
+        "text": "Pre-training: building a new model to learn its abilities",
+        "correct": false,
+        "why": "Pre-training is costly and unnecessary to learn what an existing model can do."
+      },
+      {
+        "key": "C",
+        "text": "Discovery: using prompt experimentation to explore model capabilities and limitations for the use case",
+        "correct": true,
+        "why": "Prompting is a fast, cheap way to discover what a model can and cannot do before committing to a design."
+      },
+      {
+        "key": "D",
+        "text": "Data labeling: annotating training examples",
+        "correct": false,
+        "why": "Labeling prepares training data and does not explore model capabilities."
+      }
+    ],
+    "explanation": {
+      "answer": "Benefits of prompt engineering include response quality improvement, experimentation, guardrails and discovery. Discovery means exploring through prompts what the model handles well, where it fails, and which techniques help, informing product and model decisions.",
+      "concept": "Record findings as test cases; they become the evaluation dataset for later development.",
+      "examTip": "Explore what a model can do through prompts = discovery.",
+      "references": [
+        {
+          "title": "What is prompt engineering?",
+          "url": "https://aws.amazon.com/what-is/prompt-engineering/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-065",
+    "domain": "applications",
+    "topic": "Prompt Constructs",
+    "tags": [
+      "system-prompt",
+      "user-prompt"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "In a chat application, the developer configures persistent instructions about the assistant's role, rules and tone, and each user message is sent separately.",
+    "prompt": "Where should the persistent instructions go?",
+    "options": [
+      {
+        "key": "A",
+        "text": "In the embedding model configuration",
+        "correct": false,
+        "why": "Embedding configuration affects retrieval, not assistant behavior."
+      },
+      {
+        "key": "B",
+        "text": "In the model's training data",
+        "correct": false,
+        "why": "Changing training data requires retraining and is not how runtime instructions are set."
+      },
+      {
+        "key": "C",
+        "text": "In the stop sequence field",
+        "correct": false,
+        "why": "Stop sequences end generation and cannot hold instructions."
+      },
+      {
+        "key": "D",
+        "text": "In the system prompt, which sets behavior for the whole conversation",
+        "correct": true,
+        "why": "System prompts hold role, rules and tone that apply across turns, separate from user messages."
+      }
+    ],
+    "explanation": {
+      "answer": "Chat-oriented models separate system prompts (persistent instructions, persona and constraints) from user messages and assistant responses. Placing rules in the system prompt keeps behavior consistent across the conversation.",
+      "concept": "System prompts are still soft controls; combine them with guardrails for enforcement.",
+      "examTip": "Persistent role and rules = system prompt.",
+      "references": [
+        {
+          "title": "Prompt engineering concepts (Amazon Bedrock)",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-engineering-guidelines.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-066",
+    "domain": "applications",
+    "topic": "Prompt Best Practices",
+    "tags": [
+      "context",
+      "rag",
+      "quality"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "An assistant gives generic answers to questions about a company's refund policy because the model does not know the policy.",
+    "prompt": "Which prompt engineering construct addresses this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Providing context: include the relevant policy text in the prompt, for example through retrieval",
+        "correct": true,
+        "why": "Supplying the specific policy as context lets the model answer accurately instead of generically."
+      },
+      {
+        "key": "B",
+        "text": "Raising top-k",
+        "correct": false,
+        "why": "Top-k affects sampling diversity, not knowledge."
+      },
+      {
+        "key": "C",
+        "text": "Using a negative prompt only",
+        "correct": false,
+        "why": "Saying what not to do does not give the model the missing policy information."
+      },
+      {
+        "key": "D",
+        "text": "Shortening the prompt to one word",
+        "correct": false,
+        "why": "Less information makes answers even more generic."
+      }
+    ],
+    "explanation": {
+      "answer": "Context is one of the main prompt constructs: background information, documents or data the model needs for the task. Providing the actual policy text (manually or through RAG) enables specific, accurate answers.",
+      "concept": "Context engineering is the broader discipline of deciding what context to include and how to fit it within token limits.",
+      "examTip": "Model lacks needed information → add it as context.",
+      "references": [
+        {
+          "title": "What is prompt engineering?",
+          "url": "https://aws.amazon.com/what-is/prompt-engineering/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-067",
+    "domain": "applications",
+    "topic": "Prompt Techniques",
+    "tags": [
+      "chain-of-thought",
+      "cost"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "Adding chain-of-thought instructions improved accuracy on a reasoning task but increased average response length from 80 to 600 tokens.",
+    "prompt": "Which trade-off should the team consider?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Chain-of-thought reduces cost because answers are more accurate",
+        "correct": false,
+        "why": "Accuracy does not reduce token billing. Longer outputs cost more."
+      },
+      {
+        "key": "B",
+        "text": "Higher accuracy comes with more output tokens, increasing cost and latency; the team should decide whether the accuracy gain justifies it",
+        "correct": true,
+        "why": "Chain-of-thought produces reasoning text that is billed and takes time to generate."
+      },
+      {
+        "key": "C",
+        "text": "Chain-of-thought has no effect on latency",
+        "correct": false,
+        "why": "Every extra output token takes time to generate, so longer chain-of-thought responses increase latency."
+      },
+      {
+        "key": "D",
+        "text": "Chain-of-thought requires fine-tuning",
+        "correct": false,
+        "why": "It is a prompting technique and needs no training."
+      }
+    ],
+    "explanation": {
+      "answer": "Chain-of-thought improves reasoning accuracy at the expense of more output tokens, which raises cost and latency. Use it where accuracy matters most, and consider limiting reasoning length or using it only for complex requests.",
+      "concept": "Prompt techniques have cost implications just like model choice and customization.",
+      "examTip": "CoT = better reasoning, more tokens, higher cost and latency.",
+      "references": [
+        {
+          "title": "Amazon Bedrock pricing",
+          "url": "https://aws.amazon.com/bedrock/pricing/"
+        },
+        {
+          "title": "What is prompt engineering?",
+          "url": "https://aws.amazon.com/what-is/prompt-engineering/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-068",
+    "domain": "applications",
+    "topic": "Prompt Best Practices",
+    "tags": [
+      "multiple-comments",
+      "clarity"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A long prompt contains a single dense paragraph mixing rules, data and the task. A colleague suggests restructuring it into clearly labeled sections with separate short instructions, each covering one requirement.",
+    "prompt": "Why is this restructuring a best practice?",
+    "options": [
+      {
+        "key": "A",
+        "text": "It guarantees the model never makes mistakes",
+        "correct": false,
+        "why": "Better structure improves results but cannot guarantee perfection."
+      },
+      {
+        "key": "B",
+        "text": "It reduces the context window size",
+        "correct": false,
+        "why": "Prompt structure does not change the model's context window."
+      },
+      {
+        "key": "C",
+        "text": "Separating requirements into distinct, clearly labeled instructions makes each one easier for the model to identify and follow",
+        "correct": true,
+        "why": "Clear structure reduces ambiguity, so the model is less likely to miss or confuse requirements."
+      },
+      {
+        "key": "D",
+        "text": "It retrains the model with the new structure",
+        "correct": false,
+        "why": "Restructuring a prompt does not change model weights."
+      }
+    ],
+    "explanation": {
+      "answer": "Prompt best practices include specificity, concision and organizing instructions clearly, for example using multiple separate statements or comments for different requirements, headings, numbered steps and delimiters for data.",
+      "concept": "Well-structured prompts are also easier for teams to maintain, review and version.",
+      "examTip": "Dense paragraph → structured sections and separate instructions.",
+      "references": [
+        {
+          "title": "Prompt engineering concepts (Amazon Bedrock)",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-engineering-guidelines.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-069",
+    "domain": "applications",
+    "topic": "Prompt Techniques",
+    "tags": [
+      "few-shot",
+      "example-quality"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A few-shot prompt for classifying support tickets contains five examples, all labeled \"Billing\". The model now labels almost every new ticket as \"Billing\".",
+    "prompt": "What is the MOST likely cause and fix?",
+    "options": [
+      {
+        "key": "A",
+        "text": "The temperature is too low; increase it",
+        "correct": false,
+        "why": "Randomness does not correct biased examples and would make outputs less reliable."
+      },
+      {
+        "key": "B",
+        "text": "Remove the label names from the instructions",
+        "correct": false,
+        "why": "Without label names, the model does not know which categories exist."
+      },
+      {
+        "key": "C",
+        "text": "The model needs pre-training from scratch",
+        "correct": false,
+        "why": "The issue is in the prompt examples, not the base model."
+      },
+      {
+        "key": "D",
+        "text": "The examples are not representative; include balanced, diverse examples covering each category",
+        "correct": true,
+        "why": "Models imitate the examples they see. Examples from only one class bias the output toward that class."
+      }
+    ],
+    "explanation": {
+      "answer": "Few-shot examples strongly influence outputs. They should be representative and balanced across expected inputs and labels, and consistent with the instructions. Skewed examples bias predictions.",
+      "concept": "The same principle applies to fine-tuning data: representativeness and balance matter.",
+      "examTip": "Few-shot examples must be diverse and balanced.",
+      "references": [
+        {
+          "title": "What is prompt engineering?",
+          "url": "https://aws.amazon.com/what-is/prompt-engineering/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-070",
+    "domain": "applications",
+    "topic": "Prompt Best Practices",
+    "tags": [
+      "response-quality"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A manager asks why the team spends time on prompt engineering instead of immediately fine-tuning a model.",
+    "prompt": "Which reason is MOST accurate?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Prompt engineering can significantly improve response quality quickly and cheaply, without training, and should be tried before more costly approaches",
+        "correct": true,
+        "why": "Prompting needs no data preparation or training and often achieves the needed quality."
+      },
+      {
+        "key": "B",
+        "text": "Prompt engineering guarantees zero hallucinations",
+        "correct": false,
+        "why": "No technique guarantees zero hallucinations."
+      },
+      {
+        "key": "C",
+        "text": "Fine-tuning is impossible on AWS",
+        "correct": false,
+        "why": "Fine-tuning is supported in Amazon Bedrock and SageMaker AI."
+      },
+      {
+        "key": "D",
+        "text": "Prompt engineering permanently changes the model's weights",
+        "correct": false,
+        "why": "Prompts influence a single response only. They never change the model's weights."
+      }
+    ],
+    "explanation": {
+      "answer": "Prompt engineering is the fastest and least expensive way to improve FM responses. Teams typically iterate on prompts first, then add RAG for knowledge, and fine-tune only if prompting and RAG are insufficient.",
+      "concept": "Benefits of prompt engineering: response quality improvement, experimentation, guardrails and discovery.",
+      "examTip": "Try prompt engineering before fine-tuning.",
+      "references": [
+        {
+          "title": "What is prompt engineering?",
+          "url": "https://aws.amazon.com/what-is/prompt-engineering/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-071",
+    "domain": "applications",
+    "topic": "Prompt Techniques",
+    "tags": [
+      "prompt-chaining",
+      "self-check"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A team wants an LLM to draft an answer and then review its own draft against a checklist (accuracy, tone, completeness) before producing a final version.",
+    "prompt": "Which approach describes this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Batch inference",
+        "correct": false,
+        "why": "Batch inference is an execution mode, not a quality pattern."
+      },
+      {
+        "key": "B",
+        "text": "A multi-step prompting pattern in which the model generates a draft, critiques it against criteria and revises it",
+        "correct": true,
+        "why": "Generate-critique-revise patterns use additional prompting steps to improve quality."
+      },
+      {
+        "key": "C",
+        "text": "Model distillation",
+        "correct": false,
+        "why": "Distillation trains a smaller model and does not involve self-review at runtime."
+      },
+      {
+        "key": "D",
+        "text": "Continued pre-training",
+        "correct": false,
+        "why": "Continued pre-training is a training method, not a runtime review step."
+      }
+    ],
+    "explanation": {
+      "answer": "Self-review (generate, critique, revise) is a prompting pattern that improves output quality by adding steps where the model checks its draft against explicit criteria. It costs extra model calls and tokens.",
+      "concept": "A separate model can also act as the reviewer, which is similar to the LLM-as-a-judge evaluation approach.",
+      "examTip": "Draft → critique → revise = multi-step self-review prompting.",
+      "references": [
+        {
+          "title": "What is prompt engineering?",
+          "url": "https://aws.amazon.com/what-is/prompt-engineering/"
+        }
+      ]
+    }
+  }
+]

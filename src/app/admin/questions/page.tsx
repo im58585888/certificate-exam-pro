@@ -1,10 +1,9 @@
 import Link from "next/link";
-import { DOMAIN_LABEL } from "@/components/QuestionParts";
 import { requireAdmin } from "@/lib/auth";
 import { query } from "@/lib/db";
+import { DEFAULT_EXAM, EXAM_LIST, getExam } from "@/lib/exams";
 import { ensureBank, getQuestion, overrideState, questionsFor } from "@/lib/questions";
 
-const EXAM = "saa-c03";
 const MIN_SAMPLE = 20;
 
 type Flag = "easy" | "hard" | "reported";
@@ -14,6 +13,8 @@ export default async function AdminQuestions({ searchParams }: PageProps<"/admin
   await ensureBank(true);
   const sp = await searchParams;
   const str = (k: string) => (typeof sp[k] === "string" ? (sp[k] as string) : "");
+  const EXAM = getExam(str("exam")) ? str("exam") : DEFAULT_EXAM;
+  const exam = getExam(EXAM)!;
   const domain = str("domain"), flag = str("flag") as Flag | "", q = str("q").toLowerCase(), status = str("status");
 
   const stats = new Map((await query<{ question_id: string; n: number; pct: number; secs: number }>(
@@ -42,15 +43,17 @@ export default async function AdminQuestions({ searchParams }: PageProps<"/admin
   return (
     <div className="space-y-4">
       <form className="flex flex-wrap items-end gap-2">
+        <label className="text-sm"><span className="eyebrow">Exam</span>
+          <select className="input mt-1" name="exam" defaultValue={EXAM}>{EXAM_LIST.map((e) => <option key={e.slug} value={e.slug}>{e.code}</option>)}</select></label>
         <label className="text-sm"><span className="eyebrow">Search</span><input className="input mt-1" name="q" defaultValue={q} placeholder="id, topic or text" /></label>
         <label className="text-sm"><span className="eyebrow">Domain</span>
-          <select className="input mt-1" name="domain" defaultValue={domain}><option value="">All</option>{Object.entries(DOMAIN_LABEL).map(([k, v]) => <option key={k} value={k}>{v}</option>)}</select></label>
+          <select className="input mt-1" name="domain" defaultValue={domain}><option value="">All</option>{exam.domains.map((d) => <option key={d.id} value={d.id}>{d.short}</option>)}</select></label>
         <label className="text-sm"><span className="eyebrow">Flag</span>
           <select className="input mt-1" name="flag" defaultValue={flag}><option value="">Any</option><option value="reported">Has open reports</option><option value="hard">Under 30% correct</option><option value="easy">Over 95% correct</option></select></label>
         <label className="text-sm"><span className="eyebrow">Status</span>
           <select className="input mt-1" name="status" defaultValue={status}><option value="">Any</option><option value="edited">Edited</option><option value="disabled">Disabled</option></select></label>
         <button className="btn-primary">Filter</button>
-        <Link href="/admin/questions/new" className="btn-ghost ml-auto">+ New question</Link>
+        <Link href={`/admin/questions/new?exam=${EXAM}`} className="btn-ghost ml-auto">+ New {exam.code} question</Link>
       </form>
       <p className="text-sm text-muted">{rows.length} questions. Flags need at least {MIN_SAMPLE} answers. Very low accuracy often means a wrong or ambiguous answer key.</p>
       <div className="card overflow-x-auto">
@@ -64,7 +67,7 @@ export default async function AdminQuestions({ searchParams }: PageProps<"/admin
                   <span className="text-muted"> · {r.question.topic}</span>
                   <p className="line-clamp-2 text-soft">{r.question.prompt}</p>
                 </td>
-                <td className="py-3 text-soft">{DOMAIN_LABEL[r.question.domain]?.split(" ")[0]}</td>
+                <td className="py-3 text-soft">{exam.domains.find((d) => d.id === r.question.domain)?.short}</td>
                 <td className="py-3 text-right tabular-nums">{r.s?.n ?? 0}</td>
                 <td className={`py-3 text-right tabular-nums ${r.flags.includes("hard") ? "font-bold text-bad" : r.flags.includes("easy") ? "font-bold text-warn" : ""}`}>{r.s ? `${Math.round(r.s.pct * 100)}%` : "–"}</td>
                 <td className="py-3 text-right tabular-nums">{r.s ? `${Math.round(r.s.secs)}s` : "–"}</td>

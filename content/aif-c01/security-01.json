@@ -1,0 +1,1298 @@
+[
+  {
+    "id": "aif-sec-001",
+    "domain": "security",
+    "topic": "Access Control",
+    "tags": [
+      "iam",
+      "least-privilege",
+      "bedrock"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A company wants its developers to invoke only one specific foundation model in Amazon Bedrock and nothing else in the account.",
+    "prompt": "How should the company enforce this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Give developers the AdministratorAccess policy",
+        "correct": false,
+        "why": "Administrator access grants far more than needed, violating least privilege."
+      },
+      {
+        "key": "B",
+        "text": "Tell developers in an email which model to use",
+        "correct": false,
+        "why": "An email is not an enforced control; developers could still call other models."
+      },
+      {
+        "key": "C",
+        "text": "Attach an IAM policy that allows bedrock:InvokeModel only on that model's ARN",
+        "correct": true,
+        "why": "IAM policies scoped to specific actions and resources enforce least privilege for model access."
+      },
+      {
+        "key": "D",
+        "text": "Raise the model's temperature",
+        "correct": false,
+        "why": "Temperature affects output randomness, not access control."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Identity and Access Management (IAM) controls who can do what on which resources. Policies can allow specific Bedrock actions (such as InvokeModel) on specific model ARNs, implementing least privilege.",
+      "concept": "Use IAM roles for applications, scope permissions narrowly, and use conditions and service control policies for organization-wide guardrails.",
+      "examTip": "Restrict which models/users can be used = IAM policies with least privilege.",
+      "references": [
+        {
+          "title": "Identity and access management for Amazon Bedrock",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/security-iam.html"
+        },
+        {
+          "title": "What is IAM?",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-sec-002",
+    "domain": "security",
+    "topic": "Network Security",
+    "tags": [
+      "privatelink",
+      "vpc-endpoint"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A bank's security policy requires that application traffic to Amazon Bedrock from its VPC must not traverse the public internet.",
+    "prompt": "Which solution meets this requirement?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Increase the model's max tokens",
+        "correct": false,
+        "why": "Max tokens controls response length, not network paths."
+      },
+      {
+        "key": "B",
+        "text": "Use Amazon CloudFront in front of Bedrock",
+        "correct": false,
+        "why": "CloudFront is a content delivery network for public content and does not provide private VPC connectivity to Bedrock."
+      },
+      {
+        "key": "C",
+        "text": "Route traffic through an internet gateway",
+        "correct": false,
+        "why": "An internet gateway sends traffic over the public internet, which violates the policy."
+      },
+      {
+        "key": "D",
+        "text": "Create an interface VPC endpoint for Amazon Bedrock using AWS PrivateLink",
+        "correct": true,
+        "why": "PrivateLink interface endpoints keep traffic between the VPC and Bedrock on the AWS network without using the public internet."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS PrivateLink provides private connectivity between VPCs and AWS services through interface VPC endpoints. Amazon Bedrock supports interface endpoints, so model calls stay within the AWS network.",
+      "concept": "Endpoint policies can further restrict which actions and resources are allowed through the endpoint.",
+      "examTip": "Reach Bedrock without the public internet = PrivateLink interface endpoint.",
+      "references": [
+        {
+          "title": "Use interface VPC endpoints (AWS PrivateLink) with Amazon Bedrock",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/vpc-interface-endpoints.html"
+        },
+        {
+          "title": "What is AWS PrivateLink?",
+          "url": "https://docs.aws.amazon.com/vpc/latest/privatelink/what-is-privatelink.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-sec-003",
+    "domain": "security",
+    "topic": "Encryption",
+    "tags": [
+      "kms",
+      "encryption-at-rest"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A healthcare company fine-tunes a model in Amazon Bedrock. Compliance requires that the custom model and training artifacts be encrypted with keys the company controls, including the ability to disable them.",
+    "prompt": "Which approach meets this requirement?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use AWS KMS customer managed keys to encrypt the customization job outputs and custom model",
+        "correct": true,
+        "why": "Customer managed KMS keys give the company control over key policies, rotation and disabling access."
+      },
+      {
+        "key": "B",
+        "text": "Share one key with all AWS customers",
+        "correct": false,
+        "why": "Shared keys provide no customer control and are not how KMS works."
+      },
+      {
+        "key": "C",
+        "text": "Store the model unencrypted for faster access",
+        "correct": false,
+        "why": "Unencrypted storage violates the compliance requirement."
+      },
+      {
+        "key": "D",
+        "text": "Encrypt the model by increasing temperature",
+        "correct": false,
+        "why": "Temperature has nothing to do with encryption."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Key Management Service (KMS) customer managed keys let you control encryption keys for data at rest, including Bedrock custom models, training data in Amazon S3 and knowledge base resources. You manage key policies, rotation, auditing and can disable keys to revoke access.",
+      "concept": "Bedrock encrypts data at rest by default with AWS owned keys; customer managed keys add control for compliance.",
+      "examTip": "Encryption with keys you control = AWS KMS customer managed keys.",
+      "references": [
+        {
+          "title": "AWS KMS overview",
+          "url": "https://docs.aws.amazon.com/kms/latest/developerguide/overview.html"
+        },
+        {
+          "title": "Data protection in Amazon Bedrock",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/data-protection.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-sec-004",
+    "domain": "security",
+    "topic": "Sensitive Data Discovery",
+    "tags": [
+      "macie",
+      "pii",
+      "s3"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "Before using thousands of documents in Amazon S3 as a knowledge base and fine-tuning source, a company wants to automatically discover which files contain sensitive data such as names, credit card numbers and passport numbers.",
+    "prompt": "Which AWS service should it use?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Polly",
+        "correct": false,
+        "why": "Polly converts text to speech and does not scan S3 for sensitive data."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Macie",
+        "correct": true,
+        "why": "Macie uses machine learning and pattern matching to discover and report sensitive data, such as PII, in Amazon S3."
+      },
+      {
+        "key": "C",
+        "text": "Amazon Route 53",
+        "correct": false,
+        "why": "Route 53 is a DNS service and cannot inspect the contents of S3 objects for sensitive data."
+      },
+      {
+        "key": "D",
+        "text": "AWS Trusted Advisor",
+        "correct": false,
+        "why": "Trusted Advisor checks account best practices but does not classify document contents."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Macie is a data security service that discovers sensitive data in Amazon S3 using machine learning and pattern matching, and reports findings so you can protect, remove or redact the data before using it in AI systems.",
+      "concept": "Discovering sensitive data before it enters training sets or knowledge bases helps prevent data leakage through model outputs.",
+      "examTip": "Find sensitive data in S3 = Amazon Macie.",
+      "references": [
+        {
+          "title": "What is Amazon Macie?",
+          "url": "https://docs.aws.amazon.com/macie/latest/user/what-is-macie.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-sec-005",
+    "domain": "security",
+    "topic": "Shared Responsibility",
+    "tags": [
+      "shared-responsibility-model"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A team builds a RAG application on Amazon Bedrock and asks which security tasks are its own responsibility.",
+    "prompt": "Under the AWS shared responsibility model, which is the CUSTOMER's responsibility?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Patching the underlying hosts that run Bedrock",
+        "correct": false,
+        "why": "AWS manages the infrastructure behind managed services."
+      },
+      {
+        "key": "B",
+        "text": "Securing the hypervisor layer",
+        "correct": false,
+        "why": "The virtualization layer is AWS's responsibility."
+      },
+      {
+        "key": "C",
+        "text": "Managing IAM permissions, classifying and protecting the data put into the knowledge base, and configuring guardrails",
+        "correct": true,
+        "why": "Customers are responsible for security in the cloud, including identities, data and application-level controls."
+      },
+      {
+        "key": "D",
+        "text": "Physical security of AWS data centers",
+        "correct": false,
+        "why": "Physical security of data centers is AWS's responsibility under the shared responsibility model."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS is responsible for security of the cloud: facilities, hardware, networking and the managed service itself. The customer is responsible for security in the cloud: IAM, data protection and classification, encryption choices, network configuration, application logic, guardrails and how outputs are used.",
+      "concept": "With more managed services, the customer's share shrinks but never disappears.",
+      "examTip": "AWS = of the cloud. You = in the cloud (data, access, configuration).",
+      "references": [
+        {
+          "title": "AWS shared responsibility model",
+          "url": "https://aws.amazon.com/compliance/shared-responsibility-model/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-sec-006",
+    "domain": "security",
+    "topic": "Agent Security",
+    "tags": [
+      "agentcore-identity",
+      "oauth"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "An agent must call a third-party CRM on behalf of each signed-in employee, using that employee's own permissions, without the developers storing user credentials in code.",
+    "prompt": "Which capability supports this securely?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Store each user's CRM password in the agent's system prompt",
+        "correct": false,
+        "why": "Prompts are not secure storage and can be exposed through prompt attacks."
+      },
+      {
+        "key": "B",
+        "text": "Use one shared administrator account for all users",
+        "correct": false,
+        "why": "A shared admin account ignores individual permissions and violates least privilege."
+      },
+      {
+        "key": "C",
+        "text": "Disable authentication on the CRM",
+        "correct": false,
+        "why": "Removing authentication exposes the CRM to anyone."
+      },
+      {
+        "key": "D",
+        "text": "Amazon Bedrock AgentCore Identity, which manages agent identities and securely brokers user-delegated credentials such as OAuth tokens",
+        "correct": true,
+        "why": "AgentCore Identity lets agents act on behalf of users with properly scoped, securely stored tokens instead of hard-coded credentials."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Bedrock AgentCore Identity provides identity and access management for agents, integrating with identity providers and handling OAuth flows and credential storage so agents can access AWS and third-party resources on behalf of users with appropriate scopes.",
+      "concept": "Acting with the user's own permissions prevents agents from accessing data the user could not access.",
+      "examTip": "Agent acts as the user with secure tokens = AgentCore Identity.",
+      "references": [
+        {
+          "title": "Amazon Bedrock AgentCore Identity",
+          "url": "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/identity.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-sec-007",
+    "domain": "security",
+    "topic": "Agent Security",
+    "tags": [
+      "policy-in-agentcore"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A security team wants deterministic, centrally managed rules that prevent any agent from calling a \"delete_customer\" tool, and that limit a \"refund\" tool to amounts below a threshold, regardless of what the model decides.",
+    "prompt": "Which capability enforces this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Policy in Amazon Bedrock AgentCore, which evaluates tool calls against defined policies before they are executed",
+        "correct": true,
+        "why": "Policies enforced at the gateway block disallowed tool calls deterministically, independent of the model's reasoning."
+      },
+      {
+        "key": "B",
+        "text": "Model distillation",
+        "correct": false,
+        "why": "Distillation is a training technique and does not control tool calls."
+      },
+      {
+        "key": "C",
+        "text": "A sentence in the agent's instructions asking it not to delete customers",
+        "correct": false,
+        "why": "Instructions are soft guidance that the model may not always follow."
+      },
+      {
+        "key": "D",
+        "text": "A higher temperature setting",
+        "correct": false,
+        "why": "Temperature only changes output randomness and cannot block or limit tool calls."
+      }
+    ],
+    "explanation": {
+      "answer": "Policy in Amazon Bedrock AgentCore lets teams define fine-grained rules for agent actions, such as which tools may be called, by whom and with what parameter limits, enforced outside the agent's code when calls pass through AgentCore Gateway.",
+      "concept": "Deterministic policy enforcement is a key security layer for agents, complementing IAM, guardrails and human approval.",
+      "examTip": "Enforce hard rules on agent tool calls = Policy in AgentCore.",
+      "references": [
+        {
+          "title": "Policy in Amazon Bedrock AgentCore",
+          "url": "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/policy.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-sec-008",
+    "domain": "security",
+    "topic": "Guardrails for Security",
+    "tags": [
+      "guardrails",
+      "prompt-attack"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A public chatbot receives many attempts to override its instructions and extract confidential information.",
+    "prompt": "Which AWS feature helps detect and block these prompt attacks?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon S3 versioning",
+        "correct": false,
+        "why": "Versioning keeps object history and does not inspect prompts."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Bedrock Guardrails with the prompt attack content filter enabled",
+        "correct": true,
+        "why": "The prompt attack filter detects jailbreak and prompt injection attempts in user input."
+      },
+      {
+        "key": "C",
+        "text": "AWS Cost Anomaly Detection",
+        "correct": false,
+        "why": "Cost anomaly detection monitors spending, not prompt content."
+      },
+      {
+        "key": "D",
+        "text": "Amazon EBS snapshots",
+        "correct": false,
+        "why": "Snapshots back up volumes and do not filter prompts."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Bedrock Guardrails includes a prompt attack filter that identifies attempts to bypass safety controls or override system instructions (jailbreaks and prompt injection), as part of its content filters.",
+      "concept": "Combine with least-privilege tools, secrets kept out of prompts, and output filtering for defense in depth.",
+      "examTip": "Detect prompt injection/jailbreak = Guardrails prompt attack filter.",
+      "references": [
+        {
+          "title": "Guardrail components (Amazon Bedrock)",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-components.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-sec-009",
+    "domain": "security",
+    "topic": "Encryption",
+    "tags": [
+      "encryption-in-transit",
+      "tls"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "An auditor asks how data sent from the company's application to Amazon Bedrock is protected while traveling over the network.",
+    "prompt": "Which answer is correct?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Data in transit is never encrypted",
+        "correct": false,
+        "why": "AWS APIs require TLS for data in transit."
+      },
+      {
+        "key": "B",
+        "text": "Only image data is encrypted in transit",
+        "correct": false,
+        "why": "All API traffic, including text, is encrypted with TLS."
+      },
+      {
+        "key": "C",
+        "text": "Requests to Amazon Bedrock are encrypted in transit using TLS",
+        "correct": true,
+        "why": "AWS service endpoints, including Bedrock, use TLS to encrypt data in transit."
+      },
+      {
+        "key": "D",
+        "text": "Encryption in transit requires a higher temperature",
+        "correct": false,
+        "why": "Temperature has no relation to encryption."
+      }
+    ],
+    "explanation": {
+      "answer": "Data sent to and from Amazon Bedrock is encrypted in transit using TLS. Data at rest is encrypted with AWS KMS keys. Together they protect data throughout its lifecycle.",
+      "concept": "Encryption at rest and in transit are baseline security considerations for AI systems in the exam guide.",
+      "examTip": "In transit = TLS. At rest = KMS.",
+      "references": [
+        {
+          "title": "Data protection in Amazon Bedrock",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/data-protection.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-sec-010",
+    "domain": "security",
+    "topic": "Access Control",
+    "tags": [
+      "iam-roles",
+      "application"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A developer hard-codes long-term AWS access keys into a Lambda function that calls Amazon Bedrock.",
+    "prompt": "What is the recommended practice instead?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Put the access keys in the model prompt",
+        "correct": false,
+        "why": "Prompts are not secure storage, and keys could leak through outputs."
+      },
+      {
+        "key": "B",
+        "text": "Share the keys in a public repository so others can reuse them",
+        "correct": false,
+        "why": "Publishing keys allows anyone to use them."
+      },
+      {
+        "key": "C",
+        "text": "Use the root user's access keys",
+        "correct": false,
+        "why": "Root credentials have unrestricted access and should never be used by applications."
+      },
+      {
+        "key": "D",
+        "text": "Assign the Lambda function an IAM execution role with only the Bedrock permissions it needs",
+        "correct": true,
+        "why": "IAM roles provide temporary, automatically rotated credentials scoped to the function's needs, without storing keys in code."
+      }
+    ],
+    "explanation": {
+      "answer": "Applications on AWS should use IAM roles, which provide temporary credentials, instead of long-term access keys. Roles should be scoped with least-privilege policies for only the required Bedrock actions and resources.",
+      "concept": "For credentials to non-AWS systems, use AWS Secrets Manager or agent identity services rather than code or prompts.",
+      "examTip": "Applications call AWS with IAM roles, never hard-coded keys.",
+      "references": [
+        {
+          "title": "What is IAM?",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction.html"
+        },
+        {
+          "title": "Identity and access management for Amazon Bedrock",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/security-iam.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-sec-011",
+    "domain": "security",
+    "topic": "Shared Responsibility",
+    "tags": [
+      "shared-responsibility",
+      "genai-scope"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A company compares using a fully managed foundation model API with training and self-hosting its own model on Amazon EC2.",
+    "prompt": "How does the customer's security responsibility change between these options?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Self-hosting increases the customer's responsibilities, adding operating system, model hosting, scaling and patching to data, access and application controls",
+        "correct": true,
+        "why": "The more of the stack the customer runs, the more security tasks the customer owns."
+      },
+      {
+        "key": "B",
+        "text": "The managed API makes AWS responsible for the customer's data classification",
+        "correct": false,
+        "why": "Data classification remains the customer's responsibility."
+      },
+      {
+        "key": "C",
+        "text": "Responsibilities are identical in both cases",
+        "correct": false,
+        "why": "Self-hosting shifts infrastructure and model operations to the customer."
+      },
+      {
+        "key": "D",
+        "text": "Self-hosting makes AWS responsible for the customer's application logic",
+        "correct": false,
+        "why": "Application logic is always the customer's responsibility."
+      }
+    ],
+    "explanation": {
+      "answer": "Under the shared responsibility model, the division depends on the service type. With managed services such as Amazon Bedrock, AWS manages more of the stack. When self-hosting on EC2, customers also manage the OS, runtime, model artifacts, scaling and patching, in addition to data, identity and application controls.",
+      "concept": "The Generative AI Security Scoping Matrix uses a similar idea: responsibilities grow from consumer apps (scope 1) to self-trained models (scope 5).",
+      "examTip": "More of the stack you run = more security you own.",
+      "references": [
+        {
+          "title": "AWS shared responsibility model",
+          "url": "https://aws.amazon.com/compliance/shared-responsibility-model/"
+        },
+        {
+          "title": "Generative AI Security Scoping Matrix",
+          "url": "https://aws.amazon.com/ai/security/generative-ai-scoping-matrix/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-sec-012",
+    "domain": "security",
+    "topic": "Access Control",
+    "tags": [
+      "knowledge-base",
+      "authorization",
+      "data-access-control"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A company indexes HR, finance and legal documents into one knowledge base. An employee in marketing asks the assistant about executive salaries and receives confidential figures.",
+    "prompt": "Which control would have prevented this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Ask users not to request confidential information",
+        "correct": false,
+        "why": "Relying on users' restraint is not a security control."
+      },
+      {
+        "key": "B",
+        "text": "Enforce document-level access control at retrieval, for example by filtering on metadata tied to the user's permissions, or by separating knowledge bases by audience",
+        "correct": true,
+        "why": "Retrieval must respect the user's permissions so that unauthorized documents never reach the model's context."
+      },
+      {
+        "key": "C",
+        "text": "Use a larger embedding model",
+        "correct": false,
+        "why": "Embedding quality does not enforce permissions."
+      },
+      {
+        "key": "D",
+        "text": "Increase the temperature",
+        "correct": false,
+        "why": "Temperature has no effect on which documents are retrieved."
+      }
+    ],
+    "explanation": {
+      "answer": "RAG systems can leak data if retrieval ignores user permissions. Data access control must be enforced at retrieval time, using permission-aware metadata filters, separate indexes per audience, or identity-aware retrieval, so the model only sees documents the user may access.",
+      "concept": "This is a data leakage prevention practice for AI systems.",
+      "examTip": "RAG must respect who can see which documents.",
+      "references": [
+        {
+          "title": "How Amazon Bedrock knowledge bases work",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/kb-how-it-works.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-sec-013",
+    "domain": "security",
+    "topic": "Threat Detection",
+    "tags": [
+      "guardduty",
+      "threat-detection"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A security team wants continuous threat detection for its AWS accounts running AI workloads, including alerts for unusual API activity such as credentials being used from suspicious locations.",
+    "prompt": "Which AWS service provides this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Artifact",
+        "correct": false,
+        "why": "Artifact provides compliance reports, not threat detection."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Polly",
+        "correct": false,
+        "why": "Polly converts text to speech and does not analyze account activity for threats."
+      },
+      {
+        "key": "C",
+        "text": "Amazon GuardDuty",
+        "correct": true,
+        "why": "GuardDuty continuously monitors accounts and workloads for malicious activity and anomalous behavior using threat intelligence and machine learning."
+      },
+      {
+        "key": "D",
+        "text": "Amazon Translate",
+        "correct": false,
+        "why": "Translate converts text between languages and provides no threat detection."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon GuardDuty is a threat detection service that analyzes sources such as CloudTrail events, VPC flow logs and DNS logs to identify suspicious activity, including compromised credentials and unusual API calls. It includes protection plans for various workload types.",
+      "concept": "Threat detection is part of the security considerations for AI systems, alongside vulnerability management and infrastructure protection.",
+      "examTip": "Detect malicious activity in AWS accounts = GuardDuty.",
+      "references": [
+        {
+          "title": "What is Amazon GuardDuty?",
+          "url": "https://docs.aws.amazon.com/guardduty/latest/ug/what-is-guardduty.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-sec-014",
+    "domain": "security",
+    "topic": "Vulnerability Management",
+    "tags": [
+      "inspector",
+      "vulnerabilities"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A team hosts a self-managed model server in containers and on EC2 instances. It needs automated scanning of the instances, container images and Lambda functions for known software vulnerabilities.",
+    "prompt": "Which AWS service should it use?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Macie",
+        "correct": false,
+        "why": "Macie discovers sensitive data in S3; it does not scan for software vulnerabilities."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Comprehend",
+        "correct": false,
+        "why": "Comprehend analyzes text and has no vulnerability scanning capability."
+      },
+      {
+        "key": "C",
+        "text": "AWS Cost Explorer",
+        "correct": false,
+        "why": "Cost Explorer analyzes spending and cannot scan workloads for software vulnerabilities."
+      },
+      {
+        "key": "D",
+        "text": "Amazon Inspector",
+        "correct": true,
+        "why": "Inspector automatically scans EC2 instances, container images and Lambda functions for software vulnerabilities and unintended network exposure."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Inspector is an automated vulnerability management service that continuously scans workloads, including EC2, container images in Amazon ECR and Lambda functions, for known vulnerabilities (CVEs) and network exposure.",
+      "concept": "AI infrastructure has traditional attack surfaces too; vulnerability management is listed among AI security considerations.",
+      "examTip": "Scan for software vulnerabilities = Amazon Inspector.",
+      "references": [
+        {
+          "title": "What is Amazon Inspector?",
+          "url": "https://docs.aws.amazon.com/inspector/latest/user/what-is-inspector.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-sec-015",
+    "domain": "security",
+    "topic": "Network Security",
+    "tags": [
+      "vpc",
+      "customization-jobs"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A company wants its Amazon Bedrock model customization job to access training data in Amazon S3 only through its own VPC, with no route to the internet.",
+    "prompt": "Which configuration supports this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Configure the customization job to use the company's VPC and an S3 VPC endpoint, with endpoint and bucket policies restricting access",
+        "correct": true,
+        "why": "Running the job in a VPC with private endpoints keeps training data access off the internet and under network controls."
+      },
+      {
+        "key": "B",
+        "text": "Increase the number of training epochs",
+        "correct": false,
+        "why": "Epochs affect training, not network security."
+      },
+      {
+        "key": "C",
+        "text": "Copy the data to employees' laptops",
+        "correct": false,
+        "why": "This spreads sensitive data and is not a network control."
+      },
+      {
+        "key": "D",
+        "text": "Make the S3 bucket public so the job can reach it",
+        "correct": false,
+        "why": "A public bucket exposes the training data to everyone, the opposite of keeping access private."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Bedrock model customization jobs can be configured with a VPC so that they access training and validation data through your VPC, using gateway or interface endpoints and policies that restrict access. This protects training data in transit and limits exposure.",
+      "concept": "Infrastructure protection for AI includes network isolation for training and inference resources.",
+      "examTip": "Keep customization data access private = VPC configuration + endpoints.",
+      "references": [
+        {
+          "title": "Protect model customization jobs using a VPC (Amazon Bedrock)",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/usingVPC.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-sec-016",
+    "domain": "security",
+    "topic": "Guardrails for Security",
+    "tags": [
+      "data-leakage",
+      "pii"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "An internal assistant summarizes customer emails. Security wants to prevent email addresses and account numbers from appearing in summaries shared with a wider team.",
+    "prompt": "Which control is MOST direct?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Route 53 routing policies",
+        "correct": false,
+        "why": "DNS routing does not affect what text the model outputs."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Bedrock Guardrails sensitive information filters to mask PII and custom patterns such as account numbers in outputs",
+        "correct": true,
+        "why": "Sensitive information filters detect and mask standard PII and custom regex patterns, preventing leakage in outputs."
+      },
+      {
+        "key": "C",
+        "text": "Model distillation",
+        "correct": false,
+        "why": "Distillation does not remove PII from responses."
+      },
+      {
+        "key": "D",
+        "text": "Amazon EC2 Auto Scaling",
+        "correct": false,
+        "why": "Auto Scaling adjusts capacity and does not filter content."
+      }
+    ],
+    "explanation": {
+      "answer": "Data leakage prevention for generative AI includes filtering outputs. Amazon Bedrock Guardrails sensitive information filters detect PII types and custom regular-expression patterns and can mask or block them in prompts and responses.",
+      "concept": "Also minimize sensitive data in context and enforce access controls on who can see outputs.",
+      "examTip": "Prevent PII leaking in outputs = sensitive information filters.",
+      "references": [
+        {
+          "title": "Guardrail components (Amazon Bedrock)",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-components.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-sec-017",
+    "domain": "security",
+    "topic": "Access Control",
+    "tags": [
+      "least-privilege",
+      "agents"
+    ],
+    "difficulty": "medium",
+    "type": "multi",
+    "selectCount": 2,
+    "stem": "A company is securing an agent that reads from a database and creates support tickets.",
+    "prompt": "Which practices follow security best practices? (Select TWO.)",
+    "options": [
+      {
+        "key": "A",
+        "text": "Disable logging to reduce costs",
+        "correct": false,
+        "why": "Without logs, incidents cannot be detected or investigated."
+      },
+      {
+        "key": "B",
+        "text": "Give the agent database administrator rights to avoid permission errors",
+        "correct": false,
+        "why": "Excessive rights let injected or mistaken actions cause serious damage."
+      },
+      {
+        "key": "C",
+        "text": "Log every tool call the agent makes for auditing",
+        "correct": true,
+        "why": "Audit trails let teams detect misuse and investigate incidents."
+      },
+      {
+        "key": "D",
+        "text": "Give the agent's role read-only access to the needed tables and permission to create tickets only",
+        "correct": true,
+        "why": "Least privilege limits what a compromised or mistaken agent can do."
+      },
+      {
+        "key": "E",
+        "text": "Store database passwords in the agent's instructions",
+        "correct": false,
+        "why": "Instructions are visible to the model and can be leaked."
+      }
+    ],
+    "explanation": {
+      "answer": "Securing AI agents relies on standard security principles: least-privilege permissions per tool, managed credentials (not in prompts), audit logging of actions, monitoring and human approval for sensitive operations.",
+      "concept": "AWS services involved: IAM roles, AgentCore Identity and Policy, CloudTrail and AgentCore Observability.",
+      "examTip": "Agents: least privilege + audit logging. Never secrets in prompts.",
+      "references": [
+        {
+          "title": "What is IAM?",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction.html"
+        },
+        {
+          "title": "Policy in Amazon Bedrock AgentCore",
+          "url": "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/policy.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-sec-018",
+    "domain": "security",
+    "topic": "Encryption",
+    "tags": [
+      "knowledge-base-encryption"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company stores proprietary documents in a Bedrock knowledge base backed by a vector store. Security requires that the source documents, the embeddings and any transient data be encrypted at rest.",
+    "prompt": "Which approach satisfies this requirement?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Store embeddings in a public bucket",
+        "correct": false,
+        "why": "A public bucket would expose the embeddings, which can reveal information about the source documents."
+      },
+      {
+        "key": "B",
+        "text": "Skip encryption because embeddings are just numbers",
+        "correct": false,
+        "why": "Embeddings can leak information about source content and should be protected."
+      },
+      {
+        "key": "C",
+        "text": "Encrypt the S3 source bucket, the vector store and knowledge base resources with AWS KMS keys",
+        "correct": true,
+        "why": "Applying KMS encryption to every storage layer in the RAG pipeline protects documents and vectors at rest."
+      },
+      {
+        "key": "D",
+        "text": "Encrypt only the final chatbot responses",
+        "correct": false,
+        "why": "Source documents and embeddings would remain unprotected at rest."
+      }
+    ],
+    "explanation": {
+      "answer": "Encryption at rest should cover the whole AI data pipeline: source data in S3, vector stores, knowledge base resources, logs and custom models. AWS KMS keys (AWS managed or customer managed) provide encryption and access control.",
+      "concept": "Embeddings derived from sensitive text are themselves sensitive and need protection.",
+      "examTip": "Encrypt every layer: sources, vectors, logs, models.",
+      "references": [
+        {
+          "title": "Data protection in Amazon Bedrock",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/data-protection.html"
+        },
+        {
+          "title": "AWS KMS overview",
+          "url": "https://docs.aws.amazon.com/kms/latest/developerguide/overview.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-sec-019",
+    "domain": "security",
+    "topic": "Shared Responsibility",
+    "tags": [
+      "model-provider",
+      "data-isolation"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A security architect asks whether third-party model providers on Amazon Bedrock can see the company's prompts or access its fine-tuned models.",
+    "prompt": "Which statement is correct?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Providers can log into the customer's account",
+        "correct": false,
+        "why": "Providers have no access to customer accounts."
+      },
+      {
+        "key": "B",
+        "text": "Model providers receive all prompts for quality monitoring",
+        "correct": false,
+        "why": "Customer prompts are not shared with providers."
+      },
+      {
+        "key": "C",
+        "text": "Fine-tuned models are shared with the original provider",
+        "correct": false,
+        "why": "Custom models remain private to the customer."
+      },
+      {
+        "key": "D",
+        "text": "Model providers do not have access to customer prompts, outputs or fine-tuned models; Bedrock runs models in AWS-managed environments isolated from providers",
+        "correct": true,
+        "why": "Bedrock isolates customer data from model providers, which do not receive prompts, completions or custom models."
+      }
+    ],
+    "explanation": {
+      "answer": "In Amazon Bedrock, model providers have no access to customer data: prompts, responses and customized models stay within AWS-managed infrastructure and the customer's control. This isolation is a key security benefit of using FMs through Bedrock.",
+      "concept": "Customers still control access with IAM, encrypt with KMS and log with CloudTrail.",
+      "examTip": "Bedrock: providers can't see your prompts or custom models.",
+      "references": [
+        {
+          "title": "Data protection in Amazon Bedrock",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/data-protection.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-sec-020",
+    "domain": "security",
+    "topic": "Application Security",
+    "tags": [
+      "rate-limiting",
+      "abuse"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A public generative AI app is hit by automated scripts sending thousands of requests per minute, driving up costs and attempting to extract data.",
+    "prompt": "Which control is MOST appropriate at the application layer?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Require authentication, apply rate limiting and request quotas (for example with AWS WAF and API Gateway throttling), and monitor for abuse",
+        "correct": true,
+        "why": "Authentication and throttling limit automated abuse and cost, and monitoring detects attacks."
+      },
+      {
+        "key": "B",
+        "text": "Switch to a larger model",
+        "correct": false,
+        "why": "A larger model increases cost per request and does not stop abuse."
+      },
+      {
+        "key": "C",
+        "text": "Remove all authentication to reduce friction",
+        "correct": false,
+        "why": "Removing authentication makes automated abuse easier and lets anyone consume the model budget."
+      },
+      {
+        "key": "D",
+        "text": "Increase the model's temperature",
+        "correct": false,
+        "why": "Temperature does not affect request volume or abuse."
+      }
+    ],
+    "explanation": {
+      "answer": "Application security for AI includes standard web protections: authentication and authorization, rate limiting and quotas, bot protection and input validation (for example AWS WAF and Amazon API Gateway throttling), plus monitoring of usage patterns.",
+      "concept": "Abuse can cause both security issues (data extraction, hijacking) and cost spikes (\"denial of wallet\").",
+      "examTip": "Automated abuse of an AI app → auth + rate limits + WAF + monitoring.",
+      "references": [
+        {
+          "title": "Generative AI Lens: AWS Well-Architected",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/generative-ai-lens.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-sec-021",
+    "domain": "security",
+    "topic": "Guardrails for Security",
+    "tags": [
+      "toxicity",
+      "output-filtering"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A company must prevent its generative AI marketing tool from producing toxic or offensive language in published content.",
+    "prompt": "Which control directly addresses this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Using a VPC endpoint",
+        "correct": false,
+        "why": "Network privacy does not filter content."
+      },
+      {
+        "key": "B",
+        "text": "Output filtering with Amazon Bedrock Guardrails content filters before content is published",
+        "correct": true,
+        "why": "Content filters detect and block toxic categories such as hate and insults in model outputs."
+      },
+      {
+        "key": "C",
+        "text": "Encrypting the content at rest",
+        "correct": false,
+        "why": "Encryption protects confidentiality but does not stop toxic content."
+      },
+      {
+        "key": "D",
+        "text": "Enabling S3 versioning",
+        "correct": false,
+        "why": "Versioning stores history but does not filter content."
+      }
+    ],
+    "explanation": {
+      "answer": "Toxicity is a security and safety consideration for AI systems. Output filtering and validation, such as Bedrock Guardrails content filters, plus human review for published material, prevents toxic content from reaching audiences.",
+      "concept": "Output validation is listed with toxicity, prompt injection and data leakage among AI security considerations.",
+      "examTip": "Stop toxic outputs = content filters on outputs (+ review).",
+      "references": [
+        {
+          "title": "Detect and filter harmful content with Amazon Bedrock Guardrails",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-sec-022",
+    "domain": "security",
+    "topic": "Access Control",
+    "tags": [
+      "scp",
+      "organizations",
+      "model-access"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A large enterprise with many AWS accounts wants to prevent any account from using foundation models that have not been approved by its AI governance board.",
+    "prompt": "Which control works across all accounts?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Raising temperature on unapproved models",
+        "correct": false,
+        "why": "Temperature only affects output randomness and cannot prevent accounts from calling unapproved models."
+      },
+      {
+        "key": "B",
+        "text": "A wiki page listing approved models",
+        "correct": false,
+        "why": "Documentation does not enforce restrictions."
+      },
+      {
+        "key": "C",
+        "text": "AWS Organizations service control policies (SCPs) that deny Bedrock actions on unapproved model IDs",
+        "correct": true,
+        "why": "SCPs set permission boundaries across accounts in an organization, so unapproved models cannot be used regardless of local IAM policies."
+      },
+      {
+        "key": "D",
+        "text": "Batch inference for all accounts",
+        "correct": false,
+        "why": "Batch inference is an execution mode, not an access control."
+      }
+    ],
+    "explanation": {
+      "answer": "Service control policies in AWS Organizations define the maximum permissions for accounts. Denying Bedrock invocation for unapproved models in an SCP enforces governance decisions organization-wide.",
+      "concept": "Combine preventive controls (SCPs, IAM) with detective controls (AWS Config, CloudTrail) for governance.",
+      "examTip": "Enforce approved-model list across many accounts = SCPs.",
+      "references": [
+        {
+          "title": "Identity and access management for Amazon Bedrock",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/security-iam.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-sec-023",
+    "domain": "security",
+    "topic": "Application Security",
+    "tags": [
+      "prompt-injection",
+      "secure-design"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "An AI assistant has a tool that can run database queries. A user crafts input that causes the model to generate a query deleting records.",
+    "prompt": "Which design choice MOST effectively limits the damage from such attacks?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Increase the max tokens",
+        "correct": false,
+        "why": "Output length does not affect query permissions."
+      },
+      {
+        "key": "B",
+        "text": "Use a larger model",
+        "correct": false,
+        "why": "Larger models can still be manipulated by injected instructions, so model size is not a control."
+      },
+      {
+        "key": "C",
+        "text": "Add \"never delete records\" to the system prompt only",
+        "correct": false,
+        "why": "Prompt instructions can be bypassed through injection."
+      },
+      {
+        "key": "D",
+        "text": "Give the tool a database role with read-only permissions and validate generated queries before execution",
+        "correct": true,
+        "why": "Read-only permissions and query validation mean that even a manipulated model cannot delete data."
+      }
+    ],
+    "explanation": {
+      "answer": "Because prompt injection cannot be fully prevented, security must assume the model can be manipulated. Restricting tool permissions (least privilege), validating generated commands, and requiring approval for destructive actions limit the impact.",
+      "concept": "Treat model outputs that drive actions as untrusted input to downstream systems.",
+      "examTip": "Assume the model can be tricked → restrict what its tools can do.",
+      "references": [
+        {
+          "title": "Generative AI Lens: AWS Well-Architected",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/generative-ai-lens.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-sec-024",
+    "domain": "security",
+    "topic": "Infrastructure Protection",
+    "tags": [
+      "infrastructure",
+      "defense-in-depth"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company self-hosts an open-source model on EC2 instances behind a load balancer.",
+    "prompt": "Which practice protects this infrastructure?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Place instances in private subnets, restrict security groups to the load balancer, patch regularly and scan for vulnerabilities",
+        "correct": true,
+        "why": "Network isolation, restricted access, patching and scanning are core infrastructure protections."
+      },
+      {
+        "key": "B",
+        "text": "Share instance SSH keys widely",
+        "correct": false,
+        "why": "Widely shared keys allow unauthorized access."
+      },
+      {
+        "key": "C",
+        "text": "Disable operating system updates for stability",
+        "correct": false,
+        "why": "Unpatched systems accumulate exploitable vulnerabilities."
+      },
+      {
+        "key": "D",
+        "text": "Give instances public IP addresses with all ports open",
+        "correct": false,
+        "why": "Open ports and public IPs expose the instances to attack."
+      }
+    ],
+    "explanation": {
+      "answer": "Infrastructure protection for AI workloads applies standard cloud security: private subnets, least-privilege security groups, load balancers and WAF at the edge, patching, vulnerability scanning (Amazon Inspector) and threat detection (Amazon GuardDuty).",
+      "concept": "Self-hosting adds these responsibilities compared with managed APIs.",
+      "examTip": "Self-hosted model infra → private subnets, tight security groups, patching, scanning.",
+      "references": [
+        {
+          "title": "What is Amazon Inspector?",
+          "url": "https://docs.aws.amazon.com/inspector/latest/user/what-is-inspector.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-sec-025",
+    "domain": "security",
+    "topic": "Security Services",
+    "tags": [
+      "service-matching"
+    ],
+    "difficulty": "medium",
+    "type": "multi",
+    "selectCount": 3,
+    "stem": "A security team maps AWS services to AI security needs.",
+    "prompt": "Which pairings are correct? (Select THREE.)",
+    "options": [
+      {
+        "key": "A",
+        "text": "Block toxic model outputs → Amazon Route 53",
+        "correct": false,
+        "why": "Route 53 is DNS. Toxic content is filtered with Bedrock Guardrails."
+      },
+      {
+        "key": "B",
+        "text": "Discover sensitive data in S3 training sets → Amazon Macie",
+        "correct": true,
+        "why": "Macie discovers sensitive data in Amazon S3."
+      },
+      {
+        "key": "C",
+        "text": "Scan container images for CVEs → Amazon Polly",
+        "correct": false,
+        "why": "Polly is text to speech. Vulnerability scanning is Amazon Inspector."
+      },
+      {
+        "key": "D",
+        "text": "Private connectivity from a VPC to Amazon Bedrock → AWS PrivateLink",
+        "correct": true,
+        "why": "PrivateLink interface endpoints provide private access to Bedrock."
+      },
+      {
+        "key": "E",
+        "text": "Control encryption keys for custom models → AWS KMS",
+        "correct": true,
+        "why": "KMS manages keys for encryption at rest."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS services for securing AI systems include IAM (access), AWS KMS (encryption), Amazon Macie (sensitive data discovery), AWS PrivateLink (private connectivity), Amazon Bedrock Guardrails (content and PII safeguards), AgentCore Identity and Policy (agent security), Amazon Inspector (vulnerabilities) and Amazon GuardDuty (threat detection).",
+      "concept": "Knowing which service addresses which risk is a frequent exam pattern.",
+      "examTip": "Macie = sensitive data. PrivateLink = private access. KMS = keys. Guardrails = content.",
+      "references": [
+        {
+          "title": "What is Amazon Macie?",
+          "url": "https://docs.aws.amazon.com/macie/latest/user/what-is-macie.html"
+        },
+        {
+          "title": "What is AWS PrivateLink?",
+          "url": "https://docs.aws.amazon.com/vpc/latest/privatelink/what-is-privatelink.html"
+        }
+      ]
+    }
+  }
+]

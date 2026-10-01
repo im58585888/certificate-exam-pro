@@ -21,7 +21,7 @@ export default async function ResultsPage({ params }: PageProps<"/results/[id]">
   const attempts = await sessionAttempts(id);
   if (!session.finished_at && session.mode === "exam") redirect(`/quiz/${id}`);
   const exam = getExam(session.exam)!;
-  const access = await getAccess(owner.userId);
+  const access = await getAccess(owner.userId, session.exam);
   const flagged = new Set((await flagsFor(owner, session.exam)).map((f) => f.question_id));
 
   const byQ = new Map(attempts.map((a) => [a.question_id, a]));
@@ -89,7 +89,7 @@ export default async function ResultsPage({ params }: PageProps<"/results/[id]">
           </ul>
           <div className="mt-5 flex flex-wrap items-center gap-3">
             <Link className="btn !bg-white !px-6 !py-3 !text-[#4338CA]" href={owner.userId || paymentsMode === "waitlist" ? "/pricing" : "/register?next=/pricing"}>
-              {paymentsMode === "waitlist" ? "Get notified when passes launch" : `Get ${PASS_DAYS} days for $${(PASS_PRICE_CENTS / 100).toFixed(2)}`}
+              {paymentsMode === "waitlist" ? "Get notified when passes launch" : `Unlock ${exam.code}: ${PASS_DAYS} days for $${(PASS_PRICE_CENTS / 100).toFixed(2)}`}
             </Link>
             {!owner.userId && <Link className="font-bold text-white underline underline-offset-4" href="/register?next=/dashboard">Or create a free account to save these results</Link>}
           </div>

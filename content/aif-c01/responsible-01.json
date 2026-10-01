@@ -1,0 +1,1281 @@
+[
+  {
+    "id": "aif-rai-001",
+    "domain": "responsible",
+    "topic": "Responsible AI Features",
+    "tags": [
+      "fairness"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A lender reviews its credit model and finds that applicants with similar financial profiles receive different approval rates depending on their gender.",
+    "prompt": "Which responsible AI dimension is MOST directly at issue?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Scalability",
+        "correct": false,
+        "why": "Scalability is about handling more load. The issue here is unequal treatment, not volume."
+      },
+      {
+        "key": "B",
+        "text": "Cost efficiency",
+        "correct": false,
+        "why": "Cost efficiency concerns spending. It does not describe biased outcomes."
+      },
+      {
+        "key": "C",
+        "text": "Latency",
+        "correct": false,
+        "why": "Latency is how quickly the model responds. It has nothing to do with unequal outcomes across groups."
+      },
+      {
+        "key": "D",
+        "text": "Fairness",
+        "correct": true,
+        "why": "Fairness concerns whether a model's outcomes are equitable across groups. Different approval rates for similar applicants by gender is a fairness problem."
+      }
+    ],
+    "explanation": {
+      "answer": "Fairness means AI systems treat individuals and groups equitably and do not produce unjustified differences in outcomes based on attributes such as gender, race or age. Measuring outcomes across groups reveals fairness issues.",
+      "concept": "AWS describes responsible AI dimensions including fairness, explainability, privacy and security, safety, controllability, veracity and robustness, governance and transparency.",
+      "examTip": "Unequal outcomes across groups = fairness issue.",
+      "references": [
+        {
+          "title": "Responsible AI at AWS",
+          "url": "https://aws.amazon.com/ai/responsible-ai/"
+        },
+        {
+          "title": "Detect pre-training data bias (SageMaker Clarify)",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-detect-data-bias.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-rai-002",
+    "domain": "responsible",
+    "topic": "Responsible AI Features",
+    "tags": [
+      "veracity",
+      "robustness"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A team wants its AI assistant to produce correct outputs and to keep working reliably even when users enter unexpected, noisy or slightly malformed inputs.",
+    "prompt": "Which two responsible AI dimensions does this describe?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Veracity and robustness",
+        "correct": true,
+        "why": "Veracity is about producing correct, truthful outputs, and robustness is about performing reliably under unexpected or adversarial inputs."
+      },
+      {
+        "key": "B",
+        "text": "Inclusivity and sustainability",
+        "correct": false,
+        "why": "Inclusivity concerns serving diverse users, and sustainability concerns environmental impact. Neither is about correctness under noisy input."
+      },
+      {
+        "key": "C",
+        "text": "Transparency and latency",
+        "correct": false,
+        "why": "Transparency is about openness on how the system works. Latency is a performance metric."
+      },
+      {
+        "key": "D",
+        "text": "Governance and pricing",
+        "correct": false,
+        "why": "Governance concerns policies and oversight, and pricing is not a responsible AI dimension."
+      }
+    ],
+    "explanation": {
+      "answer": "Veracity means the system produces accurate, truthful outputs. Robustness means it maintains correct behavior under varied, unexpected or adversarial conditions, such as typos, unusual phrasing or attempted manipulation.",
+      "concept": "Robustness can be tested by perturbing inputs (as in Bedrock Model Evaluation's robustness metric) and with red-teaming.",
+      "examTip": "Correct = veracity. Reliable under unusual inputs = robustness.",
+      "references": [
+        {
+          "title": "Responsible AI at AWS",
+          "url": "https://aws.amazon.com/ai/responsible-ai/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-rai-003",
+    "domain": "responsible",
+    "topic": "Responsible AI Features",
+    "tags": [
+      "inclusivity"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A voice assistant works well for native English speakers but frequently misunderstands users with regional accents and speech differences.",
+    "prompt": "Which responsible AI feature should the team improve?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Batch inference",
+        "correct": false,
+        "why": "Batch inference is an execution mode, not a responsible AI feature."
+      },
+      {
+        "key": "B",
+        "text": "Inclusivity",
+        "correct": true,
+        "why": "Inclusivity means the system serves a diverse range of users well. Poor performance for accents and speech differences excludes those users."
+      },
+      {
+        "key": "C",
+        "text": "Token pricing",
+        "correct": false,
+        "why": "Pricing has no bearing on who the assistant understands."
+      },
+      {
+        "key": "D",
+        "text": "Data residency",
+        "correct": false,
+        "why": "Residency concerns where data is stored, not how well different users are served."
+      }
+    ],
+    "explanation": {
+      "answer": "Inclusivity means designing AI systems that work well for people of different backgrounds, abilities, languages and accents. It usually requires diverse training and evaluation data and testing with diverse users.",
+      "concept": "Inclusive datasets and subgroup testing help catch performance gaps before deployment.",
+      "examTip": "Works poorly for some groups of users = inclusivity gap.",
+      "references": [
+        {
+          "title": "Responsible AI at AWS",
+          "url": "https://aws.amazon.com/ai/responsible-ai/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-rai-004",
+    "domain": "responsible",
+    "topic": "Responsible AI Features",
+    "tags": [
+      "safety"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A mental-health support app uses an LLM. The team must make sure it never encourages self-harm and always points users in crisis to professional help.",
+    "prompt": "Which responsible AI feature is the PRIMARY concern?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Model size",
+        "correct": false,
+        "why": "Model size does not determine whether outputs are safe."
+      },
+      {
+        "key": "B",
+        "text": "Embedding dimension",
+        "correct": false,
+        "why": "Embedding dimension is a retrieval setting unrelated to harmful content."
+      },
+      {
+        "key": "C",
+        "text": "Safety",
+        "correct": true,
+        "why": "Safety is about preventing harmful outputs and outcomes, such as content that could encourage self-harm."
+      },
+      {
+        "key": "D",
+        "text": "Throughput",
+        "correct": false,
+        "why": "Throughput measures request volume, not harm prevention."
+      }
+    ],
+    "explanation": {
+      "answer": "Safety means preventing AI systems from producing harmful outputs or causing harm to users or others. In sensitive domains, it requires content filters, careful prompts, escalation to humans and thorough testing.",
+      "concept": "Amazon Bedrock Guardrails provides configurable safeguards such as content filters and denied topics to support safety.",
+      "examTip": "Prevent harm to users = safety.",
+      "references": [
+        {
+          "title": "Detect and filter harmful content with Amazon Bedrock Guardrails",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-rai-005",
+    "domain": "responsible",
+    "topic": "Guardrails",
+    "tags": [
+      "guardrails",
+      "denied-topics"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A bank's customer chatbot must not give investment advice, even if customers ask directly. The bank wants this enforced consistently across prompts and models.",
+    "prompt": "Which Amazon Bedrock Guardrails feature is designed for this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Prompt caching",
+        "correct": false,
+        "why": "Prompt caching reduces cost and latency. It does not block topics."
+      },
+      {
+        "key": "B",
+        "text": "Batch inference",
+        "correct": false,
+        "why": "Batch inference processes requests asynchronously and does not restrict topics."
+      },
+      {
+        "key": "C",
+        "text": "Provisioned Throughput",
+        "correct": false,
+        "why": "Provisioned Throughput reserves capacity and has no content controls."
+      },
+      {
+        "key": "D",
+        "text": "Denied topics",
+        "correct": true,
+        "why": "Denied topics let you define subjects, such as investment advice, that the application should refuse in both user inputs and model responses."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Bedrock Guardrails denied topics let you describe topics in natural language that should be blocked. When user input or model output matches a denied topic, the guardrail returns a configured blocked message.",
+      "concept": "Guardrails apply independently of the model, so the same policy works across different FMs and can be used with the ApplyGuardrail API for any text.",
+      "examTip": "Block a whole subject area = denied topics.",
+      "references": [
+        {
+          "title": "Guardrail components (Amazon Bedrock)",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-components.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-rai-006",
+    "domain": "responsible",
+    "topic": "Guardrails",
+    "tags": [
+      "guardrails",
+      "content-filters"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A gaming community's AI assistant must block hateful, insulting, sexual and violent content in user messages and generated replies, with adjustable strictness.",
+    "prompt": "Which Amazon Bedrock Guardrails feature should the team configure?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Content filters with configurable strength for each harmful category",
+        "correct": true,
+        "why": "Content filters detect categories such as hate, insults, sexual content, violence and misconduct, with adjustable filter strength for inputs and outputs."
+      },
+      {
+        "key": "B",
+        "text": "Contextual grounding check only",
+        "correct": false,
+        "why": "Grounding checks detect hallucinations relative to sources. They do not filter hateful or violent content."
+      },
+      {
+        "key": "C",
+        "text": "Model invocation logging",
+        "correct": false,
+        "why": "Logging records requests and responses but does not block content."
+      },
+      {
+        "key": "D",
+        "text": "Word filters only for product names",
+        "correct": false,
+        "why": "Word filters block specific words or phrases. They cannot reliably detect the full range of harmful content categories."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Bedrock Guardrails content filters detect and block harmful content in categories including hate, insults, sexual, violence and misconduct, plus prompt attacks. Each category's filter strength can be tuned for inputs and outputs, and some filters support image content.",
+      "concept": "Guardrails components: content filters, denied topics, word filters, sensitive information filters, contextual grounding checks and automated reasoning checks.",
+      "examTip": "Block categories of harmful content = content filters.",
+      "references": [
+        {
+          "title": "Guardrail components (Amazon Bedrock)",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-components.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-rai-007",
+    "domain": "responsible",
+    "topic": "Guardrails",
+    "tags": [
+      "automated-reasoning",
+      "veracity"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "An HR assistant answers questions about leave eligibility rules. The company needs mathematically verifiable checks that answers are consistent with its written policy rules, not just a probabilistic judgment.",
+    "prompt": "Which Amazon Bedrock Guardrails capability is designed for this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Word filters",
+        "correct": false,
+        "why": "Word filters block specific terms and cannot verify logical consistency with policy rules."
+      },
+      {
+        "key": "B",
+        "text": "Automated Reasoning checks",
+        "correct": true,
+        "why": "Automated Reasoning checks use formal logic to validate whether responses are consistent with policies encoded from your documents, providing verifiable results."
+      },
+      {
+        "key": "C",
+        "text": "Prompt caching",
+        "correct": false,
+        "why": "Prompt caching only reduces cost and latency for repeated prompts. It cannot verify answers against policy rules."
+      },
+      {
+        "key": "D",
+        "text": "Content filters for violence",
+        "correct": false,
+        "why": "Violence filters detect harmful content, not policy correctness."
+      }
+    ],
+    "explanation": {
+      "answer": "Automated Reasoning checks in Amazon Bedrock Guardrails encode domain rules (for example from an HR policy document) into a formal representation and use mathematical logic to check whether model responses are valid according to those rules, helping detect factual errors and improve veracity.",
+      "concept": "Contextual grounding checks compare responses with retrieved sources probabilistically; automated reasoning provides logic-based verification against defined policies.",
+      "examTip": "Verify answers against formal policy rules = Automated Reasoning checks.",
+      "references": [
+        {
+          "title": "Automated Reasoning checks (Amazon Bedrock Guardrails)",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-automated-reasoning-checks.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-rai-008",
+    "domain": "responsible",
+    "topic": "Legal Risks",
+    "tags": [
+      "intellectual-property"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A marketing team publishes AI-generated images. A photographer later claims that one image closely reproduces their copyrighted work.",
+    "prompt": "Which legal risk of generative AI does this illustrate?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Data drift",
+        "correct": false,
+        "why": "Data drift is a change in input data over time, not a legal risk about ownership of content."
+      },
+      {
+        "key": "B",
+        "text": "Token pricing",
+        "correct": false,
+        "why": "Pricing is unrelated to copyright claims."
+      },
+      {
+        "key": "C",
+        "text": "Intellectual property infringement claims",
+        "correct": true,
+        "why": "Generated content that resembles copyrighted material can lead to IP infringement claims."
+      },
+      {
+        "key": "D",
+        "text": "Underfitting",
+        "correct": false,
+        "why": "Underfitting is a model training issue, not a legal risk."
+      }
+    ],
+    "explanation": {
+      "answer": "Generative models trained on large datasets can produce outputs similar to copyrighted works, creating risk of intellectual property infringement claims. Organizations reduce risk through policies, review of outputs before publication, model and vendor choices with clear terms, and tools such as similarity checks.",
+      "concept": "Other legal and business risks: biased outputs, loss of customer trust, end-user harm and hallucinations.",
+      "examTip": "Output resembles someone's copyrighted work = IP infringement risk.",
+      "references": [
+        {
+          "title": "Responsible AI at AWS",
+          "url": "https://aws.amazon.com/ai/responsible-ai/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-rai-009",
+    "domain": "responsible",
+    "topic": "Legal Risks",
+    "tags": [
+      "customer-trust",
+      "hallucination"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "An airline's chatbot confidently tells a customer about a refund policy that does not exist. The customer relies on it, and the story spreads on social media.",
+    "prompt": "Which risks does this MOST directly illustrate?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Overfitting leading to slower responses",
+        "correct": false,
+        "why": "The problem is fabricated information, not speed or training fit."
+      },
+      {
+        "key": "B",
+        "text": "High embedding dimensions",
+        "correct": false,
+        "why": "Embedding configuration does not explain a fabricated policy."
+      },
+      {
+        "key": "C",
+        "text": "Excessive batch inference",
+        "correct": false,
+        "why": "Batch inference has nothing to do with chatbot hallucinations."
+      },
+      {
+        "key": "D",
+        "text": "Hallucination leading to end-user harm, potential legal liability and loss of customer trust",
+        "correct": true,
+        "why": "The fabricated policy misled a customer, which can create liability and damage trust in the brand."
+      }
+    ],
+    "explanation": {
+      "answer": "Hallucinated answers presented as fact can harm users and expose companies to legal claims and reputational damage. Mitigations include grounding answers in authoritative sources (RAG), contextual grounding checks, clear disclaimers, scope restrictions and human escalation.",
+      "concept": "Companies may be held responsible for what their AI systems tell customers, so veracity controls are a business necessity.",
+      "examTip": "Chatbot invents policy → harm, liability and lost trust.",
+      "references": [
+        {
+          "title": "What are AI hallucinations?",
+          "url": "https://aws.amazon.com/what-is/ai-hallucinations/"
+        },
+        {
+          "title": "Contextual grounding check (Amazon Bedrock Guardrails)",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-contextual-grounding-check.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-rai-010",
+    "domain": "responsible",
+    "topic": "Legal Risks",
+    "tags": [
+      "biased-outputs",
+      "legal"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A recruiting tool that uses generative AI to screen resumes is found to rank candidates from certain universities in a way that disadvantages a protected group.",
+    "prompt": "Which legal risk is MOST relevant?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Biased model outputs that may violate anti-discrimination laws",
+        "correct": true,
+        "why": "Outputs that disadvantage protected groups can lead to discrimination claims and regulatory action."
+      },
+      {
+        "key": "B",
+        "text": "Model distillation cost",
+        "correct": false,
+        "why": "Training cost is not a legal discrimination risk."
+      },
+      {
+        "key": "C",
+        "text": "Vector store latency",
+        "correct": false,
+        "why": "Retrieval speed is not related to fairness or law."
+      },
+      {
+        "key": "D",
+        "text": "Prompt caching expiration",
+        "correct": false,
+        "why": "Caching behavior is unrelated to discriminatory outcomes."
+      }
+    ],
+    "explanation": {
+      "answer": "Biased outputs in high-impact decisions, such as hiring, lending or housing, can violate anti-discrimination laws and regulations. Organizations should test for bias, document decisions, maintain human oversight and limit automated decision-making in these areas.",
+      "concept": "Bias detection tools (SageMaker Clarify), subgroup analysis and human audits support compliance.",
+      "examTip": "Biased outcomes in hiring/lending = legal discrimination risk.",
+      "references": [
+        {
+          "title": "Detect pre-training data bias (SageMaker Clarify)",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-detect-data-bias.html"
+        },
+        {
+          "title": "Responsible AI at AWS",
+          "url": "https://aws.amazon.com/ai/responsible-ai/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-rai-011",
+    "domain": "responsible",
+    "topic": "Guardrails",
+    "tags": [
+      "guardrails",
+      "pii-masking"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A call-center summarization tool must not expose customers' credit card numbers and Social Security numbers in summaries, but should still produce useful summaries.",
+    "prompt": "Which configuration BEST meets this need?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Denied topics for \"customer calls\"",
+        "correct": false,
+        "why": "Denying the whole topic would block the summaries entirely."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Bedrock Guardrails sensitive information filters set to mask those PII types in outputs",
+        "correct": true,
+        "why": "Masking replaces detected PII with placeholders while allowing the rest of the summary through."
+      },
+      {
+        "key": "C",
+        "text": "Removing all guardrails",
+        "correct": false,
+        "why": "This removes the protection the team needs."
+      },
+      {
+        "key": "D",
+        "text": "Increasing the temperature",
+        "correct": false,
+        "why": "Temperature does not detect or remove sensitive information."
+      }
+    ],
+    "explanation": {
+      "answer": "Sensitive information filters in Amazon Bedrock Guardrails detect PII types (such as credit card numbers, SSNs, emails and phone numbers) and custom regex patterns. Each type can be blocked or masked, so useful content still flows while sensitive data is protected.",
+      "concept": "Masking keeps outputs usable; blocking is better when any presence of the data is unacceptable.",
+      "examTip": "Keep the summary, hide the PII = sensitive information filter with masking.",
+      "references": [
+        {
+          "title": "Guardrail components (Amazon Bedrock)",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-components.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-rai-012",
+    "domain": "responsible",
+    "topic": "Responsible AI Features",
+    "tags": [
+      "responsible-ai-dimensions"
+    ],
+    "difficulty": "medium",
+    "type": "multi",
+    "selectCount": 3,
+    "stem": "A company drafts its responsible AI principles for a new generative AI product.",
+    "prompt": "Which items are recognized features or dimensions of responsible AI? (Select THREE.)",
+    "options": [
+      {
+        "key": "A",
+        "text": "Safety",
+        "correct": true,
+        "why": "Safety focuses on preventing harmful outputs and outcomes."
+      },
+      {
+        "key": "B",
+        "text": "Robustness",
+        "correct": true,
+        "why": "Robustness ensures reliable behavior under varied and adversarial inputs."
+      },
+      {
+        "key": "C",
+        "text": "Maximizing token usage",
+        "correct": false,
+        "why": "Using more tokens is a cost factor, not a responsible AI principle."
+      },
+      {
+        "key": "D",
+        "text": "Using the largest available model",
+        "correct": false,
+        "why": "Model size is not a responsible AI dimension and may even conflict with sustainability."
+      },
+      {
+        "key": "E",
+        "text": "Fairness",
+        "correct": true,
+        "why": "Fairness ensures equitable treatment and outcomes across groups."
+      }
+    ],
+    "explanation": {
+      "answer": "Features of responsible AI listed in the exam guide include bias and fairness, inclusivity, robustness, safety and veracity. AWS's broader dimensions also include explainability, privacy and security, controllability, governance and transparency.",
+      "concept": "Responsible AI applies across the whole lifecycle: data, model selection, development, deployment and monitoring.",
+      "examTip": "Fairness, inclusivity, robustness, safety, veracity (+ explainability, privacy, transparency, governance).",
+      "references": [
+        {
+          "title": "Responsible AI at AWS",
+          "url": "https://aws.amazon.com/ai/responsible-ai/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-rai-013",
+    "domain": "responsible",
+    "topic": "Guardrails",
+    "tags": [
+      "guardrails",
+      "model-agnostic"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A company uses several foundation models, some on Amazon Bedrock and one self-hosted elsewhere. It wants one consistent set of safety policies applied to all of their inputs and outputs.",
+    "prompt": "Which approach supports this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Rely on each model provider's default behavior",
+        "correct": false,
+        "why": "Defaults differ between providers and may not match company policy."
+      },
+      {
+        "key": "B",
+        "text": "Write separate, different safety prompts for each model",
+        "correct": false,
+        "why": "Separate prompts lead to inconsistent policies and are soft controls."
+      },
+      {
+        "key": "C",
+        "text": "Define one guardrail in Amazon Bedrock Guardrails and apply it to Bedrock model calls and, through the ApplyGuardrail API, to text from other models",
+        "correct": true,
+        "why": "The ApplyGuardrail API evaluates any text against a guardrail, so the same policy works regardless of which model produced it."
+      },
+      {
+        "key": "D",
+        "text": "Use only Provisioned Throughput",
+        "correct": false,
+        "why": "Capacity settings do not enforce safety policies."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Bedrock Guardrails is model-agnostic: guardrails can be attached to Bedrock model invocations, agents and knowledge bases, and the standalone ApplyGuardrail API can assess text from any model or application. This centralizes safety policies.",
+      "concept": "Centralized, consistent safeguards simplify governance and auditing across multiple models.",
+      "examTip": "Same safety policy across many models = Bedrock Guardrails (+ ApplyGuardrail API).",
+      "references": [
+        {
+          "title": "Detect and filter harmful content with Amazon Bedrock Guardrails",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-rai-014",
+    "domain": "responsible",
+    "topic": "Legal Risks",
+    "tags": [
+      "end-user-risk",
+      "disclosure"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A telehealth company uses an AI assistant for appointment questions. Some users assume they are talking to a doctor and act on general wellness suggestions as medical advice.",
+    "prompt": "Which practice BEST reduces end-user risk?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Hide that the assistant is AI to make it feel more personal",
+        "correct": false,
+        "why": "Concealing AI use increases the risk of misplaced reliance and erodes trust."
+      },
+      {
+        "key": "B",
+        "text": "Remove all guardrails",
+        "correct": false,
+        "why": "Removing guardrails takes away safeguards and makes it more likely users receive harmful or misleading content."
+      },
+      {
+        "key": "C",
+        "text": "Increase the temperature for more engaging replies",
+        "correct": false,
+        "why": "More randomness increases risk in a health context."
+      },
+      {
+        "key": "D",
+        "text": "Clearly disclose that users are interacting with AI, state its limitations, and route medical questions to qualified professionals",
+        "correct": true,
+        "why": "Transparency about AI use and its limits, plus escalation paths, prevents users from over-relying on the assistant."
+      }
+    ],
+    "explanation": {
+      "answer": "End-user risk arises when people misunderstand or over-trust AI outputs. Disclosure that content is AI-generated, clear statements of limitations, safe-completion behavior and escalation to humans are key practices.",
+      "concept": "Transparency to users is part of human-centered design for AI (Task 4.2).",
+      "examTip": "Users might over-trust AI → disclose AI use, state limits, escalate to humans.",
+      "references": [
+        {
+          "title": "Responsible AI at AWS",
+          "url": "https://aws.amazon.com/ai/responsible-ai/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-rai-015",
+    "domain": "responsible",
+    "topic": "Guardrails",
+    "tags": [
+      "word-filters"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A children's education app must never display a specific list of competitor brand names and certain slang words in its AI-generated content.",
+    "prompt": "Which Amazon Bedrock Guardrails feature handles an exact list of terms?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Word filters (custom words and phrases, plus a managed profanity list)",
+        "correct": true,
+        "why": "Word filters block exact words and phrases you specify, such as brand names, and can include a managed profanity list."
+      },
+      {
+        "key": "B",
+        "text": "Contextual grounding check",
+        "correct": false,
+        "why": "Grounding checks evaluate whether answers are supported by sources, not whether specific words appear."
+      },
+      {
+        "key": "C",
+        "text": "Automated Reasoning checks",
+        "correct": false,
+        "why": "Automated reasoning validates logical consistency with policies, not word lists."
+      },
+      {
+        "key": "D",
+        "text": "Model distillation",
+        "correct": false,
+        "why": "Distillation is a model customization technique."
+      }
+    ],
+    "explanation": {
+      "answer": "Word filters in Amazon Bedrock Guardrails block exact matches of custom words or phrases and offer a managed profanity filter. They complement content filters, which detect harmful categories more broadly.",
+      "concept": "Use word filters for known exact terms, denied topics for subject areas, and content filters for harmful categories.",
+      "examTip": "Specific list of forbidden words = word filters.",
+      "references": [
+        {
+          "title": "Guardrail components (Amazon Bedrock)",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-components.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-rai-016",
+    "domain": "responsible",
+    "topic": "Responsible AI Features",
+    "tags": [
+      "controllability"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "An organization requires that operators be able to monitor its AI system's behavior, adjust its rules, and intervene or shut it down if it behaves unexpectedly.",
+    "prompt": "Which responsible AI dimension does this describe?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Embedding",
+        "correct": false,
+        "why": "Embeddings are vector representations used for search. They give operators no way to monitor or intervene."
+      },
+      {
+        "key": "B",
+        "text": "Controllability",
+        "correct": true,
+        "why": "Controllability means having mechanisms to monitor and steer AI system behavior, including the ability to intervene."
+      },
+      {
+        "key": "C",
+        "text": "Throughput",
+        "correct": false,
+        "why": "Throughput measures how many requests are handled, not whether operators can steer or stop the system."
+      },
+      {
+        "key": "D",
+        "text": "Tokenization",
+        "correct": false,
+        "why": "Tokenization is how text is split for models."
+      }
+    ],
+    "explanation": {
+      "answer": "Controllability refers to having mechanisms to monitor and steer AI system behavior, such as configurable guardrails, human approval steps, kill switches, monitoring and alerting.",
+      "concept": "Controllability is especially important for agents that take actions.",
+      "examTip": "Ability to monitor, steer and intervene = controllability.",
+      "references": [
+        {
+          "title": "Responsible AI at AWS",
+          "url": "https://aws.amazon.com/ai/responsible-ai/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-rai-017",
+    "domain": "responsible",
+    "topic": "Guardrails",
+    "tags": [
+      "guardrails",
+      "input-output"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A developer asks whether Amazon Bedrock Guardrails checks only what users send, or also what the model generates.",
+    "prompt": "Which statement is correct?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Guardrails only check user inputs",
+        "correct": false,
+        "why": "This is incomplete. Guardrails also evaluate model outputs, not only what users send."
+      },
+      {
+        "key": "B",
+        "text": "Guardrails only check model responses",
+        "correct": false,
+        "why": "This is incomplete. Guardrails also evaluate user inputs, not only the model's responses."
+      },
+      {
+        "key": "C",
+        "text": "Guardrails can evaluate both user inputs and model responses",
+        "correct": true,
+        "why": "Guardrails policies apply to prompts before they reach the model and to responses before they reach users."
+      },
+      {
+        "key": "D",
+        "text": "Guardrails only work during model training",
+        "correct": false,
+        "why": "Guardrails operate at inference time, not during training."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Bedrock Guardrails evaluates user inputs and model responses against configured policies. If a policy is triggered, the guardrail can block the content or mask sensitive information and return a configured message.",
+      "concept": "Checking inputs stops harmful requests and prompt attacks early; checking outputs catches harmful or sensitive generated content.",
+      "examTip": "Guardrails check both directions: input and output.",
+      "references": [
+        {
+          "title": "Detect and filter harmful content with Amazon Bedrock Guardrails",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-rai-018",
+    "domain": "responsible",
+    "topic": "Responsible Model Selection",
+    "tags": [
+      "sustainability",
+      "environmental"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company with strong sustainability goals is choosing between a very large model and a smaller model that meets its accuracy requirements for a classification task.",
+    "prompt": "Which choice aligns BEST with responsible model selection?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Choose the largest model regardless of need",
+        "correct": false,
+        "why": "Using more compute than needed increases energy consumption without benefit."
+      },
+      {
+        "key": "B",
+        "text": "Pre-train a new model from scratch",
+        "correct": false,
+        "why": "Pre-training has a very large environmental footprint and is unnecessary here."
+      },
+      {
+        "key": "C",
+        "text": "Run both models on every request",
+        "correct": false,
+        "why": "Running both models on every request doubles inference compute and energy use with no benefit."
+      },
+      {
+        "key": "D",
+        "text": "Choose the smaller model, because it meets requirements with lower energy use and environmental impact",
+        "correct": true,
+        "why": "Right-sizing models reduces compute and energy use, supporting sustainability without sacrificing required quality."
+      }
+    ],
+    "explanation": {
+      "answer": "Responsible model selection considers environmental impact and sustainability alongside accuracy and cost. Choosing the smallest model that meets requirements, reusing pre-trained models instead of training from scratch, and using efficient hardware reduce energy consumption.",
+      "concept": "AWS purpose-built chips such as Inferentia and Trainium aim for better performance per watt.",
+      "examTip": "Sustainability → right-size the model, reuse pre-trained models.",
+      "references": [
+        {
+          "title": "Responsible AI at AWS",
+          "url": "https://aws.amazon.com/ai/responsible-ai/"
+        },
+        {
+          "title": "AWS Inferentia",
+          "url": "https://aws.amazon.com/ai/machine-learning/inferentia/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-rai-019",
+    "domain": "responsible",
+    "topic": "Legal Risks",
+    "tags": [
+      "legal-risks"
+    ],
+    "difficulty": "medium",
+    "type": "multi",
+    "selectCount": 2,
+    "stem": "A legal team lists the risks of deploying a generative AI writing tool for customers.",
+    "prompt": "Which are recognized legal or business risks of generative AI? (Select TWO.)",
+    "options": [
+      {
+        "key": "A",
+        "text": "Guaranteed elimination of all errors",
+        "correct": false,
+        "why": "This is not a risk, and no AI system can eliminate all errors."
+      },
+      {
+        "key": "B",
+        "text": "Intellectual property infringement claims over generated content",
+        "correct": true,
+        "why": "Generated outputs can resemble protected works, leading to IP claims."
+      },
+      {
+        "key": "C",
+        "text": "Loss of customer trust from harmful or inaccurate outputs",
+        "correct": true,
+        "why": "Errors and harmful content can damage reputation and customer relationships."
+      },
+      {
+        "key": "D",
+        "text": "Reduced need for any human oversight",
+        "correct": false,
+        "why": "Generative AI generally increases the need for oversight in sensitive uses."
+      },
+      {
+        "key": "E",
+        "text": "Automatic compliance with all regulations",
+        "correct": false,
+        "why": "AI tools do not make applications compliant automatically."
+      }
+    ],
+    "explanation": {
+      "answer": "Legal risks of generative AI named in the exam guide include intellectual property infringement claims, biased model outputs, loss of customer trust, end-user risk and hallucinations.",
+      "concept": "Mitigations: governance policies, output review, guardrails, provenance and disclosure practices, and contractual protections from vendors.",
+      "examTip": "IP claims, bias, lost trust, end-user harm, hallucinations.",
+      "references": [
+        {
+          "title": "Responsible AI at AWS",
+          "url": "https://aws.amazon.com/ai/responsible-ai/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-rai-020",
+    "domain": "responsible",
+    "topic": "Guardrails",
+    "tags": [
+      "contextual-grounding"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A RAG application must block answers that are not supported by the retrieved documents or that are irrelevant to the user's question.",
+    "prompt": "Which Amazon Bedrock Guardrails feature addresses this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Contextual grounding check, which scores grounding and relevance",
+        "correct": true,
+        "why": "The contextual grounding check measures whether a response is grounded in the source and relevant to the query, and blocks responses below set thresholds."
+      },
+      {
+        "key": "B",
+        "text": "Sensitive information filters",
+        "correct": false,
+        "why": "These detect PII, not unsupported content."
+      },
+      {
+        "key": "C",
+        "text": "Denied topics",
+        "correct": false,
+        "why": "Denied topics block subjects, not ungrounded answers."
+      },
+      {
+        "key": "D",
+        "text": "Word filters",
+        "correct": false,
+        "why": "Word filters block specific terms and cannot judge whether an answer is supported by sources."
+      }
+    ],
+    "explanation": {
+      "answer": "The contextual grounding check in Amazon Bedrock Guardrails detects hallucinations in RAG and summarization use cases by scoring grounding (is the response supported by the reference source?) and relevance (does it answer the query?), filtering responses below configured thresholds.",
+      "concept": "Supports veracity, a responsible AI feature.",
+      "examTip": "Block answers not supported by sources = contextual grounding check.",
+      "references": [
+        {
+          "title": "Contextual grounding check (Amazon Bedrock Guardrails)",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-contextual-grounding-check.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-rai-021",
+    "domain": "responsible",
+    "topic": "Responsible AI Features",
+    "tags": [
+      "privacy"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A company designs an AI system that minimizes the personal data it collects, protects that data, and uses it only for the purposes customers agreed to.",
+    "prompt": "Which responsible AI dimension does this reflect?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Latency",
+        "correct": false,
+        "why": "Latency measures response speed. It says nothing about how personal data is collected or protected."
+      },
+      {
+        "key": "B",
+        "text": "Privacy and security",
+        "correct": true,
+        "why": "Collecting only what is needed, protecting it and respecting agreed purposes are core privacy and security practices."
+      },
+      {
+        "key": "C",
+        "text": "Model size",
+        "correct": false,
+        "why": "Model size has nothing to do with how personal data is handled."
+      },
+      {
+        "key": "D",
+        "text": "Creativity",
+        "correct": false,
+        "why": "Creativity is not a responsible AI dimension related to data handling."
+      }
+    ],
+    "explanation": {
+      "answer": "Privacy and security in responsible AI means appropriately obtaining, using and protecting data and models: data minimization, consent and purpose limitation, access controls, encryption and protection against leakage.",
+      "concept": "AWS tools include Bedrock Guardrails sensitive information filters, Amazon Macie for data discovery, AWS KMS for encryption and IAM for access control.",
+      "examTip": "Collect less, protect it, use only as agreed = privacy and security.",
+      "references": [
+        {
+          "title": "Responsible AI at AWS",
+          "url": "https://aws.amazon.com/ai/responsible-ai/"
+        },
+        {
+          "title": "Data protection in Amazon Bedrock",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/data-protection.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-rai-022",
+    "domain": "responsible",
+    "topic": "Guardrails",
+    "tags": [
+      "guardrails-limitations"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "After enabling Amazon Bedrock Guardrails, a manager says the company no longer needs to test or monitor its AI application for harmful outputs.",
+    "prompt": "What is the BEST response?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Agree; guardrails guarantee zero harmful outputs",
+        "correct": false,
+        "why": "Guardrails reduce but cannot guarantee elimination of harmful outputs."
+      },
+      {
+        "key": "B",
+        "text": "Only monitor latency",
+        "correct": false,
+        "why": "Latency monitoring does not detect harmful content."
+      },
+      {
+        "key": "C",
+        "text": "Guardrails reduce risk but are not perfect; the company should still test, red-team, monitor outputs and review incidents",
+        "correct": true,
+        "why": "No filter catches everything. Ongoing testing and monitoring are needed to find gaps and tune policies."
+      },
+      {
+        "key": "D",
+        "text": "Disable guardrails and rely on prompts",
+        "correct": false,
+        "why": "Prompts alone are weaker controls than guardrails."
+      }
+    ],
+    "explanation": {
+      "answer": "Guardrails are one layer of defense. Responsible deployment also requires evaluation and red-teaming before launch, monitoring and logging in production, user feedback channels, and incident response to adjust policies.",
+      "concept": "Defense in depth: prompts + guardrails + evaluation + monitoring + human oversight.",
+      "examTip": "Guardrails help; they don't replace testing and monitoring.",
+      "references": [
+        {
+          "title": "Detect and filter harmful content with Amazon Bedrock Guardrails",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-rai-023",
+    "domain": "responsible",
+    "topic": "Responsible AI Features",
+    "tags": [
+      "veracity",
+      "bias",
+      "definitions"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A responsible AI training session asks participants to match terms to definitions.",
+    "prompt": "Which definition of bias in AI is MOST accurate?",
+    "options": [
+      {
+        "key": "A",
+        "text": "The cost of running a model",
+        "correct": false,
+        "why": "Cost is unrelated to the definition of bias."
+      },
+      {
+        "key": "B",
+        "text": "The temperature setting of a model",
+        "correct": false,
+        "why": "Temperature is an inference parameter, not bias."
+      },
+      {
+        "key": "C",
+        "text": "Any random error in a single prediction",
+        "correct": false,
+        "why": "Bias is systematic, not random noise in an individual prediction."
+      },
+      {
+        "key": "D",
+        "text": "Systematic errors or skew in data or models that lead to unfair or inaccurate outcomes for certain groups or cases",
+        "correct": true,
+        "why": "Bias in AI refers to systematic skew that produces unfair or inaccurate results, often affecting particular groups."
+      }
+    ],
+    "explanation": {
+      "answer": "Bias is a systematic deviation that causes a model to favor or disfavor certain outcomes or groups. It can come from unrepresentative data, historical prejudice in labels, flawed features or modeling choices.",
+      "concept": "In ML theory, \"bias\" also refers to error from overly simple models (bias-variance trade-off). Context tells you which meaning is intended.",
+      "examTip": "Responsible AI bias = systematic unfair skew. Statistical bias = model too simple.",
+      "references": [
+        {
+          "title": "Detect pre-training data bias (SageMaker Clarify)",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-detect-data-bias.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-rai-024",
+    "domain": "responsible",
+    "topic": "Guardrails",
+    "tags": [
+      "guardrails",
+      "agents",
+      "knowledge-bases"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A team has built an Amazon Bedrock agent and a knowledge base and wants the same safety policies applied to both.",
+    "prompt": "Which statement is correct?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Bedrock Guardrails can be associated with Bedrock agents and used with knowledge base queries, applying the same policies",
+        "correct": true,
+        "why": "Guardrails integrate with Bedrock model invocation, Agents and Knowledge Bases, so consistent safeguards can be applied."
+      },
+      {
+        "key": "B",
+        "text": "Guardrails work only with image models",
+        "correct": false,
+        "why": "Guardrails support text, and some filters support images."
+      },
+      {
+        "key": "C",
+        "text": "Each knowledge base requires a new model to be trained for safety",
+        "correct": false,
+        "why": "Safety is configured with guardrails, not by training new models."
+      },
+      {
+        "key": "D",
+        "text": "Guardrails cannot be used with agents",
+        "correct": false,
+        "why": "Guardrails can be associated with Bedrock agents."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Bedrock Guardrails can be applied across Bedrock capabilities: direct model invocation, Bedrock Agents, Knowledge Bases (RetrieveAndGenerate) and Flows, enabling consistent safety policies.",
+      "concept": "Centralized policy reduces gaps that arise when each component has its own ad hoc rules.",
+      "examTip": "Guardrails plug into models, agents, knowledge bases and flows.",
+      "references": [
+        {
+          "title": "Detect and filter harmful content with Amazon Bedrock Guardrails",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-rai-025",
+    "domain": "responsible",
+    "topic": "Legal Risks",
+    "tags": [
+      "watermarking",
+      "transparency"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A news organization worries about AI-generated images being mistaken for real photographs. It wants to be able to identify images created by the image-generation model it uses.",
+    "prompt": "Which capability helps?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Increasing the image resolution",
+        "correct": false,
+        "why": "Higher resolution makes images more realistic but does not identify their origin."
+      },
+      {
+        "key": "B",
+        "text": "Invisible watermarking of AI-generated images, with a way to detect the watermark",
+        "correct": true,
+        "why": "Some image-generation models, such as Amazon's, embed invisible watermarks that can later be detected to identify AI-generated images."
+      },
+      {
+        "key": "C",
+        "text": "Batch inference",
+        "correct": false,
+        "why": "Batch inference changes how requests are processed, not provenance."
+      },
+      {
+        "key": "D",
+        "text": "Prompt caching",
+        "correct": false,
+        "why": "Caching affects cost and latency, not content provenance."
+      }
+    ],
+    "explanation": {
+      "answer": "Watermarking and content credentials help identify AI-generated content, supporting transparency and reducing misuse such as misinformation. Amazon's image-generation models in Bedrock add invisible watermarks to generated images and support detecting them.",
+      "concept": "Provenance and disclosure of AI-generated content reduce legal and reputational risk.",
+      "examTip": "Identify AI-generated images = watermarking + detection.",
+      "references": [
+        {
+          "title": "Amazon Nova",
+          "url": "https://aws.amazon.com/nova/"
+        },
+        {
+          "title": "Responsible AI at AWS",
+          "url": "https://aws.amazon.com/ai/responsible-ai/"
+        }
+      ]
+    }
+  }
+]

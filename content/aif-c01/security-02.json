@@ -1,0 +1,1289 @@
+[
+  {
+    "id": "aif-sec-026",
+    "domain": "security",
+    "topic": "Data Lineage",
+    "tags": [
+      "data-lineage",
+      "source-citation"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "After a model produces a problematic output, investigators need to trace which datasets, versions and processing steps were used to train it.",
+    "prompt": "Which practice makes this possible?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Deleting training data immediately after training",
+        "correct": false,
+        "why": "Deleting data without records makes tracing impossible."
+      },
+      {
+        "key": "B",
+        "text": "Tracking data lineage: recording data origins, transformations and versions across the ML lifecycle",
+        "correct": true,
+        "why": "Lineage records let teams trace a model back to its exact data sources and processing."
+      },
+      {
+        "key": "C",
+        "text": "Increasing temperature",
+        "correct": false,
+        "why": "Temperature is unrelated to traceability."
+      },
+      {
+        "key": "D",
+        "text": "Using prompt caching",
+        "correct": false,
+        "why": "Caching affects cost and latency, not traceability."
+      }
+    ],
+    "explanation": {
+      "answer": "Data lineage documents where data came from, how it was transformed and which versions were used to train which models. It supports debugging, audits, compliance and responding to issues such as poisoned or unlicensed data.",
+      "concept": "SageMaker AI lineage tracking, AWS Glue Data Catalog and SageMaker Model Cards help capture lineage and documentation.",
+      "examTip": "Trace model back to its data = data lineage.",
+      "references": [
+        {
+          "title": "AWS Glue Data Catalog",
+          "url": "https://docs.aws.amazon.com/glue/latest/dg/catalog-and-crawler.html"
+        },
+        {
+          "title": "Amazon SageMaker Model Cards",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/model-cards.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-sec-027",
+    "domain": "security",
+    "topic": "Data Lineage",
+    "tags": [
+      "data-catalog",
+      "glue"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A data platform team wants a central inventory of datasets in its data lake, including schemas and locations, so AI teams can find approved data and governance can track its use.",
+    "prompt": "Which AWS capability provides a central metadata catalog?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Polly",
+        "correct": false,
+        "why": "Polly converts text to speech and cannot catalog datasets or their schemas."
+      },
+      {
+        "key": "B",
+        "text": "Amazon EC2 Spot",
+        "correct": false,
+        "why": "EC2 Spot is a discounted compute pricing option, not a metadata catalog."
+      },
+      {
+        "key": "C",
+        "text": "AWS Glue Data Catalog",
+        "correct": true,
+        "why": "The Glue Data Catalog stores metadata such as table definitions, schemas and locations for data assets."
+      },
+      {
+        "key": "D",
+        "text": "Amazon Route 53",
+        "correct": false,
+        "why": "Route 53 is a DNS service and does not store metadata about data assets."
+      }
+    ],
+    "explanation": {
+      "answer": "Data cataloging organizes metadata about data assets so they can be discovered, understood and governed. The AWS Glue Data Catalog is a central metadata repository; AWS Lake Formation adds fine-grained access control, and Amazon DataZone supports data discovery and governance across an organization.",
+      "concept": "Cataloging and lineage together support documenting data origins for AI systems.",
+      "examTip": "Central metadata inventory of datasets = Glue Data Catalog.",
+      "references": [
+        {
+          "title": "AWS Glue Data Catalog",
+          "url": "https://docs.aws.amazon.com/glue/latest/dg/catalog-and-crawler.html"
+        },
+        {
+          "title": "What is Amazon DataZone?",
+          "url": "https://docs.aws.amazon.com/datazone/latest/userguide/what-is-datazone.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-sec-028",
+    "domain": "security",
+    "topic": "Secure Data Engineering",
+    "tags": [
+      "lake-formation",
+      "fine-grained-access"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "Data scientists need access to a customer table for model training, but must not see columns containing Social Security numbers and must only see rows for their region.",
+    "prompt": "Which AWS capability provides this fine-grained access control for data lake tables?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Raising the model temperature",
+        "correct": false,
+        "why": "Temperature is unrelated to data access control."
+      },
+      {
+        "key": "B",
+        "text": "Amazon CloudFront",
+        "correct": false,
+        "why": "CloudFront is a content delivery network."
+      },
+      {
+        "key": "C",
+        "text": "Amazon Polly",
+        "correct": false,
+        "why": "Polly converts text to speech and has no data access control features."
+      },
+      {
+        "key": "D",
+        "text": "AWS Lake Formation column-level and row-level permissions",
+        "correct": true,
+        "why": "Lake Formation grants fine-grained access to tables, columns and rows in the data lake."
+      }
+    ],
+    "explanation": {
+      "answer": "Data access control is a secure data engineering best practice. AWS Lake Formation centrally manages fine-grained permissions on data lake resources, including column-level, row-level and cell-level security, so people and models get only the data they need.",
+      "concept": "Least-privilege access to training data reduces privacy risk and potential leakage through models.",
+      "examTip": "Column/row-level access to data lake = Lake Formation.",
+      "references": [
+        {
+          "title": "What is AWS Lake Formation?",
+          "url": "https://docs.aws.amazon.com/lake-formation/latest/dg/what-is-lake-formation.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-sec-029",
+    "domain": "security",
+    "topic": "Secure Data Engineering",
+    "tags": [
+      "data-quality"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "An AI team ingests data from many sources into its training pipeline. Corrupted files and wrongly formatted records have caused poor models in the past.",
+    "prompt": "Which secure data engineering practice addresses this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Assess data quality with automated validation checks (completeness, format, ranges, duplicates) before data enters training",
+        "correct": true,
+        "why": "Validating data quality early prevents corrupted or malformed data from degrading models."
+      },
+      {
+        "key": "B",
+        "text": "Increase model size to absorb errors",
+        "correct": false,
+        "why": "Larger models also learn from bad data, so model size cannot compensate for poor data quality."
+      },
+      {
+        "key": "C",
+        "text": "Skip logging of data sources",
+        "correct": false,
+        "why": "Without source logs, problems cannot be traced."
+      },
+      {
+        "key": "D",
+        "text": "Train on whatever arrives",
+        "correct": false,
+        "why": "Unvalidated data leads to unreliable models."
+      }
+    ],
+    "explanation": {
+      "answer": "Best practices for secure data engineering include assessing data quality, implementing privacy-enhancing technologies, enforcing data access control and maintaining data integrity. Automated validation catches bad data before it affects models.",
+      "concept": "Tools such as AWS Glue Data Quality and SageMaker Data Wrangler data quality reports support these checks.",
+      "examTip": "Validate data quality before training.",
+      "references": [
+        {
+          "title": "Amazon SageMaker Data Wrangler",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/data-wrangler.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-sec-030",
+    "domain": "security",
+    "topic": "Secure Data Engineering",
+    "tags": [
+      "privacy-enhancing-technologies",
+      "anonymization"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A health insurer wants to train a model on claims data while reducing the risk that individual patients can be identified from the training data or model outputs.",
+    "prompt": "Which practice applies privacy-enhancing technologies?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Keep every identifier to maximize accuracy",
+        "correct": false,
+        "why": "Retaining unnecessary identifiers increases privacy risk."
+      },
+      {
+        "key": "B",
+        "text": "De-identify data through masking, tokenization or pseudonymization, and remove direct identifiers not needed for the task",
+        "correct": true,
+        "why": "Privacy-enhancing techniques reduce identifiability while preserving data utility."
+      },
+      {
+        "key": "C",
+        "text": "Store patient names in model prompts",
+        "correct": false,
+        "why": "This increases exposure of identifiable data."
+      },
+      {
+        "key": "D",
+        "text": "Publish the dataset for transparency",
+        "correct": false,
+        "why": "Publishing would expose personal health information."
+      }
+    ],
+    "explanation": {
+      "answer": "Privacy-enhancing technologies (PETs) include data minimization, masking, tokenization, pseudonymization, anonymization, aggregation and techniques such as differential privacy. They reduce the risk of exposing individuals' data through datasets or models.",
+      "concept": "Amazon Comprehend (and Comprehend Medical) can detect PII/PHI for redaction, and Amazon Macie can find sensitive data in S3.",
+      "examTip": "Reduce identifiability of training data = privacy-enhancing technologies.",
+      "references": [
+        {
+          "title": "What is Amazon Comprehend Medical?",
+          "url": "https://docs.aws.amazon.com/comprehend-medical/latest/dev/comprehendmedical-welcome.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-sec-031",
+    "domain": "security",
+    "topic": "Secure Data Engineering",
+    "tags": [
+      "data-integrity"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A security team worries that someone could secretly modify the training data stored in Amazon S3 between data preparation and model training.",
+    "prompt": "Which controls help protect data integrity?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Allow public write access to the bucket",
+        "correct": false,
+        "why": "Public write access lets anyone modify the training data, inviting tampering and poisoning."
+      },
+      {
+        "key": "B",
+        "text": "Increase the model's temperature",
+        "correct": false,
+        "why": "Temperature has nothing to do with data integrity."
+      },
+      {
+        "key": "C",
+        "text": "Restrict write access with IAM and bucket policies, enable S3 versioning and Object Lock where appropriate, and log access with CloudTrail",
+        "correct": true,
+        "why": "Limiting who can write, preserving versions and logging changes protect against and reveal tampering."
+      },
+      {
+        "key": "D",
+        "text": "Disable all logging",
+        "correct": false,
+        "why": "Without logs, tampering cannot be detected."
+      }
+    ],
+    "explanation": {
+      "answer": "Data integrity ensures data is not altered without authorization. Controls include least-privilege write permissions, versioning, immutability (S3 Object Lock), checksums and audit logging (CloudTrail data events).",
+      "concept": "Integrity protections also defend against training data poisoning.",
+      "examTip": "Prevent/detect tampering of training data = access control + versioning + logging.",
+      "references": [
+        {
+          "title": "AWS CloudTrail User Guide",
+          "url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-user-guide.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-sec-032",
+    "domain": "security",
+    "topic": "Audit Logging",
+    "tags": [
+      "model-invocation-logging"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A regulated company must keep records of the prompts sent to and responses received from foundation models on Amazon Bedrock for audit purposes.",
+    "prompt": "Which feature should it enable?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Polly",
+        "correct": false,
+        "why": "Polly converts text to speech and does not record model prompts or responses."
+      },
+      {
+        "key": "B",
+        "text": "AWS Cost Explorer",
+        "correct": false,
+        "why": "Cost Explorer shows spending, not prompts and responses."
+      },
+      {
+        "key": "C",
+        "text": "AWS Snowball",
+        "correct": false,
+        "why": "Snowball physically transfers data and does not log model invocations."
+      },
+      {
+        "key": "D",
+        "text": "Amazon Bedrock model invocation logging to Amazon S3 and/or Amazon CloudWatch Logs",
+        "correct": true,
+        "why": "Model invocation logging captures request and response data for Bedrock model calls for auditing and analysis."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Bedrock model invocation logging records invocation metadata, inputs and outputs to Amazon S3 and/or CloudWatch Logs. This supports audit trails, troubleshooting and analysis of AI interactions. AWS CloudTrail separately records API calls (who called what, when).",
+      "concept": "Logs containing prompts may include sensitive data, so protect them with encryption, access controls and retention policies.",
+      "examTip": "Record prompts and responses = Bedrock model invocation logging. Record API activity = CloudTrail.",
+      "references": [
+        {
+          "title": "Monitor model invocation using logging",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/model-invocation-logging.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-sec-033",
+    "domain": "security",
+    "topic": "Audit Logging",
+    "tags": [
+      "cloudtrail"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A security team needs to know which IAM user deleted a Bedrock guardrail last Tuesday and from which IP address.",
+    "prompt": "Which AWS service records this information?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS CloudTrail",
+        "correct": true,
+        "why": "CloudTrail records API calls, including who made them, when and from where."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Polly",
+        "correct": false,
+        "why": "Polly converts text to speech and does not record who called which AWS API."
+      },
+      {
+        "key": "C",
+        "text": "Amazon Translate",
+        "correct": false,
+        "why": "Translate converts languages and keeps no record of API activity."
+      },
+      {
+        "key": "D",
+        "text": "Amazon Rekognition",
+        "correct": false,
+        "why": "Rekognition analyzes images and video and does not log account activity."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS CloudTrail logs API activity across AWS services, including Amazon Bedrock management actions such as creating or deleting guardrails, recording the identity, time, source IP and parameters.",
+      "concept": "CloudTrail is foundational for audit trails, security investigations and compliance evidence.",
+      "examTip": "Who did what, when, from where = CloudTrail.",
+      "references": [
+        {
+          "title": "AWS CloudTrail User Guide",
+          "url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-user-guide.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-sec-034",
+    "domain": "security",
+    "topic": "Hallucination Mitigation",
+    "tags": [
+      "rag-grounding",
+      "hallucination"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A pharmaceutical company's assistant must give accurate answers about drug interactions and must not invent information.",
+    "prompt": "Which technique MOST directly improves output accuracy?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Allow unlimited response length",
+        "correct": false,
+        "why": "Longer responses do not improve accuracy."
+      },
+      {
+        "key": "B",
+        "text": "Ground responses in authoritative sources using RAG and validate them with contextual grounding checks",
+        "correct": true,
+        "why": "Grounding in verified sources and checking that answers are supported reduces hallucinations."
+      },
+      {
+        "key": "C",
+        "text": "Increase temperature for richer answers",
+        "correct": false,
+        "why": "Higher randomness increases the risk of fabricated content."
+      },
+      {
+        "key": "D",
+        "text": "Remove all source documents",
+        "correct": false,
+        "why": "Without sources, the model relies only on its training data."
+      }
+    ],
+    "explanation": {
+      "answer": "Hallucination mitigation methods include RAG grounding in authoritative data, contextual grounding checks (Bedrock Guardrails), output validation against rules or databases, Automated Reasoning checks, confidence scoring and human review for high-risk answers.",
+      "concept": "Grounding techniques are listed in Domain 5 as ways to improve output accuracy.",
+      "examTip": "Reduce hallucinations = ground (RAG) + verify (grounding checks, validation).",
+      "references": [
+        {
+          "title": "Contextual grounding check (Amazon Bedrock Guardrails)",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-contextual-grounding-check.html"
+        },
+        {
+          "title": "What are AI hallucinations?",
+          "url": "https://aws.amazon.com/what-is/ai-hallucinations/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-sec-035",
+    "domain": "security",
+    "topic": "Hallucination Mitigation",
+    "tags": [
+      "output-validation"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "An LLM extracts invoice totals and due dates for an accounts-payable system. Occasionally it outputs dates that do not exist or totals that do not match the invoice line items.",
+    "prompt": "Which control BEST catches these errors before payment?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Trust the model's output because it is usually correct",
+        "correct": false,
+        "why": "Occasional errors in payments can be costly."
+      },
+      {
+        "key": "B",
+        "text": "Raise the temperature",
+        "correct": false,
+        "why": "More randomness increases the chance of wrong values instead of catching them before payment."
+      },
+      {
+        "key": "C",
+        "text": "Validate outputs programmatically, for example checking date formats and recomputing totals from line items, and route failures to human review",
+        "correct": true,
+        "why": "Deterministic validation catches impossible or inconsistent values, and human review handles exceptions."
+      },
+      {
+        "key": "D",
+        "text": "Remove the line items from the input",
+        "correct": false,
+        "why": "Removing data makes accurate extraction and validation harder."
+      }
+    ],
+    "explanation": {
+      "answer": "Output validation checks model outputs against rules, schemas and source data before they are used. Combined with confidence thresholds and human review (for example Amazon Augmented AI), it prevents hallucinated or inconsistent values from causing harm.",
+      "concept": "Output filtering and validation is listed among security and privacy considerations for AI systems.",
+      "examTip": "Model output drives a transaction → validate it deterministically first.",
+      "references": [
+        {
+          "title": "Using Amazon Augmented AI for human review",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/a2i-use-augmented-ai-a2i-human-review-loops.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-sec-036",
+    "domain": "security",
+    "topic": "Hallucination Mitigation",
+    "tags": [
+      "confidence-scoring"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A claims assistant should automatically answer questions when it is confident and hand off to a human agent when it is not.",
+    "prompt": "Which technique supports this design?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Increasing max tokens",
+        "correct": false,
+        "why": "Response length does not indicate how likely an answer is to be correct."
+      },
+      {
+        "key": "B",
+        "text": "Always sending everything to humans",
+        "correct": false,
+        "why": "This forfeits automation benefits for confident cases."
+      },
+      {
+        "key": "C",
+        "text": "Always answering automatically",
+        "correct": false,
+        "why": "This ignores uncertainty and risks wrong answers."
+      },
+      {
+        "key": "D",
+        "text": "Confidence scoring, for example using grounding or relevance scores, with a threshold that routes low-confidence answers to humans",
+        "correct": true,
+        "why": "Scoring confidence and setting thresholds lets the system act only when likely correct and escalate otherwise."
+      }
+    ],
+    "explanation": {
+      "answer": "Confidence scoring estimates how reliable an output is, using signals such as grounding and relevance scores from Bedrock Guardrails, retrieval similarity scores or evaluator models. Thresholds route uncertain cases to human review.",
+      "concept": "This combines hallucination detection with human-in-the-loop design.",
+      "examTip": "Answer when confident, escalate when not = confidence scoring + threshold.",
+      "references": [
+        {
+          "title": "Contextual grounding check (Amazon Bedrock Guardrails)",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-contextual-grounding-check.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-sec-037",
+    "domain": "security",
+    "topic": "Privacy Risks",
+    "tags": [
+      "data-leakage",
+      "training-data-memorization"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A company fine-tuned a model on raw customer support logs. A tester discovers that clever prompts can make the model reproduce real customers' phone numbers from the training data.",
+    "prompt": "Which risk does this demonstrate, and what is the BEST prevention?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Training data leakage through memorization; remove or de-identify sensitive data before fine-tuning and filter outputs for PII",
+        "correct": true,
+        "why": "Models can memorize and reproduce training data, so sensitive data should not be in training sets, and outputs should be filtered."
+      },
+      {
+        "key": "B",
+        "text": "Data residency; change Regions",
+        "correct": false,
+        "why": "Moving Regions does not stop the model reproducing memorized data."
+      },
+      {
+        "key": "C",
+        "text": "Latency; use a faster model",
+        "correct": false,
+        "why": "Response speed is unrelated to a model reproducing memorized training data."
+      },
+      {
+        "key": "D",
+        "text": "Underfitting; train for more epochs",
+        "correct": false,
+        "why": "More training could increase memorization."
+      }
+    ],
+    "explanation": {
+      "answer": "Models can memorize parts of their training data and reproduce them when prompted, creating data leakage risk. Prevention: data minimization and de-identification before training, access controls on the model, and output filtering for sensitive information.",
+      "concept": "Data leakage prevention is a key AI privacy consideration in Domain 5.",
+      "examTip": "Model regurgitates training PII → clean data before training + filter outputs.",
+      "references": [
+        {
+          "title": "Prepare data for model customization",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/model-customization-prepare.html"
+        },
+        {
+          "title": "Guardrail components (Amazon Bedrock)",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-components.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-sec-038",
+    "domain": "security",
+    "topic": "Privacy Risks",
+    "tags": [
+      "prompt-data",
+      "third-party-tools"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "Employees paste confidential source code and customer data into a free public AI chatbot not approved by the company.",
+    "prompt": "Which governance and security response is MOST appropriate?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Increase temperature on the public chatbot",
+        "correct": false,
+        "why": "The company cannot control, and should not rely on, settings of an unapproved external tool."
+      },
+      {
+        "key": "B",
+        "text": "Define an acceptable-use policy, provide approved AI tools with appropriate data protections, and train employees on what data may be shared",
+        "correct": true,
+        "why": "Policies, approved alternatives and training address the root cause of risky behavior."
+      },
+      {
+        "key": "C",
+        "text": "Ignore it because the chatbot is free",
+        "correct": false,
+        "why": "Free consumer tools may store or use submitted data, creating leakage risk."
+      },
+      {
+        "key": "D",
+        "text": "Encourage employees to paste more data for better answers",
+        "correct": false,
+        "why": "Encouraging employees to paste more data increases the amount of confidential data exposed."
+      }
+    ],
+    "explanation": {
+      "answer": "Using consumer AI applications with sensitive data is a common leakage risk (scope 1 in the Generative AI Security Scoping Matrix). Governance responses include acceptable-use policies, approved enterprise tools with data protections, technical controls and employee training.",
+      "concept": "Team training requirements are part of governance protocols in the exam guide.",
+      "examTip": "Staff using unapproved AI tools → policy + approved tools + training.",
+      "references": [
+        {
+          "title": "Generative AI Security Scoping Matrix",
+          "url": "https://aws.amazon.com/ai/security/generative-ai-scoping-matrix/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-sec-039",
+    "domain": "security",
+    "topic": "Privacy Risks",
+    "tags": [
+      "log-security"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A team enables model invocation logging for audits. The logs now contain customer prompts with personal information, and the log bucket is readable by all developers.",
+    "prompt": "What should the team do?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Make the log bucket public for transparency",
+        "correct": false,
+        "why": "Public logs would expose customers' personal information to anyone."
+      },
+      {
+        "key": "B",
+        "text": "Disable all logging permanently",
+        "correct": false,
+        "why": "Audit requirements still need logs; the logs should be protected, not eliminated."
+      },
+      {
+        "key": "C",
+        "text": "Restrict access to the logs, encrypt them with KMS, apply retention limits, and consider masking sensitive data before logging",
+        "correct": true,
+        "why": "Logs of AI interactions are sensitive data and need the same protections as other personal data."
+      },
+      {
+        "key": "D",
+        "text": "Keep logs forever without access controls",
+        "correct": false,
+        "why": "Unlimited retention and open access increase privacy risk."
+      }
+    ],
+    "explanation": {
+      "answer": "Audit logs for AI interactions often contain sensitive prompts and outputs. Protect them with least-privilege access, encryption, retention policies aligned with regulations, and redaction where possible.",
+      "concept": "Audit trail and logging requirements must be balanced with privacy obligations.",
+      "examTip": "AI logs are sensitive data → restrict, encrypt, set retention.",
+      "references": [
+        {
+          "title": "Monitor model invocation using logging",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/model-invocation-logging.html"
+        },
+        {
+          "title": "AWS KMS overview",
+          "url": "https://docs.aws.amazon.com/kms/latest/developerguide/overview.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-sec-040",
+    "domain": "security",
+    "topic": "Data Lineage",
+    "tags": [
+      "model-cards",
+      "documentation"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A governance team wants each model's documentation to include where its training data came from, how it was prepared and what licenses apply.",
+    "prompt": "Which AWS capability is designed to hold this documentation alongside other model details?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Direct Connect",
+        "correct": false,
+        "why": "Direct Connect provides dedicated network links and has no documentation features."
+      },
+      {
+        "key": "B",
+        "text": "Amazon ElastiCache",
+        "correct": false,
+        "why": "ElastiCache is an in-memory cache and is not a place to document models."
+      },
+      {
+        "key": "C",
+        "text": "Amazon Polly",
+        "correct": false,
+        "why": "Polly converts text to speech and cannot hold model documentation."
+      },
+      {
+        "key": "D",
+        "text": "Amazon SageMaker Model Cards",
+        "correct": true,
+        "why": "Model Cards document training details, data sources, intended uses and evaluations in one place."
+      }
+    ],
+    "explanation": {
+      "answer": "Documenting data origins is part of source citation and data lineage. SageMaker Model Cards include sections for training details and data, supporting transparency, audits and responsible use.",
+      "concept": "The exam guide lists SageMaker Model Cards under documenting data origins in Domain 5.",
+      "examTip": "Model documentation including data origins = SageMaker Model Cards.",
+      "references": [
+        {
+          "title": "Amazon SageMaker Model Cards",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/model-cards.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-sec-041",
+    "domain": "security",
+    "topic": "Security Considerations",
+    "tags": [
+      "ai-security-considerations"
+    ],
+    "difficulty": "medium",
+    "type": "multi",
+    "selectCount": 3,
+    "stem": "A security architect lists security and privacy considerations specific to generative AI applications.",
+    "prompt": "Which items belong on the list? (Select THREE.)",
+    "options": [
+      {
+        "key": "A",
+        "text": "Audit trails and logging of AI interactions",
+        "correct": true,
+        "why": "Logging supports investigations, compliance and accountability."
+      },
+      {
+        "key": "B",
+        "text": "Choosing the font for the chat interface",
+        "correct": false,
+        "why": "Visual design is not a security consideration."
+      },
+      {
+        "key": "C",
+        "text": "Maximizing response length",
+        "correct": false,
+        "why": "Response length is not a security control."
+      },
+      {
+        "key": "D",
+        "text": "Data leakage through model outputs",
+        "correct": true,
+        "why": "Models can reveal sensitive context or training data."
+      },
+      {
+        "key": "E",
+        "text": "Prompt injection",
+        "correct": true,
+        "why": "Malicious inputs can manipulate model behavior."
+      }
+    ],
+    "explanation": {
+      "answer": "Security and privacy considerations for AI systems include application security, threat detection, vulnerability management, infrastructure protection, prompt injection, encryption at rest and in transit, data leakage prevention, output filtering and validation, audit trails and logging, and toxicity.",
+      "concept": "Many are traditional security controls; prompt injection, leakage through outputs and toxicity are AI-specific.",
+      "examTip": "AI security = classic controls + prompt injection, leakage, output validation, toxicity.",
+      "references": [
+        {
+          "title": "Generative AI Lens: AWS Well-Architected",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/generative-ai-lens.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-sec-042",
+    "domain": "security",
+    "topic": "Secure Data Engineering",
+    "tags": [
+      "data-minimization",
+      "rag"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A team plans to load an entire CRM export, including customers' full payment details, into a knowledge base for a sales assistant that only needs account names and product holdings.",
+    "prompt": "What is the BEST approach?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Include only the fields the assistant needs and exclude payment details from the knowledge base",
+        "correct": true,
+        "why": "Data minimization reduces the sensitive data that could leak through retrieval or outputs."
+      },
+      {
+        "key": "B",
+        "text": "Store payment details in the system prompt",
+        "correct": false,
+        "why": "Prompts can be exposed through prompt attacks, so payment details must never be placed in them."
+      },
+      {
+        "key": "C",
+        "text": "Load payment details but ask the model not to mention them",
+        "correct": false,
+        "why": "Instructions are not a reliable control against leakage."
+      },
+      {
+        "key": "D",
+        "text": "Load everything in case it is useful later",
+        "correct": false,
+        "why": "Unnecessary sensitive data increases risk without benefit."
+      }
+    ],
+    "explanation": {
+      "answer": "Data minimization, providing AI systems only with the data necessary for their purpose, is a foundational privacy and secure data engineering practice. Data that is never retrieved cannot leak.",
+      "concept": "Combine minimization with access control, encryption and output filtering.",
+      "examTip": "Only give the AI the data it needs.",
+      "references": [
+        {
+          "title": "Data protection in Amazon Bedrock",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/data-protection.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-sec-043",
+    "domain": "security",
+    "topic": "Hallucination Mitigation",
+    "tags": [
+      "automated-reasoning",
+      "verification"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "An insurance company's assistant explains coverage rules. The company wants answers to be checked against a formal representation of its policy rules, producing verifiable results rather than a probability score.",
+    "prompt": "Which capability fits?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Prompt caching",
+        "correct": false,
+        "why": "Prompt caching reduces cost and latency and does not verify answers against rules."
+      },
+      {
+        "key": "B",
+        "text": "Automated Reasoning checks in Amazon Bedrock Guardrails",
+        "correct": true,
+        "why": "Automated Reasoning checks use formal logic to verify whether responses comply with encoded policy rules."
+      },
+      {
+        "key": "C",
+        "text": "Batch inference",
+        "correct": false,
+        "why": "Batch inference is an asynchronous execution mode and performs no logical verification."
+      },
+      {
+        "key": "D",
+        "text": "Word filters",
+        "correct": false,
+        "why": "Word filters block specific terms and cannot verify logical correctness."
+      }
+    ],
+    "explanation": {
+      "answer": "Automated Reasoning checks translate natural-language policies into formal logic and mathematically verify whether model responses are consistent with them, helping detect hallucinations and incorrect claims with explainable results.",
+      "concept": "Contextual grounding checks compare responses to retrieved sources; Automated Reasoning verifies against formal rules. Both improve accuracy.",
+      "examTip": "Verify answers against formal rules = Automated Reasoning checks.",
+      "references": [
+        {
+          "title": "Automated Reasoning checks (Amazon Bedrock Guardrails)",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-automated-reasoning-checks.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-sec-044",
+    "domain": "security",
+    "topic": "Audit Logging",
+    "tags": [
+      "agent-observability",
+      "audit"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "Compliance requires a complete record of every action an AI agent took, including tool calls, inputs and outputs, for each customer session.",
+    "prompt": "Which capability provides this for agents on AWS?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Cost Explorer",
+        "correct": false,
+        "why": "Cost Explorer shows spending, not the steps and tool calls an agent performed."
+      },
+      {
+        "key": "B",
+        "text": "Amazon S3 Glacier only",
+        "correct": false,
+        "why": "Glacier stores archives but does not capture agent actions."
+      },
+      {
+        "key": "C",
+        "text": "Agent tracing and observability (for example Amazon Bedrock AgentCore Observability or Bedrock Agents traces) combined with CloudTrail",
+        "correct": true,
+        "why": "Agent traces record each step and tool call, while CloudTrail records AWS API activity, together forming an audit trail."
+      },
+      {
+        "key": "D",
+        "text": "Amazon Polly",
+        "correct": false,
+        "why": "Polly converts text to speech and does not record agent actions."
+      }
+    ],
+    "explanation": {
+      "answer": "Audit trails for AI interactions require capturing agent steps, tool invocations, parameters and results. AgentCore Observability and Bedrock Agents trace features provide this visibility, and CloudTrail logs API calls made in the account.",
+      "concept": "Retain these logs according to policy and protect them as sensitive data.",
+      "examTip": "Record everything an agent did = agent tracing/observability + CloudTrail.",
+      "references": [
+        {
+          "title": "Amazon Bedrock AgentCore Observability",
+          "url": "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/observability.html"
+        },
+        {
+          "title": "AWS CloudTrail User Guide",
+          "url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-user-guide.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-sec-045",
+    "domain": "security",
+    "topic": "Privacy Risks",
+    "tags": [
+      "multi-tenant",
+      "isolation"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A software company offers an AI assistant to many business customers from one application. One customer's assistant once included details from another customer's documents in an answer.",
+    "prompt": "Which design flaw MOST likely caused this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "The model was too small",
+        "correct": false,
+        "why": "Model size does not cause cross-tenant leakage."
+      },
+      {
+        "key": "B",
+        "text": "The embedding dimension was too large",
+        "correct": false,
+        "why": "Vector size does not explain data appearing across tenants."
+      },
+      {
+        "key": "C",
+        "text": "The model's temperature was too low",
+        "correct": false,
+        "why": "Temperature does not cause cross-tenant data access."
+      },
+      {
+        "key": "D",
+        "text": "Missing tenant isolation in retrieval, memory or context, allowing one tenant's data into another tenant's prompts",
+        "correct": true,
+        "why": "Without strict per-tenant separation of data and context, information can leak across customers."
+      }
+    ],
+    "explanation": {
+      "answer": "Multi-tenant generative AI applications must isolate each tenant's data in retrieval (separate indexes or enforced metadata filters), memory and caches, and must never mix tenants' content in a prompt. Failures lead to data leakage.",
+      "concept": "Tenant isolation is a key application security consideration for SaaS AI products.",
+      "examTip": "Customer A sees Customer B's data → tenant isolation failure.",
+      "references": [
+        {
+          "title": "Generative AI Lens: AWS Well-Architected",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/generative-ai-lens.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-sec-046",
+    "domain": "security",
+    "topic": "Hallucination Mitigation",
+    "tags": [
+      "citations",
+      "verification"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A legal research assistant must allow lawyers to quickly verify every claim it makes.",
+    "prompt": "Which feature BEST supports this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Source citations linking each claim to the retrieved passage it came from",
+        "correct": true,
+        "why": "Citations let users check claims against the original source, exposing any unsupported statements."
+      },
+      {
+        "key": "B",
+        "text": "Higher temperature",
+        "correct": false,
+        "why": "More randomness makes answers less reliable and no easier to verify."
+      },
+      {
+        "key": "C",
+        "text": "Longer answers",
+        "correct": false,
+        "why": "Longer answers do not show where claims came from, so they are no easier to verify."
+      },
+      {
+        "key": "D",
+        "text": "Removing references to save tokens",
+        "correct": false,
+        "why": "This removes the ability to verify claims."
+      }
+    ],
+    "explanation": {
+      "answer": "Source citation connects generated claims to their supporting documents, allowing verification and making hallucinations easier to detect. Amazon Bedrock Knowledge Bases returns citations with generated responses.",
+      "concept": "Citation is both a grounding technique and a transparency practice.",
+      "examTip": "Make claims verifiable = cite sources.",
+      "references": [
+        {
+          "title": "Retrieve data and generate AI responses with Amazon Bedrock Knowledge Bases",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/knowledge-base.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-sec-047",
+    "domain": "security",
+    "topic": "Secure Data Engineering",
+    "tags": [
+      "secure-data-engineering"
+    ],
+    "difficulty": "medium",
+    "type": "multi",
+    "selectCount": 2,
+    "stem": "A data engineering lead defines best practices for pipelines that feed AI training and retrieval.",
+    "prompt": "Which practices are secure data engineering best practices? (Select TWO.)",
+    "options": [
+      {
+        "key": "A",
+        "text": "Remove audit logs to save storage",
+        "correct": false,
+        "why": "Audit logs are needed for traceability and incident response."
+      },
+      {
+        "key": "B",
+        "text": "Share raw sensitive data broadly to speed up experiments",
+        "correct": false,
+        "why": "Broad sharing increases privacy and leakage risk."
+      },
+      {
+        "key": "C",
+        "text": "Skip encryption for internal buckets",
+        "correct": false,
+        "why": "Internal data still needs encryption at rest."
+      },
+      {
+        "key": "D",
+        "text": "Validate data quality and integrity before use",
+        "correct": true,
+        "why": "Quality and integrity checks prevent corrupted or tampered data from affecting models."
+      },
+      {
+        "key": "E",
+        "text": "Enforce least-privilege access to datasets",
+        "correct": true,
+        "why": "Data access control limits exposure of sensitive data."
+      }
+    ],
+    "explanation": {
+      "answer": "Secure data engineering best practices include assessing data quality, privacy-enhancing technologies, data access control, data integrity, encryption, and lineage and audit logging.",
+      "concept": "AWS tools: Lake Formation (access), Macie (sensitive data discovery), KMS (encryption), CloudTrail (audit), Glue Data Catalog (cataloging).",
+      "examTip": "Quality, privacy, access control, integrity.",
+      "references": [
+        {
+          "title": "What is AWS Lake Formation?",
+          "url": "https://docs.aws.amazon.com/lake-formation/latest/dg/what-is-lake-formation.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-sec-048",
+    "domain": "security",
+    "topic": "Security Considerations",
+    "tags": [
+      "indirect-injection",
+      "tool-outputs"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "An email-triage agent reads incoming messages. A phishing email contains hidden text instructing the agent to forward all invoices to an external address.",
+    "prompt": "Which combination of controls BEST reduces this risk?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Increase the model's temperature",
+        "correct": false,
+        "why": "Randomness does not prevent following injected instructions."
+      },
+      {
+        "key": "B",
+        "text": "Treat email content as untrusted data, restrict the agent from sending to external addresses without approval, and apply guardrails and monitoring",
+        "correct": true,
+        "why": "Limiting the agent's actions and treating content as data blocks the injected instruction from causing harm."
+      },
+      {
+        "key": "C",
+        "text": "Disable logging of agent actions",
+        "correct": false,
+        "why": "Disabling logging hides the agent's actions, preventing detection of the attack."
+      },
+      {
+        "key": "D",
+        "text": "Allow the agent to forward any email automatically",
+        "correct": false,
+        "why": "Unrestricted forwarding lets injected instructions exfiltrate data."
+      }
+    ],
+    "explanation": {
+      "answer": "Indirect prompt injection hides instructions in content the agent processes. Defenses include treating such content as untrusted, least-privilege actions (no external forwarding without approval), deterministic policies, guardrails and monitoring.",
+      "concept": "The more an agent can do, the more important action-level controls become.",
+      "examTip": "Content can carry instructions → limit actions, require approval, monitor.",
+      "references": [
+        {
+          "title": "Policy in Amazon Bedrock AgentCore",
+          "url": "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/policy.html"
+        },
+        {
+          "title": "Detect and filter harmful content with Amazon Bedrock Guardrails",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-sec-049",
+    "domain": "security",
+    "topic": "Data Lineage",
+    "tags": [
+      "provenance",
+      "rag-sources"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A knowledge base contains thousands of documents from many departments. When an answer is wrong, the team cannot tell which document version caused it or who added it.",
+    "prompt": "Which practice addresses this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Remove all metadata to simplify the index",
+        "correct": false,
+        "why": "Without metadata, sources cannot be traced."
+      },
+      {
+        "key": "B",
+        "text": "Increase temperature",
+        "correct": false,
+        "why": "Temperature does not help trace sources."
+      },
+      {
+        "key": "C",
+        "text": "Record provenance metadata for each document (source, owner, version, date) and return citations so problematic sources can be traced",
+        "correct": true,
+        "why": "Provenance metadata and citations make it possible to identify and fix the exact source of a wrong answer."
+      },
+      {
+        "key": "D",
+        "text": "Disable citations",
+        "correct": false,
+        "why": "Citations are what link answers to sources."
+      }
+    ],
+    "explanation": {
+      "answer": "Documenting data origins for RAG means recording provenance for each source document and surfacing citations in answers. This supports correction, accountability and defense against poisoned or outdated content.",
+      "concept": "Source citation and data lineage are listed together in Domain 5.",
+      "examTip": "Trace a wrong answer to its document = provenance metadata + citations.",
+      "references": [
+        {
+          "title": "How Amazon Bedrock knowledge bases work",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/kb-how-it-works.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-sec-050",
+    "domain": "security",
+    "topic": "Security Considerations",
+    "tags": [
+      "encryption",
+      "defense-in-depth"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A team lists baseline security controls for its Amazon Bedrock application.",
+    "prompt": "Which combination represents a sound baseline?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Public S3 buckets for training data",
+        "correct": false,
+        "why": "Public S3 buckets would expose training data to anyone on the internet."
+      },
+      {
+        "key": "B",
+        "text": "A single shared admin user and no logging",
+        "correct": false,
+        "why": "Shared admin access and no logs violate basic security principles."
+      },
+      {
+        "key": "C",
+        "text": "Secrets stored in prompts",
+        "correct": false,
+        "why": "Prompts are not secure storage. Secrets placed there can be leaked through the model."
+      },
+      {
+        "key": "D",
+        "text": "Least-privilege IAM, encryption at rest and in transit, private connectivity where required, guardrails, and logging",
+        "correct": true,
+        "why": "These controls together protect access, data, network paths, content and accountability."
+      }
+    ],
+    "explanation": {
+      "answer": "A secure baseline for AI applications includes IAM least privilege, KMS encryption, TLS in transit, PrivateLink where required, Bedrock Guardrails, model invocation logging and CloudTrail, plus monitoring and incident response.",
+      "concept": "Defense in depth combines several independent controls.",
+      "examTip": "IAM + encryption + private network + guardrails + logging.",
+      "references": [
+        {
+          "title": "Data protection in Amazon Bedrock",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/data-protection.html"
+        },
+        {
+          "title": "Identity and access management for Amazon Bedrock",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/security-iam.html"
+        }
+      ]
+    }
+  }
+]

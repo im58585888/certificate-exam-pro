@@ -1,0 +1,1238 @@
+[
+  {
+    "id": "aif-app-025",
+    "domain": "applications",
+    "topic": "Vector Databases",
+    "tags": [
+      "opensearch",
+      "vector-store"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A team needs a managed AWS service that supports k-nearest neighbor (k-NN) vector search at scale, and also full-text keyword search, for its RAG application.",
+    "prompt": "Which AWS service fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Artifact",
+        "correct": false,
+        "why": "Artifact provides compliance documents, not a database."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Polly",
+        "correct": false,
+        "why": "Polly converts text to speech and cannot store or search vectors."
+      },
+      {
+        "key": "C",
+        "text": "Amazon OpenSearch Service (or OpenSearch Serverless)",
+        "correct": true,
+        "why": "OpenSearch supports vector (k-NN) search and keyword search, and can combine them in hybrid queries, making it a common RAG vector store."
+      },
+      {
+        "key": "D",
+        "text": "Amazon Transcribe",
+        "correct": false,
+        "why": "Transcribe converts speech to text and has no vector search capability."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon OpenSearch Service and OpenSearch Serverless provide vector search through k-NN indexes along with full-text search, supporting semantic, keyword and hybrid retrieval. OpenSearch Serverless is a popular default vector store for Amazon Bedrock Knowledge Bases.",
+      "concept": "Other AWS options for storing embeddings include Aurora PostgreSQL and RDS for PostgreSQL with pgvector, Amazon Neptune Analytics, Amazon S3 Vectors, Amazon MemoryDB and Amazon DocumentDB.",
+      "examTip": "Vector + keyword (hybrid) search at scale = OpenSearch.",
+      "references": [
+        {
+          "title": "k-NN search in Amazon OpenSearch Service",
+          "url": "https://docs.aws.amazon.com/opensearch-service/latest/developerguide/knn.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-026",
+    "domain": "applications",
+    "topic": "Vector Databases",
+    "tags": [
+      "aurora",
+      "pgvector",
+      "rds"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company already runs its application on Amazon Aurora PostgreSQL and wants to store document embeddings next to its relational data, querying both with SQL, rather than adding a separate database.",
+    "prompt": "Which approach fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Store embeddings in Amazon S3 Glacier Deep Archive",
+        "correct": false,
+        "why": "Glacier Deep Archive is for long-term archives with retrieval times of hours. It cannot perform similarity search."
+      },
+      {
+        "key": "B",
+        "text": "Use Amazon Polly to read embeddings aloud",
+        "correct": false,
+        "why": "Polly converts text to speech and has nothing to do with storing vectors."
+      },
+      {
+        "key": "C",
+        "text": "Store embeddings in AWS CloudTrail logs",
+        "correct": false,
+        "why": "CloudTrail records API activity. It is not a database for embeddings."
+      },
+      {
+        "key": "D",
+        "text": "Use the pgvector extension in Aurora PostgreSQL to store and search embeddings",
+        "correct": true,
+        "why": "pgvector adds vector data types and similarity search to PostgreSQL, so embeddings live alongside relational data and are queried with SQL."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Aurora PostgreSQL-Compatible Edition and Amazon RDS for PostgreSQL support the pgvector extension for storing embeddings and running similarity search with SQL. This lets teams reuse existing databases and skills. Aurora PostgreSQL is also a supported vector store for Bedrock Knowledge Bases.",
+      "concept": "Choosing a vector store involves scale, latency, cost, existing skills, and whether you need hybrid, graph or relational queries alongside vectors.",
+      "examTip": "Already on PostgreSQL, want vectors with SQL = pgvector (Aurora / RDS for PostgreSQL).",
+      "references": [
+        {
+          "title": "Using Aurora PostgreSQL as a knowledge base / vector database",
+          "url": "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/AuroraPostgreSQL.VectorDB.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-027",
+    "domain": "applications",
+    "topic": "Vector Databases",
+    "tags": [
+      "neptune",
+      "graph",
+      "graphrag"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A pharmaceutical company's RAG application must answer questions that depend on relationships between entities, such as which drugs interact with proteins targeted by other drugs. Plain vector similarity misses these multi-hop connections.",
+    "prompt": "Which AWS service is designed to combine graph relationships with vector search?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Neptune Analytics",
+        "correct": true,
+        "why": "Neptune Analytics is a graph analytics engine with vector search, enabling retrieval that follows relationships (GraphRAG) as well as semantic similarity."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Polly",
+        "correct": false,
+        "why": "Polly generates speech from text. It cannot store graph relationships or run vector search."
+      },
+      {
+        "key": "C",
+        "text": "Amazon Translate",
+        "correct": false,
+        "why": "Translate converts languages and does not store graphs or vectors."
+      },
+      {
+        "key": "D",
+        "text": "AWS Trusted Advisor",
+        "correct": false,
+        "why": "Trusted Advisor provides account recommendations, not data storage."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Neptune Analytics supports graph data and vector similarity search. Graph-enhanced RAG (GraphRAG) uses entity relationships to retrieve connected facts that pure vector similarity might miss. Amazon Bedrock Knowledge Bases supports Neptune Analytics for GraphRAG.",
+      "concept": "Match retrieval to the data: semantic text → vector search; relationships and multi-hop questions → graph-based retrieval; tables → text-to-SQL.",
+      "examTip": "Relationships between entities + vectors = Neptune Analytics (GraphRAG).",
+      "references": [
+        {
+          "title": "Vector similarity search in Neptune Analytics",
+          "url": "https://docs.aws.amazon.com/neptune-analytics/latest/userguide/vector-similarity.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-028",
+    "domain": "applications",
+    "topic": "Vector Databases",
+    "tags": [
+      "s3-vectors",
+      "cost"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A company needs to store billions of embeddings for a RAG archive that is queried occasionally. Sub-second latency is acceptable, but storage cost must be as low as possible.",
+    "prompt": "Which AWS option is designed for cost-optimized, large-scale vector storage?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Comprehend",
+        "correct": false,
+        "why": "Comprehend analyzes text and does not store vectors."
+      },
+      {
+        "key": "B",
+        "text": "Amazon S3 Vectors",
+        "correct": true,
+        "why": "S3 Vectors provides durable, cost-optimized vector storage with native similarity queries, suited to large datasets that are queried less frequently."
+      },
+      {
+        "key": "C",
+        "text": "AWS Config",
+        "correct": false,
+        "why": "Config records resource configurations, not embeddings."
+      },
+      {
+        "key": "D",
+        "text": "An in-memory cache sized for all vectors",
+        "correct": false,
+        "why": "Keeping billions of vectors in memory is expensive. It suits ultra-low-latency needs, not lowest cost."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon S3 Vectors adds purpose-built vector buckets and indexes to Amazon S3, storing and querying vectors at very large scale with low cost. It suits workloads where sub-second query latency is acceptable. It can serve as a vector store for Bedrock Knowledge Bases and can be paired with OpenSearch for hot data.",
+      "concept": "Vector store trade-offs: in-memory or OpenSearch for lowest latency and high query rates; S3 Vectors for low-cost, large-scale storage.",
+      "examTip": "Huge vector volume + lowest cost + infrequent queries = S3 Vectors.",
+      "references": [
+        {
+          "title": "Amazon S3 Vectors",
+          "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-vectors.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-029",
+    "domain": "applications",
+    "topic": "Vector Databases",
+    "tags": [
+      "vector-store-services"
+    ],
+    "difficulty": "medium",
+    "type": "multi",
+    "selectCount": 3,
+    "stem": "An architect is shortlisting AWS services that can store embeddings in a vector database for a RAG application.",
+    "prompt": "Which services can store and search embeddings? (Select THREE.)",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon OpenSearch Service",
+        "correct": true,
+        "why": "OpenSearch supports k-NN vector search, alone or combined with keyword search, so it can store and query embeddings."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Polly",
+        "correct": false,
+        "why": "Polly converts text to speech and has no storage capability."
+      },
+      {
+        "key": "C",
+        "text": "Amazon Aurora PostgreSQL with pgvector",
+        "correct": true,
+        "why": "pgvector adds vector storage and similarity search to Aurora PostgreSQL."
+      },
+      {
+        "key": "D",
+        "text": "AWS Artifact",
+        "correct": false,
+        "why": "Artifact is a portal for compliance reports, not a database."
+      },
+      {
+        "key": "E",
+        "text": "Amazon Neptune Analytics",
+        "correct": true,
+        "why": "Neptune Analytics supports vector similarity search alongside graph analytics."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS services that store embeddings for vector search include Amazon OpenSearch Service and Serverless, Amazon Aurora PostgreSQL and Amazon RDS for PostgreSQL (pgvector), Amazon Neptune Analytics, Amazon S3 Vectors, Amazon MemoryDB and Amazon DocumentDB.",
+      "concept": "The exam guide specifically names OpenSearch Service, Aurora, Neptune and RDS for PostgreSQL as examples.",
+      "examTip": "Know the four named in the guide: OpenSearch, Aurora, Neptune, RDS for PostgreSQL.",
+      "references": [
+        {
+          "title": "What is a vector database?",
+          "url": "https://aws.amazon.com/what-is/vector-databases/"
+        },
+        {
+          "title": "k-NN search in Amazon OpenSearch Service",
+          "url": "https://docs.aws.amazon.com/opensearch-service/latest/developerguide/knn.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-030",
+    "domain": "applications",
+    "topic": "Customization Tradeoffs",
+    "tags": [
+      "in-context-learning",
+      "rag",
+      "fine-tuning",
+      "cost"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company wants to improve an FM's answers about its products. It is considering in-context learning (examples in prompts), RAG, fine-tuning and pre-training a model from scratch.",
+    "prompt": "Which option is generally the LEAST expensive to try first?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Fine-tuning",
+        "correct": false,
+        "why": "Fine-tuning requires labeled data, training compute and hosting the custom model."
+      },
+      {
+        "key": "B",
+        "text": "Continued pre-training on all company documents",
+        "correct": false,
+        "why": "Continued pre-training requires training compute and large datasets, making it costly."
+      },
+      {
+        "key": "C",
+        "text": "In-context learning with well-designed prompts and examples",
+        "correct": true,
+        "why": "In-context learning needs no training or infrastructure. You only pay for the extra prompt tokens."
+      },
+      {
+        "key": "D",
+        "text": "Pre-training from scratch",
+        "correct": false,
+        "why": "Pre-training is by far the most expensive option, requiring massive data and compute."
+      }
+    ],
+    "explanation": {
+      "answer": "Customization approaches roughly in increasing cost: in-context learning (prompt engineering, few-shot examples), RAG (adds retrieval infrastructure), fine-tuning (training plus custom model hosting), continued pre-training, and pre-training from scratch. Start with the cheapest approach that might work.",
+      "concept": "Distillation reduces inference cost by training a smaller model, but adds training cost up front.",
+      "examTip": "Cheapest → most expensive: prompting < RAG < fine-tuning < continued pre-training < pre-training.",
+      "references": [
+        {
+          "title": "Customize your model (Amazon Bedrock)",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/custom-models.html"
+        },
+        {
+          "title": "What is prompt engineering?",
+          "url": "https://aws.amazon.com/what-is/prompt-engineering/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-031",
+    "domain": "applications",
+    "topic": "Customization Tradeoffs",
+    "tags": [
+      "fine-tuning",
+      "style",
+      "format"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A company needs a model to consistently write in a very specific house style and output format across thousands of daily requests. Few-shot prompting works but requires long prompts with many examples, raising token costs, and still drifts occasionally.",
+    "prompt": "Which customization approach is MOST appropriate?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Increase the temperature",
+        "correct": false,
+        "why": "Higher randomness would worsen consistency."
+      },
+      {
+        "key": "B",
+        "text": "Use RAG to retrieve style guides",
+        "correct": false,
+        "why": "RAG adds information to the prompt but does not reliably change how the model writes, and it adds tokens."
+      },
+      {
+        "key": "C",
+        "text": "Pre-train a new model from scratch",
+        "correct": false,
+        "why": "Pre-training is excessive and extremely costly for a style requirement."
+      },
+      {
+        "key": "D",
+        "text": "Fine-tune the model on many examples of the desired style and format",
+        "correct": true,
+        "why": "Fine-tuning teaches consistent style and format, so prompts can be shorter and outputs more consistent at high volume."
+      }
+    ],
+    "explanation": {
+      "answer": "Fine-tuning is well suited to teaching a model a consistent behavior, style, tone or output format, especially when prompt-based approaches need long example-filled prompts at high volume. RAG is better for supplying knowledge; fine-tuning is better for shaping behavior.",
+      "concept": "Fine-tuning adds training and hosting costs, so it pays off when volume is high or prompts become unwieldy.",
+      "examTip": "Behavior/style/format → fine-tune. Knowledge/facts → RAG.",
+      "references": [
+        {
+          "title": "Customize your model (Amazon Bedrock)",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/custom-models.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-032",
+    "domain": "applications",
+    "topic": "Customization Tradeoffs",
+    "tags": [
+      "rag-vs-fine-tuning"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A team debates RAG versus fine-tuning for a support assistant that must answer questions from 10,000 knowledge articles, updated weekly, and cite the article used.",
+    "prompt": "Which approach is MOST appropriate and why?",
+    "options": [
+      {
+        "key": "A",
+        "text": "RAG, because it keeps answers current by updating the index and can cite sources",
+        "correct": true,
+        "why": "Weekly updates and citation requirements favor RAG, which updates through re-indexing and returns source passages."
+      },
+      {
+        "key": "B",
+        "text": "Fine-tuning, because it can cite exact articles",
+        "correct": false,
+        "why": "A fine-tuned model cannot reliably cite which article a fact came from."
+      },
+      {
+        "key": "C",
+        "text": "Fine-tuning weekly, because it is cheaper than RAG",
+        "correct": false,
+        "why": "Weekly fine-tuning adds recurring training cost and still cannot provide citations."
+      },
+      {
+        "key": "D",
+        "text": "Neither; use the base model alone",
+        "correct": false,
+        "why": "The base model does not know the company's articles."
+      }
+    ],
+    "explanation": {
+      "answer": "RAG suits knowledge that is large, changes often or must be cited: updates require only re-indexing, and answers can reference sources. Fine-tuning is better for teaching behavior and domain style.",
+      "concept": "Many solutions combine both: fine-tune for tone and format, RAG for up-to-date facts.",
+      "examTip": "Frequent updates or citations → RAG.",
+      "references": [
+        {
+          "title": "What is RAG?",
+          "url": "https://aws.amazon.com/what-is/retrieval-augmented-generation/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-033",
+    "domain": "applications",
+    "topic": "AI Agents",
+    "tags": [
+      "agents",
+      "business-applications"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A travel agency wants a system that can book flights, reserve hotels and update customer itineraries by calling its booking APIs, based on requests such as \"move my trip to next week\".",
+    "prompt": "Which application of foundation models fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "An image-generation model",
+        "correct": false,
+        "why": "Image generation is unrelated to booking travel."
+      },
+      {
+        "key": "B",
+        "text": "An AI agent that plans the steps and calls booking APIs as tools",
+        "correct": true,
+        "why": "Agents use FM reasoning to break down a request and call APIs to take the required actions."
+      },
+      {
+        "key": "C",
+        "text": "A text embedding model alone",
+        "correct": false,
+        "why": "Embeddings support search but cannot book flights or update itineraries."
+      },
+      {
+        "key": "D",
+        "text": "A summarization prompt",
+        "correct": false,
+        "why": "Summarizing text does not take actions in booking systems."
+      }
+    ],
+    "explanation": {
+      "answer": "AI agents extend FMs with the ability to take actions: they interpret goals, plan steps, call APIs and other tools, and handle the results. Business applications include travel and order management, customer service resolution, IT automation and research.",
+      "concept": "On AWS, agents can be built with Amazon Bedrock Agents (managed configuration) or frameworks such as Strands Agents deployed on Amazon Bedrock AgentCore.",
+      "examTip": "Take actions via APIs on the user's behalf = AI agent.",
+      "references": [
+        {
+          "title": "Automate tasks with Amazon Bedrock Agents",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/agents.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-034",
+    "domain": "applications",
+    "topic": "AI Agents",
+    "tags": [
+      "agents",
+      "role"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A manager asks what role an AI agent plays in an application compared with a single call to a foundation model.",
+    "prompt": "Which description is MOST accurate?",
+    "options": [
+      {
+        "key": "A",
+        "text": "An agent only translates text",
+        "correct": false,
+        "why": "Agents perform a wide range of multi-step tasks, not only translation."
+      },
+      {
+        "key": "B",
+        "text": "An agent is a type of vector database",
+        "correct": false,
+        "why": "Vector databases store embeddings. Agents may use them as tools but are not databases."
+      },
+      {
+        "key": "C",
+        "text": "An agent orchestrates multiple steps, deciding which tools, data sources and model calls are needed to complete a task, rather than producing one response to one prompt",
+        "correct": true,
+        "why": "Agents coordinate reasoning, tool use and memory across steps to reach a goal."
+      },
+      {
+        "key": "D",
+        "text": "An agent is a smaller version of a foundation model",
+        "correct": false,
+        "why": "Agents use foundation models; they are not smaller models."
+      }
+    ],
+    "explanation": {
+      "answer": "AI agents act as orchestrators: they use an FM to reason about a goal, then decide which tools to call (APIs, knowledge bases, code execution), maintain state across steps, and produce a final result or action.",
+      "concept": "A single FM call is stateless and produces one output; agents add planning, tools, memory and iteration.",
+      "examTip": "Single call = one answer. Agent = multi-step orchestration with tools.",
+      "references": [
+        {
+          "title": "What are AI agents?",
+          "url": "https://aws.amazon.com/what-is/ai-agents/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-035",
+    "domain": "applications",
+    "topic": "Customization Tradeoffs",
+    "tags": [
+      "continued-pretraining",
+      "domain-adaptation"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A materials-science company has millions of unlabeled internal research papers full of specialized terminology. General models misunderstand the jargon. The company does not have labeled prompt-response pairs.",
+    "prompt": "Which customization approach fits this situation?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Reinforcement learning from human feedback with no humans",
+        "correct": false,
+        "why": "RLHF needs human preference data, which is not available."
+      },
+      {
+        "key": "B",
+        "text": "Raising the temperature",
+        "correct": false,
+        "why": "Temperature does not teach domain vocabulary."
+      },
+      {
+        "key": "C",
+        "text": "Instruction fine-tuning with labeled prompt-response pairs",
+        "correct": false,
+        "why": "The company has no labeled pairs, which instruction fine-tuning requires."
+      },
+      {
+        "key": "D",
+        "text": "Continued pre-training on the unlabeled domain papers",
+        "correct": true,
+        "why": "Continued pre-training uses unlabeled domain text to teach the model domain vocabulary and knowledge, without needing labeled pairs."
+      }
+    ],
+    "explanation": {
+      "answer": "Continued pre-training continues the self-supervised pre-training process on unlabeled domain-specific data, adapting the model to a domain's language and knowledge. Fine-tuning, by contrast, typically uses labeled prompt-completion examples to teach tasks or behavior.",
+      "concept": "Amazon Bedrock supports continued pre-training for some models. It costs more than fine-tuning on a small dataset because it uses larger volumes of data.",
+      "examTip": "Lots of unlabeled domain text → continued pre-training. Labeled task examples → fine-tuning.",
+      "references": [
+        {
+          "title": "Customize your model (Amazon Bedrock)",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/custom-models.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-036",
+    "domain": "applications",
+    "topic": "Customization Tradeoffs",
+    "tags": [
+      "distillation",
+      "latency",
+      "cost"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company's assistant uses a large model with excellent quality for a narrow task, but latency is too high and inference costs are significant at scale.",
+    "prompt": "Which customization approach trades some upfront training for lower ongoing cost and latency?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Model distillation to a smaller student model",
+        "correct": true,
+        "why": "Distillation trains a smaller model to imitate the large model on the task, reducing inference cost and latency afterward."
+      },
+      {
+        "key": "B",
+        "text": "Adding more few-shot examples to each prompt",
+        "correct": false,
+        "why": "More examples increase tokens, cost and latency."
+      },
+      {
+        "key": "C",
+        "text": "Removing guardrails",
+        "correct": false,
+        "why": "Removing safety controls does not meaningfully reduce cost or latency and adds risk."
+      },
+      {
+        "key": "D",
+        "text": "Switching to batch inference for the interactive assistant",
+        "correct": false,
+        "why": "Batch inference is asynchronous and unsuitable for interactive use."
+      }
+    ],
+    "explanation": {
+      "answer": "Model distillation generates training data from a larger teacher model and trains a smaller student model to reproduce its behavior on the target use case. The student model is cheaper and faster to run, at the cost of an upfront distillation process.",
+      "concept": "Each customization approach has different cost trade-offs: upfront (training) versus ongoing (inference tokens, hosting).",
+      "examTip": "Keep quality, cut latency and inference cost on a narrow task = distillation.",
+      "references": [
+        {
+          "title": "Customize a model with distillation in Amazon Bedrock",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/model-distillation.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-037",
+    "domain": "applications",
+    "topic": "AI Agents",
+    "tags": [
+      "agent-business-value"
+    ],
+    "difficulty": "medium",
+    "type": "multi",
+    "selectCount": 2,
+    "stem": "A company evaluates business applications for AI agents.",
+    "prompt": "Which scenarios are well suited to AI agents? (Select TWO.)",
+    "options": [
+      {
+        "key": "A",
+        "text": "Displaying a static FAQ page",
+        "correct": false,
+        "why": "A static page needs no reasoning or actions."
+      },
+      {
+        "key": "B",
+        "text": "Computing a fixed shipping fee from a table",
+        "correct": false,
+        "why": "A lookup from a table is deterministic and needs no agent."
+      },
+      {
+        "key": "C",
+        "text": "Investigating a customer's billing complaint by looking up invoices, checking payment records and issuing a credit within policy",
+        "correct": true,
+        "why": "This requires gathering information from systems, applying rules and taking an action, all agent strengths."
+      },
+      {
+        "key": "D",
+        "text": "Storing backups of log files",
+        "correct": false,
+        "why": "Backups are an operational task handled by storage and backup services."
+      },
+      {
+        "key": "E",
+        "text": "Handling an employee's onboarding by creating accounts, ordering equipment and scheduling training through internal systems",
+        "correct": true,
+        "why": "Onboarding is a multi-step process across several systems, which agents can coordinate with tools."
+      }
+    ],
+    "explanation": {
+      "answer": "AI agents deliver business value in workflows that span multiple systems and require judgment: onboarding, customer issue resolution, procurement, IT operations, research and report preparation.",
+      "concept": "For agents that take consequential actions, add human approval steps and least-privilege permissions.",
+      "examTip": "Multi-system, judgment-based workflows = agents.",
+      "references": [
+        {
+          "title": "What is agentic AI?",
+          "url": "https://aws.amazon.com/what-is/agentic-ai/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-038",
+    "domain": "applications",
+    "topic": "Customization Tradeoffs",
+    "tags": [
+      "in-context-learning",
+      "few-shot"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A developer includes three example input-output pairs in a prompt so that the model learns the desired output pattern for a new input, without changing the model's weights.",
+    "prompt": "What is this approach called?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Fine-tuning",
+        "correct": false,
+        "why": "Fine-tuning changes model weights through training, which is not happening here."
+      },
+      {
+        "key": "B",
+        "text": "In-context learning (few-shot prompting)",
+        "correct": true,
+        "why": "Providing examples in the prompt lets the model infer the pattern at inference time with no training."
+      },
+      {
+        "key": "C",
+        "text": "Pre-training",
+        "correct": false,
+        "why": "Pre-training builds a model on massive data, not a few prompt examples."
+      },
+      {
+        "key": "D",
+        "text": "Distillation",
+        "correct": false,
+        "why": "Distillation trains a smaller model from a larger one."
+      }
+    ],
+    "explanation": {
+      "answer": "In-context learning means the model learns a task from instructions and examples included in the prompt. Few-shot prompting is the most common form. It requires no training, but examples add tokens to every request.",
+      "concept": "In-context learning is the cheapest customization approach to start with, but its per-request token overhead can make fine-tuning more economical at very high volume.",
+      "examTip": "Examples in the prompt, no weight changes = in-context learning.",
+      "references": [
+        {
+          "title": "What is prompt engineering?",
+          "url": "https://aws.amazon.com/what-is/prompt-engineering/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-039",
+    "domain": "applications",
+    "topic": "Vector Databases",
+    "tags": [
+      "vector-store-selection"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A startup wants the fastest path to a working RAG prototype on AWS and does not want to choose, configure or manage a vector database itself.",
+    "prompt": "Which approach is MOST appropriate?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Skip vectors and fine-tune the model instead",
+        "correct": false,
+        "why": "Fine-tuning is slower and more expensive and does not give a RAG prototype."
+      },
+      {
+        "key": "B",
+        "text": "Install an open-source vector database on self-managed EC2 instances",
+        "correct": false,
+        "why": "Self-managing a database adds setup and operational work the startup wants to avoid."
+      },
+      {
+        "key": "C",
+        "text": "Create an Amazon Bedrock knowledge base and let it create a managed vector store with the quick-create option",
+        "correct": true,
+        "why": "Bedrock Knowledge Bases can create and configure a supported vector store for you, minimizing setup effort."
+      },
+      {
+        "key": "D",
+        "text": "Store vectors in spreadsheets",
+        "correct": false,
+        "why": "Spreadsheets cannot perform efficient similarity search."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Bedrock Knowledge Bases can quick-create a vector store (for example OpenSearch Serverless or S3 Vectors) and handle ingestion, so teams can build RAG prototypes without managing vector infrastructure.",
+      "concept": "Teams can later move to a vector store that better fits scale, latency or cost requirements.",
+      "examTip": "Fastest managed RAG prototype = Bedrock Knowledge Bases with a quick-created vector store.",
+      "references": [
+        {
+          "title": "Retrieve data and generate AI responses with Amazon Bedrock Knowledge Bases",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/knowledge-base.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-040",
+    "domain": "applications",
+    "topic": "Customization Tradeoffs",
+    "tags": [
+      "cost-tradeoffs",
+      "comparison"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A CTO asks which statement about customization cost trade-offs is accurate.",
+    "prompt": "Which statement is accurate?",
+    "options": [
+      {
+        "key": "A",
+        "text": "RAG requires pre-training a new model each time documents change.",
+        "correct": false,
+        "why": "RAG updates by re-indexing documents, not by training."
+      },
+      {
+        "key": "B",
+        "text": "Pre-training from scratch is the cheapest way to add company knowledge.",
+        "correct": false,
+        "why": "Pre-training is the most expensive customization option."
+      },
+      {
+        "key": "C",
+        "text": "Fine-tuning has no cost beyond the first request.",
+        "correct": false,
+        "why": "Fine-tuning has training costs and ongoing costs for using the custom model."
+      },
+      {
+        "key": "D",
+        "text": "RAG adds ongoing retrieval and vector storage costs and more input tokens per request, while fine-tuning adds upfront training cost and ongoing custom model costs but can shorten prompts.",
+        "correct": true,
+        "why": "This captures where each approach spends money: RAG on retrieval and context tokens, fine-tuning on training and custom model hosting."
+      }
+    ],
+    "explanation": {
+      "answer": "Each approach has a different cost profile. In-context learning: more tokens per request. RAG: embeddings, vector storage, retrieval and extra context tokens. Fine-tuning: training compute plus custom model hosting or storage. Distillation: upfront training, lower inference cost. Pre-training: highest cost overall.",
+      "concept": "Choose based on the problem (knowledge vs behavior), data availability, update frequency, volume and budget.",
+      "examTip": "Know where each approach spends money: tokens, retrieval, training, hosting.",
+      "references": [
+        {
+          "title": "Customize your model (Amazon Bedrock)",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/custom-models.html"
+        },
+        {
+          "title": "Amazon Bedrock pricing",
+          "url": "https://aws.amazon.com/bedrock/pricing/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-041",
+    "domain": "applications",
+    "topic": "AI Agents",
+    "tags": [
+      "agents-with-rag"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "An insurance agent assistant must answer questions about policy wording and also file claims. The policy wording lives in documents, and claims are filed through an API.",
+    "prompt": "How should the agent be designed?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Give the agent a knowledge base for policy documents and an action that calls the claims API",
+        "correct": true,
+        "why": "The knowledge base grounds answers in policy text, and the action lets the agent file claims."
+      },
+      {
+        "key": "B",
+        "text": "Use only a larger context window",
+        "correct": false,
+        "why": "A larger context window cannot call the claims API."
+      },
+      {
+        "key": "C",
+        "text": "Fine-tune the model on claims forms and give it no tools",
+        "correct": false,
+        "why": "Without a tool, the agent cannot file claims, and fine-tuning does not keep policy text current."
+      },
+      {
+        "key": "D",
+        "text": "Use Amazon Polly to read policies aloud",
+        "correct": false,
+        "why": "Reading aloud does not answer questions or file claims."
+      }
+    ],
+    "explanation": {
+      "answer": "Agents commonly combine retrieval (knowledge bases for grounded answers) with actions (APIs to perform tasks). Amazon Bedrock Agents supports attaching knowledge bases and action groups to the same agent.",
+      "concept": "Separate read access (knowledge) from write access (actions) and apply appropriate permissions and approvals to actions.",
+      "examTip": "Answer from docs + do something = knowledge base + action group.",
+      "references": [
+        {
+          "title": "Automate tasks with Amazon Bedrock Agents",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/agents.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-042",
+    "domain": "applications",
+    "topic": "FM Selection",
+    "tags": [
+      "input-output-length",
+      "context"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A team needs a model to produce detailed 5,000-word technical reports from short prompts.",
+    "prompt": "Which model limit is MOST important to check?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Image resolution",
+        "correct": false,
+        "why": "The required output is a written report, so image resolution has no bearing on the choice."
+      },
+      {
+        "key": "B",
+        "text": "Maximum output length (output token limit)",
+        "correct": true,
+        "why": "Long reports need a model whose maximum output token limit can accommodate thousands of words."
+      },
+      {
+        "key": "C",
+        "text": "Embedding dimension",
+        "correct": false,
+        "why": "Embedding dimension relates to vector search, not report length."
+      },
+      {
+        "key": "D",
+        "text": "Number of supported audio voices",
+        "correct": false,
+        "why": "Voices are irrelevant to written reports."
+      }
+    ],
+    "explanation": {
+      "answer": "Models differ in their maximum input length (context window) and maximum output length. Long-form generation requires a sufficiently high output token limit, otherwise responses will be truncated.",
+      "concept": "Input/output length is an FM selection criterion. Longer outputs also cost more and take longer to generate.",
+      "examTip": "Long outputs → check maximum output tokens.",
+      "references": [
+        {
+          "title": "Influence response generation with inference parameters",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/inference-parameters.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-043",
+    "domain": "applications",
+    "topic": "RAG",
+    "tags": [
+      "reranking",
+      "retrieval"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A RAG system retrieves 20 candidate passages per question, but the most useful ones are often not near the top, and including all 20 makes prompts long and expensive.",
+    "prompt": "Which technique BEST improves which passages are passed to the model?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Increase temperature",
+        "correct": false,
+        "why": "Temperature affects generation randomness, not passage relevance."
+      },
+      {
+        "key": "B",
+        "text": "Disable embeddings",
+        "correct": false,
+        "why": "Without embeddings, semantic retrieval stops working."
+      },
+      {
+        "key": "C",
+        "text": "Use a reranker model to score candidates for relevance and pass only the top few to the FM",
+        "correct": true,
+        "why": "Reranking reorders retrieved candidates by relevance to the question so fewer, better passages are used."
+      },
+      {
+        "key": "D",
+        "text": "Pass all 100 passages instead",
+        "correct": false,
+        "why": "Sending even more passages adds tokens, cost and irrelevant noise, making the problem worse."
+      }
+    ],
+    "explanation": {
+      "answer": "Reranking applies a more precise relevance model to the initial retrieval results and reorders them, so only the most relevant passages go into the prompt. This improves answer quality and reduces tokens. Amazon Bedrock Knowledge Bases supports reranker models.",
+      "concept": "Two-stage retrieval (fast broad search, then precise reranking) is a common RAG optimization.",
+      "examTip": "Right passages not at the top → add reranking.",
+      "references": [
+        {
+          "title": "How Amazon Bedrock knowledge bases work",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/kb-how-it-works.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-044",
+    "domain": "applications",
+    "topic": "AI Agents",
+    "tags": [
+      "agent-limits",
+      "guardrails"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A company plans to give an AI agent broad administrator permissions so it can \"fix anything\" in its cloud environment automatically.",
+    "prompt": "What is the BEST recommendation?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Grant full administrator permissions to avoid errors",
+        "correct": false,
+        "why": "Broad permissions mean any mistake or prompt injection can cause serious damage."
+      },
+      {
+        "key": "B",
+        "text": "Let the agent create its own permissions",
+        "correct": false,
+        "why": "Self-granted permissions remove any control over what the agent can do."
+      },
+      {
+        "key": "C",
+        "text": "Disable logging to protect privacy",
+        "correct": false,
+        "why": "Without logs, harmful actions cannot be detected or investigated."
+      },
+      {
+        "key": "D",
+        "text": "Grant only the minimum permissions each task requires, require human approval for destructive actions, and log every action",
+        "correct": true,
+        "why": "Least privilege, approvals and audit logging limit the damage an agent mistake or a manipulated agent could cause."
+      }
+    ],
+    "explanation": {
+      "answer": "Agents that take actions must follow least privilege: scoped IAM permissions or tool access, deterministic policies on what tools can do, human approval for high-impact or irreversible actions, and complete audit trails.",
+      "concept": "Prompt injection can cause an agent to attempt unintended actions, so permission boundaries are a critical defense.",
+      "examTip": "Agents get least privilege + approvals + logging, never blanket admin.",
+      "references": [
+        {
+          "title": "Policy in Amazon Bedrock AgentCore",
+          "url": "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/policy.html"
+        },
+        {
+          "title": "What is IAM?",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-045",
+    "domain": "applications",
+    "topic": "Customization Tradeoffs",
+    "tags": [
+      "fine-tuning-vs-prompting",
+      "volume"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A classification task works well with a 4,000-token few-shot prompt. The application will handle 50 million requests per month.",
+    "prompt": "Why might fine-tuning become more cost-effective than few-shot prompting here?",
+    "options": [
+      {
+        "key": "A",
+        "text": "A fine-tuned model may perform the task with a much shorter prompt, so the savings on input tokens across 50 million requests can outweigh training and custom model costs",
+        "correct": true,
+        "why": "At very high volume, eliminating thousands of example tokens per request can save more than fine-tuning costs."
+      },
+      {
+        "key": "B",
+        "text": "Fine-tuning removes the need for evaluation",
+        "correct": false,
+        "why": "Fine-tuned models must still be evaluated."
+      },
+      {
+        "key": "C",
+        "text": "Few-shot prompts become more accurate at higher volume",
+        "correct": false,
+        "why": "Request volume does not change how accurate a prompt is. It only multiplies the token cost of long prompts."
+      },
+      {
+        "key": "D",
+        "text": "Fine-tuning makes all tokens free",
+        "correct": false,
+        "why": "Inference tokens on custom models are still billed."
+      }
+    ],
+    "explanation": {
+      "answer": "In-context learning costs tokens on every request. At high volume, a fine-tuned model that needs only a short prompt can be cheaper overall despite training and custom model costs. The break-even depends on volume, prompt length and pricing.",
+      "concept": "Always compare total cost of ownership across approaches using expected volume.",
+      "examTip": "Huge volume + long example-heavy prompts → fine-tuning may be cheaper overall.",
+      "references": [
+        {
+          "title": "Customize your model (Amazon Bedrock)",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/custom-models.html"
+        },
+        {
+          "title": "Amazon Bedrock pricing",
+          "url": "https://aws.amazon.com/bedrock/pricing/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-046",
+    "domain": "applications",
+    "topic": "RAG",
+    "tags": [
+      "data-sources",
+      "ingestion"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A team's knowledge base is built from documents in Amazon S3. New documents are added daily, but the assistant does not know about them.",
+    "prompt": "What is the MOST likely fix?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Delete the knowledge base and use the base model",
+        "correct": false,
+        "why": "The base model does not know the company's documents."
+      },
+      {
+        "key": "B",
+        "text": "Run a sync (ingestion job) for the data source so new documents are chunked, embedded and indexed",
+        "correct": true,
+        "why": "New or changed documents must be ingested into the vector index before they can be retrieved."
+      },
+      {
+        "key": "C",
+        "text": "Fine-tune the model daily",
+        "correct": false,
+        "why": "Fine-tuning is unnecessary. RAG updates through ingestion."
+      },
+      {
+        "key": "D",
+        "text": "Increase the temperature",
+        "correct": false,
+        "why": "Temperature does not add documents to the index."
+      }
+    ],
+    "explanation": {
+      "answer": "Knowledge bases must ingest content before it is searchable. In Amazon Bedrock Knowledge Bases, you sync a data source to process new, updated and deleted documents into the vector store; this can be automated on a schedule or triggered by events.",
+      "concept": "RAG freshness depends on ingestion frequency, not on retraining the model.",
+      "examTip": "New docs not found → re-sync / re-ingest the data source.",
+      "references": [
+        {
+          "title": "How Amazon Bedrock knowledge bases work",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/kb-how-it-works.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-047",
+    "domain": "applications",
+    "topic": "AI Agents",
+    "tags": [
+      "agents",
+      "multi-agent",
+      "business"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A bank builds an investment research assistant: one agent gathers market data, another analyzes company filings, and a supervisor agent assembles a report for human advisors to review.",
+    "prompt": "Which business benefit of this agent design is MOST significant?",
+    "options": [
+      {
+        "key": "A",
+        "text": "It guarantees investment returns",
+        "correct": false,
+        "why": "No AI system can guarantee investment returns. The value is faster research, with humans still deciding."
+      },
+      {
+        "key": "B",
+        "text": "It removes the need for regulatory compliance",
+        "correct": false,
+        "why": "Financial advice remains regulated regardless of tooling."
+      },
+      {
+        "key": "C",
+        "text": "Specialized agents automate time-consuming research steps, giving advisors a draft report faster while they keep final judgment",
+        "correct": true,
+        "why": "Agents save analyst time on gathering and analysis, while humans retain responsibility for advice."
+      },
+      {
+        "key": "D",
+        "text": "It eliminates the need for any data sources",
+        "correct": false,
+        "why": "The agents rely on market data and filings to work."
+      }
+    ],
+    "explanation": {
+      "answer": "Agentic applications automate multi-step knowledge work, such as research, analysis and drafting, increasing productivity. Human review keeps accountability for high-stakes decisions.",
+      "concept": "Measure such systems with task completion rate, time saved, accuracy and user satisfaction.",
+      "examTip": "Agents speed up multi-step knowledge work; humans keep accountability.",
+      "references": [
+        {
+          "title": "Multi-agent collaboration in Amazon Bedrock Agents",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/agents-multi-agent-collaboration.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-048",
+    "domain": "applications",
+    "topic": "FM Selection",
+    "tags": [
+      "selection",
+      "evaluation"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A team has shortlisted three models that meet its modality and compliance requirements.",
+    "prompt": "What is the BEST next step to choose between them?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Pick the one with the most marketing coverage",
+        "correct": false,
+        "why": "Marketing coverage does not indicate fitness for the team's task."
+      },
+      {
+        "key": "B",
+        "text": "Pick the newest model without testing",
+        "correct": false,
+        "why": "Newer does not always mean better or cheaper for a specific use case."
+      },
+      {
+        "key": "C",
+        "text": "Choose randomly",
+        "correct": false,
+        "why": "Random selection ignores measurable differences."
+      },
+      {
+        "key": "D",
+        "text": "Evaluate all three on a representative dataset of the team's own tasks, comparing quality, latency and cost",
+        "correct": true,
+        "why": "Testing on real tasks shows which model best balances quality, speed and cost for this specific use case."
+      }
+    ],
+    "explanation": {
+      "answer": "After applying hard requirements, compare candidate models on a representative evaluation dataset, measuring task quality alongside latency and cost. Amazon Bedrock Model Evaluation supports automatic metrics, LLM-as-a-judge and human evaluation for this comparison.",
+      "concept": "Public benchmarks are a starting point; your own data is the deciding factor.",
+      "examTip": "Final choice = evaluate on your own representative data.",
+      "references": [
+        {
+          "title": "Evaluate the performance of Amazon Bedrock resources",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/evaluation.html"
+        }
+      ]
+    }
+  }
+]

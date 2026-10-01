@@ -1,0 +1,1172 @@
+[
+  {
+    "id": "aif-app-118",
+    "domain": "applications",
+    "topic": "Evaluation Metrics",
+    "tags": [
+      "rouge",
+      "summarization"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A team evaluates a summarization model by comparing its summaries with human-written reference summaries, measuring how many words and phrases overlap.",
+    "prompt": "Which metric is commonly used for this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Area under the ROC curve",
+        "correct": false,
+        "why": "AUC evaluates binary classifiers, not generated summaries."
+      },
+      {
+        "key": "B",
+        "text": "ROUGE (Recall-Oriented Understudy for Gisting Evaluation)",
+        "correct": true,
+        "why": "ROUGE measures overlap of n-grams and sequences between generated and reference text and is a standard summarization metric."
+      },
+      {
+        "key": "C",
+        "text": "Precision at a fixed threshold for fraud",
+        "correct": false,
+        "why": "This is a classification metric unrelated to summarization."
+      },
+      {
+        "key": "D",
+        "text": "Root mean squared error",
+        "correct": false,
+        "why": "RMSE measures numeric prediction error for regression, not text overlap."
+      }
+    ],
+    "explanation": {
+      "answer": "ROUGE evaluates automatic summarization (and other generation) by measuring overlap between generated text and reference texts, for example ROUGE-1 (unigrams), ROUGE-2 (bigrams) and ROUGE-L (longest common subsequence). It is recall-oriented.",
+      "concept": "Overlap metrics are cheap and automatic but miss meaning when wording differs; semantic metrics such as BERTScore and LLM-as-a-judge address that.",
+      "examTip": "Summarization overlap metric = ROUGE.",
+      "references": [
+        {
+          "title": "Evaluate the performance of Amazon Bedrock resources",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/evaluation.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-119",
+    "domain": "applications",
+    "topic": "Evaluation Metrics",
+    "tags": [
+      "bleu",
+      "translation"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A localization team evaluates a model's machine translations by comparing them with professional human translations, focusing on how precisely the n-grams match.",
+    "prompt": "Which metric is traditionally used for this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Perplexity of an image model",
+        "correct": false,
+        "why": "This is not a translation evaluation metric."
+      },
+      {
+        "key": "B",
+        "text": "Mean absolute error",
+        "correct": false,
+        "why": "MAE measures numeric error, not text similarity."
+      },
+      {
+        "key": "C",
+        "text": "BLEU (Bilingual Evaluation Understudy)",
+        "correct": true,
+        "why": "BLEU is a precision-oriented n-gram overlap metric originally designed for evaluating machine translation."
+      },
+      {
+        "key": "D",
+        "text": "F1 score for fraud",
+        "correct": false,
+        "why": "F1 evaluates classification, not translation quality."
+      }
+    ],
+    "explanation": {
+      "answer": "BLEU measures how closely machine-generated text matches reference translations based on n-gram precision, with a brevity penalty. It is the classic metric for machine translation.",
+      "concept": "BLEU (precision-oriented, translation) and ROUGE (recall-oriented, summarization) both rely on word overlap and can undervalue valid paraphrases.",
+      "examTip": "Translation overlap metric = BLEU. Summarization = ROUGE.",
+      "references": [
+        {
+          "title": "Evaluate the performance of Amazon Bedrock resources",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/evaluation.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-120",
+    "domain": "applications",
+    "topic": "Evaluation Metrics",
+    "tags": [
+      "bertscore",
+      "semantic-similarity"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A team finds that ROUGE gives low scores to generated answers that use different wording from the references but mean the same thing. It wants a metric that compares meaning rather than exact words.",
+    "prompt": "Which metric fits?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Accuracy on a classification test set",
+        "correct": false,
+        "why": "Classification accuracy does not measure similarity of free text."
+      },
+      {
+        "key": "B",
+        "text": "Latency",
+        "correct": false,
+        "why": "Latency measures how fast a response arrives, not whether it means the same thing as the reference."
+      },
+      {
+        "key": "C",
+        "text": "BLEU",
+        "correct": false,
+        "why": "BLEU also relies on exact n-gram overlap, so it has the same weakness."
+      },
+      {
+        "key": "D",
+        "text": "BERTScore",
+        "correct": true,
+        "why": "BERTScore compares contextual embeddings of tokens in the generated and reference texts, capturing semantic similarity beyond exact word overlap."
+      }
+    ],
+    "explanation": {
+      "answer": "BERTScore uses contextual embeddings from a pre-trained model to compute similarity between generated and reference texts, rewarding paraphrases that preserve meaning. It complements overlap metrics such as ROUGE and BLEU.",
+      "concept": "Amazon Bedrock Model Evaluation reports metrics such as BERTScore for some task types and offers LLM-as-a-judge for qualities such as correctness and helpfulness.",
+      "examTip": "Meaning-based similarity using embeddings = BERTScore.",
+      "references": [
+        {
+          "title": "Evaluate the performance of Amazon Bedrock resources",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/evaluation.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-121",
+    "domain": "applications",
+    "topic": "Evaluation Approaches",
+    "tags": [
+      "llm-as-a-judge"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A team needs to evaluate thousands of chatbot responses for helpfulness, correctness and tone. Human review of all of them is too slow and expensive.",
+    "prompt": "Which approach scales evaluation while approximating human judgment?",
+    "options": [
+      {
+        "key": "A",
+        "text": "LLM-as-a-judge, where an evaluator model scores responses against defined criteria",
+        "correct": true,
+        "why": "An evaluator LLM can assess qualities such as helpfulness and correctness at scale, with human spot checks for calibration."
+      },
+      {
+        "key": "B",
+        "text": "Counting the number of words in each response",
+        "correct": false,
+        "why": "Length says little about helpfulness or correctness."
+      },
+      {
+        "key": "C",
+        "text": "Asking the chatbot to rate itself with no criteria",
+        "correct": false,
+        "why": "Self-rating without criteria or an independent judge is unreliable."
+      },
+      {
+        "key": "D",
+        "text": "Measuring only response latency",
+        "correct": false,
+        "why": "Response speed says nothing about whether answers are helpful, correct or appropriately toned."
+      }
+    ],
+    "explanation": {
+      "answer": "LLM-as-a-judge uses a capable model to score or compare outputs against rubrics, such as correctness, completeness, helpfulness, harmfulness and style. Amazon Bedrock Model Evaluation supports LLM-as-a-judge with built-in and custom metrics.",
+      "concept": "Judge models have biases too; validate them against human ratings on a sample, and keep humans in the loop for high-stakes decisions.",
+      "examTip": "Scale quality evaluation with a judge model = LLM-as-a-judge.",
+      "references": [
+        {
+          "title": "Use LLM-as-a-judge evaluation (Amazon Bedrock)",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/evaluation-judge.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-122",
+    "domain": "applications",
+    "topic": "Evaluation Approaches",
+    "tags": [
+      "human-evaluation",
+      "human-in-the-loop"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company is choosing a model to write empathetic responses to customers who have experienced a bereavement. Automated metrics do not capture whether responses feel appropriate and compassionate.",
+    "prompt": "Which evaluation approach is MOST appropriate?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Token count only",
+        "correct": false,
+        "why": "Counting tokens measures length, which does not indicate whether a response is compassionate."
+      },
+      {
+        "key": "B",
+        "text": "Human-in-the-loop evaluation, in which trained reviewers rate responses for empathy and appropriateness",
+        "correct": true,
+        "why": "Subjective qualities such as empathy are best judged by people using clear guidelines."
+      },
+      {
+        "key": "C",
+        "text": "Inference latency only",
+        "correct": false,
+        "why": "Speed does not indicate emotional appropriateness."
+      },
+      {
+        "key": "D",
+        "text": "BLEU score only",
+        "correct": false,
+        "why": "Word overlap cannot assess empathy or appropriateness."
+      }
+    ],
+    "explanation": {
+      "answer": "Human evaluation captures nuanced, subjective qualities, such as empathy, tone, cultural appropriateness and brand fit, that automatic metrics miss. Amazon Bedrock Model Evaluation supports human evaluation jobs using your own workforce or an AWS-managed team.",
+      "concept": "Combine human evaluation (depth) with automatic metrics and LLM-as-a-judge (scale).",
+      "examTip": "Subjective qualities (empathy, tone) → human evaluation.",
+      "references": [
+        {
+          "title": "Evaluate the performance of Amazon Bedrock resources",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/evaluation.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-123",
+    "domain": "applications",
+    "topic": "Evaluation Approaches",
+    "tags": [
+      "bedrock-model-evaluation"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A team wants a managed AWS capability to compare several foundation models on its own prompt dataset, using automatic metrics, LLM-as-a-judge and optional human reviewers, without building an evaluation pipeline itself.",
+    "prompt": "Which capability should the team use?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Inspector",
+        "correct": false,
+        "why": "Inspector scans for software vulnerabilities."
+      },
+      {
+        "key": "B",
+        "text": "AWS Cost Explorer",
+        "correct": false,
+        "why": "Cost Explorer analyzes AWS spending. It does not evaluate or compare model outputs."
+      },
+      {
+        "key": "C",
+        "text": "Amazon Bedrock Model Evaluation",
+        "correct": true,
+        "why": "Bedrock Model Evaluation runs evaluation jobs with automatic metrics, LLM-as-a-judge and human workflows on built-in or custom datasets."
+      },
+      {
+        "key": "D",
+        "text": "AWS Config",
+        "correct": false,
+        "why": "AWS Config evaluates resource configurations, not model outputs."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Bedrock Model Evaluation provides managed evaluation of models and RAG systems: automatic evaluation with metrics (such as accuracy, robustness and toxicity) on curated or custom datasets, LLM-as-a-judge evaluation, and human evaluation.",
+      "concept": "Evaluation is needed for model selection, prompt changes, fine-tuning decisions and ongoing monitoring.",
+      "examTip": "Managed model comparison on your data = Bedrock Model Evaluation.",
+      "references": [
+        {
+          "title": "Evaluate the performance of Amazon Bedrock resources",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/evaluation.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-124",
+    "domain": "applications",
+    "topic": "Evaluation Approaches",
+    "tags": [
+      "benchmark-datasets"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A team reads that a model scores highly on a well-known public benchmark for question answering. It wonders whether the model will perform as well on its insurance-claims questions.",
+    "prompt": "Which statement is MOST accurate?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Benchmarks measure only latency",
+        "correct": false,
+        "why": "Most benchmarks measure task performance, not just speed."
+      },
+      {
+        "key": "B",
+        "text": "Benchmarks are useless and should be ignored",
+        "correct": false,
+        "why": "Benchmarks provide helpful standardized comparisons as a starting point."
+      },
+      {
+        "key": "C",
+        "text": "A high benchmark score guarantees performance on any task",
+        "correct": false,
+        "why": "Benchmarks cover particular tasks and data; performance on other domains can differ significantly."
+      },
+      {
+        "key": "D",
+        "text": "Public benchmarks are useful for initial comparison, but performance must be validated on the team's own representative data",
+        "correct": true,
+        "why": "Benchmarks may not reflect a specific domain, so task-specific evaluation is necessary."
+      }
+    ],
+    "explanation": {
+      "answer": "Benchmark datasets provide standardized comparisons across models, but they may not represent your domain, and models may have seen benchmark data during training. Always evaluate on representative data from your use case.",
+      "concept": "Bedrock Model Evaluation lets you bring custom prompt datasets alongside built-in ones.",
+      "examTip": "Benchmarks = starting point. Your own data = deciding factor.",
+      "references": [
+        {
+          "title": "Evaluate the performance of Amazon Bedrock resources",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/evaluation.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-125",
+    "domain": "applications",
+    "topic": "Evaluating Applications",
+    "tags": [
+      "rag-evaluation",
+      "retrieval-metrics"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A RAG assistant gives poor answers. The team needs to know whether the problem is that relevant passages are not being retrieved, or that the model writes bad answers even from good passages.",
+    "prompt": "Which evaluation approach separates these issues?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Evaluate retrieval (for example context relevance and coverage) separately from generation (for example faithfulness and correctness)",
+        "correct": true,
+        "why": "Measuring each stage separately pinpoints whether retrieval or generation is the weak link."
+      },
+      {
+        "key": "B",
+        "text": "Measure only end-to-end latency",
+        "correct": false,
+        "why": "Latency does not reveal which stage produces poor answers."
+      },
+      {
+        "key": "C",
+        "text": "Count the number of documents in the knowledge base",
+        "correct": false,
+        "why": "Document count says nothing about retrieval or generation quality."
+      },
+      {
+        "key": "D",
+        "text": "Increase temperature and see if answers improve",
+        "correct": false,
+        "why": "This is not a diagnostic evaluation and may worsen answers."
+      }
+    ],
+    "explanation": {
+      "answer": "RAG applications should be evaluated at two levels: retrieval quality (are the retrieved chunks relevant and do they cover the needed information?) and generation quality (is the answer correct, complete and faithful to the retrieved context?). Amazon Bedrock offers RAG evaluation for knowledge bases with retrieve-only and retrieve-and-generate modes.",
+      "concept": "Faithfulness (groundedness) checks that answers do not add information beyond the sources.",
+      "examTip": "RAG evaluation = retrieval metrics + generation metrics, separately.",
+      "references": [
+        {
+          "title": "Evaluate RAG knowledge bases (Amazon Bedrock)",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/evaluation-kb.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-126",
+    "domain": "applications",
+    "topic": "Evaluating Applications",
+    "tags": [
+      "agent-evaluation",
+      "task-completion"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A team evaluates an agent that books meetings. Its individual responses read well, but the team is unsure whether meetings are actually booked correctly.",
+    "prompt": "Which evaluation focus is MOST important for this agent?",
+    "options": [
+      {
+        "key": "A",
+        "text": "ROUGE score of the agent's messages",
+        "correct": false,
+        "why": "Text overlap does not show whether meetings were booked correctly."
+      },
+      {
+        "key": "B",
+        "text": "Task completion and correctness of actions, including whether the right tools were called with the right parameters",
+        "correct": true,
+        "why": "For agents, success means completing the task correctly, not just producing fluent text."
+      },
+      {
+        "key": "C",
+        "text": "The color scheme of the user interface",
+        "correct": false,
+        "why": "UI appearance does not measure agent correctness."
+      },
+      {
+        "key": "D",
+        "text": "Number of tokens per response",
+        "correct": false,
+        "why": "Token count measures cost, not task success."
+      }
+    ],
+    "explanation": {
+      "answer": "Evaluating agents focuses on outcomes and behavior: task completion rate, correctness of actions, tool selection and parameter accuracy, number of steps, errors and recovery, safety of actions, and cost per task. Trace-based evaluation examines each step.",
+      "concept": "Workflows and agents need end-to-end evaluation in addition to evaluation of individual model outputs.",
+      "examTip": "Agents are judged on task completion and correct tool use.",
+      "references": [
+        {
+          "title": "Amazon Bedrock AgentCore Observability",
+          "url": "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/observability.html"
+        },
+        {
+          "title": "What is Amazon Bedrock AgentCore?",
+          "url": "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/what-is-bedrock-agentcore.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-127",
+    "domain": "applications",
+    "topic": "Business Alignment",
+    "tags": [
+      "task-completion-rate",
+      "cost-per-interaction"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "An executive asks how to judge whether a customer-service AI assistant is meeting business objectives, not just producing good-sounding text.",
+    "prompt": "Which metrics BEST align with business objectives?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Model parameter count and embedding dimension",
+        "correct": false,
+        "why": "These are technical attributes that do not show business impact."
+      },
+      {
+        "key": "B",
+        "text": "Only BLEU and ROUGE",
+        "correct": false,
+        "why": "Text-overlap metrics do not show resolution, satisfaction or cost."
+      },
+      {
+        "key": "C",
+        "text": "Task completion rate, user satisfaction and cost per interaction",
+        "correct": true,
+        "why": "These measure whether customers' issues are resolved, whether they are satisfied, and at what cost."
+      },
+      {
+        "key": "D",
+        "text": "Number of GPUs used",
+        "correct": false,
+        "why": "Infrastructure details are not business outcomes."
+      }
+    ],
+    "explanation": {
+      "answer": "Business objective alignment metrics for AI applications include task completion rate, user satisfaction (CSAT), cost per interaction, deflection or containment rate, time saved and conversion. These tie model behavior to business value.",
+      "concept": "Track technical metrics for quality and business metrics for value; both are needed.",
+      "examTip": "Business alignment = task completion, satisfaction, cost per interaction.",
+      "references": [
+        {
+          "title": "Generative AI Lens: AWS Well-Architected",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/generative-ai-lens.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-128",
+    "domain": "applications",
+    "topic": "Business Alignment",
+    "tags": [
+      "productivity",
+      "user-engagement"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company deployed an AI writing assistant for its marketing staff. It wants to know whether the FM is effectively meeting the business objective of making the team more productive.",
+    "prompt": "Which measurement BEST answers this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Check whether the model supports image input",
+        "correct": false,
+        "why": "Modality support does not measure productivity."
+      },
+      {
+        "key": "B",
+        "text": "Measure BLEU against random text",
+        "correct": false,
+        "why": "Comparing against random text is meaningless."
+      },
+      {
+        "key": "C",
+        "text": "Count the model's parameters",
+        "correct": false,
+        "why": "Model size does not indicate productivity impact."
+      },
+      {
+        "key": "D",
+        "text": "Compare time to produce approved content and output volume before and after adoption, along with how often staff use and keep the drafts",
+        "correct": true,
+        "why": "Productivity gains and real engagement show whether the FM is delivering the intended business value."
+      }
+    ],
+    "explanation": {
+      "answer": "To determine whether an FM meets business objectives, measure outcomes such as productivity (time saved, throughput), user engagement (adoption, retention, acceptance of suggestions) and quality of the final work, ideally against a baseline.",
+      "concept": "The exam guide lists productivity, user engagement and task engineering as ways to judge FM effectiveness against business goals.",
+      "examTip": "Is it helping the business? Measure productivity and engagement against a baseline.",
+      "references": [
+        {
+          "title": "Generative AI Lens: AWS Well-Architected",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/generative-ai-lens.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-129",
+    "domain": "applications",
+    "topic": "Evaluation Metrics",
+    "tags": [
+      "metric-selection"
+    ],
+    "difficulty": "medium",
+    "type": "multi",
+    "selectCount": 2,
+    "stem": "A team matches evaluation metrics to tasks.",
+    "prompt": "Which pairings are correct? (Select TWO.)",
+    "options": [
+      {
+        "key": "A",
+        "text": "Image generation → mean absolute error on token counts",
+        "correct": false,
+        "why": "This is not a meaningful image generation metric."
+      },
+      {
+        "key": "B",
+        "text": "Machine translation → BLEU",
+        "correct": true,
+        "why": "BLEU was designed to evaluate machine translation against references."
+      },
+      {
+        "key": "C",
+        "text": "House price prediction → BLEU",
+        "correct": false,
+        "why": "Price prediction is regression and uses metrics such as RMSE."
+      },
+      {
+        "key": "D",
+        "text": "Text summarization → ROUGE",
+        "correct": true,
+        "why": "ROUGE is a standard summarization metric based on overlap with references."
+      },
+      {
+        "key": "E",
+        "text": "Fraud classification → ROUGE",
+        "correct": false,
+        "why": "Fraud classification uses precision, recall, F1 or AUC."
+      }
+    ],
+    "explanation": {
+      "answer": "Choose metrics that fit the task: BLEU for translation, ROUGE for summarization, BERTScore for semantic similarity, LLM-as-a-judge or human ratings for open-ended quality, and classic metrics (accuracy, F1, RMSE) for traditional ML tasks.",
+      "concept": "No single metric captures everything; combine automatic metrics with human or judge-model assessment.",
+      "examTip": "BLEU = translation. ROUGE = summarization. BERTScore = semantic similarity.",
+      "references": [
+        {
+          "title": "Evaluate the performance of Amazon Bedrock resources",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/evaluation.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-130",
+    "domain": "applications",
+    "topic": "Evaluating Applications",
+    "tags": [
+      "faithfulness",
+      "groundedness"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A RAG answer states a fact that is true in the real world but does not appear anywhere in the retrieved documents.",
+    "prompt": "Which RAG evaluation dimension flags this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Faithfulness (groundedness) to the retrieved context",
+        "correct": true,
+        "why": "Faithfulness checks whether the answer is supported by the provided context, regardless of real-world truth."
+      },
+      {
+        "key": "B",
+        "text": "Embedding dimension",
+        "correct": false,
+        "why": "Embedding size does not evaluate answer support."
+      },
+      {
+        "key": "C",
+        "text": "Retrieval latency",
+        "correct": false,
+        "why": "Latency measures speed, not whether the answer is grounded."
+      },
+      {
+        "key": "D",
+        "text": "Token cost",
+        "correct": false,
+        "why": "Token cost measures spending. It cannot tell whether an answer is supported by the retrieved sources."
+      }
+    ],
+    "explanation": {
+      "answer": "Faithfulness, also called groundedness, measures whether every claim in an answer is supported by the retrieved context. Ungrounded claims are a risk even when they happen to be true, because the system is supposed to answer from approved sources.",
+      "concept": "Bedrock Guardrails contextual grounding checks and Bedrock RAG evaluation both assess grounding.",
+      "examTip": "Answer contains info not in sources → low faithfulness / groundedness.",
+      "references": [
+        {
+          "title": "Evaluate RAG knowledge bases (Amazon Bedrock)",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/evaluation-kb.html"
+        },
+        {
+          "title": "Contextual grounding check (Amazon Bedrock Guardrails)",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-contextual-grounding-check.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-131",
+    "domain": "applications",
+    "topic": "Evaluation Approaches",
+    "tags": [
+      "robustness",
+      "toxicity",
+      "automatic-evaluation"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A team wants to check automatically whether a model's answers stay accurate when prompts contain small typos or rephrasings, and whether it produces toxic content.",
+    "prompt": "Which evaluation dimensions are these?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Parameter count and context window",
+        "correct": false,
+        "why": "These describe the model, not its behavior."
+      },
+      {
+        "key": "B",
+        "text": "Robustness and toxicity",
+        "correct": true,
+        "why": "Robustness measures stability under small input changes, and toxicity measures harmful content."
+      },
+      {
+        "key": "C",
+        "text": "Latency and throughput",
+        "correct": false,
+        "why": "These are performance measures, not quality or safety dimensions."
+      },
+      {
+        "key": "D",
+        "text": "Cost and storage",
+        "correct": false,
+        "why": "These are financial and infrastructure measures."
+      }
+    ],
+    "explanation": {
+      "answer": "Automatic model evaluation in Amazon Bedrock includes dimensions such as accuracy, robustness (how outputs change with small semantic-preserving perturbations to inputs) and toxicity (presence of harmful content), using built-in or custom datasets.",
+      "concept": "Robustness and safety evaluations are part of responsible AI practice.",
+      "examTip": "Stable under typos = robustness. Harmful content = toxicity.",
+      "references": [
+        {
+          "title": "Evaluate the performance of Amazon Bedrock resources",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/evaluation.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-132",
+    "domain": "applications",
+    "topic": "Evaluation Approaches",
+    "tags": [
+      "golden-dataset",
+      "regression-testing"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A team frequently updates prompts and switches models. Sometimes a change that improves one type of question quietly breaks another.",
+    "prompt": "Which practice BEST catches these regressions?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Deploy changes directly and wait for complaints",
+        "correct": false,
+        "why": "Deploying untested changes and waiting for complaints exposes real users to regressions first."
+      },
+      {
+        "key": "B",
+        "text": "Avoid all prompt changes forever",
+        "correct": false,
+        "why": "Applications must evolve; the solution is safe testing, not freezing."
+      },
+      {
+        "key": "C",
+        "text": "Maintain a representative evaluation (golden) dataset and rerun automated evaluations on every change before deploying",
+        "correct": true,
+        "why": "A fixed, representative test set evaluated on each change reveals regressions across question types."
+      },
+      {
+        "key": "D",
+        "text": "Test only the newest question type after each change",
+        "correct": false,
+        "why": "Testing only new cases misses regressions in existing ones."
+      }
+    ],
+    "explanation": {
+      "answer": "A golden evaluation dataset, covering representative and edge-case inputs with expected outcomes or rubrics, enables regression testing of prompts, models and RAG configurations. Automating evaluation in the release process (an MLOps practice) prevents silent quality drops.",
+      "concept": "Combine automatic metrics, LLM-as-a-judge and human review on sampled cases.",
+      "examTip": "Catch regressions → rerun a golden evaluation set on every change.",
+      "references": [
+        {
+          "title": "Evaluate the performance of Amazon Bedrock resources",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/evaluation.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-133",
+    "domain": "applications",
+    "topic": "Evaluating Applications",
+    "tags": [
+      "workflow-evaluation"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A document-processing workflow has four steps: extract fields, classify the document, summarize it and route it. End-to-end accuracy is 70%, and the team does not know which step causes failures.",
+    "prompt": "Which evaluation approach is MOST useful?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Evaluate only the final routing decision",
+        "correct": false,
+        "why": "This shows the outcome but not where errors originate."
+      },
+      {
+        "key": "B",
+        "text": "Measure only cost per document",
+        "correct": false,
+        "why": "Cost does not identify quality problems."
+      },
+      {
+        "key": "C",
+        "text": "Evaluate only the summarization step with ROUGE",
+        "correct": false,
+        "why": "One step's metric cannot explain failures in the others."
+      },
+      {
+        "key": "D",
+        "text": "Evaluate each step individually with its own metrics, in addition to the end-to-end outcome",
+        "correct": true,
+        "why": "Step-level metrics reveal which step drives failures, while end-to-end metrics show overall business success."
+      }
+    ],
+    "explanation": {
+      "answer": "Applications built from multiple FM steps (workflows, RAG, agents) should be evaluated component by component and end to end. Component metrics localize problems; end-to-end metrics measure the business outcome.",
+      "concept": "Errors compound across steps: four steps at 92% each give about 72% end to end.",
+      "examTip": "Multi-step app → evaluate each step + the whole.",
+      "references": [
+        {
+          "title": "Generative AI Lens: AWS Well-Architected",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/generative-ai-lens.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-134",
+    "domain": "applications",
+    "topic": "Evaluation Approaches",
+    "tags": [
+      "ab-testing",
+      "online-evaluation"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "Offline evaluations show that a new prompt version is better. The team wants to confirm its real-world impact on customer satisfaction before rolling it out to everyone.",
+    "prompt": "Which approach BEST confirms this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Run an A/B test, sending a portion of real traffic to the new version and comparing satisfaction and task completion with the current version",
+        "correct": true,
+        "why": "A/B testing measures real user outcomes in production with a control group."
+      },
+      {
+        "key": "B",
+        "text": "Roll out to 100% immediately",
+        "correct": false,
+        "why": "Full rollout without validation risks harming all users if offline results do not hold."
+      },
+      {
+        "key": "C",
+        "text": "Compare token counts only",
+        "correct": false,
+        "why": "Token counts do not reflect satisfaction."
+      },
+      {
+        "key": "D",
+        "text": "Ask the development team which version they prefer",
+        "correct": false,
+        "why": "Internal preference is not evidence of customer impact."
+      }
+    ],
+    "explanation": {
+      "answer": "Offline evaluation estimates quality; online evaluation, such as A/B tests or canary releases, confirms real-world impact on business metrics like satisfaction, completion and conversion.",
+      "concept": "Collect user feedback (thumbs up/down, ratings) to support ongoing evaluation.",
+      "examTip": "Confirm real impact → A/B test with real traffic.",
+      "references": [
+        {
+          "title": "Generative AI Lens: AWS Well-Architected",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/generative-ai-lens.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-135",
+    "domain": "applications",
+    "topic": "Evaluation Approaches",
+    "tags": [
+      "llm-judge-limitations"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A team relies entirely on an LLM judge to score answers. They notice the judge consistently prefers longer answers, even when shorter ones are more accurate.",
+    "prompt": "What should the team do?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Increase the judge's temperature",
+        "correct": false,
+        "why": "More randomness makes the judge less consistent."
+      },
+      {
+        "key": "B",
+        "text": "Calibrate the judge against human ratings, refine the rubric (for example penalize unnecessary length) and keep periodic human review",
+        "correct": true,
+        "why": "Judge models have biases such as length preference; calibration and clear rubrics improve reliability."
+      },
+      {
+        "key": "C",
+        "text": "Stop evaluating altogether",
+        "correct": false,
+        "why": "Evaluation is still needed; the method should be improved."
+      },
+      {
+        "key": "D",
+        "text": "Trust the judge completely",
+        "correct": false,
+        "why": "Known biases would distort evaluation results."
+      }
+    ],
+    "explanation": {
+      "answer": "LLM-as-a-judge is scalable but can show biases such as preferring longer or more confident answers or favoring certain styles. Clear rubrics, calibration against human labels and periodic human audits keep evaluations trustworthy.",
+      "concept": "Human-in-the-loop evaluation remains the reference standard for subjective quality.",
+      "examTip": "LLM judges have biases → rubric + human calibration.",
+      "references": [
+        {
+          "title": "Use LLM-as-a-judge evaluation (Amazon Bedrock)",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/evaluation-judge.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-136",
+    "domain": "applications",
+    "topic": "Business Alignment",
+    "tags": [
+      "task-engineering"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A company's FM performs well on individual questions, but employees still spend a long time because the AI step does not fit how their work is actually organized.",
+    "prompt": "Which consideration does this highlight when judging whether an FM meets business objectives?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Embedding dimension",
+        "correct": false,
+        "why": "Retrieval configuration does not address workflow integration."
+      },
+      {
+        "key": "B",
+        "text": "The number of supported languages",
+        "correct": false,
+        "why": "Language support is not the issue described."
+      },
+      {
+        "key": "C",
+        "text": "How well the AI is engineered into the actual task and workflow, not just its standalone output quality",
+        "correct": true,
+        "why": "Business value depends on fitting the model into the real task flow so it removes work rather than adding steps."
+      },
+      {
+        "key": "D",
+        "text": "The model's training cutoff date",
+        "correct": false,
+        "why": "Cutoff dates do not explain poor workflow fit."
+      }
+    ],
+    "explanation": {
+      "answer": "Determining whether an FM meets business objectives includes task engineering: designing how the model fits into the end-to-end task so that it saves effort, plus measuring productivity and engagement. Good outputs alone do not guarantee business value.",
+      "concept": "Measure end-to-end time and outcomes, gather user feedback, and redesign the workflow around the AI where needed.",
+      "examTip": "Great outputs but no time saved → fix task/workflow integration.",
+      "references": [
+        {
+          "title": "Generative AI Lens: AWS Well-Architected",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/generative-ai-lens.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-137",
+    "domain": "applications",
+    "topic": "Evaluation Metrics",
+    "tags": [
+      "reference-free",
+      "llm-judge",
+      "rouge"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A team wants to evaluate open-ended creative answers for which no single correct reference text exists.",
+    "prompt": "Which evaluation method is MOST suitable?",
+    "options": [
+      {
+        "key": "A",
+        "text": "ROUGE against a random sentence",
+        "correct": false,
+        "why": "Comparing to an arbitrary reference is meaningless."
+      },
+      {
+        "key": "B",
+        "text": "BLEU against a single reference",
+        "correct": false,
+        "why": "Overlap metrics need references and penalize valid creative variation."
+      },
+      {
+        "key": "C",
+        "text": "RMSE",
+        "correct": false,
+        "why": "RMSE measures error on numeric predictions and cannot assess open-ended creative text."
+      },
+      {
+        "key": "D",
+        "text": "Rubric-based evaluation with an LLM judge and human reviewers, which does not require a single reference answer",
+        "correct": true,
+        "why": "Rubric-based judging assesses qualities such as relevance and creativity without needing a reference text."
+      }
+    ],
+    "explanation": {
+      "answer": "Reference-based metrics (ROUGE, BLEU, BERTScore) need ground-truth text. For open-ended or creative tasks, rubric-based evaluation by human reviewers or LLM judges (assessing relevance, coherence, creativity, safety) is more appropriate.",
+      "concept": "Choose evaluation methods according to whether reliable reference answers exist.",
+      "examTip": "No reference answer → rubric-based human or LLM-judge evaluation.",
+      "references": [
+        {
+          "title": "Use LLM-as-a-judge evaluation (Amazon Bedrock)",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/evaluation-judge.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-138",
+    "domain": "applications",
+    "topic": "Evaluating Applications",
+    "tags": [
+      "rag-evaluation",
+      "bedrock"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A team built a knowledge base in Amazon Bedrock and wants managed evaluation of both its retrieval results and the generated answers, including metrics such as correctness, completeness and faithfulness.",
+    "prompt": "Which capability should the team use?",
+    "options": [
+      {
+        "key": "A",
+        "text": "RAG evaluation in Amazon Bedrock Evaluations for knowledge bases",
+        "correct": true,
+        "why": "Bedrock offers RAG evaluation jobs that assess retrieval and retrieve-and-generate quality with LLM-as-a-judge metrics."
+      },
+      {
+        "key": "B",
+        "text": "Amazon CloudWatch billing alarms",
+        "correct": false,
+        "why": "Billing alarms track cost, not answer quality."
+      },
+      {
+        "key": "C",
+        "text": "Amazon Polly",
+        "correct": false,
+        "why": "Polly converts text to speech and has no capability to evaluate retrieval or answer quality."
+      },
+      {
+        "key": "D",
+        "text": "AWS Trusted Advisor",
+        "correct": false,
+        "why": "Trusted Advisor gives account best-practice checks, not RAG evaluation."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Bedrock Evaluations supports evaluating RAG applications built with Bedrock Knowledge Bases (or your own RAG system). Retrieve-only evaluations measure context relevance and coverage; retrieve-and-generate evaluations measure qualities such as correctness, completeness, faithfulness and responsible-AI metrics.",
+      "concept": "Use these evaluations to tune chunking, retrieval settings, prompts and models.",
+      "examTip": "Managed RAG quality evaluation = Bedrock Evaluations for knowledge bases.",
+      "references": [
+        {
+          "title": "Evaluate RAG knowledge bases (Amazon Bedrock)",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/evaluation-kb.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-139",
+    "domain": "applications",
+    "topic": "Business Alignment",
+    "tags": [
+      "metrics-selection",
+      "business"
+    ],
+    "difficulty": "medium",
+    "type": "multi",
+    "selectCount": 2,
+    "stem": "A company launches an AI assistant that answers customer billing questions.",
+    "prompt": "Which metrics BEST show alignment with business objectives? (Select TWO.)",
+    "options": [
+      {
+        "key": "A",
+        "text": "Embedding vector dimension",
+        "correct": false,
+        "why": "Vector size is a technical configuration."
+      },
+      {
+        "key": "B",
+        "text": "Percentage of billing questions resolved without a human agent",
+        "correct": true,
+        "why": "Resolution without escalation measures task completion and cost savings."
+      },
+      {
+        "key": "C",
+        "text": "The model provider's logo color",
+        "correct": false,
+        "why": "Branding has no bearing on business value."
+      },
+      {
+        "key": "D",
+        "text": "Customer satisfaction ratings after assistant conversations",
+        "correct": true,
+        "why": "Satisfaction shows whether the experience meets customer needs."
+      },
+      {
+        "key": "E",
+        "text": "Number of layers in the model",
+        "correct": false,
+        "why": "Architecture details do not reflect business outcomes."
+      }
+    ],
+    "explanation": {
+      "answer": "Business alignment metrics for AI applications include task completion or resolution rate, user satisfaction, cost per interaction, average handle time and escalation rate.",
+      "concept": "Pair them with quality and safety metrics so cost savings do not come at the expense of correctness.",
+      "examTip": "Resolution rate + satisfaction + cost per interaction = business alignment.",
+      "references": [
+        {
+          "title": "Generative AI Lens: AWS Well-Architected",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/generative-ai-lens.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-140",
+    "domain": "applications",
+    "topic": "Evaluation Approaches",
+    "tags": [
+      "evaluation-strategy"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A regulated bank is about to launch a generative AI assistant for internal staff and needs an evaluation strategy that is thorough, scalable and defensible to auditors.",
+    "prompt": "Which strategy is MOST appropriate?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Rely on a public benchmark score only",
+        "correct": false,
+        "why": "Benchmarks may not reflect the bank's tasks and do not provide audit evidence for its use case."
+      },
+      {
+        "key": "B",
+        "text": "Combine automatic metrics and LLM-as-a-judge on a representative dataset with human expert review of samples and high-risk cases, document results, and keep monitoring after launch",
+        "correct": true,
+        "why": "Layered evaluation balances scale and depth, and documentation plus ongoing monitoring supports audit and governance needs."
+      },
+      {
+        "key": "C",
+        "text": "Have one developer try a few prompts",
+        "correct": false,
+        "why": "Ad hoc testing is neither thorough nor defensible."
+      },
+      {
+        "key": "D",
+        "text": "Skip evaluation because the model is from a reputable provider",
+        "correct": false,
+        "why": "Provider reputation does not validate behavior on the bank's specific use case."
+      }
+    ],
+    "explanation": {
+      "answer": "Robust FM evaluation combines several approaches: automatic metrics, LLM-as-a-judge at scale, human-in-the-loop review for nuance and risk, task-specific and adversarial test sets, and post-deployment monitoring, all documented for governance.",
+      "concept": "Evaluation evidence can be recorded in model documentation such as SageMaker Model Cards to support audits.",
+      "examTip": "Defensible evaluation = automatic + judge + human + documentation + monitoring.",
+      "references": [
+        {
+          "title": "Evaluate the performance of Amazon Bedrock resources",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/evaluation.html"
+        },
+        {
+          "title": "Amazon SageMaker Model Cards",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/model-cards.html"
+        }
+      ]
+    }
+  }
+]

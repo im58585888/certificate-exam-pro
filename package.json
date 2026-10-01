@@ -9,7 +9,7 @@
     "lint": "eslint",
     "predev": "node scripts/build-content-index.mjs",
     "prebuild": "node scripts/build-content-index.mjs",
-    "validate:questions": "node scripts/validate-questions.mjs",
+    "validate:questions": "node scripts/validate-questions.mjs content/saa-c03 && node scripts/validate-questions.mjs content/aif-c01",
     "check:setup": "node scripts/check-setup.mjs"
   },
   "dependencies": {

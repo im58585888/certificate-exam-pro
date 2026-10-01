@@ -1,0 +1,1285 @@
+[
+  {
+    "id": "aif-fun-026",
+    "domain": "fundamentals",
+    "topic": "AWS AI Services",
+    "tags": [
+      "transcribe",
+      "speech-to-text"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A call center records thousands of customer calls every day. The quality team wants written transcripts of every call so it can search them for compliance phrases.",
+    "prompt": "Which AWS service should the company use to create the transcripts?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Polly",
+        "correct": false,
+        "why": "Amazon Polly converts text into lifelike speech, which is the opposite direction. The team needs speech converted into text."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Translate",
+        "correct": false,
+        "why": "Amazon Translate converts text from one language to another. It does not turn audio recordings into text."
+      },
+      {
+        "key": "C",
+        "text": "Amazon Transcribe",
+        "correct": true,
+        "why": "Amazon Transcribe is the automatic speech recognition service that converts audio into text, including call analytics features for contact centers."
+      },
+      {
+        "key": "D",
+        "text": "Amazon Textract",
+        "correct": false,
+        "why": "Amazon Textract extracts text and data from scanned documents and images. It does not process audio."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Transcribe uses automatic speech recognition (ASR) to convert speech to text. It supports batch and streaming audio, speaker identification, custom vocabularies and a call analytics capability designed for contact center recordings.",
+      "concept": "Know the speech pair: Transcribe is speech-to-text, Polly is text-to-speech. Translate converts between languages, and Textract reads documents.",
+      "examTip": "Audio in, text out = Transcribe. Text in, audio out = Polly.",
+      "references": [
+        {
+          "title": "What is Amazon Transcribe?",
+          "url": "https://docs.aws.amazon.com/transcribe/latest/dg/what-is.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-fun-027",
+    "domain": "fundamentals",
+    "topic": "AWS AI Services",
+    "tags": [
+      "polly",
+      "text-to-speech"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "An e-learning company wants every written lesson to be available as natural-sounding audio narration in several voices, without hiring voice actors.",
+    "prompt": "Which AWS service meets this requirement?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Lex",
+        "correct": false,
+        "why": "Amazon Lex builds conversational chatbots and voice bots. It is not a tool for producing narration audio from lesson text."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Transcribe",
+        "correct": false,
+        "why": "Amazon Transcribe converts speech into text. The company already has text and needs audio."
+      },
+      {
+        "key": "C",
+        "text": "Amazon Comprehend",
+        "correct": false,
+        "why": "Amazon Comprehend analyzes text for sentiment, entities and topics. It does not generate audio."
+      },
+      {
+        "key": "D",
+        "text": "Amazon Polly",
+        "correct": true,
+        "why": "Amazon Polly turns text into lifelike speech with a choice of voices and languages, which is exactly what narrated lessons need."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Polly is a text-to-speech (TTS) service. It offers many voices across languages, including neural and generative voices, and supports SSML tags to control pronunciation, pauses and emphasis.",
+      "concept": "Polly is commonly used for accessibility, narrated content, voice responses in applications, and announcements.",
+      "examTip": "\"Lifelike speech\" or \"read text aloud\" = Amazon Polly.",
+      "references": [
+        {
+          "title": "What is Amazon Polly?",
+          "url": "https://docs.aws.amazon.com/polly/latest/dg/what-is.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-fun-028",
+    "domain": "fundamentals",
+    "topic": "AWS AI Services",
+    "tags": [
+      "translate"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A global e-commerce company wants to automatically convert product descriptions written in English into Spanish, German and Japanese for its regional websites.",
+    "prompt": "Which AWS service is designed for this task?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Translate",
+        "correct": true,
+        "why": "Amazon Translate is a neural machine translation service that converts text between languages, including batch translation of large document sets."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Kendra",
+        "correct": false,
+        "why": "Amazon Kendra is an intelligent enterprise search service. It finds information but does not translate content."
+      },
+      {
+        "key": "C",
+        "text": "Amazon Polly",
+        "correct": false,
+        "why": "Amazon Polly converts text to speech. Producing spoken audio does not produce translated written descriptions."
+      },
+      {
+        "key": "D",
+        "text": "Amazon Comprehend",
+        "correct": false,
+        "why": "Amazon Comprehend can detect the dominant language of text, but it does not translate text into other languages."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Translate provides fast, high-quality neural machine translation. It supports real-time and batch translation and custom terminology so brand names and product terms are translated consistently.",
+      "concept": "Translate is often combined with other services, for example Transcribe then Translate then Polly to build a speech-to-speech translation pipeline.",
+      "examTip": "Converting text from one language to another = Amazon Translate.",
+      "references": [
+        {
+          "title": "What is Amazon Translate?",
+          "url": "https://docs.aws.amazon.com/translate/latest/dg/what-is.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-fun-029",
+    "domain": "fundamentals",
+    "topic": "AWS AI Services",
+    "tags": [
+      "comprehend",
+      "entities",
+      "sentiment"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A product team wants to analyze social media posts about its brand to identify the sentiment of each post and extract mentioned product names and locations. The team has no machine learning expertise.",
+    "prompt": "Which AWS service should the team use?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon SageMaker AI built-in algorithms",
+        "correct": false,
+        "why": "Building a custom model with SageMaker AI requires ML expertise and labeled data. A pre-trained managed API is the simpler choice."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Comprehend",
+        "correct": true,
+        "why": "Amazon Comprehend is a managed NLP service that detects sentiment and extracts entities such as products and locations, with no ML expertise required."
+      },
+      {
+        "key": "C",
+        "text": "Amazon Rekognition",
+        "correct": false,
+        "why": "Amazon Rekognition analyzes images and videos. The posts to analyze here are text."
+      },
+      {
+        "key": "D",
+        "text": "Amazon Lex",
+        "correct": false,
+        "why": "Amazon Lex builds chatbots that understand user intents. It is not designed to analyze large volumes of existing posts."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Comprehend uses pre-trained NLP models to find sentiment, entities, key phrases, language, personally identifiable information (PII) and topics in text. It can also be customized with your own labels for custom classification and entity recognition.",
+      "concept": "AWS AI services are pre-trained and accessed through APIs, so they suit teams without ML expertise. SageMaker AI is for building, training and deploying custom models.",
+      "examTip": "Sentiment, entities or key phrases in text with no ML expertise = Amazon Comprehend.",
+      "references": [
+        {
+          "title": "What is Amazon Comprehend?",
+          "url": "https://docs.aws.amazon.com/comprehend/latest/dg/what-is.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-fun-030",
+    "domain": "fundamentals",
+    "topic": "AWS AI Services",
+    "tags": [
+      "lex",
+      "chatbot"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A pizza chain wants a chatbot on its website and phone line that understands requests such as \"I want a large pepperoni delivered at 7\", asks follow-up questions for missing details, and places the order.",
+    "prompt": "Which AWS service is purpose-built for this conversational interface?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Personalize",
+        "correct": false,
+        "why": "Personalize generates recommendations from user behavior. It does not provide a chatbot interface."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Comprehend",
+        "correct": false,
+        "why": "Comprehend analyzes text for insights such as sentiment. It does not run multi-turn conversations or collect order details."
+      },
+      {
+        "key": "C",
+        "text": "Amazon Lex",
+        "correct": true,
+        "why": "Amazon Lex builds conversational interfaces using voice and text. It recognizes intents, collects missing details (slots) with follow-up prompts and can call a function to fulfill the order."
+      },
+      {
+        "key": "D",
+        "text": "Amazon Polly",
+        "correct": false,
+        "why": "Polly only converts text to speech. It does not understand what customers say or manage a conversation."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Lex provides automatic speech recognition and natural language understanding to build chatbots and voice bots. You define intents (what the user wants), slots (details needed, such as size and time) and fulfillment logic, often in AWS Lambda.",
+      "concept": "Lex powers conversational interfaces, including integration with Amazon Connect for contact centers. Lex can also use generative AI features to help build and run bots.",
+      "examTip": "Chatbot, voice bot, intents and slots = Amazon Lex.",
+      "references": [
+        {
+          "title": "What is Amazon Lex V2?",
+          "url": "https://docs.aws.amazon.com/lexv2/latest/dg/what-is.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-fun-031",
+    "domain": "fundamentals",
+    "topic": "AWS AI Services",
+    "tags": [
+      "textract",
+      "document-processing"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "An accounting firm receives thousands of scanned invoices and tax forms. It wants to automatically pull out values such as invoice totals, dates and table rows, keeping the relationship between each form field and its value.",
+    "prompt": "Which AWS service should the firm use?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Rekognition",
+        "correct": false,
+        "why": "Rekognition can detect some text in images, but it is not built to extract form key-value pairs and tables from documents."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Comprehend",
+        "correct": false,
+        "why": "Comprehend analyzes text that is already digital. It cannot read scanned images or understand form layouts and tables."
+      },
+      {
+        "key": "C",
+        "text": "Amazon Transcribe",
+        "correct": false,
+        "why": "Transcribe converts audio to text. Scanned invoices are images, not audio."
+      },
+      {
+        "key": "D",
+        "text": "Amazon Textract",
+        "correct": true,
+        "why": "Textract goes beyond OCR to extract printed and handwritten text, form key-value pairs and tables from scanned documents, preserving their structure."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Textract extracts text, handwriting, forms (key-value pairs) and tables from scanned documents. It also has specialized APIs for invoices, receipts and identity documents, and supports queries to ask for specific fields.",
+      "concept": "Intelligent document processing pipelines often combine Textract (read the document) with Comprehend (understand the text) and human review through Amazon Augmented AI (A2I) for low-confidence results.",
+      "examTip": "Scanned documents, forms and tables = Amazon Textract.",
+      "references": [
+        {
+          "title": "What is Amazon Textract?",
+          "url": "https://docs.aws.amazon.com/textract/latest/dg/what-is.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-fun-032",
+    "domain": "fundamentals",
+    "topic": "AWS AI Services",
+    "tags": [
+      "rekognition",
+      "content-moderation"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A social media startup needs to automatically detect and flag uploaded images that contain explicit or violent content before they are shown to other users.",
+    "prompt": "Which AWS service provides this capability with a pre-trained API?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Rekognition",
+        "correct": true,
+        "why": "Rekognition includes content moderation APIs that detect explicit, suggestive and violent content in images and videos, returning labels with confidence scores."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Textract",
+        "correct": false,
+        "why": "Textract extracts text and data from documents. It does not classify images for unsafe content."
+      },
+      {
+        "key": "C",
+        "text": "Amazon Comprehend",
+        "correct": false,
+        "why": "Comprehend analyzes text. It can help moderate text but cannot inspect images."
+      },
+      {
+        "key": "D",
+        "text": "Amazon Polly",
+        "correct": false,
+        "why": "Polly generates speech from text and has nothing to do with image analysis."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Rekognition provides pre-trained computer vision for images and video: object and scene detection, face analysis and comparison, text in images, celebrity recognition and content moderation. Moderation results can be routed to human reviewers for borderline cases.",
+      "concept": "Rekognition also supports Custom Labels, which lets you train detection for your own objects with a small labeled dataset and no deep ML expertise.",
+      "examTip": "Images or video plus detect objects, faces or unsafe content = Amazon Rekognition.",
+      "references": [
+        {
+          "title": "What is Amazon Rekognition?",
+          "url": "https://docs.aws.amazon.com/rekognition/latest/dg/what-is.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-fun-033",
+    "domain": "fundamentals",
+    "topic": "AWS AI Services",
+    "tags": [
+      "personalize",
+      "recommendations"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A streaming video service wants to show each subscriber a personalized row of \"Recommended for you\" titles based on their viewing history, using the same technology approach Amazon uses for retail recommendations.",
+    "prompt": "Which AWS service is designed for this use case?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Forecast-style time-series modeling",
+        "correct": false,
+        "why": "Time-series forecasting predicts future values such as demand. Recommending titles to individual users is a personalization problem."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Personalize",
+        "correct": true,
+        "why": "Amazon Personalize is a fully managed service for building real-time personalized recommendations from user interaction data such as views and clicks."
+      },
+      {
+        "key": "C",
+        "text": "Amazon Kendra",
+        "correct": false,
+        "why": "Kendra is an intelligent search service that answers queries over documents. It does not generate per-user recommendations from viewing history."
+      },
+      {
+        "key": "D",
+        "text": "Amazon Comprehend",
+        "correct": false,
+        "why": "Comprehend analyzes text. It does not learn user preferences from interaction history."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Personalize lets developers build recommendation systems without ML expertise. You provide user, item and interaction data, choose a recipe (for example, user personalization or similar items) and call an API to get recommendations in real time.",
+      "concept": "Recommendation systems are a core AI use case for retail, media and marketing, increasing engagement and conversion.",
+      "examTip": "\"Recommended for you\", \"customers also watched\" or personalized rankings = Amazon Personalize.",
+      "references": [
+        {
+          "title": "What is Amazon Personalize?",
+          "url": "https://docs.aws.amazon.com/personalize/latest/dg/what-is-personalize.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-fun-034",
+    "domain": "fundamentals",
+    "topic": "AWS AI Services",
+    "tags": [
+      "kendra",
+      "enterprise-search"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "Employees at a law firm waste time searching across SharePoint, file shares and an internal wiki. The firm wants a search tool where staff can ask natural language questions, such as \"What is our policy on remote work?\", and get precise answers drawn from those sources.",
+    "prompt": "Which AWS service is designed for this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Personalize",
+        "correct": false,
+        "why": "Personalize produces recommendations based on user behavior. It is not a question-answering search engine over documents."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Textract",
+        "correct": false,
+        "why": "Textract extracts text from scanned documents but does not index multiple repositories or answer questions."
+      },
+      {
+        "key": "C",
+        "text": "Amazon Kendra",
+        "correct": true,
+        "why": "Amazon Kendra is an intelligent enterprise search service with connectors for sources such as SharePoint and file shares, and it answers natural language questions with relevant passages."
+      },
+      {
+        "key": "D",
+        "text": "Amazon Polly",
+        "correct": false,
+        "why": "Polly converts text to speech. It cannot search content."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Kendra uses machine learning to index content from many enterprise sources through built-in connectors and returns precise answers and ranked documents for natural language questions. It also respects document access controls.",
+      "concept": "Kendra can serve as the retriever in a Retrieval Augmented Generation (RAG) application, supplying relevant passages to a foundation model that then writes the answer.",
+      "examTip": "Enterprise search across many sources with natural language questions = Amazon Kendra.",
+      "references": [
+        {
+          "title": "What is Amazon Kendra?",
+          "url": "https://docs.aws.amazon.com/kendra/latest/dg/what-is-kendra.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-fun-035",
+    "domain": "fundamentals",
+    "topic": "AWS AI Services",
+    "tags": [
+      "comprehend-medical",
+      "phi"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A hospital wants to extract medications, dosages, medical conditions and test results from unstructured clinical notes written by doctors.",
+    "prompt": "Which AWS service is purpose-built for this task?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Rekognition",
+        "correct": false,
+        "why": "Rekognition analyzes images and video, not clinical text."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Translate",
+        "correct": false,
+        "why": "Translate converts text between languages. It does not extract medical entities."
+      },
+      {
+        "key": "C",
+        "text": "Amazon Comprehend (general entity recognition)",
+        "correct": false,
+        "why": "Standard Comprehend detects general entities such as people and places. It is not trained to extract medical concepts such as dosages and conditions."
+      },
+      {
+        "key": "D",
+        "text": "Amazon Comprehend Medical",
+        "correct": true,
+        "why": "Comprehend Medical uses NLP models trained on medical text to extract medications, dosages, conditions, tests and protected health information from clinical notes."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Comprehend Medical is a HIPAA-eligible NLP service that extracts medical information, such as conditions, medications, dosage, strength and frequency, tests and procedures, from unstructured clinical text. It can also detect protected health information (PHI) and link entities to medical ontologies.",
+      "concept": "AWS offers specialized variants of AI services for specific domains. When the scenario names a domain such as healthcare, check for a purpose-built option.",
+      "examTip": "Clinical notes or medical entities in text = Amazon Comprehend Medical.",
+      "references": [
+        {
+          "title": "What is Amazon Comprehend Medical?",
+          "url": "https://docs.aws.amazon.com/comprehend-medical/latest/dev/comprehendmedical-welcome.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-fun-036",
+    "domain": "fundamentals",
+    "topic": "ML Techniques",
+    "tags": [
+      "regression"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A ride-sharing company wants to predict how many minutes each trip will take, based on distance, time of day and weather.",
+    "prompt": "Which machine learning technique fits this problem?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Regression",
+        "correct": true,
+        "why": "Regression predicts a continuous numeric value. Estimating trip duration in minutes from input features is a regression problem."
+      },
+      {
+        "key": "B",
+        "text": "Binary classification",
+        "correct": false,
+        "why": "Binary classification predicts one of two categories, such as yes or no. Trip duration is a continuous number of minutes."
+      },
+      {
+        "key": "C",
+        "text": "Dimensionality reduction",
+        "correct": false,
+        "why": "Dimensionality reduction compresses many features into fewer. It does not predict trip duration."
+      },
+      {
+        "key": "D",
+        "text": "Clustering",
+        "correct": false,
+        "why": "Clustering groups unlabeled data points. The company wants a specific numeric prediction for each trip."
+      }
+    ],
+    "explanation": {
+      "answer": "Regression is a supervised learning technique that predicts a continuous value, such as a duration, price or temperature, from input features.",
+      "concept": "Choose the technique by the output: a number means regression, a category means classification, and discovering groups means clustering.",
+      "examTip": "\"How much\" or \"how many\" = regression. \"Which category\" = classification.",
+      "references": [
+        {
+          "title": "What is machine learning?",
+          "url": "https://aws.amazon.com/what-is/machine-learning/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-fun-037",
+    "domain": "fundamentals",
+    "topic": "ML Techniques",
+    "tags": [
+      "classification"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A telecom company wants to predict whether each customer will cancel their subscription in the next 30 days. The answer for each customer is either \"will cancel\" or \"will stay\".",
+    "prompt": "Which machine learning technique should be used?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Regression",
+        "correct": false,
+        "why": "Regression predicts a continuous number. The required output is one of two categories."
+      },
+      {
+        "key": "B",
+        "text": "Binary classification",
+        "correct": true,
+        "why": "There are exactly two possible outcomes for each customer. Predicting one of two classes is binary classification."
+      },
+      {
+        "key": "C",
+        "text": "Time-series forecasting",
+        "correct": false,
+        "why": "Forecasting predicts future values of a series, such as total monthly cancellations. The task here is a yes/no prediction per customer."
+      },
+      {
+        "key": "D",
+        "text": "Clustering",
+        "correct": false,
+        "why": "Clustering discovers groups without labels. The company wants to predict a known outcome, which needs labeled historical churn data."
+      }
+    ],
+    "explanation": {
+      "answer": "Binary classification predicts one of two classes. Churn prediction, trained on historical customers labeled as churned or retained, is one of the most common business uses of classification.",
+      "concept": "Multi-class classification predicts one of more than two categories (for example, ticket type), and multi-label classification can assign several labels to the same item.",
+      "examTip": "Two possible outcomes = binary classification. Many categories = multi-class classification.",
+      "references": [
+        {
+          "title": "The difference between supervised and unsupervised learning",
+          "url": "https://aws.amazon.com/compare/the-difference-between-machine-learning-supervised-and-unsupervised/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-fun-038",
+    "domain": "fundamentals",
+    "topic": "When Not to Use AI",
+    "tags": [
+      "deterministic",
+      "cost-benefit"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A payroll team asks whether it should use machine learning to calculate employees' tax withholding. The calculation follows published tax tables exactly, and every result must be precisely correct and auditable.",
+    "prompt": "What is the BEST recommendation?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use a large language model to calculate the withholding, because it can read the tax tables.",
+        "correct": false,
+        "why": "LLMs are nondeterministic and can make arithmetic mistakes. A task requiring exact, auditable results should not rely on a probabilistic model."
+      },
+      {
+        "key": "B",
+        "text": "Train a regression model on past payroll results to predict the withholding.",
+        "correct": false,
+        "why": "A regression model would only approximate the calculation and could be wrong for edge cases. Exact rules already exist, so prediction adds risk without benefit."
+      },
+      {
+        "key": "C",
+        "text": "Use rule-based logic that implements the tax tables, because the outcome must be exact and deterministic.",
+        "correct": true,
+        "why": "When a specific, known outcome is required and the rules are fully defined, conventional code is cheaper, exact and auditable. ML provides predictions, not guaranteed results."
+      },
+      {
+        "key": "D",
+        "text": "Use clustering to group employees and apply an average withholding to each group.",
+        "correct": false,
+        "why": "Averages per group would be wrong for most individuals. Tax withholding must be calculated exactly for each person."
+      }
+    ],
+    "explanation": {
+      "answer": "ML is not appropriate when the problem has a fully defined deterministic solution and requires a precise outcome. ML models produce probabilistic predictions with some error rate, while rule-based code gives exact, explainable and auditable results at lower cost.",
+      "concept": "Signs that ML is a poor fit: rules are known and stable, exact answers are required, too little data exists, the cost of building and running a model outweighs the benefit, or errors are unacceptable.",
+      "examTip": "\"Must be exact\" or \"specific outcome required\" with known rules = do not use ML.",
+      "references": [
+        {
+          "title": "What is machine learning?",
+          "url": "https://aws.amazon.com/what-is/machine-learning/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-fun-039",
+    "domain": "fundamentals",
+    "topic": "AI Use Cases",
+    "tags": [
+      "fraud-detection",
+      "anomaly-detection"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "An online retailer wants to catch fraudulent orders. Fraud patterns change frequently, there are millions of orders per day, and manual review of every order is impossible.",
+    "prompt": "Why is machine learning a good fit for this problem?",
+    "options": [
+      {
+        "key": "A",
+        "text": "ML is always cheaper than a few hand-written rules.",
+        "correct": false,
+        "why": "ML has costs for data, training, hosting and monitoring. It is valuable here because of scale and complexity, not because it is always cheaper."
+      },
+      {
+        "key": "B",
+        "text": "ML guarantees that every fraudulent order is caught.",
+        "correct": false,
+        "why": "No ML model is perfect. ML reduces fraud but will still produce some false positives and false negatives."
+      },
+      {
+        "key": "C",
+        "text": "ML removes the need for any labeled historical data.",
+        "correct": false,
+        "why": "Supervised fraud models learn best from labeled examples of past fraud. ML does not remove the value of historical data."
+      },
+      {
+        "key": "D",
+        "text": "ML can learn complex, changing patterns from large volumes of data and score every order automatically at scale.",
+        "correct": true,
+        "why": "Fraud patterns are complex and shifting, and volumes are huge. ML scales to score every order and can be retrained as patterns change, which fixed rules struggle to match."
+      }
+    ],
+    "explanation": {
+      "answer": "ML adds value when patterns are too complex or change too often for hand-written rules, and when the volume of decisions is too large for people. Fraud detection is a classic example: models score every transaction and flag suspicious ones for review.",
+      "concept": "Value drivers for ML: automation at scale, assisting human decision making (for example, prioritizing reviews), and adapting to new patterns through retraining.",
+      "examTip": "Complex patterns + huge scale + patterns that change = ML is a good fit.",
+      "references": [
+        {
+          "title": "What is machine learning?",
+          "url": "https://aws.amazon.com/what-is/machine-learning/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-fun-040",
+    "domain": "fundamentals",
+    "topic": "Traditional ML vs FMs",
+    "tags": [
+      "explainability",
+      "regulation",
+      "foundation-model"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A bank must decide loan approvals. Regulators require the bank to give each rejected applicant the specific reasons for the decision, and the bank has five years of well-labeled tabular application data.",
+    "prompt": "Which approach is MOST appropriate?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Train a traditional supervised ML model on the tabular data and use explainability tooling to report the factors behind each decision.",
+        "correct": true,
+        "why": "Labeled tabular data suits a traditional classifier, which is cheaper, more consistent and more explainable. Tools such as SageMaker Clarify can show which features drove each decision."
+      },
+      {
+        "key": "B",
+        "text": "Use an image-generation model to visualize applicant risk.",
+        "correct": false,
+        "why": "Image generation does not make approval decisions and does nothing to meet the explanation requirement."
+      },
+      {
+        "key": "C",
+        "text": "Prompt a large general-purpose foundation model with each application and ask it to decide.",
+        "correct": false,
+        "why": "A general FM is hard to explain, can be inconsistent between runs, and is not designed for decisions on tabular data. That conflicts with the regulatory explanation requirement."
+      },
+      {
+        "key": "D",
+        "text": "Use unsupervised clustering and reject applicants in the riskiest cluster.",
+        "correct": false,
+        "why": "Clustering ignores the labeled outcomes the bank already has and gives no clear per-applicant reasons for rejection."
+      }
+    ],
+    "explanation": {
+      "answer": "Traditional ML models are often a better choice than foundation models when there is a narrow prediction task, good labeled (often tabular) data, and strict explainability or regulatory requirements. Feature-attribution tools such as SageMaker Clarify (based on SHAP) can explain individual predictions.",
+      "concept": "Choose FMs for broad language, image or reasoning tasks and fast development without task-specific training data. Choose traditional ML when you need precise predictions on structured data, explainability, consistency, low inference cost or tight regulatory control.",
+      "examTip": "Regulators require reasons + labeled tabular data = traditional ML with explainability, not a general-purpose FM.",
+      "references": [
+        {
+          "title": "Model explainability with SageMaker Clarify",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-model-explainability.html"
+        },
+        {
+          "title": "What are foundation models?",
+          "url": "https://aws.amazon.com/what-is/foundation-models/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-fun-041",
+    "domain": "fundamentals",
+    "topic": "AWS AI Services",
+    "tags": [
+      "sagemaker-ai"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A data science team needs a single managed platform to prepare data, build and train custom models with their own algorithms, tune them and deploy them to production endpoints.",
+    "prompt": "Which AWS service provides this end-to-end capability?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Polly",
+        "correct": false,
+        "why": "Polly converts text to speech. It is not an ML development platform."
+      },
+      {
+        "key": "B",
+        "text": "Amazon SageMaker AI",
+        "correct": true,
+        "why": "SageMaker AI is the fully managed service for the whole ML lifecycle: data preparation, building, training, tuning, deploying and monitoring custom models."
+      },
+      {
+        "key": "C",
+        "text": "Amazon Comprehend",
+        "correct": false,
+        "why": "Comprehend is a pre-trained NLP API. It does not provide a platform for building and training custom models with your own algorithms."
+      },
+      {
+        "key": "D",
+        "text": "AWS Artifact",
+        "correct": false,
+        "why": "AWS Artifact provides compliance reports and agreements. It has nothing to do with training models."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon SageMaker AI is AWS's fully managed service for building, training and deploying machine learning models. It includes notebooks and Studio, built-in algorithms, managed training, automatic model tuning, multiple inference options, pipelines and monitoring.",
+      "concept": "AWS's AI stack has layers: pre-trained AI services (Comprehend, Rekognition, Transcribe and others) for common tasks via API, Amazon Bedrock for generative AI with foundation models, and SageMaker AI for custom ML development.",
+      "examTip": "Build, train and deploy your own models = SageMaker AI. Use a ready-made capability through an API = an AI service.",
+      "references": [
+        {
+          "title": "What is Amazon SageMaker AI?",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/whatis.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-fun-042",
+    "domain": "fundamentals",
+    "topic": "AWS AI Services",
+    "tags": [
+      "sagemaker-canvas",
+      "no-code"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A team of business analysts with no coding or ML experience wants to build a model that predicts which sales leads will convert, using a spreadsheet of past leads, through a visual point-and-click interface.",
+    "prompt": "Which AWS capability BEST fits this team?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Writing a custom training script in a SageMaker AI notebook",
+        "correct": false,
+        "why": "Custom training scripts require Python and ML expertise, which the analysts do not have."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Transcribe",
+        "correct": false,
+        "why": "Transcribe converts speech to text and cannot build a lead-conversion model."
+      },
+      {
+        "key": "C",
+        "text": "Amazon SageMaker Canvas",
+        "correct": true,
+        "why": "SageMaker Canvas is a no-code visual interface that lets business analysts import data, build ML models and generate predictions without writing code."
+      },
+      {
+        "key": "D",
+        "text": "AWS Lambda",
+        "correct": false,
+        "why": "Lambda runs code you write. It does not provide a visual ML model-building experience."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon SageMaker Canvas gives business users a visual, no-code way to prepare data, build ML models (including automatically selecting algorithms) and make predictions. It also offers access to ready-to-use models and foundation models.",
+      "concept": "SageMaker offers tools for different personas: Canvas for no-code business analysts, Studio and notebooks for data scientists, and Autopilot for automated model building.",
+      "examTip": "No-code ML for business analysts = SageMaker Canvas.",
+      "references": [
+        {
+          "title": "Amazon SageMaker Canvas",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/canvas.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-fun-043",
+    "domain": "fundamentals",
+    "topic": "AI Use Cases",
+    "tags": [
+      "speech",
+      "pipeline",
+      "translate",
+      "transcribe",
+      "polly"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A conference organizer wants a live system in which a speaker talks in English and attendees hear the talk spoken in French in near real time.",
+    "prompt": "Which combination of AWS services implements this pipeline?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Comprehend, then Amazon Lex, then Amazon Polly",
+        "correct": false,
+        "why": "Comprehend analyzes text and Lex manages chatbot conversations. Neither converts speech to text or translates."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Rekognition, then Amazon Translate, then Amazon Textract",
+        "correct": false,
+        "why": "Rekognition and Textract work with images and documents. Neither handles live speech."
+      },
+      {
+        "key": "C",
+        "text": "Amazon Polly, then Amazon Translate, then Amazon Transcribe",
+        "correct": false,
+        "why": "This order is reversed. Polly produces speech from text, so it must come last, not first."
+      },
+      {
+        "key": "D",
+        "text": "Amazon Transcribe, then Amazon Translate, then Amazon Polly",
+        "correct": true,
+        "why": "Transcribe converts English speech to text, Translate converts the text to French, and Polly speaks the French text aloud."
+      }
+    ],
+    "explanation": {
+      "answer": "Speech-to-speech translation chains three AI services: Amazon Transcribe (speech to text), Amazon Translate (text to text in another language) and Amazon Polly (text to speech). Each service supports streaming for near real-time use.",
+      "concept": "Many AI solutions combine several managed services into a pipeline instead of building one custom model.",
+      "examTip": "Follow the data: audio → text (Transcribe) → other language (Translate) → audio (Polly).",
+      "references": [
+        {
+          "title": "What is Amazon Transcribe?",
+          "url": "https://docs.aws.amazon.com/transcribe/latest/dg/what-is.html"
+        },
+        {
+          "title": "What is Amazon Translate?",
+          "url": "https://docs.aws.amazon.com/translate/latest/dg/what-is.html"
+        },
+        {
+          "title": "What is Amazon Polly?",
+          "url": "https://docs.aws.amazon.com/polly/latest/dg/what-is.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-fun-044",
+    "domain": "fundamentals",
+    "topic": "AI Use Cases",
+    "tags": [
+      "human-in-the-loop",
+      "a2i"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "An insurance company uses ML to extract data from claim forms. For predictions with low confidence scores, regulations require a human to review and correct the result before the claim is processed.",
+    "prompt": "Which AWS capability is designed to add this human review step?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Augmented AI (Amazon A2I)",
+        "correct": true,
+        "why": "Amazon A2I builds human review workflows for ML predictions, for example sending low-confidence Textract or Rekognition results to reviewers."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Polly",
+        "correct": false,
+        "why": "Polly converts text to speech and has no role in reviewing predictions."
+      },
+      {
+        "key": "C",
+        "text": "Amazon SageMaker Model Monitor",
+        "correct": false,
+        "why": "Model Monitor detects data and model quality drift on endpoints over time. It does not route individual predictions to human reviewers."
+      },
+      {
+        "key": "D",
+        "text": "AWS CloudTrail",
+        "correct": false,
+        "why": "CloudTrail records API activity for auditing. It does not provide a human review workflow."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Augmented AI (A2I) adds human review to ML workflows. You define conditions, such as a confidence below a threshold, that trigger a human loop, and reviewers from a private workforce, vendors or Amazon Mechanical Turk check and correct the output.",
+      "concept": "Human-in-the-loop design keeps people involved where errors are costly. It is used to assist human decision making rather than fully replace it, and corrected results can become new training data.",
+      "examTip": "Low-confidence predictions need human review = Amazon Augmented AI (A2I).",
+      "references": [
+        {
+          "title": "Using Amazon Augmented AI for human review",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/a2i-use-augmented-ai-a2i-human-review-loops.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-fun-045",
+    "domain": "fundamentals",
+    "topic": "AWS AI Services",
+    "tags": [
+      "textract",
+      "comprehend",
+      "document-processing"
+    ],
+    "difficulty": "medium",
+    "type": "multi",
+    "selectCount": 2,
+    "stem": "A mortgage company receives scanned loan application PDFs. It wants to extract the text and form fields from the scans and then detect any personally identifiable information (PII), such as names and Social Security numbers, in the extracted text.",
+    "prompt": "Which AWS services should the company combine? (Select TWO.)",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Personalize",
+        "correct": false,
+        "why": "Personalize generates recommendations from user behavior and has no document-processing role."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Textract",
+        "correct": true,
+        "why": "Textract reads the scanned PDFs and extracts text and form key-value pairs, turning images into machine-readable text."
+      },
+      {
+        "key": "C",
+        "text": "Amazon Polly",
+        "correct": false,
+        "why": "Polly turns text into speech. It neither reads scans nor detects PII."
+      },
+      {
+        "key": "D",
+        "text": "Amazon Comprehend",
+        "correct": true,
+        "why": "Comprehend can detect and redact PII entities in text, so it handles the second step once Textract has produced the text."
+      },
+      {
+        "key": "E",
+        "text": "Amazon Lex",
+        "correct": false,
+        "why": "Lex builds conversational bots. It does not process scanned documents."
+      }
+    ],
+    "explanation": {
+      "answer": "An intelligent document processing pipeline first uses Amazon Textract to extract text, forms and tables from scanned documents, then uses Amazon Comprehend to analyze that text, including detecting and redacting PII.",
+      "concept": "Textract handles document images; Comprehend handles language understanding. Amazon Macie, by contrast, discovers sensitive data in Amazon S3 at the storage level.",
+      "examTip": "Scanned document → Textract. Understanding or PII in the resulting text → Comprehend.",
+      "references": [
+        {
+          "title": "What is Amazon Textract?",
+          "url": "https://docs.aws.amazon.com/textract/latest/dg/what-is.html"
+        },
+        {
+          "title": "What is Amazon Comprehend?",
+          "url": "https://docs.aws.amazon.com/comprehend/latest/dg/what-is.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-fun-046",
+    "domain": "fundamentals",
+    "topic": "AI Use Cases",
+    "tags": [
+      "forecasting",
+      "use-case-matching"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A grocery chain wants to estimate how many units of each product every store will sell next week, so it can reduce waste from over-ordering.",
+    "prompt": "Which type of AI application addresses this need?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Speech recognition",
+        "correct": false,
+        "why": "Speech recognition converts audio to text, which does not help estimate product sales."
+      },
+      {
+        "key": "B",
+        "text": "Demand forecasting",
+        "correct": true,
+        "why": "Demand forecasting uses historical sales and related signals to predict future demand, which directly reduces over-ordering and waste."
+      },
+      {
+        "key": "C",
+        "text": "Image generation",
+        "correct": false,
+        "why": "Image generation creates pictures. It cannot estimate next week's sales."
+      },
+      {
+        "key": "D",
+        "text": "Machine translation",
+        "correct": false,
+        "why": "Translation converts text between languages and is unrelated to predicting sales volumes."
+      }
+    ],
+    "explanation": {
+      "answer": "Demand forecasting is a time-series ML application that predicts future values, such as units sold per product per store, from historical data and related factors such as promotions, holidays and weather.",
+      "concept": "Forecasting is used for inventory planning, staffing, capacity and financial planning. On AWS, forecasting models can be built in SageMaker AI, including through SageMaker Canvas.",
+      "examTip": "\"Predict next week's/month's quantity\" = forecasting on time-series data.",
+      "references": [
+        {
+          "title": "Amazon SageMaker Canvas",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/canvas.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-fun-047",
+    "domain": "fundamentals",
+    "topic": "When Not to Use AI",
+    "tags": [
+      "cost-benefit",
+      "roi"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A small business with 40 customers is considering hiring a data scientist and building a custom churn-prediction model. The owner already calls every customer monthly and knows each one personally.",
+    "prompt": "What should the business consider FIRST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "How to deploy the model on GPU instances for the lowest latency",
+        "correct": false,
+        "why": "Deployment details are irrelevant until the business decides ML is justified. Latency is not a concern for monthly churn checks."
+      },
+      {
+        "key": "B",
+        "text": "Which deep learning architecture will give the highest accuracy",
+        "correct": false,
+        "why": "Architecture choice comes later, if at all. The first question is whether ML is worth building for 40 customers."
+      },
+      {
+        "key": "C",
+        "text": "Whether the cost of building and maintaining a model outweighs the benefit for so few customers",
+        "correct": true,
+        "why": "With 40 customers and close personal contact, a model would cost far more than the value it adds, and there is too little data to train it reliably. A cost-benefit analysis comes first."
+      },
+      {
+        "key": "D",
+        "text": "How to collect labels for one million training examples",
+        "correct": false,
+        "why": "The business has only 40 customers. Planning for a million labeled examples ignores the actual situation."
+      }
+    ],
+    "explanation": {
+      "answer": "Before adopting ML, assess whether the expected benefit justifies the cost of data, development, infrastructure and ongoing maintenance. With very few customers, little data and an effective manual process already in place, ML is unlikely to deliver a positive return.",
+      "concept": "ML fits problems with enough data, enough scale or complexity, and measurable value. Simple heuristics or manual processes are often better for small-scale problems.",
+      "examTip": "Tiny scale, little data, process already works = ML is probably not appropriate.",
+      "references": [
+        {
+          "title": "What is machine learning?",
+          "url": "https://aws.amazon.com/what-is/machine-learning/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-fun-048",
+    "domain": "fundamentals",
+    "topic": "AWS AI Services",
+    "tags": [
+      "rekognition",
+      "custom-labels"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A farm-equipment company wants to identify its own specific machine part models in photos sent by technicians. The pre-trained object labels in a generic vision API only return \"machine\" or \"metal\". The company has a few hundred labeled photos of each part.",
+    "prompt": "Which approach requires the LEAST ML expertise?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Build and train a convolutional neural network from scratch on Amazon EC2",
+        "correct": false,
+        "why": "Training a CNN from scratch requires deep ML expertise and usually far more data than a few hundred images per class."
+      },
+      {
+        "key": "B",
+        "text": "Use Amazon Polly with custom voices",
+        "correct": false,
+        "why": "Polly generates speech and cannot recognize objects in photos."
+      },
+      {
+        "key": "C",
+        "text": "Use Amazon Comprehend custom classification",
+        "correct": false,
+        "why": "Comprehend custom classification works on text, not images."
+      },
+      {
+        "key": "D",
+        "text": "Use Amazon Rekognition Custom Labels",
+        "correct": true,
+        "why": "Rekognition Custom Labels trains a model to detect your own objects from a relatively small set of labeled images, without requiring ML expertise."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Rekognition Custom Labels extends Rekognition so you can identify objects and scenes specific to your business. It uses transfer learning behind the scenes, so a modest labeled dataset can produce a usable model without ML expertise.",
+      "concept": "Several AI services offer customization: Rekognition Custom Labels for images, Comprehend custom classification and entity recognition for text, and custom vocabularies in Transcribe.",
+      "examTip": "Pre-trained labels not specific enough + small labeled image set + little ML expertise = Rekognition Custom Labels.",
+      "references": [
+        {
+          "title": "What is Amazon Rekognition?",
+          "url": "https://docs.aws.amazon.com/rekognition/latest/dg/what-is.html"
+        },
+        {
+          "title": "What is transfer learning?",
+          "url": "https://aws.amazon.com/what-is/transfer-learning/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-fun-049",
+    "domain": "fundamentals",
+    "topic": "AI Use Cases",
+    "tags": [
+      "assist-decisions",
+      "human-in-the-loop"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A radiology department deploys a model that highlights suspicious regions on scans. Radiologists still make every final diagnosis, but they review flagged scans first and report that they finish their queue faster.",
+    "prompt": "Which value of AI does this deployment MOST directly demonstrate?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Assisting human decision making",
+        "correct": true,
+        "why": "The model prioritizes and highlights work so experts decide faster and focus attention, while humans keep final authority."
+      },
+      {
+        "key": "B",
+        "text": "Eliminating the need for training data",
+        "correct": false,
+        "why": "A model that detects suspicious regions requires labeled training data. The value shown is in how it is used, not in avoiding data."
+      },
+      {
+        "key": "C",
+        "text": "Fully replacing expert judgment",
+        "correct": false,
+        "why": "Radiologists still make every final diagnosis. The model supports experts instead of replacing them."
+      },
+      {
+        "key": "D",
+        "text": "Generating new medical images",
+        "correct": false,
+        "why": "The model highlights regions in existing scans. It does not create new images."
+      }
+    ],
+    "explanation": {
+      "answer": "One of AI's main business values is assisting human decision making: surfacing insights, prioritizing work and reducing manual effort while people remain accountable for final decisions. This is especially important in high-stakes domains such as healthcare and finance.",
+      "concept": "Other common value categories are automation (removing repetitive work), scalability (handling volumes people cannot) and personalization.",
+      "examTip": "Model suggests, human decides = assisting human decision making.",
+      "references": [
+        {
+          "title": "Responsible AI at AWS",
+          "url": "https://aws.amazon.com/ai/responsible-ai/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-fun-050",
+    "domain": "fundamentals",
+    "topic": "Traditional ML vs FMs",
+    "tags": [
+      "foundation-model",
+      "use-case"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A startup wants to launch, within two weeks, a feature that drafts friendly email responses to a wide variety of customer questions. It has no labeled training data and no ML team.",
+    "prompt": "Which approach is MOST appropriate?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Collect and label 100,000 emails, then train a custom model from scratch",
+        "correct": false,
+        "why": "This would take months and requires an ML team. It does not fit a two-week timeline with no labeled data."
+      },
+      {
+        "key": "B",
+        "text": "Use a pre-trained foundation model through a managed service such as Amazon Bedrock, with well-designed prompts",
+        "correct": true,
+        "why": "Foundation models can generate varied, natural text out of the box. A managed API lets a team without ML expertise ship quickly using prompts, with no training data required."
+      },
+      {
+        "key": "C",
+        "text": "Use k-means clustering on past emails",
+        "correct": false,
+        "why": "Clustering groups emails but cannot write new responses."
+      },
+      {
+        "key": "D",
+        "text": "Use a linear regression model to predict the reply text",
+        "correct": false,
+        "why": "Regression predicts numbers, not free-form text."
+      }
+    ],
+    "explanation": {
+      "answer": "Foundation models are a strong fit for broad, open-ended language tasks such as drafting text, especially when there is little task-specific data and speed to market matters. Amazon Bedrock provides FMs through an API with no infrastructure to manage.",
+      "concept": "Prompting a pre-trained FM is the fastest, cheapest way to start. If results need improvement, add Retrieval Augmented Generation (company knowledge) or fine-tuning later.",
+      "examTip": "Open-ended generation + no training data + fast launch = foundation model via a managed service.",
+      "references": [
+        {
+          "title": "What is Amazon Bedrock?",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/what-is-bedrock.html"
+        },
+        {
+          "title": "What are foundation models?",
+          "url": "https://aws.amazon.com/what-is/foundation-models/"
+        }
+      ]
+    }
+  }
+]

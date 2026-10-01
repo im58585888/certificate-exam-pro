@@ -7,13 +7,12 @@ import { getUser } from "@/lib/auth";
 import { getAccess } from "@/lib/billing";
 import { query } from "@/lib/db";
 import { attemptsFor, dueCount, masteryBy, readiness, reviewQueue, weakestTopics } from "@/lib/engine";
-import { getExam } from "@/lib/exams";
+import { DEFAULT_EXAM, EXAM_LIST, getExam } from "@/lib/exams";
 import { flagsFor } from "@/lib/flags";
 import { ensureBank, questionsFor } from "@/lib/questions";
 
 export const metadata: Metadata = { title: "Dashboard" };
 
-const EXAM = "saa-c03";
 const DAYS = 30;
 const iso = (d: Date) => d.toISOString().slice(0, 10);
 
@@ -31,9 +30,12 @@ export default async function Dashboard({ searchParams }: PageProps<"/dashboard"
   await ensureBank();
   const user = await getUser();
   if (!user) redirect("/login?next=/dashboard");
-  const { welcome, reset } = await searchParams;
+  const { welcome, reset, exam: examParam } = await searchParams;
+  // Requested exam, else the one practiced most recently, else the default.
+  const recent = await query<{ exam: string }>(`select exam from quiz_sessions where user_id = $1 order by created_at desc limit 1`, [user.id]);
+  const EXAM = typeof examParam === "string" && getExam(examParam) ? examParam : getExam(recent[0]?.exam ?? "") ? recent[0].exam : DEFAULT_EXAM;
   const exam = getExam(EXAM)!;
-  const access = await getAccess(user.id);
+  const access = await getAccess(user.id, EXAM);
   const bank = questionsFor(EXAM);
   const attempts = await attemptsFor({ userId: user.id }, EXAM);
 
@@ -67,7 +69,7 @@ export default async function Dashboard({ searchParams }: PageProps<"/dashboard"
   }
 
   const domainM = new Map(masteryBy(attempts, bank, "domain").map((m) => [m.key, m]));
-  const domainRows = exam.domains.map((d) => ({ id: d.id, label: d.name.replace("Design ", ""), weight: d.weight, score: domainM.get(d.id)?.score ?? null, attempts: domainM.get(d.id)?.attempts ?? 0 }));
+  const domainRows = exam.domains.map((d) => ({ id: d.id, label: d.short, weight: d.weight, score: domainM.get(d.id)?.score ?? null, attempts: domainM.get(d.id)?.attempts ?? 0 }));
   // Same order "Strengthen weak areas" uses: flagged topics first, then lowest mastery.
   const topicMastery = new Map(masteryBy(attempts, bank, "topic").map((m) => [m.key, m]));
   const topicOf = new Map(bank.map((q) => [q.id, q.topic]));
@@ -87,7 +89,15 @@ export default async function Dashboard({ searchParams }: PageProps<"/dashboard"
   return (
     <div className="mx-auto max-w-6xl px-4 py-10">
       {reset && <p className="mb-6 rounded-xl bg-ok-soft px-4 py-3 font-semibold text-ok">Your password was updated. Other devices have been signed out.</p>}
-      {welcome && <p className="mb-6 rounded-xl bg-ok-soft px-4 py-3 font-semibold text-ok">Your all-access pass is active. Everything is unlocked.</p>}
+      {welcome && <p className="mb-6 rounded-xl bg-ok-soft px-4 py-3 font-semibold text-ok">Your {exam.code} pass is active. Everything for this exam is unlocked.</p>}
+      <nav className="mb-6 flex flex-wrap gap-2" aria-label="Exam">
+        {EXAM_LIST.map((e) => (
+          <Link key={e.slug} href={`/dashboard?exam=${e.slug}`} aria-current={e.slug === EXAM ? "page" : undefined}
+            className={`rounded-full border px-3 py-1.5 text-sm font-semibold ${e.slug === EXAM ? "border-brand bg-brand-soft text-brand" : "border-line text-muted hover:text-ink"}`}>
+            {e.code} · {e.shortName}
+          </Link>
+        ))}
+      </nav>
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <p className="eyebrow">{exam.code} dashboard</p>
@@ -130,7 +140,7 @@ export default async function Dashboard({ searchParams }: PageProps<"/dashboard"
             <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
               <Stat label="Questions answered" value={total.toLocaleString()} />
               <Stat label="Accuracy" value={`${Math.round((correct / total) * 100)}%`} />
-              <Stat label="Avg time per question" value={`${avgSec}s`} note="Real exam allows ~120s" />
+              <Stat label="Avg time per question" value={`${avgSec}s`} note={`Real exam allows ~${Math.round((exam.examMinutes * 60) / exam.examQuestions)}s`} />
               <Stat label="Study streak" value={`${streak} day${streak === 1 ? "" : "s"}`} />
               <Stat label="Question bank seen" value={`${Math.round((seen / bank.length) * 100)}%`} note={`${seen} of ${bank.length}`} />
               <Stat label="To review" value={String(queue.length)} note={`${due} due now · ${flags.length} flagged`} />
@@ -141,7 +151,7 @@ export default async function Dashboard({ searchParams }: PageProps<"/dashboard"
             <section className="card p-6">
               <h2 className="font-extrabold">Mastery by exam domain</h2>
               <p className="mb-5 text-sm text-muted">Recent answers count more than old ones.</p>
-              <DomainBars rows={domainRows} passLine={0.72} />
+              <DomainBars rows={domainRows} passLine={exam.passingScaled / 1000} />
             </section>
             <section className="card p-6">
               <h2 className="font-extrabold">Weakest topics</h2>

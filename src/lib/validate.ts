@@ -1,9 +1,9 @@
+import { getExam } from "./exams";
 import type { Question } from "./questions";
 
-const DOMAINS = ["secure", "resilient", "performance", "cost"];
-
 /** Same rules as scripts/validate-questions.mjs, used when admins edit or add questions. */
-export function validateQuestion(q: Partial<Question>): string[] {
+export function validateQuestion(q: Partial<Question>, exam: string): string[] {
+  const DOMAINS = getExam(exam)?.domains.map((d) => d.id) ?? [];
   const errors: string[] = [];
   for (const k of ["id", "domain", "topic", "difficulty", "type", "stem", "prompt", "options", "explanation"] as const) {
     if (!q[k]) errors.push(`Missing "${k}".`);

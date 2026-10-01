@@ -152,12 +152,12 @@ export async function startQuizAction(form: FormData) {
   if (!exam || !(mode in COUNTS)) redirect("/practice");
   // Scope: checked domains and study areas. All or none checked both mean "everything".
   const domains = form.getAll("domains").map(String).filter((v): v is DomainId => exam.domains.some((d) => d.id === v));
-  const scope: Scope = { domains: [...new Set(domains)], areas: [...new Set(form.getAll("areas").map(String).filter(isArea))] };
+  const scope: Scope = { domains: [...new Set(domains)], areas: [...new Set(form.getAll("areas").map(String).filter((a) => isArea(examSlug, a)))] };
   const requested = Number(form.get("count")) || COUNTS[mode][0];
   let count = COUNTS[mode].includes(requested) ? requested : COUNTS[mode][0];
 
   const user = await getUser();
-  const access = await getAccess(user?.id);
+  const access = await getAccess(user?.id, examSlug);
   const owner: Owner = user ? { userId: user.id } : { anonId: await ensureAnonId() };
 
   if (!access.active) {
@@ -216,7 +216,7 @@ export async function submitAnswerAction(sessionId: string, questionId: string, 
     return { status: "saved" };
   }
 
-  const access = await getAccess(owner.userId);
+  const access = await getAccess(owner.userId, session.exam);
   // Only free answers carry a network fingerprint; paid usage is never tracked by IP.
   const ipHash = access.active ? null : await clientIpHash();
   if (ipHash) {
@@ -259,26 +259,28 @@ export async function finishQuizAction(sessionId: string) {
 
 // ---------- Billing ----------
 
-export async function checkoutAction() {
+export async function checkoutAction(form: FormData) {
+  const exam = getExam(String(form.get("exam") ?? ""));
+  if (!exam) redirect("/pricing");
   const user = await getUser();
   if (!user) redirect(`/register?next=${encodeURIComponent("/pricing")}`);
   if (paymentsMode === "waitlist") redirect("/pricing");
   if (!stripe) {
     if (process.env.NODE_ENV === "production") throw new Error("Payments are not configured.");
-    redirect("/checkout/dev");
+    redirect(`/checkout/dev?exam=${exam.slug}`);
   }
   const origin = await appOrigin();
   const session = await stripe.checkout.sessions.create({
     mode: "payment",
     customer_email: user.email,
     client_reference_id: user.id,
-    metadata: { userId: user.id },
+    metadata: { userId: user.id, exam: exam.slug },
     line_items: [{
       quantity: 1,
       price_data: {
         currency: "usd",
         unit_amount: PASS_PRICE_CENTS,
-        product_data: { name: `All-access pass (${PASS_DAYS} days)`, description: "Unlimited practice on every exam, adaptive review and analytics." },
+        product_data: { name: `${exam.code} pass (${PASS_DAYS} days)`, description: `Unlimited ${exam.name} practice, mock exams, adaptive review and analytics.` },
       },
     }],
     success_url: `${origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
@@ -288,12 +290,14 @@ export async function checkoutAction() {
 }
 
 /** Local development stand-in for Stripe Checkout. Disabled in production. */
-export async function devGrantAction() {
+export async function devGrantAction(form: FormData) {
   if (paymentsMode !== "simulated") throw new Error("Not available.");
+  const exam = getExam(String(form.get("exam") ?? ""));
+  if (!exam) redirect("/pricing");
   const user = await getUser();
   if (!user) redirect("/login");
-  await grantPass(user.id, `dev_${Date.now()}`, PASS_PRICE_CENTS, "dev");
-  redirect("/dashboard?welcome=1");
+  await grantPass(user.id, exam.slug, `dev_${Date.now()}`, PASS_PRICE_CENTS, "dev");
+  redirect(`/dashboard?exam=${exam.slug}&welcome=1`);
 }
 
 // ---------- Question feedback ----------

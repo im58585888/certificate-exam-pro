@@ -1,0 +1,1303 @@
+[
+  {
+    "id": "aif-fun-076",
+    "domain": "fundamentals",
+    "topic": "ML Techniques",
+    "tags": [
+      "anomaly-detection",
+      "unsupervised-learning"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A factory streams temperature and vibration readings from hundreds of machines. It has almost no records of past failures but wants to be alerted when a machine starts behaving unusually.",
+    "prompt": "Which ML technique is MOST appropriate?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Multi-class classification",
+        "correct": false,
+        "why": "Classification needs many labeled examples of each class. The factory has almost no labeled failures."
+      },
+      {
+        "key": "B",
+        "text": "Machine translation",
+        "correct": false,
+        "why": "Translation converts text between languages and has nothing to do with sensor readings."
+      },
+      {
+        "key": "C",
+        "text": "Anomaly detection",
+        "correct": true,
+        "why": "Anomaly detection learns what normal behavior looks like and flags readings that deviate from it, which works well when failure labels are scarce."
+      },
+      {
+        "key": "D",
+        "text": "Regression on failure dates",
+        "correct": false,
+        "why": "Predicting failure dates by regression requires historical failure data, which the factory lacks."
+      }
+    ],
+    "explanation": {
+      "answer": "Anomaly detection identifies data points or patterns that differ significantly from normal behavior. It is often unsupervised, so it can work without labeled failures, making it suitable for predictive maintenance, fraud and security monitoring.",
+      "concept": "Algorithms such as Random Cut Forest (a SageMaker AI built-in algorithm) assign anomaly scores to data points based on how unusual they are.",
+      "examTip": "\"Unusual behavior\" with few or no labeled incidents = anomaly detection.",
+      "references": [
+        {
+          "title": "Built-in algorithms and pretrained models in SageMaker AI",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/algos.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-fun-077",
+    "domain": "fundamentals",
+    "topic": "ML Techniques",
+    "tags": [
+      "transfer-learning"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company has only 2,000 labeled images of defective solar panels. Instead of training a vision model from scratch, its team takes a model already trained on millions of general images and retrains only its final layers on the solar panel images.",
+    "prompt": "What is this technique called?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Clustering",
+        "correct": false,
+        "why": "Clustering groups unlabeled data. The team is adapting a trained model to a new labeled task."
+      },
+      {
+        "key": "B",
+        "text": "Reinforcement learning",
+        "correct": false,
+        "why": "Reinforcement learning learns from rewards in an environment. Reusing a pre-trained image model is a different technique."
+      },
+      {
+        "key": "C",
+        "text": "Data augmentation",
+        "correct": false,
+        "why": "Data augmentation creates modified copies of training examples, such as rotated images. It does not involve reusing another model's learned weights."
+      },
+      {
+        "key": "D",
+        "text": "Transfer learning",
+        "correct": true,
+        "why": "Transfer learning reuses knowledge from a model trained on one task to improve learning on a related task, which reduces the data and compute needed."
+      }
+    ],
+    "explanation": {
+      "answer": "Transfer learning starts from a model pre-trained on a large, general dataset and adapts it to a new, related task with a smaller dataset. It works because early layers learn general features (edges, textures) that are useful across tasks.",
+      "concept": "Fine-tuning foundation models is a form of transfer learning: the general knowledge from pre-training is adapted to a specific domain or task.",
+      "examTip": "Reuse a pre-trained model for a related task with limited data = transfer learning.",
+      "references": [
+        {
+          "title": "What is transfer learning?",
+          "url": "https://aws.amazon.com/what-is/transfer-learning/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-fun-078",
+    "domain": "fundamentals",
+    "topic": "AI Use Cases",
+    "tags": [
+      "use-case-matching",
+      "nlp",
+      "computer-vision",
+      "forecasting"
+    ],
+    "difficulty": "medium",
+    "type": "multi",
+    "selectCount": 2,
+    "stem": "A retail company lists several proposed AI projects and asks which ones are natural language processing (NLP) use cases.",
+    "prompt": "Which projects are NLP use cases? (Select TWO.)",
+    "options": [
+      {
+        "key": "A",
+        "text": "Optimizing truck delivery routes",
+        "correct": false,
+        "why": "Route optimization is an operations research or reinforcement learning problem, not NLP."
+      },
+      {
+        "key": "B",
+        "text": "Detecting shoplifting from in-store camera footage",
+        "correct": false,
+        "why": "Analyzing camera footage is a computer vision task, not NLP."
+      },
+      {
+        "key": "C",
+        "text": "Extracting product names and complaint topics from online reviews",
+        "correct": true,
+        "why": "Entity and topic extraction from review text are core NLP tasks."
+      },
+      {
+        "key": "D",
+        "text": "Forecasting next quarter's sales per store",
+        "correct": false,
+        "why": "Sales forecasting uses numeric time-series data, not language."
+      },
+      {
+        "key": "E",
+        "text": "Summarizing long customer complaint emails for support agents",
+        "correct": true,
+        "why": "Summarizing written emails requires understanding and generating language, which is NLP."
+      }
+    ],
+    "explanation": {
+      "answer": "NLP covers any task involving human language in text or speech: summarization, sentiment, entity and topic extraction, classification, translation and question answering. Camera footage is computer vision, sales prediction is forecasting, and routing is optimization.",
+      "concept": "Map each project to its input data: text → NLP, images and video → computer vision, ordered numbers over time → forecasting.",
+      "examTip": "If the input is human language, it is NLP.",
+      "references": [
+        {
+          "title": "What is natural language processing?",
+          "url": "https://aws.amazon.com/what-is/nlp/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-fun-079",
+    "domain": "fundamentals",
+    "topic": "AWS AI Services",
+    "tags": [
+      "transcribe",
+      "call-analytics",
+      "comprehend"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A contact center wants transcripts of calls along with insights such as caller sentiment over the course of each call, talk time, interruptions and detected issues, using one managed feature with minimal custom integration.",
+    "prompt": "Which AWS capability is designed for this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Transcribe Call Analytics",
+        "correct": true,
+        "why": "Transcribe Call Analytics transcribes calls and adds conversation insights such as sentiment, talk time, interruptions, issue detection and summaries."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Translate batch jobs",
+        "correct": false,
+        "why": "Translate converts text between languages. It does not create transcripts or call insights."
+      },
+      {
+        "key": "C",
+        "text": "Amazon Polly neural voices",
+        "correct": false,
+        "why": "Polly generates speech. It does not analyze recorded calls."
+      },
+      {
+        "key": "D",
+        "text": "Amazon Rekognition video analysis",
+        "correct": false,
+        "why": "Rekognition analyzes images and video, not call audio."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Transcribe Call Analytics is purpose-built for contact centers. It combines speech-to-text with conversation analytics, including speaker separation, sentiment per speaker, non-talk time, interruptions, issue and outcome detection, and generative call summaries.",
+      "concept": "Purpose-built features often replace a custom multi-service pipeline. Amazon Connect contact centers can use these analytics through Contact Lens.",
+      "examTip": "Call transcripts plus sentiment and conversation insights = Transcribe Call Analytics.",
+      "references": [
+        {
+          "title": "What is Amazon Transcribe?",
+          "url": "https://docs.aws.amazon.com/transcribe/latest/dg/what-is.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-fun-080",
+    "domain": "fundamentals",
+    "topic": "AI Terminology",
+    "tags": [
+      "probabilistic",
+      "confidence-score"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "An image classifier returns \"dog\" with a confidence score of 0.62 for a photo. A product manager asks what the score means.",
+    "prompt": "Which explanation is MOST accurate?",
+    "options": [
+      {
+        "key": "A",
+        "text": "The model is 62% of the way through training.",
+        "correct": false,
+        "why": "The score is produced at inference time for one input. It is unrelated to training progress."
+      },
+      {
+        "key": "B",
+        "text": "The model estimates its certainty in the prediction; ML outputs are probabilistic, so the application should decide how to handle lower-confidence results.",
+        "correct": true,
+        "why": "ML predictions come with a confidence estimate. Applications often set thresholds, for example sending low-confidence results for human review."
+      },
+      {
+        "key": "C",
+        "text": "62% of the image's pixels are a dog.",
+        "correct": false,
+        "why": "A classification confidence score does not measure the area of the image covered by the object."
+      },
+      {
+        "key": "D",
+        "text": "The image is guaranteed to contain a dog 62% of the time it is viewed.",
+        "correct": false,
+        "why": "The image either contains a dog or not. The score reflects the model's certainty, not a property of the image."
+      }
+    ],
+    "explanation": {
+      "answer": "ML models produce probabilistic outputs. A confidence score expresses how certain the model is about a prediction. Applications choose thresholds based on business risk and often route low-confidence predictions to people.",
+      "concept": "Because ML is probabilistic, it is unsuitable when an exact, guaranteed outcome is required. Confidence scores enable human-in-the-loop designs such as Amazon Augmented AI.",
+      "examTip": "Confidence scores are about the model's certainty. Low confidence → human review or fallback.",
+      "references": [
+        {
+          "title": "What is Amazon Rekognition?",
+          "url": "https://docs.aws.amazon.com/rekognition/latest/dg/what-is.html"
+        },
+        {
+          "title": "Using Amazon Augmented AI for human review",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/a2i-use-augmented-ai-a2i-human-review-loops.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-fun-081",
+    "domain": "fundamentals",
+    "topic": "ML Techniques",
+    "tags": [
+      "dimensionality-reduction",
+      "unsupervised-learning"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A dataset has 900 highly correlated input columns. Training is slow, and the team wants to compress the columns into a much smaller set of new variables that keep most of the information.",
+    "prompt": "Which technique addresses this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Adding more columns through feature crosses",
+        "correct": false,
+        "why": "Feature crosses increase the number of features, which makes the problem worse."
+      },
+      {
+        "key": "B",
+        "text": "Machine translation",
+        "correct": false,
+        "why": "Translation converts text between languages and is unrelated to reducing numeric features."
+      },
+      {
+        "key": "C",
+        "text": "Dimensionality reduction, such as principal component analysis (PCA)",
+        "correct": true,
+        "why": "Dimensionality reduction transforms many correlated features into fewer variables that retain most of the variance, speeding up training and reducing noise."
+      },
+      {
+        "key": "D",
+        "text": "Reinforcement learning",
+        "correct": false,
+        "why": "Reinforcement learning trains agents with rewards and does not compress input features."
+      }
+    ],
+    "explanation": {
+      "answer": "Dimensionality reduction is an unsupervised technique that reduces the number of input variables while preserving important information. Principal component analysis (PCA) creates new uncorrelated components ranked by how much variance they explain.",
+      "concept": "Fewer, more informative features can reduce training time, storage and overfitting. PCA is available as a SageMaker AI built-in algorithm.",
+      "examTip": "Too many correlated features → dimensionality reduction (PCA).",
+      "references": [
+        {
+          "title": "Built-in algorithms and pretrained models in SageMaker AI",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/algos.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-fun-082",
+    "domain": "fundamentals",
+    "topic": "AI Use Cases",
+    "tags": [
+      "knowledge-base",
+      "question-answering"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A software company wants its support portal to answer customer questions using its product manuals and release notes, so that answers reflect the company's actual documentation rather than general internet knowledge.",
+    "prompt": "Which type of AI application is MOST suitable?",
+    "options": [
+      {
+        "key": "A",
+        "text": "A time-series forecasting model for support ticket volume",
+        "correct": false,
+        "why": "Forecasting ticket volume helps staffing but does not answer customer questions."
+      },
+      {
+        "key": "B",
+        "text": "An image classifier trained on product screenshots",
+        "correct": false,
+        "why": "Classifying screenshots does not answer written questions from documentation."
+      },
+      {
+        "key": "C",
+        "text": "A clustering model that groups manuals by length",
+        "correct": false,
+        "why": "Grouping manuals by length does not produce answers to questions."
+      },
+      {
+        "key": "D",
+        "text": "A knowledge-base question-answering application that retrieves relevant documentation and uses a foundation model to compose the answer",
+        "correct": true,
+        "why": "Grounding answers in retrieved company documents gives accurate, specific responses. This is the retrieval augmented generation pattern used by knowledge bases."
+      }
+    ],
+    "explanation": {
+      "answer": "Knowledge bases are a real-world AI application in which relevant passages are retrieved from company content and supplied to a foundation model, which writes an answer grounded in that content. Amazon Bedrock Knowledge Bases manages this retrieval augmented generation (RAG) workflow.",
+      "concept": "Grounding answers in company data improves accuracy, reduces hallucinations and keeps answers current without retraining the model.",
+      "examTip": "Answers must come from the company's own documents = knowledge base / RAG.",
+      "references": [
+        {
+          "title": "Retrieve data and generate AI responses with Amazon Bedrock Knowledge Bases",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/knowledge-base.html"
+        },
+        {
+          "title": "What is RAG?",
+          "url": "https://aws.amazon.com/what-is/retrieval-augmented-generation/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-fun-083",
+    "domain": "fundamentals",
+    "topic": "AI Terminology",
+    "tags": [
+      "generalization",
+      "fit"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A team says its model \"generalizes well\".",
+    "prompt": "What does this mean?",
+    "options": [
+      {
+        "key": "A",
+        "text": "The model performs well on new, unseen data, not just the data it was trained on.",
+        "correct": true,
+        "why": "Generalization is the ability to make accurate predictions on new data. It is the real goal of training."
+      },
+      {
+        "key": "B",
+        "text": "The model memorized its training data perfectly.",
+        "correct": false,
+        "why": "Memorizing training data is overfitting, which usually hurts performance on new data."
+      },
+      {
+        "key": "C",
+        "text": "The model can be used for any task in any industry.",
+        "correct": false,
+        "why": "Generalizing refers to performance on unseen data for its task, not universal applicability."
+      },
+      {
+        "key": "D",
+        "text": "The model has the most parameters possible.",
+        "correct": false,
+        "why": "Model size does not guarantee generalization. Large models can still overfit."
+      }
+    ],
+    "explanation": {
+      "answer": "A model that generalizes well captures the true underlying patterns, so it performs well on new data drawn from the same distribution as the training data. Good fit sits between underfitting and overfitting.",
+      "concept": "Generalization is measured with held-out validation and test sets that the model did not see during training.",
+      "examTip": "Generalization = good results on unseen data.",
+      "references": [
+        {
+          "title": "What is overfitting?",
+          "url": "https://aws.amazon.com/what-is/overfitting/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-fun-084",
+    "domain": "fundamentals",
+    "topic": "Traditional ML vs FMs",
+    "tags": [
+      "latency",
+      "cost",
+      "operational-constraints"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A payment processor needs to classify 50,000 transactions per second as \"standard\" or \"needs review\", with each decision in under 5 milliseconds and at the lowest possible cost per prediction. It has years of labeled transaction data.",
+    "prompt": "Which approach is MOST appropriate?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Send each transaction as a prompt to a large language model and parse its answer",
+        "correct": false,
+        "why": "LLM inference is far slower and more expensive per call, and outputs can vary. It does not meet a 5 ms, very low-cost-per-prediction requirement."
+      },
+      {
+        "key": "B",
+        "text": "Train a compact traditional ML classifier, such as gradient-boosted trees, on the labeled data and serve it from a low-latency endpoint",
+        "correct": true,
+        "why": "A compact model on structured data gives fast, consistent and very cheap predictions at high volume, which suits strict latency and cost constraints."
+      },
+      {
+        "key": "C",
+        "text": "Ask human reviewers to label each transaction in real time",
+        "correct": false,
+        "why": "People cannot review 50,000 transactions per second in milliseconds."
+      },
+      {
+        "key": "D",
+        "text": "Generate a synthetic image of each transaction and classify the image",
+        "correct": false,
+        "why": "Converting transactions to images adds latency and cost and provides no benefit over using the structured data directly."
+      }
+    ],
+    "explanation": {
+      "answer": "Operational constraints such as very low latency, very high throughput and low cost per prediction favor small, specialized traditional ML models. Foundation models are powerful for broad tasks but are slower and costlier per inference and less deterministic.",
+      "concept": "When choosing between traditional ML and FMs, weigh regulatory needs, explainability, latency, throughput, cost and the type of data. Labeled structured data plus a narrow task usually points to traditional ML.",
+      "examTip": "Millisecond latency + massive volume + labeled tabular data = traditional ML, not an LLM.",
+      "references": [
+        {
+          "title": "Real-time inference",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/realtime-endpoints.html"
+        },
+        {
+          "title": "Built-in algorithms and pretrained models in SageMaker AI",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/algos.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-fun-085",
+    "domain": "fundamentals",
+    "topic": "AI Terminology",
+    "tags": [
+      "multimodal",
+      "genai"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A model can accept a photo of a damaged car together with a written question, such as \"Which panels look damaged?\", and answer in text.",
+    "prompt": "Which term describes this model?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Regression model",
+        "correct": false,
+        "why": "Regression predicts a single number and cannot interpret a photo with a question."
+      },
+      {
+        "key": "B",
+        "text": "Clustering model",
+        "correct": false,
+        "why": "Clustering groups unlabeled data and does not answer questions about images."
+      },
+      {
+        "key": "C",
+        "text": "Multimodal model",
+        "correct": true,
+        "why": "A multimodal model processes more than one type of data, here an image and text, and can reason across them."
+      },
+      {
+        "key": "D",
+        "text": "Unimodal text model",
+        "correct": false,
+        "why": "A text-only model cannot accept the photo as input. This model combines two input types."
+      }
+    ],
+    "explanation": {
+      "answer": "Multimodal models accept and sometimes generate multiple data types, such as text, images, audio and video. Vision-language models that answer questions about images are a common example.",
+      "concept": "Multimodal FMs are available in Amazon Bedrock, for example Amazon Nova models that accept text, images and video.",
+      "examTip": "More than one data type in or out = multimodal.",
+      "references": [
+        {
+          "title": "What is Amazon Nova?",
+          "url": "https://docs.aws.amazon.com/nova/latest/userguide/what-is-nova.html"
+        },
+        {
+          "title": "What are foundation models?",
+          "url": "https://aws.amazon.com/what-is/foundation-models/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-fun-086",
+    "domain": "fundamentals",
+    "topic": "Learning Types",
+    "tags": [
+      "semi-supervised"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A company has 5,000 labeled product reviews and 2 million unlabeled reviews. It wants to train a classifier that benefits from both the small labeled set and the large unlabeled set.",
+    "prompt": "Which learning approach describes this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Purely unsupervised clustering",
+        "correct": false,
+        "why": "Purely unsupervised methods ignore the labels, so they cannot directly learn the classifier the company wants."
+      },
+      {
+        "key": "B",
+        "text": "Reinforcement learning",
+        "correct": false,
+        "why": "Reinforcement learning uses rewards from an environment, not a mix of labeled and unlabeled reviews."
+      },
+      {
+        "key": "C",
+        "text": "Rule-based programming",
+        "correct": false,
+        "why": "Rule-based programming does not learn from data at all."
+      },
+      {
+        "key": "D",
+        "text": "Semi-supervised learning",
+        "correct": true,
+        "why": "Semi-supervised learning combines a small amount of labeled data with a large amount of unlabeled data to improve model performance."
+      }
+    ],
+    "explanation": {
+      "answer": "Semi-supervised learning uses a small labeled dataset plus a large unlabeled dataset. Techniques include pseudo-labeling, where a model trained on the labeled data labels unlabeled examples that are then used for further training.",
+      "concept": "Labeling is expensive, so semi-supervised methods and active learning (as in SageMaker Ground Truth automated labeling) reduce how many examples humans must label.",
+      "examTip": "A little labeled data + lots of unlabeled data = semi-supervised learning.",
+      "references": [
+        {
+          "title": "What is data labeling?",
+          "url": "https://aws.amazon.com/what-is/data-labeling/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-fun-087",
+    "domain": "fundamentals",
+    "topic": "AI Use Cases",
+    "tags": [
+      "agentic-ai",
+      "use-case"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "An IT department receives many routine requests, such as password resets, software installs and access requests. Each request requires checking a policy, calling one or two internal systems and updating a ticket.",
+    "prompt": "Which AI application is BEST suited to automating these multi-step requests end to end?",
+    "options": [
+      {
+        "key": "A",
+        "text": "An AI agent that can reason about the request, call internal tools and APIs, and update the ticket",
+        "correct": true,
+        "why": "Agents combine an FM's reasoning with tool use to complete multi-step tasks, which is what these routine requests need."
+      },
+      {
+        "key": "B",
+        "text": "A demand forecasting model",
+        "correct": false,
+        "why": "Forecasting predicts future volumes, which can help staffing but does not complete individual requests."
+      },
+      {
+        "key": "C",
+        "text": "A sentiment analysis model",
+        "correct": false,
+        "why": "Sentiment analysis only labels the tone of text. It cannot check policies, call systems or update tickets."
+      },
+      {
+        "key": "D",
+        "text": "An image generation model",
+        "correct": false,
+        "why": "Generating images does not complete IT requests."
+      }
+    ],
+    "explanation": {
+      "answer": "Agentic AI applications use AI agents that interpret a goal, plan steps, call tools and APIs, and act on the results. Routine multi-step workflows such as IT service requests are a common business application.",
+      "concept": "Agents should be given only the permissions they need, and sensitive actions can require human approval.",
+      "examTip": "Multi-step tasks that require calling systems and taking actions = AI agent.",
+      "references": [
+        {
+          "title": "What are AI agents?",
+          "url": "https://aws.amazon.com/what-is/ai-agents/"
+        },
+        {
+          "title": "Automate tasks with Amazon Bedrock Agents",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/agents.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-fun-088",
+    "domain": "fundamentals",
+    "topic": "Data Types",
+    "tags": [
+      "labeled-data",
+      "unlabeled-data"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A team has two datasets of customer support emails. In Dataset 1, each email is tagged with its category, such as billing or technical. Dataset 2 contains the same kind of emails with no tags.",
+    "prompt": "Which statement is correct?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Both datasets are labeled because they contain emails.",
+        "correct": false,
+        "why": "Containing data does not make it labeled. Labels are the target values attached to each example."
+      },
+      {
+        "key": "B",
+        "text": "Dataset 1 is labeled and can train a supervised classifier; Dataset 2 is unlabeled.",
+        "correct": true,
+        "why": "Dataset 1 pairs each email with its correct category, which supervised learning needs. Dataset 2 has no target values."
+      },
+      {
+        "key": "C",
+        "text": "Dataset 2 is labeled because the emails have senders.",
+        "correct": false,
+        "why": "Sender metadata is not the target the team wants to predict, so it does not make the data labeled for this task."
+      },
+      {
+        "key": "D",
+        "text": "Neither dataset can be used for machine learning.",
+        "correct": false,
+        "why": "Labeled data supports supervised learning, and unlabeled data supports unsupervised and self-supervised learning."
+      }
+    ],
+    "explanation": {
+      "answer": "Labeled data includes the correct answer (label or target) for each example. Unlabeled data has inputs only. Supervised learning needs labeled data; unsupervised learning works with unlabeled data.",
+      "concept": "Labels can come from humans (SageMaker Ground Truth), from business processes (a recorded outcome such as \"refunded\") or from the data itself (self-supervision).",
+      "examTip": "Labeled = each example carries the answer you want to predict.",
+      "references": [
+        {
+          "title": "What is data labeling?",
+          "url": "https://aws.amazon.com/what-is/data-labeling/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-fun-089",
+    "domain": "fundamentals",
+    "topic": "AWS AI Services",
+    "tags": [
+      "rekognition",
+      "face",
+      "identity"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A fintech app wants new users to upload a photo of their ID and take a selfie, then automatically check that the face in the selfie matches the face on the ID.",
+    "prompt": "Which AWS service provides face comparison capabilities for this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Translate",
+        "correct": false,
+        "why": "Translate converts text between languages and cannot analyze faces."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Comprehend",
+        "correct": false,
+        "why": "Comprehend analyzes text and cannot compare faces in images."
+      },
+      {
+        "key": "C",
+        "text": "Amazon Rekognition",
+        "correct": true,
+        "why": "Rekognition provides face detection, face comparison and face liveness capabilities used in identity verification flows."
+      },
+      {
+        "key": "D",
+        "text": "Amazon Polly",
+        "correct": false,
+        "why": "Polly generates speech and has no image capabilities."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Rekognition offers face analysis features including face comparison (similarity between two faces) and Face Liveness (detecting whether a real person is present), which support identity verification workflows. Amazon Textract can extract the text fields from the ID document.",
+      "concept": "Responsible use of facial analysis requires attention to consent, privacy, accuracy across demographic groups and appropriate confidence thresholds, often with human review.",
+      "examTip": "Compare faces or verify identity from images = Amazon Rekognition.",
+      "references": [
+        {
+          "title": "What is Amazon Rekognition?",
+          "url": "https://docs.aws.amazon.com/rekognition/latest/dg/what-is.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-fun-090",
+    "domain": "fundamentals",
+    "topic": "AI Use Cases",
+    "tags": [
+      "scalability",
+      "automation"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A marketplace receives 3 million new product listings per day. Moderators previously checked a small sample by hand. Now an ML model screens every listing for prohibited items and sends only suspicious ones to moderators.",
+    "prompt": "Which benefit of AI does this MOST directly show?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Guaranteed zero errors",
+        "correct": false,
+        "why": "ML models still make mistakes. The benefit is coverage at scale, not perfection."
+      },
+      {
+        "key": "B",
+        "text": "Eliminating all human involvement",
+        "correct": false,
+        "why": "Moderators still review suspicious listings. The model assists rather than fully replaces them."
+      },
+      {
+        "key": "C",
+        "text": "Reducing data storage costs",
+        "correct": false,
+        "why": "Screening listings does not reduce how much data is stored."
+      },
+      {
+        "key": "D",
+        "text": "Solution scalability",
+        "correct": true,
+        "why": "The model screens every one of millions of listings, a volume humans could not cover, while people handle only the flagged ones."
+      }
+    ],
+    "explanation": {
+      "answer": "AI scales decisions to volumes that people cannot handle, applying the same checks consistently to every item. Combined with human review of flagged items, it improves coverage and lets experts focus on the hardest cases.",
+      "concept": "Common AI value statements: automation of repetitive work, scalability to large volumes, consistency, and assisting human decision making.",
+      "examTip": "\"Every one of millions\" = scalability.",
+      "references": [
+        {
+          "title": "What is machine learning?",
+          "url": "https://aws.amazon.com/what-is/machine-learning/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-fun-091",
+    "domain": "fundamentals",
+    "topic": "ML Pipeline",
+    "tags": [
+      "evaluation",
+      "baseline"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A team trained a churn model with 84% accuracy and wants to know whether that result is actually good before deploying it.",
+    "prompt": "What should the team compare the model against FIRST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "A simple baseline, such as predicting the most common outcome or the current business rule",
+        "correct": true,
+        "why": "A baseline shows whether the model improves on what already exists. If 84% of customers never churn, 84% accuracy adds nothing."
+      },
+      {
+        "key": "B",
+        "text": "A model from an unrelated industry",
+        "correct": false,
+        "why": "Results from a different problem and dataset are not a meaningful comparison."
+      },
+      {
+        "key": "C",
+        "text": "The training accuracy of the same model",
+        "correct": false,
+        "why": "Training accuracy is usually optimistic. It helps detect overfitting but does not show business value over the status quo."
+      },
+      {
+        "key": "D",
+        "text": "The number of GPUs used for training",
+        "correct": false,
+        "why": "Compute used for training says nothing about whether the model's predictions add value."
+      }
+    ],
+    "explanation": {
+      "answer": "Model evaluation should start by comparing against a baseline, such as always predicting the majority class or the existing rule-based process. A model is only valuable if it beats the baseline on the metrics that matter to the business.",
+      "concept": "Evaluate on held-out test data, compare to baselines, choose metrics that reflect the costs of each type of error, and confirm business impact in production.",
+      "examTip": "Always ask: better than what? Compare to a baseline.",
+      "references": [
+        {
+          "title": "Machine Learning Lens: AWS Well-Architected",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/machine-learning-lens.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-fun-092",
+    "domain": "fundamentals",
+    "topic": "AI Terminology",
+    "tags": [
+      "generative-vs-discriminative",
+      "genai"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A marketing team wants AI to create 20 different social media captions for a new product launch, each in a different style.",
+    "prompt": "Which kind of AI is required?",
+    "options": [
+      {
+        "key": "A",
+        "text": "A regression model",
+        "correct": false,
+        "why": "Regression predicts a single numeric value, such as a price. It cannot write new text."
+      },
+      {
+        "key": "B",
+        "text": "Generative AI",
+        "correct": true,
+        "why": "Creating new, varied text content is exactly what generative AI models such as LLMs do."
+      },
+      {
+        "key": "C",
+        "text": "A classification model",
+        "correct": false,
+        "why": "Classification assigns existing categories. It cannot write new captions."
+      },
+      {
+        "key": "D",
+        "text": "A clustering model",
+        "correct": false,
+        "why": "Clustering groups existing items and does not create new content."
+      }
+    ],
+    "explanation": {
+      "answer": "Generative AI creates new content, including text, images, audio, video and code. Writing many original captions in different styles is a typical generative AI use case.",
+      "concept": "Generated content should be reviewed for accuracy, brand fit and intellectual property concerns before publishing.",
+      "examTip": "\"Create\", \"draft\", \"write\" or \"generate\" content = generative AI.",
+      "references": [
+        {
+          "title": "What is generative AI?",
+          "url": "https://aws.amazon.com/what-is/generative-ai/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-fun-093",
+    "domain": "fundamentals",
+    "topic": "Model Deployment",
+    "tags": [
+      "self-hosted",
+      "control"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A research lab must run a specific open-source model version with custom inference code on dedicated instances it controls, and it has engineers experienced in managing ML infrastructure.",
+    "prompt": "Which deployment approach BEST fits?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use AWS Artifact",
+        "correct": false,
+        "why": "Artifact provides compliance documents and does not host models."
+      },
+      {
+        "key": "B",
+        "text": "Use only Amazon Polly",
+        "correct": false,
+        "why": "Polly is a text-to-speech service and cannot run arbitrary open-source models."
+      },
+      {
+        "key": "C",
+        "text": "Self-host the model on Amazon SageMaker AI endpoints or Amazon EC2 instances",
+        "correct": true,
+        "why": "Self-hosting gives control over the exact model version, custom inference code and instance types, which the lab requires and can manage."
+      },
+      {
+        "key": "D",
+        "text": "Avoid deploying the model",
+        "correct": false,
+        "why": "The lab needs to run the model, so avoiding deployment does not meet the requirement."
+      }
+    ],
+    "explanation": {
+      "answer": "Self-hosted deployment (for example SageMaker AI real-time endpoints with a custom container, or EC2) provides control over model versions, runtime code, hardware and scaling. The trade-off is more operational responsibility than a fully managed API.",
+      "concept": "SageMaker AI endpoints reduce the infrastructure burden compared with raw EC2 while still letting you bring your own model and code.",
+      "examTip": "Need specific model version + custom code + infrastructure control = self-host (SageMaker AI endpoint or EC2).",
+      "references": [
+        {
+          "title": "Deploy models for inference (SageMaker AI)",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/deploy-model.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-fun-094",
+    "domain": "fundamentals",
+    "topic": "AWS AI Services",
+    "tags": [
+      "lex",
+      "kendra",
+      "service-selection"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A university wants a chatbot that handles structured tasks, such as booking advising appointments by collecting the student ID, date and time, and also answers open questions about policies found in thousands of pages of handbooks.",
+    "prompt": "Which combination of AWS services BEST fits these two needs?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Rekognition for appointments and Amazon Textract for policies",
+        "correct": false,
+        "why": "Rekognition analyzes images and Textract extracts text from scans. Neither runs a chatbot or answers questions."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Comprehend for both needs",
+        "correct": false,
+        "why": "Comprehend analyzes text but cannot run a booking conversation or act as a search engine over handbooks."
+      },
+      {
+        "key": "C",
+        "text": "Amazon Polly for appointments and Amazon Translate for policies",
+        "correct": false,
+        "why": "Polly speaks text and Translate converts languages. Neither manages a booking conversation or searches handbooks."
+      },
+      {
+        "key": "D",
+        "text": "Amazon Lex for the appointment-booking conversation and Amazon Kendra to find answers in the handbooks",
+        "correct": true,
+        "why": "Lex handles intents and collects slot values such as ID, date and time. Kendra searches the handbooks to answer policy questions, and the two can be integrated."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Lex manages structured conversations (intents, slots and fulfillment), and Amazon Kendra provides intelligent search over document collections. Lex can fall back to Kendra (or to a generative AI answer grounded in documents) for questions outside its defined intents.",
+      "concept": "Many solutions mix services: one for conversation management and another for knowledge retrieval. Today the knowledge side is often implemented with RAG using Amazon Bedrock Knowledge Bases.",
+      "examTip": "Collect details and complete a task = Lex. Find answers in many documents = Kendra (or a Bedrock knowledge base).",
+      "references": [
+        {
+          "title": "What is Amazon Lex V2?",
+          "url": "https://docs.aws.amazon.com/lexv2/latest/dg/what-is.html"
+        },
+        {
+          "title": "What is Amazon Kendra?",
+          "url": "https://docs.aws.amazon.com/kendra/latest/dg/what-is-kendra.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-fun-095",
+    "domain": "fundamentals",
+    "topic": "ML Pipeline",
+    "tags": [
+      "data-quality",
+      "garbage-in"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A team discovers that 30% of its training records have missing values and that some labels were entered incorrectly. A team member suggests skipping cleanup and relying on a bigger model to compensate.",
+    "prompt": "What is the BEST response?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Clean and fix the data first, because model quality depends heavily on data quality.",
+        "correct": true,
+        "why": "Poor-quality data leads to poor models. Handling missing values and fixing labels is essential before training."
+      },
+      {
+        "key": "B",
+        "text": "Agree, because larger models are immune to bad data.",
+        "correct": false,
+        "why": "Larger models also learn from errors in the data. Wrong labels teach the wrong patterns regardless of model size."
+      },
+      {
+        "key": "C",
+        "text": "Train on the data as-is and fix problems after deployment.",
+        "correct": false,
+        "why": "Deploying a model trained on flawed data puts poor predictions in front of users. Problems should be fixed before training."
+      },
+      {
+        "key": "D",
+        "text": "Delete the labels and switch to unsupervised learning.",
+        "correct": false,
+        "why": "Throwing away labels removes the information needed for the prediction task. Fixing the bad labels is the right step."
+      }
+    ],
+    "explanation": {
+      "answer": "Data quality is one of the biggest factors in model quality: errors in data and labels propagate into predictions (\"garbage in, garbage out\"). Data preparation includes handling missing values, correcting labels, removing duplicates and checking representativeness.",
+      "concept": "Data preparation typically consumes most of the effort in ML projects. Tools such as SageMaker Data Wrangler help profile data and fix quality issues.",
+      "examTip": "Bad data cannot be fixed by a bigger model. Clean the data first.",
+      "references": [
+        {
+          "title": "Amazon SageMaker Data Wrangler",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/data-wrangler.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-fun-096",
+    "domain": "fundamentals",
+    "topic": "AI Terminology",
+    "tags": [
+      "parameters",
+      "hyperparameters"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A manager hears the terms \"parameters\" and \"hyperparameters\" in a model review and asks how they differ.",
+    "prompt": "Which statement is correct?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Parameters are set manually before training; hyperparameters are learned from data.",
+        "correct": false,
+        "why": "This is reversed. Parameters such as weights are learned, while hyperparameters are set before training."
+      },
+      {
+        "key": "B",
+        "text": "Parameters, such as weights, are learned during training; hyperparameters, such as learning rate, are chosen before training to control how learning happens.",
+        "correct": true,
+        "why": "Weights are adjusted by the training algorithm. Hyperparameters configure that algorithm and are chosen by people or tuning jobs."
+      },
+      {
+        "key": "C",
+        "text": "They are the same thing.",
+        "correct": false,
+        "why": "They play different roles: one is learned during training, the other controls the training process."
+      },
+      {
+        "key": "D",
+        "text": "Hyperparameters only exist in generative AI models.",
+        "correct": false,
+        "why": "Hyperparameters exist in nearly all ML algorithms, including decision trees and linear models."
+      }
+    ],
+    "explanation": {
+      "answer": "Model parameters (for example, neural network weights) are learned from training data. Hyperparameters (for example, learning rate, batch size, number of epochs, tree depth) are external settings chosen before training that shape how the parameters are learned.",
+      "concept": "Foundation model sizes are described by their number of parameters, such as billions of weights. Inference parameters such as temperature are a separate concept used when generating output.",
+      "examTip": "Learned = parameter. Chosen before training = hyperparameter.",
+      "references": [
+        {
+          "title": "Automatic model tuning with SageMaker AI",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/automatic-model-tuning.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-fun-097",
+    "domain": "fundamentals",
+    "topic": "AI Use Cases",
+    "tags": [
+      "recommendation",
+      "personalization"
+    ],
+    "difficulty": "medium",
+    "type": "multi",
+    "selectCount": 2,
+    "stem": "A media company is reviewing where AI could add value.",
+    "prompt": "Which scenarios are good fits for AI/ML? (Select TWO.)",
+    "options": [
+      {
+        "key": "A",
+        "text": "Recommending articles to each reader based on reading history across millions of readers",
+        "correct": true,
+        "why": "Personalized recommendations at large scale rely on learning patterns from behavior data, a classic ML use case."
+      },
+      {
+        "key": "B",
+        "text": "Automatically generating captions and alt text for thousands of images",
+        "correct": true,
+        "why": "Describing image content at scale is a computer vision and generative AI task where manual work does not scale."
+      },
+      {
+        "key": "C",
+        "text": "Sorting a list of articles alphabetically by title",
+        "correct": false,
+        "why": "Alphabetical sorting is a deterministic operation that standard code performs perfectly."
+      },
+      {
+        "key": "D",
+        "text": "Calculating sales tax on subscription invoices from a fixed published rate",
+        "correct": false,
+        "why": "A fixed formula gives an exact answer. Rule-based code is cheaper and fully accurate."
+      },
+      {
+        "key": "E",
+        "text": "Adding the current date to the top of each newsletter",
+        "correct": false,
+        "why": "Inserting a date is trivial deterministic logic and does not need ML."
+      }
+    ],
+    "explanation": {
+      "answer": "AI/ML adds value where patterns are complex, data is large, and outcomes involve judgment or perception, such as personalization and image understanding. Deterministic tasks with exact rules (tax formulas, sorting, inserting dates) should use ordinary code.",
+      "concept": "A quick test: if you can write the exact rules and need an exact answer, do not use ML.",
+      "examTip": "Prediction, perception, personalization at scale → ML. Exact known rules → regular code.",
+      "references": [
+        {
+          "title": "What is machine learning?",
+          "url": "https://aws.amazon.com/what-is/machine-learning/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-fun-098",
+    "domain": "fundamentals",
+    "topic": "AWS AI Services",
+    "tags": [
+      "comprehend",
+      "custom-classification"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "An insurance company wants to automatically route incoming customer emails into its own 12 department-specific categories. Generic sentiment and entity detection are not enough, and the company has a few thousand emails already labeled by department.",
+    "prompt": "Which approach requires the LEAST ML expertise?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Train a transformer model from scratch on GPU instances",
+        "correct": false,
+        "why": "Training from scratch needs ML expertise, large data and significant compute, which is unnecessary here."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Polly",
+        "correct": false,
+        "why": "Polly converts text to speech and cannot classify emails."
+      },
+      {
+        "key": "C",
+        "text": "Amazon Comprehend custom classification trained on the labeled emails",
+        "correct": true,
+        "why": "Comprehend custom classification trains a text classifier on your own labels with no ML expertise, then classifies new documents through an API."
+      },
+      {
+        "key": "D",
+        "text": "Amazon Rekognition Custom Labels",
+        "correct": false,
+        "why": "Rekognition Custom Labels classifies images, not text emails."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Comprehend custom classification lets you train a classifier with your own categories by providing labeled examples. Comprehend handles model selection and training, so no ML expertise is required.",
+      "concept": "Comprehend also supports custom entity recognition, for example extracting policy numbers specific to a business.",
+      "examTip": "Text classification with your own labels and no ML expertise = Comprehend custom classification.",
+      "references": [
+        {
+          "title": "What is Amazon Comprehend?",
+          "url": "https://docs.aws.amazon.com/comprehend/latest/dg/what-is.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-fun-099",
+    "domain": "fundamentals",
+    "topic": "AI Terminology",
+    "tags": [
+      "agentic-ai",
+      "genai",
+      "comparison"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A consultant explains the difference between a generative AI assistant and an agentic AI system to a client's leadership team.",
+    "prompt": "Which statement BEST captures the difference?",
+    "options": [
+      {
+        "key": "A",
+        "text": "There is no difference; the terms are marketing synonyms.",
+        "correct": false,
+        "why": "The terms describe different capabilities. Agentic AI acts on the world through tools, not just generates content."
+      },
+      {
+        "key": "B",
+        "text": "Agentic AI cannot use foundation models.",
+        "correct": false,
+        "why": "Most agentic systems use foundation models as their reasoning engine."
+      },
+      {
+        "key": "C",
+        "text": "Generative AI uses neural networks, but agentic AI uses only hand-written rules.",
+        "correct": false,
+        "why": "Agentic systems usually rely on foundation models (neural networks) for reasoning. They are not rule-based."
+      },
+      {
+        "key": "D",
+        "text": "A generative AI assistant produces content in response to a prompt, while an agentic AI system autonomously plans and takes multi-step actions with tools to achieve a goal.",
+        "correct": true,
+        "why": "Generative AI responds with content. Agentic AI adds goal pursuit, planning, tool use, memory and acting on external systems."
+      }
+    ],
+    "explanation": {
+      "answer": "Generative AI models create content when prompted. Agentic AI systems use such models as a reasoning core but also plan, call tools and APIs, retain memory, and take actions over multiple steps with limited human input to accomplish goals.",
+      "concept": "Because agents take actions, they need guardrails such as least-privilege permissions, human approval for sensitive actions, observability and evaluation of task completion.",
+      "examTip": "Generative = creates content. Agentic = pursues goals by taking actions.",
+      "references": [
+        {
+          "title": "What is agentic AI?",
+          "url": "https://aws.amazon.com/what-is/agentic-ai/"
+        },
+        {
+          "title": "What is generative AI?",
+          "url": "https://aws.amazon.com/what-is/generative-ai/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-fun-100",
+    "domain": "fundamentals",
+    "topic": "AWS Services by Stage",
+    "tags": [
+      "data-wrangler",
+      "pipeline-stage"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "An ML team maps AWS services to the stages of its pipeline: data preparation, model training and evaluation, deployment, and monitoring.",
+    "prompt": "Which mapping is correct?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Data preparation: SageMaker Data Wrangler; training: SageMaker AI training jobs; deployment: SageMaker AI endpoints; monitoring: SageMaker Model Monitor",
+        "correct": true,
+        "why": "Each tool matches its stage: Data Wrangler prepares data, training jobs build models, endpoints serve them, and Model Monitor tracks production quality."
+      },
+      {
+        "key": "B",
+        "text": "Monitoring: AWS Artifact; training: AWS Config",
+        "correct": false,
+        "why": "Artifact provides compliance reports and Config tracks resource configurations. Neither trains or monitors ML models."
+      },
+      {
+        "key": "C",
+        "text": "Training: Amazon Polly; deployment: Amazon Translate",
+        "correct": false,
+        "why": "Polly and Translate are pre-trained AI services. They do not train or deploy custom models."
+      },
+      {
+        "key": "D",
+        "text": "Data preparation: SageMaker Model Monitor; monitoring: SageMaker Data Wrangler",
+        "correct": false,
+        "why": "This swaps the two tools. Data Wrangler prepares data, and Model Monitor watches deployed models."
+      }
+    ],
+    "explanation": {
+      "answer": "SageMaker AI provides a tool for each pipeline stage: Data Wrangler and Feature Store for data preparation, Ground Truth for labeling, training jobs and automatic model tuning for training, Model Registry for versioning, endpoints and batch transform for deployment, Model Monitor for monitoring, and Pipelines to orchestrate them.",
+      "concept": "For generative AI applications, Amazon Bedrock covers model access, customization, knowledge bases, agents, guardrails and evaluation.",
+      "examTip": "Learn one SageMaker tool per stage: Wrangler (prep), Ground Truth (label), training jobs (train), endpoints (deploy), Model Monitor (monitor), Pipelines (orchestrate).",
+      "references": [
+        {
+          "title": "What is Amazon SageMaker AI?",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/whatis.html"
+        },
+        {
+          "title": "Data and model quality monitoring with Amazon SageMaker Model Monitor",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor.html"
+        }
+      ]
+    }
+  }
+]

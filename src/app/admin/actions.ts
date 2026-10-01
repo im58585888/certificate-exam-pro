@@ -6,8 +6,8 @@ import { redirect } from "next/navigation";
 import { requireAdmin } from "@/lib/auth";
 import { grantPass } from "@/lib/billing";
 import { one, query } from "@/lib/db";
-import { EXAMS } from "@/lib/exams";
-import { ensureBank, getQuestion, isBuiltIn, type Question } from "@/lib/questions";
+import { DEFAULT_EXAM, EXAMS } from "@/lib/exams";
+import { ensureBank, examOf, getQuestion, isBuiltIn, type Question } from "@/lib/questions";
 import { validateQuestion } from "@/lib/validate";
 
 export interface SaveState {
@@ -28,7 +28,7 @@ export async function saveQuestionAction(_: SaveState, form: FormData): Promise<
   } catch (e) {
     return { errors: [`Invalid JSON: ${(e as Error).message}`] };
   }
-  const errors = validateQuestion(q);
+  const errors = validateQuestion(q, exam);
   if (mode === "edit" && q.id !== String(form.get("originalId"))) errors.push("The id can't be changed when editing.");
   if (mode === "new" && (isBuiltIn(q.id) || getQuestion(q.id))) errors.push(`A question with id "${q.id}" already exists.`);
   if (errors.length) return { errors };
@@ -53,7 +53,7 @@ export async function setQuestionDisabledAction(form: FormData) {
   await query(
     `insert into question_overrides (question_id, exam, disabled, updated_by) values ($1, $2, $3, $4)
      on conflict (question_id) do update set disabled = excluded.disabled, updated_by = excluded.updated_by, updated_at = now()`,
-    [id, String(form.get("exam") ?? "saa-c03"), disabled, admin.email],
+    [id, examOf(id) ?? String(form.get("exam") ?? DEFAULT_EXAM), disabled, admin.email],
   );
   await ensureBank(true);
   revalidatePath(`/admin/questions/${encodeURIComponent(id)}`);
@@ -83,8 +83,10 @@ export async function grantCompPassAction(form: FormData) {
   await requireAdmin();
   const userId = String(form.get("userId"));
   const days = Math.min(365, Math.max(1, Number(form.get("days")) || 30));
+  const exam = String(form.get("exam") ?? "");
+  if (!(exam in EXAMS)) return;
   if (!(await one(`select 1 from users where id = $1`, [userId]))) return;
-  await grantPass(userId, `comp_${randomUUID()}`, 0, "comp", days);
+  await grantPass(userId, exam, `comp_${randomUUID()}`, 0, "comp", days);
   revalidatePath("/admin/users");
 }
 

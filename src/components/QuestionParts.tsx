@@ -1,11 +1,7 @@
+import { DOMAIN_SHORT } from "@/lib/exams";
 import type { Feedback, PublicQuestion } from "@/lib/questions";
 
-export const DOMAIN_LABEL: Record<string, string> = {
-  secure: "Secure Architectures",
-  resilient: "Resilient Architectures",
-  performance: "High-Performing Architectures",
-  cost: "Cost-Optimized Architectures",
-};
+export const DOMAIN_LABEL = DOMAIN_SHORT;
 
 const DIFF_CLASS: Record<string, string> = {
   easy: "bg-ok-soft text-ok",

@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { startQuizAction } from "../../actions";
 import { ScopePicker, type ScopeCell } from "@/components/ScopePicker";
-import { areaOf, AREAS } from "@/lib/areas";
+import { areaOf, areasFor } from "@/lib/areas";
 import { currentOwner, getUser } from "@/lib/auth";
 import { getAccess } from "@/lib/billing";
 import { answeredCount, attemptsFor, dueCount, reviewQueue } from "@/lib/engine";
@@ -33,7 +33,7 @@ export default async function PracticeHub({ params, searchParams }: PageProps<"/
   const exam = getExam(slug);
   if (!exam) notFound();
   const user = await getUser();
-  const access = await getAccess(user?.id);
+  const access = await getAccess(user?.id, slug);
   const owner = await currentOwner();
   const attempts = owner ? await attemptsFor(owner, slug) : [];
   const used = owner ? await answeredCount(owner, slug) : 0;
@@ -47,7 +47,7 @@ export default async function PracticeHub({ params, searchParams }: PageProps<"/
   const seen = new Set(attempts.map((a) => a.question_id));
   const cellMap = new Map<string, ScopeCell>();
   for (const q of questions) {
-    const area = areaOf(q.topic);
+    const area = areaOf(slug, q.topic);
     const key = `${q.domain}|${area}`;
     const c = cellMap.get(key) ?? { domain: q.domain, area, total: 0, unseen: 0 };
     c.total++;
@@ -55,8 +55,8 @@ export default async function PracticeHub({ params, searchParams }: PageProps<"/
     cellMap.set(key, c);
   }
   const cells = [...cellMap.values()];
-  const domainChips = exam.domains.map((d) => ({ id: d.id, label: d.name.replace("Design ", "").replace(" Architectures", "") }));
-  const areaList = AREAS.map((a) => ({ id: a.id, name: a.name }));
+  const domainChips = exam.domains.map((d) => ({ id: d.id, label: d.short }));
+  const areaList = areasFor(slug);
   const liveFlags = flags.filter((f) => questions.some((q) => q.id === f.question_id)).length;
   const unlock = <Link className="btn-ghost w-full" href={user ? "/pricing" : "/register?next=/pricing"}>Unlock with a pass</Link>;
 

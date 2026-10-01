@@ -1,0 +1,1297 @@
+[
+  {
+    "id": "aif-rai-026",
+    "domain": "responsible",
+    "topic": "Bias Detection",
+    "tags": [
+      "sagemaker-clarify",
+      "pre-training-bias"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "Before training a loan model, a data science team wants to measure whether its training data under-represents certain age groups or has very different approval labels across groups.",
+    "prompt": "Which AWS capability is designed for this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Polly",
+        "correct": false,
+        "why": "Polly converts text to speech and does not analyze datasets."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Route 53",
+        "correct": false,
+        "why": "Route 53 is a DNS service and has no capability to analyze training data for bias."
+      },
+      {
+        "key": "C",
+        "text": "Amazon SageMaker Clarify pre-training bias analysis",
+        "correct": true,
+        "why": "SageMaker Clarify computes pre-training bias metrics, such as class imbalance and differences in label proportions across groups, on the dataset."
+      },
+      {
+        "key": "D",
+        "text": "AWS Cost Explorer",
+        "correct": false,
+        "why": "Cost Explorer analyzes AWS spending. It cannot measure representation or label differences in a dataset."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon SageMaker Clarify detects potential bias in data before training (pre-training metrics such as class imbalance and difference in positive proportions in labels) and in model predictions after training, and explains predictions with feature attributions.",
+      "concept": "Detecting bias early in data is cheaper than fixing a biased model after deployment.",
+      "examTip": "Measure bias in data or predictions = SageMaker Clarify.",
+      "references": [
+        {
+          "title": "Detect pre-training data bias (SageMaker Clarify)",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-detect-data-bias.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-rai-027",
+    "domain": "responsible",
+    "topic": "Bias Detection",
+    "tags": [
+      "post-training-bias",
+      "clarify"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A trained hiring model is about to be deployed. The team wants to check whether its predictions have different accuracy or approval rates across demographic groups.",
+    "prompt": "Which approach should the team use?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Measure only overall accuracy",
+        "correct": false,
+        "why": "Overall accuracy can hide large differences between groups."
+      },
+      {
+        "key": "B",
+        "text": "Increase the model's size",
+        "correct": false,
+        "why": "A bigger model does not show whether predictions are biased."
+      },
+      {
+        "key": "C",
+        "text": "Skip testing because the training data was large",
+        "correct": false,
+        "why": "Dataset size does not guarantee fairness. Large datasets can still encode bias against some groups."
+      },
+      {
+        "key": "D",
+        "text": "Run post-training bias metrics with SageMaker Clarify and perform subgroup analysis of the predictions",
+        "correct": true,
+        "why": "Post-training bias analysis compares prediction outcomes and error rates across groups to reveal unfair behavior."
+      }
+    ],
+    "explanation": {
+      "answer": "Subgroup analysis evaluates model performance and outcomes separately for different groups. SageMaker Clarify provides post-training bias metrics (such as differences in positive prediction rates or accuracy between groups) to identify unfair predictions.",
+      "concept": "Fairness evaluation should happen before deployment and continuously afterward, because bias can drift.",
+      "examTip": "Overall metrics can hide group gaps → subgroup analysis.",
+      "references": [
+        {
+          "title": "Detect pre-training data bias (SageMaker Clarify)",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-detect-data-bias.html"
+        },
+        {
+          "title": "Model explainability with SageMaker Clarify",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-model-explainability.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-rai-028",
+    "domain": "responsible",
+    "topic": "Bias Detection",
+    "tags": [
+      "bias-drift",
+      "model-monitor"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A credit model passed fairness checks at launch. A year later, the applicant population has changed, and the team suspects outcomes may have become less fair.",
+    "prompt": "Which capability monitors for this automatically in production?",
+    "options": [
+      {
+        "key": "A",
+        "text": "SageMaker Model Monitor bias drift monitoring, using SageMaker Clarify metrics",
+        "correct": true,
+        "why": "Model Monitor can track bias metrics over time on live predictions and alert when they drift beyond thresholds."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Polly",
+        "correct": false,
+        "why": "Polly generates speech from text and cannot monitor deployed models for fairness drift."
+      },
+      {
+        "key": "C",
+        "text": "Amazon S3 Lifecycle rules",
+        "correct": false,
+        "why": "Lifecycle rules manage storage classes, not model fairness."
+      },
+      {
+        "key": "D",
+        "text": "AWS Artifact",
+        "correct": false,
+        "why": "Artifact provides compliance reports and does not monitor models."
+      }
+    ],
+    "explanation": {
+      "answer": "Bias can drift after deployment as data changes. SageMaker Model Monitor integrates with SageMaker Clarify to monitor bias drift and feature attribution drift on endpoints, alerting through Amazon CloudWatch when metrics exceed thresholds.",
+      "concept": "Responsible AI requires continuous monitoring, not one-time checks.",
+      "examTip": "Fairness changes after launch = bias drift → Model Monitor + Clarify.",
+      "references": [
+        {
+          "title": "Data and model quality monitoring with Amazon SageMaker Model Monitor",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-rai-029",
+    "domain": "responsible",
+    "topic": "Datasets",
+    "tags": [
+      "balanced-dataset",
+      "diversity"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A team building a skin-condition image classifier notices that 90% of its training images are of light skin tones.",
+    "prompt": "Which dataset characteristic should the team improve?",
+    "options": [
+      {
+        "key": "A",
+        "text": "File naming conventions",
+        "correct": false,
+        "why": "File names do not affect what the model learns about different skin tones."
+      },
+      {
+        "key": "B",
+        "text": "Diversity and balance, so all skin tones are well represented",
+        "correct": true,
+        "why": "An unbalanced dataset leads to worse performance for under-represented skin tones, which is both an accuracy and fairness problem."
+      },
+      {
+        "key": "C",
+        "text": "Image compression format",
+        "correct": false,
+        "why": "Compression format does not address representation of skin tones."
+      },
+      {
+        "key": "D",
+        "text": "The number of duplicate images",
+        "correct": false,
+        "why": "Adding duplicates would not improve representation of under-represented groups."
+      }
+    ],
+    "explanation": {
+      "answer": "Responsible datasets are inclusive, diverse, curated and balanced, covering the populations and conditions the model will encounter. Under-representation leads to higher error rates for those groups.",
+      "concept": "Remedies include collecting more data for under-represented groups, careful resampling, and evaluating performance per group.",
+      "examTip": "One group dominates the data → improve diversity and balance.",
+      "references": [
+        {
+          "title": "Responsible AI at AWS",
+          "url": "https://aws.amazon.com/ai/responsible-ai/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-rai-030",
+    "domain": "responsible",
+    "topic": "Datasets",
+    "tags": [
+      "curated-sources"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company plans to train a customer-service model using text scraped from random internet forums, including posts full of offensive language and misinformation.",
+    "prompt": "Which responsible dataset practice is MOST important?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Translate the forum posts before training",
+        "correct": false,
+        "why": "Translation does not remove toxicity or misinformation."
+      },
+      {
+        "key": "B",
+        "text": "Use as much raw data as possible without review",
+        "correct": false,
+        "why": "Unreviewed data introduces toxicity, bias and misinformation into the model."
+      },
+      {
+        "key": "C",
+        "text": "Use curated, trustworthy data sources and filter out toxic, inaccurate and irrelevant content",
+        "correct": true,
+        "why": "Models reproduce what they learn, so curated, high-quality sources reduce toxic and false outputs."
+      },
+      {
+        "key": "D",
+        "text": "Only use data from a single forum",
+        "correct": false,
+        "why": "A single uncurated source is still uncurated and less diverse."
+      }
+    ],
+    "explanation": {
+      "answer": "Curated data sources, with known provenance, appropriate licensing and quality controls, are a key characteristic of responsible datasets. Filtering toxic or false content and documenting sources reduces harmful model behavior.",
+      "concept": "Data lineage and cataloging (Domain 5) support knowing where training data came from.",
+      "examTip": "Responsible datasets are curated, not random scrapes.",
+      "references": [
+        {
+          "title": "Responsible AI at AWS",
+          "url": "https://aws.amazon.com/ai/responsible-ai/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-rai-031",
+    "domain": "responsible",
+    "topic": "Bias & Variance",
+    "tags": [
+      "variance",
+      "overfitting"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A model's predictions change dramatically when it is retrained on slightly different samples of the same data, and it performs much better on training data than on new data.",
+    "prompt": "Which problem does this indicate?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Perfect generalization",
+        "correct": false,
+        "why": "A large training-versus-new-data gap is the opposite of good generalization."
+      },
+      {
+        "key": "B",
+        "text": "Low latency",
+        "correct": false,
+        "why": "Latency is unrelated to these symptoms, which describe how the model fits its training data."
+      },
+      {
+        "key": "C",
+        "text": "High bias (underfitting)",
+        "correct": false,
+        "why": "High bias models are too simple and perform poorly even on training data."
+      },
+      {
+        "key": "D",
+        "text": "High variance (overfitting)",
+        "correct": true,
+        "why": "High variance means the model is very sensitive to the specific training data, which shows up as overfitting and unstable predictions."
+      }
+    ],
+    "explanation": {
+      "answer": "Variance is error from sensitivity to small fluctuations in training data. High-variance models overfit: they fit training data closely and generalize poorly. Bias is error from overly simple assumptions, leading to underfitting.",
+      "concept": "Effects of bias and variance include inaccuracy, overfitting, underfitting and uneven effects on demographic groups (for example a model that overfits to majority groups).",
+      "examTip": "Unstable + great on train, poor on new = high variance (overfitting).",
+      "references": [
+        {
+          "title": "What is overfitting?",
+          "url": "https://aws.amazon.com/what-is/overfitting/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-rai-032",
+    "domain": "responsible",
+    "topic": "Bias & Variance",
+    "tags": [
+      "bias",
+      "underfitting",
+      "demographic-groups"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A speech model trained mostly on one dialect has low error for that dialect but high error for others. Adding more data from the dominant dialect does not help the other dialects.",
+    "prompt": "Which explanation and remedy are MOST appropriate?",
+    "options": [
+      {
+        "key": "A",
+        "text": "The training data under-represents other dialects, so the model is biased toward the dominant group; add representative data for the other dialects and evaluate per group",
+        "correct": true,
+        "why": "Performance gaps across groups come from unrepresentative data; targeted data collection and per-group evaluation address them."
+      },
+      {
+        "key": "B",
+        "text": "The model has too little data overall; add more of the dominant dialect",
+        "correct": false,
+        "why": "The scenario shows that more dominant-dialect data does not help other dialects."
+      },
+      {
+        "key": "C",
+        "text": "The model needs a higher temperature",
+        "correct": false,
+        "why": "Temperature does not change what a speech model has learned about dialects."
+      },
+      {
+        "key": "D",
+        "text": "The model is perfect; users should change how they speak",
+        "correct": false,
+        "why": "Shifting the burden to users ignores the model's fairness problem."
+      }
+    ],
+    "explanation": {
+      "answer": "Bias in data affects demographic groups unequally: models perform best for groups well represented in training. Remedies include collecting representative data, rebalancing, and measuring performance per subgroup.",
+      "concept": "Inclusivity and fairness depend on dataset representativeness, not just dataset size.",
+      "examTip": "Group-specific errors → representative data for that group + subgroup evaluation.",
+      "references": [
+        {
+          "title": "Responsible AI at AWS",
+          "url": "https://aws.amazon.com/ai/responsible-ai/"
+        },
+        {
+          "title": "Detect pre-training data bias (SageMaker Clarify)",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-detect-data-bias.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-rai-033",
+    "domain": "responsible",
+    "topic": "Bias Detection",
+    "tags": [
+      "label-quality"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A content moderation model flags posts in one dialect as toxic far more often than equivalent posts in standard English. Investigation finds that human labelers marked many harmless dialect posts as toxic.",
+    "prompt": "Which bias detection practice found the root cause?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Increasing inference throughput",
+        "correct": false,
+        "why": "Throughput does not reveal labeling problems."
+      },
+      {
+        "key": "B",
+        "text": "Analyzing label quality",
+        "correct": true,
+        "why": "Reviewing how examples were labeled revealed that biased labels taught the model to over-flag the dialect."
+      },
+      {
+        "key": "C",
+        "text": "Prompt caching",
+        "correct": false,
+        "why": "Prompt caching reduces cost for repeated prompts and has nothing to do with how training data was labeled."
+      },
+      {
+        "key": "D",
+        "text": "Changing embedding dimensions",
+        "correct": false,
+        "why": "Embedding size does not expose biased labels."
+      }
+    ],
+    "explanation": {
+      "answer": "Label quality analysis checks whether training labels are accurate and consistent across groups. Biased or inconsistent human labels are a common source of model bias.",
+      "concept": "Other bias and trustworthiness detection methods in the exam guide: human audits and subgroup analysis.",
+      "examTip": "Model bias traced to how data was labeled = label quality analysis.",
+      "references": [
+        {
+          "title": "What is data labeling?",
+          "url": "https://aws.amazon.com/what-is/data-labeling/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-rai-034",
+    "domain": "responsible",
+    "topic": "Bias Detection",
+    "tags": [
+      "human-audits"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A public-sector agency uses AI to prioritize benefit applications for review. It wants independent experts to periodically review samples of decisions for fairness and correctness.",
+    "prompt": "Which practice is this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Batch inference",
+        "correct": false,
+        "why": "Batch inference is a way of running predictions, not an oversight practice."
+      },
+      {
+        "key": "B",
+        "text": "Prompt caching",
+        "correct": false,
+        "why": "Prompt caching is a cost and latency optimization, not a way for people to review AI decisions."
+      },
+      {
+        "key": "C",
+        "text": "Human audits",
+        "correct": true,
+        "why": "Human audits have qualified reviewers examine model decisions to identify bias, errors and trustworthiness issues that metrics might miss."
+      },
+      {
+        "key": "D",
+        "text": "Distillation",
+        "correct": false,
+        "why": "Distillation is a model training technique."
+      }
+    ],
+    "explanation": {
+      "answer": "Human audits involve people, often independent or domain experts, reviewing samples of AI outputs and decisions for fairness, accuracy and compliance. They complement automated metrics and support accountability.",
+      "concept": "Audit findings should feed back into data improvements, policy changes and retraining.",
+      "examTip": "People periodically reviewing AI decisions = human audits.",
+      "references": [
+        {
+          "title": "Responsible AI at AWS",
+          "url": "https://aws.amazon.com/ai/responsible-ai/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-rai-035",
+    "domain": "responsible",
+    "topic": "Bias Detection",
+    "tags": [
+      "detection-tools"
+    ],
+    "difficulty": "medium",
+    "type": "multi",
+    "selectCount": 3,
+    "stem": "A responsible AI team assembles methods to detect and monitor bias, trustworthiness and truthfulness.",
+    "prompt": "Which methods should it include? (Select THREE.)",
+    "options": [
+      {
+        "key": "A",
+        "text": "Removing all monitoring after launch",
+        "correct": false,
+        "why": "Bias can drift, so monitoring must continue after launch."
+      },
+      {
+        "key": "B",
+        "text": "Analyzing label quality in training data",
+        "correct": true,
+        "why": "Biased or inconsistent labels are a major source of model bias."
+      },
+      {
+        "key": "C",
+        "text": "Measuring only average latency",
+        "correct": false,
+        "why": "Latency does not reveal bias or truthfulness issues."
+      },
+      {
+        "key": "D",
+        "text": "Subgroup analysis of performance and outcomes",
+        "correct": true,
+        "why": "Comparing results across groups reveals disparities hidden by overall metrics."
+      },
+      {
+        "key": "E",
+        "text": "Human audits of sampled decisions",
+        "correct": true,
+        "why": "Expert review catches issues automated metrics miss."
+      }
+    ],
+    "explanation": {
+      "answer": "Tools and practices to detect and monitor bias, trustworthiness and truthfulness include analyzing label quality, human audits, subgroup analysis, automated bias metrics (SageMaker Clarify), bias drift monitoring (Model Monitor) and evaluation of generative outputs for toxicity and accuracy.",
+      "concept": "Combine automated metrics with human judgment for robust oversight.",
+      "examTip": "Label quality + human audits + subgroup analysis.",
+      "references": [
+        {
+          "title": "Detect pre-training data bias (SageMaker Clarify)",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-detect-data-bias.html"
+        },
+        {
+          "title": "Data and model quality monitoring with Amazon SageMaker Model Monitor",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-rai-036",
+    "domain": "responsible",
+    "topic": "Datasets",
+    "tags": [
+      "proxy-features"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A team removed the race attribute from a lending dataset to avoid bias. Analysis shows the model still produces disparate outcomes across racial groups, largely driven by the applicant's postal code.",
+    "prompt": "What is the MOST likely explanation?",
+    "options": [
+      {
+        "key": "A",
+        "text": "The model has too few parameters",
+        "correct": false,
+        "why": "Model size does not explain proxy-driven disparities."
+      },
+      {
+        "key": "B",
+        "text": "Removing race always eliminates racial bias",
+        "correct": false,
+        "why": "Correlated proxy features can still encode the removed attribute."
+      },
+      {
+        "key": "C",
+        "text": "The temperature was set incorrectly",
+        "correct": false,
+        "why": "Temperature does not apply to this kind of model decision and does not cause proxy bias."
+      },
+      {
+        "key": "D",
+        "text": "Postal code acts as a proxy for race, so bias persists even though the attribute was removed",
+        "correct": true,
+        "why": "Features correlated with protected attributes can reintroduce bias indirectly."
+      }
+    ],
+    "explanation": {
+      "answer": "Proxy variables are features correlated with protected attributes (for example postal code with race). Removing the protected attribute is not enough; teams must measure outcomes across groups and examine feature influence to detect proxy bias.",
+      "concept": "SageMaker Clarify feature attributions help reveal which features drive predictions, aiding proxy detection.",
+      "examTip": "Removed sensitive attribute but bias remains → look for proxy features.",
+      "references": [
+        {
+          "title": "Model explainability with SageMaker Clarify",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-model-explainability.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-rai-037",
+    "domain": "responsible",
+    "topic": "Responsible Model Selection",
+    "tags": [
+      "sustainability",
+      "reuse"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A team considers pre-training its own large language model from scratch for a common summarization use case that existing models already handle well.",
+    "prompt": "From a sustainability perspective, what is the BEST recommendation?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use an existing pre-trained model, adapting it with prompts, RAG or light fine-tuning, instead of pre-training from scratch",
+        "correct": true,
+        "why": "Reusing existing models avoids the very large energy footprint of pre-training."
+      },
+      {
+        "key": "B",
+        "text": "Pre-train from scratch to have full control",
+        "correct": false,
+        "why": "Pre-training consumes enormous compute and energy and is unnecessary when existing models suffice."
+      },
+      {
+        "key": "C",
+        "text": "Pre-train several models in parallel and pick the best",
+        "correct": false,
+        "why": "Pre-training several models in parallel multiplies the already large energy cost of pre-training."
+      },
+      {
+        "key": "D",
+        "text": "Run the largest model available for every request",
+        "correct": false,
+        "why": "Over-sized models waste energy on simple tasks."
+      }
+    ],
+    "explanation": {
+      "answer": "Responsible model selection includes environmental considerations. Reusing pre-trained models, choosing appropriately sized models, using efficient hardware and avoiding unnecessary training reduce energy consumption and carbon footprint.",
+      "concept": "The AWS Well-Architected sustainability guidance encourages using managed services and right-sizing resources.",
+      "examTip": "Sustainability: reuse pre-trained models, right-size, avoid needless training.",
+      "references": [
+        {
+          "title": "Responsible AI at AWS",
+          "url": "https://aws.amazon.com/ai/responsible-ai/"
+        },
+        {
+          "title": "Machine Learning Lens: AWS Well-Architected",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/machine-learning-lens.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-rai-038",
+    "domain": "responsible",
+    "topic": "Datasets",
+    "tags": [
+      "inclusivity",
+      "dataset-characteristics"
+    ],
+    "difficulty": "medium",
+    "type": "multi",
+    "selectCount": 2,
+    "stem": "A team reviews its training dataset against responsible AI guidelines.",
+    "prompt": "Which characteristics should a responsible dataset have? (Select TWO.)",
+    "options": [
+      {
+        "key": "A",
+        "text": "Unknown origin and licensing",
+        "correct": false,
+        "why": "Responsible data has known provenance and appropriate rights."
+      },
+      {
+        "key": "B",
+        "text": "Balanced representation so that no relevant group is severely under-represented",
+        "correct": true,
+        "why": "Balance reduces systematic errors for minority groups."
+      },
+      {
+        "key": "C",
+        "text": "Inclusive and diverse coverage of the people and scenarios the model will serve",
+        "correct": true,
+        "why": "Diverse, inclusive data helps the model perform well for all users."
+      },
+      {
+        "key": "D",
+        "text": "Data collected only from the development team's own devices",
+        "correct": false,
+        "why": "A narrow source is unlikely to represent real users."
+      },
+      {
+        "key": "E",
+        "text": "As many duplicate records as possible",
+        "correct": false,
+        "why": "Duplicates skew the data and add no new information."
+      }
+    ],
+    "explanation": {
+      "answer": "Characteristics of responsible datasets include inclusivity, diversity, curated data sources and balanced representation, along with accurate labels, appropriate consent and licensing, and documented lineage.",
+      "concept": "Dataset quality and representativeness are the foundation for fair and robust models.",
+      "examTip": "Inclusive, diverse, curated, balanced.",
+      "references": [
+        {
+          "title": "Responsible AI at AWS",
+          "url": "https://aws.amazon.com/ai/responsible-ai/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-rai-039",
+    "domain": "responsible",
+    "topic": "Bias Detection",
+    "tags": [
+      "genai-bias-evaluation"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A team wants to test whether its generative AI job-description writer produces different language quality or stereotypes depending on the gender implied in prompts.",
+    "prompt": "Which approach is MOST appropriate?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Test with a single prompt",
+        "correct": false,
+        "why": "One prompt cannot reveal systematic differences between groups."
+      },
+      {
+        "key": "B",
+        "text": "Create paired test prompts that differ only in implied gender, then compare outputs with automated metrics and human review",
+        "correct": true,
+        "why": "Controlled paired prompts isolate the effect of the attribute, revealing bias in generated text."
+      },
+      {
+        "key": "C",
+        "text": "Measure only token count",
+        "correct": false,
+        "why": "Token count does not capture stereotypes."
+      },
+      {
+        "key": "D",
+        "text": "Assume the model is unbiased because it is popular",
+        "correct": false,
+        "why": "Popularity does not demonstrate fairness."
+      }
+    ],
+    "explanation": {
+      "answer": "Bias in generative models can be tested with counterfactual or paired prompts that vary only a sensitive attribute, comparing outputs for sentiment, quality, stereotypes and refusals. Automated evaluations (including LLM-as-a-judge) and human reviewers assess differences.",
+      "concept": "Amazon Bedrock Model Evaluation and SageMaker Clarify foundation model evaluations include bias and stereotyping assessments.",
+      "examTip": "Test GenAI bias with prompts that differ only in the sensitive attribute.",
+      "references": [
+        {
+          "title": "Evaluate the performance of Amazon Bedrock resources",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/evaluation.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-rai-040",
+    "domain": "responsible",
+    "topic": "Bias & Variance",
+    "tags": [
+      "underfitting",
+      "inaccuracy"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A very simple model predicts insurance claim amounts poorly for every group of customers, on both training and new data.",
+    "prompt": "Which statement describes the problem?",
+    "options": [
+      {
+        "key": "A",
+        "text": "High variance (overfitting)",
+        "correct": false,
+        "why": "Overfitting shows good training performance and poor new-data performance, not poor performance everywhere."
+      },
+      {
+        "key": "B",
+        "text": "Data residency",
+        "correct": false,
+        "why": "Residency is about where data is stored."
+      },
+      {
+        "key": "C",
+        "text": "High bias (underfitting): the model is too simple to capture the patterns",
+        "correct": true,
+        "why": "Poor results everywhere, including on training data, indicate the model is too simple."
+      },
+      {
+        "key": "D",
+        "text": "Prompt injection",
+        "correct": false,
+        "why": "Prompt injection is an attack on LLM applications, not a fit problem."
+      }
+    ],
+    "explanation": {
+      "answer": "High bias causes underfitting: the model is too simple, so it is inaccurate on training and new data alike. Increasing model capacity or adding informative features helps.",
+      "concept": "The bias-variance trade-off: reduce bias with more capacity, reduce variance with more data, regularization or simpler models.",
+      "examTip": "Bad everywhere = high bias / underfitting.",
+      "references": [
+        {
+          "title": "What is overfitting?",
+          "url": "https://aws.amazon.com/what-is/overfitting/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-rai-041",
+    "domain": "responsible",
+    "topic": "Datasets",
+    "tags": [
+      "consent",
+      "privacy"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company wants to use recordings of customer support calls to train a speech model. The original privacy notice said recordings were for quality assurance only.",
+    "prompt": "What should the company do before using the recordings for training?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use the recordings immediately because the company owns them",
+        "correct": false,
+        "why": "Ownership does not override privacy commitments and regulations about purpose."
+      },
+      {
+        "key": "B",
+        "text": "Delete the privacy notice",
+        "correct": false,
+        "why": "Removing the notice does not change obligations already made to customers."
+      },
+      {
+        "key": "C",
+        "text": "Publish the recordings for transparency",
+        "correct": false,
+        "why": "Publishing personal recordings would violate privacy."
+      },
+      {
+        "key": "D",
+        "text": "Confirm it has an appropriate legal basis and consent for the new purpose, and de-identify personal data as needed",
+        "correct": true,
+        "why": "Using data beyond its stated purpose requires a legal basis or consent, and minimizing personal data reduces privacy risk."
+      }
+    ],
+    "explanation": {
+      "answer": "Responsible datasets respect privacy: data should be used only for purposes with a valid legal basis or consent, minimized, and de-identified where possible. Purpose limitation is a core privacy principle.",
+      "concept": "Data governance (Domain 5) covers lifecycles, retention and documented usage of data.",
+      "examTip": "New use of personal data → check consent/legal basis + de-identify.",
+      "references": [
+        {
+          "title": "Responsible AI at AWS",
+          "url": "https://aws.amazon.com/ai/responsible-ai/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-rai-042",
+    "domain": "responsible",
+    "topic": "Bias Detection",
+    "tags": [
+      "clarify",
+      "foundation-model-evaluation"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "An ML team on SageMaker AI wants to evaluate a foundation model it hosts for issues such as stereotyping, toxicity and factual knowledge before deployment.",
+    "prompt": "Which capability supports this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Foundation model evaluations in SageMaker AI (powered by SageMaker Clarify)",
+        "correct": true,
+        "why": "SageMaker AI provides foundation model evaluation for dimensions such as accuracy, toxicity, stereotyping and robustness."
+      },
+      {
+        "key": "B",
+        "text": "AWS Cost Explorer",
+        "correct": false,
+        "why": "Cost Explorer analyzes spending and cannot evaluate a model for stereotyping or toxicity."
+      },
+      {
+        "key": "C",
+        "text": "Amazon Route 53 health checks",
+        "correct": false,
+        "why": "Route 53 health checks monitor endpoint availability, not model bias."
+      },
+      {
+        "key": "D",
+        "text": "Amazon S3 Transfer Acceleration",
+        "correct": false,
+        "why": "Transfer Acceleration speeds uploads and has nothing to do with evaluation."
+      }
+    ],
+    "explanation": {
+      "answer": "SageMaker AI offers foundation model evaluations (built on SageMaker Clarify) that assess models for quality and responsibility dimensions such as factual knowledge, toxicity, prompt stereotyping and semantic robustness, with automatic and human evaluation options.",
+      "concept": "Amazon Bedrock Model Evaluation offers similar capabilities for models used through Bedrock.",
+      "examTip": "Evaluate an FM for stereotyping/toxicity on SageMaker = FM evaluations (Clarify).",
+      "references": [
+        {
+          "title": "Model explainability with SageMaker Clarify",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-model-explainability.html"
+        },
+        {
+          "title": "Evaluate the performance of Amazon Bedrock resources",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/evaluation.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-rai-043",
+    "domain": "responsible",
+    "topic": "Bias & Variance",
+    "tags": [
+      "demographic-effects",
+      "overfitting"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A medical model is very accurate for the patient groups that make up most of its training data but makes erratic predictions for a small patient group with few examples.",
+    "prompt": "Which statement BEST describes this situation?",
+    "options": [
+      {
+        "key": "A",
+        "text": "The model is fair because overall accuracy is high",
+        "correct": false,
+        "why": "High overall accuracy can hide poor performance for small groups."
+      },
+      {
+        "key": "B",
+        "text": "The model has effectively overfit to the majority groups and has high error for the under-represented group, an effect of bias and variance on demographic groups",
+        "correct": true,
+        "why": "Sparse data for a group leads to unreliable, high-variance predictions for that group."
+      },
+      {
+        "key": "C",
+        "text": "The issue is caused by token pricing",
+        "correct": false,
+        "why": "Pricing does not affect model accuracy for groups."
+      },
+      {
+        "key": "D",
+        "text": "The model needs a smaller context window",
+        "correct": false,
+        "why": "Context window size is irrelevant to this model's group performance."
+      }
+    ],
+    "explanation": {
+      "answer": "Bias and variance can affect demographic groups unequally. Groups with little data often get less accurate and less stable predictions. Subgroup evaluation exposes this; remedies include gathering more data for the group and careful modeling choices.",
+      "concept": "Fairness requires examining per-group metrics, not only aggregate accuracy.",
+      "examTip": "Small group, erratic predictions → data scarcity for that group, check subgroups.",
+      "references": [
+        {
+          "title": "Detect pre-training data bias (SageMaker Clarify)",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-detect-data-bias.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-rai-044",
+    "domain": "responsible",
+    "topic": "Responsible AI Features",
+    "tags": [
+      "governance"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company establishes an AI review board, defines policies for acceptable AI use, and requires risk assessments and documentation before any AI system is launched.",
+    "prompt": "Which responsible AI dimension does this represent?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Inference",
+        "correct": false,
+        "why": "Inference is using a trained model to make predictions."
+      },
+      {
+        "key": "B",
+        "text": "Chunking",
+        "correct": false,
+        "why": "Chunking splits documents for retrieval."
+      },
+      {
+        "key": "C",
+        "text": "Governance",
+        "correct": true,
+        "why": "Governance means policies, processes and oversight structures that ensure AI is developed and used responsibly."
+      },
+      {
+        "key": "D",
+        "text": "Tokenization",
+        "correct": false,
+        "why": "Tokenization splits text into units for a model. It is not a policy or oversight structure."
+      }
+    ],
+    "explanation": {
+      "answer": "Governance incorporates best practices into the AI supply chain, including policies, roles and responsibilities, review processes, risk assessments, documentation and audits.",
+      "concept": "Governance frameworks such as the AWS Generative AI Security Scoping Matrix help classify use cases and apply appropriate controls (Domain 5).",
+      "examTip": "Policies, review boards, risk assessments = governance.",
+      "references": [
+        {
+          "title": "Responsible AI at AWS",
+          "url": "https://aws.amazon.com/ai/responsible-ai/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-rai-045",
+    "domain": "responsible",
+    "topic": "Datasets",
+    "tags": [
+      "class-imbalance",
+      "fairness"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "In a dataset for predicting loan default, only 2% of examples come from small-business applicants, who are an important customer segment.",
+    "prompt": "Which risk does this create, and what is a reasonable response?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Remove small-business applicants from the dataset entirely",
+        "correct": false,
+        "why": "Removing them guarantees poor performance for that segment."
+      },
+      {
+        "key": "B",
+        "text": "No risk exists because 2% is enough for any model",
+        "correct": false,
+        "why": "Small segments are often poorly learned, especially if their patterns differ."
+      },
+      {
+        "key": "C",
+        "text": "Increase the model's temperature",
+        "correct": false,
+        "why": "Temperature is irrelevant to this classification model's training data."
+      },
+      {
+        "key": "D",
+        "text": "The model may perform poorly or unfairly for small-business applicants; collect more representative data and evaluate that segment separately",
+        "correct": true,
+        "why": "Under-represented segments often see higher error rates. More data and per-segment evaluation address the risk."
+      }
+    ],
+    "explanation": {
+      "answer": "Imbalanced representation leads to models that underperform for minority segments. Remedies include collecting more data, resampling or weighting, and evaluating each segment with appropriate metrics.",
+      "concept": "SageMaker Clarify's class imbalance metric quantifies representation differences in training data.",
+      "examTip": "Tiny segment in data → risk of poor/unfair performance for that segment.",
+      "references": [
+        {
+          "title": "Detect pre-training data bias (SageMaker Clarify)",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-detect-data-bias.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-rai-046",
+    "domain": "responsible",
+    "topic": "Bias Detection",
+    "tags": [
+      "feedback-loop"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A recommendation model shows popular items more often, which makes them more popular, so the model shows them even more. Niche creators' content rarely gets shown, regardless of quality.",
+    "prompt": "Which bias pattern does this describe?",
+    "options": [
+      {
+        "key": "A",
+        "text": "A feedback loop that amplifies existing popularity bias",
+        "correct": true,
+        "why": "The model's own outputs influence future training data, reinforcing and amplifying the initial bias."
+      },
+      {
+        "key": "B",
+        "text": "Prompt caching",
+        "correct": false,
+        "why": "Caching is a cost optimization, not a bias pattern."
+      },
+      {
+        "key": "C",
+        "text": "Underfitting due to a small model",
+        "correct": false,
+        "why": "The issue is self-reinforcing exposure, not model capacity."
+      },
+      {
+        "key": "D",
+        "text": "Data residency",
+        "correct": false,
+        "why": "Residency concerns where data is stored."
+      }
+    ],
+    "explanation": {
+      "answer": "Feedback loops occur when model outputs influence the data used for future training, amplifying existing biases. Mitigations include exploration strategies, fairness constraints in ranking, monitoring exposure across groups and periodic human review.",
+      "concept": "Bias can emerge after deployment, so continuous monitoring is part of responsible AI.",
+      "examTip": "Model output → more data for same items → stronger bias = feedback loop.",
+      "references": [
+        {
+          "title": "Responsible AI at AWS",
+          "url": "https://aws.amazon.com/ai/responsible-ai/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-rai-047",
+    "domain": "responsible",
+    "topic": "Responsible Model Selection",
+    "tags": [
+      "model-selection",
+      "responsible"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company is choosing a foundation model for a public-facing assistant and wants to select responsibly.",
+    "prompt": "Which practice reflects responsible model selection?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Choose the model with the longest name",
+        "correct": false,
+        "why": "A model's name has no bearing on its safety, fairness, licensing or fitness for the use case."
+      },
+      {
+        "key": "B",
+        "text": "Review the provider's documentation on intended use, limitations, safety evaluations and licensing, and evaluate the model on fairness and safety for the use case",
+        "correct": true,
+        "why": "Responsible selection considers documented limitations, safety and fairness evaluations, licensing and fit for the intended use."
+      },
+      {
+        "key": "C",
+        "text": "Choose whichever model was released most recently",
+        "correct": false,
+        "why": "Recency does not indicate suitability or safety for a use case."
+      },
+      {
+        "key": "D",
+        "text": "Skip evaluation to launch faster",
+        "correct": false,
+        "why": "Skipping evaluation increases the risk of harmful or unfair outputs."
+      }
+    ],
+    "explanation": {
+      "answer": "Responsible model selection includes reviewing model documentation (such as model cards or AWS AI Service Cards), intended uses and limitations, licensing, safety and bias evaluations, environmental impact, and testing on the specific use case.",
+      "concept": "Transparency artifacts help organizations choose and use models appropriately (Task 4.2).",
+      "examTip": "Responsible selection = documentation + licensing + fairness/safety evaluation + sustainability.",
+      "references": [
+        {
+          "title": "Responsible AI at AWS",
+          "url": "https://aws.amazon.com/ai/responsible-ai/"
+        },
+        {
+          "title": "Evaluate the performance of Amazon Bedrock resources",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/evaluation.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-rai-048",
+    "domain": "responsible",
+    "topic": "Bias Detection",
+    "tags": [
+      "trustworthiness",
+      "truthfulness"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A team wants to monitor whether its customer-facing generative assistant keeps giving truthful, accurate answers over time as products and policies change.",
+    "prompt": "Which approach BEST supports this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Test once before launch and never again",
+        "correct": false,
+        "why": "Truthfulness can degrade as products and policies change."
+      },
+      {
+        "key": "B",
+        "text": "Monitor only how many users log in",
+        "correct": false,
+        "why": "Usage counts do not indicate whether answers are accurate."
+      },
+      {
+        "key": "C",
+        "text": "Regularly evaluate sampled production answers against current authoritative sources, with automated grounding checks and human review, and track results over time",
+        "correct": true,
+        "why": "Continuous evaluation against current sources reveals declining truthfulness as information changes."
+      },
+      {
+        "key": "D",
+        "text": "Increase the max-token limit",
+        "correct": false,
+        "why": "Longer answers do not improve truthfulness."
+      }
+    ],
+    "explanation": {
+      "answer": "Monitoring trustworthiness and truthfulness requires ongoing evaluation of real outputs: grounding checks against sources, LLM-as-a-judge or rule-based checks, human review of samples, and user feedback, tracked over time.",
+      "concept": "Updating knowledge bases promptly and monitoring accuracy keep RAG applications truthful.",
+      "examTip": "Truthfulness over time → continuous evaluation of production outputs.",
+      "references": [
+        {
+          "title": "Contextual grounding check (Amazon Bedrock Guardrails)",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-contextual-grounding-check.html"
+        },
+        {
+          "title": "Evaluate the performance of Amazon Bedrock resources",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/evaluation.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-rai-049",
+    "domain": "responsible",
+    "topic": "Datasets",
+    "tags": [
+      "historical-bias"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company trains a promotion-recommendation model on 20 years of past promotion decisions, during which managers rarely promoted employees who worked part-time.",
+    "prompt": "What is the MAIN risk?",
+    "options": [
+      {
+        "key": "A",
+        "text": "The model will hallucinate images",
+        "correct": false,
+        "why": "This is a recommendation model and does not generate images."
+      },
+      {
+        "key": "B",
+        "text": "The model will require more GPUs",
+        "correct": false,
+        "why": "Compute needs are unrelated to the fairness risk."
+      },
+      {
+        "key": "C",
+        "text": "The model will be too slow",
+        "correct": false,
+        "why": "Historical bias affects fairness, not speed."
+      },
+      {
+        "key": "D",
+        "text": "The model learns and perpetuates historical bias against part-time employees",
+        "correct": true,
+        "why": "Training on historically biased decisions teaches the model to reproduce those biases."
+      }
+    ],
+    "explanation": {
+      "answer": "Historical bias occurs when training labels reflect past unfair decisions. Models trained on them reproduce and can scale those biases. Teams should examine labels, measure outcomes across groups, and reconsider whether historical decisions are appropriate targets.",
+      "concept": "Responsible AI starts with questioning whether the data reflects the outcomes you actually want.",
+      "examTip": "Training labels from biased past decisions = historical bias.",
+      "references": [
+        {
+          "title": "Detect pre-training data bias (SageMaker Clarify)",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-detect-data-bias.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-rai-050",
+    "domain": "responsible",
+    "topic": "Responsible Model Selection",
+    "tags": [
+      "environmental",
+      "efficiency"
+    ],
+    "difficulty": "medium",
+    "type": "multi",
+    "selectCount": 2,
+    "stem": "An organization wants to reduce the environmental impact of its AI workloads.",
+    "prompt": "Which practices help? (Select TWO.)",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use energy-efficient, purpose-built hardware such as AWS Inferentia and Trainium where suitable",
+        "correct": true,
+        "why": "Purpose-built accelerators aim for better performance per watt."
+      },
+      {
+        "key": "B",
+        "text": "Send every request to multiple models and discard most answers",
+        "correct": false,
+        "why": "Sending each request to several models and discarding most answers wastes compute and energy."
+      },
+      {
+        "key": "C",
+        "text": "Use the smallest model that meets quality requirements",
+        "correct": true,
+        "why": "Smaller models need less compute and energy per request."
+      },
+      {
+        "key": "D",
+        "text": "Retrain large models from scratch every week regardless of need",
+        "correct": false,
+        "why": "Unnecessary training consumes large amounts of energy."
+      },
+      {
+        "key": "E",
+        "text": "Keep idle GPU instances running at all times",
+        "correct": false,
+        "why": "Idle GPU instances consume energy while doing no useful work, increasing environmental impact."
+      }
+    ],
+    "explanation": {
+      "answer": "Sustainable AI practices include right-sizing models, reusing pre-trained models, efficient hardware, serverless or auto-scaling infrastructure to avoid idle capacity, and avoiding unnecessary training runs.",
+      "concept": "Environmental considerations are part of responsible model selection in the exam guide.",
+      "examTip": "Right-size, reuse, efficient hardware, no idle capacity.",
+      "references": [
+        {
+          "title": "AWS Trainium",
+          "url": "https://aws.amazon.com/ai/machine-learning/trainium/"
+        },
+        {
+          "title": "Machine Learning Lens: AWS Well-Architected",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/machine-learning-lens.html"
+        }
+      ]
+    }
+  }
+]

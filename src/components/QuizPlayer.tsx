@@ -19,6 +19,8 @@ export interface QuizPlayerProps {
   deadline: number | null;
   signedIn: boolean;
   waitlist?: boolean;
+  /** Exam code shown in the paywall, e.g. "AIF-C01". */
+  examCode: string;
 }
 
 const MODE_LABEL: Record<Mode, string> = { trial: "Free trial", practice: "Practice", reinforce: "Strengthen weak areas", review: "Review mistakes", flagged: "Flagged questions", exam: "Timed mock exam" };
@@ -29,7 +31,7 @@ function formatClock(ms: number) {
   return `${h ? `${h}:` : ""}${String(m).padStart(h ? 2 : 1, "0")}:${String(sec).padStart(2, "0")}`;
 }
 
-export function QuizPlayer({ sessionId, mode, questions, initialFlags, initial, deadline, signedIn, waitlist }: QuizPlayerProps) {
+export function QuizPlayer({ sessionId, mode, questions, initialFlags, initial, deadline, signedIn, waitlist, examCode }: QuizPlayerProps) {
   const isExam = mode === "exam";
   const [answers, setAnswers] = useState(initial);
   const [index, setIndex] = useState(() => Math.max(0, questions.findIndex((q) => !initial[q.id])));
@@ -222,10 +224,10 @@ export function QuizPlayer({ sessionId, mode, questions, initialFlags, initial, 
       {paywall && (
         <div className="fixed inset-0 z-50 grid place-items-center bg-black/50 p-4" role="dialog" aria-modal="true" aria-labelledby="pw-title">
           <div className="card max-w-md p-7 text-center">
-            <h2 id="pw-title" className="text-2xl font-extrabold">You&apos;ve used your free questions</h2>
+            <h2 id="pw-title" className="text-2xl font-extrabold">You&apos;ve used your free {examCode} questions</h2>
             <p className="mt-2 text-soft">Unlock unlimited practice, timed mock exams, adaptive review of your mistakes and full analytics for 30 days.</p>
             <div className="mt-5 flex flex-col gap-2">
-              <Link className="btn-primary !py-3" href={waitlist || signedIn ? "/pricing" : "/register?next=/pricing"}>{waitlist ? "Get notified when passes launch" : "Unlock all access for $9.99"}</Link>
+              <Link className="btn-primary !py-3" href={waitlist || signedIn ? "/pricing" : "/register?next=/pricing"}>{waitlist ? "Get notified when passes launch" : `Unlock ${examCode} for $9.99`}</Link>
               <button className="btn-ghost" onClick={finish}>See my trial results</button>
             </div>
           </div>

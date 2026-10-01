@@ -22,8 +22,8 @@ export default function OpenGraphImage() {
             <span style={{ fontSize: 26, padding: "6px 14px", borderRadius: 10, background: "linear-gradient(135deg, #4F46E5, #9333EA)" }}>PRO</span>
           </div>
         </div>
-        <div style={{ marginTop: 48, fontSize: 64, fontWeight: 800, lineHeight: 1.1, maxWidth: 980 }}>Pass the AWS exam by understanding every answer.</div>
-        <div style={{ marginTop: 28, fontSize: 30, color: "#c9c6ee" }}>500 exam-style questions · detailed explanations · 10 free</div>
+        <div style={{ marginTop: 48, fontSize: 64, fontWeight: 800, lineHeight: 1.1, maxWidth: 980 }}>Pass your AWS exam by understanding every answer.</div>
+        <div style={{ marginTop: 28, fontSize: 30, color: "#c9c6ee" }}>AI Practitioner + Solutions Architect · 1,000 questions · 10 free</div>
       </div>
     ),
     size,

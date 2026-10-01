@@ -4,7 +4,8 @@ import { ExplanationPanel, OptionList, QuestionMeta, QuestionText } from "@/comp
 import { QuestionEditor } from "@/components/QuestionEditor";
 import { requireAdmin } from "@/lib/auth";
 import { one, query } from "@/lib/db";
-import { ensureBank, feedbackFor, getQuestion, isBuiltIn, overrideState, toPublic } from "@/lib/questions";
+import { DEFAULT_EXAM } from "@/lib/exams";
+import { ensureBank, examOf, feedbackFor, getQuestion, isBuiltIn, overrideState, toPublic } from "@/lib/questions";
 import { REPORT_REASONS } from "@/lib/reports";
 import { deleteAddedQuestionAction, revertQuestionAction, setQuestionDisabledAction, setReportStatusAction } from "../../actions";
 
@@ -17,7 +18,7 @@ export default async function AdminQuestion({ params, searchParams }: PageProps<
   const q = getQuestion(id);
   if (!q) notFound();
   const state = overrideState(id);
-  const exam = (await one<{ exam: string }>(`select exam from question_overrides where question_id = $1`, [id]))?.exam ?? "saa-c03";
+  const exam = examOf(id) ?? DEFAULT_EXAM;
 
   // Present options in stored order (A, B, C…) for review rather than the learner's shuffled order.
   const pub = { ...toPublic(q, "admin"), options: q.options.map((o) => ({ key: o.key, text: o.text })) };

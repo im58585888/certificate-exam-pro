@@ -1,0 +1,1286 @@
+[
+  {
+    "id": "aif-gen-051",
+    "domain": "genai",
+    "topic": "GenAI Limitations",
+    "tags": [
+      "hallucination"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A lawyer asks an LLM-based assistant for court cases supporting an argument. The assistant returns confident, well-formatted citations, but several of the cases do not exist.",
+    "prompt": "What is this limitation called?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Latency",
+        "correct": false,
+        "why": "Latency is response time. The problem here is incorrect content."
+      },
+      {
+        "key": "B",
+        "text": "Hallucination",
+        "correct": true,
+        "why": "A hallucination is plausible-sounding but false or fabricated content, such as citations to cases that do not exist."
+      },
+      {
+        "key": "C",
+        "text": "Tokenization",
+        "correct": false,
+        "why": "Tokenization is how text is split into units. It does not describe invented facts."
+      },
+      {
+        "key": "D",
+        "text": "Overfitting",
+        "correct": false,
+        "why": "Overfitting describes a model that fits its training data too closely. Inventing nonexistent facts at generation time is a different limitation."
+      }
+    ],
+    "explanation": {
+      "answer": "Hallucinations are outputs that sound fluent and confident but are factually wrong or fabricated. They occur because LLMs generate likely text patterns rather than retrieving verified facts.",
+      "concept": "Mitigations include grounding with retrieval augmented generation, asking for citations to retrieved sources, contextual grounding checks in Amazon Bedrock Guardrails, lower temperature, and human review for high-stakes outputs.",
+      "examTip": "Confident but made-up content = hallucination. Mitigate with RAG grounding and verification.",
+      "references": [
+        {
+          "title": "What are AI hallucinations?",
+          "url": "https://aws.amazon.com/what-is/ai-hallucinations/"
+        },
+        {
+          "title": "Contextual grounding check (Amazon Bedrock Guardrails)",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-contextual-grounding-check.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-052",
+    "domain": "genai",
+    "topic": "GenAI Limitations",
+    "tags": [
+      "nondeterminism"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A QA engineer sends the identical prompt to an LLM five times and gets five differently worded answers. The engineer files a bug saying the model is broken.",
+    "prompt": "What is the BEST explanation?",
+    "options": [
+      {
+        "key": "A",
+        "text": "The prompt was too short to be processed.",
+        "correct": false,
+        "why": "Prompt length does not explain different outputs for the same input."
+      },
+      {
+        "key": "B",
+        "text": "The model is corrupted and must be retrained.",
+        "correct": false,
+        "why": "Varying outputs are normal for sampled generation. Retraining is not needed."
+      },
+      {
+        "key": "C",
+        "text": "LLM outputs are nondeterministic when sampling settings allow randomness; lowering temperature reduces variation, but generative outputs should be tested for quality rather than exact text.",
+        "correct": true,
+        "why": "Generation samples from probabilities, so identical prompts can yield different outputs. Settings such as temperature control how much variation occurs."
+      },
+      {
+        "key": "D",
+        "text": "The engineer's network connection altered the responses.",
+        "correct": false,
+        "why": "Network issues do not rewrite model output. The variation comes from sampling."
+      }
+    ],
+    "explanation": {
+      "answer": "Nondeterminism is a known characteristic of generative AI: the same input can produce different outputs because tokens are sampled from a probability distribution. Lowering temperature and top-p makes outputs more consistent, though not always identical.",
+      "concept": "Testing generative applications focuses on evaluating quality, correctness and safety across many samples, not on matching exact strings.",
+      "examTip": "Same prompt, different answers = nondeterminism. Reduce with lower temperature.",
+      "references": [
+        {
+          "title": "Influence response generation with inference parameters",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/inference-parameters.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-053",
+    "domain": "genai",
+    "topic": "GenAI Limitations",
+    "tags": [
+      "interpretability",
+      "explainability"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A regulator asks a company to explain precisely why its LLM-based assistant recommended one insurance product over another to a specific customer.",
+    "prompt": "Which limitation of generative AI makes this request difficult?",
+    "options": [
+      {
+        "key": "A",
+        "text": "LLMs cannot generate text in full sentences",
+        "correct": false,
+        "why": "LLMs generate fluent text. The difficulty is explaining why, not producing words."
+      },
+      {
+        "key": "B",
+        "text": "LLMs can only process images",
+        "correct": false,
+        "why": "LLMs process text, and many are multimodal."
+      },
+      {
+        "key": "C",
+        "text": "LLMs have no parameters",
+        "correct": false,
+        "why": "LLMs have very many parameters, which is part of why they are hard to interpret."
+      },
+      {
+        "key": "D",
+        "text": "Low interpretability: it is hard to trace how billions of parameters produced a particular output",
+        "correct": true,
+        "why": "Large neural models are largely black boxes. Their internal reasoning cannot be fully traced to give a precise causal explanation."
+      }
+    ],
+    "explanation": {
+      "answer": "Interpretability is limited for large foundation models: their decisions emerge from complex interactions among billions of parameters, so it is hard to explain exactly why a specific output was produced. This is a key disadvantage in regulated settings.",
+      "concept": "Mitigations include using simpler, explainable models for regulated decisions, documenting models with model cards, citing retrieved sources, logging inputs and outputs, and keeping humans accountable.",
+      "examTip": "\"Explain exactly why\" for an FM = interpretability limitation.",
+      "references": [
+        {
+          "title": "What is explainable AI?",
+          "url": "https://aws.amazon.com/what-is/explainable-ai/"
+        },
+        {
+          "title": "Responsible AI at AWS",
+          "url": "https://aws.amazon.com/ai/responsible-ai/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-054",
+    "domain": "genai",
+    "topic": "GenAI Advantages",
+    "tags": [
+      "adaptability",
+      "advantages"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A company used to build a separate ML model for each language task. With a single foundation model, it now handles summarization, classification, drafting and question answering just by changing the prompt.",
+    "prompt": "Which advantage of generative AI does this illustrate?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Adaptability across many tasks",
+        "correct": true,
+        "why": "One foundation model can perform many different tasks through prompting, without building a separate model for each."
+      },
+      {
+        "key": "B",
+        "text": "Determinism",
+        "correct": false,
+        "why": "FMs are generally nondeterministic. The benefit shown is flexibility, not identical outputs."
+      },
+      {
+        "key": "C",
+        "text": "Zero inference cost",
+        "correct": false,
+        "why": "FM inference has real costs, typically per token."
+      },
+      {
+        "key": "D",
+        "text": "Guaranteed accuracy",
+        "correct": false,
+        "why": "FMs can make mistakes. Accuracy is never guaranteed."
+      }
+    ],
+    "explanation": {
+      "answer": "Adaptability is a major advantage of generative AI: a single foundation model can be applied to many tasks and domains through prompts, often without task-specific training data, reducing time to value.",
+      "concept": "Other advantages: responsiveness and conversational ability, content generation at scale, and simplicity for non-experts. Disadvantages: hallucinations, nondeterminism, limited interpretability and cost at scale.",
+      "examTip": "One model, many tasks via prompts = adaptability.",
+      "references": [
+        {
+          "title": "What are foundation models?",
+          "url": "https://aws.amazon.com/what-is/foundation-models/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-055",
+    "domain": "genai",
+    "topic": "GenAI Advantages",
+    "tags": [
+      "conversational",
+      "responsiveness"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A utility company replaces a menu-driven phone tree (\"press 1 for billing\") with an assistant that understands free-form questions and responds naturally, including follow-up questions.",
+    "prompt": "Which generative AI advantage does this MOST directly demonstrate?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Lower storage requirements",
+        "correct": false,
+        "why": "Replacing a phone tree does not mainly affect storage."
+      },
+      {
+        "key": "B",
+        "text": "Conversational capability and responsiveness",
+        "correct": true,
+        "why": "Understanding free-form language and responding naturally in a dialogue is a core strength of generative AI."
+      },
+      {
+        "key": "C",
+        "text": "Elimination of all errors",
+        "correct": false,
+        "why": "Generative assistants can still make mistakes and need safeguards."
+      },
+      {
+        "key": "D",
+        "text": "Faster model training",
+        "correct": false,
+        "why": "The improvement is in user interaction, not training speed."
+      }
+    ],
+    "explanation": {
+      "answer": "Generative AI enables natural, conversational interfaces that handle open-ended questions, follow-ups and context, improving user experience compared with rigid menus or scripted bots.",
+      "concept": "Conversational systems still need guardrails, grounding in accurate information and handoff to humans when needed.",
+      "examTip": "Natural, free-form dialogue = conversational capability.",
+      "references": [
+        {
+          "title": "What is generative AI?",
+          "url": "https://aws.amazon.com/what-is/generative-ai/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-056",
+    "domain": "genai",
+    "topic": "GenAI Limitations",
+    "tags": [
+      "knowledge-cutoff",
+      "inaccuracy"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "An employee asks an LLM about a new company policy announced last week. The model gives an answer based on the old policy.",
+    "prompt": "What is the MOST likely cause, and what is the BEST remedy?",
+    "options": [
+      {
+        "key": "A",
+        "text": "The model is overfitting; add regularization.",
+        "correct": false,
+        "why": "This is not a training-fit issue. The model simply never saw the new policy."
+      },
+      {
+        "key": "B",
+        "text": "The model's context window is too large; reduce it.",
+        "correct": false,
+        "why": "Context window size does not cause outdated knowledge."
+      },
+      {
+        "key": "C",
+        "text": "The model has a training data cutoff and no access to the new document; supply current information through retrieval augmented generation (RAG).",
+        "correct": true,
+        "why": "Models only know their training data. RAG retrieves up-to-date documents at query time so answers reflect current information."
+      },
+      {
+        "key": "D",
+        "text": "The model's temperature is too low; increase it.",
+        "correct": false,
+        "why": "Temperature changes randomness, not what the model knows. Higher temperature would not provide the new policy."
+      }
+    ],
+    "explanation": {
+      "answer": "Foundation models know only what was in their training data up to a cutoff date and do not know private company information. RAG retrieves current, authoritative documents and provides them as context, so answers reflect the latest information without retraining.",
+      "concept": "Fine-tuning is a poor fit for frequently changing facts because the model must be retrained each time. RAG updates by re-indexing documents.",
+      "examTip": "Outdated or missing company knowledge → RAG, not fine-tuning.",
+      "references": [
+        {
+          "title": "What is RAG?",
+          "url": "https://aws.amazon.com/what-is/retrieval-augmented-generation/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-057",
+    "domain": "genai",
+    "topic": "Model Selection",
+    "tags": [
+      "model-selection",
+      "latency",
+      "cost"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A mobile app needs an LLM to suggest short reply options in chat. Responses must appear within a fraction of a second, there are millions of requests per day, and the task is simple.",
+    "prompt": "Which model choice is MOST appropriate?",
+    "options": [
+      {
+        "key": "A",
+        "text": "An image-generation model",
+        "correct": false,
+        "why": "Image generation does not produce text reply suggestions."
+      },
+      {
+        "key": "B",
+        "text": "The largest, most capable model available, regardless of cost",
+        "correct": false,
+        "why": "The largest models are slower and more expensive per token. A simple task with strict latency and huge volume does not need them."
+      },
+      {
+        "key": "C",
+        "text": "A model with the longest available context window",
+        "correct": false,
+        "why": "Short chat replies do not need a huge context window, and long-context models may cost more."
+      },
+      {
+        "key": "D",
+        "text": "A smaller, faster, lower-cost model that performs well enough on this simple task",
+        "correct": true,
+        "why": "Smaller models offer lower latency and cost per request, which matters at millions of requests per day for a simple task."
+      }
+    ],
+    "explanation": {
+      "answer": "Model selection balances capability, latency, cost, context length and modality against requirements. For simple, high-volume, latency-sensitive tasks, smaller models usually give the best value. Larger models are justified for complex reasoning.",
+      "concept": "Evaluate candidate models on your own task with tools such as Amazon Bedrock Model Evaluation, then pick the smallest model that meets the quality bar.",
+      "examTip": "Simple task + low latency + high volume = smaller, cheaper model.",
+      "references": [
+        {
+          "title": "Evaluate the performance of Amazon Bedrock resources",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/evaluation.html"
+        },
+        {
+          "title": "Amazon Bedrock pricing",
+          "url": "https://aws.amazon.com/bedrock/pricing/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-058",
+    "domain": "genai",
+    "topic": "Model Selection",
+    "tags": [
+      "model-selection",
+      "compliance",
+      "data-residency"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A European bank wants to use a foundation model to summarize customer correspondence. Its compliance team requires that the data be processed only in specific AWS Regions and that the model provider's license and terms permit commercial use.",
+    "prompt": "Which model-selection factors are these requirements about?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Compliance and constraints, including regional availability and licensing terms",
+        "correct": true,
+        "why": "Where a model can run and the legal terms of its use are compliance and constraint factors in model selection."
+      },
+      {
+        "key": "B",
+        "text": "Number of training epochs",
+        "correct": false,
+        "why": "Training epochs apply to model training, not to selecting a model that satisfies regulations."
+      },
+      {
+        "key": "C",
+        "text": "Embedding dimension and chunk size",
+        "correct": false,
+        "why": "These are retrieval design choices, not compliance factors."
+      },
+      {
+        "key": "D",
+        "text": "Temperature and top-p",
+        "correct": false,
+        "why": "These are inference settings that control randomness, not compliance or licensing requirements."
+      }
+    ],
+    "explanation": {
+      "answer": "Selecting a generative AI model involves more than quality: compliance and constraints such as data residency, regional availability, licensing and acceptable-use terms, security certifications and auditability can rule models in or out.",
+      "concept": "Other selection factors: model type and modality, performance, capabilities, latency, cost, context length, customization support and model complexity.",
+      "examTip": "Region, license, regulation = compliance/constraint factors in model selection.",
+      "references": [
+        {
+          "title": "What is Amazon Bedrock?",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/what-is-bedrock.html"
+        },
+        {
+          "title": "Data protection in Amazon Bedrock",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/data-protection.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-059",
+    "domain": "genai",
+    "topic": "Business Metrics",
+    "tags": [
+      "business-value",
+      "conversion-rate"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "An online retailer adds a generative AI shopping assistant. Leadership wants to know whether it increases sales.",
+    "prompt": "Which metric MOST directly measures this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "The model's parameter count",
+        "correct": false,
+        "why": "Model size says nothing about business outcomes."
+      },
+      {
+        "key": "B",
+        "text": "Conversion rate of sessions that use the assistant compared with similar sessions that do not",
+        "correct": true,
+        "why": "Conversion rate directly measures whether shoppers buy more often, and comparing against a control isolates the assistant's effect."
+      },
+      {
+        "key": "C",
+        "text": "Average number of tokens per response",
+        "correct": false,
+        "why": "Token counts relate to cost and verbosity, not to whether sales increase."
+      },
+      {
+        "key": "D",
+        "text": "BLEU score of the assistant's replies",
+        "correct": false,
+        "why": "BLEU measures text overlap with references and does not measure sales impact."
+      }
+    ],
+    "explanation": {
+      "answer": "Business value for generative AI is measured with business metrics such as conversion rate, average revenue per user, customer lifetime value, efficiency gains, ROI and customer satisfaction, ideally through controlled comparisons such as A/B tests.",
+      "concept": "Technical metrics (accuracy, ROUGE, latency) show quality and performance; business metrics show impact.",
+      "examTip": "\"Does it increase sales?\" → conversion rate or revenue metrics, measured against a control.",
+      "references": [
+        {
+          "title": "Generative AI Lens: AWS Well-Architected",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/generative-ai-lens.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-060",
+    "domain": "genai",
+    "topic": "Business Metrics",
+    "tags": [
+      "efficiency",
+      "roi"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A support organization deploys a generative AI tool that drafts responses for agents. Agents now handle 30% more tickets per hour with the same customer satisfaction scores.",
+    "prompt": "Which business value does this primarily demonstrate?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Lower embedding storage cost",
+        "correct": false,
+        "why": "Storage cost is not part of the reported result."
+      },
+      {
+        "key": "B",
+        "text": "Higher model accuracy on a benchmark",
+        "correct": false,
+        "why": "Benchmark accuracy is a technical metric. The outcome reported is operational productivity."
+      },
+      {
+        "key": "C",
+        "text": "Improved efficiency (productivity)",
+        "correct": true,
+        "why": "More tickets handled per hour with the same quality is a direct productivity and efficiency gain."
+      },
+      {
+        "key": "D",
+        "text": "Reduced model hallucinations",
+        "correct": false,
+        "why": "Hallucination rates were not measured. The result describes throughput."
+      }
+    ],
+    "explanation": {
+      "answer": "Efficiency metrics, such as tasks completed per hour, handling time and time saved, capture productivity gains. Combined with costs, they feed into return on investment calculations.",
+      "concept": "Track quality alongside efficiency (for example customer satisfaction) so speed gains do not hide worse outcomes.",
+      "examTip": "More work done in the same time with same quality = efficiency.",
+      "references": [
+        {
+          "title": "Generative AI Lens: AWS Well-Architected",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/generative-ai-lens.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-061",
+    "domain": "genai",
+    "topic": "GenAI Limitations",
+    "tags": [
+      "disadvantages"
+    ],
+    "difficulty": "medium",
+    "type": "multi",
+    "selectCount": 2,
+    "stem": "A risk committee is listing disadvantages of deploying a generative AI assistant for customers.",
+    "prompt": "Which items are recognized disadvantages of generative AI? (Select TWO.)",
+    "options": [
+      {
+        "key": "A",
+        "text": "It can only respond in a single fixed sentence.",
+        "correct": false,
+        "why": "Generative models produce varied, flexible responses."
+      },
+      {
+        "key": "B",
+        "text": "It may produce plausible but incorrect information (hallucinations).",
+        "correct": true,
+        "why": "Hallucinations are a widely recognized risk of generative models."
+      },
+      {
+        "key": "C",
+        "text": "The same input can yield different outputs (nondeterminism), complicating testing.",
+        "correct": true,
+        "why": "Sampling-based generation is nondeterministic, which makes testing and consistency harder."
+      },
+      {
+        "key": "D",
+        "text": "It cannot understand natural language.",
+        "correct": false,
+        "why": "Understanding and generating natural language is a core strength of LLMs."
+      },
+      {
+        "key": "E",
+        "text": "It requires labeling millions of examples before any use.",
+        "correct": false,
+        "why": "Pre-trained FMs can be used immediately through prompting without labeling data."
+      }
+    ],
+    "explanation": {
+      "answer": "Key disadvantages of generative AI include hallucinations, inaccuracy, nondeterminism, limited interpretability, potential bias and toxicity, intellectual property concerns, and cost at scale.",
+      "concept": "Each disadvantage has mitigations: RAG and grounding checks for hallucinations, lower temperature for consistency, guardrails for harmful content, and human review for high-stakes decisions.",
+      "examTip": "Know the big four: hallucination, inaccuracy, nondeterminism, low interpretability.",
+      "references": [
+        {
+          "title": "What are AI hallucinations?",
+          "url": "https://aws.amazon.com/what-is/ai-hallucinations/"
+        },
+        {
+          "title": "What is generative AI?",
+          "url": "https://aws.amazon.com/what-is/generative-ai/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-062",
+    "domain": "genai",
+    "topic": "Model Selection",
+    "tags": [
+      "modality",
+      "model-selection"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A team needs a model that can analyze scanned product photos and answer customers' written questions about them.",
+    "prompt": "Which model-selection factor is MOST decisive?",
+    "options": [
+      {
+        "key": "A",
+        "text": "The model's training cutoff date",
+        "correct": false,
+        "why": "Cutoff date matters for knowledge, but the decisive need is accepting images as input."
+      },
+      {
+        "key": "B",
+        "text": "The number of languages the model supports for code",
+        "correct": false,
+        "why": "Programming language support is irrelevant to analyzing product photos."
+      },
+      {
+        "key": "C",
+        "text": "Whether the model supports audio output",
+        "correct": false,
+        "why": "The task needs written answers, not audio."
+      },
+      {
+        "key": "D",
+        "text": "Modality: the model must accept images as well as text",
+        "correct": true,
+        "why": "A text-only model cannot analyze photos. Supporting image input is the first requirement."
+      }
+    ],
+    "explanation": {
+      "answer": "Modality, meaning which input and output types a model supports, is often the first filter in model selection. Image understanding requires a multimodal model that accepts images.",
+      "concept": "After modality, compare quality on your task, latency, cost, context length and compliance constraints.",
+      "examTip": "Images in the task → choose a multimodal model.",
+      "references": [
+        {
+          "title": "What is Amazon Nova?",
+          "url": "https://docs.aws.amazon.com/nova/latest/userguide/what-is-nova.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-063",
+    "domain": "genai",
+    "topic": "Business Metrics",
+    "tags": [
+      "customer-lifetime-value",
+      "arpu"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A subscription company introduces generative AI-personalized onboarding. Twelve months later it wants to assess the long-term financial impact on customers who received it.",
+    "prompt": "Which metric is MOST appropriate for long-term customer value?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Customer lifetime value (CLV)",
+        "correct": true,
+        "why": "CLV estimates the total revenue a customer generates over the relationship, capturing long-term effects of better onboarding such as reduced churn."
+      },
+      {
+        "key": "B",
+        "text": "ROUGE score of onboarding messages",
+        "correct": false,
+        "why": "ROUGE measures text overlap with references, not financial impact."
+      },
+      {
+        "key": "C",
+        "text": "Tokens generated per onboarding message",
+        "correct": false,
+        "why": "Token counts describe cost and verbosity, not long-term customer value."
+      },
+      {
+        "key": "D",
+        "text": "Model inference latency",
+        "correct": false,
+        "why": "Latency is a performance metric and does not reflect long-term revenue."
+      }
+    ],
+    "explanation": {
+      "answer": "Customer lifetime value measures long-term revenue per customer and reflects retention, upgrades and engagement. Average revenue per user (ARPU), conversion rate and retention are related business metrics for generative AI applications.",
+      "concept": "Choose metrics that match the time horizon of the impact: conversion for immediate effects, CLV and retention for long-term effects.",
+      "examTip": "Long-term financial impact per customer = customer lifetime value.",
+      "references": [
+        {
+          "title": "Generative AI Lens: AWS Well-Architected",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/generative-ai-lens.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-064",
+    "domain": "genai",
+    "topic": "GenAI Limitations",
+    "tags": [
+      "high-stakes",
+      "human-review"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A hospital considers letting an LLM write final medication dosage instructions that go directly to patients without review.",
+    "prompt": "What is the BEST recommendation?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Deploy it as planned because LLMs are always accurate in medical contexts.",
+        "correct": false,
+        "why": "LLMs can hallucinate and make errors, which is dangerous for dosage instructions."
+      },
+      {
+        "key": "B",
+        "text": "Use the LLM only to draft instructions, with qualified clinicians reviewing and approving every output before it reaches patients.",
+        "correct": true,
+        "why": "For high-stakes outputs, generative AI should assist experts, with human review to catch errors before harm occurs."
+      },
+      {
+        "key": "C",
+        "text": "Increase the temperature to get more creative dosage instructions.",
+        "correct": false,
+        "why": "Creativity is the opposite of what dosage instructions need. Higher temperature increases variability and risk."
+      },
+      {
+        "key": "D",
+        "text": "Remove all references to medications from the prompts.",
+        "correct": false,
+        "why": "This would make the instructions useless and does not address the accuracy risk."
+      }
+    ],
+    "explanation": {
+      "answer": "Generative AI's limitations (hallucinations, inaccuracy, limited interpretability) make it unsuitable for unsupervised high-stakes decisions. Keeping qualified humans in the loop, grounding with authoritative sources and applying guardrails reduces risk.",
+      "concept": "Match the level of automation to the risk: low-risk tasks can be automated; high-risk tasks need human oversight and accountability.",
+      "examTip": "High stakes (health, legal, finance) → AI drafts, human approves.",
+      "references": [
+        {
+          "title": "Responsible AI at AWS",
+          "url": "https://aws.amazon.com/ai/responsible-ai/"
+        },
+        {
+          "title": "Using Amazon Augmented AI for human review",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/a2i-use-augmented-ai-a2i-human-review-loops.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-065",
+    "domain": "genai",
+    "topic": "Model Selection",
+    "tags": [
+      "model-complexity",
+      "cost"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "An analytics team tested three models on its document classification task. The largest model scored 94%, a mid-size model 93% and a small model 92%. The small model costs one tenth as much per request and responds four times faster.",
+    "prompt": "Which model should the team MOST likely choose if 90% accuracy meets the business requirement?",
+    "options": [
+      {
+        "key": "A",
+        "text": "The mid-size model, because the middle option is always best",
+        "correct": false,
+        "why": "There is no rule that the middle option is best. The decision should follow requirements, cost and latency."
+      },
+      {
+        "key": "B",
+        "text": "None, because no model reached 100%",
+        "correct": false,
+        "why": "100% accuracy is rarely achievable. The requirement is 90%, which all three meet."
+      },
+      {
+        "key": "C",
+        "text": "The small model, because it meets the requirement at much lower cost and latency",
+        "correct": true,
+        "why": "Once the quality bar is met, lower cost and faster responses usually provide better overall value."
+      },
+      {
+        "key": "D",
+        "text": "The largest model, because higher accuracy is always worth the cost",
+        "correct": false,
+        "why": "The extra 2 points of accuracy do not change whether the requirement is met, but cost and latency are much higher."
+      }
+    ],
+    "explanation": {
+      "answer": "Choose the smallest or cheapest model that meets the quality requirement. Larger, more complex models cost more per token and add latency; marginal accuracy gains are worth paying for only when they matter to the business.",
+      "concept": "Model evaluation on your own data is essential. Amazon Bedrock Model Evaluation helps compare models on task-specific datasets.",
+      "examTip": "Meets requirements + cheaper + faster = right choice.",
+      "references": [
+        {
+          "title": "Evaluate the performance of Amazon Bedrock resources",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/evaluation.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-066",
+    "domain": "genai",
+    "topic": "GenAI Advantages",
+    "tags": [
+      "content-generation",
+      "scale"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "An e-commerce company must write unique descriptions for 200,000 products in its catalog. Its copywriters can write about 50 per day.",
+    "prompt": "Which advantage of generative AI is MOST relevant?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Perfect factual accuracy",
+        "correct": false,
+        "why": "Generated descriptions can contain errors, so they should be grounded in product data and spot-checked."
+      },
+      {
+        "key": "B",
+        "text": "No need for any product data",
+        "correct": false,
+        "why": "Good descriptions need accurate product attributes as input to avoid invented details."
+      },
+      {
+        "key": "C",
+        "text": "Deterministic outputs",
+        "correct": false,
+        "why": "Generative outputs are typically nondeterministic. The benefit here is scale."
+      },
+      {
+        "key": "D",
+        "text": "Ability to generate content at scale",
+        "correct": true,
+        "why": "Generative AI can draft large volumes of unique content quickly, with humans reviewing samples or edge cases."
+      }
+    ],
+    "explanation": {
+      "answer": "Generative AI can produce large volumes of content quickly, such as product descriptions, marketing variants and summaries, which would take people far longer. Feeding accurate product attributes into prompts keeps descriptions factual.",
+      "concept": "Batch inference can lower the cost of generating large volumes of content when results are not needed immediately.",
+      "examTip": "Huge content volume, limited writers = content generation at scale.",
+      "references": [
+        {
+          "title": "Process multiple prompts with batch inference",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/batch-inference.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-067",
+    "domain": "genai",
+    "topic": "Business Metrics",
+    "tags": [
+      "accuracy",
+      "cross-domain"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A company plans to use one foundation model for both its legal-document summaries and its customer-service chat. Before committing, it wants to know whether the model performs well in both areas.",
+    "prompt": "Which evaluation approach BEST addresses this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Measure cross-domain performance by evaluating the model on representative datasets from each use case",
+        "correct": true,
+        "why": "Testing on data from each domain shows whether one model performs adequately across both use cases."
+      },
+      {
+        "key": "B",
+        "text": "Measure only the model's response latency",
+        "correct": false,
+        "why": "Latency matters, but it does not show whether outputs are accurate or useful in each domain."
+      },
+      {
+        "key": "C",
+        "text": "Evaluate the model only on a general public benchmark",
+        "correct": false,
+        "why": "General benchmarks may not reflect performance on the company's specific legal and service tasks."
+      },
+      {
+        "key": "D",
+        "text": "Choose the model with the most parameters and skip evaluation",
+        "correct": false,
+        "why": "Model size does not guarantee good performance in either specific domain."
+      }
+    ],
+    "explanation": {
+      "answer": "Cross-domain performance describes how well a model performs across different tasks and subject areas. Evaluating on representative datasets from each intended use case reveals whether one model can serve all of them or whether different models are needed.",
+      "concept": "Amazon Bedrock Model Evaluation supports custom datasets, human evaluation and LLM-as-a-judge to compare models per use case.",
+      "examTip": "One model for several domains → test on data from each domain.",
+      "references": [
+        {
+          "title": "Evaluate the performance of Amazon Bedrock resources",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/evaluation.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-068",
+    "domain": "genai",
+    "topic": "GenAI Limitations",
+    "tags": [
+      "math",
+      "reasoning",
+      "tool-use"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A finance assistant built on an LLM sometimes makes arithmetic mistakes when computing multi-step loan amortization figures.",
+    "prompt": "Which approach MOST reliably improves the accuracy of these calculations?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Remove numbers from the prompt",
+        "correct": false,
+        "why": "The calculation needs the numbers. Removing them makes the task impossible."
+      },
+      {
+        "key": "B",
+        "text": "Have the model call a calculation tool or code interpreter to perform the math, then explain the results",
+        "correct": true,
+        "why": "Deterministic tools compute exact results, while the model handles understanding the request and explaining the output."
+      },
+      {
+        "key": "C",
+        "text": "Ask the model to answer faster",
+        "correct": false,
+        "why": "Speed instructions do not improve arithmetic accuracy."
+      },
+      {
+        "key": "D",
+        "text": "Increase the temperature so the model tries different answers",
+        "correct": false,
+        "why": "More randomness makes calculations less reliable."
+      }
+    ],
+    "explanation": {
+      "answer": "LLMs predict text and are not reliable calculators. Offloading exact computation to tools, such as a calculator function or a code interpreter, combines the model's language understanding with deterministic accuracy.",
+      "concept": "Amazon Bedrock AgentCore Code Interpreter lets agents run code securely for calculations and data analysis.",
+      "examTip": "Exact math or deterministic logic → have the model use a tool.",
+      "references": [
+        {
+          "title": "What is Amazon Bedrock AgentCore?",
+          "url": "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/what-is-bedrock-agentcore.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-069",
+    "domain": "genai",
+    "topic": "Model Selection",
+    "tags": [
+      "context-length",
+      "model-selection"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A team must have a model analyze entire 300-page technical specifications in a single request to find inconsistencies between sections.",
+    "prompt": "Which model capability is MOST important?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Image generation quality",
+        "correct": false,
+        "why": "The task is text analysis, not image generation."
+      },
+      {
+        "key": "B",
+        "text": "The smallest possible model size",
+        "correct": false,
+        "why": "Small models often have shorter context windows and weaker long-document reasoning."
+      },
+      {
+        "key": "C",
+        "text": "A large context window (maximum input length) that can hold the whole document",
+        "correct": true,
+        "why": "Comparing sections across a 300-page document in one request requires the model to accept a very long input."
+      },
+      {
+        "key": "D",
+        "text": "Support for speech synthesis",
+        "correct": false,
+        "why": "Audio output is unrelated to analyzing long documents."
+      }
+    ],
+    "explanation": {
+      "answer": "Input and output length limits (the context window) are a key model-selection criterion. Tasks that require reasoning across a whole long document need a model whose context window can hold it.",
+      "concept": "Longer inputs mean more tokens and higher cost and latency. Prompt caching can reduce cost when the same long document is queried repeatedly.",
+      "examTip": "Whole long document in one request → large context window.",
+      "references": [
+        {
+          "title": "What is a large language model?",
+          "url": "https://aws.amazon.com/what-is/large-language-model/"
+        },
+        {
+          "title": "Prompt caching for faster model inference",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-caching.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-070",
+    "domain": "genai",
+    "topic": "GenAI Limitations",
+    "tags": [
+      "bias",
+      "toxicity"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "During testing, a generative AI marketing tool occasionally produces stereotypes about certain groups and, rarely, offensive language.",
+    "prompt": "Why does this happen, and what is an appropriate mitigation?",
+    "options": [
+      {
+        "key": "A",
+        "text": "The context window is too short; double it.",
+        "correct": false,
+        "why": "Context length does not cause biased or toxic outputs."
+      },
+      {
+        "key": "B",
+        "text": "The model is overfitting to the prompt; remove the prompt.",
+        "correct": false,
+        "why": "Removing the prompt makes the tool useless and does not address learned bias."
+      },
+      {
+        "key": "C",
+        "text": "The tokenizer is broken; switch to a different alphabet.",
+        "correct": false,
+        "why": "Tokenization does not cause stereotypes. The issue comes from learned patterns in training data."
+      },
+      {
+        "key": "D",
+        "text": "The model learned patterns from broad internet data that contains biased and toxic content; apply guardrails, testing and human review.",
+        "correct": true,
+        "why": "Foundation models reflect their training data. Content filters, bias testing and review reduce harmful outputs."
+      }
+    ],
+    "explanation": {
+      "answer": "Foundation models are trained on large datasets that can contain biased, stereotypical or toxic content, which the model can reproduce. Mitigations include Amazon Bedrock Guardrails content filters and denied topics, bias evaluation across groups, careful prompts, and human review.",
+      "concept": "Responsible AI practices (Domain 4) address fairness, toxicity and safety across the lifecycle.",
+      "examTip": "Biased or toxic outputs → guardrails + evaluation + human review.",
+      "references": [
+        {
+          "title": "Detect and filter harmful content with Amazon Bedrock Guardrails",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-071",
+    "domain": "genai",
+    "topic": "Business Metrics",
+    "tags": [
+      "roi",
+      "costs"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A CFO asks for an ROI estimate for a generative AI document assistant.",
+    "prompt": "Which inputs are needed to calculate ROI?",
+    "options": [
+      {
+        "key": "A",
+        "text": "The measurable benefits (such as hours saved or revenue gained) and the total costs (such as development, inference, integration and maintenance)",
+        "correct": true,
+        "why": "ROI compares the value generated against all costs of building and operating the solution."
+      },
+      {
+        "key": "B",
+        "text": "The number of employees in the company",
+        "correct": false,
+        "why": "Headcount alone does not quantify benefits or costs of the assistant."
+      },
+      {
+        "key": "C",
+        "text": "Only the model's benchmark scores",
+        "correct": false,
+        "why": "Benchmarks measure quality, not financial return."
+      },
+      {
+        "key": "D",
+        "text": "Only the price per 1,000 tokens",
+        "correct": false,
+        "why": "Token price is one cost component. ROI also needs the benefits and the other costs."
+      }
+    ],
+    "explanation": {
+      "answer": "Return on investment = (benefits − costs) / costs. Benefits include time saved, productivity, revenue lift and error reduction; costs include development, integration, inference (tokens or provisioned capacity), data preparation, monitoring and change management.",
+      "concept": "Define baseline measurements before launch so benefits can be measured credibly afterward.",
+      "examTip": "ROI = benefits versus total cost of ownership.",
+      "references": [
+        {
+          "title": "Generative AI Lens: AWS Well-Architected",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/generative-ai-lens.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-072",
+    "domain": "genai",
+    "topic": "Model Selection",
+    "tags": [
+      "multilingual",
+      "model-selection"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A customer-support assistant must serve users in Japanese, Portuguese and Arabic with equal quality.",
+    "prompt": "Which model-selection criterion is MOST important?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Support for diffusion",
+        "correct": false,
+        "why": "Diffusion is an image-generation technique and does not affect language support."
+      },
+      {
+        "key": "B",
+        "text": "Multilingual capability verified on those languages",
+        "correct": true,
+        "why": "The model must perform well in each required language. Evaluating it on those languages confirms suitability."
+      },
+      {
+        "key": "C",
+        "text": "Image-generation resolution",
+        "correct": false,
+        "why": "Image generation is irrelevant to multilingual text support."
+      },
+      {
+        "key": "D",
+        "text": "The smallest parameter count",
+        "correct": false,
+        "why": "Size alone does not guarantee language coverage. Some small models perform poorly in less common languages."
+      }
+    ],
+    "explanation": {
+      "answer": "Multilingual support varies between models. Selection should confirm that the model performs well in each required language, ideally by evaluating it on representative examples.",
+      "concept": "Other selection criteria include cost, latency, modality, context length, customization options and compliance.",
+      "examTip": "Several languages → verify multilingual quality per language.",
+      "references": [
+        {
+          "title": "Evaluate the performance of Amazon Bedrock resources",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/evaluation.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-073",
+    "domain": "genai",
+    "topic": "GenAI Advantages",
+    "tags": [
+      "low-barrier",
+      "time-to-market"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A startup with two developers and no data scientists wants to add an intelligent summarization feature in a week.",
+    "prompt": "Why does generative AI make this feasible?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Generative AI guarantees perfect summaries.",
+        "correct": false,
+        "why": "Summaries can contain errors and should be tested and monitored."
+      },
+      {
+        "key": "B",
+        "text": "Generative AI requires a full data science team.",
+        "correct": false,
+        "why": "Managed generative AI services are designed so developers without ML expertise can build features."
+      },
+      {
+        "key": "C",
+        "text": "Pre-trained foundation models can be used through APIs and prompts, without collecting data or training a model.",
+        "correct": true,
+        "why": "Using an existing FM through a managed API removes the need for data collection, training and ML infrastructure."
+      },
+      {
+        "key": "D",
+        "text": "Generative AI always runs on the user's laptop for free.",
+        "correct": false,
+        "why": "Most FMs run in the cloud and are billed per use."
+      }
+    ],
+    "explanation": {
+      "answer": "Generative AI lowers the barrier to entry: developers can call pre-trained foundation models through APIs (such as Amazon Bedrock) and shape behavior with prompts, achieving fast time to market without ML expertise.",
+      "concept": "This accessibility is one of the advantages of AWS generative AI services listed in the exam guide, along with efficiency, cost-effectiveness and speed to market.",
+      "examTip": "No ML team + fast launch = pre-trained FM via managed API.",
+      "references": [
+        {
+          "title": "What is Amazon Bedrock?",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/what-is-bedrock.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-074",
+    "domain": "genai",
+    "topic": "GenAI Limitations",
+    "tags": [
+      "prompt-sensitivity"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A team finds that small changes in prompt wording, such as reordering two sentences, noticeably change the quality of an LLM's answers.",
+    "prompt": "What is the BEST way to manage this characteristic?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Ignore it, because wording never matters",
+        "correct": false,
+        "why": "The team has observed that wording matters. Ignoring it leads to unpredictable quality."
+      },
+      {
+        "key": "B",
+        "text": "Retrain the model every time a prompt changes",
+        "correct": false,
+        "why": "Retraining is unnecessary and expensive. Prompt sensitivity is handled through prompt engineering and evaluation."
+      },
+      {
+        "key": "C",
+        "text": "Use a random prompt for each request",
+        "correct": false,
+        "why": "Random prompts make quality even less predictable."
+      },
+      {
+        "key": "D",
+        "text": "Systematically test prompt variations against an evaluation dataset and manage the chosen prompts as versioned assets",
+        "correct": true,
+        "why": "Treating prompts like code, with testing and versioning, controls quality and makes changes safe."
+      }
+    ],
+    "explanation": {
+      "answer": "LLM outputs can be sensitive to prompt wording, order and examples. Teams manage this with experimentation, evaluation datasets, prompt templates and version control for prompts, for example with Amazon Bedrock Prompt Management.",
+      "concept": "Prompt management enables comparing versions, rolling back and reusing prompts consistently across applications.",
+      "examTip": "Prompt wording matters → test, version and manage prompts.",
+      "references": [
+        {
+          "title": "Construct and store reusable prompts with Prompt management",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-management.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-075",
+    "domain": "genai",
+    "topic": "Model Selection",
+    "tags": [
+      "customization",
+      "model-selection"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A company expects that it will later need to fine-tune its chosen foundation model on proprietary data to match a very specific writing style.",
+    "prompt": "Which factor should it check during model selection?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Whether the model supports the customization methods the company plans to use, such as fine-tuning, on its chosen platform",
+        "correct": true,
+        "why": "Not every model supports every customization method on every platform. Checking up front avoids having to switch models later."
+      },
+      {
+        "key": "B",
+        "text": "Whether the model has a short name",
+        "correct": false,
+        "why": "A model's name has no effect on its suitability."
+      },
+      {
+        "key": "C",
+        "text": "Whether the model can generate images",
+        "correct": false,
+        "why": "Image generation is irrelevant to adapting a writing style."
+      },
+      {
+        "key": "D",
+        "text": "Whether the model has the highest temperature setting",
+        "correct": false,
+        "why": "Temperature is a runtime setting available on most models and is not a selection criterion for customization."
+      }
+    ],
+    "explanation": {
+      "answer": "Customization support is a model-selection factor: some models support fine-tuning, continued pre-training or distillation on a given platform and others do not. Choosing a model that supports the planned adaptation path avoids rework.",
+      "concept": "Customized models can also change how you pay for inference, for example requiring dedicated capacity, so factor in cost.",
+      "examTip": "Plan to fine-tune later → pick a model that supports fine-tuning on your platform.",
+      "references": [
+        {
+          "title": "Customize your model (Amazon Bedrock)",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/custom-models.html"
+        }
+      ]
+    }
+  }
+]

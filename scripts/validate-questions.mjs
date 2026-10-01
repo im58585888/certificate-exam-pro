@@ -4,7 +4,13 @@ import { join } from "node:path";
 
 const dir = process.argv.slice(2).find((a) => !a.startsWith("--")) ?? new URL("../content/saa-c03", import.meta.url).pathname.replaceAll("%20", " ");
 const checkLinks = process.argv.includes("--links");
-const DOMAINS = { secure: 0.30, resilient: 0.26, performance: 0.24, cost: 0.20 };
+const EXAM_DOMAINS = {
+  "saa-c03": { secure: 0.30, resilient: 0.26, performance: 0.24, cost: 0.20 },
+  "aif-c01": { fundamentals: 0.20, genai: 0.24, applications: 0.28, responsible: 0.14, security: 0.14 },
+};
+const examSlug = dir.replace(/\/+$/, "").split("/").pop();
+const DOMAINS = EXAM_DOMAINS[examSlug];
+if (!DOMAINS) { console.error(`Unknown exam folder: ${examSlug}`); process.exit(1); }
 const errors = [];
 const all = [];
 

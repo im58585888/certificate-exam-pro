@@ -1,7 +1,7 @@
 import "server-only";
 import { query } from "./db";
 import { ownerClause, type Owner } from "./auth";
-import { areaOf, type AreaId } from "./areas";
+import { areaOf } from "./areas";
 import { getExam, type DomainId } from "./exams";
 import type { FlagRow } from "./flags";
 import { questionsFor, type Question } from "./questions";
@@ -127,7 +127,7 @@ export function masteryBy(attempts: AttemptRow[], bank: Question[], by: "topic" 
 
 /**
  * Readiness: exam-weighted domain mastery, with unattempted domains counted at 35% so skipping a
- * domain can't inflate the estimate. Mapped linearly onto the 100–1000 scaled range (720 = pass).
+ * domain can't inflate the estimate. Mapped linearly onto the 100–1000 scaled range (for example 720 = pass on SAA-C03).
  * This is a study signal, not a prediction of the official score.
  */
 export function readiness(attempts: AttemptRow[], examSlug: string) {
@@ -189,13 +189,13 @@ function blueprintPick(pool: Question[], n: number, examSlug: string, lastSeen: 
 /** Which part of the bank a session draws from. Empty lists mean "all". */
 export interface Scope {
   domains: DomainId[];
-  areas: AreaId[];
+  areas: string[];
 }
 
 export const FULL_SCOPE: Scope = { domains: [], areas: [] };
 
-export function inScope(q: Question, scope: Scope): boolean {
-  return (!scope.domains.length || scope.domains.includes(q.domain)) && (!scope.areas.length || scope.areas.includes(areaOf(q.topic)));
+export function inScope(q: Question, scope: Scope, exam: string): boolean {
+  return (!scope.domains.length || scope.domains.includes(q.domain)) && (!scope.areas.length || scope.areas.includes(areaOf(exam, q.topic)));
 }
 
 export interface SelectOptions {
@@ -212,7 +212,7 @@ export function selectQuestions({ exam, mode, count, scope = FULL_SCOPE, attempt
   const lastSeen = new Map<string, number>();
   for (const a of attempts) lastSeen.set(a.question_id, new Date(a.created_at).getTime());
   // The mock exam always uses the whole bank, like the real test.
-  const pool = mode === "exam" || mode === "trial" ? bank : bank.filter((q) => inScope(q, scope));
+  const pool = mode === "exam" || mode === "trial" ? bank : bank.filter((q) => inScope(q, scope, exam));
 
   if (mode === "trial" || mode === "exam" || mode === "practice") return blueprintPick(pool, count, exam, lastSeen);
 

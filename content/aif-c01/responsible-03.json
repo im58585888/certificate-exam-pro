@@ -1,0 +1,1023 @@
+[
+  {
+    "id": "aif-rai-051",
+    "domain": "responsible",
+    "topic": "Explainability",
+    "tags": [
+      "transparent-vs-opaque"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A team compares a small decision tree, whose decision rules can be read directly, with a very large neural network whose internal reasoning cannot easily be inspected.",
+    "prompt": "Which statement is correct?",
+    "options": [
+      {
+        "key": "A",
+        "text": "The decision tree is more transparent and interpretable; the large neural network is more of a black box",
+        "correct": true,
+        "why": "Simple models expose their decision logic; very large neural networks are hard to interpret directly."
+      },
+      {
+        "key": "B",
+        "text": "Neither model can make predictions",
+        "correct": false,
+        "why": "Both models make predictions; they differ in interpretability."
+      },
+      {
+        "key": "C",
+        "text": "The neural network is more transparent because it is larger",
+        "correct": false,
+        "why": "Larger, more complex models are generally harder to interpret."
+      },
+      {
+        "key": "D",
+        "text": "Both models are equally transparent",
+        "correct": false,
+        "why": "The tree's rules are readable, while the neural network's internal weights are not meaningful to people."
+      }
+    ],
+    "explanation": {
+      "answer": "Transparent (interpretable) models, such as linear models and small decision trees, allow people to understand how inputs lead to outputs. Complex models, such as deep neural networks and large foundation models, are less transparent and need post-hoc explainability techniques.",
+      "concept": "Interpretability describes how understandable a model is by design; explainability describes methods to explain a model's outputs, including black-box models.",
+      "examTip": "Simple model = transparent. Large neural net = black box needing explanation tools.",
+      "references": [
+        {
+          "title": "What is explainable AI?",
+          "url": "https://aws.amazon.com/what-is/explainable-ai/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-rai-052",
+    "domain": "responsible",
+    "topic": "Explainability",
+    "tags": [
+      "clarify",
+      "shap",
+      "feature-attribution"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A bank must explain to each rejected loan applicant which factors most influenced the model's decision, such as income or credit history.",
+    "prompt": "Which AWS capability provides per-prediction feature attributions?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Polly",
+        "correct": false,
+        "why": "Polly converts text to speech and cannot explain model decisions."
+      },
+      {
+        "key": "B",
+        "text": "Amazon SageMaker Clarify explainability, which uses SHAP-based feature attributions",
+        "correct": true,
+        "why": "Clarify computes how much each feature contributed to individual predictions, supporting explanations to applicants."
+      },
+      {
+        "key": "C",
+        "text": "Amazon CloudFront",
+        "correct": false,
+        "why": "CloudFront delivers content and has no explainability features."
+      },
+      {
+        "key": "D",
+        "text": "AWS Artifact",
+        "correct": false,
+        "why": "Artifact provides AWS compliance reports. It cannot explain which features drove a model's decision."
+      }
+    ],
+    "explanation": {
+      "answer": "SageMaker Clarify provides model explainability using Shapley values (SHAP), producing global feature importance and local, per-prediction attributions. These support explanations required by regulators and customers.",
+      "concept": "Explainability supports transparency, debugging, fairness reviews and regulatory compliance.",
+      "examTip": "Which features drove this prediction? = SageMaker Clarify (SHAP).",
+      "references": [
+        {
+          "title": "Model explainability with SageMaker Clarify",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-model-explainability.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-rai-053",
+    "domain": "responsible",
+    "topic": "Model Documentation",
+    "tags": [
+      "model-cards"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A governance team requires that every production model be documented with its intended use, training data details, evaluation results, risk rating and known limitations in a standard format.",
+    "prompt": "Which AWS capability is designed for this documentation?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Snowball",
+        "correct": false,
+        "why": "Snowball is a physical data transfer device."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Route 53",
+        "correct": false,
+        "why": "Route 53 is a DNS service and cannot store model documentation."
+      },
+      {
+        "key": "C",
+        "text": "Amazon SageMaker Model Cards",
+        "correct": true,
+        "why": "SageMaker Model Cards provide a standardized way to document model details, intended uses, risk ratings and evaluation results."
+      },
+      {
+        "key": "D",
+        "text": "Amazon Polly",
+        "correct": false,
+        "why": "Polly converts text to speech and has no model documentation features."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon SageMaker Model Cards are a single source of truth for documenting a model's purpose, intended uses, risk rating, training details, evaluation results and caveats. They support governance, audits and responsible use.",
+      "concept": "Model cards improve transparency and help downstream users understand when a model is or is not appropriate.",
+      "examTip": "Standardized model documentation = SageMaker Model Cards.",
+      "references": [
+        {
+          "title": "Amazon SageMaker Model Cards",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/model-cards.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-rai-054",
+    "domain": "responsible",
+    "topic": "Explainability",
+    "tags": [
+      "safety-transparency-tradeoff"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A team must choose between a highly accurate deep learning model that is hard to interpret and a slightly less accurate linear model whose decisions are easy to explain, for a regulated credit decision.",
+    "prompt": "Which statement BEST describes the trade-off?",
+    "options": [
+      {
+        "key": "A",
+        "text": "The linear model is always more accurate",
+        "correct": false,
+        "why": "The scenario states the linear model is slightly less accurate."
+      },
+      {
+        "key": "B",
+        "text": "Interpretability never matters if accuracy is higher",
+        "correct": false,
+        "why": "Regulations and fairness reviews often require explanations."
+      },
+      {
+        "key": "C",
+        "text": "Deep learning models cannot be used anywhere",
+        "correct": false,
+        "why": "Deep learning is widely used; the issue is fit for regulated decisions."
+      },
+      {
+        "key": "D",
+        "text": "There is often a trade-off between performance and interpretability; in regulated, high-impact decisions, the more interpretable model may be preferred if its accuracy is acceptable",
+        "correct": true,
+        "why": "Interpretability supports accountability and compliance, which can outweigh small accuracy gains in high-stakes decisions."
+      }
+    ],
+    "explanation": {
+      "answer": "Teams often trade off model performance against interpretability and transparency. For high-impact, regulated decisions, interpretable models or strong explainability tooling may be required even at some cost to accuracy.",
+      "concept": "The exam guide also mentions trade-offs between model safety and transparency, such as measuring interpretability against performance.",
+      "examTip": "Regulated decision + small accuracy gap → prefer the interpretable model.",
+      "references": [
+        {
+          "title": "What is explainable AI?",
+          "url": "https://aws.amazon.com/what-is/explainable-ai/"
+        },
+        {
+          "title": "Model explainability with SageMaker Clarify",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-model-explainability.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-rai-055",
+    "domain": "responsible",
+    "topic": "Explainability",
+    "tags": [
+      "open-source",
+      "transparency",
+      "licensing"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A research institute needs to inspect a model's architecture and weights, know what data it was trained on, and understand the terms under which it may be used and modified.",
+    "prompt": "Which kind of model BEST supports this transparency?",
+    "options": [
+      {
+        "key": "A",
+        "text": "An open-source (open-weight) model with published documentation of its training data and a clear license",
+        "correct": true,
+        "why": "Open weights, documented data and clear licensing enable inspection, reproducibility and understanding of permitted uses."
+      },
+      {
+        "key": "B",
+        "text": "Any model, because all models publish their training data",
+        "correct": false,
+        "why": "Many models do not disclose their training data in detail."
+      },
+      {
+        "key": "C",
+        "text": "A model chosen by lowest price only",
+        "correct": false,
+        "why": "Price says nothing about whether the weights, training data or license terms can be inspected."
+      },
+      {
+        "key": "D",
+        "text": "A proprietary model with no documentation",
+        "correct": false,
+        "why": "Without documentation or access, the institute cannot inspect the model or its data."
+      }
+    ],
+    "explanation": {
+      "answer": "Tools and signals that support transparency include open-source models, documentation of training data, licensing terms, model cards and evaluation results. Open-weight models allow direct inspection and modification within license terms.",
+      "concept": "Proprietary models may still be transparent through documentation such as AWS AI Service Cards and provider model cards, but they offer less direct inspection.",
+      "examTip": "Need to inspect weights and data = open-source model with documentation and license.",
+      "references": [
+        {
+          "title": "What is explainable AI?",
+          "url": "https://aws.amazon.com/what-is/explainable-ai/"
+        },
+        {
+          "title": "Responsible AI at AWS",
+          "url": "https://aws.amazon.com/ai/responsible-ai/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-rai-056",
+    "domain": "responsible",
+    "topic": "Human-Centered Design",
+    "tags": [
+      "user-feedback"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A team designs its AI assistant so that users can rate each answer, flag incorrect information, and explain what was wrong. The feedback is reviewed and used to improve the system.",
+    "prompt": "Which human-centered design principle does this implement?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Batch inference",
+        "correct": false,
+        "why": "Batch inference is a processing mode, not a design principle."
+      },
+      {
+        "key": "B",
+        "text": "User-feedback mechanisms",
+        "correct": true,
+        "why": "Letting users rate and report problems gives a channel for improving the AI and keeping humans involved."
+      },
+      {
+        "key": "C",
+        "text": "Model distillation",
+        "correct": false,
+        "why": "Distillation trains a smaller model from a larger one. It does not collect feedback from users."
+      },
+      {
+        "key": "D",
+        "text": "Data residency",
+        "correct": false,
+        "why": "Residency is about where data is stored."
+      }
+    ],
+    "explanation": {
+      "answer": "Human-centered design for explainable AI includes user-feedback mechanisms (ratings, flags, corrections), transparency about AI decisions, clear communication of limitations and easy escalation to humans.",
+      "concept": "Feedback data can also feed evaluation datasets and future fine-tuning or RLHF.",
+      "examTip": "Users rate/flag answers = user-feedback mechanism.",
+      "references": [
+        {
+          "title": "Responsible AI at AWS",
+          "url": "https://aws.amazon.com/ai/responsible-ai/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-rai-057",
+    "domain": "responsible",
+    "topic": "Human-Centered Design",
+    "tags": [
+      "decision-transparency"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "An insurance app uses AI to recommend claim decisions. Customers receive a message explaining that AI assisted the decision, the main factors considered, and how to request a human review.",
+    "prompt": "Which principle does this reflect?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Vector search",
+        "correct": false,
+        "why": "Vector search retrieves similar content and does not make AI decisions transparent to customers."
+      },
+      {
+        "key": "B",
+        "text": "Prompt caching",
+        "correct": false,
+        "why": "Prompt caching is a cost and latency optimization, not a way of explaining decisions to customers."
+      },
+      {
+        "key": "C",
+        "text": "AI decision transparency, a principle of human-centered design for explainable AI",
+        "correct": true,
+        "why": "Disclosing AI involvement, key factors and recourse options makes decisions understandable and contestable."
+      },
+      {
+        "key": "D",
+        "text": "Hyperparameter tuning",
+        "correct": false,
+        "why": "Hyperparameter tuning optimizes model training and does not explain decisions to customers."
+      }
+    ],
+    "explanation": {
+      "answer": "AI decision transparency means telling people when AI is involved, explaining the basis for decisions in understandable terms, and offering ways to contest or appeal. It builds trust and supports accountability.",
+      "concept": "Explanations should be tailored to the audience: customers need plain-language reasons, while auditors may need technical detail.",
+      "examTip": "Tell users AI was used, why, and how to appeal = decision transparency.",
+      "references": [
+        {
+          "title": "What is explainable AI?",
+          "url": "https://aws.amazon.com/what-is/explainable-ai/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-rai-058",
+    "domain": "responsible",
+    "topic": "Model Documentation",
+    "tags": [
+      "ai-service-cards",
+      "transparency"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A customer wants to understand the intended use cases, limitations and responsible AI design considerations of an AWS-managed AI service such as Amazon Rekognition face matching.",
+    "prompt": "Which AWS resource provides this information?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Cost and Usage Report",
+        "correct": false,
+        "why": "This report covers billing, not responsible AI information."
+      },
+      {
+        "key": "B",
+        "text": "Amazon VPC flow logs",
+        "correct": false,
+        "why": "VPC flow logs record network traffic metadata, not a service's intended uses or limitations."
+      },
+      {
+        "key": "C",
+        "text": "AWS Snowball",
+        "correct": false,
+        "why": "Snowball is a device for physical data transfer and contains no responsible AI documentation."
+      },
+      {
+        "key": "D",
+        "text": "AWS AI Service Cards",
+        "correct": true,
+        "why": "AI Service Cards document intended use cases, limitations, design choices and best practices for AWS AI services."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS AI Service Cards are transparency documents that describe AWS AI services' intended use cases, limitations, responsible AI design choices, and deployment and performance optimization best practices.",
+      "concept": "AI Service Cards (for AWS services) complement SageMaker Model Cards (for your own models).",
+      "examTip": "Responsible AI documentation for AWS AI services = AI Service Cards.",
+      "references": [
+        {
+          "title": "Responsible AI at AWS",
+          "url": "https://aws.amazon.com/ai/responsible-ai/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-rai-059",
+    "domain": "responsible",
+    "topic": "Explainability",
+    "tags": [
+      "citations",
+      "genai-explainability"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "Users of a generative research assistant ask, \"How do I know where this answer came from?\"",
+    "prompt": "Which design improves the transparency of the assistant's answers?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Ground answers with RAG and display citations to the source documents used",
+        "correct": true,
+        "why": "Citations let users verify claims and understand the basis for each answer."
+      },
+      {
+        "key": "B",
+        "text": "Hide the sources to keep answers concise",
+        "correct": false,
+        "why": "Hiding sources reduces users' ability to verify answers."
+      },
+      {
+        "key": "C",
+        "text": "Use a larger model with no retrieval",
+        "correct": false,
+        "why": "A larger model alone cannot show where an answer came from."
+      },
+      {
+        "key": "D",
+        "text": "Increase the temperature",
+        "correct": false,
+        "why": "More randomness reduces, rather than increases, transparency."
+      }
+    ],
+    "explanation": {
+      "answer": "For generative AI, transparency can be improved through source attribution: RAG with citations shows which documents support an answer, helping users verify it and building trust.",
+      "concept": "Source citation and documenting data origins also appear in Domain 5 (data lineage).",
+      "examTip": "Show where answers came from = RAG + citations.",
+      "references": [
+        {
+          "title": "Retrieve data and generate AI responses with Amazon Bedrock Knowledge Bases",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/knowledge-base.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-rai-060",
+    "domain": "responsible",
+    "topic": "Explainability",
+    "tags": [
+      "bedrock-evaluation",
+      "transparency"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company wants to publish transparent evidence of how its chosen foundation models perform on accuracy, robustness and toxicity for its use case.",
+    "prompt": "Which AWS capability helps produce this evidence?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Direct Connect",
+        "correct": false,
+        "why": "Direct Connect provides private network links."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Bedrock Model Evaluation",
+        "correct": true,
+        "why": "Bedrock Model Evaluation produces reports on metrics such as accuracy, robustness and toxicity, which can be documented and shared."
+      },
+      {
+        "key": "C",
+        "text": "Amazon S3 Glacier",
+        "correct": false,
+        "why": "Glacier is archival storage. It cannot evaluate model accuracy, robustness or toxicity."
+      },
+      {
+        "key": "D",
+        "text": "Amazon EC2 Auto Scaling",
+        "correct": false,
+        "why": "Auto Scaling adjusts capacity and does not evaluate models."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Bedrock Model Evaluation generates evaluation reports on built-in or custom datasets, covering quality and responsible AI metrics. These results support transparent model selection and can be recorded in model documentation.",
+      "concept": "The exam guide lists Bedrock Model Evaluations and SageMaker Model Cards as tools for transparency.",
+      "examTip": "Evidence of FM performance and safety = Bedrock Model Evaluation reports.",
+      "references": [
+        {
+          "title": "Evaluate the performance of Amazon Bedrock resources",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/evaluation.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-rai-061",
+    "domain": "responsible",
+    "topic": "Explainability",
+    "tags": [
+      "safety-vs-transparency"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A company debates publishing the full details of its content-moderation model, including the exact thresholds and rules. Security staff worry that bad actors could use the details to evade moderation.",
+    "prompt": "Which statement BEST reflects this trade-off?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Moderation models cannot be documented",
+        "correct": false,
+        "why": "Moderation models can and should be documented, with care about sensitive details."
+      },
+      {
+        "key": "B",
+        "text": "Transparency never has any downsides",
+        "correct": false,
+        "why": "Revealing exploitable details can help bad actors bypass safeguards."
+      },
+      {
+        "key": "C",
+        "text": "Greater transparency can sometimes reduce safety by helping adversaries; organizations balance disclosure, for example sharing principles and evaluation results without revealing exploitable details",
+        "correct": true,
+        "why": "Full disclosure of thresholds can enable evasion, so transparency is balanced against safety."
+      },
+      {
+        "key": "D",
+        "text": "Safety requires hiding the existence of moderation",
+        "correct": false,
+        "why": "Hiding that moderation exists undermines trust; principles and policies can be shared."
+      }
+    ],
+    "explanation": {
+      "answer": "Safety and transparency can conflict: disclosing detailed model internals or rules may help adversaries evade safeguards. Responsible organizations share meaningful information (policies, intended use, evaluation results, limitations) while protecting exploitable specifics.",
+      "concept": "Similarly, more interpretable models may be less accurate; teams measure interpretability and performance to find an acceptable balance.",
+      "examTip": "Transparency vs safety: disclose enough to build trust, not enough to enable abuse.",
+      "references": [
+        {
+          "title": "Responsible AI at AWS",
+          "url": "https://aws.amazon.com/ai/responsible-ai/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-rai-062",
+    "domain": "responsible",
+    "topic": "Explainability",
+    "tags": [
+      "global-vs-local"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A data scientist needs two kinds of explanation for a churn model: which features matter most across all customers, and why the model predicted churn for one specific customer.",
+    "prompt": "What are these two kinds of explanation called?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Zero-shot and few-shot explanations",
+        "correct": false,
+        "why": "These are prompting techniques, not explanation types."
+      },
+      {
+        "key": "B",
+        "text": "Batch and real-time explanations",
+        "correct": false,
+        "why": "These describe inference timing, not explanation scope."
+      },
+      {
+        "key": "C",
+        "text": "Precision and recall",
+        "correct": false,
+        "why": "These are evaluation metrics, not explanation types."
+      },
+      {
+        "key": "D",
+        "text": "Global explanations (overall feature importance) and local explanations (attributions for a single prediction)",
+        "correct": true,
+        "why": "Global explanations describe overall model behavior; local explanations describe one prediction."
+      }
+    ],
+    "explanation": {
+      "answer": "Global explainability summarizes how features influence a model's predictions overall. Local explainability shows how features contributed to an individual prediction. SageMaker Clarify provides both using SHAP values.",
+      "concept": "Local explanations support individual decisions and appeals; global explanations support model validation and governance.",
+      "examTip": "All predictions = global. One prediction = local.",
+      "references": [
+        {
+          "title": "Model explainability with SageMaker Clarify",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-model-explainability.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-rai-063",
+    "domain": "responsible",
+    "topic": "Human-Centered Design",
+    "tags": [
+      "human-in-the-loop",
+      "explainable-ai"
+    ],
+    "difficulty": "medium",
+    "type": "multi",
+    "selectCount": 2,
+    "stem": "A design team applies human-centered design principles to an AI loan-assistance tool.",
+    "prompt": "Which practices reflect these principles? (Select TWO.)",
+    "options": [
+      {
+        "key": "A",
+        "text": "Removing all options to contest decisions",
+        "correct": false,
+        "why": "Lack of recourse is contrary to human-centered design."
+      },
+      {
+        "key": "B",
+        "text": "Hiding that AI is involved",
+        "correct": false,
+        "why": "Concealment undermines trust and informed consent."
+      },
+      {
+        "key": "C",
+        "text": "Explaining AI-assisted outcomes in plain language with the main reasons",
+        "correct": true,
+        "why": "Understandable explanations help people make sense of AI decisions."
+      },
+      {
+        "key": "D",
+        "text": "Presenting outputs with no indication of uncertainty or limits",
+        "correct": false,
+        "why": "Users need to understand limitations to rely on outputs appropriately."
+      },
+      {
+        "key": "E",
+        "text": "Providing a simple way to give feedback or request human review",
+        "correct": true,
+        "why": "Feedback and recourse keep humans in control and improve the system."
+      }
+    ],
+    "explanation": {
+      "answer": "Human-centered design for explainable AI includes user-feedback mechanisms, transparency about AI decisions, understandable explanations, communication of uncertainty and limitations, and accessible paths to human review.",
+      "concept": "Design for appropriate trust: users should neither over-rely on nor dismiss AI outputs.",
+      "examTip": "Explain clearly, show limits, allow feedback and human review.",
+      "references": [
+        {
+          "title": "What is explainable AI?",
+          "url": "https://aws.amazon.com/what-is/explainable-ai/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-rai-064",
+    "domain": "responsible",
+    "topic": "Model Documentation",
+    "tags": [
+      "model-cards",
+      "governance"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "During an audit, the company must show who approved a model, its risk rating, evaluation results and the use cases it should not be used for.",
+    "prompt": "Where should this information be maintained?",
+    "options": [
+      {
+        "key": "A",
+        "text": "In a SageMaker Model Card for the model, kept current through the model's lifecycle",
+        "correct": true,
+        "why": "Model Cards record approvals, risk ratings, evaluation results and intended and out-of-scope uses in one place."
+      },
+      {
+        "key": "B",
+        "text": "In the model's prompt",
+        "correct": false,
+        "why": "A prompt is runtime input to the model, not a controlled governance record that auditors can rely on."
+      },
+      {
+        "key": "C",
+        "text": "Nowhere, because models document themselves",
+        "correct": false,
+        "why": "Models do not produce governance documentation on their own."
+      },
+      {
+        "key": "D",
+        "text": "In random spreadsheets on individual laptops",
+        "correct": false,
+        "why": "Scattered, uncontrolled records are unreliable for audits."
+      }
+    ],
+    "explanation": {
+      "answer": "SageMaker Model Cards capture model information across the lifecycle, including intended uses, risk rating, training details, evaluation results, approvals and caveats, and can be exported for audits. They integrate with the SageMaker Model Registry.",
+      "concept": "Documentation is a pillar of transparency and governance.",
+      "examTip": "Audit-ready model documentation = SageMaker Model Cards.",
+      "references": [
+        {
+          "title": "Amazon SageMaker Model Cards",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/model-cards.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-rai-065",
+    "domain": "responsible",
+    "topic": "Explainability",
+    "tags": [
+      "why-explainability-matters"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A product manager asks why the team should invest in explainability for its AI features.",
+    "prompt": "Which reason is MOST accurate?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Explainability reduces cloud costs to zero",
+        "correct": false,
+        "why": "Explainability tools have their own costs."
+      },
+      {
+        "key": "B",
+        "text": "Explainability builds user trust, helps detect bias and errors, and supports regulatory and audit requirements",
+        "correct": true,
+        "why": "Understanding why models behave as they do supports trust, debugging, fairness and compliance."
+      },
+      {
+        "key": "C",
+        "text": "Explainability is only needed for image models",
+        "correct": false,
+        "why": "Explainability matters for all kinds of models, especially in high-stakes decisions."
+      },
+      {
+        "key": "D",
+        "text": "Explainability always increases model accuracy",
+        "correct": false,
+        "why": "Explainability helps understanding; it does not automatically make models more accurate."
+      }
+    ],
+    "explanation": {
+      "answer": "Transparent and explainable models help stakeholders understand decisions, build appropriate trust, identify bias and errors, meet regulatory requirements and enable accountability.",
+      "concept": "The level of explainability required depends on the risk of the use case.",
+      "examTip": "Explainability = trust + debugging + fairness + compliance.",
+      "references": [
+        {
+          "title": "What is explainable AI?",
+          "url": "https://aws.amazon.com/what-is/explainable-ai/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-rai-066",
+    "domain": "responsible",
+    "topic": "Explainability",
+    "tags": [
+      "data-transparency"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A team cannot explain why its model behaves oddly for certain inputs because nobody recorded which datasets were used to train it or how they were processed.",
+    "prompt": "Which practice would have prevented this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Deleting old datasets immediately",
+        "correct": false,
+        "why": "Deleting data without records makes the problem worse."
+      },
+      {
+        "key": "B",
+        "text": "Increasing the temperature",
+        "correct": false,
+        "why": "Temperature does not record data history."
+      },
+      {
+        "key": "C",
+        "text": "Documenting training data sources, processing steps and versions (data lineage), for example in model cards",
+        "correct": true,
+        "why": "Knowing exactly what data and processing produced a model makes its behavior explainable and reproducible."
+      },
+      {
+        "key": "D",
+        "text": "Using a larger model",
+        "correct": false,
+        "why": "Model size does not provide documentation."
+      }
+    ],
+    "explanation": {
+      "answer": "Transparency includes documenting data: sources, collection methods, licensing, preprocessing, versions and known limitations. This data lineage makes model behavior explainable and supports audits and reproducibility.",
+      "concept": "AWS Glue Data Catalog, SageMaker lineage tracking and Model Cards help capture this information.",
+      "examTip": "Can't explain behavior because data history is unknown → document lineage.",
+      "references": [
+        {
+          "title": "Amazon SageMaker Model Cards",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/model-cards.html"
+        },
+        {
+          "title": "AWS Glue Data Catalog",
+          "url": "https://docs.aws.amazon.com/glue/latest/dg/catalog-and-crawler.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-rai-067",
+    "domain": "responsible",
+    "topic": "Human-Centered Design",
+    "tags": [
+      "uncertainty",
+      "appropriate-reliance"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "Doctors using an AI diagnostic aid tend to accept its suggestions without question, even when the model is uncertain.",
+    "prompt": "Which design change BEST supports appropriate reliance?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Display suggestions in larger fonts",
+        "correct": false,
+        "why": "Visual emphasis without context may increase over-reliance."
+      },
+      {
+        "key": "B",
+        "text": "Hide confidence scores to keep the interface simple",
+        "correct": false,
+        "why": "Hiding uncertainty encourages blind trust."
+      },
+      {
+        "key": "C",
+        "text": "Remove the doctors from the decision",
+        "correct": false,
+        "why": "Removing human oversight in high-stakes medical decisions increases risk."
+      },
+      {
+        "key": "D",
+        "text": "Show the model's confidence and the key evidence for each suggestion, and highlight low-confidence cases for closer review",
+        "correct": true,
+        "why": "Communicating uncertainty and reasoning helps experts decide when to trust or question the AI."
+      }
+    ],
+    "explanation": {
+      "answer": "Human-centered explainable AI communicates uncertainty, evidence and limitations so users can calibrate their trust. Highlighting low-confidence cases directs human attention where it matters most.",
+      "concept": "Over-reliance (automation bias) is a known risk; good design keeps humans engaged and accountable.",
+      "examTip": "Prevent blind trust → show confidence, evidence and limits.",
+      "references": [
+        {
+          "title": "What is explainable AI?",
+          "url": "https://aws.amazon.com/what-is/explainable-ai/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-rai-068",
+    "domain": "responsible",
+    "topic": "Explainability",
+    "tags": [
+      "interpretability-performance-measurement"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A team wants to decide objectively between a simpler, interpretable model and a more complex, accurate one for a moderate-risk use case.",
+    "prompt": "Which approach is MOST appropriate?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Measure both interpretability needs and performance against requirements: compare accuracy, check whether explanation tools give stakeholders sufficient insight for the complex model, and choose the option that meets both",
+        "correct": true,
+        "why": "An objective decision weighs measured performance against the level of explanation the use case requires."
+      },
+      {
+        "key": "B",
+        "text": "Pick randomly",
+        "correct": false,
+        "why": "Picking at random ignores both the performance and the transparency requirements of the use case."
+      },
+      {
+        "key": "C",
+        "text": "Always pick the simplest model",
+        "correct": false,
+        "why": "Simplicity alone may sacrifice needed performance when explanation tools are sufficient."
+      },
+      {
+        "key": "D",
+        "text": "Always pick the most accurate model",
+        "correct": false,
+        "why": "Accuracy alone ignores transparency and accountability needs."
+      }
+    ],
+    "explanation": {
+      "answer": "Balancing safety, transparency and performance means measuring them: evaluate accuracy and other metrics, assess whether post-hoc explanations (such as SHAP via SageMaker Clarify) give adequate insight, and select the model that meets both performance and transparency requirements for the risk level.",
+      "concept": "Higher-risk use cases justify stronger transparency requirements.",
+      "examTip": "Measure both interpretability and performance; let risk level decide.",
+      "references": [
+        {
+          "title": "Model explainability with SageMaker Clarify",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-model-explainability.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-rai-069",
+    "domain": "responsible",
+    "topic": "Model Documentation",
+    "tags": [
+      "transparency-tools"
+    ],
+    "difficulty": "medium",
+    "type": "multi",
+    "selectCount": 2,
+    "stem": "A governance lead lists tools that help identify transparent and explainable models.",
+    "prompt": "Which tools belong on the list? (Select TWO.)",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Snowball Edge",
+        "correct": false,
+        "why": "Snowball Edge is for data transfer and edge computing."
+      },
+      {
+        "key": "B",
+        "text": "Amazon SageMaker Model Cards",
+        "correct": true,
+        "why": "Model Cards document models' intended uses, limitations and evaluations."
+      },
+      {
+        "key": "C",
+        "text": "Amazon Bedrock Model Evaluation",
+        "correct": true,
+        "why": "Model Evaluation produces evidence about model behavior that supports transparency."
+      },
+      {
+        "key": "D",
+        "text": "Amazon EC2 Spot Instances",
+        "correct": false,
+        "why": "Spot Instances are a pricing option for compute."
+      },
+      {
+        "key": "E",
+        "text": "Amazon CloudFront",
+        "correct": false,
+        "why": "CloudFront delivers content and has no transparency features."
+      }
+    ],
+    "explanation": {
+      "answer": "Tools to identify transparent and explainable models include SageMaker Model Cards, Amazon Bedrock Model Evaluation, SageMaker Clarify explainability, open-source models with documented data, and clear licensing.",
+      "concept": "Transparency is about both documentation and measurable evidence of behavior.",
+      "examTip": "Model Cards + Bedrock evaluations + Clarify + open models/licensing.",
+      "references": [
+        {
+          "title": "Amazon SageMaker Model Cards",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/model-cards.html"
+        },
+        {
+          "title": "Evaluate the performance of Amazon Bedrock resources",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/evaluation.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-rai-070",
+    "domain": "responsible",
+    "topic": "Explainability",
+    "tags": [
+      "genai-limitations",
+      "transparency"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A team asks an LLM to explain its own reasoning for a decision. The explanation sounds plausible, but analysis shows it does not reflect what actually drove the output.",
+    "prompt": "Which statement is MOST accurate?",
+    "options": [
+      {
+        "key": "A",
+        "text": "LLMs cannot produce any text explanations",
+        "correct": false,
+        "why": "LLMs can produce explanations; the issue is reliability."
+      },
+      {
+        "key": "B",
+        "text": "Self-generated explanations from LLMs may not faithfully reflect the model's internal process, so they should not be treated as reliable explanations for high-stakes decisions",
+        "correct": true,
+        "why": "An LLM's explanation is itself generated text and can be a plausible rationalization rather than a faithful account."
+      },
+      {
+        "key": "C",
+        "text": "LLM self-explanations are always faithful",
+        "correct": false,
+        "why": "Research shows self-explanations can be unfaithful to the actual computation."
+      },
+      {
+        "key": "D",
+        "text": "Higher temperature makes explanations more faithful",
+        "correct": false,
+        "why": "Temperature affects randomness, not faithfulness."
+      }
+    ],
+    "explanation": {
+      "answer": "Large models have limited interpretability, and their self-explanations may be post-hoc rationalizations. For high-stakes decisions, rely on transparent models, grounded sources (citations), documented evaluations and human accountability rather than self-reported reasoning.",
+      "concept": "This is part of the trade-off between powerful but opaque models and transparent ones.",
+      "examTip": "LLM's explanation of itself ≠ guaranteed true explanation.",
+      "references": [
+        {
+          "title": "What is explainable AI?",
+          "url": "https://aws.amazon.com/what-is/explainable-ai/"
+        }
+      ]
+    }
+  }
+]

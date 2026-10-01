@@ -1,6 +1,6 @@
 # Certificate Exam Pro
 
-Practice-exam site for AWS certifications (SAA-C03 first): a 10-question free trial with no account, a $9.99 all-access pass for 30 days, detailed explanations for every option, adaptive review of mistakes, and analytics.
+Practice-exam site for AWS certifications (AIF-C01 AI Practitioner and SAA-C03 Solutions Architect – Associate, 500 questions each): a 10-question free trial per exam with no account, a $9.99 pass per exam for 30 days, detailed explanations for every option, adaptive review of mistakes, and analytics.
 
 ## Run locally
 
@@ -57,3 +57,13 @@ Edits are stored in the database (`question_overrides`) and reach learners withi
 9. **Legal:** have the Terms and Privacy pages (currently drafts) reviewed before launch.
 
 To try a production build locally without a database server: `ALLOW_EMBEDDED_DB=1 npm run build && ALLOW_EMBEDDED_DB=1 npm start`.
+
+## Adding another exam
+
+1. Write question files in `content/<exam-slug>/*.json` (same schema as the existing banks). `npm run dev`/`build` regenerates `content/<exam-slug>/index.ts`.
+2. Add the exam to `EXAMS` (and `EXAM_LIST` for display order) in `src/lib/exams.ts`, with domain ids that are unique across exams.
+3. Import the bank in `src/lib/questions.ts` (`BANK`).
+4. Add its domains to `EXAM_DOMAINS` in `scripts/validate-questions.mjs` and to the `validate:questions` npm script.
+5. Map its topics to study areas in `src/lib/areas.ts` (`AREA_SETS`).
+
+Passes are per exam (`entitlements.exam`); the landing page, pricing, practice chooser and dashboard pick up new exams automatically.

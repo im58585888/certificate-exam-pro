@@ -1,0 +1,1051 @@
+[
+  {
+    "id": "aif-gen-101",
+    "domain": "genai",
+    "topic": "Cost Tradeoffs",
+    "tags": [
+      "on-demand",
+      "provisioned-throughput"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A startup's generative AI app has unpredictable traffic: some days see a few hundred requests, others see bursts of thousands. The team wants to pay only for what it uses.",
+    "prompt": "Which Amazon Bedrock pricing option fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "On-demand pricing, billed per input and output token",
+        "correct": true,
+        "why": "On-demand charges only for tokens processed, with no commitment, which suits unpredictable or variable traffic."
+      },
+      {
+        "key": "B",
+        "text": "Provisioned Throughput with a six-month commitment",
+        "correct": false,
+        "why": "Provisioned Throughput reserves capacity billed by the hour regardless of use, which wastes money when traffic is low and unpredictable."
+      },
+      {
+        "key": "C",
+        "text": "Reserved Instances for Amazon RDS",
+        "correct": false,
+        "why": "RDS Reserved Instances discount database instances and have nothing to do with Bedrock model inference."
+      },
+      {
+        "key": "D",
+        "text": "Buying dedicated GPU servers on premises",
+        "correct": false,
+        "why": "On-premises hardware requires large upfront cost and capacity planning, the opposite of paying per use."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Bedrock on-demand pricing charges per input and output token (or per image for image models) with no commitments. It is the most flexible option for variable or early-stage workloads.",
+      "concept": "Provisioned Throughput buys dedicated model capacity (model units) by the hour, optionally with term commitments, giving guaranteed throughput for steady, high-volume workloads.",
+      "examTip": "Unpredictable traffic, pay per use = on-demand. Steady high volume needing guaranteed capacity = Provisioned Throughput.",
+      "references": [
+        {
+          "title": "Amazon Bedrock pricing",
+          "url": "https://aws.amazon.com/bedrock/pricing/"
+        },
+        {
+          "title": "Increase model invocation capacity with Provisioned Throughput",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/prov-throughput.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-102",
+    "domain": "genai",
+    "topic": "Cost Tradeoffs",
+    "tags": [
+      "provisioned-throughput",
+      "guaranteed-capacity"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A large retailer's product-search assistant handles a steady, very high volume of requests all day. It has experienced throttling during peaks and needs consistent, guaranteed throughput.",
+    "prompt": "Which Amazon Bedrock option addresses this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Lowering the temperature",
+        "correct": false,
+        "why": "Temperature affects output randomness, not capacity or throttling."
+      },
+      {
+        "key": "B",
+        "text": "Provisioned Throughput",
+        "correct": true,
+        "why": "Provisioned Throughput reserves dedicated capacity for a model, giving consistent throughput for steady, high-volume workloads."
+      },
+      {
+        "key": "C",
+        "text": "Using a larger embedding dimension",
+        "correct": false,
+        "why": "Embedding dimension affects retrieval, not model throughput."
+      },
+      {
+        "key": "D",
+        "text": "Batch inference",
+        "correct": false,
+        "why": "Batch inference processes requests asynchronously at lower cost. It does not suit an interactive assistant that needs immediate responses."
+      }
+    ],
+    "explanation": {
+      "answer": "Provisioned Throughput lets you purchase model units that deliver a dedicated level of throughput for a model, billed hourly, with optional 1-month or 6-month commitments for lower rates. It suits predictable, high-volume production workloads that need guaranteed capacity.",
+      "concept": "Cross-Region inference is another way to handle bursts with on-demand models by routing requests across Regions.",
+      "examTip": "Steady high volume + guaranteed throughput = Provisioned Throughput.",
+      "references": [
+        {
+          "title": "Increase model invocation capacity with Provisioned Throughput",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/prov-throughput.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-103",
+    "domain": "genai",
+    "topic": "Cost Tradeoffs",
+    "tags": [
+      "batch-inference",
+      "cost"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A media company needs to generate summaries for 2 million archived articles. Results are needed within a few days, not in real time, and cost is the top priority.",
+    "prompt": "Which Amazon Bedrock approach is MOST cost-effective?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Purchase Provisioned Throughput for a year",
+        "correct": false,
+        "why": "A long commitment for a one-time job is wasteful. Batch inference is designed for this pattern."
+      },
+      {
+        "key": "B",
+        "text": "Use the Bedrock console playground manually",
+        "correct": false,
+        "why": "Manually running millions of prompts is impractical."
+      },
+      {
+        "key": "C",
+        "text": "Batch inference, submitting the prompts as a job from Amazon S3",
+        "correct": true,
+        "why": "Bedrock batch inference processes large sets of prompts asynchronously at a lower price than on-demand for supported models."
+      },
+      {
+        "key": "D",
+        "text": "Send 2 million real-time on-demand requests as fast as possible",
+        "correct": false,
+        "why": "Real-time on-demand requests cost more per token than batch processing and risk throttling, with no benefit when results can wait."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Bedrock batch inference runs many prompts asynchronously: you place input records in Amazon S3, start a job, and receive outputs in S3. For supported models it is priced lower than on-demand inference, making it ideal for large, non-urgent workloads.",
+      "concept": "Trade-off: batch is cheaper but not immediate. Choose it when latency does not matter.",
+      "examTip": "Huge volume, not time-sensitive, cost matters = Bedrock batch inference.",
+      "references": [
+        {
+          "title": "Process multiple prompts with batch inference",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/batch-inference.html"
+        },
+        {
+          "title": "Amazon Bedrock pricing",
+          "url": "https://aws.amazon.com/bedrock/pricing/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-104",
+    "domain": "genai",
+    "topic": "Cost Tradeoffs",
+    "tags": [
+      "cross-region-inference",
+      "availability"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "An application using an on-demand model in one AWS Region sometimes hits throughput limits during traffic spikes. The team wants higher throughput and resilience without managing capacity.",
+    "prompt": "Which Amazon Bedrock feature helps?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Lowering max tokens to zero",
+        "correct": false,
+        "why": "Zero output tokens would make the application useless."
+      },
+      {
+        "key": "B",
+        "text": "Switching to an embedding model",
+        "correct": false,
+        "why": "Embedding models produce vectors, not the generated responses the application needs."
+      },
+      {
+        "key": "C",
+        "text": "Moving the application to Amazon S3 Glacier",
+        "correct": false,
+        "why": "Glacier is archival storage and cannot serve model inference."
+      },
+      {
+        "key": "D",
+        "text": "Cross-Region inference, which routes requests across multiple Regions using an inference profile",
+        "correct": true,
+        "why": "Cross-Region inference distributes on-demand traffic across Regions in a geography to increase throughput and resilience during bursts."
+      }
+    ],
+    "explanation": {
+      "answer": "Cross-Region inference uses inference profiles to route on-demand requests to Regions with available capacity within a defined geography. It improves throughput and availability during spikes without requiring Provisioned Throughput.",
+      "concept": "Consider data residency requirements: choose inference profiles whose Regions are acceptable for your compliance needs.",
+      "examTip": "On-demand throttling during bursts, no capacity management = cross-Region inference.",
+      "references": [
+        {
+          "title": "Increase throughput with cross-Region inference",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/cross-region-inference.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-105",
+    "domain": "genai",
+    "topic": "Cost Tradeoffs",
+    "tags": [
+      "model-size",
+      "cost-performance"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A team notices that its monthly Amazon Bedrock bill is dominated by a large premium model used for simple FAQ classification tasks.",
+    "prompt": "Which change is MOST likely to reduce cost without hurting results?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Evaluate a smaller, cheaper model for the simple tasks and use the premium model only where its capability is needed",
+        "correct": true,
+        "why": "Per-token prices vary widely by model. Simple tasks often perform well on smaller models at a fraction of the cost."
+      },
+      {
+        "key": "B",
+        "text": "Send each request twice and pick the better answer",
+        "correct": false,
+        "why": "Sending every request twice doubles the tokens billed and therefore roughly doubles the cost."
+      },
+      {
+        "key": "C",
+        "text": "Increase the response length",
+        "correct": false,
+        "why": "Longer responses mean more output tokens, and output tokens are billed, so cost goes up, not down."
+      },
+      {
+        "key": "D",
+        "text": "Add more instructions to every prompt",
+        "correct": false,
+        "why": "Longer prompts add input tokens and increase cost."
+      }
+    ],
+    "explanation": {
+      "answer": "Different models have different prices and capabilities. Matching each task to the least expensive model that meets quality requirements is one of the most effective cost optimizations. Some teams route requests between models based on complexity.",
+      "concept": "Amazon Bedrock Intelligent Prompt Routing can route requests between models in a family to balance quality and cost.",
+      "examTip": "Expensive model on simple tasks → right-size the model.",
+      "references": [
+        {
+          "title": "Amazon Bedrock pricing",
+          "url": "https://aws.amazon.com/bedrock/pricing/"
+        },
+        {
+          "title": "Evaluate the performance of Amazon Bedrock resources",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/evaluation.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-106",
+    "domain": "genai",
+    "topic": "Cost Tradeoffs",
+    "tags": [
+      "custom-models",
+      "hosting-cost"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A company is deciding whether to fine-tune a foundation model on Amazon Bedrock or improve results with prompt engineering and RAG.",
+    "prompt": "Which cost consideration about fine-tuned (custom) models is MOST accurate?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Fine-tuned models are always free to run after training.",
+        "correct": false,
+        "why": "Inference on custom models is not free. It is billed like other usage, often with additional storage or capacity costs."
+      },
+      {
+        "key": "B",
+        "text": "Custom models add training costs, and serving them can involve additional costs such as model storage and dedicated capacity, so they usually cost more than using a base model with prompts and RAG.",
+        "correct": true,
+        "why": "Fine-tuning incurs training charges, and custom models can require paid storage and dedicated or specific inference options, raising total cost."
+      },
+      {
+        "key": "C",
+        "text": "Fine-tuning reduces the cost of every other model in the account.",
+        "correct": false,
+        "why": "Customizing one model does not change prices for other models."
+      },
+      {
+        "key": "D",
+        "text": "Prompt engineering is more expensive than fine-tuning because it requires GPUs for training.",
+        "correct": false,
+        "why": "Prompt engineering involves no training at all, making it the cheapest customization approach."
+      }
+    ],
+    "explanation": {
+      "answer": "Fine-tuning adds training cost, and custom models bring ongoing costs such as model storage and, depending on the model, dedicated capacity like Provisioned Throughput for inference. Prompt engineering and RAG usually achieve the goal at lower cost and should be tried first.",
+      "concept": "Customization approaches from lowest to highest cost: prompt engineering, RAG, fine-tuning, continued pre-training, pre-training from scratch.",
+      "examTip": "Custom models = training cost + ongoing hosting/storage cost. Try prompts and RAG first.",
+      "references": [
+        {
+          "title": "Customize your model (Amazon Bedrock)",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/custom-models.html"
+        },
+        {
+          "title": "Amazon Bedrock pricing",
+          "url": "https://aws.amazon.com/bedrock/pricing/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-107",
+    "domain": "genai",
+    "topic": "Cost Tradeoffs",
+    "tags": [
+      "regional-coverage",
+      "availability"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company planning to launch in a new country discovers that the specific foundation model it wants is not available in the AWS Region closest to its users.",
+    "prompt": "Which trade-off must the company consider?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Data residency rules never apply to generative AI.",
+        "correct": false,
+        "why": "Data residency and privacy regulations apply to AI workloads that process personal data."
+      },
+      {
+        "key": "B",
+        "text": "Regions have no effect on latency.",
+        "correct": false,
+        "why": "Distance between users and the Region affects latency."
+      },
+      {
+        "key": "C",
+        "text": "Model availability varies by Region, so it may need to choose a different model, use another Region (considering latency and data residency) or use cross-Region inference.",
+        "correct": true,
+        "why": "Regional coverage affects which models are usable where, with trade-offs in latency, compliance and cost."
+      },
+      {
+        "key": "D",
+        "text": "All models are available in every Region at all times.",
+        "correct": false,
+        "why": "Model availability differs by Region and changes over time."
+      }
+    ],
+    "explanation": {
+      "answer": "Regional coverage is one of the cost and design trade-offs for AWS generative AI services. Model availability differs by Region, and choosing a Region affects latency, data residency compliance, pricing and redundancy options.",
+      "concept": "Cross-Region inference can expand capacity, but teams must confirm that routing across the included Regions satisfies their compliance requirements.",
+      "examTip": "Model not in your Region → weigh another model, another Region or cross-Region inference against latency and residency.",
+      "references": [
+        {
+          "title": "Increase throughput with cross-Region inference",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/cross-region-inference.html"
+        },
+        {
+          "title": "What is Amazon Bedrock?",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/what-is-bedrock.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-108",
+    "domain": "genai",
+    "topic": "Cost Tradeoffs",
+    "tags": [
+      "prompt-caching",
+      "latency"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A legal assistant sends the same 40-page contract as context with each of many follow-up questions in a session. Costs and latency are high because the contract tokens are processed every time.",
+    "prompt": "Which Amazon Bedrock feature directly reduces cost and latency for this pattern?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Increasing the temperature",
+        "correct": false,
+        "why": "Temperature affects randomness and does not reduce processing of repeated tokens."
+      },
+      {
+        "key": "B",
+        "text": "Adding more examples to the prompt",
+        "correct": false,
+        "why": "More examples add tokens and increase cost."
+      },
+      {
+        "key": "C",
+        "text": "Switching to a diffusion model",
+        "correct": false,
+        "why": "Diffusion models generate images and cannot answer contract questions."
+      },
+      {
+        "key": "D",
+        "text": "Prompt caching for the repeated prompt prefix",
+        "correct": true,
+        "why": "Prompt caching stores the processed repeated portion of a prompt, so subsequent requests reuse it at lower cost and with lower latency."
+      }
+    ],
+    "explanation": {
+      "answer": "Prompt caching lets supported models cache a repeated prompt prefix, such as a long document or system instructions, across requests. Cached tokens are billed at a reduced rate and processed faster, lowering both cost and latency for workloads that reuse context.",
+      "concept": "Prompt caching is listed in the exam guide as an FM selection and cost consideration. Structure prompts so stable content comes first and changing questions come last.",
+      "examTip": "Same long context reused across requests = prompt caching.",
+      "references": [
+        {
+          "title": "Prompt caching for faster model inference",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-caching.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-109",
+    "domain": "genai",
+    "topic": "Cost Tradeoffs",
+    "tags": [
+      "responsiveness",
+      "availability",
+      "redundancy"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A company's mission-critical customer assistant must stay responsive during traffic spikes and remain available during a Regional disruption. A cheaper design uses a single Region with on-demand capacity only.",
+    "prompt": "Which statement BEST describes the trade-off?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Higher responsiveness, availability and redundancy, such as reserved capacity or multi-Region designs, generally cost more than a single-Region on-demand setup.",
+        "correct": true,
+        "why": "Guaranteed capacity and redundancy add cost. The business must balance that cost against the impact of slowdowns or outages."
+      },
+      {
+        "key": "B",
+        "text": "Responsiveness depends only on the prompt wording.",
+        "correct": false,
+        "why": "Capacity, model choice, Region and token counts strongly affect responsiveness."
+      },
+      {
+        "key": "C",
+        "text": "Availability cannot be improved for generative AI applications.",
+        "correct": false,
+        "why": "Designs such as cross-Region inference, multi-Region deployments and reserved capacity improve availability."
+      },
+      {
+        "key": "D",
+        "text": "Redundancy always reduces total cost.",
+        "correct": false,
+        "why": "Running in more places or reserving capacity typically increases cost."
+      }
+    ],
+    "explanation": {
+      "answer": "Cost trade-offs for AWS generative AI services include responsiveness (latency and capacity), availability, redundancy, performance, regional coverage, token-based pricing, provisioned throughput and custom models. More resilience and guaranteed performance usually cost more.",
+      "concept": "Match the design to the business impact: mission-critical workloads justify reserved capacity and redundancy, while internal tools may accept the cheaper option.",
+      "examTip": "Better availability and guaranteed speed cost more. Decide by business criticality.",
+      "references": [
+        {
+          "title": "Increase model invocation capacity with Provisioned Throughput",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/prov-throughput.html"
+        },
+        {
+          "title": "Generative AI Lens: AWS Well-Architected",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/generative-ai-lens.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-110",
+    "domain": "genai",
+    "topic": "Token Pricing",
+    "tags": [
+      "input-output-tokens",
+      "pricing"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "An analyst estimates monthly costs for an on-demand text model. The application sends about 2,000 input tokens and receives about 500 output tokens per request.",
+    "prompt": "Which statement about the cost calculation is correct?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Cost depends only on the number of requests, not tokens.",
+        "correct": false,
+        "why": "Token-based pricing means longer requests and responses cost more."
+      },
+      {
+        "key": "B",
+        "text": "Input and output tokens are billed, usually at different per-token rates, so both volumes must be estimated.",
+        "correct": true,
+        "why": "Pricing is per input token and per output token, and output tokens often cost more per token, so both must be modeled."
+      },
+      {
+        "key": "C",
+        "text": "Only output tokens are billed.",
+        "correct": false,
+        "why": "On-demand text models bill for both input and output tokens."
+      },
+      {
+        "key": "D",
+        "text": "Tokens are billed only during model training.",
+        "correct": false,
+        "why": "Inference tokens are billed with on-demand pricing."
+      }
+    ],
+    "explanation": {
+      "answer": "On-demand pricing for text models is based on input tokens processed and output tokens generated, typically with separate rates. Estimating cost requires request volume × (input tokens × input rate + output tokens × output rate).",
+      "concept": "Reducing either side helps: shorter prompts and retrieved context reduce input tokens; concise answers and max-token limits reduce output tokens.",
+      "examTip": "Cost = requests × (input tokens × input price + output tokens × output price).",
+      "references": [
+        {
+          "title": "Amazon Bedrock pricing",
+          "url": "https://aws.amazon.com/bedrock/pricing/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-111",
+    "domain": "genai",
+    "topic": "Cost Tradeoffs",
+    "tags": [
+      "distillation",
+      "cost"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A company gets excellent results from a large, expensive model on a narrow, repetitive task, but the inference cost is too high at its volume. It wants a smaller model that performs nearly as well on this specific task.",
+    "prompt": "Which Amazon Bedrock capability is designed for this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Guardrails",
+        "correct": false,
+        "why": "Guardrails filter content and do not create a smaller model."
+      },
+      {
+        "key": "B",
+        "text": "Increasing the context window",
+        "correct": false,
+        "why": "A bigger context window does not make the model cheaper."
+      },
+      {
+        "key": "C",
+        "text": "Model distillation",
+        "correct": true,
+        "why": "Distillation uses a large teacher model's responses to train a smaller student model that approaches the teacher's quality on the target task at lower cost and latency."
+      },
+      {
+        "key": "D",
+        "text": "Model invocation logging",
+        "correct": false,
+        "why": "Logging records requests and responses. It does not reduce model cost by itself."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Bedrock Model Distillation transfers knowledge from a larger teacher model to a smaller student model for a specific use case. The distilled model can be faster and cheaper while retaining much of the teacher's accuracy on that task.",
+      "concept": "Distillation is one of the customization approaches in the exam guide, alongside pre-training, fine-tuning, in-context learning and RAG, each with different cost trade-offs.",
+      "examTip": "Large model quality, smaller model cost, specific task = distillation.",
+      "references": [
+        {
+          "title": "Customize a model with distillation in Amazon Bedrock",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/model-distillation.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-112",
+    "domain": "genai",
+    "topic": "Cost Tradeoffs",
+    "tags": [
+      "self-hosted-vs-managed",
+      "tco"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A company debates self-hosting an open-weight model on GPU instances versus using a managed on-demand API. Its traffic is low and irregular, and it has no ML infrastructure engineers.",
+    "prompt": "Which option is MOST likely to have the lower total cost of ownership?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Training a new model from scratch",
+        "correct": false,
+        "why": "Pre-training from scratch is extremely expensive and does not reduce operating cost."
+      },
+      {
+        "key": "B",
+        "text": "Buying on-premises GPU servers",
+        "correct": false,
+        "why": "Upfront hardware cost and maintenance far exceed the needs of a low-traffic workload."
+      },
+      {
+        "key": "C",
+        "text": "Self-hosting on GPU instances that run 24/7",
+        "correct": false,
+        "why": "Always-on GPUs bill continuously even when idle, and the company would need engineers to operate them."
+      },
+      {
+        "key": "D",
+        "text": "The managed on-demand API, paying per token",
+        "correct": true,
+        "why": "With low, irregular traffic and no infrastructure team, paying only for tokens used avoids idle GPU cost and operational overhead."
+      }
+    ],
+    "explanation": {
+      "answer": "Total cost of ownership includes infrastructure, idle capacity, operations staff and maintenance. Managed per-token APIs are usually cheapest for low or variable traffic. Self-hosting can win at sustained high utilization with in-house expertise.",
+      "concept": "Consider utilization: idle dedicated capacity is wasted money, while per-token pricing scales to zero.",
+      "examTip": "Low/irregular traffic + no infra team = managed per-token API.",
+      "references": [
+        {
+          "title": "Amazon Bedrock pricing",
+          "url": "https://aws.amazon.com/bedrock/pricing/"
+        },
+        {
+          "title": "Amazon SageMaker AI pricing",
+          "url": "https://aws.amazon.com/sagemaker/ai/pricing/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-113",
+    "domain": "genai",
+    "topic": "Cost Tradeoffs",
+    "tags": [
+      "cost-optimization"
+    ],
+    "difficulty": "medium",
+    "type": "multi",
+    "selectCount": 2,
+    "stem": "A team wants to reduce inference costs for its Amazon Bedrock application without degrading quality.",
+    "prompt": "Which actions reduce cost? (Select TWO.)",
+    "options": [
+      {
+        "key": "A",
+        "text": "Remove max-token limits so responses can be as long as possible",
+        "correct": false,
+        "why": "Longer responses mean more output tokens and higher cost."
+      },
+      {
+        "key": "B",
+        "text": "Send duplicate requests to compare answers",
+        "correct": false,
+        "why": "Duplicate requests multiply the number of tokens billed, so they increase cost rather than reduce it."
+      },
+      {
+        "key": "C",
+        "text": "Always use the largest available model for every request",
+        "correct": false,
+        "why": "Larger models typically cost more per token and are unnecessary for simple tasks."
+      },
+      {
+        "key": "D",
+        "text": "Use batch inference for nightly, non-urgent report generation",
+        "correct": true,
+        "why": "Batch inference is priced lower than on-demand for supported models when results can wait."
+      },
+      {
+        "key": "E",
+        "text": "Retrieve only the most relevant document chunks instead of entire documents",
+        "correct": true,
+        "why": "Sending fewer, more relevant tokens reduces input token cost and often improves answer focus."
+      }
+    ],
+    "explanation": {
+      "answer": "Common cost optimizations for generative AI include reducing input tokens (concise prompts, targeted retrieval, summarized history), limiting output length, choosing smaller models where adequate, using batch inference for non-urgent work, prompt caching for repeated context, and the right capacity model.",
+      "concept": "Measure quality with evaluation datasets after each optimization so savings do not come at the cost of accuracy.",
+      "examTip": "Fewer tokens, right-sized models, batch for non-urgent work, caching for repeated context.",
+      "references": [
+        {
+          "title": "Amazon Bedrock pricing",
+          "url": "https://aws.amazon.com/bedrock/pricing/"
+        },
+        {
+          "title": "Process multiple prompts with batch inference",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/batch-inference.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-114",
+    "domain": "genai",
+    "topic": "Cost Tradeoffs",
+    "tags": [
+      "image-pricing",
+      "modality"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A marketing team budgets for an image-generation model on Amazon Bedrock.",
+    "prompt": "How are image-generation models typically priced on-demand?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Per image generated, often varying by resolution and quality settings",
+        "correct": true,
+        "why": "Image models are commonly priced per generated image, with price depending on attributes such as size and quality."
+      },
+      {
+        "key": "B",
+        "text": "Per hour of the user's login time",
+        "correct": false,
+        "why": "Pricing is based on model usage, not login time."
+      },
+      {
+        "key": "C",
+        "text": "A single flat fee for unlimited images",
+        "correct": false,
+        "why": "On-demand pricing is usage-based, not unlimited."
+      },
+      {
+        "key": "D",
+        "text": "Per gigabyte of training data uploaded",
+        "correct": false,
+        "why": "On-demand image generation is not priced by training data volume."
+      }
+    ],
+    "explanation": {
+      "answer": "Pricing depends on modality: text models are usually priced per input and output token, while image-generation models are typically priced per image, varying with resolution and quality. Video generation is typically priced by output duration.",
+      "concept": "Check each model's pricing details because units differ by modality and provider.",
+      "examTip": "Text = per token. Images = per image (by size/quality).",
+      "references": [
+        {
+          "title": "Amazon Bedrock pricing",
+          "url": "https://aws.amazon.com/bedrock/pricing/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-115",
+    "domain": "genai",
+    "topic": "Cost Tradeoffs",
+    "tags": [
+      "performance",
+      "latency",
+      "model-choice"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A voice assistant must begin speaking a reply within about half a second. The current large model is accurate but takes several seconds to start responding.",
+    "prompt": "Which change MOST directly improves responsiveness?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Switch to batch inference",
+        "correct": false,
+        "why": "Batch inference is asynchronous and far too slow for a live voice conversation."
+      },
+      {
+        "key": "B",
+        "text": "Use a smaller, faster model (or a latency-optimized option) and stream the response as it is generated",
+        "correct": true,
+        "why": "Smaller or latency-optimized models produce tokens faster, and streaming lets the app start speaking as soon as the first tokens arrive."
+      },
+      {
+        "key": "C",
+        "text": "Add more few-shot examples to every prompt",
+        "correct": false,
+        "why": "More examples increase input tokens and processing time."
+      },
+      {
+        "key": "D",
+        "text": "Raise the max-tokens limit",
+        "correct": false,
+        "why": "Allowing longer outputs does not make the first tokens arrive sooner."
+      }
+    ],
+    "explanation": {
+      "answer": "Latency depends on model size, input length, output length and serving configuration. For interactive experiences, smaller or latency-optimized models, shorter prompts and streaming responses improve perceived responsiveness.",
+      "concept": "Performance trade-offs often pit accuracy against speed and cost. Evaluate whether a smaller model meets quality needs.",
+      "examTip": "Too slow to respond → smaller/faster model + streaming + shorter prompts.",
+      "references": [
+        {
+          "title": "Generative AI Lens: AWS Well-Architected",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/generative-ai-lens.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-116",
+    "domain": "genai",
+    "topic": "AWS GenAI Services",
+    "tags": [
+      "cost-effectiveness",
+      "pay-as-you-go"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A nonprofit wants to pilot a generative AI chatbot for three months with uncertain usage and a small budget.",
+    "prompt": "Which characteristic of AWS generative AI services MOST helps?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Mandatory multi-year contracts",
+        "correct": false,
+        "why": "AWS generative AI services do not require multi-year contracts for on-demand use."
+      },
+      {
+        "key": "B",
+        "text": "Required purchase of on-premises hardware",
+        "correct": false,
+        "why": "Managed services run in the cloud. No hardware purchase is needed."
+      },
+      {
+        "key": "C",
+        "text": "Pay-as-you-go pricing with no upfront commitment",
+        "correct": true,
+        "why": "Paying only for actual usage keeps pilot costs proportional to traffic and avoids long-term commitments."
+      },
+      {
+        "key": "D",
+        "text": "Fixed pricing regardless of usage",
+        "correct": false,
+        "why": "On-demand pricing scales with usage rather than being fixed."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS generative AI services such as Amazon Bedrock offer pay-as-you-go pricing, which makes experimentation and pilots cost-effective because spending tracks actual usage.",
+      "concept": "Set budgets and alerts with AWS Budgets and monitor token usage to avoid surprises during pilots.",
+      "examTip": "Uncertain usage + small budget = pay as you go.",
+      "references": [
+        {
+          "title": "Amazon Bedrock pricing",
+          "url": "https://aws.amazon.com/bedrock/pricing/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-117",
+    "domain": "genai",
+    "topic": "Cost Tradeoffs",
+    "tags": [
+      "rag-vs-long-context",
+      "tokens"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A team can either paste an entire 500-page manual into a long-context model on every question, or retrieve the five most relevant passages with RAG.",
+    "prompt": "Which statement about the cost trade-off is MOST accurate?",
+    "options": [
+      {
+        "key": "A",
+        "text": "RAG requires pre-training a new model.",
+        "correct": false,
+        "why": "RAG uses existing models with retrieved context. No pre-training is needed."
+      },
+      {
+        "key": "B",
+        "text": "Both approaches cost exactly the same.",
+        "correct": false,
+        "why": "Token volumes differ by orders of magnitude, so costs differ significantly."
+      },
+      {
+        "key": "C",
+        "text": "Pasting the full manual is always cheaper because there is no vector store.",
+        "correct": false,
+        "why": "Hundreds of thousands of tokens per question cost far more than a vector store at most volumes."
+      },
+      {
+        "key": "D",
+        "text": "RAG usually costs less per question because far fewer input tokens are sent, although it adds retrieval infrastructure costs.",
+        "correct": true,
+        "why": "Sending a few relevant passages instead of a whole manual dramatically cuts input tokens, which usually outweighs the cost of embeddings and a vector store."
+      }
+    ],
+    "explanation": {
+      "answer": "Because generative models charge per token, sending only relevant context through RAG is usually much cheaper and faster than sending entire documents on every request. RAG does add costs for embeddings, vector storage and retrieval, which are generally small by comparison at scale.",
+      "concept": "Long-context approaches can still be useful for tasks that truly need the whole document at once, and prompt caching can reduce their cost for repeated use.",
+      "examTip": "Whole document every time = many tokens. RAG = few relevant tokens.",
+      "references": [
+        {
+          "title": "What is RAG?",
+          "url": "https://aws.amazon.com/what-is/retrieval-augmented-generation/"
+        },
+        {
+          "title": "Amazon Bedrock pricing",
+          "url": "https://aws.amazon.com/bedrock/pricing/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-118",
+    "domain": "genai",
+    "topic": "Cost Tradeoffs",
+    "tags": [
+      "provisioned-throughput",
+      "commitment"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company is confident its high-volume workload will run steadily for at least the next six months and wants the lowest hourly rate for dedicated Bedrock model capacity.",
+    "prompt": "Which option provides this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Provisioned Throughput with a longer-term (for example six-month) commitment",
+        "correct": true,
+        "why": "Committing to a longer term for Provisioned Throughput lowers the hourly price compared with no commitment."
+      },
+      {
+        "key": "B",
+        "text": "On-demand pricing only",
+        "correct": false,
+        "why": "On-demand does not provide dedicated capacity or commitment discounts."
+      },
+      {
+        "key": "C",
+        "text": "Amazon EC2 Spot Instances for Bedrock",
+        "correct": false,
+        "why": "Spot Instances apply to EC2, not to Bedrock model capacity."
+      },
+      {
+        "key": "D",
+        "text": "Batch inference for interactive traffic",
+        "correct": false,
+        "why": "Batch inference is asynchronous and unsuitable for interactive traffic."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Bedrock Provisioned Throughput is purchased in model units billed hourly. Choosing a commitment term (such as 1 month or 6 months) lowers the effective rate compared with no-commitment provisioned capacity, rewarding predictable long-term usage.",
+      "concept": "Commitments trade flexibility for lower prices. Use them only when demand is predictable.",
+      "examTip": "Predictable long-term volume → commit to get a lower rate.",
+      "references": [
+        {
+          "title": "Increase model invocation capacity with Provisioned Throughput",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/prov-throughput.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-119",
+    "domain": "genai",
+    "topic": "AWS Infrastructure Benefits",
+    "tags": [
+      "shared-responsibility",
+      "genai"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A team deploys a chatbot on Amazon Bedrock and assumes AWS is responsible for everything about it, including what users are allowed to ask and who can access the application.",
+    "prompt": "Under the AWS shared responsibility model, which is the customer's responsibility?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Securing the physical data centers that run Bedrock",
+        "correct": false,
+        "why": "Physical security of data centers is AWS's responsibility."
+      },
+      {
+        "key": "B",
+        "text": "Configuring IAM access, protecting their data, setting guardrails and deciding how the application uses model outputs",
+        "correct": true,
+        "why": "Customers are responsible for security in the cloud: identities and permissions, data protection, application behavior and responsible use."
+      },
+      {
+        "key": "C",
+        "text": "Patching the Bedrock service software",
+        "correct": false,
+        "why": "AWS operates and patches the managed Bedrock service."
+      },
+      {
+        "key": "D",
+        "text": "Maintaining the hardware that hosts the foundation models",
+        "correct": false,
+        "why": "AWS manages the underlying infrastructure and hardware for Bedrock."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS is responsible for security of the cloud (infrastructure, hardware, managed service operation). Customers are responsible for security in the cloud: IAM permissions, data classification and encryption choices, network configuration, guardrails, prompt and output handling, and compliance of their application.",
+      "concept": "With managed services, the customer's share shrinks but never disappears. Responsible AI decisions remain with the customer.",
+      "examTip": "AWS = of the cloud. Customer = in the cloud (data, access, configuration, use).",
+      "references": [
+        {
+          "title": "AWS shared responsibility model",
+          "url": "https://aws.amazon.com/compliance/shared-responsibility-model/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-120",
+    "domain": "genai",
+    "topic": "Cost Tradeoffs",
+    "tags": [
+      "agents",
+      "cost",
+      "tokens"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A team's agent costs far more per task than a simple chatbot. Traces show the agent makes many model calls per task, each carrying long tool descriptions and growing history.",
+    "prompt": "Which statement BEST explains the cost and a mitigation?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Agents are billed by the number of users, so cost cannot be reduced.",
+        "correct": false,
+        "why": "Model usage is billed by tokens, which design changes can reduce."
+      },
+      {
+        "key": "B",
+        "text": "Increasing temperature will reduce the number of calls.",
+        "correct": false,
+        "why": "Temperature does not reduce the number of agent steps."
+      },
+      {
+        "key": "C",
+        "text": "Agents make multiple model calls per task, each with context; limiting steps, trimming tool definitions and history, and using smaller models for simple steps reduce cost.",
+        "correct": true,
+        "why": "Agent loops multiply token usage. Reducing calls and context per call, and right-sizing models per step, controls cost."
+      },
+      {
+        "key": "D",
+        "text": "Agents cost more only because they use images.",
+        "correct": false,
+        "why": "The traces show cost comes from repeated text model calls with large context, not images."
+      }
+    ],
+    "explanation": {
+      "answer": "Agentic applications typically invoke the model several times per task (planning, tool selection, reflection, final answer), and each call includes instructions, tool definitions and history. Costs scale with steps × tokens. Mitigations include step limits, concise tool descriptions, context summarization, prompt caching and routing simple steps to smaller models.",
+      "concept": "Track cost per task (cost per interaction) as a business metric alongside task completion rate.",
+      "examTip": "Agent cost ≈ number of steps × tokens per step. Reduce both.",
+      "references": [
+        {
+          "title": "Amazon Bedrock pricing",
+          "url": "https://aws.amazon.com/bedrock/pricing/"
+        },
+        {
+          "title": "Prompt caching for faster model inference",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-caching.html"
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,1318 @@
+[
+  {
+    "id": "aif-gen-026",
+    "domain": "genai",
+    "topic": "Model Context Protocol",
+    "tags": [
+      "mcp",
+      "tools",
+      "agents"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company builds AI agents with different frameworks. Each agent needs access to the same internal systems, such as the CRM, a ticketing tool and a document store. Today every team writes its own custom integration for every agent.",
+    "prompt": "Which standard is designed to let agents connect to external tools and data sources through a common interface?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Simple Mail Transfer Protocol (SMTP)",
+        "correct": false,
+        "why": "SMTP sends email between servers and has nothing to do with connecting agents to tools."
+      },
+      {
+        "key": "B",
+        "text": "Model Context Protocol (MCP)",
+        "correct": true,
+        "why": "MCP is an open protocol that standardizes how AI applications discover and call tools and access data through MCP servers, so one integration can serve many agents."
+      },
+      {
+        "key": "C",
+        "text": "BLEU",
+        "correct": false,
+        "why": "BLEU is a metric for evaluating machine translation quality, not an integration standard."
+      },
+      {
+        "key": "D",
+        "text": "Structured Query Language (SQL)",
+        "correct": false,
+        "why": "SQL queries relational databases. It does not standardize how AI agents discover and call arbitrary tools."
+      }
+    ],
+    "explanation": {
+      "answer": "The Model Context Protocol (MCP) is an open standard for connecting AI applications and agents to external systems. MCP servers expose tools, resources and prompts; MCP clients inside agents discover and use them. Building an MCP server once lets any MCP-compatible agent use that system.",
+      "concept": "On AWS, Amazon Bedrock AgentCore Gateway can turn existing APIs and AWS Lambda functions into MCP-compatible tools, and frameworks such as Strands Agents can consume MCP servers.",
+      "examTip": "Standard way for agents to connect to tools and data = MCP.",
+      "references": [
+        {
+          "title": "Model Context Protocol introduction",
+          "url": "https://modelcontextprotocol.io/introduction"
+        },
+        {
+          "title": "Amazon Bedrock AgentCore Gateway",
+          "url": "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/gateway.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-027",
+    "domain": "genai",
+    "topic": "Model Context Protocol",
+    "tags": [
+      "mcp",
+      "client-server"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A developer is learning the Model Context Protocol and wants to understand its basic architecture.",
+    "prompt": "Which description of MCP is MOST accurate?",
+    "options": [
+      {
+        "key": "A",
+        "text": "MCP is a training technique that fine-tunes models on tool documentation.",
+        "correct": false,
+        "why": "MCP does not train or change models. It is a protocol used at runtime to connect applications to tools and data."
+      },
+      {
+        "key": "B",
+        "text": "MCP is a vector database for storing embeddings.",
+        "correct": false,
+        "why": "MCP is not a storage system. It defines how applications communicate with external capability providers."
+      },
+      {
+        "key": "C",
+        "text": "MCP is a client-server protocol in which an AI application's MCP client connects to MCP servers that expose capabilities such as tools, resources and prompts.",
+        "correct": true,
+        "why": "This is MCP's architecture: hosts and clients on the AI side, servers on the system side, with a standard way to list and call capabilities."
+      },
+      {
+        "key": "D",
+        "text": "MCP is an evaluation metric for summarization.",
+        "correct": false,
+        "why": "Summarization metrics include ROUGE. MCP is an integration protocol."
+      }
+    ],
+    "explanation": {
+      "answer": "MCP uses a client-server model. The AI application (host) runs MCP clients that connect to MCP servers. Servers advertise capabilities, chiefly tools (actions the model can invoke), resources (data it can read) and prompts (reusable templates), and the model decides when to use them.",
+      "concept": "Standardizing integrations reduces duplicate work and makes tools portable across agent frameworks. Security still matters: servers should enforce authentication, authorization and least privilege.",
+      "examTip": "MCP = clients in the AI app, servers exposing tools, resources and prompts.",
+      "references": [
+        {
+          "title": "Model Context Protocol introduction",
+          "url": "https://modelcontextprotocol.io/introduction"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-028",
+    "domain": "genai",
+    "topic": "Agentic AI Concepts",
+    "tags": [
+      "tool-use",
+      "function-calling"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A user asks an AI assistant, \"What is the current status of my order 48213?\" The underlying model was trained months ago and has no access to live order data.",
+    "prompt": "Which agentic capability allows the assistant to answer correctly?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Reducing the context window",
+        "correct": false,
+        "why": "A smaller context window does not give the model access to external data."
+      },
+      {
+        "key": "B",
+        "text": "Fine-tuning the model on last year's orders",
+        "correct": false,
+        "why": "Fine-tuning on historical data cannot provide the live status of a specific current order."
+      },
+      {
+        "key": "C",
+        "text": "Increasing the model's temperature",
+        "correct": false,
+        "why": "Temperature changes randomness. It cannot give the model access to live order data."
+      },
+      {
+        "key": "D",
+        "text": "Tool use: the model calls an order-status API and uses the result in its answer",
+        "correct": true,
+        "why": "Tool use (function calling) lets the model request an external action, such as an API call, and incorporate the live result into its response."
+      }
+    ],
+    "explanation": {
+      "answer": "Tool use (also called function calling) lets a model decide to call external functions or APIs with structured parameters. The application executes the call and returns the result, which the model uses to answer. This gives models access to live data and the ability to take actions.",
+      "concept": "Tools are described to the model with names, descriptions and input schemas. Good tool descriptions and least-privilege permissions are essential for reliable, safe agents.",
+      "examTip": "Model needs live data or must act on a system = tool use / function calling.",
+      "references": [
+        {
+          "title": "What are AI agents?",
+          "url": "https://aws.amazon.com/what-is/ai-agents/"
+        },
+        {
+          "title": "Automate tasks with Amazon Bedrock Agents",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/agents.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-029",
+    "domain": "genai",
+    "topic": "Multi-Agent Systems",
+    "tags": [
+      "multi-agent",
+      "supervisor"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "An insurance company designs an AI system for claims. One agent receives each claim, breaks the work into parts, and delegates to specialized agents for policy lookup, damage assessment and fraud screening. It then combines their results into a final recommendation.",
+    "prompt": "Which multi-agent pattern does this describe?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Supervisor (orchestrator) with specialist sub-agents",
+        "correct": true,
+        "why": "A supervisor agent decomposes the task, routes subtasks to specialist agents and aggregates their outputs, exactly as described."
+      },
+      {
+        "key": "B",
+        "text": "Batch inference",
+        "correct": false,
+        "why": "Batch inference processes many inputs offline. It does not describe agents delegating to each other."
+      },
+      {
+        "key": "C",
+        "text": "A single-agent pattern with no delegation",
+        "correct": false,
+        "why": "The scenario explicitly delegates work to several specialized agents, so it is not a single agent."
+      },
+      {
+        "key": "D",
+        "text": "Unsupervised clustering",
+        "correct": false,
+        "why": "Clustering is an ML technique for grouping data, not an agent collaboration pattern."
+      }
+    ],
+    "explanation": {
+      "answer": "In the supervisor (orchestrator-worker) pattern, a coordinating agent plans the work, delegates subtasks to specialized agents and synthesizes their results. Specialization keeps each agent's instructions and tools focused, which improves reliability.",
+      "concept": "Amazon Bedrock Agents supports multi-agent collaboration with a supervisor agent, and frameworks such as Strands Agents support patterns including agents-as-tools, swarms, graphs and workflows.",
+      "examTip": "One agent coordinates and delegates to specialists = supervisor pattern.",
+      "references": [
+        {
+          "title": "Multi-agent collaboration in Amazon Bedrock Agents",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/agents-multi-agent-collaboration.html"
+        },
+        {
+          "title": "Agentic AI patterns (AWS Prescriptive Guidance)",
+          "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/agentic-ai-patterns/introduction.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-030",
+    "domain": "genai",
+    "topic": "Multi-Agent Systems",
+    "tags": [
+      "multi-agent",
+      "sequential",
+      "pipeline"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A content team builds a system in which a research agent gathers facts, then passes its notes to a writing agent, which passes a draft to an editing agent, which produces the final article. Each agent always runs in the same order.",
+    "prompt": "Which multi-agent pattern is this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Reinforcement learning from human feedback",
+        "correct": false,
+        "why": "RLHF is a model training method, not a pattern for coordinating agents at runtime."
+      },
+      {
+        "key": "B",
+        "text": "Sequential (pipeline) pattern",
+        "correct": true,
+        "why": "Each agent processes the previous agent's output in a fixed order, which is a sequential pipeline."
+      },
+      {
+        "key": "C",
+        "text": "Retrieval augmented generation",
+        "correct": false,
+        "why": "RAG supplies retrieved documents to a model. It does not describe agents handing work to each other."
+      },
+      {
+        "key": "D",
+        "text": "Parallel fan-out pattern",
+        "correct": false,
+        "why": "In a parallel pattern, agents work at the same time on separate parts. Here each step waits for the previous one."
+      }
+    ],
+    "explanation": {
+      "answer": "In the sequential (pipeline or workflow) pattern, agents run in a predefined order, each consuming the previous agent's output. It is predictable and easy to debug, which suits processes with clear stages.",
+      "concept": "Other patterns: parallel (independent subtasks at the same time, then merge), supervisor/orchestrator (dynamic delegation), and peer or swarm (agents hand off to each other dynamically). Choose based on how predictable the workflow is.",
+      "examTip": "Fixed order, output passed along = sequential pattern.",
+      "references": [
+        {
+          "title": "Agentic AI patterns (AWS Prescriptive Guidance)",
+          "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/agentic-ai-patterns/introduction.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-031",
+    "domain": "genai",
+    "topic": "Multi-Agent Systems",
+    "tags": [
+      "multi-agent",
+      "parallel"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A due-diligence system must analyze a company's financial statements, legal filings and news coverage. The three analyses are independent of each other, and the team wants results as quickly as possible before a final agent merges them.",
+    "prompt": "Which pattern is MOST appropriate?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Run the three analyses one after another in a strict sequence",
+        "correct": false,
+        "why": "Running independent tasks in sequence wastes time because no task depends on another's output."
+      },
+      {
+        "key": "B",
+        "text": "Use a single prompt with no tools",
+        "correct": false,
+        "why": "A single prompt would mix three large analyses and lose the benefits of specialization and concurrency."
+      },
+      {
+        "key": "C",
+        "text": "Parallel (fan-out/fan-in): run the three specialist agents at the same time, then aggregate",
+        "correct": true,
+        "why": "Independent subtasks can run concurrently, reducing total time, and a final step merges the results."
+      },
+      {
+        "key": "D",
+        "text": "Fine-tune one model per document type before every request",
+        "correct": false,
+        "why": "Fine-tuning per request is slow and costly and is not an orchestration pattern."
+      }
+    ],
+    "explanation": {
+      "answer": "The parallel (fan-out/fan-in or scatter-gather) pattern runs independent subtasks concurrently and then aggregates the results. It reduces latency when subtasks do not depend on each other.",
+      "concept": "Workflow orchestration chooses between sequential, parallel, conditional and dynamic (agent-decided) execution depending on dependencies between steps.",
+      "examTip": "Independent subtasks + speed = parallel fan-out, then merge.",
+      "references": [
+        {
+          "title": "Agentic AI patterns (AWS Prescriptive Guidance)",
+          "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/agentic-ai-patterns/introduction.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-032",
+    "domain": "genai",
+    "topic": "Agent Memory",
+    "tags": [
+      "memory",
+      "short-term",
+      "long-term"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A travel assistant should remember what the user said earlier in the current conversation, and also remember across separate conversations that the user prefers aisle seats and vegetarian meals.",
+    "prompt": "Which memory design meets these needs?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Retrain the model every time a user states a preference",
+        "correct": false,
+        "why": "Retraining per user preference is impractical, slow and expensive."
+      },
+      {
+        "key": "B",
+        "text": "Store nothing and ask the user to repeat preferences each time",
+        "correct": false,
+        "why": "This fails the requirement to remember preferences and creates a poor experience."
+      },
+      {
+        "key": "C",
+        "text": "Only increase the model's context window",
+        "correct": false,
+        "why": "A bigger context window helps within one conversation but does not persist preferences across separate sessions."
+      },
+      {
+        "key": "D",
+        "text": "Use short-term (session) memory for the current conversation and long-term memory that stores extracted preferences across sessions",
+        "correct": true,
+        "why": "Short-term memory keeps the current dialogue coherent, and long-term memory persists user facts and preferences for future sessions."
+      }
+    ],
+    "explanation": {
+      "answer": "Agents typically use two kinds of memory. Short-term memory holds the current session's conversation and state. Long-term memory stores durable information, such as preferences, facts and summaries, extracted from interactions and retrieved in later sessions.",
+      "concept": "Amazon Bedrock AgentCore Memory provides managed short-term and long-term memory for agents. Memory should respect privacy: store only what is needed and allow deletion.",
+      "examTip": "Within a conversation = short-term memory. Across conversations = long-term memory.",
+      "references": [
+        {
+          "title": "Amazon Bedrock AgentCore Memory",
+          "url": "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/memory.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-033",
+    "domain": "genai",
+    "topic": "Agentic AI Concepts",
+    "tags": [
+      "reasoning",
+      "planning",
+      "react"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "An agent receives the task \"Find the three cheapest flights to Denver next Friday and email the options to my manager.\" It thinks about what to do, calls a flight-search tool, examines the results, decides it needs the manager's address, calls a directory tool, and then calls an email tool.",
+    "prompt": "Which concept BEST describes this behavior?",
+    "options": [
+      {
+        "key": "A",
+        "text": "A reasoning-and-acting loop, in which the agent alternates between reasoning about next steps and taking actions with tools, using each observation to decide what to do next",
+        "correct": true,
+        "why": "The agent iterates: reason, act with a tool, observe the result, and reason again until the goal is complete."
+      },
+      {
+        "key": "B",
+        "text": "Dimensionality reduction",
+        "correct": false,
+        "why": "Dimensionality reduction compresses features and has nothing to do with agent behavior."
+      },
+      {
+        "key": "C",
+        "text": "Supervised pre-training",
+        "correct": false,
+        "why": "Pre-training happens before deployment and is not the runtime behavior described."
+      },
+      {
+        "key": "D",
+        "text": "Batch transform",
+        "correct": false,
+        "why": "Batch transform scores a dataset offline. It does not describe step-by-step reasoning and tool calls."
+      }
+    ],
+    "explanation": {
+      "answer": "Agents commonly run an iterative loop: the model reasons about the goal and current state, chooses an action (a tool call), observes the result, and repeats until it can finish. This approach is often called ReAct (reason + act).",
+      "concept": "The loop needs limits, such as a maximum number of steps, timeouts and cost controls, plus observability to trace each reasoning step and tool call.",
+      "examTip": "Think → act (tool) → observe → repeat = agent reasoning loop.",
+      "references": [
+        {
+          "title": "What are AI agents?",
+          "url": "https://aws.amazon.com/what-is/ai-agents/"
+        },
+        {
+          "title": "Agentic AI patterns (AWS Prescriptive Guidance)",
+          "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/agentic-ai-patterns/introduction.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-034",
+    "domain": "genai",
+    "topic": "Workflow Orchestration",
+    "tags": [
+      "orchestration",
+      "deterministic-workflow"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A bank's loan process must always run identity verification, then a credit check, then a compliance review, in that exact order with full auditability. An FM is used only to summarize documents within certain steps.",
+    "prompt": "Which orchestration approach is MOST appropriate?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use a diffusion model to plan the steps",
+        "correct": false,
+        "why": "Diffusion models generate images and cannot orchestrate business processes."
+      },
+      {
+        "key": "B",
+        "text": "A deterministic, predefined workflow that calls the FM only inside specific steps",
+        "correct": true,
+        "why": "When steps and order are mandatory, a predefined workflow guarantees the sequence and auditability while still using the FM where it adds value."
+      },
+      {
+        "key": "C",
+        "text": "Skip orchestration and ask users to run each step manually",
+        "correct": false,
+        "why": "Manual steps lose automation and consistency and increase the risk of skipped checks."
+      },
+      {
+        "key": "D",
+        "text": "Let a fully autonomous agent decide which steps to run and in what order on each request",
+        "correct": false,
+        "why": "Fully autonomous ordering adds unpredictability. Regulated processes with fixed required steps need deterministic control."
+      }
+    ],
+    "explanation": {
+      "answer": "Workflow orchestration can be deterministic (steps and order defined in advance) or dynamic (an agent chooses steps). For regulated processes with required steps and audit needs, a predefined workflow that embeds FM calls at specific points provides control and predictability.",
+      "concept": "Amazon Bedrock Flows and AWS Step Functions orchestrate predefined workflows that include model calls. Use autonomous agents where flexibility is valuable and risk is manageable.",
+      "examTip": "Mandatory steps in a fixed order = deterministic workflow, not a free-roaming agent.",
+      "references": [
+        {
+          "title": "Amazon Bedrock Flows",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/flows.html"
+        },
+        {
+          "title": "Agentic AI patterns (AWS Prescriptive Guidance)",
+          "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/agentic-ai-patterns/introduction.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-035",
+    "domain": "genai",
+    "topic": "Agentic AI Concepts",
+    "tags": [
+      "human-in-the-loop",
+      "agent-safety"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A procurement agent can create purchase orders. The company wants the agent to work autonomously for small purchases but never commit to purchases above $10,000 without a person's approval.",
+    "prompt": "Which design BEST meets this requirement?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Give the agent unrestricted permissions and review purchases monthly",
+        "correct": false,
+        "why": "Monthly review is after the fact. Large purchases would already be committed without approval."
+      },
+      {
+        "key": "B",
+        "text": "Remove the purchase-order tool entirely",
+        "correct": false,
+        "why": "Removing the tool also blocks the routine small purchases the company wants automated."
+      },
+      {
+        "key": "C",
+        "text": "Add a human-in-the-loop approval step that the workflow requires before executing purchases above the threshold",
+        "correct": true,
+        "why": "Requiring human confirmation for high-impact actions keeps autonomy for routine cases while controlling risk."
+      },
+      {
+        "key": "D",
+        "text": "Raise the model's temperature so it is more cautious",
+        "correct": false,
+        "why": "Temperature controls randomness, not caution, and cannot enforce an approval policy."
+      }
+    ],
+    "explanation": {
+      "answer": "Agents that take consequential actions should include human-in-the-loop controls, such as user confirmation or approval workflows, for high-risk actions. Combined with least-privilege permissions and policy limits, this balances automation with safety.",
+      "concept": "Amazon Bedrock Agents supports user confirmation before invoking actions, and Policy in Amazon Bedrock AgentCore can enforce rules about which tools agents may call and with what parameters.",
+      "examTip": "High-impact agent action = require human approval.",
+      "references": [
+        {
+          "title": "Automate tasks with Amazon Bedrock Agents",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/agents.html"
+        },
+        {
+          "title": "Policy in Amazon Bedrock AgentCore",
+          "url": "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/policy.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-036",
+    "domain": "genai",
+    "topic": "Multi-Agent Systems",
+    "tags": [
+      "multi-agent",
+      "communication"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "In a customer-service system, a triage agent hands a conversation directly to a billing agent, which may in turn hand it to a technical agent if it discovers a device problem. No single coordinator controls every handoff.",
+    "prompt": "Which multi-agent communication pattern is this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Single-shot prompting",
+        "correct": false,
+        "why": "Single-shot prompting is a prompt technique with one example, not a way agents communicate."
+      },
+      {
+        "key": "B",
+        "text": "Centralized supervisor pattern",
+        "correct": false,
+        "why": "In a supervisor pattern, one coordinator routes every subtask. Here agents hand off directly to each other."
+      },
+      {
+        "key": "C",
+        "text": "Batch transform",
+        "correct": false,
+        "why": "Batch transform is an offline inference method, not an agent communication pattern."
+      },
+      {
+        "key": "D",
+        "text": "Decentralized peer-to-peer handoffs (a swarm-style pattern)",
+        "correct": true,
+        "why": "Agents pass control to one another directly based on what they discover, without a central coordinator."
+      }
+    ],
+    "explanation": {
+      "answer": "Multi-agent communication can be centralized (a supervisor routes all work) or decentralized (agents hand off to peers directly, as in swarm or network patterns). Decentralized handoffs are flexible but harder to predict and trace.",
+      "concept": "Whatever the pattern, shared context and clear handoff protocols matter, and observability is essential to trace which agent did what.",
+      "examTip": "Central coordinator = supervisor. Agents hand off to each other = peer / swarm.",
+      "references": [
+        {
+          "title": "Agentic AI patterns (AWS Prescriptive Guidance)",
+          "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/agentic-ai-patterns/introduction.html"
+        },
+        {
+          "title": "Strands Agents",
+          "url": "https://strandsagents.com/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-037",
+    "domain": "genai",
+    "topic": "Agentic AI Concepts",
+    "tags": [
+      "agent-components"
+    ],
+    "difficulty": "medium",
+    "type": "multi",
+    "selectCount": 3,
+    "stem": "An architect lists the building blocks of a typical AI agent.",
+    "prompt": "Which components are core parts of an AI agent? (Select THREE.)",
+    "options": [
+      {
+        "key": "A",
+        "text": "A GPU cluster that the agent must re-train on each request",
+        "correct": false,
+        "why": "Agents do not retrain the model per request. They use a trained model at inference time."
+      },
+      {
+        "key": "B",
+        "text": "A diffusion model for every agent",
+        "correct": false,
+        "why": "Diffusion models generate images. They are not a required part of an agent."
+      },
+      {
+        "key": "C",
+        "text": "Memory that keeps conversation state and useful context",
+        "correct": true,
+        "why": "Memory lets the agent stay coherent within a session and recall relevant information across sessions."
+      },
+      {
+        "key": "D",
+        "text": "Tools or APIs the agent can call to act and get information",
+        "correct": true,
+        "why": "Tools let the agent access live data and take actions in external systems."
+      },
+      {
+        "key": "E",
+        "text": "A foundation model that reasons and plans",
+        "correct": true,
+        "why": "The FM interprets goals, plans steps and decides which actions to take."
+      }
+    ],
+    "explanation": {
+      "answer": "A typical AI agent combines a foundation model (reasoning and planning), instructions describing its role, tools (APIs, functions, knowledge bases, MCP servers) for acting and retrieving information, memory, and an orchestration loop that ties them together.",
+      "concept": "Production agents also need identity and access controls, guardrails, observability and evaluation.",
+      "examTip": "Agent = model + instructions + tools + memory + orchestration loop.",
+      "references": [
+        {
+          "title": "What are AI agents?",
+          "url": "https://aws.amazon.com/what-is/ai-agents/"
+        },
+        {
+          "title": "What is Amazon Bedrock AgentCore?",
+          "url": "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/what-is-bedrock-agentcore.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-038",
+    "domain": "genai",
+    "topic": "Agentic AI Concepts",
+    "tags": [
+      "agent-vs-chatbot"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A manager asks why the team is calling its new system an \"agent\" rather than a chatbot.",
+    "prompt": "Which feature MOST distinguishes an AI agent from a simple chatbot?",
+    "options": [
+      {
+        "key": "A",
+        "text": "The agent can autonomously plan and take actions in other systems through tools to accomplish goals.",
+        "correct": true,
+        "why": "Agents go beyond answering: they plan multi-step work and act through tools and APIs."
+      },
+      {
+        "key": "B",
+        "text": "The agent never uses a language model.",
+        "correct": false,
+        "why": "Most agents use language models as their reasoning engine."
+      },
+      {
+        "key": "C",
+        "text": "The agent uses a nicer user interface.",
+        "correct": false,
+        "why": "Interface design does not define an agent. The difference is in capabilities."
+      },
+      {
+        "key": "D",
+        "text": "The agent only answers yes or no questions.",
+        "correct": false,
+        "why": "Agents handle complex goals, not just yes or no questions."
+      }
+    ],
+    "explanation": {
+      "answer": "A chatbot primarily converses and answers questions. An AI agent pursues goals: it plans steps, uses tools to retrieve information and perform actions, and adapts based on results, with varying degrees of autonomy.",
+      "concept": "Autonomy should match risk. Low-risk tasks can be fully automated, while high-impact actions should require human approval.",
+      "examTip": "Agent = takes actions toward a goal; chatbot = mainly talks.",
+      "references": [
+        {
+          "title": "What are AI agents?",
+          "url": "https://aws.amazon.com/what-is/ai-agents/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-039",
+    "domain": "genai",
+    "topic": "Model Context Protocol",
+    "tags": [
+      "mcp",
+      "benefits"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A platform team plans to expose its internal inventory system as an MCP server.",
+    "prompt": "What is the MAIN benefit of this approach?",
+    "options": [
+      {
+        "key": "A",
+        "text": "It removes the need for authentication on the inventory system.",
+        "correct": false,
+        "why": "MCP servers should still enforce authentication and authorization. The protocol does not remove security needs."
+      },
+      {
+        "key": "B",
+        "text": "Any MCP-compatible agent or AI application can discover and use the inventory tools without a custom integration for each one.",
+        "correct": true,
+        "why": "A standard interface means one server works with many clients and frameworks, reducing duplicated integration work."
+      },
+      {
+        "key": "C",
+        "text": "It permanently stores the inventory data inside the language model's weights.",
+        "correct": false,
+        "why": "MCP does not change model weights. Data is accessed at runtime through the server."
+      },
+      {
+        "key": "D",
+        "text": "It guarantees that the model never hallucinates.",
+        "correct": false,
+        "why": "Live tool data can reduce hallucinations, but nothing guarantees a model never makes mistakes."
+      }
+    ],
+    "explanation": {
+      "answer": "MCP replaces many one-off integrations with one standard interface. Once a system is exposed as an MCP server, any compatible agent, assistant or IDE can list its tools and call them, which speeds up development and keeps integrations consistent.",
+      "concept": "Treat MCP servers like any API: apply authentication, least-privilege authorization, input validation and logging.",
+      "examTip": "Build once, use from many agents = MCP's main benefit.",
+      "references": [
+        {
+          "title": "Model Context Protocol introduction",
+          "url": "https://modelcontextprotocol.io/introduction"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-040",
+    "domain": "genai",
+    "topic": "Agent Memory",
+    "tags": [
+      "memory",
+      "privacy",
+      "context-window"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A long-running agent conversation has grown to hundreds of turns. Responses are slowing down, costs are rising, and older details are crowding out the current task.",
+    "prompt": "Which memory management technique BEST addresses this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Switch to a smaller embedding dimension",
+        "correct": false,
+        "why": "Embedding dimension affects vector search, not the size of the conversation in the prompt."
+      },
+      {
+        "key": "B",
+        "text": "Keep appending every turn to the prompt indefinitely",
+        "correct": false,
+        "why": "This is the cause of the problem. It keeps increasing tokens, latency and cost and eventually exceeds the context window."
+      },
+      {
+        "key": "C",
+        "text": "Summarize or compress older turns and store key facts in long-term memory, retrieving them only when relevant",
+        "correct": true,
+        "why": "Summarizing history and retrieving stored facts on demand keeps the context small and focused while preserving important information."
+      },
+      {
+        "key": "D",
+        "text": "Delete the system instructions to save tokens",
+        "correct": false,
+        "why": "System instructions define the agent's behavior. Removing them degrades quality."
+      }
+    ],
+    "explanation": {
+      "answer": "Memory management for agents includes summarizing older conversation turns, extracting durable facts into long-term memory, and retrieving only relevant memories into the context. This controls token usage, latency and cost while keeping the agent focused.",
+      "concept": "This is a context engineering practice. Managed services such as AgentCore Memory can extract and retrieve memories automatically.",
+      "examTip": "Long conversations → summarize and retrieve selectively, don't append forever.",
+      "references": [
+        {
+          "title": "Amazon Bedrock AgentCore Memory",
+          "url": "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/memory.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-041",
+    "domain": "genai",
+    "topic": "Multi-Agent Systems",
+    "tags": [
+      "multi-agent",
+      "benefits",
+      "specialization"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A team's single agent has 40 tools and very long instructions covering sales, support and billing. It often picks the wrong tool.",
+    "prompt": "Why might splitting it into a multi-agent system help?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Multi-agent systems never cost more than single agents.",
+        "correct": false,
+        "why": "More agents can mean more model calls and higher cost. The benefit is quality and maintainability, not guaranteed lower cost."
+      },
+      {
+        "key": "B",
+        "text": "Multi-agent systems eliminate the need for testing.",
+        "correct": false,
+        "why": "Multi-agent systems need more testing and observability because of interactions between agents."
+      },
+      {
+        "key": "C",
+        "text": "Multi-agent systems do not use foundation models.",
+        "correct": false,
+        "why": "Each agent typically uses a foundation model for reasoning."
+      },
+      {
+        "key": "D",
+        "text": "Each specialized agent gets focused instructions and a small, relevant set of tools, which improves tool selection and accuracy.",
+        "correct": true,
+        "why": "Specialization narrows each agent's scope, so the model has fewer, clearer choices and better instructions for its domain."
+      }
+    ],
+    "explanation": {
+      "answer": "Multi-agent systems break complex applications into specialized agents, each with focused instructions, tools and knowledge. This improves accuracy and maintainability, and lets teams develop and update agents independently.",
+      "concept": "Trade-offs: more coordination overhead, more model calls and more complex debugging. Use multiple agents when complexity justifies it.",
+      "examTip": "Too many tools and responsibilities in one agent → split into specialists.",
+      "references": [
+        {
+          "title": "Multi-agent collaboration in Amazon Bedrock Agents",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/agents-multi-agent-collaboration.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-042",
+    "domain": "genai",
+    "topic": "Agentic AI Concepts",
+    "tags": [
+      "knowledge-base-as-tool"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "An HR agent must answer policy questions from the employee handbook and also submit vacation requests to the HR system.",
+    "prompt": "How should the agent be equipped for both tasks?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Give the agent access to a knowledge base for the handbook and an action (tool) that calls the HR system's API",
+        "correct": true,
+        "why": "A knowledge base grounds policy answers in the handbook, and an API tool lets the agent take the action of submitting a request."
+      },
+      {
+        "key": "B",
+        "text": "Fine-tune the model on the handbook and remove all tools",
+        "correct": false,
+        "why": "Without a tool, the agent cannot submit vacation requests. Fine-tuning is also harder to keep current than retrieval."
+      },
+      {
+        "key": "C",
+        "text": "Use only a larger context window",
+        "correct": false,
+        "why": "A larger context window does not let the agent act on the HR system."
+      },
+      {
+        "key": "D",
+        "text": "Use an image classifier",
+        "correct": false,
+        "why": "Image classification is unrelated to answering policy questions or submitting requests."
+      }
+    ],
+    "explanation": {
+      "answer": "Agents combine knowledge and actions. Knowledge bases (RAG) provide grounded information from documents, while action groups or tools call APIs to perform tasks. Amazon Bedrock Agents supports both knowledge bases and action groups.",
+      "concept": "Separating knowledge (read) from actions (write) also helps apply different permissions and guardrails to each.",
+      "examTip": "Answer from documents = knowledge base. Do something in a system = tool / action.",
+      "references": [
+        {
+          "title": "Automate tasks with Amazon Bedrock Agents",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/agents.html"
+        },
+        {
+          "title": "Amazon Bedrock Knowledge Bases",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/knowledge-base.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-043",
+    "domain": "genai",
+    "topic": "Agentic AI Concepts",
+    "tags": [
+      "observability",
+      "tracing"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "An agent sometimes produces wrong results, and the team cannot tell whether the problem is in the model's reasoning, a tool returning bad data, or a step being skipped.",
+    "prompt": "Which capability is MOST important for diagnosing this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Increasing the maximum output tokens",
+        "correct": false,
+        "why": "Allowing longer responses does not reveal where errors originate."
+      },
+      {
+        "key": "B",
+        "text": "Agent observability: tracing each reasoning step, tool call, input and output",
+        "correct": true,
+        "why": "Step-by-step traces show exactly where in the agent's workflow things went wrong."
+      },
+      {
+        "key": "C",
+        "text": "Removing all tools",
+        "correct": false,
+        "why": "Removing tools breaks the agent's functionality rather than diagnosing the problem."
+      },
+      {
+        "key": "D",
+        "text": "Switching to a diffusion model",
+        "correct": false,
+        "why": "Diffusion models generate images and do not help debug agents."
+      }
+    ],
+    "explanation": {
+      "answer": "Observability for agents means capturing traces of reasoning steps, tool invocations, parameters, results, latency and token usage. This lets teams pinpoint failures and measure quality and cost.",
+      "concept": "Amazon Bedrock AgentCore Observability provides tracing and metrics for agents, and Bedrock Agents exposes trace information for each step.",
+      "examTip": "Need to see what the agent did step by step = observability / tracing.",
+      "references": [
+        {
+          "title": "Amazon Bedrock AgentCore Observability",
+          "url": "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/observability.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-044",
+    "domain": "genai",
+    "topic": "Workflow Orchestration",
+    "tags": [
+      "agents",
+      "autonomy-levels"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A company is choosing between a predefined workflow and an autonomous agent for two tasks. Task 1: generating a weekly report from the same three data sources in the same format. Task 2: researching open-ended customer questions that may need different sources and steps each time.",
+    "prompt": "Which assignment is MOST appropriate?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Predefined workflow for both tasks",
+        "correct": false,
+        "why": "A fixed workflow cannot adapt to open-ended questions that need different steps each time."
+      },
+      {
+        "key": "B",
+        "text": "Autonomous agent for both tasks",
+        "correct": false,
+        "why": "Using an agent for a fixed, repeatable task adds cost and unpredictability with no benefit."
+      },
+      {
+        "key": "C",
+        "text": "Predefined workflow for Task 1 and autonomous agent for Task 2",
+        "correct": true,
+        "why": "Predictable, repeatable steps fit a deterministic workflow, while varied, open-ended tasks benefit from an agent's dynamic planning."
+      },
+      {
+        "key": "D",
+        "text": "Autonomous agent for Task 1 and predefined workflow for Task 2",
+        "correct": false,
+        "why": "This is reversed. The predictable task suits a fixed workflow, and the variable task benefits from an agent's flexibility."
+      }
+    ],
+    "explanation": {
+      "answer": "Use deterministic workflows when steps are known and repeatable; they are cheaper, faster and more predictable. Use agents when the path to the goal varies and requires dynamic decisions about which tools and steps to use.",
+      "concept": "Many production systems blend both: a fixed workflow that hands specific open-ended steps to an agent.",
+      "examTip": "Known steps → workflow. Unknown or varying steps → agent.",
+      "references": [
+        {
+          "title": "Agentic AI patterns (AWS Prescriptive Guidance)",
+          "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/agentic-ai-patterns/introduction.html"
+        },
+        {
+          "title": "Amazon Bedrock Flows",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/flows.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-045",
+    "domain": "genai",
+    "topic": "Model Context Protocol",
+    "tags": [
+      "mcp",
+      "security"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A team wants to connect its agent to a third-party MCP server it found online that offers file-management tools.",
+    "prompt": "Which consideration is MOST important before connecting?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Whether the server uses the same embedding model",
+        "correct": false,
+        "why": "MCP servers do not need to share an embedding model with the agent."
+      },
+      {
+        "key": "B",
+        "text": "Whether the server increases the agent's temperature",
+        "correct": false,
+        "why": "MCP servers do not control model inference parameters."
+      },
+      {
+        "key": "C",
+        "text": "Whether the server's tool descriptions are written in a formal tone",
+        "correct": false,
+        "why": "Tone does not matter for safety. The concern is what the server can do and whether it is trustworthy."
+      },
+      {
+        "key": "D",
+        "text": "Whether the server is trustworthy and what permissions and data access its tools would have, applying least privilege",
+        "correct": true,
+        "why": "Tools can read data and take actions. An untrusted or over-privileged server could leak data or perform harmful actions, including through injected instructions in tool descriptions or results."
+      }
+    ],
+    "explanation": {
+      "answer": "Connecting an agent to an MCP server gives the model the ability to use that server's tools. Teams should vet the server's provenance, restrict its permissions to the minimum needed, require authentication, validate inputs and outputs, and log tool calls.",
+      "concept": "Tool outputs and descriptions can carry indirect prompt injection. Treat all external content as untrusted.",
+      "examTip": "Third-party tools = verify trust, apply least privilege, log and monitor.",
+      "references": [
+        {
+          "title": "Model Context Protocol introduction",
+          "url": "https://modelcontextprotocol.io/introduction"
+        },
+        {
+          "title": "Amazon Bedrock AgentCore Identity",
+          "url": "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/identity.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-046",
+    "domain": "genai",
+    "topic": "Agentic AI Concepts",
+    "tags": [
+      "agent-use-case",
+      "business-value"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A company is evaluating where AI agents could deliver the most value.",
+    "prompt": "Which task is the BEST candidate for an AI agent?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Resolving routine customer refund requests that require checking order history, applying policy and issuing refunds through an API",
+        "correct": true,
+        "why": "This multi-step task needs reasoning, information lookup and an action through a system, which is what agents are designed for."
+      },
+      {
+        "key": "B",
+        "text": "Adding two numbers in a spreadsheet cell",
+        "correct": false,
+        "why": "Simple deterministic arithmetic is handled perfectly by a formula. An agent adds cost and no value."
+      },
+      {
+        "key": "C",
+        "text": "Sorting a list of names alphabetically",
+        "correct": false,
+        "why": "Sorting is deterministic and handled by standard code."
+      },
+      {
+        "key": "D",
+        "text": "Displaying a fixed company logo on a website",
+        "correct": false,
+        "why": "Showing a static image needs no AI at all."
+      }
+    ],
+    "explanation": {
+      "answer": "AI agents add the most value for multi-step tasks that require judgment, information gathering from several systems, and actions, such as customer service resolutions, IT support, research and back-office processing.",
+      "concept": "Business value metrics for agents include task completion rate, time saved, cost per interaction and customer satisfaction.",
+      "examTip": "Multi-step + judgment + actions in systems = good agent use case.",
+      "references": [
+        {
+          "title": "What is agentic AI?",
+          "url": "https://aws.amazon.com/what-is/agentic-ai/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-047",
+    "domain": "genai",
+    "topic": "Workflow Orchestration",
+    "tags": [
+      "flows",
+      "low-code"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A team wants to visually link prompts, a knowledge base, AWS Lambda functions and conditional logic into a reusable generative AI workflow on Amazon Bedrock, without managing orchestration code.",
+    "prompt": "Which Amazon Bedrock capability fits this need?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Polly",
+        "correct": false,
+        "why": "Polly converts text to speech and is not a workflow builder."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Bedrock Flows",
+        "correct": true,
+        "why": "Bedrock Flows lets you build generative AI workflows by connecting nodes such as prompts, knowledge bases, Lambda functions and conditions in a visual builder."
+      },
+      {
+        "key": "C",
+        "text": "Amazon Bedrock Guardrails",
+        "correct": false,
+        "why": "Guardrails filter harmful content and sensitive information. They do not orchestrate workflows."
+      },
+      {
+        "key": "D",
+        "text": "Provisioned Throughput",
+        "correct": false,
+        "why": "Provisioned Throughput reserves model capacity. It does not define workflows."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Bedrock Flows is a workflow builder for generative AI. You link nodes, such as prompts, models, knowledge bases, agents, Lambda functions, conditions and iterators, into a flow, version it and invoke it from applications.",
+      "concept": "Flows suit predefined, repeatable generative AI workflows. Agents suit dynamic tasks in which the model decides the steps.",
+      "examTip": "Visually connect prompts, knowledge bases and logic on Bedrock = Bedrock Flows.",
+      "references": [
+        {
+          "title": "Amazon Bedrock Flows",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/flows.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-048",
+    "domain": "genai",
+    "topic": "Agentic AI Concepts",
+    "tags": [
+      "tool-descriptions",
+      "reliability"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "An agent has two tools named \"get_data\" and \"fetch_info\" with one-word descriptions. It frequently calls the wrong one.",
+    "prompt": "Which change is MOST likely to improve the agent's tool selection?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Remove the agent's instructions",
+        "correct": false,
+        "why": "Instructions guide when and how to use tools. Removing them makes behavior worse."
+      },
+      {
+        "key": "B",
+        "text": "Increase the temperature",
+        "correct": false,
+        "why": "More randomness makes tool selection less reliable, not more."
+      },
+      {
+        "key": "C",
+        "text": "Give each tool a clear, distinct name and a detailed description of what it does, when to use it, and its input parameters",
+        "correct": true,
+        "why": "The model chooses tools based on their names, descriptions and schemas. Clear, distinct descriptions make the right choice obvious."
+      },
+      {
+        "key": "D",
+        "text": "Add ten more similarly named tools",
+        "correct": false,
+        "why": "More overlapping tools increase confusion."
+      }
+    ],
+    "explanation": {
+      "answer": "Foundation models decide which tool to call by reading the tool's name, description and input schema. Descriptive names, precise descriptions of purpose and usage, and well-defined parameters significantly improve tool selection.",
+      "concept": "Tool design is part of context engineering: everything the model sees about tools affects its choices.",
+      "examTip": "Agent picks wrong tool → improve tool names and descriptions.",
+      "references": [
+        {
+          "title": "Automate tasks with Amazon Bedrock Agents",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/agents.html"
+        },
+        {
+          "title": "Strands Agents",
+          "url": "https://strandsagents.com/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-049",
+    "domain": "genai",
+    "topic": "Multi-Agent Systems",
+    "tags": [
+      "agent-to-agent",
+      "interoperability"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A company runs agents built by different vendors on different frameworks. It wants these agents to discover each other's capabilities and delegate tasks to one another, rather than each agent only calling tools.",
+    "prompt": "Which statement BEST describes what is needed?",
+    "options": [
+      {
+        "key": "A",
+        "text": "A larger embedding dimension",
+        "correct": false,
+        "why": "Embedding size affects vector search, not how independent agents communicate."
+      },
+      {
+        "key": "B",
+        "text": "Fine-tuning every agent on the same dataset",
+        "correct": false,
+        "why": "Shared training data does not provide a way for running agents to discover and delegate to each other."
+      },
+      {
+        "key": "C",
+        "text": "Lowering the temperature of each agent",
+        "correct": false,
+        "why": "Temperature affects output randomness, not inter-agent communication."
+      },
+      {
+        "key": "D",
+        "text": "An agent-to-agent communication standard, which complements tool protocols such as MCP by letting agents exchange tasks and results with other agents",
+        "correct": true,
+        "why": "MCP connects agents to tools and data. Agent-to-agent protocols address agents collaborating with other independent agents."
+      }
+    ],
+    "explanation": {
+      "answer": "Multi-agent communication across frameworks needs a shared way to describe agent capabilities and exchange tasks. Agent-to-agent protocols (such as the open Agent2Agent protocol) address agent collaboration, while MCP addresses agent-to-tool connections. The two are complementary.",
+      "concept": "Amazon Bedrock AgentCore is framework-agnostic and supports hosting agents and tools that communicate through open protocols.",
+      "examTip": "Agent ↔ tool = MCP. Agent ↔ agent = agent-to-agent protocol.",
+      "references": [
+        {
+          "title": "What is Amazon Bedrock AgentCore?",
+          "url": "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/what-is-bedrock-agentcore.html"
+        },
+        {
+          "title": "Agentic AI patterns (AWS Prescriptive Guidance)",
+          "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/agentic-ai-patterns/introduction.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-gen-050",
+    "domain": "genai",
+    "topic": "Agent Memory",
+    "tags": [
+      "memory",
+      "privacy"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A healthcare scheduling agent stores long-term memories about patients to personalize future conversations.",
+    "prompt": "Which practice is MOST important for this memory design?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Store only necessary information, isolate memories per user, encrypt them, and apply retention and deletion policies",
+        "correct": true,
+        "why": "Memory holds sensitive data, so minimization, per-user isolation, encryption and retention controls protect privacy and support compliance."
+      },
+      {
+        "key": "B",
+        "text": "Store every word of every conversation forever to maximize personalization",
+        "correct": false,
+        "why": "Storing everything indefinitely increases privacy risk and cost and may violate data-retention requirements."
+      },
+      {
+        "key": "C",
+        "text": "Store memories in the model's weights by retraining nightly",
+        "correct": false,
+        "why": "Retraining on patient data nightly is costly and makes it hard to delete specific information."
+      },
+      {
+        "key": "D",
+        "text": "Share each patient's memories with all other patients' sessions",
+        "correct": false,
+        "why": "Mixing memories across users would leak private health information."
+      }
+    ],
+    "explanation": {
+      "answer": "Agent memory can contain personal and sensitive data. Good practice includes data minimization, strict separation by user or session, encryption at rest and in transit, access controls, and retention and deletion policies aligned with regulations.",
+      "concept": "Managed memory services scope memories by identifiers such as actor and session, which supports isolation between users.",
+      "examTip": "Agent memory = sensitive data → minimize, isolate, encrypt, set retention.",
+      "references": [
+        {
+          "title": "Amazon Bedrock AgentCore Memory",
+          "url": "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/memory.html"
+        },
+        {
+          "title": "Data protection in Amazon Bedrock",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/data-protection.html"
+        }
+      ]
+    }
+  }
+]

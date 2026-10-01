@@ -1,4 +1,5 @@
 import "server-only";
+import aifC01 from "../../content/aif-c01";
 import saaC03 from "../../content/saa-c03";
 import { query } from "./db";
 import type { DomainId } from "./exams";
@@ -53,8 +54,10 @@ export interface Feedback {
 
 const BANK: Record<string, Question[]> = {
   "saa-c03": saaC03 as Question[],
+  "aif-c01": aifC01 as Question[],
 };
 const BY_ID = new Map(Object.values(BANK).flat().map((q) => [q.id, q]));
+const EXAM_OF = new Map(Object.entries(BANK).flatMap(([exam, qs]) => qs.map((q) => [q.id, exam] as const)));
 
 // ---------- Admin overrides (edits, new questions, disabled questions) stored in the database ----------
 
@@ -89,6 +92,11 @@ export function questionsFor(exam: string): Question[] {
   const base = (BANK[exam] ?? []).map((q) => o.get(q.id)?.data ?? q);
   const added = [...o.entries()].filter(([id, v]) => v.exam === exam && v.data && !BY_ID.has(id)).map(([, v]) => v.data!);
   return [...base, ...added].filter((q) => !o.get(q.id)?.disabled);
+}
+
+/** Which exam a question (built-in or admin-added) belongs to. */
+export function examOf(id: string): string | undefined {
+  return EXAM_OF.get(id) ?? overrides().get(id)?.exam;
 }
 
 export function isBuiltIn(id: string): boolean {

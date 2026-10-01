@@ -135,4 +135,7 @@ create table if not exists flags (
 create unique index if not exists flags_user_q on flags (user_id, question_id) where user_id is not null;
 create unique index if not exists flags_anon_q on flags (anon_id, question_id) where user_id is null;
 alter table flags enable row level security;
+
+-- v5: passes are per exam (null = legacy all-exam pass)
+alter table entitlements add column if not exists exam text;
 `;

@@ -1,0 +1,1223 @@
+[
+  {
+    "id": "aif-app-001",
+    "domain": "applications",
+    "topic": "Inference Parameters",
+    "tags": [
+      "temperature",
+      "randomness"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A bank's FAQ assistant sometimes words answers creatively and occasionally drifts from the approved facts. The team wants responses to be more consistent and focused.",
+    "prompt": "Which inference parameter change is MOST appropriate?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Decrease the temperature",
+        "correct": true,
+        "why": "Lower temperature makes the model favor the most likely tokens, yielding more consistent, focused and deterministic responses."
+      },
+      {
+        "key": "B",
+        "text": "Increase the temperature",
+        "correct": false,
+        "why": "Higher temperature makes token selection more random, producing more varied and creative output, the opposite of what the team wants."
+      },
+      {
+        "key": "C",
+        "text": "Remove all stop sequences",
+        "correct": false,
+        "why": "Stop sequences control where generation ends. Removing them does not reduce variability."
+      },
+      {
+        "key": "D",
+        "text": "Increase the maximum output tokens",
+        "correct": false,
+        "why": "Max tokens limits response length. Allowing longer answers does not make them more consistent."
+      }
+    ],
+    "explanation": {
+      "answer": "Temperature controls randomness when sampling the next token. Low values (close to 0) make outputs more deterministic and conservative, which suits factual Q&A. High values increase diversity and creativity, which suits brainstorming or creative writing.",
+      "concept": "Top-p (nucleus sampling) and top-k also control randomness by limiting which candidate tokens can be sampled.",
+      "examTip": "Factual/consistent → low temperature. Creative/varied → high temperature.",
+      "references": [
+        {
+          "title": "Influence response generation with inference parameters",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/inference-parameters.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-002",
+    "domain": "applications",
+    "topic": "Inference Parameters",
+    "tags": [
+      "top-p",
+      "top-k"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A developer reads that a model supports a parameter that restricts sampling to the smallest set of candidate next tokens whose cumulative probability reaches a chosen threshold, such as 0.9.",
+    "prompt": "Which parameter is this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Max tokens",
+        "correct": false,
+        "why": "Max tokens limits response length and does not affect which tokens are candidates."
+      },
+      {
+        "key": "B",
+        "text": "Top-p (nucleus sampling)",
+        "correct": true,
+        "why": "Top-p keeps the most likely tokens until their cumulative probability reaches p, and samples only from that set."
+      },
+      {
+        "key": "C",
+        "text": "Top-k",
+        "correct": false,
+        "why": "Top-k limits sampling to a fixed number (k) of the most likely tokens, not to a cumulative probability threshold."
+      },
+      {
+        "key": "D",
+        "text": "Stop sequence",
+        "correct": false,
+        "why": "A stop sequence tells the model when to stop generating. It does not filter candidate tokens."
+      }
+    ],
+    "explanation": {
+      "answer": "Top-p (nucleus sampling) limits the candidate pool to the smallest set of tokens whose probabilities add up to p. Lower top-p narrows choices to the most likely tokens, reducing randomness; higher top-p allows more diverse choices.",
+      "concept": "Top-k limits candidates to the k most likely tokens. Temperature reshapes the probability distribution. All three tune the balance between consistency and creativity.",
+      "examTip": "Cumulative probability threshold = top-p. Fixed number of candidates = top-k.",
+      "references": [
+        {
+          "title": "Influence response generation with inference parameters",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/inference-parameters.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-003",
+    "domain": "applications",
+    "topic": "Inference Parameters",
+    "tags": [
+      "stop-sequences"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "An application asks an LLM to generate exactly one product tagline, but the model keeps continuing with extra taglines separated by a line containing \"###\".",
+    "prompt": "Which inference parameter can make the model stop at the first \"###\"?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Temperature",
+        "correct": false,
+        "why": "Temperature changes randomness but does not stop generation at a specific string."
+      },
+      {
+        "key": "B",
+        "text": "Top-k",
+        "correct": false,
+        "why": "Top-k limits candidate tokens and does not end generation at a delimiter."
+      },
+      {
+        "key": "C",
+        "text": "Stop sequence",
+        "correct": true,
+        "why": "A stop sequence is a string that, when generated, causes the model to stop producing more tokens."
+      },
+      {
+        "key": "D",
+        "text": "Embedding dimension",
+        "correct": false,
+        "why": "Embedding dimension relates to vector representations, not text generation."
+      }
+    ],
+    "explanation": {
+      "answer": "Stop sequences specify strings that signal the model to stop generating. They help control output structure and prevent unwanted continuation, which also saves output tokens.",
+      "concept": "Combine stop sequences with clear instructions and max-token limits to control response length and format.",
+      "examTip": "End output at a specific marker = stop sequence.",
+      "references": [
+        {
+          "title": "Influence response generation with inference parameters",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/inference-parameters.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-004",
+    "domain": "applications",
+    "topic": "Inference Parameters",
+    "tags": [
+      "temperature",
+      "creative"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A marketing team uses an LLM to brainstorm 30 unusual campaign slogans. The current outputs are repetitive and very similar to each other.",
+    "prompt": "Which change is MOST likely to produce more diverse slogans?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Set temperature to 0",
+        "correct": false,
+        "why": "Temperature 0 makes outputs nearly deterministic, which increases repetition."
+      },
+      {
+        "key": "B",
+        "text": "Reduce max tokens to 5",
+        "correct": false,
+        "why": "Very short limits may truncate slogans and do not increase diversity."
+      },
+      {
+        "key": "C",
+        "text": "Add a stop sequence after the first word",
+        "correct": false,
+        "why": "Stopping after one word would truncate every slogan."
+      },
+      {
+        "key": "D",
+        "text": "Increase the temperature (and possibly top-p)",
+        "correct": true,
+        "why": "Higher temperature and top-p allow less likely tokens to be chosen, increasing variety and creativity."
+      }
+    ],
+    "explanation": {
+      "answer": "Increasing temperature (and top-p) makes the model sample from a wider range of tokens, producing more varied and creative outputs, which suits brainstorming.",
+      "concept": "Higher randomness can also increase off-topic or lower-quality outputs, so creative use cases often pair higher temperature with human selection.",
+      "examTip": "Need more variety → raise temperature.",
+      "references": [
+        {
+          "title": "Influence response generation with inference parameters",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/inference-parameters.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-005",
+    "domain": "applications",
+    "topic": "RAG",
+    "tags": [
+      "rag",
+      "definition"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A company wants its LLM assistant to answer questions using the latest internal policy documents. Before generating each answer, the system searches the documents for relevant passages and adds them to the prompt.",
+    "prompt": "What is this technique called?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Retrieval Augmented Generation (RAG)",
+        "correct": true,
+        "why": "RAG retrieves relevant information from an external knowledge source and augments the prompt with it, so the model generates grounded answers."
+      },
+      {
+        "key": "B",
+        "text": "Reinforcement learning from human feedback",
+        "correct": false,
+        "why": "RLHF is a training method that aligns models with human preferences. It does not retrieve documents per question."
+      },
+      {
+        "key": "C",
+        "text": "Model distillation",
+        "correct": false,
+        "why": "Distillation trains a smaller model from a larger one and does not involve retrieving documents."
+      },
+      {
+        "key": "D",
+        "text": "Fine-tuning",
+        "correct": false,
+        "why": "Fine-tuning changes model weights through training. This system adds documents at query time without training."
+      }
+    ],
+    "explanation": {
+      "answer": "Retrieval Augmented Generation (RAG) retrieves relevant content from a knowledge source (such as a vector database) at query time and supplies it to the model as context. The model then generates an answer grounded in that content.",
+      "concept": "RAG keeps answers current (update documents, not the model), reduces hallucinations, can cite sources, and avoids the cost of retraining.",
+      "examTip": "Retrieve relevant docs + add to prompt + generate = RAG.",
+      "references": [
+        {
+          "title": "What is RAG?",
+          "url": "https://aws.amazon.com/what-is/retrieval-augmented-generation/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-006",
+    "domain": "applications",
+    "topic": "RAG",
+    "tags": [
+      "knowledge-bases",
+      "managed-rag"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company wants a fully managed way to connect documents stored in Amazon S3 to a foundation model for question answering. It wants AWS to handle chunking, generating embeddings, storing vectors and retrieving relevant passages.",
+    "prompt": "Which AWS capability should the company use?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon SageMaker Ground Truth",
+        "correct": false,
+        "why": "Ground Truth labels training data with human workers and does not provide RAG."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Bedrock Knowledge Bases",
+        "correct": true,
+        "why": "Bedrock Knowledge Bases manages the full RAG workflow: ingestion, chunking, embeddings, vector storage, retrieval and prompt augmentation."
+      },
+      {
+        "key": "C",
+        "text": "AWS Config",
+        "correct": false,
+        "why": "AWS Config tracks resource configurations and compliance, not document retrieval."
+      },
+      {
+        "key": "D",
+        "text": "Amazon Polly",
+        "correct": false,
+        "why": "Polly converts text to speech. It does not ingest documents, create embeddings or retrieve passages."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Bedrock Knowledge Bases is a fully managed RAG capability. It connects to data sources (such as Amazon S3, web crawlers, SharePoint and others), chunks and embeds content, stores vectors in a supported vector store, and retrieves relevant results, optionally generating answers with citations.",
+      "concept": "Supported vector stores include Amazon OpenSearch Serverless, Aurora PostgreSQL, Amazon Neptune Analytics, Amazon S3 Vectors and third-party options.",
+      "examTip": "Managed RAG on AWS = Amazon Bedrock Knowledge Bases.",
+      "references": [
+        {
+          "title": "Retrieve data and generate AI responses with Amazon Bedrock Knowledge Bases",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/knowledge-base.html"
+        },
+        {
+          "title": "How Amazon Bedrock knowledge bases work",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/kb-how-it-works.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-007",
+    "domain": "applications",
+    "topic": "RAG",
+    "tags": [
+      "rag",
+      "citations",
+      "hallucination"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A compliance team requires that every answer from an internal assistant show which source documents it was based on, so reviewers can verify accuracy.",
+    "prompt": "Which design BEST supports this requirement?",
+    "options": [
+      {
+        "key": "A",
+        "text": "A fine-tuned model with no retrieval",
+        "correct": false,
+        "why": "A fine-tuned model blends knowledge into its weights and cannot point to the specific documents behind an answer."
+      },
+      {
+        "key": "B",
+        "text": "An image-generation model",
+        "correct": false,
+        "why": "Image generation does not provide sourced text answers."
+      },
+      {
+        "key": "C",
+        "text": "A RAG application that returns citations to the retrieved passages used to generate each answer",
+        "correct": true,
+        "why": "RAG retrieves specific source passages, so the application can return them as citations for verification."
+      },
+      {
+        "key": "D",
+        "text": "A higher temperature setting",
+        "correct": false,
+        "why": "Temperature affects randomness and has nothing to do with sourcing."
+      }
+    ],
+    "explanation": {
+      "answer": "Because RAG grounds answers in retrieved documents, it can return the source passages as citations. Amazon Bedrock Knowledge Bases' RetrieveAndGenerate API returns citations that link the response to source chunks.",
+      "concept": "Source citation supports transparency, trust and auditing, and is part of responsible and secure AI practices in the exam guide.",
+      "examTip": "Need answers with sources → RAG with citations.",
+      "references": [
+        {
+          "title": "Retrieve data and generate AI responses with Amazon Bedrock Knowledge Bases",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/knowledge-base.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-008",
+    "domain": "applications",
+    "topic": "RAG",
+    "tags": [
+      "rag-vs-fine-tuning",
+      "freshness"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A product catalog with prices and stock levels changes many times per day. A team wants an assistant that answers customer questions using current catalog information.",
+    "prompt": "Which approach is MOST appropriate?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Pre-train a new model every week",
+        "correct": false,
+        "why": "Pre-training is extremely expensive and would still be out of date between runs."
+      },
+      {
+        "key": "B",
+        "text": "Rely on the base model's training data",
+        "correct": false,
+        "why": "The base model knows nothing about the company's current catalog."
+      },
+      {
+        "key": "C",
+        "text": "Fine-tune the model daily on the latest catalog",
+        "correct": false,
+        "why": "Daily fine-tuning is costly and still lags behind changes that occur many times a day."
+      },
+      {
+        "key": "D",
+        "text": "Use RAG or tools to retrieve current catalog data at query time",
+        "correct": true,
+        "why": "Retrieving data at query time always reflects the latest information without retraining the model."
+      }
+    ],
+    "explanation": {
+      "answer": "For frequently changing information, retrieve data at query time through RAG (documents) or tool calls (live APIs and databases). This keeps answers current and avoids retraining.",
+      "concept": "Fine-tuning is better for teaching style, format or domain behavior, not for frequently changing facts.",
+      "examTip": "Facts change often → retrieve at query time (RAG/tools), don't fine-tune.",
+      "references": [
+        {
+          "title": "What is RAG?",
+          "url": "https://aws.amazon.com/what-is/retrieval-augmented-generation/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-009",
+    "domain": "applications",
+    "topic": "FM Selection",
+    "tags": [
+      "selection-criteria"
+    ],
+    "difficulty": "medium",
+    "type": "multi",
+    "selectCount": 3,
+    "stem": "A team is writing selection criteria for choosing a foundation model for a customer-facing chat application.",
+    "prompt": "Which factors are valid FM selection criteria? (Select THREE.)",
+    "options": [
+      {
+        "key": "A",
+        "text": "Supported languages and modalities",
+        "correct": true,
+        "why": "The model must support the languages and input types the application needs."
+      },
+      {
+        "key": "B",
+        "text": "Latency and response speed",
+        "correct": true,
+        "why": "Customer-facing chat needs responsive answers, so latency matters."
+      },
+      {
+        "key": "C",
+        "text": "Whether the model name is short",
+        "correct": false,
+        "why": "A model's name does not affect its capabilities or cost."
+      },
+      {
+        "key": "D",
+        "text": "Cost per input and output token",
+        "correct": true,
+        "why": "Cost directly affects the economics of the application at scale."
+      },
+      {
+        "key": "E",
+        "text": "The color of the provider's logo",
+        "correct": false,
+        "why": "Branding has no bearing on model suitability."
+      }
+    ],
+    "explanation": {
+      "answer": "FM selection criteria include cost, modality, latency, multilingual support, model size and complexity, customization options, input and output length (context window), prompt caching support, accuracy on your task, and compliance constraints.",
+      "concept": "Shortlist models by hard requirements (modality, languages, compliance), then compare quality, cost and latency on your own evaluation data.",
+      "examTip": "Cost, modality, latency, languages, size, customization, context length, caching.",
+      "references": [
+        {
+          "title": "Evaluate the performance of Amazon Bedrock resources",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/evaluation.html"
+        },
+        {
+          "title": "What is Amazon Bedrock?",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/what-is-bedrock.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-010",
+    "domain": "applications",
+    "topic": "FM Selection",
+    "tags": [
+      "model-size",
+      "complexity"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "An application needs complex multi-step reasoning over legal contracts. Testing shows that small models miss subtle clauses while larger models catch them reliably.",
+    "prompt": "Which selection decision is MOST appropriate?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Choose a larger, more capable model, accepting higher cost and latency because the task requires it",
+        "correct": true,
+        "why": "When smaller models fail the quality bar on complex reasoning, the extra cost of a more capable model is justified."
+      },
+      {
+        "key": "B",
+        "text": "Choose a model at random",
+        "correct": false,
+        "why": "Random selection ignores the evaluation results."
+      },
+      {
+        "key": "C",
+        "text": "Choose an image-generation model",
+        "correct": false,
+        "why": "The task is text reasoning, not image generation."
+      },
+      {
+        "key": "D",
+        "text": "Choose the smallest model to minimize cost, even though it misses clauses",
+        "correct": false,
+        "why": "Missing clauses in legal review creates risk that outweighs the savings."
+      }
+    ],
+    "explanation": {
+      "answer": "Model size and complexity trade off against cost and latency. Complex reasoning tasks often require larger models; simpler tasks can use smaller ones. Base the decision on evaluation against your requirements.",
+      "concept": "A hybrid approach routes simple requests to small models and complex ones to large models to balance cost and quality.",
+      "examTip": "Task too complex for small models → pay for capability.",
+      "references": [
+        {
+          "title": "Evaluate the performance of Amazon Bedrock resources",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/evaluation.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-011",
+    "domain": "applications",
+    "topic": "RAG",
+    "tags": [
+      "rag-workflow"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "An engineer describes the runtime steps of a RAG application when a user asks a question.",
+    "prompt": "Which sequence is correct?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Generate the answer, then embed the question, then retrieve passages",
+        "correct": false,
+        "why": "Retrieval must happen before generation so the model can use the retrieved passages."
+      },
+      {
+        "key": "B",
+        "text": "Embed the question, search the vector store for similar chunks, add the retrieved chunks to the prompt, then generate the answer",
+        "correct": true,
+        "why": "This is the RAG query flow: retrieve relevant context by similarity, augment the prompt, then generate."
+      },
+      {
+        "key": "C",
+        "text": "Fine-tune the model on the question, then answer",
+        "correct": false,
+        "why": "RAG does not train the model per question."
+      },
+      {
+        "key": "D",
+        "text": "Translate the question, then generate an image",
+        "correct": false,
+        "why": "These steps are unrelated to answering questions with retrieved documents."
+      }
+    ],
+    "explanation": {
+      "answer": "At query time, RAG converts the question into an embedding, retrieves the most similar document chunks from a vector store, augments the prompt with those chunks, and asks the FM to generate an answer grounded in them.",
+      "concept": "Ingestion happens earlier: documents are chunked, embedded and indexed. Retrieval quality depends on chunking, embeddings and search configuration.",
+      "examTip": "Embed → retrieve → augment → generate.",
+      "references": [
+        {
+          "title": "How Amazon Bedrock knowledge bases work",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/kb-how-it-works.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-012",
+    "domain": "applications",
+    "topic": "RAG",
+    "tags": [
+      "rag-business-applications"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A company is identifying business applications for retrieval augmented generation.",
+    "prompt": "Which application is the BEST fit for RAG?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Sorting invoices by date",
+        "correct": false,
+        "why": "Sorting is deterministic and needs no generative model."
+      },
+      {
+        "key": "B",
+        "text": "Predicting tomorrow's temperature from sensor readings",
+        "correct": false,
+        "why": "Weather prediction from sensor data is a forecasting problem."
+      },
+      {
+        "key": "C",
+        "text": "An employee assistant that answers HR and IT questions from internal handbooks and wikis",
+        "correct": true,
+        "why": "Answering from internal documents is the core RAG use case, grounding responses in company knowledge."
+      },
+      {
+        "key": "D",
+        "text": "Generating abstract art with no reference material",
+        "correct": false,
+        "why": "Abstract art generation does not need retrieved documents."
+      }
+    ],
+    "explanation": {
+      "answer": "RAG fits applications that must answer from a specific, often private or frequently updated, body of knowledge: internal help desks, customer support over product documentation, policy and compliance Q&A, research assistants and sales enablement.",
+      "concept": "RAG combines search with generation, so answers are both relevant to company content and naturally phrased.",
+      "examTip": "Answers must come from your documents → RAG.",
+      "references": [
+        {
+          "title": "What is RAG?",
+          "url": "https://aws.amazon.com/what-is/retrieval-augmented-generation/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-013",
+    "domain": "applications",
+    "topic": "FM Selection",
+    "tags": [
+      "prompt-caching",
+      "selection-criteria"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A team's application sends a long, identical system prompt and reference document with every request. They are comparing two similarly priced models; only one supports prompt caching in Amazon Bedrock.",
+    "prompt": "Why should prompt caching support influence the selection?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Prompt caching permanently trains the model on the prompt",
+        "correct": false,
+        "why": "Caching does not change model weights. It reuses processed context temporarily."
+      },
+      {
+        "key": "B",
+        "text": "Prompt caching is only for image models",
+        "correct": false,
+        "why": "Prompt caching applies to supported text and multimodal models with repeated prompt content."
+      },
+      {
+        "key": "C",
+        "text": "Prompt caching makes the model more creative",
+        "correct": false,
+        "why": "Caching affects cost and latency, not creativity."
+      },
+      {
+        "key": "D",
+        "text": "Prompt caching can significantly reduce cost and latency for repeated prompt prefixes, which matches this workload",
+        "correct": true,
+        "why": "Caching the repeated prefix means it is not fully reprocessed and billed at the full rate on every request."
+      }
+    ],
+    "explanation": {
+      "answer": "Prompt caching stores the processed form of a repeated prompt prefix for a period, so subsequent requests that share the prefix are cheaper and faster. For workloads with long, repeated context, support for prompt caching is an important selection criterion.",
+      "concept": "Structure prompts with static content (instructions, documents) first and variable content (the user's question) last to maximize cache hits.",
+      "examTip": "Repeated long prefix → prefer a model with prompt caching.",
+      "references": [
+        {
+          "title": "Prompt caching for faster model inference",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-caching.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-014",
+    "domain": "applications",
+    "topic": "Inference Parameters",
+    "tags": [
+      "max-tokens",
+      "truncation"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "Users complain that an assistant's answers often end mid-sentence. Logs show responses stop exactly at 100 tokens.",
+    "prompt": "What is the MOST likely cause and fix?",
+    "options": [
+      {
+        "key": "A",
+        "text": "The maximum output tokens setting is too low; increase it or ask for more concise answers",
+        "correct": true,
+        "why": "Responses stopping at exactly the same token count indicate the max-tokens limit is truncating them."
+      },
+      {
+        "key": "B",
+        "text": "The model needs fine-tuning",
+        "correct": false,
+        "why": "Truncation at a fixed length is a configuration issue, not a training issue."
+      },
+      {
+        "key": "C",
+        "text": "The embedding model is wrong; replace it",
+        "correct": false,
+        "why": "Embedding models are used for retrieval and do not truncate generated responses."
+      },
+      {
+        "key": "D",
+        "text": "The temperature is too low; increase it",
+        "correct": false,
+        "why": "Temperature affects randomness, not response length cutoffs."
+      }
+    ],
+    "explanation": {
+      "answer": "The max tokens (maximum output length) parameter caps the number of generated tokens. If it is too low, responses are cut off. Increase it, or instruct the model to answer concisely so complete answers fit within the limit.",
+      "concept": "Input and output length limits are both FM selection and configuration considerations; longer limits mean higher potential cost.",
+      "examTip": "Answers cut off at the same length → max tokens too low.",
+      "references": [
+        {
+          "title": "Influence response generation with inference parameters",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/inference-parameters.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-015",
+    "domain": "applications",
+    "topic": "RAG",
+    "tags": [
+      "retrieval-quality",
+      "chunking"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A RAG assistant often answers with information from the wrong section of long manuals. Investigation shows each chunk is an entire 30-page chapter, and retrieved chunks contain many unrelated topics.",
+    "prompt": "Which change is MOST likely to improve answer relevance?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use an image-generation model",
+        "correct": false,
+        "why": "Image generation is irrelevant to text retrieval quality."
+      },
+      {
+        "key": "B",
+        "text": "Use smaller, more focused chunks (or a hierarchical or semantic chunking strategy) so retrieved passages match the question more precisely",
+        "correct": true,
+        "why": "Smaller, coherent chunks make similarity search more precise and reduce irrelevant content in the prompt."
+      },
+      {
+        "key": "C",
+        "text": "Increase the temperature",
+        "correct": false,
+        "why": "Randomness does not fix retrieval of the wrong content."
+      },
+      {
+        "key": "D",
+        "text": "Remove the vector store and send no context",
+        "correct": false,
+        "why": "Without retrieval, the model loses access to the manuals entirely."
+      }
+    ],
+    "explanation": {
+      "answer": "Chunking strategy strongly affects RAG quality. Very large chunks mix many topics, weakening similarity matching and filling the context with noise. Smaller or semantically coherent chunks, or hierarchical chunking (search small chunks, return their parent context), improve precision.",
+      "concept": "Other retrieval improvements include metadata filtering, hybrid search, reranking and query reformulation.",
+      "examTip": "Wrong passages retrieved → revisit chunking (size, strategy).",
+      "references": [
+        {
+          "title": "How content chunking works for knowledge bases",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/kb-chunking.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-016",
+    "domain": "applications",
+    "topic": "FM Selection",
+    "tags": [
+      "modality",
+      "multilingual",
+      "selection"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A team must select a model to describe product images in English, French and German.",
+    "prompt": "Which two selection criteria are MOST decisive?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Embedding dimension and chunk size",
+        "correct": false,
+        "why": "These are retrieval settings, not generation model requirements."
+      },
+      {
+        "key": "B",
+        "text": "Stop sequences and top-k",
+        "correct": false,
+        "why": "These are runtime parameters, not selection criteria."
+      },
+      {
+        "key": "C",
+        "text": "Modality (image input) and multilingual support",
+        "correct": true,
+        "why": "The model must accept images and produce good descriptions in all three languages."
+      },
+      {
+        "key": "D",
+        "text": "Training cutoff date and model name",
+        "correct": false,
+        "why": "These do not determine whether the model can describe images in multiple languages."
+      }
+    ],
+    "explanation": {
+      "answer": "Modality and multilingual capability are hard requirements here: without image input or support for the needed languages, a model cannot do the task regardless of its other strengths.",
+      "concept": "Apply hard filters first (modality, language, compliance), then compare quality, cost and latency.",
+      "examTip": "Images + several languages → filter by modality and language support.",
+      "references": [
+        {
+          "title": "What is Amazon Nova?",
+          "url": "https://docs.aws.amazon.com/nova/latest/userguide/what-is-nova.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-017",
+    "domain": "applications",
+    "topic": "Inference Parameters",
+    "tags": [
+      "temperature",
+      "top-p",
+      "use-case"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company runs two applications on the same model: a contract-clause extractor that must produce the same structured output for the same input, and a story generator for children's books.",
+    "prompt": "Which settings are MOST appropriate?",
+    "options": [
+      {
+        "key": "A",
+        "text": "High temperature for both",
+        "correct": false,
+        "why": "High randomness would make extraction inconsistent."
+      },
+      {
+        "key": "B",
+        "text": "High temperature for the extractor and low for the story generator",
+        "correct": false,
+        "why": "This is reversed: extraction needs low randomness and creative writing benefits from higher randomness."
+      },
+      {
+        "key": "C",
+        "text": "Temperature 0 for both",
+        "correct": false,
+        "why": "Zero temperature would make stories repetitive and dull."
+      },
+      {
+        "key": "D",
+        "text": "Low temperature for the extractor and higher temperature for the story generator",
+        "correct": true,
+        "why": "Extraction needs consistency, so low randomness; storytelling benefits from variety, so higher randomness."
+      }
+    ],
+    "explanation": {
+      "answer": "Inference parameters should match the use case. Deterministic tasks such as extraction, classification and factual Q&A use low temperature/top-p; creative tasks such as stories and brainstorming use higher values.",
+      "concept": "Parameters are set per request, so one model can serve both styles of application.",
+      "examTip": "Structured/factual → low temperature. Creative → higher temperature.",
+      "references": [
+        {
+          "title": "Influence response generation with inference parameters",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/inference-parameters.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-018",
+    "domain": "applications",
+    "topic": "RAG",
+    "tags": [
+      "metadata-filtering",
+      "access"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A global company's knowledge base contains HR policies for 20 countries. Employees in Germany sometimes receive answers based on US policies.",
+    "prompt": "Which RAG improvement BEST addresses this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Attach metadata (such as country) to documents and apply metadata filters at retrieval time based on the user's location",
+        "correct": true,
+        "why": "Metadata filtering restricts retrieval to documents relevant to the user's country, preventing answers from the wrong policy set."
+      },
+      {
+        "key": "B",
+        "text": "Increase the temperature",
+        "correct": false,
+        "why": "Temperature does not influence which documents are retrieved."
+      },
+      {
+        "key": "C",
+        "text": "Remove all German documents",
+        "correct": false,
+        "why": "That would make correct German answers impossible."
+      },
+      {
+        "key": "D",
+        "text": "Use a larger max-token setting",
+        "correct": false,
+        "why": "Longer outputs do not fix retrieving the wrong documents."
+      }
+    ],
+    "explanation": {
+      "answer": "Metadata filtering narrows retrieval to documents whose attributes match the query context, such as country, department, product or date. Amazon Bedrock Knowledge Bases supports metadata on documents and filters at query time.",
+      "concept": "Retrieval precision matters as much as model quality. Filtering, chunking, hybrid search and reranking all improve RAG relevance.",
+      "examTip": "Right documents for the right user → metadata filtering.",
+      "references": [
+        {
+          "title": "How Amazon Bedrock knowledge bases work",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/kb-how-it-works.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-019",
+    "domain": "applications",
+    "topic": "RAG",
+    "tags": [
+      "structured-data",
+      "knowledge-bases"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "Business users want to ask questions such as \"What were total sales by region last quarter?\" in natural language, and the answer must be computed from tables in a data warehouse, not from documents.",
+    "prompt": "Which approach is MOST appropriate?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Embed every row of the warehouse as text and use vector similarity search to sum values",
+        "correct": false,
+        "why": "Vector search finds similar text. It cannot reliably compute totals across many rows."
+      },
+      {
+        "key": "B",
+        "text": "Use a capability that converts the natural-language question into a SQL query against the structured data, such as structured data retrieval in Amazon Bedrock Knowledge Bases",
+        "correct": true,
+        "why": "Aggregations over tables require generating and running queries. Text-to-SQL retrieval computes accurate numbers from structured data."
+      },
+      {
+        "key": "C",
+        "text": "Ask the model to guess the totals from its training data",
+        "correct": false,
+        "why": "The model has no knowledge of the company's sales data and would hallucinate numbers."
+      },
+      {
+        "key": "D",
+        "text": "Fine-tune the model on last quarter's sales report",
+        "correct": false,
+        "why": "Fine-tuning does not let a model compute accurate aggregations on current data."
+      }
+    ],
+    "explanation": {
+      "answer": "For structured data, RAG uses query generation rather than vector similarity: the FM translates the question into SQL, the query runs against the data store, and the results ground the answer. Amazon Bedrock Knowledge Bases supports structured data retrieval from sources such as Amazon Redshift.",
+      "concept": "Choose retrieval by data type: unstructured text → vector search; structured tables → text-to-SQL; relationships → graph-based retrieval.",
+      "examTip": "Numbers from tables → generate and run SQL, not vector search.",
+      "references": [
+        {
+          "title": "Retrieve data and generate AI responses with Amazon Bedrock Knowledge Bases",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/knowledge-base.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-020",
+    "domain": "applications",
+    "topic": "FM Selection",
+    "tags": [
+      "customization-support",
+      "selection"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A healthcare startup expects it will need to adapt a model's tone and terminology with its own examples later, and it wants to stay within Amazon Bedrock.",
+    "prompt": "Which selection criterion does this introduce?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Number of output languages for audio",
+        "correct": false,
+        "why": "Audio output is not part of the requirement."
+      },
+      {
+        "key": "B",
+        "text": "The model's release year only",
+        "correct": false,
+        "why": "Release year alone does not tell you whether customization is supported."
+      },
+      {
+        "key": "C",
+        "text": "Customization: whether the model supports fine-tuning or other customization in Amazon Bedrock",
+        "correct": true,
+        "why": "Only some models support customization methods in Bedrock, so this requirement narrows the choice."
+      },
+      {
+        "key": "D",
+        "text": "Image resolution",
+        "correct": false,
+        "why": "Image resolution is irrelevant to adapting text tone and terminology."
+      }
+    ],
+    "explanation": {
+      "answer": "Customization is an FM selection criterion: some models in Amazon Bedrock support fine-tuning, continued pre-training or distillation, while others can only be used as-is with prompts and RAG.",
+      "concept": "Prefer prompt engineering and RAG first; plan for customization only if they are insufficient.",
+      "examTip": "Need to adapt the model later → pick one that supports customization.",
+      "references": [
+        {
+          "title": "Customize your model (Amazon Bedrock)",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/custom-models.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-021",
+    "domain": "applications",
+    "topic": "RAG",
+    "tags": [
+      "rag-components"
+    ],
+    "difficulty": "medium",
+    "type": "multi",
+    "selectCount": 2,
+    "stem": "An architect lists the components needed for a document-based RAG application.",
+    "prompt": "Which components are required? (Select TWO.)",
+    "options": [
+      {
+        "key": "A",
+        "text": "A GPU cluster to pre-train a new foundation model",
+        "correct": false,
+        "why": "RAG uses existing models. Pre-training is not required."
+      },
+      {
+        "key": "B",
+        "text": "A vector store to index and search the embeddings",
+        "correct": true,
+        "why": "A vector store holds embeddings and performs similarity search at query time."
+      },
+      {
+        "key": "C",
+        "text": "A diffusion model",
+        "correct": false,
+        "why": "Diffusion models generate images and are not part of text RAG."
+      },
+      {
+        "key": "D",
+        "text": "A reinforcement learning reward function",
+        "correct": false,
+        "why": "RAG does not involve reinforcement learning."
+      },
+      {
+        "key": "E",
+        "text": "An embedding model to convert chunks and queries into vectors",
+        "correct": true,
+        "why": "Embeddings enable semantic retrieval of relevant chunks."
+      }
+    ],
+    "explanation": {
+      "answer": "A document RAG application needs a data source, a chunking step, an embedding model, a vector store for similarity search, and a generation model (LLM) to write answers from retrieved context.",
+      "concept": "Amazon Bedrock Knowledge Bases assembles these components for you, including managed ingestion and vector store integration.",
+      "examTip": "RAG = data + chunking + embedding model + vector store + LLM.",
+      "references": [
+        {
+          "title": "How Amazon Bedrock knowledge bases work",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/kb-how-it-works.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-022",
+    "domain": "applications",
+    "topic": "FM Selection",
+    "tags": [
+      "latency",
+      "streaming",
+      "input-length"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A team must pick between two models for a live chat feature. Model X has slightly better quality but takes much longer to start responding. Model Y is slightly weaker but responds quickly. User research shows that waiting more than two seconds causes many users to abandon the chat.",
+    "prompt": "Which model should the team MOST likely choose, assuming Model Y meets the quality bar?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Model X, because quality always outweighs latency",
+        "correct": false,
+        "why": "In interactive applications, slow responses can cause users to leave before seeing any answer."
+      },
+      {
+        "key": "B",
+        "text": "Neither, because latency cannot be measured",
+        "correct": false,
+        "why": "Latency is measurable and is a standard selection criterion."
+      },
+      {
+        "key": "C",
+        "text": "Model X with a higher temperature",
+        "correct": false,
+        "why": "Temperature only changes how random the output is. It does not make Model X respond any faster."
+      },
+      {
+        "key": "D",
+        "text": "Model Y, because latency strongly affects user experience and it meets the quality requirement",
+        "correct": true,
+        "why": "When both models meet quality needs, the faster one better serves an interactive experience where delays cause abandonment."
+      }
+    ],
+    "explanation": {
+      "answer": "Latency is a key FM selection criterion for interactive applications. If a faster model meets the quality bar, it usually delivers better user experience and lower cost.",
+      "concept": "Streaming responses and shorter prompts also reduce perceived latency.",
+      "examTip": "Interactive + meets quality → choose the faster model.",
+      "references": [
+        {
+          "title": "Generative AI Lens: AWS Well-Architected",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/generative-ai-lens.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-023",
+    "domain": "applications",
+    "topic": "RAG",
+    "tags": [
+      "grounding",
+      "hallucination",
+      "instructions"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A RAG assistant sometimes adds information that is not in the retrieved documents. The team wants it to answer only from the provided context and say when the answer is not available.",
+    "prompt": "Which change BEST supports this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Instruct the model to answer only from the provided context and to say \"I don't know\" otherwise, and enable a contextual grounding check in Amazon Bedrock Guardrails",
+        "correct": true,
+        "why": "Explicit grounding instructions plus an automated grounding check reduce answers that are unsupported by the retrieved sources."
+      },
+      {
+        "key": "B",
+        "text": "Switch to an embedding model for generation",
+        "correct": false,
+        "why": "Embedding models produce vectors, not answers."
+      },
+      {
+        "key": "C",
+        "text": "Raise the temperature to make answers more complete",
+        "correct": false,
+        "why": "Higher randomness increases the chance of unsupported content."
+      },
+      {
+        "key": "D",
+        "text": "Remove the retrieved context to shorten prompts",
+        "correct": false,
+        "why": "Without context, the model has nothing to ground its answers in."
+      }
+    ],
+    "explanation": {
+      "answer": "Grounding techniques keep RAG answers faithful to sources: clear instructions to use only the provided context, permission to say the answer is unknown, citation requirements, and automated checks such as Bedrock Guardrails contextual grounding, which flags responses not supported by the source or not relevant to the query.",
+      "concept": "Hallucination detection and grounding methods also appear in Domain 5 (security and governance).",
+      "examTip": "Answers go beyond sources → grounding instructions + contextual grounding check.",
+      "references": [
+        {
+          "title": "Contextual grounding check (Amazon Bedrock Guardrails)",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-contextual-grounding-check.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-024",
+    "domain": "applications",
+    "topic": "Inference Parameters",
+    "tags": [
+      "top-k"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A developer sets top-k to 1 for a text-generation request.",
+    "prompt": "What is the expected effect?",
+    "options": [
+      {
+        "key": "A",
+        "text": "The model generates only one token in total",
+        "correct": false,
+        "why": "Top-k limits candidate tokens at each step, not the total number of tokens generated."
+      },
+      {
+        "key": "B",
+        "text": "The model always picks the single most likely next token, making output highly deterministic",
+        "correct": true,
+        "why": "With k = 1, only the top-ranked token is considered at each step, which is greedy decoding."
+      },
+      {
+        "key": "C",
+        "text": "The model becomes maximally creative",
+        "correct": false,
+        "why": "Restricting candidates to one token removes randomness, the opposite of creativity."
+      },
+      {
+        "key": "D",
+        "text": "The model retrieves one document from a knowledge base",
+        "correct": false,
+        "why": "Top-k in inference parameters controls token sampling, not retrieval (although retrieval also has a similar number-of-results setting)."
+      }
+    ],
+    "explanation": {
+      "answer": "Top-k restricts sampling to the k most likely next tokens. With k = 1 the model always picks the most probable token (greedy decoding), producing deterministic, conservative output. Larger k allows more variety.",
+      "concept": "Temperature, top-p and top-k all shape randomness; length is controlled by max tokens and stop sequences.",
+      "examTip": "Top-k = number of candidate tokens. k = 1 → deterministic.",
+      "references": [
+        {
+          "title": "Influence response generation with inference parameters",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/inference-parameters.html"
+        }
+      ]
+    }
+  }
+]

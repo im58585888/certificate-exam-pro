@@ -1,0 +1,1020 @@
+[
+  {
+    "id": "aif-sec-051",
+    "domain": "security",
+    "topic": "Compliance Services",
+    "tags": [
+      "aws-artifact"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A bank's compliance officer needs AWS's SOC 2 and ISO certification reports to include in an audit of the bank's new AI platform.",
+    "prompt": "Where can the officer download these reports?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Artifact",
+        "correct": true,
+        "why": "AWS Artifact provides on-demand access to AWS security and compliance reports such as SOC and ISO, and to agreements."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Bedrock playground",
+        "correct": false,
+        "why": "The playground is for experimenting with models."
+      },
+      {
+        "key": "C",
+        "text": "Amazon Inspector",
+        "correct": false,
+        "why": "Inspector scans for vulnerabilities and does not provide AWS audit reports."
+      },
+      {
+        "key": "D",
+        "text": "AWS Lambda",
+        "correct": false,
+        "why": "Lambda runs code and does not provide AWS's compliance reports."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Artifact is a self-service portal for AWS compliance reports (for example SOC, PCI and ISO reports) and agreements such as the Business Associate Addendum. Customers use them as evidence of AWS's controls in their own audits.",
+      "concept": "AWS Artifact covers AWS's side of shared responsibility; customers still demonstrate their own controls.",
+      "examTip": "Download AWS compliance reports = AWS Artifact.",
+      "references": [
+        {
+          "title": "What is AWS Artifact?",
+          "url": "https://docs.aws.amazon.com/artifact/latest/ug/what-is-aws-artifact.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-sec-052",
+    "domain": "security",
+    "topic": "Compliance Services",
+    "tags": [
+      "aws-config"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company requires that all SageMaker AI notebook instances have direct internet access disabled and all S3 buckets holding training data be encrypted. It wants continuous detection of resources that violate these rules.",
+    "prompt": "Which AWS service should it use?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Translate",
+        "correct": false,
+        "why": "Translate converts languages and cannot detect non-compliant resources."
+      },
+      {
+        "key": "B",
+        "text": "AWS Config with rules evaluating resource configurations",
+        "correct": true,
+        "why": "AWS Config continuously records resource configurations and evaluates them against rules, flagging non-compliant resources."
+      },
+      {
+        "key": "C",
+        "text": "Amazon Personalize",
+        "correct": false,
+        "why": "Personalize generates recommendations and has no compliance monitoring capability."
+      },
+      {
+        "key": "D",
+        "text": "Amazon Polly",
+        "correct": false,
+        "why": "Polly converts text to speech and cannot evaluate resource configurations."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Config records configurations of AWS resources and evaluates them with managed or custom rules, providing continuous compliance monitoring and history of configuration changes. Conformance packs bundle rules for frameworks.",
+      "concept": "Config is a detective control; pair it with preventive controls such as SCPs and IAM.",
+      "examTip": "Continuously check resources against configuration rules = AWS Config.",
+      "references": [
+        {
+          "title": "What is AWS Config?",
+          "url": "https://docs.aws.amazon.com/config/latest/developerguide/WhatIsConfig.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-sec-053",
+    "domain": "security",
+    "topic": "Compliance Services",
+    "tags": [
+      "trusted-advisor"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A team wants automated recommendations about security gaps, cost savings, performance, fault tolerance and service limits across its AWS account that hosts AI workloads.",
+    "prompt": "Which AWS service provides these best-practice checks?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Comprehend",
+        "correct": false,
+        "why": "Comprehend analyzes text and does not inspect accounts for best-practice gaps."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Rekognition",
+        "correct": false,
+        "why": "Rekognition analyzes images and video and does not review account configuration."
+      },
+      {
+        "key": "C",
+        "text": "AWS Trusted Advisor",
+        "correct": true,
+        "why": "Trusted Advisor inspects the account and recommends improvements across cost, security, performance, fault tolerance and service limits."
+      },
+      {
+        "key": "D",
+        "text": "Amazon Polly",
+        "correct": false,
+        "why": "Polly converts text to speech and provides no account recommendations."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Trusted Advisor provides recommendations based on AWS best practices across cost optimization, performance, security, fault tolerance, service limits and operational excellence, helping governance teams find gaps.",
+      "concept": "The exam guide lists Trusted Advisor among services that assist with governance and compliance.",
+      "examTip": "Account-wide best-practice recommendations = Trusted Advisor.",
+      "references": [
+        {
+          "title": "AWS Trusted Advisor",
+          "url": "https://docs.aws.amazon.com/awssupport/latest/user/trusted-advisor.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-sec-054",
+    "domain": "security",
+    "topic": "Compliance Services",
+    "tags": [
+      "audit-manager"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A company must continuously collect evidence of its AWS controls and map it to a compliance framework, including a framework for generative AI best practices, to prepare for audits.",
+    "prompt": "Which AWS service is designed for this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Polly",
+        "correct": false,
+        "why": "Polly converts text to speech and cannot collect audit evidence."
+      },
+      {
+        "key": "B",
+        "text": "Amazon EBS",
+        "correct": false,
+        "why": "EBS provides block storage volumes and has no audit evidence features."
+      },
+      {
+        "key": "C",
+        "text": "Amazon Route 53",
+        "correct": false,
+        "why": "Route 53 is a DNS service and does not map evidence to compliance frameworks."
+      },
+      {
+        "key": "D",
+        "text": "AWS Audit Manager",
+        "correct": true,
+        "why": "Audit Manager continuously collects evidence from AWS usage and maps it to prebuilt or custom frameworks, including generative AI best-practice frameworks."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Audit Manager automates evidence collection from AWS services and organizes it according to compliance frameworks, simplifying audit preparation. It offers prebuilt frameworks, including one for generative AI best practices on Amazon Bedrock and SageMaker AI.",
+      "concept": "Audit Manager uses data from sources such as AWS Config, CloudTrail and Security Hub as evidence.",
+      "examTip": "Continuous audit evidence mapped to frameworks = AWS Audit Manager.",
+      "references": [
+        {
+          "title": "What is AWS Audit Manager?",
+          "url": "https://docs.aws.amazon.com/audit-manager/latest/userguide/what-is.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-sec-055",
+    "domain": "security",
+    "topic": "Governance Frameworks",
+    "tags": [
+      "scoping-matrix"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company's security team wants a framework that classifies generative AI use cases by how much of the model and application the company controls, from using a public consumer app to training its own model, so it can apply the right security controls to each.",
+    "prompt": "Which AWS framework is designed for this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "The Generative AI Security Scoping Matrix",
+        "correct": true,
+        "why": "The Scoping Matrix classifies use cases into five scopes by ownership and control, guiding which security considerations apply."
+      },
+      {
+        "key": "B",
+        "text": "The AWS pricing calculator",
+        "correct": false,
+        "why": "The pricing calculator estimates costs, not security scope."
+      },
+      {
+        "key": "C",
+        "text": "AWS Snowball",
+        "correct": false,
+        "why": "Snowball physically transfers data and is not a security framework."
+      },
+      {
+        "key": "D",
+        "text": "Amazon Bedrock playground",
+        "correct": false,
+        "why": "The playground is for experimenting with models."
+      }
+    ],
+    "explanation": {
+      "answer": "The Generative AI Security Scoping Matrix defines five scopes: (1) consumer apps, (2) enterprise apps, (3) pre-trained models used to build your application, (4) fine-tuned models, and (5) self-trained models. Higher scopes mean more control and more security responsibility.",
+      "concept": "For each scope it highlights governance and compliance, legal and privacy, risk management, controls and resilience considerations.",
+      "examTip": "Classify GenAI use cases by ownership to pick controls = Security Scoping Matrix.",
+      "references": [
+        {
+          "title": "Generative AI Security Scoping Matrix",
+          "url": "https://aws.amazon.com/ai/security/generative-ai-scoping-matrix/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-sec-056",
+    "domain": "security",
+    "topic": "Governance Frameworks",
+    "tags": [
+      "scoping-matrix",
+      "scopes"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A company builds a customer-support application by calling a foundation model through the Amazon Bedrock API with its own prompts and a knowledge base. It does not fine-tune or train the model.",
+    "prompt": "Which scope of the Generative AI Security Scoping Matrix does this use case fall into?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Scope 5: self-trained model",
+        "correct": false,
+        "why": "The company did not train its own model."
+      },
+      {
+        "key": "B",
+        "text": "Scope 3: building an application on a pre-trained model",
+        "correct": true,
+        "why": "Using an existing FM through an API in the company's own application, without fine-tuning, is scope 3."
+      },
+      {
+        "key": "C",
+        "text": "Scope 4: fine-tuned model",
+        "correct": false,
+        "why": "Scope 4 applies when a model is fine-tuned, and this company does not fine-tune."
+      },
+      {
+        "key": "D",
+        "text": "Scope 1: consumer app",
+        "correct": false,
+        "why": "Scope 1 is employees using public consumer AI services, not building an application."
+      }
+    ],
+    "explanation": {
+      "answer": "Scope 3 covers applications a company builds using pre-trained foundation models (for example through Amazon Bedrock), including prompts and RAG. Scope 4 adds fine-tuning with the company's data, and scope 5 means training a model from scratch.",
+      "concept": "Scopes 1 and 2 are buying applications: consumer apps (scope 1) and enterprise SaaS with generative AI features (scope 2).",
+      "examTip": "Own app + existing FM via API (+ RAG) = scope 3.",
+      "references": [
+        {
+          "title": "Generative AI Security Scoping Matrix",
+          "url": "https://aws.amazon.com/ai/security/generative-ai-scoping-matrix/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-sec-057",
+    "domain": "security",
+    "topic": "Data Governance",
+    "tags": [
+      "data-retention",
+      "lifecycle"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "Regulations require a company to delete customer chat transcripts used by its AI assistant after 18 months.",
+    "prompt": "Which data governance practice addresses this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Delete transcripts randomly",
+        "correct": false,
+        "why": "Random deletion is not a controlled, auditable policy."
+      },
+      {
+        "key": "B",
+        "text": "Increase the model's context window",
+        "correct": false,
+        "why": "Context window size is unrelated to retention."
+      },
+      {
+        "key": "C",
+        "text": "Define a data retention policy and enforce it automatically, for example with Amazon S3 Lifecycle rules and log retention settings",
+        "correct": true,
+        "why": "Retention policies with automated enforcement ensure data is deleted on schedule."
+      },
+      {
+        "key": "D",
+        "text": "Keep all transcripts forever in case they are useful",
+        "correct": false,
+        "why": "Indefinite retention violates the regulation."
+      }
+    ],
+    "explanation": {
+      "answer": "Data governance strategies include managing data lifecycles and retention: defining how long data is kept, archiving and deleting it on schedule, and documenting the policy. AWS tools such as S3 Lifecycle and CloudWatch Logs retention automate enforcement.",
+      "concept": "Retention applies to source data, training sets, logs, memories and knowledge bases.",
+      "examTip": "Delete data after a required period = retention policy + lifecycle automation.",
+      "references": [
+        {
+          "title": "Generative AI Lens: AWS Well-Architected",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/generative-ai-lens.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-sec-058",
+    "domain": "security",
+    "topic": "Data Governance",
+    "tags": [
+      "data-residency"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company operating in a country with strict data-localization laws must ensure that customer data processed by its AI application stays within that country's AWS Region.",
+    "prompt": "Which practice supports this requirement?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Ignore residency because AI is exempt",
+        "correct": false,
+        "why": "AI workloads are not exempt from data residency laws."
+      },
+      {
+        "key": "B",
+        "text": "Use any Region with the lowest price",
+        "correct": false,
+        "why": "Price-based Region choice may violate localization laws."
+      },
+      {
+        "key": "C",
+        "text": "Enable cross-Region inference across all global Regions",
+        "correct": false,
+        "why": "This may route data outside the permitted country."
+      },
+      {
+        "key": "D",
+        "text": "Deploy the application, data stores and model inference in the required Region, avoiding configurations such as cross-Region inference profiles that route data outside the permitted Regions",
+        "correct": true,
+        "why": "Choosing Regions and inference configurations deliberately keeps data processing within the legal boundary."
+      }
+    ],
+    "explanation": {
+      "answer": "Data residency is a data governance consideration: choose AWS Regions that satisfy legal requirements, keep storage and processing there, and review features that move data between Regions, such as cross-Region inference and replication.",
+      "concept": "Service and model availability vary by Region, which can constrain choices for residency-bound workloads.",
+      "examTip": "Data must stay in-country → pick that Region, avoid cross-Region routing.",
+      "references": [
+        {
+          "title": "Increase throughput with cross-Region inference",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/cross-region-inference.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-sec-059",
+    "domain": "security",
+    "topic": "Data Governance",
+    "tags": [
+      "monitoring",
+      "observation"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A governance team wants ongoing visibility into how its AI systems use data, including unusual access patterns, usage volumes and policy violations.",
+    "prompt": "Which data governance strategy is this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Monitoring and observation of data use, with logging, metrics and alerts",
+        "correct": true,
+        "why": "Continuous monitoring of data access and usage detects anomalies and policy violations."
+      },
+      {
+        "key": "B",
+        "text": "Prompt caching",
+        "correct": false,
+        "why": "Caching is a cost and latency optimization."
+      },
+      {
+        "key": "C",
+        "text": "Model distillation",
+        "correct": false,
+        "why": "Distillation trains a smaller model and does not give visibility into how data is used."
+      },
+      {
+        "key": "D",
+        "text": "Increasing temperature",
+        "correct": false,
+        "why": "Temperature is unrelated to governance visibility."
+      }
+    ],
+    "explanation": {
+      "answer": "Data governance strategies include logging, monitoring and observation: tracking who accesses which data, how AI systems use it, and alerting on anomalies or violations, using services such as CloudTrail, CloudWatch, Macie and GuardDuty.",
+      "concept": "Governance also covers lifecycles, residency and retention.",
+      "examTip": "Ongoing visibility into data use = monitoring/observation.",
+      "references": [
+        {
+          "title": "AWS CloudTrail User Guide",
+          "url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-user-guide.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-sec-060",
+    "domain": "security",
+    "topic": "Governance Processes",
+    "tags": [
+      "policies",
+      "review-cadence"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company launched several AI applications a year ago. Since then, models, regulations and usage have changed, but no one has re-examined the applications' risks.",
+    "prompt": "Which governance practice was missing?",
+    "options": [
+      {
+        "key": "A",
+        "text": "More GPUs",
+        "correct": false,
+        "why": "Adding compute capacity does not provide any oversight or risk review."
+      },
+      {
+        "key": "B",
+        "text": "A defined review cadence that periodically reassesses AI systems' risks, controls and compliance",
+        "correct": true,
+        "why": "Regular reviews keep governance current as models, regulations and usage evolve."
+      },
+      {
+        "key": "C",
+        "text": "A larger model",
+        "correct": false,
+        "why": "Model size does not address oversight gaps."
+      },
+      {
+        "key": "D",
+        "text": "Higher temperature",
+        "correct": false,
+        "why": "Temperature affects model outputs and has nothing to do with re-examining risks."
+      }
+    ],
+    "explanation": {
+      "answer": "Governance protocols include policies, a review cadence (for example quarterly risk reviews), review strategies (who reviews what and how), governance frameworks, transparency standards and team training. Periodic reviews catch new risks after launch.",
+      "concept": "Triggers for ad hoc reviews include model upgrades, new data sources, incidents and regulatory changes.",
+      "examTip": "No periodic re-assessment = missing review cadence.",
+      "references": [
+        {
+          "title": "Generative AI Security Scoping Matrix",
+          "url": "https://aws.amazon.com/ai/security/generative-ai-scoping-matrix/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-sec-061",
+    "domain": "security",
+    "topic": "Governance Processes",
+    "tags": [
+      "team-training"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "Several incidents occurred because employees did not know how to use the company's approved AI tools safely, such as which data may be entered and how to verify outputs.",
+    "prompt": "Which governance measure addresses this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Removing all AI tools without explanation",
+        "correct": false,
+        "why": "This loses business value and may push employees to unapproved tools."
+      },
+      {
+        "key": "B",
+        "text": "Disabling logging",
+        "correct": false,
+        "why": "Disabling logging reduces visibility into incidents and does not teach safe use."
+      },
+      {
+        "key": "C",
+        "text": "Team training requirements on responsible and secure AI use, aligned with company policies",
+        "correct": true,
+        "why": "Training ensures employees understand policies, data handling rules and output verification."
+      },
+      {
+        "key": "D",
+        "text": "Increasing model size",
+        "correct": false,
+        "why": "Model size does not change how employees use tools."
+      }
+    ],
+    "explanation": {
+      "answer": "Governance protocols include team training requirements so that people understand AI policies, data classification, acceptable use, limitations of AI outputs and how to report issues.",
+      "concept": "Policies are only effective if people know and follow them.",
+      "examTip": "Employees misuse AI tools out of ignorance → training requirements.",
+      "references": [
+        {
+          "title": "Responsible AI at AWS",
+          "url": "https://aws.amazon.com/ai/responsible-ai/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-sec-062",
+    "domain": "security",
+    "topic": "Compliance Services",
+    "tags": [
+      "service-matching",
+      "governance"
+    ],
+    "difficulty": "medium",
+    "type": "multi",
+    "selectCount": 3,
+    "stem": "A governance team maps AWS services to compliance needs for its AI platform.",
+    "prompt": "Which pairings are correct? (Select THREE.)",
+    "options": [
+      {
+        "key": "A",
+        "text": "Get best-practice recommendations → Amazon Polly",
+        "correct": false,
+        "why": "Polly is text to speech; recommendations come from Trusted Advisor."
+      },
+      {
+        "key": "B",
+        "text": "Detect non-compliant resource configurations → AWS Config",
+        "correct": true,
+        "why": "Config evaluates resources against rules."
+      },
+      {
+        "key": "C",
+        "text": "Obtain AWS compliance reports → AWS Artifact",
+        "correct": true,
+        "why": "Artifact provides AWS audit reports and agreements."
+      },
+      {
+        "key": "D",
+        "text": "Detect software vulnerabilities → AWS Artifact",
+        "correct": false,
+        "why": "Vulnerability scanning is Amazon Inspector."
+      },
+      {
+        "key": "E",
+        "text": "Record API activity for audits → AWS CloudTrail",
+        "correct": true,
+        "why": "CloudTrail logs API calls with identity, time and source, which provides audit evidence."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS services for governance and compliance in the exam guide: AWS Config (configuration compliance), Amazon Inspector (vulnerabilities), AWS Artifact (compliance reports), AWS CloudTrail (audit logging) and AWS Trusted Advisor (best-practice checks). AWS Audit Manager helps collect audit evidence.",
+      "concept": "Know each service's single primary purpose for scenario questions.",
+      "examTip": "Config = rules. Inspector = vulns. Artifact = reports. CloudTrail = API logs. Trusted Advisor = recommendations.",
+      "references": [
+        {
+          "title": "What is AWS Config?",
+          "url": "https://docs.aws.amazon.com/config/latest/developerguide/WhatIsConfig.html"
+        },
+        {
+          "title": "What is AWS Artifact?",
+          "url": "https://docs.aws.amazon.com/artifact/latest/ug/what-is-aws-artifact.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-sec-063",
+    "domain": "security",
+    "topic": "Governance Processes",
+    "tags": [
+      "transparency-standards"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company decides that every customer-facing AI feature must disclose that AI is used, document its intended use and limitations, and publish a contact for concerns.",
+    "prompt": "Which governance element does this establish?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Provisioned Throughput",
+        "correct": false,
+        "why": "Provisioned Throughput reserves capacity."
+      },
+      {
+        "key": "B",
+        "text": "Batch inference",
+        "correct": false,
+        "why": "Batch inference is an asynchronous execution mode, not a disclosure or documentation requirement."
+      },
+      {
+        "key": "C",
+        "text": "Embedding dimensions",
+        "correct": false,
+        "why": "Embedding dimensions are a technical setting."
+      },
+      {
+        "key": "D",
+        "text": "Transparency standards",
+        "correct": true,
+        "why": "Standards that require disclosure and documentation make AI use transparent to customers and stakeholders."
+      }
+    ],
+    "explanation": {
+      "answer": "Transparency standards are governance requirements for disclosing AI use, documenting purpose and limitations (for example through model cards), and providing channels for feedback and recourse.",
+      "concept": "They support trust, regulatory compliance and responsible AI principles.",
+      "examTip": "Required disclosure and documentation of AI = transparency standards.",
+      "references": [
+        {
+          "title": "Responsible AI at AWS",
+          "url": "https://aws.amazon.com/ai/responsible-ai/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-sec-064",
+    "domain": "security",
+    "topic": "Compliance Services",
+    "tags": [
+      "inspector",
+      "governance"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A governance checklist requires continuous scanning of the company's AI application containers for known software vulnerabilities.",
+    "prompt": "Which AWS service meets this checklist item?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Inspector",
+        "correct": true,
+        "why": "Inspector continuously scans container images, EC2 instances and Lambda functions for known vulnerabilities."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Polly",
+        "correct": false,
+        "why": "Polly converts text to speech and cannot scan containers for vulnerabilities."
+      },
+      {
+        "key": "C",
+        "text": "AWS Trusted Advisor",
+        "correct": false,
+        "why": "Trusted Advisor checks account configuration best practices, not container CVEs."
+      },
+      {
+        "key": "D",
+        "text": "AWS Artifact",
+        "correct": false,
+        "why": "Artifact provides AWS compliance reports, not scanning."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Inspector supports governance and compliance by continuously identifying software vulnerabilities and network exposure in workloads, producing findings that can be tracked and remediated.",
+      "concept": "Findings from Inspector can feed into AWS Security Hub and audit evidence in AWS Audit Manager.",
+      "examTip": "Continuous CVE scanning = Amazon Inspector.",
+      "references": [
+        {
+          "title": "What is Amazon Inspector?",
+          "url": "https://docs.aws.amazon.com/inspector/latest/user/what-is-inspector.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-sec-065",
+    "domain": "security",
+    "topic": "Data Governance",
+    "tags": [
+      "data-lifecycle",
+      "classification"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company wants every dataset used by its AI systems to be classified (for example public, internal, confidential), owned by a named person, and handled according to its classification from creation to deletion.",
+    "prompt": "Which data governance strategy does this describe?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Model distillation",
+        "correct": false,
+        "why": "Distillation trains a smaller model and does not classify or manage datasets."
+      },
+      {
+        "key": "B",
+        "text": "Data lifecycle management with classification and ownership",
+        "correct": true,
+        "why": "Classifying, assigning owners and managing data through its lifecycle are core governance practices."
+      },
+      {
+        "key": "C",
+        "text": "Prompt engineering",
+        "correct": false,
+        "why": "Prompt engineering is about crafting model inputs."
+      },
+      {
+        "key": "D",
+        "text": "Hyperparameter tuning",
+        "correct": false,
+        "why": "Tuning optimizes model training settings."
+      }
+    ],
+    "explanation": {
+      "answer": "Data governance for AI includes classifying data by sensitivity, assigning ownership, and managing the lifecycle (creation, storage, use, sharing, archiving, deletion) according to policy, along with logging, residency, monitoring and retention.",
+      "concept": "Amazon DataZone and AWS Lake Formation support cataloging, ownership and governed access.",
+      "examTip": "Classify + own + manage from creation to deletion = data lifecycle governance.",
+      "references": [
+        {
+          "title": "What is Amazon DataZone?",
+          "url": "https://docs.aws.amazon.com/datazone/latest/userguide/what-is-datazone.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-sec-066",
+    "domain": "security",
+    "topic": "Governance Frameworks",
+    "tags": [
+      "scoping-matrix",
+      "scope-comparison"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A company moves from using an enterprise SaaS product with built-in generative AI features to fine-tuning its own model on proprietary data in Amazon Bedrock.",
+    "prompt": "According to the Generative AI Security Scoping Matrix, how do the company's responsibilities change?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Nothing changes because both are generative AI",
+        "correct": false,
+        "why": "The scopes differ in ownership and control, and so in responsibilities."
+      },
+      {
+        "key": "B",
+        "text": "Its responsibilities decrease because AWS hosts the model",
+        "correct": false,
+        "why": "Fine-tuning adds responsibilities for training data and model governance."
+      },
+      {
+        "key": "C",
+        "text": "It moves from scope 2 to scope 4 and takes on more responsibility, including governance of training data, the customized model and its access",
+        "correct": true,
+        "why": "Fine-tuning shifts the company to a higher scope with more control over and accountability for data and model."
+      },
+      {
+        "key": "D",
+        "text": "It moves to scope 1, the lowest responsibility",
+        "correct": false,
+        "why": "Scope 1 is using consumer applications, which is not this situation."
+      }
+    ],
+    "explanation": {
+      "answer": "In the Scoping Matrix, scope 2 is enterprise applications with embedded generative AI, and scope 4 is fine-tuning existing models with your data. Higher scopes increase responsibility for data governance, model security, legal and privacy considerations, and controls.",
+      "concept": "Scope 5 (training from scratch) carries the most responsibility.",
+      "examTip": "Higher scope number = more control and more responsibility.",
+      "references": [
+        {
+          "title": "Generative AI Security Scoping Matrix",
+          "url": "https://aws.amazon.com/ai/security/generative-ai-scoping-matrix/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-sec-067",
+    "domain": "security",
+    "topic": "Data Governance",
+    "tags": [
+      "logging",
+      "governance-strategies"
+    ],
+    "difficulty": "medium",
+    "type": "multi",
+    "selectCount": 2,
+    "stem": "A data governance lead lists strategies for data used by AI systems.",
+    "prompt": "Which items are data governance strategies? (Select TWO.)",
+    "options": [
+      {
+        "key": "A",
+        "text": "Ensuring data residency requirements are met",
+        "correct": true,
+        "why": "Residency governs where data is stored and processed."
+      },
+      {
+        "key": "B",
+        "text": "Increasing model temperature",
+        "correct": false,
+        "why": "Temperature is an inference setting for model outputs, not a data governance strategy."
+      },
+      {
+        "key": "C",
+        "text": "Choosing the chatbot's color scheme",
+        "correct": false,
+        "why": "A chatbot's visual design has nothing to do with how data is governed."
+      },
+      {
+        "key": "D",
+        "text": "Removing all audit logs",
+        "correct": false,
+        "why": "Logging is part of governance; removing it undermines oversight."
+      },
+      {
+        "key": "E",
+        "text": "Defining data retention periods and enforcing deletion",
+        "correct": true,
+        "why": "Retention is a core data governance strategy."
+      }
+    ],
+    "explanation": {
+      "answer": "Data governance strategies named in the exam guide include data lifecycles, logging, residency, monitoring, observation and retention.",
+      "concept": "These apply to all data in AI systems: training data, retrieval sources, prompts, outputs, logs and agent memory.",
+      "examTip": "Lifecycle, logging, residency, monitoring, observation, retention.",
+      "references": [
+        {
+          "title": "Generative AI Lens: AWS Well-Architected",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/generative-ai-lens.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-sec-068",
+    "domain": "security",
+    "topic": "Governance Processes",
+    "tags": [
+      "review-strategies",
+      "approval"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A company wants new AI use cases to be reviewed with effort proportional to their risk: low-risk internal tools approved quickly, high-risk customer-facing decisions reviewed by legal, security and responsible AI experts.",
+    "prompt": "Which governance practice does this describe?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Rejecting all AI use cases",
+        "correct": false,
+        "why": "Rejecting everything blocks valuable low-risk uses instead of managing risk proportionately."
+      },
+      {
+        "key": "B",
+        "text": "Approving all use cases automatically",
+        "correct": false,
+        "why": "Automatic approval ignores risk and lets high-stakes use cases launch without review."
+      },
+      {
+        "key": "C",
+        "text": "Letting each developer decide alone",
+        "correct": false,
+        "why": "Individual decisions lack consistent oversight."
+      },
+      {
+        "key": "D",
+        "text": "A risk-based review strategy with tiered approval processes",
+        "correct": true,
+        "why": "Matching review depth to risk makes governance efficient while protecting high-stakes uses."
+      }
+    ],
+    "explanation": {
+      "answer": "Governance protocols include review strategies, such as risk-based tiering, in which use cases are classified by risk (for example with the Scoping Matrix and impact assessments) and routed to appropriate reviewers before approval.",
+      "concept": "Combine with documented policies, a review cadence and transparency standards.",
+      "examTip": "Review effort proportional to risk = risk-based review strategy.",
+      "references": [
+        {
+          "title": "Generative AI Security Scoping Matrix",
+          "url": "https://aws.amazon.com/ai/security/generative-ai-scoping-matrix/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-sec-069",
+    "domain": "security",
+    "topic": "Compliance Services",
+    "tags": [
+      "config",
+      "cloudtrail",
+      "difference"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "An auditor asks two questions: \"Who changed the encryption setting on the training-data bucket?\" and \"Is the bucket currently compliant with our encryption rule?\"",
+    "prompt": "Which services answer these questions?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS CloudTrail answers who made the change; AWS Config answers whether the bucket is currently compliant",
+        "correct": true,
+        "why": "CloudTrail records API calls and identities; Config evaluates resource configurations against rules."
+      },
+      {
+        "key": "B",
+        "text": "AWS Config answers who made the change; CloudTrail evaluates compliance rules",
+        "correct": false,
+        "why": "This reverses the roles: CloudTrail records who changed something, and Config evaluates compliance."
+      },
+      {
+        "key": "C",
+        "text": "Amazon Polly answers both",
+        "correct": false,
+        "why": "Polly is a text-to-speech service and cannot answer either audit question."
+      },
+      {
+        "key": "D",
+        "text": "AWS Artifact answers both",
+        "correct": false,
+        "why": "Artifact provides AWS compliance reports, not account activity or resource compliance."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS CloudTrail logs who did what and when (API activity). AWS Config records resource configuration history and evaluates current compliance against rules. Together they provide audit evidence for AI infrastructure.",
+      "concept": "Config also shows configuration timelines, which can be correlated with CloudTrail events.",
+      "examTip": "Who did it = CloudTrail. Is it compliant = Config.",
+      "references": [
+        {
+          "title": "AWS CloudTrail User Guide",
+          "url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-user-guide.html"
+        },
+        {
+          "title": "What is AWS Config?",
+          "url": "https://docs.aws.amazon.com/config/latest/developerguide/WhatIsConfig.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-sec-070",
+    "domain": "security",
+    "topic": "Governance Processes",
+    "tags": [
+      "governance-program"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A large enterprise is establishing an AI governance program for dozens of generative AI projects across business units.",
+    "prompt": "Which combination of elements is MOST complete?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Letting each team define its own rules with no central oversight",
+        "correct": false,
+        "why": "Inconsistent rules create gaps and unmanaged risk."
+      },
+      {
+        "key": "B",
+        "text": "Written AI policies, risk classification (such as the Generative AI Security Scoping Matrix), tiered reviews on a set cadence, transparency standards, team training, and compliance tooling such as AWS Config, CloudTrail and Audit Manager",
+        "correct": true,
+        "why": "This covers policy, risk assessment, oversight processes, transparency, people and technical evidence."
+      },
+      {
+        "key": "C",
+        "text": "A single approval email from the CTO",
+        "correct": false,
+        "why": "One approval does not provide ongoing oversight, consistency or evidence."
+      },
+      {
+        "key": "D",
+        "text": "Only choosing the cheapest model for every project",
+        "correct": false,
+        "why": "Cost choices do not constitute governance."
+      }
+    ],
+    "explanation": {
+      "answer": "Effective AI governance combines processes (policies, review cadence, review strategies, frameworks such as the Generative AI Security Scoping Matrix, transparency standards, team training) with technical controls and evidence (IAM, Config, CloudTrail, Inspector, Artifact, Audit Manager, Bedrock Guardrails).",
+      "concept": "Governance should be continuous and proportionate to risk.",
+      "examTip": "Governance = policies + risk framework + reviews + transparency + training + tooling.",
+      "references": [
+        {
+          "title": "Generative AI Security Scoping Matrix",
+          "url": "https://aws.amazon.com/ai/security/generative-ai-scoping-matrix/"
+        },
+        {
+          "title": "What is AWS Audit Manager?",
+          "url": "https://docs.aws.amazon.com/audit-manager/latest/userguide/what-is.html"
+        }
+      ]
+    }
+  }
+]

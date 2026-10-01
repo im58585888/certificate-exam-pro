@@ -1,9 +1,14 @@
 /**
- * Study areas: service-level groups of the fine-grained question topics, so learners can pick
- * "Networking" or "Databases" instead of 180 one-question topics. Areas cut across exam domains
- * (a Storage question can be about security, resilience, performance or cost).
+ * Study areas: service-level groups of each exam's fine-grained question topics, so learners can pick
+ * "Networking" or "Prompt Engineering" instead of 100+ one-question topics. Areas cut across exam
+ * domains (a Storage question can be about security, resilience, performance or cost).
  */
-export const AREAS = [
+export interface Area {
+  id: string;
+  name: string;
+}
+
+const SAA_AREAS: Area[] = [
   { id: "identity", name: "Identity & Access" },
   { id: "data-protection", name: "Encryption & Data Protection" },
   { id: "threats", name: "Monitoring & Threat Protection" },
@@ -17,11 +22,9 @@ export const AREAS = [
   { id: "edge", name: "Content Delivery & Edge" },
   { id: "resilience", name: "High Availability & DR" },
   { id: "governance", name: "Cost, Governance & Operations" },
-] as const;
+];
 
-export type AreaId = (typeof AREAS)[number]["id"];
-
-const TOPIC_AREA: Record<string, AreaId> = {
+const SAA_TOPIC_AREA: Record<string, string> = {
   // Identity & Access
   "IAM": "identity", "AWS Organizations": "identity", "Account Security": "identity", "Application Authorization": "identity",
   "Identity Federation": "identity", "Identity for Apps": "identity", "Hybrid Identity": "identity", "Instance Access": "identity",
@@ -70,9 +73,69 @@ const TOPIC_AREA: Record<string, AreaId> = {
   "Static Stability": "resilience", "Resilience Assessment": "resilience", "Resilience Testing": "resilience",
 };
 
-/** Area for a question topic. Topics added later through the admin editor fall back to the operations group. */
-export function areaOf(topic: string): AreaId {
-  return TOPIC_AREA[topic] ?? "governance";
+
+const AIF_AREAS: Area[] = [
+  { id: "ml-concepts", name: "AI & ML Concepts" },
+  { id: "use-cases", name: "AI Use Cases & AWS AI Services" },
+  { id: "ml-lifecycle", name: "ML Lifecycle & MLOps" },
+  { id: "genai-concepts", name: "GenAI Concepts & Limits" },
+  { id: "aws-genai", name: "Bedrock & AWS GenAI Services" },
+  { id: "agents", name: "Agents & Agentic AI" },
+  { id: "cost-selection", name: "Cost & Model Selection" },
+  { id: "rag", name: "RAG & Vector Stores" },
+  { id: "prompting", name: "Prompt Engineering" },
+  { id: "customization", name: "Training & Fine-Tuning" },
+  { id: "evaluation", name: "Evaluation & Business Value" },
+  { id: "responsible", name: "Responsible AI & Bias" },
+  { id: "explainability", name: "Transparency & Explainability" },
+  { id: "security", name: "Securing AI Systems" },
+  { id: "governance", name: "Governance & Compliance" },
+];
+
+const AIF_TOPIC_AREA: Record<string, string> = {
+  "AI Terminology": "ml-concepts", "Learning Types": "ml-concepts", "Data Types": "ml-concepts", "ML Techniques": "ml-concepts",
+  "Model Fit": "ml-concepts", "Inference Types": "ml-concepts",
+  "AI Use Cases": "use-cases", "AWS AI Services": "use-cases", "When Not to Use AI": "use-cases", "Traditional ML vs FMs": "use-cases",
+  "ML Pipeline": "ml-lifecycle", "MLOps": "ml-lifecycle", "Model Metrics": "ml-lifecycle", "Model Deployment": "ml-lifecycle",
+  "Model Sources": "ml-lifecycle", "AWS Services by Stage": "ml-lifecycle",
+  "Tokens & Embeddings": "genai-concepts", "Model Architectures": "genai-concepts", "Foundation Models": "genai-concepts",
+  "FM Lifecycle": "genai-concepts", "Context Engineering": "genai-concepts", "GenAI Use Cases": "genai-concepts",
+  "Prompt Basics": "genai-concepts", "GenAI Advantages": "genai-concepts", "GenAI Limitations": "genai-concepts",
+  "Amazon Bedrock": "aws-genai", "AWS GenAI Services": "aws-genai", "SageMaker AI & JumpStart": "aws-genai", "AWS Infrastructure Benefits": "aws-genai",
+  "Agentic AI Concepts": "agents", "Agent Memory": "agents", "Model Context Protocol": "agents", "Multi-Agent Systems": "agents",
+  "Workflow Orchestration": "agents", "Bedrock AgentCore": "agents", "Strands Agents": "agents", "AI Agents": "agents", "Agent Security": "agents",
+  "Cost Tradeoffs": "cost-selection", "Token Pricing": "cost-selection", "Model Selection": "cost-selection", "Business Metrics": "cost-selection",
+  "FM Selection": "cost-selection",
+  "RAG": "rag", "Vector Databases": "rag",
+  "Prompt Techniques": "prompting", "Prompt Constructs": "prompting", "Prompt Best Practices": "prompting", "Prompt Management": "prompting",
+  "Prompt Risks": "prompting", "Inference Parameters": "prompting",
+  "Customization Tradeoffs": "customization", "FM Training": "customization", "Fine-Tuning Methods": "customization", "Fine-Tuning Data": "customization",
+  "Evaluation Approaches": "evaluation", "Evaluation Metrics": "evaluation", "Evaluating Applications": "evaluation", "Business Alignment": "evaluation",
+  "Responsible AI Features": "responsible", "Bias Detection": "responsible", "Bias & Variance": "responsible", "Datasets": "responsible",
+  "Legal Risks": "responsible", "Responsible Model Selection": "responsible", "Guardrails": "responsible",
+  "Explainability": "explainability", "Model Documentation": "explainability", "Human-Centered Design": "explainability",
+  "Access Control": "security", "Encryption": "security", "Network Security": "security", "Application Security": "security",
+  "Guardrails for Security": "security", "Privacy Risks": "security", "Secure Data Engineering": "security", "Security Considerations": "security",
+  "Security Services": "security", "Sensitive Data Discovery": "security", "Shared Responsibility": "security", "Threat Detection": "security",
+  "Vulnerability Management": "security", "Infrastructure Protection": "security", "Hallucination Mitigation": "security",
+  "Compliance Services": "governance", "Data Governance": "governance", "Data Lineage": "governance", "Audit Logging": "governance",
+  "Governance Frameworks": "governance", "Governance Processes": "governance",
+};
+
+// Topics added later through the admin editor fall back to a general area for their exam.
+const AREA_SETS: Record<string, { areas: Area[]; topics: Record<string, string>; fallback: string }> = {
+  "saa-c03": { areas: SAA_AREAS, topics: SAA_TOPIC_AREA, fallback: "governance" },
+  "aif-c01": { areas: AIF_AREAS, topics: AIF_TOPIC_AREA, fallback: "ml-concepts" },
+};
+
+export function areasFor(exam: string): Area[] {
+  return AREA_SETS[exam]?.areas ?? [];
 }
 
-export const isArea = (v: string): v is AreaId => AREAS.some((a) => a.id === v);
+/** Area id for a question topic within an exam. */
+export function areaOf(exam: string, topic: string): string {
+  const set = AREA_SETS[exam];
+  return set ? set.topics[topic] ?? set.fallback : "other";
+}
+
+export const isArea = (exam: string, v: string) => areasFor(exam).some((a) => a.id === v);

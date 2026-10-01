@@ -1,0 +1,1176 @@
+[
+  {
+    "id": "aif-app-095",
+    "domain": "applications",
+    "topic": "Fine-Tuning Methods",
+    "tags": [
+      "instruction-tuning"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A team trains a base model on thousands of examples, each consisting of an instruction (such as \"Summarize this email in one sentence\") and the ideal response, so that the model follows instructions better.",
+    "prompt": "What is this type of fine-tuning called?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Continued pre-training",
+        "correct": false,
+        "why": "Continued pre-training uses unlabeled text, not instruction-response pairs."
+      },
+      {
+        "key": "B",
+        "text": "Clustering",
+        "correct": false,
+        "why": "Clustering is an unsupervised grouping technique, not a fine-tuning method."
+      },
+      {
+        "key": "C",
+        "text": "Prompt caching",
+        "correct": false,
+        "why": "Prompt caching reduces inference cost and does not train the model."
+      },
+      {
+        "key": "D",
+        "text": "Instruction tuning",
+        "correct": true,
+        "why": "Instruction tuning fine-tunes a model on instruction-response pairs so it learns to follow natural language instructions."
+      }
+    ],
+    "explanation": {
+      "answer": "Instruction tuning is supervised fine-tuning on examples of instructions paired with high-quality responses. It teaches a model to follow instructions and perform tasks as directed, and is a key step in turning a base model into an assistant.",
+      "concept": "Other fine-tuning approaches include domain adaptation (specializing in a field's language and tasks) and alignment with human preferences (RLHF).",
+      "examTip": "Instruction-response pairs for training = instruction tuning.",
+      "references": [
+        {
+          "title": "Customize your model (Amazon Bedrock)",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/custom-models.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-096",
+    "domain": "applications",
+    "topic": "Fine-Tuning Methods",
+    "tags": [
+      "domain-adaptation"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A law firm fine-tunes a general model on labeled examples of legal clause analysis written by its attorneys, so the model uses correct legal terminology and reasoning patterns.",
+    "prompt": "Which fine-tuning goal does this describe?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Adapting the model to a specific domain",
+        "correct": true,
+        "why": "Fine-tuning on legal examples specializes the model for the legal domain's language and tasks."
+      },
+      {
+        "key": "B",
+        "text": "Making the model multimodal",
+        "correct": false,
+        "why": "Training on legal text does not add image capabilities."
+      },
+      {
+        "key": "C",
+        "text": "Eliminating the need for evaluation",
+        "correct": false,
+        "why": "Domain-adapted models still need evaluation."
+      },
+      {
+        "key": "D",
+        "text": "Reducing the model's context window",
+        "correct": false,
+        "why": "Fine-tuning does not change the context window."
+      }
+    ],
+    "explanation": {
+      "answer": "Domain adaptation fine-tunes a general model on domain-specific data, such as legal, medical or financial content, so it handles specialized vocabulary, formats and reasoning better.",
+      "concept": "Domain adaptation can use labeled examples (fine-tuning) or unlabeled domain text (continued pre-training).",
+      "examTip": "Specialize a general model for a field = domain adaptation.",
+      "references": [
+        {
+          "title": "Customize your model (Amazon Bedrock)",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/custom-models.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-097",
+    "domain": "applications",
+    "topic": "Fine-Tuning Methods",
+    "tags": [
+      "transfer-learning",
+      "fine-tuning"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A student asks why fine-tuning a foundation model on a few thousand examples works so much better than training a new model on those same examples from scratch.",
+    "prompt": "Which concept explains this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Batch inference makes training faster",
+        "correct": false,
+        "why": "Batch inference is an inference mode and has nothing to do with training efficiency."
+      },
+      {
+        "key": "B",
+        "text": "Transfer learning: the model reuses general knowledge from pre-training and only needs to adapt to the new task",
+        "correct": true,
+        "why": "Pre-trained knowledge transfers to the new task, so far less task-specific data is needed."
+      },
+      {
+        "key": "C",
+        "text": "Temperature tuning improves training",
+        "correct": false,
+        "why": "Temperature is an inference parameter that affects generation randomness. It plays no role in training."
+      },
+      {
+        "key": "D",
+        "text": "Overfitting: the model memorizes the small dataset",
+        "correct": false,
+        "why": "Overfitting is a risk with small datasets, not the reason fine-tuning works well."
+      }
+    ],
+    "explanation": {
+      "answer": "Fine-tuning is a form of transfer learning: the model's broad pre-trained knowledge of language and concepts is transferred to a new task, so a relatively small dataset can produce strong results.",
+      "concept": "Training from scratch would need vastly more data and compute to learn the same general capabilities.",
+      "examTip": "Fine-tuning works with little data because of transfer learning.",
+      "references": [
+        {
+          "title": "What is transfer learning?",
+          "url": "https://aws.amazon.com/what-is/transfer-learning/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-098",
+    "domain": "applications",
+    "topic": "Fine-Tuning Data",
+    "tags": [
+      "data-format",
+      "labeled-data"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A team prepares data to fine-tune a text model in Amazon Bedrock to write product FAQs in the company's style.",
+    "prompt": "What should the training data typically consist of?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Random unrelated images",
+        "correct": false,
+        "why": "Images unrelated to the task do not teach FAQ writing."
+      },
+      {
+        "key": "B",
+        "text": "A list of hyperparameters with no examples",
+        "correct": false,
+        "why": "Hyperparameters configure training but cannot replace training examples."
+      },
+      {
+        "key": "C",
+        "text": "Labeled examples of prompts paired with the desired completions, stored in a file such as JSON Lines in Amazon S3",
+        "correct": true,
+        "why": "Supervised fine-tuning learns from input-output pairs that show the desired behavior."
+      },
+      {
+        "key": "D",
+        "text": "Only the model's name",
+        "correct": false,
+        "why": "A model name contains no examples of the desired behavior, so it provides nothing to learn from."
+      }
+    ],
+    "explanation": {
+      "answer": "Fine-tuning data for text models consists of labeled prompt-completion examples (for chat models, conversation-formatted examples) that demonstrate the desired outputs. In Amazon Bedrock, the data is typically JSON Lines files in Amazon S3, plus optional validation data.",
+      "concept": "Continued pre-training, by contrast, uses unlabeled text.",
+      "examTip": "Fine-tuning data = labeled prompt → ideal response examples.",
+      "references": [
+        {
+          "title": "Prepare data for model customization",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/model-customization-prepare.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-099",
+    "domain": "applications",
+    "topic": "Fine-Tuning Data",
+    "tags": [
+      "data-curation",
+      "quality"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A team has 50,000 customer support transcripts for fine-tuning. Many contain errors, rude responses from agents, duplicate conversations and outdated policy information.",
+    "prompt": "What should the team do before fine-tuning?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Increase the temperature during training",
+        "correct": false,
+        "why": "Temperature is an inference setting and does not fix data quality."
+      },
+      {
+        "key": "B",
+        "text": "Use all 50,000 as-is because more data is always better",
+        "correct": false,
+        "why": "Training on errors and rude responses teaches the model to reproduce them."
+      },
+      {
+        "key": "C",
+        "text": "Delete all transcripts and fine-tune on nothing",
+        "correct": false,
+        "why": "Fine-tuning learns from examples. With no transcripts at all, there is nothing to fine-tune on."
+      },
+      {
+        "key": "D",
+        "text": "Curate the data: remove low-quality, duplicate and outdated examples and keep high-quality, representative ones",
+        "correct": true,
+        "why": "The model learns from examples, so poor-quality examples teach poor behavior. Curation improves the resulting model."
+      }
+    ],
+    "explanation": {
+      "answer": "Data curation is essential for fine-tuning: select accurate, high-quality, relevant, deduplicated and up-to-date examples that demonstrate the behavior you want. Quality usually matters more than sheer quantity.",
+      "concept": "Data preparation considerations from the exam guide: curation, governance, size, labeling, representativeness and RLHF.",
+      "examTip": "Fine-tuning data quality > quantity. Curate first.",
+      "references": [
+        {
+          "title": "Prepare data for model customization",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/model-customization-prepare.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-100",
+    "domain": "applications",
+    "topic": "Fine-Tuning Data",
+    "tags": [
+      "representativeness"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A team fine-tunes a support model using only examples from the company's US customers. After deployment, quality is much worse for UK and Australian customers, whose spelling and product names differ.",
+    "prompt": "Which data preparation principle was missed?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Representativeness: the training data should reflect the full range of users and inputs the model will see",
+        "correct": true,
+        "why": "Data from only one region does not represent other regions' language and products, so performance suffers for them."
+      },
+      {
+        "key": "B",
+        "text": "Vector dimension",
+        "correct": false,
+        "why": "Vector dimension relates to embeddings, not fine-tuning data coverage."
+      },
+      {
+        "key": "C",
+        "text": "Prompt caching",
+        "correct": false,
+        "why": "Prompt caching is an inference optimization, not a data principle."
+      },
+      {
+        "key": "D",
+        "text": "Lower learning rate",
+        "correct": false,
+        "why": "Training settings do not fix missing types of data."
+      }
+    ],
+    "explanation": {
+      "answer": "Representative training data covers the variety of real-world inputs, users, languages and scenarios the model will face. Gaps lead to worse performance for underrepresented groups, which is also a fairness concern.",
+      "concept": "Balanced, diverse and inclusive datasets are a responsible AI requirement in Domain 4.",
+      "examTip": "Model worse for some users → training data not representative.",
+      "references": [
+        {
+          "title": "Prepare data for model customization",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/model-customization-prepare.html"
+        },
+        {
+          "title": "Responsible AI at AWS",
+          "url": "https://aws.amazon.com/ai/responsible-ai/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-101",
+    "domain": "applications",
+    "topic": "Fine-Tuning Data",
+    "tags": [
+      "rlhf",
+      "alignment"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "To make a chat model more helpful and less likely to produce harmful answers, human reviewers rank multiple model responses to the same prompt from best to worst. These rankings are used to further train the model.",
+    "prompt": "What is this technique called?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Unsupervised clustering",
+        "correct": false,
+        "why": "Clustering groups data and does not use human rankings to train responses."
+      },
+      {
+        "key": "B",
+        "text": "Reinforcement learning from human feedback (RLHF)",
+        "correct": true,
+        "why": "RLHF uses human preference judgments to train a reward signal that guides the model toward preferred responses."
+      },
+      {
+        "key": "C",
+        "text": "Tokenization",
+        "correct": false,
+        "why": "Tokenization splits text and is not a training technique."
+      },
+      {
+        "key": "D",
+        "text": "Batch transform",
+        "correct": false,
+        "why": "Batch transform is an offline inference method."
+      }
+    ],
+    "explanation": {
+      "answer": "RLHF collects human preferences between model outputs, trains a reward model from them, and uses reinforcement learning to optimize the FM toward responses humans prefer. It improves helpfulness, harmlessness and alignment with human values.",
+      "concept": "Human feedback data must be collected carefully with clear guidelines and diverse reviewers. Amazon SageMaker Ground Truth can support collecting human preference data.",
+      "examTip": "Humans rank responses → reward model → RL = RLHF.",
+      "references": [
+        {
+          "title": "What is RLHF?",
+          "url": "https://aws.amazon.com/what-is/reinforcement-learning-from-human-feedback/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-102",
+    "domain": "applications",
+    "topic": "FM Training",
+    "tags": [
+      "pre-training",
+      "fine-tuning",
+      "continued-pretraining",
+      "distillation"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "An architect summarizes four ways to train or adapt foundation models.",
+    "prompt": "Which description is correct?",
+    "options": [
+      {
+        "key": "A",
+        "text": "All four techniques are the same and use identical data",
+        "correct": false,
+        "why": "The four techniques differ in purpose, in the kind of data they use and in cost, so they are not interchangeable."
+      },
+      {
+        "key": "B",
+        "text": "Distillation makes a model larger; continued pre-training uses only images",
+        "correct": false,
+        "why": "Distillation produces a smaller model, and continued pre-training uses domain data of the model's modality, typically text."
+      },
+      {
+        "key": "C",
+        "text": "Pre-training builds a model from scratch on massive data; continued pre-training extends a pre-trained model with more unlabeled domain data; fine-tuning adapts it with labeled task examples; distillation trains a smaller model to mimic a larger one",
+        "correct": true,
+        "why": "Each definition matches the purpose and data used by the technique."
+      },
+      {
+        "key": "D",
+        "text": "Fine-tuning builds a model from scratch; pre-training adds a few examples",
+        "correct": false,
+        "why": "This reverses pre-training and fine-tuning."
+      }
+    ],
+    "explanation": {
+      "answer": "Key elements of training an FM: pre-training (from scratch, huge broad data, self-supervised), continued pre-training (more unlabeled domain data to extend knowledge), fine-tuning (labeled examples to teach tasks or behavior) and distillation (transfer a large model's capability to a smaller, cheaper model).",
+      "concept": "Cost decreases from pre-training (highest) through continued pre-training and fine-tuning; distillation adds upfront cost to reduce inference cost.",
+      "examTip": "Know each technique's data: broad unlabeled, domain unlabeled, labeled pairs, teacher outputs.",
+      "references": [
+        {
+          "title": "Customize your model (Amazon Bedrock)",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/custom-models.html"
+        },
+        {
+          "title": "Customize a model with distillation in Amazon Bedrock",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/model-distillation.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-103",
+    "domain": "applications",
+    "topic": "Fine-Tuning Data",
+    "tags": [
+      "data-governance",
+      "pii"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A hospital wants to fine-tune a model on clinical notes. The notes contain patient names, record numbers and other protected health information (PHI).",
+    "prompt": "Which data governance step is MOST important before fine-tuning?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Skip documentation of the data sources",
+        "correct": false,
+        "why": "Documenting data lineage is required for governance and audits."
+      },
+      {
+        "key": "B",
+        "text": "Publish the training data publicly for transparency",
+        "correct": false,
+        "why": "Publishing PHI would be a serious privacy violation."
+      },
+      {
+        "key": "C",
+        "text": "Fine-tune on raw notes to maximize accuracy",
+        "correct": false,
+        "why": "Training on raw PHI risks leakage through model outputs and may violate regulations."
+      },
+      {
+        "key": "D",
+        "text": "De-identify or remove PHI not needed for the task, confirm consent and legal basis, and restrict access to the training data",
+        "correct": true,
+        "why": "Models can memorize training data, so sensitive data must be minimized and governed before training."
+      }
+    ],
+    "explanation": {
+      "answer": "Governance of fine-tuning data includes data minimization, de-identification of sensitive information, consent and licensing checks, access control, encryption and lineage documentation. Fine-tuned models can sometimes reproduce training data, so sensitive data must be handled carefully.",
+      "concept": "Amazon Comprehend Medical can help detect PHI, and Amazon Macie can discover sensitive data in S3 training buckets.",
+      "examTip": "Sensitive training data → minimize, de-identify, control access, document lineage.",
+      "references": [
+        {
+          "title": "Prepare data for model customization",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/model-customization-prepare.html"
+        },
+        {
+          "title": "What is Amazon Macie?",
+          "url": "https://docs.aws.amazon.com/macie/latest/user/what-is-macie.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-104",
+    "domain": "applications",
+    "topic": "Fine-Tuning Data",
+    "tags": [
+      "data-size",
+      "overfitting"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A team fine-tunes a model on only 40 examples and trains for many epochs. The model now reproduces the training examples almost word-for-word and handles new requests poorly.",
+    "prompt": "What went wrong and what should the team do?",
+    "options": [
+      {
+        "key": "A",
+        "text": "The model overfit a very small dataset; add more diverse examples, use a validation set and train for fewer epochs",
+        "correct": true,
+        "why": "Too little data and too much training cause memorization. More varied data and validation-based stopping improve generalization."
+      },
+      {
+        "key": "B",
+        "text": "The embedding model was wrong",
+        "correct": false,
+        "why": "Fine-tuning a generation model does not depend on a separate embedding model."
+      },
+      {
+        "key": "C",
+        "text": "The temperature was too low during training",
+        "correct": false,
+        "why": "Temperature is an inference setting. It is not used during training and cannot cause overfitting."
+      },
+      {
+        "key": "D",
+        "text": "The model underfit; train for even more epochs",
+        "correct": false,
+        "why": "The symptoms show memorization, which more training would worsen."
+      }
+    ],
+    "explanation": {
+      "answer": "Dataset size and diversity matter for fine-tuning. Very small datasets trained for many epochs lead to overfitting. Use enough representative examples, hold out validation data, and tune hyperparameters such as epochs and learning rate.",
+      "concept": "Amazon Bedrock fine-tuning lets you supply validation data and set hyperparameters such as epoch count, batch size and learning rate.",
+      "examTip": "Model parrots training data → overfitting from tiny data / too many epochs.",
+      "references": [
+        {
+          "title": "Customize your model (Amazon Bedrock)",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/custom-models.html"
+        },
+        {
+          "title": "What is overfitting?",
+          "url": "https://aws.amazon.com/what-is/overfitting/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-105",
+    "domain": "applications",
+    "topic": "Fine-Tuning Data",
+    "tags": [
+      "labeling",
+      "ground-truth"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company needs 5,000 high-quality example responses written and reviewed by subject-matter experts to fine-tune a model, and wants to manage the labeling workforce and quality checks on AWS.",
+    "prompt": "Which AWS capability helps?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Route 53",
+        "correct": false,
+        "why": "Route 53 is a DNS and domain registration service. It does not manage human labeling work."
+      },
+      {
+        "key": "B",
+        "text": "Amazon SageMaker Ground Truth",
+        "correct": true,
+        "why": "Ground Truth manages human labeling workflows, including private expert workforces and review steps, for creating training data."
+      },
+      {
+        "key": "C",
+        "text": "AWS Trusted Advisor",
+        "correct": false,
+        "why": "Trusted Advisor gives account recommendations."
+      },
+      {
+        "key": "D",
+        "text": "Amazon CloudFront",
+        "correct": false,
+        "why": "CloudFront is a content delivery network, not a labeling service."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon SageMaker Ground Truth supports human data labeling and data generation workflows, including for generative AI (for example writing demonstrations or ranking responses for preference data), with private, vendor or public workforces and quality controls.",
+      "concept": "High-quality labels from qualified people are critical for fine-tuning and RLHF data.",
+      "examTip": "Human-created training data at scale = SageMaker Ground Truth.",
+      "references": [
+        {
+          "title": "Training data labeling using humans with Amazon SageMaker Ground Truth",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/sms.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-106",
+    "domain": "applications",
+    "topic": "FM Training",
+    "tags": [
+      "continued-pretraining",
+      "bedrock"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company wants to customize a model in Amazon Bedrock using its large collection of unlabeled internal technical documents, so the model becomes more knowledgeable about its domain.",
+    "prompt": "Which Bedrock customization type fits?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Fine-tuning with labeled prompt-completion pairs",
+        "correct": false,
+        "why": "Fine-tuning needs labeled examples, but the company only has unlabeled documents."
+      },
+      {
+        "key": "B",
+        "text": "Provisioned Throughput",
+        "correct": false,
+        "why": "Provisioned Throughput reserves capacity and does not customize models."
+      },
+      {
+        "key": "C",
+        "text": "Continued pre-training",
+        "correct": true,
+        "why": "Continued pre-training uses unlabeled domain data to extend the model's knowledge."
+      },
+      {
+        "key": "D",
+        "text": "Guardrails",
+        "correct": false,
+        "why": "Guardrails filter content and do not add domain knowledge."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Bedrock supports continued pre-training for some models, which trains the model further on unlabeled data from a specific domain to improve its knowledge and familiarity with domain language.",
+      "concept": "If facts change often or must be cited, RAG may be better than baking knowledge into the model.",
+      "examTip": "Unlabeled domain documents to customize in Bedrock = continued pre-training.",
+      "references": [
+        {
+          "title": "Customize your model (Amazon Bedrock)",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/custom-models.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-107",
+    "domain": "applications",
+    "topic": "FM Training",
+    "tags": [
+      "distillation",
+      "teacher-student"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "In Amazon Bedrock Model Distillation, a company selects a large model and a smaller model from the same family and provides sample prompts for its use case.",
+    "prompt": "What roles do the two models play?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Both models are merged into one larger model",
+        "correct": false,
+        "why": "Distillation produces a smaller model, not a merged larger one."
+      },
+      {
+        "key": "B",
+        "text": "The small model teaches the large model",
+        "correct": false,
+        "why": "Knowledge flows from the larger, more capable model to the smaller one."
+      },
+      {
+        "key": "C",
+        "text": "The large model is deleted after training",
+        "correct": false,
+        "why": "Distillation does not delete the teacher model."
+      },
+      {
+        "key": "D",
+        "text": "The large model is the teacher that generates high-quality responses, and the small model is the student trained on them",
+        "correct": true,
+        "why": "Distillation uses the teacher's outputs as training data for the student."
+      }
+    ],
+    "explanation": {
+      "answer": "In distillation, a teacher model generates responses to prompts for a specific use case, and those responses are used to fine-tune a smaller student model. The student becomes faster and cheaper while approaching the teacher's quality on that use case.",
+      "concept": "Bedrock can also apply data synthesis techniques to improve the distillation dataset.",
+      "examTip": "Teacher (big) → generates data → student (small) learns.",
+      "references": [
+        {
+          "title": "Customize a model with distillation in Amazon Bedrock",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/model-distillation.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-108",
+    "domain": "applications",
+    "topic": "Fine-Tuning Data",
+    "tags": [
+      "data-preparation"
+    ],
+    "difficulty": "medium",
+    "type": "multi",
+    "selectCount": 3,
+    "stem": "A team lists best practices for preparing a fine-tuning dataset.",
+    "prompt": "Which practices are recommended? (Select THREE.)",
+    "options": [
+      {
+        "key": "A",
+        "text": "Hold out a validation set to check for overfitting",
+        "correct": true,
+        "why": "Validation data shows whether the model generalizes beyond the training examples."
+      },
+      {
+        "key": "B",
+        "text": "Include examples with deliberate errors so the model learns to make them",
+        "correct": false,
+        "why": "Training on errors teaches the model to reproduce them."
+      },
+      {
+        "key": "C",
+        "text": "Include diverse examples representing real user inputs",
+        "correct": true,
+        "why": "Representative data helps the model generalize to the variety of real requests."
+      },
+      {
+        "key": "D",
+        "text": "Use accurate, high-quality examples that show the exact desired behavior",
+        "correct": true,
+        "why": "The model imitates its training examples, so they must demonstrate the desired outputs."
+      },
+      {
+        "key": "E",
+        "text": "Avoid documenting where the data came from",
+        "correct": false,
+        "why": "Data lineage documentation is needed for governance and troubleshooting."
+      }
+    ],
+    "explanation": {
+      "answer": "Good fine-tuning data is curated (accurate, high-quality, consistent), representative and diverse, appropriately sized, correctly labeled, governed (privacy, licensing, lineage) and split into training and validation sets.",
+      "concept": "Evaluate the fine-tuned model against the base model on a test set to confirm improvement.",
+      "examTip": "Quality, diversity, validation split, governance.",
+      "references": [
+        {
+          "title": "Prepare data for model customization",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/model-customization-prepare.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-109",
+    "domain": "applications",
+    "topic": "FM Training",
+    "tags": [
+      "custom-model-privacy",
+      "bedrock"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company fine-tunes a model in Amazon Bedrock with proprietary data and asks who can access the resulting customized model.",
+    "prompt": "Which statement is correct?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Bedrock creates a private copy of the model for the customer; the customer's data is not used to improve the base model, and access is controlled with IAM",
+        "correct": true,
+        "why": "Customized models are private to the customer's account, and training data is not used to train the base model."
+      },
+      {
+        "key": "B",
+        "text": "Anyone with the model name can invoke it",
+        "correct": false,
+        "why": "Invocation requires IAM permissions in the owning account."
+      },
+      {
+        "key": "C",
+        "text": "The model provider receives the training data to improve its base model",
+        "correct": false,
+        "why": "Customer training data is not shared with providers to improve base models."
+      },
+      {
+        "key": "D",
+        "text": "The customized model becomes publicly available to all Bedrock customers",
+        "correct": false,
+        "why": "Custom models are private to the account that created them."
+      }
+    ],
+    "explanation": {
+      "answer": "When you customize a model in Amazon Bedrock, a private copy is created and trained with your data. Your data is not used to train the original base model, and you control access to the custom model with IAM. Training data and custom models can be encrypted with customer managed AWS KMS keys.",
+      "concept": "Network isolation options, such as VPC configuration for customization jobs, add further protection.",
+      "examTip": "Bedrock custom model = private copy; your data doesn't train the base model.",
+      "references": [
+        {
+          "title": "Data protection in Amazon Bedrock",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/data-protection.html"
+        },
+        {
+          "title": "Customize your model (Amazon Bedrock)",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/custom-models.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-110",
+    "domain": "applications",
+    "topic": "Fine-Tuning Methods",
+    "tags": [
+      "catastrophic-forgetting"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "After aggressive fine-tuning on a narrow medical-coding task, a model performs well on coding but has become noticeably worse at general conversation and summarization tasks it previously handled well.",
+    "prompt": "What is this phenomenon called?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Prompt caching",
+        "correct": false,
+        "why": "Prompt caching is an inference optimization."
+      },
+      {
+        "key": "B",
+        "text": "Catastrophic forgetting",
+        "correct": true,
+        "why": "Catastrophic forgetting is when training on a new task degrades a model's previously learned capabilities."
+      },
+      {
+        "key": "C",
+        "text": "Data drift",
+        "correct": false,
+        "why": "Data drift is a change in production input data over time."
+      },
+      {
+        "key": "D",
+        "text": "Tokenization error",
+        "correct": false,
+        "why": "Tokenization does not explain loss of general capabilities after training."
+      }
+    ],
+    "explanation": {
+      "answer": "Catastrophic forgetting occurs when fine-tuning on narrow data overwrites general capabilities. Mitigations include using fewer epochs or lower learning rates, mixing in general-purpose examples, parameter-efficient fine-tuning methods, and evaluating both target and general tasks.",
+      "concept": "Always evaluate fine-tuned models on the tasks you care about, including those outside the fine-tuning target.",
+      "examTip": "Gains on new task, losses on old skills = catastrophic forgetting.",
+      "references": [
+        {
+          "title": "Customize your model (Amazon Bedrock)",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/custom-models.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-111",
+    "domain": "applications",
+    "topic": "Fine-Tuning Methods",
+    "tags": [
+      "peft",
+      "lora"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A team wants to fine-tune a very large model but has limited GPU budget. A colleague suggests training only a small number of additional parameters while keeping most of the original weights frozen.",
+    "prompt": "Which approach is this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Zero-shot prompting",
+        "correct": false,
+        "why": "Zero-shot prompting does not train any parameters."
+      },
+      {
+        "key": "B",
+        "text": "Batch transform",
+        "correct": false,
+        "why": "Batch transform runs inference, not training."
+      },
+      {
+        "key": "C",
+        "text": "Parameter-efficient fine-tuning (PEFT), such as LoRA",
+        "correct": true,
+        "why": "PEFT methods train a small set of added parameters, greatly reducing compute and memory compared with full fine-tuning."
+      },
+      {
+        "key": "D",
+        "text": "Pre-training from scratch",
+        "correct": false,
+        "why": "Pre-training trains all weights from scratch and is the most expensive option."
+      }
+    ],
+    "explanation": {
+      "answer": "Parameter-efficient fine-tuning (PEFT) techniques, such as low-rank adaptation (LoRA), freeze most of the model's weights and train small adapter parameters. They reduce training cost and memory and lower the risk of catastrophic forgetting.",
+      "concept": "Full fine-tuning updates all weights and is more expensive; PEFT offers most of the benefit at a fraction of the cost.",
+      "examTip": "Fine-tune huge model cheaply by training small added parameters = PEFT / LoRA.",
+      "references": [
+        {
+          "title": "SageMaker JumpStart pretrained models",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/studio-jumpstart.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-112",
+    "domain": "applications",
+    "topic": "FM Training",
+    "tags": [
+      "when-to-fine-tune"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A team asks when fine-tuning is the right choice compared with prompt engineering or RAG.",
+    "prompt": "Which situation BEST justifies fine-tuning?",
+    "options": [
+      {
+        "key": "A",
+        "text": "The team needs answers based on documents that change hourly",
+        "correct": false,
+        "why": "Frequently changing knowledge is better served by RAG."
+      },
+      {
+        "key": "B",
+        "text": "The team wants to launch tomorrow with zero ML effort",
+        "correct": false,
+        "why": "Fine-tuning requires data preparation, training and evaluation time."
+      },
+      {
+        "key": "C",
+        "text": "The team has no training data at all",
+        "correct": false,
+        "why": "Fine-tuning needs labeled training examples. Without any data, it is not an option."
+      },
+      {
+        "key": "D",
+        "text": "Prompting and RAG cannot reliably achieve a required specialized behavior, style or format, and the team has high-quality labeled examples",
+        "correct": true,
+        "why": "Fine-tuning is worth its cost when cheaper approaches fall short on behavior and good training data exists."
+      }
+    ],
+    "explanation": {
+      "answer": "Fine-tuning is appropriate for teaching consistent specialized behavior, tone, format or domain-specific task performance when prompting and RAG are insufficient and quality training data is available.",
+      "concept": "RAG addresses knowledge; fine-tuning addresses behavior. They are often combined.",
+      "examTip": "Behavior can't be fixed with prompts/RAG + have good labeled data → fine-tune.",
+      "references": [
+        {
+          "title": "Customize your model (Amazon Bedrock)",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/custom-models.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-113",
+    "domain": "applications",
+    "topic": "Fine-Tuning Data",
+    "tags": [
+      "licensing",
+      "governance"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A team plans to fine-tune a model on articles scraped from various websites, some of which have restrictive copyright terms.",
+    "prompt": "Which governance concern should be addressed FIRST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Whether the team has the legal right and appropriate licenses to use the content for training",
+        "correct": true,
+        "why": "Using copyrighted content without rights creates intellectual property and legal risk."
+      },
+      {
+        "key": "B",
+        "text": "Which temperature to use at inference",
+        "correct": false,
+        "why": "Inference settings do not address legal rights to training data."
+      },
+      {
+        "key": "C",
+        "text": "Whether the articles are long enough",
+        "correct": false,
+        "why": "Length is secondary to whether the data may legally be used."
+      },
+      {
+        "key": "D",
+        "text": "How many GPUs to use",
+        "correct": false,
+        "why": "Compute choices do not resolve legal concerns."
+      }
+    ],
+    "explanation": {
+      "answer": "Data governance for training includes verifying rights and licenses, respecting terms of use, documenting sources and lineage, and handling personal data lawfully. Intellectual property infringement is a recognized legal risk of generative AI.",
+      "concept": "Domain 4 lists legal risks such as IP infringement claims; Domain 5 covers data lineage and cataloging.",
+      "examTip": "Before training on third-party content: check rights and licenses.",
+      "references": [
+        {
+          "title": "Responsible AI at AWS",
+          "url": "https://aws.amazon.com/ai/responsible-ai/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-114",
+    "domain": "applications",
+    "topic": "FM Training",
+    "tags": [
+      "sagemaker",
+      "training-options"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A research team needs to fine-tune an open-weight model using a custom training script, a specific distributed training setup and specific GPU instance types.",
+    "prompt": "Which AWS service provides this level of control?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Artifact",
+        "correct": false,
+        "why": "Artifact provides compliance reports and agreements. It cannot train models."
+      },
+      {
+        "key": "B",
+        "text": "Amazon SageMaker AI (training jobs, including through SageMaker JumpStart)",
+        "correct": true,
+        "why": "SageMaker AI training jobs support custom scripts, distributed training and choice of instance types."
+      },
+      {
+        "key": "C",
+        "text": "Amazon Polly",
+        "correct": false,
+        "why": "Polly is a text-to-speech service and cannot run custom distributed training jobs."
+      },
+      {
+        "key": "D",
+        "text": "Amazon Route 53",
+        "correct": false,
+        "why": "Route 53 is a DNS service. It has no model training capability."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon SageMaker AI provides managed training with full control: custom training code and containers, distributed training libraries, choice of GPU or AWS Trainium instances, and managed spot training. Amazon Bedrock offers simpler, managed customization with less control.",
+      "concept": "Choose Bedrock customization for simplicity; choose SageMaker AI for custom training logic and infrastructure control.",
+      "examTip": "Custom training script + chosen instances = SageMaker AI.",
+      "references": [
+        {
+          "title": "What is Amazon SageMaker AI?",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/whatis.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-115",
+    "domain": "applications",
+    "topic": "Fine-Tuning Data",
+    "tags": [
+      "labeling-consistency"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "Three annotators labeled fine-tuning examples for tone. They used different definitions of \"formal\" and \"friendly\", so similar examples received different labels.",
+    "prompt": "What should the team do?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Increase the number of epochs",
+        "correct": false,
+        "why": "More training on inconsistent data does not fix the labels."
+      },
+      {
+        "key": "B",
+        "text": "Use the inconsistent labels; the model will figure it out",
+        "correct": false,
+        "why": "Contradictory labels teach contradictory behavior."
+      },
+      {
+        "key": "C",
+        "text": "Create clear labeling guidelines with examples, retrain annotators, and measure agreement between annotators before using the data",
+        "correct": true,
+        "why": "Consistent labels require shared definitions and quality checks; inconsistent labels confuse the model."
+      },
+      {
+        "key": "D",
+        "text": "Switch to a diffusion model",
+        "correct": false,
+        "why": "Changing model type does not fix label quality."
+      }
+    ],
+    "explanation": {
+      "answer": "Labeling quality depends on clear guidelines, examples, trained annotators and quality control such as inter-annotator agreement and review. Inconsistent labels reduce model quality and can introduce bias.",
+      "concept": "Analyzing label quality is also listed in Domain 4 as a way to detect bias and trustworthiness issues.",
+      "examTip": "Inconsistent labels → guidelines + training + agreement checks.",
+      "references": [
+        {
+          "title": "What is data labeling?",
+          "url": "https://aws.amazon.com/what-is/data-labeling/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-116",
+    "domain": "applications",
+    "topic": "FM Training",
+    "tags": [
+      "hosting-custom-model"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "After fine-tuning a model in Amazon Bedrock, a team is surprised that using the custom model involves different setup and pricing than the base model.",
+    "prompt": "Which statement BEST explains this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Custom models cannot be invoked at all",
+        "correct": false,
+        "why": "Custom models can be invoked once deployed through the supported options."
+      },
+      {
+        "key": "B",
+        "text": "Custom models are free to invoke",
+        "correct": false,
+        "why": "Invocation and storage of custom models are billed."
+      },
+      {
+        "key": "C",
+        "text": "The base model is replaced for all customers",
+        "correct": false,
+        "why": "Customization creates a private copy; the base model is unchanged."
+      },
+      {
+        "key": "D",
+        "text": "Custom models are separate resources; depending on the model, invoking them can require options such as Provisioned Throughput or on-demand custom model deployment, with their own pricing and model storage charges",
+        "correct": true,
+        "why": "Customized models are hosted as your private resources, which affects how they are deployed and billed."
+      }
+    ],
+    "explanation": {
+      "answer": "A customized model in Amazon Bedrock is a private resource in your account. Depending on the model, you invoke it through options such as Provisioned Throughput or on-demand deployment for custom models, and you pay for model storage and usage. This is part of the cost trade-off of customization.",
+      "concept": "Compare total cost of a custom model (training + storage + inference) with prompt engineering and RAG before deciding.",
+      "examTip": "Custom model = your private resource with its own deployment and pricing.",
+      "references": [
+        {
+          "title": "Customize your model (Amazon Bedrock)",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/custom-models.html"
+        },
+        {
+          "title": "Increase model invocation capacity with Provisioned Throughput",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/prov-throughput.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-app-117",
+    "domain": "applications",
+    "topic": "Fine-Tuning Data",
+    "tags": [
+      "synthetic-data"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A team lacks enough real examples for fine-tuning and considers generating synthetic training examples with a larger model.",
+    "prompt": "Which consideration is MOST important?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Synthetic data must be reviewed for accuracy, diversity and bias, and checked against licensing terms of the generating model, because errors and biases can be amplified",
+        "correct": true,
+        "why": "Synthetic data can introduce or amplify errors and bias, and some model terms restrict using outputs for training."
+      },
+      {
+        "key": "B",
+        "text": "Synthetic data guarantees better results than real data",
+        "correct": false,
+        "why": "Synthetic data can help but does not guarantee better results."
+      },
+      {
+        "key": "C",
+        "text": "Synthetic data never needs review",
+        "correct": false,
+        "why": "Unreviewed synthetic data can contain hallucinations and biases."
+      },
+      {
+        "key": "D",
+        "text": "Synthetic data can only be images",
+        "correct": false,
+        "why": "Synthetic text data is commonly generated for language model training."
+      }
+    ],
+    "explanation": {
+      "answer": "Synthetic data generated by FMs can supplement scarce real data, as in distillation. It must be curated: checked for factual errors, diversity, representativeness and bias, and used in line with the generating model's terms of use.",
+      "concept": "Combining synthetic and real data, with human review of samples, is a common practice.",
+      "examTip": "Synthetic training data → review quality, bias and licensing.",
+      "references": [
+        {
+          "title": "Customize a model with distillation in Amazon Bedrock",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/model-distillation.html"
+        }
+      ]
+    }
+  }
+]

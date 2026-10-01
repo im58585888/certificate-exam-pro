@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(process.env.APP_URL ?? "http://localhost:3000"),
   title: { default: "Certificate Exam Pro: AWS certification practice exams", template: "%s · Certificate Exam Pro" },
   description:
-    "Realistic AWS Solutions Architect Associate (SAA-C03) practice questions with detailed explanations for every answer, adaptive review of your mistakes, and progress analytics.",
+    "Realistic practice questions for AWS Certified AI Practitioner (AIF-C01) and Solutions Architect – Associate (SAA-C03), with detailed explanations for every answer, adaptive review of your mistakes, and progress analytics.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

@@ -1,0 +1,1293 @@
+[
+  {
+    "id": "aif-fun-051",
+    "domain": "fundamentals",
+    "topic": "ML Pipeline",
+    "tags": [
+      "ml-lifecycle"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A new ML team is documenting the typical stages of a machine learning project, from identifying the business problem to running the model in production.",
+    "prompt": "Which sequence lists the stages in the correct order?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Train model, define business goal, deploy model, collect data, evaluate",
+        "correct": false,
+        "why": "Training requires data, and the goal should drive everything. This order starts with training before any data exists."
+      },
+      {
+        "key": "B",
+        "text": "Collect data, monitor, deploy, define business goal, train model",
+        "correct": false,
+        "why": "Monitoring happens after deployment, and the business goal must come first to guide the rest."
+      },
+      {
+        "key": "C",
+        "text": "Define business goal, collect and prepare data, train and evaluate model, deploy, monitor",
+        "correct": true,
+        "why": "The lifecycle starts with the business problem, then data, then model development and evaluation, then deployment and ongoing monitoring."
+      },
+      {
+        "key": "D",
+        "text": "Deploy model, collect data, define business goal, train model, monitor",
+        "correct": false,
+        "why": "A model cannot be deployed before it is trained, and data cannot be chosen before the business goal is defined."
+      }
+    ],
+    "explanation": {
+      "answer": "A typical ML lifecycle is: identify the business goal and frame it as an ML problem; collect, process and prepare data (including feature engineering); train, tune and evaluate the model; deploy it; and monitor it in production, retraining when performance degrades.",
+      "concept": "The lifecycle is iterative. Monitoring results feed back into data collection and retraining.",
+      "examTip": "Goal → data → model → deploy → monitor, then loop back.",
+      "references": [
+        {
+          "title": "Machine Learning Lens: AWS Well-Architected",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/machine-learning-lens.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-fun-052",
+    "domain": "fundamentals",
+    "topic": "ML Pipeline",
+    "tags": [
+      "feature-engineering",
+      "data-preparation"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "During a project, a team converts raw timestamps into \"day of week\" and \"hour of day\" columns and combines purchase records into a \"total spend in the last 90 days\" column before training.",
+    "prompt": "Which stage of the ML pipeline does this work belong to?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Hyperparameter tuning",
+        "correct": false,
+        "why": "Hyperparameter tuning adjusts training settings such as learning rate. It does not create new input columns."
+      },
+      {
+        "key": "B",
+        "text": "Model deployment",
+        "correct": false,
+        "why": "Deployment makes a trained model available for inference. The work described happens before training."
+      },
+      {
+        "key": "C",
+        "text": "Model monitoring",
+        "correct": false,
+        "why": "Monitoring tracks a deployed model's behavior over time. Creating new columns for training is data preparation."
+      },
+      {
+        "key": "D",
+        "text": "Feature engineering",
+        "correct": true,
+        "why": "Feature engineering transforms raw data into inputs (features) that help the model learn, such as extracting time parts and aggregating spend."
+      }
+    ],
+    "explanation": {
+      "answer": "Feature engineering is the part of data preparation in which raw data is transformed into features that better represent the problem, for example extracting components from dates, aggregating history, encoding categories and scaling numbers.",
+      "concept": "On AWS, SageMaker Data Wrangler helps prepare and transform data visually, and SageMaker Feature Store stores features so they are reused consistently for training and inference.",
+      "examTip": "Creating or transforming input columns = feature engineering.",
+      "references": [
+        {
+          "title": "Amazon SageMaker Data Wrangler",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/data-wrangler.html"
+        },
+        {
+          "title": "Amazon SageMaker Feature Store",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/feature-store.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-fun-053",
+    "domain": "fundamentals",
+    "topic": "ML Pipeline",
+    "tags": [
+      "feature-store"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "Several teams at a bank build different models that all use the same customer features, such as average balance and number of transactions. Each team recomputes the features differently, causing inconsistent results between training and production.",
+    "prompt": "Which AWS capability helps the teams store, share and reuse features consistently?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon SageMaker Feature Store",
+        "correct": true,
+        "why": "Feature Store is a central repository for ML features, providing the same feature values for training (offline store) and low-latency inference (online store)."
+      },
+      {
+        "key": "B",
+        "text": "Amazon SageMaker Ground Truth",
+        "correct": false,
+        "why": "Ground Truth helps humans label data. It does not store and serve engineered features."
+      },
+      {
+        "key": "C",
+        "text": "Amazon Polly",
+        "correct": false,
+        "why": "Polly converts text to speech and has no role in feature management."
+      },
+      {
+        "key": "D",
+        "text": "Amazon SageMaker Clarify",
+        "correct": false,
+        "why": "Clarify detects bias and explains predictions. It does not store reusable features."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon SageMaker Feature Store is a managed repository to create, store, share and serve ML features. Using one definition of each feature for both training and inference prevents training-serving skew and avoids duplicated work across teams.",
+      "concept": "Reusable, versioned components such as features, pipelines and model registries are core MLOps practices that reduce technical debt.",
+      "examTip": "Share and reuse features across teams and between training and inference = SageMaker Feature Store.",
+      "references": [
+        {
+          "title": "Amazon SageMaker Feature Store",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/feature-store.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-fun-054",
+    "domain": "fundamentals",
+    "topic": "ML Pipeline",
+    "tags": [
+      "hyperparameter-tuning",
+      "training"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A data scientist wants to find the best combination of learning rate, tree depth and number of training rounds for a model, without manually running dozens of experiments.",
+    "prompt": "Which SageMaker AI capability automates this search?",
+    "options": [
+      {
+        "key": "A",
+        "text": "SageMaker Model Cards",
+        "correct": false,
+        "why": "Model Cards document a model's intended use, risks and performance. They do not run training experiments."
+      },
+      {
+        "key": "B",
+        "text": "SageMaker automatic model tuning",
+        "correct": true,
+        "why": "Automatic model tuning runs many training jobs with different hyperparameter values and finds the combination that gives the best objective metric."
+      },
+      {
+        "key": "C",
+        "text": "SageMaker Model Monitor",
+        "correct": false,
+        "why": "Model Monitor watches deployed models for drift. It does not search for training settings."
+      },
+      {
+        "key": "D",
+        "text": "SageMaker Ground Truth",
+        "correct": false,
+        "why": "Ground Truth creates labeled datasets with human labelers. It does not tune hyperparameters."
+      }
+    ],
+    "explanation": {
+      "answer": "Hyperparameters are settings chosen before training, such as learning rate or tree depth. SageMaker AI automatic model tuning (hyperparameter optimization) launches multiple training jobs using strategies such as Bayesian search and selects the best-performing configuration.",
+      "concept": "Parameters (weights) are learned during training. Hyperparameters are set by people or tuning jobs and control how training happens.",
+      "examTip": "Find the best learning rate, depth or epochs automatically = automatic model tuning.",
+      "references": [
+        {
+          "title": "Automatic model tuning with SageMaker AI",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/automatic-model-tuning.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-fun-055",
+    "domain": "fundamentals",
+    "topic": "MLOps",
+    "tags": [
+      "model-monitor",
+      "drift"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A retailer's demand model was accurate at launch, but six months later its predictions are noticeably worse. Customer buying habits have changed since the training data was collected.",
+    "prompt": "Which AWS capability helps detect this situation automatically?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Artifact",
+        "correct": false,
+        "why": "AWS Artifact provides compliance reports. It does not monitor model performance."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Polly",
+        "correct": false,
+        "why": "Polly converts text to speech and has nothing to do with model monitoring."
+      },
+      {
+        "key": "C",
+        "text": "Amazon SageMaker Model Monitor",
+        "correct": true,
+        "why": "Model Monitor continuously compares production data and predictions against a baseline and alerts on data drift and model quality degradation."
+      },
+      {
+        "key": "D",
+        "text": "Amazon SageMaker Ground Truth",
+        "correct": false,
+        "why": "Ground Truth helps create labeled data but does not watch deployed models for drift."
+      }
+    ],
+    "explanation": {
+      "answer": "Models degrade when production data drifts away from training data, for example when customer behavior changes. Amazon SageMaker Model Monitor captures endpoint data, compares it to a baseline, and flags data quality, model quality, bias drift and feature attribution drift so you know when to retrain.",
+      "concept": "Monitoring and retraining are core MLOps practices. A common pattern is: Model Monitor detects drift → alarm → pipeline retrains and redeploys the model.",
+      "examTip": "\"Model was good, now worse because data changed\" = drift, detected with SageMaker Model Monitor, fixed by retraining.",
+      "references": [
+        {
+          "title": "Data and model quality monitoring with Amazon SageMaker Model Monitor",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-fun-056",
+    "domain": "fundamentals",
+    "topic": "MLOps",
+    "tags": [
+      "pipelines",
+      "automation",
+      "repeatability"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A team retrains its model by manually running notebooks in a specific order each month. Steps are sometimes skipped, and nobody can reproduce last quarter's model exactly.",
+    "prompt": "Which MLOps practice and AWS capability address this problem?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Stop retraining the model",
+        "correct": false,
+        "why": "Models need retraining as data changes. Stopping retraining leads to degraded predictions."
+      },
+      {
+        "key": "B",
+        "text": "Use larger notebook instances so the steps run faster",
+        "correct": false,
+        "why": "Speed does not fix skipped steps or reproducibility. The process itself needs to be automated and versioned."
+      },
+      {
+        "key": "C",
+        "text": "Have a second person watch the notebooks being run",
+        "correct": false,
+        "why": "Manual oversight still relies on people following steps correctly and does not record a reproducible definition of the workflow."
+      },
+      {
+        "key": "D",
+        "text": "Automate the workflow as a repeatable pipeline with Amazon SageMaker Pipelines",
+        "correct": true,
+        "why": "SageMaker Pipelines defines the steps (process, train, evaluate, register) as code that runs the same way every time and records lineage, making retraining reproducible."
+      }
+    ],
+    "explanation": {
+      "answer": "MLOps applies DevOps principles to ML: automated, repeatable and versioned processes for data preparation, training, evaluation and deployment. Amazon SageMaker Pipelines orchestrates these steps as a workflow, and SageMaker Model Registry versions and approves the resulting models.",
+      "concept": "MLOps goals include experimentation tracking, repeatable processes, scalable systems, managing technical debt, production readiness, monitoring and automated retraining.",
+      "examTip": "Manual, error-prone, non-reproducible ML steps = automate with SageMaker Pipelines.",
+      "references": [
+        {
+          "title": "Amazon SageMaker Pipelines",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/pipelines.html"
+        },
+        {
+          "title": "What is MLOps?",
+          "url": "https://aws.amazon.com/what-is/mlops/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-fun-057",
+    "domain": "fundamentals",
+    "topic": "MLOps",
+    "tags": [
+      "model-registry",
+      "versioning"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company needs to keep track of every version of its credit model, record which version is approved for production, and roll back quickly if a new version performs badly.",
+    "prompt": "Which SageMaker AI capability is designed for this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "SageMaker Model Registry",
+        "correct": true,
+        "why": "Model Registry catalogs model versions with metadata, tracks approval status, and supports deploying or rolling back to a specific version."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Comprehend",
+        "correct": false,
+        "why": "Comprehend is an NLP service and has no model versioning role here."
+      },
+      {
+        "key": "C",
+        "text": "SageMaker Data Wrangler",
+        "correct": false,
+        "why": "Data Wrangler prepares data before training and does not version models."
+      },
+      {
+        "key": "D",
+        "text": "SageMaker Ground Truth",
+        "correct": false,
+        "why": "Ground Truth is for labeling data. It does not catalog and approve model versions."
+      }
+    ],
+    "explanation": {
+      "answer": "SageMaker Model Registry stores model versions in model groups with metrics and metadata, manages approval status (for example pending, approved or rejected), and integrates with CI/CD so approved versions are deployed and earlier versions can be restored.",
+      "concept": "Versioning models, data and code is essential for governance, auditability and safe rollback in production ML.",
+      "examTip": "Track versions, approve for production, roll back = SageMaker Model Registry.",
+      "references": [
+        {
+          "title": "Model Registration Deployment with Model Registry",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/model-registry.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-fun-058",
+    "domain": "fundamentals",
+    "topic": "Model Metrics",
+    "tags": [
+      "precision",
+      "recall",
+      "classification-metrics"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A hospital builds a model to flag patients who may have a serious but treatable disease. Missing a sick patient is far worse than sending a healthy patient for an extra test.",
+    "prompt": "Which metric should the team prioritize when evaluating the model?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Precision",
+        "correct": false,
+        "why": "Precision measures how many flagged patients are actually sick. Optimizing it reduces false alarms, but the bigger risk here is missing sick patients."
+      },
+      {
+        "key": "B",
+        "text": "Recall",
+        "correct": true,
+        "why": "Recall measures how many of the truly sick patients the model catches. When false negatives (missed cases) are most costly, recall is the priority."
+      },
+      {
+        "key": "C",
+        "text": "Training time",
+        "correct": false,
+        "why": "Training time is an operational measure. It says nothing about how many sick patients are missed."
+      },
+      {
+        "key": "D",
+        "text": "Mean squared error",
+        "correct": false,
+        "why": "Mean squared error measures regression error on numeric predictions. This is a classification problem."
+      }
+    ],
+    "explanation": {
+      "answer": "Recall = true positives / (true positives + false negatives). It answers \"of all the actual positive cases, how many did we catch?\" When missing a positive case is costly, as in disease screening or fraud detection, prioritize recall.",
+      "concept": "Precision = true positives / (true positives + false positives): of everything flagged, how many were right. Prioritize precision when false alarms are costly, such as marking legitimate email as spam. F1 balances both.",
+      "examTip": "Costly misses (false negatives) → recall. Costly false alarms (false positives) → precision.",
+      "references": [
+        {
+          "title": "Binary model insights (precision, recall, accuracy)",
+          "url": "https://docs.aws.amazon.com/machine-learning/latest/dg/binary-model-insights.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-fun-059",
+    "domain": "fundamentals",
+    "topic": "Model Metrics",
+    "tags": [
+      "precision",
+      "false-positives"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "An email provider's spam filter moves suspected spam to a junk folder that users rarely check. Users are very upset when important legitimate emails end up in junk, but they tolerate some spam in their inbox.",
+    "prompt": "Which metric should be prioritized for the spam class?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Root mean squared error",
+        "correct": false,
+        "why": "RMSE is a regression metric for numeric predictions and does not apply to spam classification."
+      },
+      {
+        "key": "B",
+        "text": "Number of features",
+        "correct": false,
+        "why": "The number of input features is a model design detail, not an evaluation metric for this trade-off."
+      },
+      {
+        "key": "C",
+        "text": "Precision",
+        "correct": true,
+        "why": "High precision means emails flagged as spam really are spam, so few legitimate emails are wrongly moved to junk. False positives are the costly error here."
+      },
+      {
+        "key": "D",
+        "text": "Recall",
+        "correct": false,
+        "why": "Maximizing recall catches more spam but tends to flag more legitimate emails as well, which is exactly what upsets users."
+      }
+    ],
+    "explanation": {
+      "answer": "Precision measures the share of predicted positives that are truly positive. When the cost of a false positive is high, such as losing an important email to the junk folder, the model should be tuned for precision, even if some spam slips through.",
+      "concept": "Precision and recall trade off against each other through the decision threshold. Raising the threshold for \"spam\" usually increases precision and lowers recall.",
+      "examTip": "\"Do not wrongly flag good items\" → precision.",
+      "references": [
+        {
+          "title": "Binary model insights (precision, recall, accuracy)",
+          "url": "https://docs.aws.amazon.com/machine-learning/latest/dg/binary-model-insights.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-fun-060",
+    "domain": "fundamentals",
+    "topic": "Model Metrics",
+    "tags": [
+      "accuracy",
+      "class-imbalance",
+      "f1"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "Only 1% of a bank's transactions are fraudulent. A new model labels every transaction as \"not fraud\" and reports 99% accuracy.",
+    "prompt": "Why is accuracy misleading here, and what is a better metric?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Accuracy is misleading because fraud is a regression problem; use mean absolute error.",
+        "correct": false,
+        "why": "Fraud detection is classification, not regression, so mean absolute error does not apply."
+      },
+      {
+        "key": "B",
+        "text": "Accuracy is reliable; a 99% score proves the model is excellent.",
+        "correct": false,
+        "why": "The model catches zero fraud. High accuracy comes only from the majority class, so it hides complete failure on the class that matters."
+      },
+      {
+        "key": "C",
+        "text": "Accuracy is misleading because the dataset is too large; use training time instead.",
+        "correct": false,
+        "why": "Dataset size is not the issue, and training time does not measure prediction quality."
+      },
+      {
+        "key": "D",
+        "text": "Accuracy is misleading because the classes are highly imbalanced; use F1 score or recall for the fraud class.",
+        "correct": true,
+        "why": "With 99% legitimate transactions, predicting \"not fraud\" always gives 99% accuracy. F1 and recall on the fraud class reveal that no fraud is caught."
+      }
+    ],
+    "explanation": {
+      "answer": "Accuracy (correct predictions / total predictions) is misleading with imbalanced classes because a model can score highly by always predicting the majority class. Metrics focused on the minority class, such as recall, precision, F1 score and area under the curve (AUC), give a truer picture.",
+      "concept": "F1 score is the harmonic mean of precision and recall. It is high only when both are reasonably high, so it is a good single metric for imbalanced problems.",
+      "examTip": "Rare positive class + high accuracy claim = suspect. Look at F1, recall or precision.",
+      "references": [
+        {
+          "title": "Binary model insights (precision, recall, accuracy)",
+          "url": "https://docs.aws.amazon.com/machine-learning/latest/dg/binary-model-insights.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-fun-061",
+    "domain": "fundamentals",
+    "topic": "Model Metrics",
+    "tags": [
+      "business-metrics",
+      "roi"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company's new recommendation model has a better offline evaluation score than the old one. The executive sponsor asks how the company will know whether the model is worth its cost.",
+    "prompt": "Which measure BEST answers the sponsor's question?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Return on investment, such as incremental revenue from recommendations compared with development and operating costs",
+        "correct": true,
+        "why": "ROI ties the model to business outcomes and costs, which is what determines whether it is worth funding."
+      },
+      {
+        "key": "B",
+        "text": "The model's F1 score on the test set",
+        "correct": false,
+        "why": "F1 is a technical model metric. It does not show whether the model creates business value relative to its cost."
+      },
+      {
+        "key": "C",
+        "text": "The number of layers in the neural network",
+        "correct": false,
+        "why": "Model architecture details say nothing about business value."
+      },
+      {
+        "key": "D",
+        "text": "The size of the training dataset",
+        "correct": false,
+        "why": "Dataset size describes the input, not the business outcome or return."
+      }
+    ],
+    "explanation": {
+      "answer": "Model metrics (accuracy, precision, recall, F1) show technical quality, but business metrics show value. Return on investment (ROI), cost per user, development costs, conversion lift and customer feedback indicate whether the model justifies its cost.",
+      "concept": "Good ML projects define business success metrics at the start, then validate them in production, often with A/B tests comparing the new model to the old one.",
+      "examTip": "\"Is it worth it?\" questions are answered with business metrics such as ROI, not model metrics.",
+      "references": [
+        {
+          "title": "Machine Learning Lens: AWS Well-Architected",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/machine-learning-lens.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-fun-062",
+    "domain": "fundamentals",
+    "topic": "Model Deployment",
+    "tags": [
+      "managed-api",
+      "self-hosted"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company wants to use a foundation model in production. It does not want to manage servers, GPUs or scaling, and it is comfortable paying per use.",
+    "prompt": "Which deployment method BEST meets these requirements?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Self-hosting an open-source model on Amazon EC2 GPU instances",
+        "correct": false,
+        "why": "Self-hosting gives full control but requires managing instances, GPUs, scaling and patching, which the company wants to avoid."
+      },
+      {
+        "key": "B",
+        "text": "A managed API service, such as invoking the model through Amazon Bedrock",
+        "correct": true,
+        "why": "With a managed API, AWS runs and scales the model infrastructure, and the company pays per request or token. No servers or GPUs to manage."
+      },
+      {
+        "key": "C",
+        "text": "Running the model on employees' laptops",
+        "correct": false,
+        "why": "Laptops cannot reliably serve a production FM, and this does not remove infrastructure work."
+      },
+      {
+        "key": "D",
+        "text": "Training a new model from scratch on premises",
+        "correct": false,
+        "why": "Training from scratch is expensive and slow, and it still leaves the company responsible for hosting."
+      }
+    ],
+    "explanation": {
+      "answer": "There are two main ways to use a model in production: call a managed API service, where the provider runs the model (Amazon Bedrock), or self-host the model on your own infrastructure, such as SageMaker AI endpoints or Amazon EC2. Managed APIs minimize operational work and use pay-per-use pricing.",
+      "concept": "Self-hosting offers more control over the model, versions and environment, and can be cheaper at very high steady volume, but requires infrastructure and MLOps skills.",
+      "examTip": "\"No servers to manage\" + \"pay per use\" for an FM = managed API (Amazon Bedrock).",
+      "references": [
+        {
+          "title": "What is Amazon Bedrock?",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/what-is-bedrock.html"
+        },
+        {
+          "title": "Deploy models for inference (SageMaker AI)",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/deploy-model.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-fun-063",
+    "domain": "fundamentals",
+    "topic": "Model Sources",
+    "tags": [
+      "open-source",
+      "jumpstart",
+      "pre-trained"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A team wants to start from a publicly available pre-trained open-source model, deploy it into its own AWS account with one click, and optionally fine-tune it on its data.",
+    "prompt": "Which AWS capability is designed for this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Artifact",
+        "correct": false,
+        "why": "Artifact provides compliance reports and agreements, not models."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Transcribe",
+        "correct": false,
+        "why": "Transcribe is a speech-to-text service. It does not offer a catalog of models to deploy."
+      },
+      {
+        "key": "C",
+        "text": "Amazon SageMaker JumpStart",
+        "correct": true,
+        "why": "SageMaker JumpStart is a hub of pre-trained and foundation models, including open-source ones, that can be deployed and fine-tuned in your account with a few clicks."
+      },
+      {
+        "key": "D",
+        "text": "AWS Trusted Advisor",
+        "correct": false,
+        "why": "Trusted Advisor recommends cost, security and performance improvements. It does not host models."
+      }
+    ],
+    "explanation": {
+      "answer": "Foundation models can come from open-source pre-trained models, proprietary models accessed through APIs, or custom models you train yourself. SageMaker JumpStart provides a catalog of pre-trained models (including many open-source FMs) that you can deploy to SageMaker AI endpoints and fine-tune.",
+      "concept": "Amazon Bedrock offers serverless API access to FMs; SageMaker JumpStart lets you deploy models into your own managed endpoints with more control over infrastructure.",
+      "examTip": "Pre-trained or open-source model deployed into your account with fine-tuning options = SageMaker JumpStart.",
+      "references": [
+        {
+          "title": "SageMaker JumpStart pretrained models",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/studio-jumpstart.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-fun-064",
+    "domain": "fundamentals",
+    "topic": "AWS Services by Stage",
+    "tags": [
+      "kiro",
+      "developer-tools"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A development team wants an AI-powered development environment that turns a feature request into structured requirements, a design and a task list, and then uses AI agents to help implement and test the code.",
+    "prompt": "Which AWS offering matches this description?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Polly",
+        "correct": false,
+        "why": "Polly converts text to speech. It is not a development environment."
+      },
+      {
+        "key": "B",
+        "text": "AWS Config",
+        "correct": false,
+        "why": "AWS Config records and evaluates resource configurations for compliance. It does not help write code."
+      },
+      {
+        "key": "C",
+        "text": "Amazon Rekognition",
+        "correct": false,
+        "why": "Rekognition analyzes images and video, not software requirements."
+      },
+      {
+        "key": "D",
+        "text": "Kiro",
+        "correct": true,
+        "why": "Kiro is an agentic AI development environment that supports spec-driven development, turning prompts into requirements, designs and tasks that AI agents help implement."
+      }
+    ],
+    "explanation": {
+      "answer": "Kiro is an AI-powered integrated development environment from AWS built around agentic workflows. It emphasizes spec-driven development, where requirements, design and implementation tasks are generated and kept in sync, and agents assist with coding and testing.",
+      "concept": "AWS offers AI tools at different stages: Kiro and Amazon Q Developer for building software, Amazon Bedrock and SageMaker AI for building AI applications, and Amazon Quick for business users working with data and agents.",
+      "examTip": "Agentic IDE with spec-driven development = Kiro.",
+      "references": [
+        {
+          "title": "Kiro documentation",
+          "url": "https://kiro.dev/docs/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-fun-065",
+    "domain": "fundamentals",
+    "topic": "AWS Services by Stage",
+    "tags": [
+      "amazon-quick",
+      "business-users"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company's business analysts want a single AI workspace where they can ask questions about company data in natural language, build dashboards, run research across internal and web sources, and automate routine workflows, without writing code.",
+    "prompt": "Which AWS offering is designed for these users?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Quick",
+        "correct": true,
+        "why": "Amazon Quick is an agentic AI workspace for business users that brings together data analysis and dashboards, research, and workflow automation with AI agents."
+      },
+      {
+        "key": "B",
+        "text": "Amazon EC2 GPU instances",
+        "correct": false,
+        "why": "EC2 provides raw compute that technical teams must manage. It is not a business-user AI workspace."
+      },
+      {
+        "key": "C",
+        "text": "AWS CloudTrail",
+        "correct": false,
+        "why": "CloudTrail logs API activity for auditing and does not answer business questions."
+      },
+      {
+        "key": "D",
+        "text": "Amazon SageMaker AI training jobs",
+        "correct": false,
+        "why": "Training jobs build custom models and require ML and coding skills. They are not a workspace for business analysts."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Quick (Amazon Quick Suite) is an AI-powered workspace for business users. It combines business intelligence (including Amazon Quick Sight dashboards), AI agents and chat, research capabilities, and automation of tasks and workflows, connected to company data.",
+      "concept": "Choose services by persona: business users → Amazon Quick; developers → Kiro and Amazon Bedrock; data scientists → SageMaker AI.",
+      "examTip": "Business users, natural language over company data, dashboards and automation = Amazon Quick.",
+      "references": [
+        {
+          "title": "What is Amazon Quick?",
+          "url": "https://docs.aws.amazon.com/quick/latest/userguide/what-is.html"
+        },
+        {
+          "title": "Amazon Quick",
+          "url": "https://aws.amazon.com/quick/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-fun-066",
+    "domain": "fundamentals",
+    "topic": "ML Pipeline",
+    "tags": [
+      "data-collection",
+      "ml-lifecycle"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "Before any model is built, a team splits its labeled dataset into three parts: one used to fit the model, one used to compare model versions and tune settings, and one held back to estimate final performance on unseen data.",
+    "prompt": "What are these three datasets usually called?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Bronze, silver and gold sets",
+        "correct": false,
+        "why": "These terms describe data-lake refinement layers in some architectures, not ML evaluation splits."
+      },
+      {
+        "key": "B",
+        "text": "Training, validation and test sets",
+        "correct": true,
+        "why": "The training set fits the model, the validation set guides tuning and model selection, and the test set gives an unbiased final estimate of performance."
+      },
+      {
+        "key": "C",
+        "text": "Input, output and inference sets",
+        "correct": false,
+        "why": "These are not standard names for data splits. Inference refers to using a deployed model."
+      },
+      {
+        "key": "D",
+        "text": "Labeled, unlabeled and synthetic sets",
+        "correct": false,
+        "why": "These describe kinds of data, not the purpose-based split used during model development."
+      }
+    ],
+    "explanation": {
+      "answer": "Data is typically split into a training set (to learn parameters), a validation set (to tune hyperparameters and select models) and a test set (held out until the end to estimate how the model will perform on new data).",
+      "concept": "Keeping the test set untouched prevents an over-optimistic estimate. Comparing training and validation performance also reveals overfitting.",
+      "examTip": "Train to learn, validate to tune, test to report.",
+      "references": [
+        {
+          "title": "What is overfitting?",
+          "url": "https://aws.amazon.com/what-is/overfitting/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-fun-067",
+    "domain": "fundamentals",
+    "topic": "MLOps",
+    "tags": [
+      "retraining",
+      "monitoring",
+      "mlops"
+    ],
+    "difficulty": "medium",
+    "type": "multi",
+    "selectCount": 2,
+    "stem": "A company is defining MLOps practices for its first production model.",
+    "prompt": "Which practices are core MLOps practices? (Select TWO.)",
+    "options": [
+      {
+        "key": "A",
+        "text": "Automating training and deployment with versioned, repeatable pipelines",
+        "correct": true,
+        "why": "Repeatable, versioned pipelines make models reproducible and reduce errors, which is foundational to MLOps."
+      },
+      {
+        "key": "B",
+        "text": "Keeping experiment results only in individual data scientists' memories",
+        "correct": false,
+        "why": "MLOps tracks experiments and lineage systematically so work can be reproduced and audited."
+      },
+      {
+        "key": "C",
+        "text": "Monitoring model performance in production and retraining when it degrades",
+        "correct": true,
+        "why": "Continuous monitoring and retraining keep models accurate as data changes, a central MLOps practice."
+      },
+      {
+        "key": "D",
+        "text": "Training each model only once and never updating it",
+        "correct": false,
+        "why": "Models drift over time. Never updating them leads to steadily worse predictions."
+      },
+      {
+        "key": "E",
+        "text": "Deploying models by copying files manually to servers whenever someone remembers",
+        "correct": false,
+        "why": "Manual, ad hoc deployment is the problem MLOps solves. MLOps automates deployment through repeatable processes."
+      }
+    ],
+    "explanation": {
+      "answer": "MLOps brings DevOps discipline to ML. Core practices include experiment tracking, automated and repeatable pipelines, versioning of data, code and models, CI/CD for models, production monitoring, and automated retraining.",
+      "concept": "On AWS: SageMaker Pipelines (automation), Model Registry (versioning and approval), Model Monitor (monitoring) and SageMaker experiments tracking.",
+      "examTip": "MLOps = automate, version, monitor, retrain.",
+      "references": [
+        {
+          "title": "What is MLOps?",
+          "url": "https://aws.amazon.com/what-is/mlops/"
+        },
+        {
+          "title": "Amazon SageMaker Pipelines",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/pipelines.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-fun-068",
+    "domain": "fundamentals",
+    "topic": "Model Metrics",
+    "tags": [
+      "regression-metrics",
+      "rmse"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A team evaluates a model that predicts apartment rents in dollars. It wants a metric that summarizes how far, on average, the predicted rents are from the actual rents.",
+    "prompt": "Which metric is appropriate?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Precision",
+        "correct": false,
+        "why": "Precision measures the share of predicted positives that are correct. It does not apply to continuous predictions."
+      },
+      {
+        "key": "B",
+        "text": "Recall",
+        "correct": false,
+        "why": "Recall is a classification metric for how many positive cases were found. Rent prediction is a regression task."
+      },
+      {
+        "key": "C",
+        "text": "Root mean squared error (RMSE)",
+        "correct": true,
+        "why": "RMSE measures the typical size of the difference between predicted and actual numeric values, expressed in the same units as the target (dollars)."
+      },
+      {
+        "key": "D",
+        "text": "BLEU score",
+        "correct": false,
+        "why": "BLEU evaluates machine-translated text against reference translations. It does not measure numeric prediction error."
+      }
+    ],
+    "explanation": {
+      "answer": "Regression models are evaluated with error metrics such as root mean squared error (RMSE), mean absolute error (MAE) and R-squared. RMSE penalizes large errors more heavily and is reported in the target's units.",
+      "concept": "Classification metrics (accuracy, precision, recall, F1, AUC) apply to category predictions; regression metrics (RMSE, MAE, R²) apply to numeric predictions; text-generation metrics (ROUGE, BLEU) apply to generated text.",
+      "examTip": "Numeric prediction → RMSE or MAE. Category prediction → accuracy, precision, recall, F1.",
+      "references": [
+        {
+          "title": "Model quality metrics (SageMaker Model Monitor)",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-model-quality-metrics.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-fun-069",
+    "domain": "fundamentals",
+    "topic": "Model Metrics",
+    "tags": [
+      "auc",
+      "classification-metrics"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A data scientist wants a single metric that summarizes how well a binary classifier separates the two classes across all possible decision thresholds, rather than at one chosen threshold.",
+    "prompt": "Which metric fits this description?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Accuracy at a 0.5 threshold",
+        "correct": false,
+        "why": "Accuracy is computed at one threshold, so it does not summarize performance across all thresholds."
+      },
+      {
+        "key": "B",
+        "text": "Mean absolute error",
+        "correct": false,
+        "why": "MAE measures numeric prediction error in regression, not class separation."
+      },
+      {
+        "key": "C",
+        "text": "Perplexity",
+        "correct": false,
+        "why": "Perplexity measures how well a language model predicts text. It is not used for binary classifiers."
+      },
+      {
+        "key": "D",
+        "text": "Area under the ROC curve (AUC)",
+        "correct": true,
+        "why": "AUC summarizes the classifier's ability to rank positives above negatives across all thresholds. A value of 1.0 is perfect separation and 0.5 is random guessing."
+      }
+    ],
+    "explanation": {
+      "answer": "The ROC curve plots the true positive rate against the false positive rate at every threshold. The area under it (AUC) is a threshold-independent measure of how well the model separates classes.",
+      "concept": "After choosing a model with a good AUC, the team still picks an operating threshold based on the business cost of false positives versus false negatives.",
+      "examTip": "\"Across all thresholds\" = AUC.",
+      "references": [
+        {
+          "title": "Binary model insights (AUC and threshold)",
+          "url": "https://docs.aws.amazon.com/machine-learning/latest/dg/binary-model-insights.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-fun-070",
+    "domain": "fundamentals",
+    "topic": "ML Pipeline",
+    "tags": [
+      "autopilot",
+      "automl"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A team with limited ML expertise has a labeled tabular dataset. It wants AWS to automatically explore data preprocessing, try several algorithms, tune them, and present a leaderboard of candidate models it can inspect.",
+    "prompt": "Which capability provides this automated machine learning (AutoML) experience?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon SageMaker Autopilot",
+        "correct": true,
+        "why": "SageMaker Autopilot automatically builds, trains and tunes candidate models on tabular data and shows a leaderboard, while keeping visibility into how models were built."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Polly",
+        "correct": false,
+        "why": "Polly converts text to speech and does not build models."
+      },
+      {
+        "key": "C",
+        "text": "Amazon Macie",
+        "correct": false,
+        "why": "Macie discovers sensitive data in Amazon S3. It does not train models."
+      },
+      {
+        "key": "D",
+        "text": "AWS CloudTrail",
+        "correct": false,
+        "why": "CloudTrail records API calls and has no model-building capability."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon SageMaker Autopilot is AutoML: it analyzes tabular data, generates candidate pipelines, trains and tunes many models, and ranks them on a leaderboard. It also produces notebooks and explainability reports so results remain transparent. Its capabilities are also available through SageMaker Canvas.",
+      "concept": "AutoML lowers the barrier to building good models, but teams still need to define the business problem, check data quality and evaluate results responsibly.",
+      "examTip": "Automatically try algorithms and tune on tabular data = SageMaker Autopilot (also surfaced in Canvas).",
+      "references": [
+        {
+          "title": "SageMaker Autopilot",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/autopilot-automate-model-development.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-fun-071",
+    "domain": "fundamentals",
+    "topic": "Model Sources",
+    "tags": [
+      "custom-model",
+      "training-from-scratch",
+      "cost"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A startup is considering pre-training its own foundation model from scratch instead of using an existing model.",
+    "prompt": "Which statement about this choice is MOST accurate?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Pre-training from scratch is the cheapest and fastest way to get a capable model.",
+        "correct": false,
+        "why": "Pre-training from scratch is the most expensive and slowest option, requiring massive data and compute."
+      },
+      {
+        "key": "B",
+        "text": "Pre-training from scratch requires very large datasets, significant compute and expertise, so most companies start from an existing pre-trained model instead.",
+        "correct": true,
+        "why": "Training a foundation model demands huge amounts of data, accelerated compute and specialized skills. Starting from an existing model and adapting it is far more practical for most organizations."
+      },
+      {
+        "key": "C",
+        "text": "Pre-training from scratch does not need any data.",
+        "correct": false,
+        "why": "Pre-training needs enormous amounts of data, typically billions of tokens or more."
+      },
+      {
+        "key": "D",
+        "text": "Pre-trained models can never be adapted, so training from scratch is required for any customization.",
+        "correct": false,
+        "why": "Pre-trained models can be adapted through prompting, RAG, fine-tuning and continued pre-training."
+      }
+    ],
+    "explanation": {
+      "answer": "The main sources for foundation models are pre-trained models (open-source or proprietary, used through an API or hosted yourself) and custom models trained from scratch. Training from scratch gives maximum control but costs the most in data, compute and time.",
+      "concept": "Customization options from cheapest to most expensive: prompt engineering, RAG, fine-tuning, continued pre-training, and full pre-training.",
+      "examTip": "Pre-training from scratch is the most expensive option. It is rarely the right answer unless a scenario explicitly needs a fully custom model.",
+      "references": [
+        {
+          "title": "What are foundation models?",
+          "url": "https://aws.amazon.com/what-is/foundation-models/"
+        },
+        {
+          "title": "Customize your model (Amazon Bedrock)",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/custom-models.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-fun-072",
+    "domain": "fundamentals",
+    "topic": "ML Pipeline",
+    "tags": [
+      "data-preparation",
+      "exploratory-data-analysis"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "Before training, a data scientist studies summary statistics, plots distributions and checks for missing values and correlations in a new dataset to understand it.",
+    "prompt": "What is this activity called?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Model deployment",
+        "correct": false,
+        "why": "Deployment comes after training. The scientist is still trying to understand the raw data."
+      },
+      {
+        "key": "B",
+        "text": "Model monitoring",
+        "correct": false,
+        "why": "Monitoring tracks a deployed model's behavior. This work happens before any model is built."
+      },
+      {
+        "key": "C",
+        "text": "Exploratory data analysis (EDA)",
+        "correct": true,
+        "why": "EDA is the step of examining data with statistics and visualizations to understand its structure, quality and relationships before modeling."
+      },
+      {
+        "key": "D",
+        "text": "Inference",
+        "correct": false,
+        "why": "Inference is using a trained model to make predictions. No model exists yet."
+      }
+    ],
+    "explanation": {
+      "answer": "Exploratory data analysis (EDA) uses statistics and visualizations to understand a dataset: distributions, missing values, outliers, correlations and potential bias. It informs data cleaning, feature engineering and model choice.",
+      "concept": "SageMaker Data Wrangler and SageMaker Canvas provide visual data quality reports and insights for EDA.",
+      "examTip": "Understanding data before modeling = EDA, part of the data preparation stage.",
+      "references": [
+        {
+          "title": "Amazon SageMaker Data Wrangler",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/data-wrangler.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-fun-073",
+    "domain": "fundamentals",
+    "topic": "MLOps",
+    "tags": [
+      "technical-debt",
+      "production-readiness"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A company has dozens of models in production. Each was built by a different team with its own scripts, undocumented data sources and custom deployment steps. Changes are risky and slow, and failures are hard to diagnose.",
+    "prompt": "Which MLOps concern does this situation MOST directly illustrate?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Overfitting",
+        "correct": false,
+        "why": "Overfitting is a property of a single model's fit to data. The problem described is about processes and maintainability across many models."
+      },
+      {
+        "key": "B",
+        "text": "Hallucination",
+        "correct": false,
+        "why": "Hallucination is a generative model producing false content. The issue here is operational, not model output."
+      },
+      {
+        "key": "C",
+        "text": "Class imbalance",
+        "correct": false,
+        "why": "Class imbalance concerns the distribution of labels in a dataset, not how models are built and operated."
+      },
+      {
+        "key": "D",
+        "text": "Accumulated technical debt from non-standardized, non-repeatable ML processes",
+        "correct": true,
+        "why": "Ad hoc scripts, undocumented data and custom deployments create ML technical debt, making systems fragile and costly to change. MLOps standardization reduces it."
+      }
+    ],
+    "explanation": {
+      "answer": "ML systems accumulate technical debt when data dependencies, pipelines and deployments are ad hoc and undocumented. MLOps reduces this debt with standardized pipelines, versioning, lineage tracking, documentation (such as model cards) and automated testing and monitoring.",
+      "concept": "MLOps fundamentals in the exam guide include experimentation, repeatable processes, scalable systems, managing technical debt, achieving production readiness, monitoring and retraining.",
+      "examTip": "Many inconsistent, fragile, undocumented ML workflows = technical debt → standardize with MLOps.",
+      "references": [
+        {
+          "title": "What is MLOps?",
+          "url": "https://aws.amazon.com/what-is/mlops/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-fun-074",
+    "domain": "fundamentals",
+    "topic": "AWS Services by Stage",
+    "tags": [
+      "bedrock",
+      "sagemaker-ai",
+      "service-selection"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company has two projects. Project 1 is a chatbot that uses an existing large language model to answer questions. Project 2 is a fraud model the data science team will train on proprietary transaction data with a custom algorithm.",
+    "prompt": "Which AWS services BEST fit the two projects?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Bedrock for Project 1 and Amazon SageMaker AI for Project 2",
+        "correct": true,
+        "why": "Bedrock provides managed access to existing foundation models for the chatbot. SageMaker AI provides the tools to train, tune and deploy a custom fraud model."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Polly for both projects",
+        "correct": false,
+        "why": "Polly only converts text to speech. It cannot host an LLM chatbot or train a fraud model."
+      },
+      {
+        "key": "C",
+        "text": "Amazon SageMaker AI for Project 1 and Amazon Translate for Project 2",
+        "correct": false,
+        "why": "Translate converts languages and cannot train a fraud model. Bedrock is the simpler fit for using an existing LLM."
+      },
+      {
+        "key": "D",
+        "text": "AWS Config for Project 1 and Amazon Rekognition for Project 2",
+        "correct": false,
+        "why": "AWS Config audits resource configurations, and Rekognition analyzes images. Neither fits these projects."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Bedrock is the managed way to build generative AI applications with existing foundation models. Amazon SageMaker AI is the platform for building, training and deploying custom ML models with your own data and algorithms.",
+      "concept": "Rule of thumb: use an existing FM through an API → Bedrock; build or deeply control your own model → SageMaker AI; common pre-built task (speech, vision, text analysis) → the specific AI service.",
+      "examTip": "Existing FM = Bedrock. Custom model training = SageMaker AI.",
+      "references": [
+        {
+          "title": "What is Amazon Bedrock?",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/what-is-bedrock.html"
+        },
+        {
+          "title": "What is Amazon SageMaker AI?",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/whatis.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "aif-fun-075",
+    "domain": "fundamentals",
+    "topic": "Model Metrics",
+    "tags": [
+      "confusion-matrix",
+      "false-positive",
+      "false-negative"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A fraud model reviewed 1,000 transactions. It flagged 50 as fraud; 40 of those were truly fraud. In total there were 80 fraudulent transactions in the batch.",
+    "prompt": "What are the model's precision and recall for the fraud class?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Precision 40%, recall 80%",
+        "correct": false,
+        "why": "40 is the count of true positives, not a percentage of anything here, and recall is 40 of 80, which is 50%."
+      },
+      {
+        "key": "B",
+        "text": "Precision 80%, recall 50%",
+        "correct": true,
+        "why": "Precision = 40 correct flags / 50 total flags = 80%. Recall = 40 frauds caught / 80 actual frauds = 50%."
+      },
+      {
+        "key": "C",
+        "text": "Precision 50%, recall 80%",
+        "correct": false,
+        "why": "These numbers are not ratios of the confusion matrix values. Precision is 40 of the 50 flagged, and recall is 40 of the 80 actual frauds."
+      },
+      {
+        "key": "D",
+        "text": "Precision 96%, recall 96%",
+        "correct": false,
+        "why": "96% is close to overall accuracy, which is dominated by the many legitimate transactions. It does not describe precision or recall for fraud."
+      }
+    ],
+    "explanation": {
+      "answer": "True positives = 40, false positives = 10 (50 flagged − 40 correct), false negatives = 40 (80 actual − 40 caught). Precision = TP / (TP + FP) = 40 / 50 = 80%. Recall = TP / (TP + FN) = 40 / 80 = 50%.",
+      "concept": "A confusion matrix counts true positives, false positives, true negatives and false negatives. Precision, recall, accuracy and F1 are all derived from it.",
+      "examTip": "Precision divides by what you flagged; recall divides by what actually exists.",
+      "references": [
+        {
+          "title": "Binary model insights (precision, recall, accuracy)",
+          "url": "https://docs.aws.amazon.com/machine-learning/latest/dg/binary-model-insights.html"
+        }
+      ]
+    }
+  }
+]
