@@ -11,9 +11,17 @@ import { allowAttempt, clientIpHash, recordAttempt } from "./request";
 // The AI tutor: explanations are written once per question (or topic) and shared by every learner.
 // Only follow-up chat and first-time generation call the model.
 
-const MODEL = "claude-opus-5-5";
-// Refusal fallback: if a request is declined, the API reruns it on a suitable model inside the same call.
-const BETAS: Anthropic.Beta.AnthropicBeta[] = ["server-side-fallback-2026-07-01"];
+// Content that is written once and shared (breakdowns, walk-throughs, cards) uses a stronger model;
+// follow-up chat, paid for on every message, uses a fast low-cost one. Override either in the environment.
+const MODELS = {
+  content: process.env.AI_MODEL_CONTENT || "claude-sonnet-5-5",
+  chat: process.env.AI_MODEL_CHAT || "claude-haiku-5-5",
+};
+
+/** Refusal fallback (the API reruns a declined request on a suitable model). Haiku has no server-side fallback. */
+function fallback(model: string) {
+  return model.startsWith("claude-haiku") ? {} : { betas: ["server-side-fallback-2026-07-01"] as Anthropic.Beta.AnthropicBeta[], fallbacks: "default" as const };
+}
 const client = process.env.ANTHROPIC_API_KEY ? new Anthropic() : null;
 /** Local development without a key serves canned content so the UI can still be exercised. */
 const mock = !client && process.env.NODE_ENV !== "production";
@@ -96,11 +104,11 @@ async function cached<T>(key: string, kind: string, hash: string): Promise<T | n
   return row && row.source_hash === hash ? row.content : null;
 }
 
-async function store(key: string, kind: string, hash: string, content: unknown): Promise<void> {
+async function store(key: string, kind: string, hash: string, content: unknown, model = MODELS.content): Promise<void> {
   await query(
     `insert into ai_content (key, kind, source_hash, content, model) values ($1, $2, $3, $4, $5)
      on conflict (key, kind) do update set source_hash = excluded.source_hash, content = excluded.content, model = excluded.model, created_at = now()`,
-    [key, kind, hash, JSON.stringify(content), mock ? "mock" : MODEL],
+    [key, kind, hash, JSON.stringify(content), mock ? "mock" : model],
   );
 }
 
@@ -131,10 +139,9 @@ export function failureCode(err: unknown): string {
 
 async function parse<T>(schema: z.ZodType<T>, system: string, user: string, maxTokens = 16000): Promise<T> {
   const res = await client!.beta.messages.parse({
-    model: MODEL,
+    model: MODELS.content,
     max_tokens: maxTokens,
-    betas: BETAS,
-    fallbacks: "default",
+    ...fallback(MODELS.content),
     output_config: { effort: "low", format: betaZodOutputFormat(schema) },
     system: [{ type: "text", text: TUTOR, cache_control: { type: "ephemeral" } }, { type: "text", text: system }],
     messages: [{ role: "user", content: user }],
@@ -178,16 +185,15 @@ Politely decline anything unrelated to AWS or studying for this exam.`;
 export type ChatTurn = { role: "user" | "assistant"; content: string };
 
 /** Streams text deltas, then the full text when done. */
-async function* streamText(system: string, messages: Anthropic.Beta.BetaMessageParam[], maxTokens: number): AsyncGenerator<string> {
+async function* streamText(model: string, system: string, messages: Anthropic.Beta.BetaMessageParam[], maxTokens: number): AsyncGenerator<string> {
   if (mock) {
     for (const word of MOCK_TEXT.split(/(?<= )/)) { yield word; await new Promise((r) => setTimeout(r, 8)); }
     return;
   }
   const stream = client!.beta.messages.stream({
-    model: MODEL,
+    model,
     max_tokens: maxTokens,
-    betas: BETAS,
-    fallbacks: "default",
+    ...fallback(model),
     output_config: { effort: "low" },
     system: [{ type: "text", text: TUTOR, cache_control: { type: "ephemeral" } }, { type: "text", text: system }],
     messages,
@@ -205,7 +211,7 @@ export async function cachedAnswerWalkthrough(q: Question): Promise<string | nul
 
 export async function* answerWalkthrough(q: Question): AsyncGenerator<string> {
   let full = "";
-  for await (const t of streamText(ANSWER_RULES, [{ role: "user", content: questionText(q, true) }], 4000)) { full += t; yield t; }
+  for await (const t of streamText(MODELS.content, ANSWER_RULES, [{ role: "user", content: questionText(q, true) }], 4000)) { full += t; yield t; }
   if (full.trim()) await store(q.id, "answer", hashQuestion(q), full);
 }
 
@@ -214,7 +220,7 @@ export function chat(q: Question, answered: boolean, turns: ChatTurn[]): AsyncGe
     { role: "user", content: `${questionText(q, answered)}\n\n---\n\n${turns[0].content}` },
     ...turns.slice(1),
   ];
-  return streamText(CHAT_RULES(answered), messages, 2000);
+  return streamText(MODELS.chat, CHAT_RULES(answered), messages, 2000);
 }
 
 // ---------- Study-sheet concept cards (one per exam topic, written from that topic's questions) ----------
