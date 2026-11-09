@@ -15,25 +15,25 @@
         "key": "A",
         "text": "AWS Artifact",
         "correct": true,
-        "why": "AWS Artifact provides on-demand access to AWS security and compliance reports such as SOC and ISO, and to agreements."
+        "why": "AWS Artifact provides on-demand access to AWS's own compliance reports, such as SOC and ISO, and agreements."
       },
       {
         "key": "B",
-        "text": "Amazon Bedrock playground",
+        "text": "AWS Audit Manager",
         "correct": false,
-        "why": "The playground is for experimenting with models."
+        "why": "Audit Manager collects evidence about the customer's own controls; AWS's SOC and ISO reports come from Artifact."
       },
       {
         "key": "C",
-        "text": "Amazon Inspector",
+        "text": "AWS Security Hub",
         "correct": false,
-        "why": "Inspector scans for vulnerabilities and does not provide AWS audit reports."
+        "why": "Security Hub aggregates security findings in the account; it does not provide AWS's certification reports."
       },
       {
         "key": "D",
-        "text": "AWS Lambda",
+        "text": "AWS Trusted Advisor",
         "correct": false,
-        "why": "Lambda runs code and does not provide AWS's compliance reports."
+        "why": "Trusted Advisor gives best-practice recommendations for the account, not AWS audit reports."
       }
     ],
     "explanation": {
@@ -62,27 +62,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Amazon Translate",
+        "text": "AWS Trusted Advisor",
         "correct": false,
-        "why": "Translate converts languages and cannot detect non-compliant resources."
+        "why": "Trusted Advisor runs AWS's predefined best-practice checks; it cannot evaluate the company's own custom rules continuously."
       },
       {
         "key": "B",
-        "text": "AWS Config with rules evaluating resource configurations",
+        "text": "AWS Config with rules",
         "correct": true,
-        "why": "AWS Config continuously records resource configurations and evaluates them against rules, flagging non-compliant resources."
+        "why": "AWS Config continuously records resource configurations and evaluates them against managed or custom rules."
       },
       {
         "key": "C",
-        "text": "Amazon Personalize",
+        "text": "Amazon Inspector",
         "correct": false,
-        "why": "Personalize generates recommendations and has no compliance monitoring capability."
+        "why": "Inspector scans for software vulnerabilities, not whether notebooks or buckets are configured as required."
       },
       {
         "key": "D",
-        "text": "Amazon Polly",
+        "text": "AWS CloudTrail",
         "correct": false,
-        "why": "Polly converts text to speech and cannot evaluate resource configurations."
+        "why": "CloudTrail records API activity; it does not evaluate whether resources comply with configuration rules."
       }
     ],
     "explanation": {
@@ -111,27 +111,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Amazon Comprehend",
+        "text": "AWS Config",
         "correct": false,
-        "why": "Comprehend analyzes text and does not inspect accounts for best-practice gaps."
+        "why": "Config evaluates resource configurations against rules you define; it does not provide cost or service-limit recommendations."
       },
       {
         "key": "B",
-        "text": "Amazon Rekognition",
+        "text": "AWS Security Hub",
         "correct": false,
-        "why": "Rekognition analyzes images and video and does not review account configuration."
+        "why": "Security Hub focuses on security findings and standards, not cost savings, performance or service limits."
       },
       {
         "key": "C",
         "text": "AWS Trusted Advisor",
         "correct": true,
-        "why": "Trusted Advisor inspects the account and recommends improvements across cost, security, performance, fault tolerance and service limits."
+        "why": "Trusted Advisor inspects the account and recommends improvements across security, cost, performance, fault tolerance and service limits."
       },
       {
         "key": "D",
-        "text": "Amazon Polly",
+        "text": "AWS Compute Optimizer",
         "correct": false,
-        "why": "Polly converts text to speech and provides no account recommendations."
+        "why": "Compute Optimizer recommends right-sizing for compute resources only, not the full range of checks requested."
       }
     ],
     "explanation": {
@@ -160,27 +160,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Amazon Polly",
+        "text": "AWS Artifact",
         "correct": false,
-        "why": "Polly converts text to speech and cannot collect audit evidence."
+        "why": "Artifact provides AWS's own compliance reports; it does not collect evidence of the company's controls."
       },
       {
         "key": "B",
-        "text": "Amazon EBS",
+        "text": "AWS Security Hub",
         "correct": false,
-        "why": "EBS provides block storage volumes and has no audit evidence features."
+        "why": "Security Hub aggregates security findings and checks standards, but it is not built to assemble audit evidence against frameworks."
       },
       {
         "key": "C",
-        "text": "Amazon Route 53",
+        "text": "AWS CloudTrail Lake",
         "correct": false,
-        "why": "Route 53 is a DNS service and does not map evidence to compliance frameworks."
+        "why": "CloudTrail Lake stores and queries activity events; mapping evidence to compliance frameworks is Audit Manager's job."
       },
       {
         "key": "D",
         "text": "AWS Audit Manager",
         "correct": true,
-        "why": "Audit Manager continuously collects evidence from AWS usage and maps it to prebuilt or custom frameworks, including generative AI best-practice frameworks."
+        "why": "Audit Manager continuously collects evidence and maps it to prebuilt or custom frameworks, including one for generative AI best practices."
       }
     ],
     "explanation": {
@@ -211,25 +211,25 @@
         "key": "A",
         "text": "The Generative AI Security Scoping Matrix",
         "correct": true,
-        "why": "The Scoping Matrix classifies use cases into five scopes by ownership and control, guiding which security considerations apply."
+        "why": "The Scoping Matrix classifies use cases into five scopes by how much the company owns and controls, guiding which security controls apply."
       },
       {
         "key": "B",
-        "text": "The AWS pricing calculator",
+        "text": "The Well-Architected Machine Learning Lens",
         "correct": false,
-        "why": "The pricing calculator estimates costs, not security scope."
+        "why": "The ML Lens gives best practices for ML workloads, but it does not classify generative AI use cases by ownership."
       },
       {
         "key": "C",
-        "text": "AWS Snowball",
+        "text": "The AWS Cloud Adoption Framework for AI",
         "correct": false,
-        "why": "Snowball physically transfers data and is not a security framework."
+        "why": "The CAF for AI helps organizations plan AI adoption capabilities, not classify use cases for security controls."
       },
       {
         "key": "D",
-        "text": "Amazon Bedrock playground",
+        "text": "The AWS shared responsibility model",
         "correct": false,
-        "why": "The playground is for experimenting with models."
+        "why": "The shared responsibility model divides duties between AWS and customers, but it does not define generative AI use-case scopes."
       }
     ],
     "explanation": {
@@ -259,27 +259,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Scope 5: self-trained model",
+        "text": "Scope 5: training its own model from scratch",
         "correct": false,
-        "why": "The company did not train its own model."
+        "why": "Scope 5 means the company trains its own model, which it does not do."
       },
       {
         "key": "B",
-        "text": "Scope 3: building an application on a pre-trained model",
+        "text": "Scope 3: building an app on a pre-trained model",
         "correct": true,
-        "why": "Using an existing FM through an API in the company's own application, without fine-tuning, is scope 3."
+        "why": "Calling an existing FM through an API in the company's own application, with prompts and RAG but no fine-tuning, is scope 3."
       },
       {
         "key": "C",
-        "text": "Scope 4: fine-tuned model",
+        "text": "Scope 4: fine-tuning an existing model",
         "correct": false,
         "why": "Scope 4 applies when a model is fine-tuned, and this company does not fine-tune."
       },
       {
         "key": "D",
-        "text": "Scope 1: consumer app",
+        "text": "Scope 2: an enterprise app with GenAI features",
         "correct": false,
-        "why": "Scope 1 is employees using public consumer AI services, not building an application."
+        "why": "Scope 2 is buying a third-party application with built-in generative AI; this company builds its own application."
       }
     ],
     "explanation": {
@@ -309,27 +309,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Delete transcripts randomly",
+        "text": "Archive transcripts to S3 Glacier after 18 months",
         "correct": false,
-        "why": "Random deletion is not a controlled, auditable policy."
+        "why": "Archiving keeps the data; the regulation requires deleting it."
       },
       {
         "key": "B",
-        "text": "Increase the model's context window",
+        "text": "Encrypt transcripts older than 18 months",
         "correct": false,
-        "why": "Context window size is unrelated to retention."
+        "why": "Encrypted data still exists, so it does not satisfy a deletion requirement."
       },
       {
         "key": "C",
-        "text": "Define a data retention policy and enforce it automatically, for example with Amazon S3 Lifecycle rules and log retention settings",
+        "text": "Automated retention, such as S3 Lifecycle and log retention",
         "correct": true,
-        "why": "Retention policies with automated enforcement ensure data is deleted on schedule."
+        "why": "A defined retention policy with automated expiration ensures transcripts are deleted on schedule."
       },
       {
         "key": "D",
-        "text": "Keep all transcripts forever in case they are useful",
+        "text": "Restrict access to transcripts older than 18 months",
         "correct": false,
-        "why": "Indefinite retention violates the regulation."
+        "why": "Restricting access keeps the data, which the regulation does not allow."
       }
     ],
     "explanation": {
@@ -358,27 +358,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Ignore residency because AI is exempt",
+        "text": "The nearest Region with cross-Region inference enabled",
         "correct": false,
-        "why": "AI workloads are not exempt from data residency laws."
+        "why": "Cross-Region inference can route requests to other Regions, which may be outside the permitted country."
       },
       {
         "key": "B",
-        "text": "Use any Region with the lowest price",
+        "text": "Encrypt the data with KMS keys created in that country",
         "correct": false,
-        "why": "Price-based Region choice may violate localization laws."
+        "why": "Encryption does not control where data is processed; inference could still happen elsewhere."
       },
       {
         "key": "C",
-        "text": "Enable cross-Region inference across all global Regions",
+        "text": "Use a VPC endpoint so data stays off the internet",
         "correct": false,
-        "why": "This may route data outside the permitted country."
+        "why": "A private network path does not keep processing inside a specific Region if inference is routed elsewhere."
       },
       {
         "key": "D",
-        "text": "Deploy the application, data stores and model inference in the required Region, avoiding configurations such as cross-Region inference profiles that route data outside the permitted Regions",
+        "text": "Keep the app, data and inference in that Region",
         "correct": true,
-        "why": "Choosing Regions and inference configurations deliberately keeps data processing within the legal boundary."
+        "why": "Deploying everything in the required Region, and avoiding cross-Region routing, keeps data processing within the legal boundary."
       }
     ],
     "explanation": {
@@ -408,27 +408,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Monitoring and observation of data use, with logging, metrics and alerts",
+        "text": "Monitoring and observation, with logging, metrics and alerts",
         "correct": true,
-        "why": "Continuous monitoring of data access and usage detects anomalies and policy violations."
+        "why": "Continuous monitoring of data access and use detects anomalies and policy violations."
       },
       {
         "key": "B",
-        "text": "Prompt caching",
+        "text": "Data lifecycle management and retention rules",
         "correct": false,
-        "why": "Caching is a cost and latency optimization."
+        "why": "Lifecycle and retention govern how long data is kept, not ongoing visibility into how it is used."
       },
       {
         "key": "C",
-        "text": "Model distillation",
+        "text": "Data residency controls for each Region",
         "correct": false,
-        "why": "Distillation trains a smaller model and does not give visibility into how data is used."
+        "why": "Residency governs where data is stored and processed, not who is using it and how."
       },
       {
         "key": "D",
-        "text": "Increasing temperature",
+        "text": "Data cataloging and sensitivity classification",
         "correct": false,
-        "why": "Temperature is unrelated to governance visibility."
+        "why": "Cataloging describes what data exists; it does not show live usage patterns or violations."
       }
     ],
     "explanation": {
@@ -458,27 +458,27 @@
     "options": [
       {
         "key": "A",
-        "text": "More GPUs",
+        "text": "A bigger budget for model evaluation at launch",
         "correct": false,
-        "why": "Adding compute capacity does not provide any oversight or risk review."
+        "why": "Launch-time evaluation does not catch risks that emerge as models, regulations and usage change later."
       },
       {
         "key": "B",
-        "text": "A defined review cadence that periodically reassesses AI systems' risks, controls and compliance",
+        "text": "A review cadence that periodically reassesses risks",
         "correct": true,
         "why": "Regular reviews keep governance current as models, regulations and usage evolve."
       },
       {
         "key": "C",
-        "text": "A larger model",
+        "text": "A data retention policy for AI logs",
         "correct": false,
-        "why": "Model size does not address oversight gaps."
+        "why": "Retention controls how long data is kept; it does not trigger reassessing application risks."
       },
       {
         "key": "D",
-        "text": "Higher temperature",
+        "text": "Transparency standards for disclosing AI use",
         "correct": false,
-        "why": "Temperature affects model outputs and has nothing to do with re-examining risks."
+        "why": "Disclosure standards matter, but they do not ensure risks are periodically re-examined."
       }
     ],
     "explanation": {
@@ -507,27 +507,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Removing all AI tools without explanation",
+        "text": "Stricter IAM permissions on the approved AI tools",
         "correct": false,
-        "why": "This loses business value and may push employees to unapproved tools."
+        "why": "Permissions control who can use the tools, not whether users know how to use them safely."
       },
       {
         "key": "B",
-        "text": "Disabling logging",
+        "text": "More detailed logging of employee prompts",
         "correct": false,
-        "why": "Disabling logging reduces visibility into incidents and does not teach safe use."
+        "why": "Logging records incidents after they happen; it does not teach safe use."
       },
       {
         "key": "C",
-        "text": "Team training requirements on responsible and secure AI use, aligned with company policies",
+        "text": "Training requirements on safe AI use, aligned with policy",
         "correct": true,
-        "why": "Training ensures employees understand policies, data handling rules and output verification."
+        "why": "Training ensures employees understand data-handling rules and how to verify outputs, addressing the cause of the incidents."
       },
       {
         "key": "D",
-        "text": "Increasing model size",
+        "text": "Guardrails that block all customer data in prompts",
         "correct": false,
-        "why": "Model size does not change how employees use tools."
+        "why": "Blocking all customer data could stop legitimate work, and it does not teach employees to verify outputs."
       }
     ],
     "explanation": {
@@ -673,21 +673,21 @@
       },
       {
         "key": "B",
-        "text": "Amazon Polly",
+        "text": "AWS Config",
         "correct": false,
-        "why": "Polly converts text to speech and cannot scan containers for vulnerabilities."
+        "why": "Config checks resource configurations against rules; it does not scan container images for CVEs."
       },
       {
         "key": "C",
         "text": "AWS Trusted Advisor",
         "correct": false,
-        "why": "Trusted Advisor checks account configuration best practices, not container CVEs."
+        "why": "Trusted Advisor checks account-level best practices, not vulnerabilities inside container images."
       },
       {
         "key": "D",
-        "text": "AWS Artifact",
+        "text": "Amazon GuardDuty",
         "correct": false,
-        "why": "Artifact provides AWS compliance reports, not scanning."
+        "why": "GuardDuty detects threats from activity and runtime behavior; known-vulnerability scanning is Inspector's job."
       }
     ],
     "explanation": {
@@ -717,27 +717,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Model distillation",
+        "text": "Data residency management for each dataset",
         "correct": false,
-        "why": "Distillation trains a smaller model and does not classify or manage datasets."
+        "why": "Residency governs where data lives, not classification and ownership from creation to deletion."
       },
       {
         "key": "B",
         "text": "Data lifecycle management with classification and ownership",
         "correct": true,
-        "why": "Classifying, assigning owners and managing data through its lifecycle are core governance practices."
+        "why": "Classifying data, assigning owners and handling it by classification from creation to deletion is lifecycle governance."
       },
       {
         "key": "C",
-        "text": "Prompt engineering",
+        "text": "Data lineage tracking across pipelines",
         "correct": false,
-        "why": "Prompt engineering is about crafting model inputs."
+        "why": "Lineage records where data came from and how it changed; it does not assign classification and ownership."
       },
       {
         "key": "D",
-        "text": "Hyperparameter tuning",
+        "text": "Audit logging of all data access requests",
         "correct": false,
-        "why": "Tuning optimizes model training settings."
+        "why": "Logging shows who accessed data, but it does not classify data or define how it is handled."
       }
     ],
     "explanation": {
@@ -767,27 +767,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Nothing changes because both are generative AI",
+        "text": "It stays in scope 2, since it still uses AWS services",
         "correct": false,
-        "why": "The scopes differ in ownership and control, and so in responsibilities."
+        "why": "Scope depends on what the company owns and controls, not on whether it uses AWS; fine-tuning moves it up."
       },
       {
         "key": "B",
-        "text": "Its responsibilities decrease because AWS hosts the model",
+        "text": "It moves to scope 3, with fewer duties since AWS hosts it",
         "correct": false,
-        "why": "Fine-tuning adds responsibilities for training data and model governance."
+        "why": "Scope 3 covers using pre-trained models without fine-tuning; fine-tuning adds responsibility rather than removing it."
       },
       {
         "key": "C",
-        "text": "It moves from scope 2 to scope 4 and takes on more responsibility, including governance of training data, the customized model and its access",
+        "text": "It moves to scope 4, taking on training data and model governance",
         "correct": true,
-        "why": "Fine-tuning shifts the company to a higher scope with more control over and accountability for data and model."
+        "why": "Fine-tuning with its own data puts the company in scope 4, responsible for training data, the custom model and its access."
       },
       {
         "key": "D",
-        "text": "It moves to scope 1, the lowest responsibility",
+        "text": "It moves to scope 5, the same as training from scratch",
         "correct": false,
-        "why": "Scope 1 is using consumer applications, which is not this situation."
+        "why": "Scope 5 is training a model from scratch; fine-tuning an existing model is scope 4."
       }
     ],
     "explanation": {
@@ -824,21 +824,21 @@
       },
       {
         "key": "B",
-        "text": "Increasing model temperature",
+        "text": "Choosing the foundation model with the lowest latency",
         "correct": false,
-        "why": "Temperature is an inference setting for model outputs, not a data governance strategy."
+        "why": "Model choice for speed is an engineering decision, not a data governance strategy."
       },
       {
         "key": "C",
-        "text": "Choosing the chatbot's color scheme",
+        "text": "Tuning inference parameters such as temperature",
         "correct": false,
-        "why": "A chatbot's visual design has nothing to do with how data is governed."
+        "why": "Inference settings affect outputs, not how data is governed."
       },
       {
         "key": "D",
-        "text": "Removing all audit logs",
+        "text": "Selecting the vector store used for retrieval",
         "correct": false,
-        "why": "Logging is part of governance; removing it undermines oversight."
+        "why": "Choosing a vector store is an architecture decision, not a governance strategy for data."
       },
       {
         "key": "E",
@@ -874,27 +874,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Rejecting all AI use cases",
+        "text": "One board that reviews every use case the same way",
         "correct": false,
-        "why": "Rejecting everything blocks valuable low-risk uses instead of managing risk proportionately."
+        "why": "Reviewing everything equally slows low-risk tools and does not scale review depth to risk."
       },
       {
         "key": "B",
-        "text": "Approving all use cases automatically",
+        "text": "Automatic approval for any use case on a managed service",
         "correct": false,
-        "why": "Automatic approval ignores risk and lets high-stakes use cases launch without review."
+        "why": "Using a managed service does not make a use case low-risk; high-impact decisions still need expert review."
       },
       {
         "key": "C",
-        "text": "Letting each developer decide alone",
+        "text": "Developer self-assessment with no central review",
         "correct": false,
-        "why": "Individual decisions lack consistent oversight."
+        "why": "Individual judgment lacks consistent oversight for high-risk use cases."
       },
       {
         "key": "D",
-        "text": "A risk-based review strategy with tiered approval processes",
+        "text": "Risk-based reviews with tiered approval paths",
         "correct": true,
-        "why": "Matching review depth to risk makes governance efficient while protecting high-stakes uses."
+        "why": "Matching review depth to risk keeps governance efficient while protecting high-stakes uses."
       }
     ],
     "explanation": {
@@ -925,27 +925,27 @@
     "options": [
       {
         "key": "A",
-        "text": "AWS CloudTrail answers who made the change; AWS Config answers whether the bucket is currently compliant",
+        "text": "CloudTrail shows who changed it; Config shows if it complies",
         "correct": true,
-        "why": "CloudTrail records API calls and identities; Config evaluates resource configurations against rules."
+        "why": "CloudTrail records API calls and identities; Config evaluates current resource configuration against rules."
       },
       {
         "key": "B",
-        "text": "AWS Config answers who made the change; CloudTrail evaluates compliance rules",
+        "text": "Config shows who changed it; CloudTrail shows if it complies",
         "correct": false,
-        "why": "This reverses the roles: CloudTrail records who changed something, and Config evaluates compliance."
+        "why": "This reverses them: CloudTrail records who made a change, and Config evaluates whether a resource complies with rules."
       },
       {
         "key": "C",
-        "text": "Amazon Polly answers both",
+        "text": "AWS Security Hub answers both questions",
         "correct": false,
-        "why": "Polly is a text-to-speech service and cannot answer either audit question."
+        "why": "Security Hub aggregates findings but does not record which user made a specific change."
       },
       {
         "key": "D",
-        "text": "AWS Artifact answers both",
+        "text": "Amazon Macie answers both questions",
         "correct": false,
-        "why": "Artifact provides AWS compliance reports, not account activity or resource compliance."
+        "why": "Macie discovers sensitive data in S3; it does not track configuration changes or rule compliance."
       }
     ],
     "explanation": {
@@ -978,27 +978,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Letting each team define its own rules with no central oversight",
+        "text": "Policies and training, with each team reviewing its own projects",
         "correct": false,
-        "why": "Inconsistent rules create gaps and unmanaged risk."
+        "why": "Without central, risk-based oversight, teams apply rules inconsistently."
       },
       {
         "key": "B",
-        "text": "Written AI policies, risk classification (such as the Generative AI Security Scoping Matrix), tiered reviews on a set cadence, transparency standards, team training, and compliance tooling such as AWS Config, CloudTrail and Audit Manager",
+        "text": "Policies, risk tiers, scheduled reviews, training and compliance tooling",
         "correct": true,
-        "why": "This covers policy, risk assessment, oversight processes, transparency, people and technical evidence."
+        "why": "Effective governance combines policy, risk classification, review processes, transparency, people and technical evidence."
       },
       {
         "key": "C",
-        "text": "A single approval email from the CTO",
+        "text": "Compliance tooling such as AWS Config and CloudTrail on its own",
         "correct": false,
-        "why": "One approval does not provide ongoing oversight, consistency or evidence."
+        "why": "Tooling provides evidence but no policies, risk classification or review process."
       },
       {
         "key": "D",
-        "text": "Only choosing the cheapest model for every project",
+        "text": "A central board that approves each project once, at launch",
         "correct": false,
-        "why": "Cost choices do not constitute governance."
+        "why": "One-time approval misses risks that emerge later, and it applies the same review regardless of risk."
       }
     ],
     "explanation": {

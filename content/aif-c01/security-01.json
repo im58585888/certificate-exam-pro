@@ -15,27 +15,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Give developers the AdministratorAccess policy",
+        "text": "Attach the AmazonBedrockFullAccess managed policy",
         "correct": false,
-        "why": "Administrator access grants far more than needed, violating least privilege."
+        "why": "This managed policy grants broad Bedrock permissions, including every model, which is the opposite of the requirement."
       },
       {
         "key": "B",
-        "text": "Tell developers in an email which model to use",
+        "text": "Add a Bedrock guardrail that blocks all other models",
         "correct": false,
-        "why": "An email is not an enforced control; developers could still call other models."
+        "why": "Guardrails filter content in prompts and responses; they do not control which models a user may invoke."
       },
       {
         "key": "C",
-        "text": "Attach an IAM policy that allows bedrock:InvokeModel only on that model's ARN",
+        "text": "An IAM policy allowing InvokeModel only on that model's ARN",
         "correct": true,
-        "why": "IAM policies scoped to specific actions and resources enforce least privilege for model access."
+        "why": "IAM policies scoped to specific actions and resource ARNs enforce least privilege for model access."
       },
       {
         "key": "D",
-        "text": "Raise the model's temperature",
+        "text": "An SCP that denies all Bedrock actions in the account",
         "correct": false,
-        "why": "Temperature affects output randomness, not access control."
+        "why": "Denying all Bedrock actions would also block the one model the developers need."
       }
     ],
     "explanation": {
@@ -69,27 +69,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Increase the model's max tokens",
+        "text": "Send Bedrock traffic through a NAT gateway",
         "correct": false,
-        "why": "Max tokens controls response length, not network paths."
+        "why": "A NAT gateway forwards traffic out through an internet gateway to the public endpoint, so it still uses the internet path."
       },
       {
         "key": "B",
-        "text": "Use Amazon CloudFront in front of Bedrock",
+        "text": "Create a gateway VPC endpoint for Bedrock",
         "correct": false,
-        "why": "CloudFront is a content delivery network for public content and does not provide private VPC connectivity to Bedrock."
+        "why": "Gateway endpoints exist only for Amazon S3 and DynamoDB. Bedrock uses interface endpoints."
       },
       {
         "key": "C",
-        "text": "Route traffic through an internet gateway",
+        "text": "Use HTTPS so requests are encrypted in transit",
         "correct": false,
-        "why": "An internet gateway sends traffic over the public internet, which violates the policy."
+        "why": "Encryption protects the content, but traffic would still travel over the public internet, which the policy forbids."
       },
       {
         "key": "D",
-        "text": "Create an interface VPC endpoint for Amazon Bedrock using AWS PrivateLink",
+        "text": "Create an interface VPC endpoint (PrivateLink) for Bedrock",
         "correct": true,
-        "why": "PrivateLink interface endpoints keep traffic between the VPC and Bedrock on the AWS network without using the public internet."
+        "why": "PrivateLink interface endpoints keep traffic between the VPC and Bedrock on the AWS network."
       }
     ],
     "explanation": {
@@ -123,27 +123,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Use AWS KMS customer managed keys to encrypt the customization job outputs and custom model",
+        "text": "KMS customer managed keys for the job outputs and custom model",
         "correct": true,
-        "why": "Customer managed KMS keys give the company control over key policies, rotation and disabling access."
+        "why": "Customer managed keys give the company control over key policies and rotation, and it can disable a key to revoke access."
       },
       {
         "key": "B",
-        "text": "Share one key with all AWS customers",
+        "text": "AWS owned keys, which Bedrock uses by default",
         "correct": false,
-        "why": "Shared keys provide no customer control and are not how KMS works."
+        "why": "AWS owned keys protect data, but the company cannot manage or disable them."
       },
       {
         "key": "C",
-        "text": "Store the model unencrypted for faster access",
+        "text": "The AWS managed key for Bedrock in the account",
         "correct": false,
-        "why": "Unencrypted storage violates the compliance requirement."
+        "why": "AWS managed keys are visible in the account, but AWS manages their policies, and customers cannot disable them."
       },
       {
         "key": "D",
-        "text": "Encrypt the model by increasing temperature",
+        "text": "S3-managed keys (SSE-S3) on the training data bucket",
         "correct": false,
-        "why": "Temperature has nothing to do with encryption."
+        "why": "SSE-S3 keys are managed by S3, not the company, and they do not cover the custom model itself."
       }
     ],
     "explanation": {
@@ -227,27 +227,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Patching the underlying hosts that run Bedrock",
+        "text": "Patching the hosts and runtime that run Bedrock",
         "correct": false,
-        "why": "AWS manages the infrastructure behind managed services."
+        "why": "AWS manages the infrastructure behind the managed Bedrock service."
       },
       {
         "key": "B",
-        "text": "Securing the hypervisor layer",
+        "text": "Isolating its data from other Bedrock customers",
         "correct": false,
-        "why": "The virtualization layer is AWS's responsibility."
+        "why": "Isolation between customers inside the managed service is AWS's responsibility."
       },
       {
         "key": "C",
-        "text": "Managing IAM permissions, classifying and protecting the data put into the knowledge base, and configuring guardrails",
+        "text": "IAM permissions, data classification and protection, guardrails",
         "correct": true,
-        "why": "Customers are responsible for security in the cloud, including identities, data and application-level controls."
+        "why": "Customers are responsible for security in the cloud: identities, the data they put into the knowledge base, and application controls."
       },
       {
         "key": "D",
-        "text": "Physical security of AWS data centers",
+        "text": "Encrypting traffic between Bedrock's internal components",
         "correct": false,
-        "why": "Physical security of data centers is AWS's responsibility under the shared responsibility model."
+        "why": "Protecting the service's internal infrastructure is part of AWS's security of the cloud."
       }
     ],
     "explanation": {
@@ -277,27 +277,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Store each user's CRM password in the agent's system prompt",
+        "text": "Store each user's CRM credentials in AWS Secrets Manager",
         "correct": false,
-        "why": "Prompts are not secure storage and can be exposed through prompt attacks."
+        "why": "Secrets Manager is better than code, but storing and mapping every user's password is still not delegated, user-consented access."
       },
       {
         "key": "B",
-        "text": "Use one shared administrator account for all users",
+        "text": "Use one CRM service account with broad access for all users",
         "correct": false,
-        "why": "A shared admin account ignores individual permissions and violates least privilege."
+        "why": "A shared account ignores each employee's own permissions, so the agent could see data a user is not allowed to."
       },
       {
         "key": "C",
-        "text": "Disable authentication on the CRM",
+        "text": "Have users paste their CRM password into the chat",
         "correct": false,
-        "why": "Removing authentication exposes the CRM to anyone."
+        "why": "Passwords in prompts can be logged or exposed and are never a secure way to delegate access."
       },
       {
         "key": "D",
-        "text": "Amazon Bedrock AgentCore Identity, which manages agent identities and securely brokers user-delegated credentials such as OAuth tokens",
+        "text": "AgentCore Identity to broker per-user OAuth tokens securely",
         "correct": true,
-        "why": "AgentCore Identity lets agents act on behalf of users with properly scoped, securely stored tokens instead of hard-coded credentials."
+        "why": "AgentCore Identity lets agents act on behalf of users with properly scoped, securely stored tokens instead of stored credentials."
       }
     ],
     "explanation": {
@@ -326,27 +326,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Policy in Amazon Bedrock AgentCore, which evaluates tool calls against defined policies before they are executed",
+        "text": "Policy in AgentCore, evaluating tool calls before they run",
         "correct": true,
-        "why": "Policies enforced at the gateway block disallowed tool calls deterministically, independent of the model's reasoning."
+        "why": "Policies enforced at the gateway block disallowed calls and parameter values deterministically, regardless of the model's reasoning."
       },
       {
         "key": "B",
-        "text": "Model distillation",
+        "text": "Bedrock Guardrails denied topics for deletes and refunds",
         "correct": false,
-        "why": "Distillation is a training technique and does not control tool calls."
+        "why": "Guardrails filter conversation content; they do not intercept tool calls or enforce amount limits."
       },
       {
         "key": "C",
-        "text": "A sentence in the agent's instructions asking it not to delete customers",
+        "text": "Agent instructions that forbid deletes and large refunds",
         "correct": false,
         "why": "Instructions are soft guidance that the model may not always follow."
       },
       {
         "key": "D",
-        "text": "A higher temperature setting",
+        "text": "IAM policies on the agent's execution role",
         "correct": false,
-        "why": "Temperature only changes output randomness and cannot block or limit tool calls."
+        "why": "IAM can block whole AWS actions, but it cannot evaluate a refund amount passed to a tool."
       }
     ],
     "explanation": {
@@ -376,27 +376,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Amazon S3 versioning",
+        "text": "AWS WAF rate-based rules on the chatbot's API",
         "correct": false,
-        "why": "Versioning keeps object history and does not inspect prompts."
+        "why": "Rate limiting slows high-volume abuse, but it does not inspect what a prompt is trying to do."
       },
       {
         "key": "B",
-        "text": "Amazon Bedrock Guardrails with the prompt attack content filter enabled",
+        "text": "Bedrock Guardrails with the prompt attack filter",
         "correct": true,
-        "why": "The prompt attack filter detects jailbreak and prompt injection attempts in user input."
+        "why": "The prompt attack filter detects attempts to override instructions or bypass safety controls in user input."
       },
       {
         "key": "C",
-        "text": "AWS Cost Anomaly Detection",
+        "text": "Amazon GuardDuty findings for the account",
         "correct": false,
-        "why": "Cost anomaly detection monitors spending, not prompt content."
+        "why": "GuardDuty detects threats in AWS account and network activity, not malicious text in chatbot prompts."
       },
       {
         "key": "D",
-        "text": "Amazon EBS snapshots",
+        "text": "Bedrock Guardrails sensitive information filters",
         "correct": false,
-        "why": "Snapshots back up volumes and do not filter prompts."
+        "why": "These mask or block personal data; they do not detect attempts to override instructions."
       }
     ],
     "explanation": {
@@ -426,27 +426,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Data in transit is never encrypted",
+        "text": "Only if the application adds encryption in its own code",
         "correct": false,
-        "why": "AWS APIs require TLS for data in transit."
+        "why": "AWS API endpoints require TLS, so encryption in transit does not depend on custom application code."
       },
       {
         "key": "B",
-        "text": "Only image data is encrypted in transit",
+        "text": "Through a VPN connection that AWS sets up automatically",
         "correct": false,
-        "why": "All API traffic, including text, is encrypted with TLS."
+        "why": "AWS does not create VPNs for API calls; TLS encrypts the connection."
       },
       {
         "key": "C",
-        "text": "Requests to Amazon Bedrock are encrypted in transit using TLS",
+        "text": "Requests to Bedrock are encrypted in transit with TLS",
         "correct": true,
-        "why": "AWS service endpoints, including Bedrock, use TLS to encrypt data in transit."
+        "why": "Data sent to and from Amazon Bedrock is encrypted in transit using TLS."
       },
       {
         "key": "D",
-        "text": "Encryption in transit requires a higher temperature",
+        "text": "With AWS KMS keys, which encrypt the network traffic",
         "correct": false,
-        "why": "Temperature has no relation to encryption."
+        "why": "KMS keys encrypt data at rest. Network traffic is protected by TLS."
       }
     ],
     "explanation": {
@@ -476,27 +476,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Put the access keys in the model prompt",
+        "text": "Store the keys in Secrets Manager and read them at startup",
         "correct": false,
-        "why": "Prompts are not secure storage, and keys could leak through outputs."
+        "why": "This hides the keys but keeps long-term credentials; an IAM role provides temporary ones automatically."
       },
       {
         "key": "B",
-        "text": "Share the keys in a public repository so others can reuse them",
+        "text": "Move the keys into Lambda environment variables",
         "correct": false,
-        "why": "Publishing keys allows anyone to use them."
+        "why": "Environment variables are configuration, not a credential mechanism; the long-term keys would still exist."
       },
       {
         "key": "C",
-        "text": "Use the root user's access keys",
+        "text": "Keep the keys but rotate them every 30 days",
         "correct": false,
-        "why": "Root credentials have unrestricted access and should never be used by applications."
+        "why": "Rotation shortens exposure but still relies on long-term keys in code."
       },
       {
         "key": "D",
-        "text": "Assign the Lambda function an IAM execution role with only the Bedrock permissions it needs",
+        "text": "An IAM execution role scoped to the Bedrock calls it makes",
         "correct": true,
-        "why": "IAM roles provide temporary, automatically rotated credentials scoped to the function's needs, without storing keys in code."
+        "why": "IAM roles supply temporary, automatically rotated credentials scoped to the function's needs, with nothing stored in code."
       }
     ],
     "explanation": {
@@ -530,27 +530,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Self-hosting increases the customer's responsibilities, adding operating system, model hosting, scaling and patching to data, access and application controls",
+        "text": "Self-hosting adds OS, hosting, scaling and patching duties",
         "correct": true,
-        "why": "The more of the stack the customer runs, the more security tasks the customer owns."
+        "why": "The more of the stack the customer runs, the more security tasks it owns, on top of data, access and application controls."
       },
       {
         "key": "B",
-        "text": "The managed API makes AWS responsible for the customer's data classification",
+        "text": "Self-hosting shifts data classification to AWS",
         "correct": false,
-        "why": "Data classification remains the customer's responsibility."
+        "why": "Classifying data is always the customer's responsibility."
       },
       {
         "key": "C",
-        "text": "Responsibilities are identical in both cases",
+        "text": "Duties are the same, since both options run on AWS",
         "correct": false,
-        "why": "Self-hosting shifts infrastructure and model operations to the customer."
+        "why": "With self-hosting on EC2 the customer also manages the OS, runtime, model artifacts and patching."
       },
       {
         "key": "D",
-        "text": "Self-hosting makes AWS responsible for the customer's application logic",
+        "text": "The managed API makes AWS responsible for IAM permissions",
         "correct": false,
-        "why": "Application logic is always the customer's responsibility."
+        "why": "Customers always manage who can access their resources, even with managed services."
       }
     ],
     "explanation": {
@@ -585,27 +585,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Ask users not to request confidential information",
+        "text": "A Guardrails denied topic for salary information",
         "correct": false,
-        "why": "Relying on users' restraint is not a security control."
+        "why": "This would also block HR staff who are entitled to the data; the fix is retrieving only what each user may see."
       },
       {
         "key": "B",
-        "text": "Enforce document-level access control at retrieval, for example by filtering on metadata tied to the user's permissions, or by separating knowledge bases by audience",
+        "text": "Filter retrieval by metadata tied to each user's permissions",
         "correct": true,
-        "why": "Retrieval must respect the user's permissions so that unauthorized documents never reach the model's context."
+        "why": "Permission-aware retrieval ensures unauthorized documents never reach the model's context."
       },
       {
         "key": "C",
-        "text": "Use a larger embedding model",
+        "text": "Encrypt the HR documents with a separate KMS key",
         "correct": false,
-        "why": "Embedding quality does not enforce permissions."
+        "why": "The knowledge base can decrypt documents to serve them, so encryption alone does not restrict which users see them."
       },
       {
         "key": "D",
-        "text": "Increase the temperature",
+        "text": "Reduce the number of chunks retrieved per query",
         "correct": false,
-        "why": "Temperature has no effect on which documents are retrieved."
+        "why": "Fewer chunks would still include confidential ones if they match the question."
       }
     ],
     "explanation": {
@@ -689,27 +689,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Amazon Macie",
+        "text": "Amazon GuardDuty",
         "correct": false,
-        "why": "Macie discovers sensitive data in S3; it does not scan for software vulnerabilities."
+        "why": "GuardDuty detects threats in account, network and runtime activity; it does not scan software packages for known CVEs."
       },
       {
         "key": "B",
-        "text": "Amazon Comprehend",
+        "text": "Amazon Macie",
         "correct": false,
-        "why": "Comprehend analyzes text and has no vulnerability scanning capability."
+        "why": "Macie discovers sensitive data in Amazon S3, not software vulnerabilities."
       },
       {
         "key": "C",
-        "text": "AWS Cost Explorer",
+        "text": "AWS Config",
         "correct": false,
-        "why": "Cost Explorer analyzes spending and cannot scan workloads for software vulnerabilities."
+        "why": "AWS Config evaluates resource configurations against rules; it does not scan for known software vulnerabilities."
       },
       {
         "key": "D",
         "text": "Amazon Inspector",
         "correct": true,
-        "why": "Inspector automatically scans EC2 instances, container images and Lambda functions for software vulnerabilities and unintended network exposure."
+        "why": "Inspector continuously scans EC2 instances, container images and Lambda functions for known vulnerabilities."
       }
     ],
     "explanation": {
@@ -739,27 +739,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Configure the customization job to use the company's VPC and an S3 VPC endpoint, with endpoint and bucket policies restricting access",
+        "text": "Run the job in the VPC with an S3 VPC endpoint and policies",
         "correct": true,
-        "why": "Running the job in a VPC with private endpoints keeps training data access off the internet and under network controls."
+        "why": "Running the customization job in a VPC with private endpoints keeps training data access off the internet."
       },
       {
         "key": "B",
-        "text": "Increase the number of training epochs",
+        "text": "Encrypt the training data with a KMS customer managed key",
         "correct": false,
-        "why": "Epochs affect training, not network security."
+        "why": "Encryption protects the data, but it does not control the network path the job uses."
       },
       {
         "key": "C",
-        "text": "Copy the data to employees' laptops",
+        "text": "Enable S3 Transfer Acceleration on the training bucket",
         "correct": false,
-        "why": "This spreads sensitive data and is not a network control."
+        "why": "Transfer Acceleration routes uploads through public edge locations; it does not keep access inside the VPC."
       },
       {
         "key": "D",
-        "text": "Make the S3 bucket public so the job can reach it",
+        "text": "Grant the job's IAM role read access to the bucket",
         "correct": false,
-        "why": "A public bucket exposes the training data to everyone, the opposite of keeping access private."
+        "why": "IAM controls who can read the data, not whether the traffic stays private."
       }
     ],
     "explanation": {
@@ -789,27 +789,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Amazon Route 53 routing policies",
+        "text": "Amazon Macie scans of the summary files in S3",
         "correct": false,
-        "why": "DNS routing does not affect what text the model outputs."
+        "why": "Macie finds sensitive data after it is stored; the summaries would already contain the PII."
       },
       {
         "key": "B",
-        "text": "Amazon Bedrock Guardrails sensitive information filters to mask PII and custom patterns such as account numbers in outputs",
+        "text": "Guardrails sensitive information filters with masking",
         "correct": true,
-        "why": "Sensitive information filters detect and mask standard PII and custom regex patterns, preventing leakage in outputs."
+        "why": "These filters detect PII and custom patterns such as account numbers and mask them in outputs."
       },
       {
         "key": "C",
-        "text": "Model distillation",
+        "text": "Amazon Comprehend PII detection on the source emails",
         "correct": false,
-        "why": "Distillation does not remove PII from responses."
+        "why": "Comprehend could redact the inputs, but it needs a custom pipeline and does not check the generated summaries."
       },
       {
         "key": "D",
-        "text": "Amazon EC2 Auto Scaling",
+        "text": "A Guardrails denied topic for customer contact details",
         "correct": false,
-        "why": "Auto Scaling adjusts capacity and does not filter content."
+        "why": "Denied topics block whole responses, while the summaries are needed with only the PII hidden."
       }
     ],
     "explanation": {
@@ -840,15 +840,15 @@
     "options": [
       {
         "key": "A",
-        "text": "Disable logging to reduce costs",
+        "text": "Grant read-write access to all tables to avoid errors",
         "correct": false,
-        "why": "Without logs, incidents cannot be detected or investigated."
+        "why": "Broad access lets a mistaken or manipulated agent change data it should never touch."
       },
       {
         "key": "B",
-        "text": "Give the agent database administrator rights to avoid permission errors",
+        "text": "Put the database credentials in the agent's environment",
         "correct": false,
-        "why": "Excessive rights let injected or mistaken actions cause serious damage."
+        "why": "Long-lived credentials in configuration can leak; use IAM-based access or a secrets service with scoped permissions."
       },
       {
         "key": "C",
@@ -864,9 +864,9 @@
       },
       {
         "key": "E",
-        "text": "Store database passwords in the agent's instructions",
+        "text": "Let the agent run any SQL the model generates",
         "correct": false,
-        "why": "Instructions are visible to the model and can be leaked."
+        "why": "Unrestricted generated SQL lets an injected instruction modify or delete data."
       }
     ],
     "explanation": {
@@ -899,27 +899,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Store embeddings in a public bucket",
+        "text": "Encrypt only the S3 source bucket with KMS",
         "correct": false,
-        "why": "A public bucket would expose the embeddings, which can reveal information about the source documents."
+        "why": "The vector store and knowledge base resources would remain uncovered by the requirement."
       },
       {
         "key": "B",
-        "text": "Skip encryption because embeddings are just numbers",
+        "text": "Encrypt only the vector store, since it holds the embeddings",
         "correct": false,
-        "why": "Embeddings can leak information about source content and should be protected."
+        "why": "The source documents in S3 would remain unencrypted, which the requirement forbids."
       },
       {
         "key": "C",
-        "text": "Encrypt the S3 source bucket, the vector store and knowledge base resources with AWS KMS keys",
+        "text": "Encrypt the source bucket, vector store and knowledge base with KMS",
         "correct": true,
-        "why": "Applying KMS encryption to every storage layer in the RAG pipeline protects documents and vectors at rest."
+        "why": "Applying KMS encryption to every storage layer protects documents, embeddings and transient data at rest."
       },
       {
         "key": "D",
-        "text": "Encrypt only the final chatbot responses",
+        "text": "Use TLS for all connections to the knowledge base",
         "correct": false,
-        "why": "Source documents and embeddings would remain unprotected at rest."
+        "why": "TLS protects data in transit; the requirement is encryption at rest."
       }
     ],
     "explanation": {
@@ -953,27 +953,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Providers can log into the customer's account",
+        "text": "Providers can view prompts, but only for abuse monitoring",
         "correct": false,
-        "why": "Providers have no access to customer accounts."
+        "why": "Bedrock does not share customer prompts with model providers for any purpose."
       },
       {
         "key": "B",
-        "text": "Model providers receive all prompts for quality monitoring",
+        "text": "Providers receive prompts, but not fine-tuned models",
         "correct": false,
-        "why": "Customer prompts are not shared with providers."
+        "why": "Prompts are not shared with providers either."
       },
       {
         "key": "C",
-        "text": "Fine-tuned models are shared with the original provider",
+        "text": "Providers can access fine-tuned models built on their model",
         "correct": false,
-        "why": "Custom models remain private to the customer."
+        "why": "Custom models are private to the customer's account."
       },
       {
         "key": "D",
-        "text": "Model providers do not have access to customer prompts, outputs or fine-tuned models; Bedrock runs models in AWS-managed environments isolated from providers",
+        "text": "Providers can't access customer prompts, outputs or custom models",
         "correct": true,
-        "why": "Bedrock isolates customer data from model providers, which do not receive prompts, completions or custom models."
+        "why": "Bedrock isolates customer data from model providers, which receive no prompts, completions or customized models."
       }
     ],
     "explanation": {
@@ -1003,27 +1003,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Require authentication, apply rate limiting and request quotas (for example with AWS WAF and API Gateway throttling), and monitor for abuse",
+        "text": "Authentication, rate limits and quotas, plus monitoring",
         "correct": true,
-        "why": "Authentication and throttling limit automated abuse and cost, and monitoring detects attacks."
+        "why": "Authentication and throttling (for example AWS WAF and API Gateway) limit automated abuse and cost, and monitoring detects attacks."
       },
       {
         "key": "B",
-        "text": "Switch to a larger model",
+        "text": "Bedrock Provisioned Throughput to absorb the extra load",
         "correct": false,
-        "why": "A larger model increases cost per request and does not stop abuse."
+        "why": "Extra capacity just lets the abusive traffic consume more, raising cost."
       },
       {
         "key": "C",
-        "text": "Remove all authentication to reduce friction",
+        "text": "Bedrock Guardrails prompt attack filter on every request",
         "correct": false,
-        "why": "Removing authentication makes automated abuse easier and lets anyone consume the model budget."
+        "why": "The filter catches malicious prompt content, but it does not stop high-volume scripted traffic or its cost."
       },
       {
         "key": "D",
-        "text": "Increase the model's temperature",
+        "text": "Cache answers so repeated requests cost less",
         "correct": false,
-        "why": "Temperature does not affect request volume or abuse."
+        "why": "Caching may reduce cost slightly but does nothing to stop the scripts or data extraction."
       }
     ],
     "explanation": {
@@ -1053,27 +1053,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Using a VPC endpoint",
+        "text": "Amazon Comprehend sentiment analysis of drafts",
         "correct": false,
-        "why": "Network privacy does not filter content."
+        "why": "Sentiment shows positive or negative tone, not whether content is toxic or offensive."
       },
       {
         "key": "B",
-        "text": "Output filtering with Amazon Bedrock Guardrails content filters before content is published",
+        "text": "Bedrock Guardrails content filters on outputs before publishing",
         "correct": true,
         "why": "Content filters detect and block toxic categories such as hate and insults in model outputs."
       },
       {
         "key": "C",
-        "text": "Encrypting the content at rest",
+        "text": "A system prompt telling the model to avoid offensive language",
         "correct": false,
-        "why": "Encryption protects confidentiality but does not stop toxic content."
+        "why": "Instructions help but can be bypassed; they are not an enforced filter."
       },
       {
         "key": "D",
-        "text": "Enabling S3 versioning",
+        "text": "Bedrock Model Evaluation toxicity scores at launch",
         "correct": false,
-        "why": "Versioning stores history but does not filter content."
+        "why": "Evaluation measures toxicity on test data; it does not block offensive content in production."
       }
     ],
     "explanation": {
@@ -1104,27 +1104,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Raising temperature on unapproved models",
+        "text": "IAM policies in each account allowing only approved models",
         "correct": false,
-        "why": "Temperature only affects output randomness and cannot prevent accounts from calling unapproved models."
+        "why": "This works account by account, but local administrators could change them; it is not central enforcement."
       },
       {
         "key": "B",
-        "text": "A wiki page listing approved models",
+        "text": "AWS Config rules that flag use of unapproved models",
         "correct": false,
-        "why": "Documentation does not enforce restrictions."
+        "why": "Config detects non-compliance after the fact; it does not prevent use."
       },
       {
         "key": "C",
-        "text": "AWS Organizations service control policies (SCPs) that deny Bedrock actions on unapproved model IDs",
+        "text": "SCPs in AWS Organizations denying unapproved model IDs",
         "correct": true,
-        "why": "SCPs set permission boundaries across accounts in an organization, so unapproved models cannot be used regardless of local IAM policies."
+        "why": "SCPs set permission boundaries across all accounts, so unapproved models cannot be used regardless of local IAM policies."
       },
       {
         "key": "D",
-        "text": "Batch inference for all accounts",
+        "text": "Bedrock Guardrails attached to every application",
         "correct": false,
-        "why": "Batch inference is an execution mode, not an access control."
+        "why": "Guardrails filter content; they do not control which models accounts can invoke."
       }
     ],
     "explanation": {
@@ -1154,27 +1154,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Increase the max tokens",
+        "text": "Add \"do not delete records\" to the system prompt",
         "correct": false,
-        "why": "Output length does not affect query permissions."
+        "why": "Prompt instructions can be overridden through injection."
       },
       {
         "key": "B",
-        "text": "Use a larger model",
+        "text": "Apply a Guardrails prompt attack filter to user input",
         "correct": false,
-        "why": "Larger models can still be manipulated by injected instructions, so model size is not a control."
+        "why": "The filter catches many attacks but not all; if one gets through, the tool can still delete data."
       },
       {
         "key": "C",
-        "text": "Add \"never delete records\" to the system prompt only",
+        "text": "Log every generated query for later review",
         "correct": false,
-        "why": "Prompt instructions can be bypassed through injection."
+        "why": "Logging helps investigations, but the records would already be deleted."
       },
       {
         "key": "D",
-        "text": "Give the tool a database role with read-only permissions and validate generated queries before execution",
+        "text": "Use a read-only database role and validate queries first",
         "correct": true,
-        "why": "Read-only permissions and query validation mean that even a manipulated model cannot delete data."
+        "why": "Read-only permissions and query validation mean even a manipulated model cannot delete data."
       }
     ],
     "explanation": {
@@ -1204,27 +1204,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Place instances in private subnets, restrict security groups to the load balancer, patch regularly and scan for vulnerabilities",
+        "text": "Private subnets, tight security groups, patching and scanning",
         "correct": true,
-        "why": "Network isolation, restricted access, patching and scanning are core infrastructure protections."
+        "why": "Network isolation, access limited to the load balancer, patching and vulnerability scanning are core infrastructure protections."
       },
       {
         "key": "B",
-        "text": "Share instance SSH keys widely",
+        "text": "Public subnets with security groups allowing HTTPS from anywhere",
         "correct": false,
-        "why": "Widely shared keys allow unauthorized access."
+        "why": "Exposing instances directly widens the attack surface; only the load balancer should be public."
       },
       {
         "key": "C",
-        "text": "Disable operating system updates for stability",
+        "text": "Encrypt the EBS volumes and leave the network as is",
         "correct": false,
-        "why": "Unpatched systems accumulate exploitable vulnerabilities."
+        "why": "Encryption at rest helps but does not protect running instances from network attacks or unpatched software."
       },
       {
         "key": "D",
-        "text": "Give instances public IP addresses with all ports open",
+        "text": "CloudFront in front, with instances left in public subnets",
         "correct": false,
-        "why": "Open ports and public IPs expose the instances to attack."
+        "why": "Instances in public subnets can still be reached directly, bypassing CloudFront."
       }
     ],
     "explanation": {

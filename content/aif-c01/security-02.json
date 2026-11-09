@@ -14,27 +14,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Deleting training data immediately after training",
+        "text": "A model card describing the model's intended use",
         "correct": false,
-        "why": "Deleting data without records makes tracing impossible."
+        "why": "Model cards document purpose and evaluations, but without lineage records they cannot trace exact dataset versions and processing steps."
       },
       {
         "key": "B",
-        "text": "Tracking data lineage: recording data origins, transformations and versions across the ML lifecycle",
+        "text": "Data lineage tracking of sources, transformations and versions",
         "correct": true,
-        "why": "Lineage records let teams trace a model back to its exact data sources and processing."
+        "why": "Lineage records let investigators trace a model back to its exact data sources, versions and processing steps."
       },
       {
         "key": "C",
-        "text": "Increasing temperature",
+        "text": "CloudTrail logs of who started the training job",
         "correct": false,
-        "why": "Temperature is unrelated to traceability."
+        "why": "CloudTrail shows who called which API and when, not which data versions and transformations were used."
       },
       {
         "key": "D",
-        "text": "Using prompt caching",
+        "text": "Model invocation logs of the problematic output",
         "correct": false,
-        "why": "Caching affects cost and latency, not traceability."
+        "why": "Invocation logs show the prompt and response, not how the model was trained."
       }
     ],
     "explanation": {
@@ -68,27 +68,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Amazon Polly",
+        "text": "Amazon Athena",
         "correct": false,
-        "why": "Polly converts text to speech and cannot catalog datasets or their schemas."
+        "why": "Athena queries data using catalog metadata, but it is not itself the central metadata catalog."
       },
       {
         "key": "B",
-        "text": "Amazon EC2 Spot",
+        "text": "Amazon S3 Inventory",
         "correct": false,
-        "why": "EC2 Spot is a discounted compute pricing option, not a metadata catalog."
+        "why": "S3 Inventory lists objects in a bucket; it does not record table schemas or provide a searchable data catalog."
       },
       {
         "key": "C",
         "text": "AWS Glue Data Catalog",
         "correct": true,
-        "why": "The Glue Data Catalog stores metadata such as table definitions, schemas and locations for data assets."
+        "why": "The Glue Data Catalog is a central metadata repository of tables, schemas and locations for data assets."
       },
       {
         "key": "D",
-        "text": "Amazon Route 53",
+        "text": "AWS Config resource inventory",
         "correct": false,
-        "why": "Route 53 is a DNS service and does not store metadata about data assets."
+        "why": "Config inventories AWS resources and their configurations, not the datasets inside a data lake."
       }
     ],
     "explanation": {
@@ -122,27 +122,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Raising the model temperature",
+        "text": "S3 bucket policies on the table's files",
         "correct": false,
-        "why": "Temperature is unrelated to data access control."
+        "why": "Bucket policies grant access to whole objects; they cannot hide columns or filter rows within a table."
       },
       {
         "key": "B",
-        "text": "Amazon CloudFront",
+        "text": "IAM policies on the Glue Data Catalog table",
         "correct": false,
-        "why": "CloudFront is a content delivery network."
+        "why": "IAM can allow or deny access to a table, but not to specific columns and rows."
       },
       {
         "key": "C",
-        "text": "Amazon Polly",
+        "text": "Amazon Macie classification of the table data",
         "correct": false,
-        "why": "Polly converts text to speech and has no data access control features."
+        "why": "Macie finds sensitive data; it does not restrict who can see which columns or rows."
       },
       {
         "key": "D",
-        "text": "AWS Lake Formation column-level and row-level permissions",
+        "text": "Lake Formation column-level and row-level permissions",
         "correct": true,
-        "why": "Lake Formation grants fine-grained access to tables, columns and rows in the data lake."
+        "why": "Lake Formation grants fine-grained access to data lake tables, including column-level and row-level filters."
       }
     ],
     "explanation": {
@@ -171,27 +171,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Assess data quality with automated validation checks (completeness, format, ranges, duplicates) before data enters training",
+        "text": "Automated data quality checks before data enters training",
         "correct": true,
-        "why": "Validating data quality early prevents corrupted or malformed data from degrading models."
+        "why": "Validating completeness, formats, ranges and duplicates stops corrupted or malformed data before it degrades models."
       },
       {
         "key": "B",
-        "text": "Increase model size to absorb errors",
+        "text": "Encrypt all incoming data with AWS KMS",
         "correct": false,
-        "why": "Larger models also learn from bad data, so model size cannot compensate for poor data quality."
+        "why": "Encryption protects confidentiality, not quality; corrupted files would still be encrypted corrupted files."
       },
       {
         "key": "C",
-        "text": "Skip logging of data sources",
+        "text": "Store every source file in S3 with versioning enabled",
         "correct": false,
-        "why": "Without source logs, problems cannot be traced."
+        "why": "Versioning preserves history but does not detect or block bad data."
       },
       {
         "key": "D",
-        "text": "Train on whatever arrives",
+        "text": "Retrain more often so bad batches age out",
         "correct": false,
-        "why": "Unvalidated data leads to unreliable models."
+        "why": "Frequent retraining keeps ingesting bad data instead of catching it."
       }
     ],
     "explanation": {
@@ -221,27 +221,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Keep every identifier to maximize accuracy",
+        "text": "Encrypt the claims data with a customer managed key",
         "correct": false,
-        "why": "Retaining unnecessary identifiers increases privacy risk."
+        "why": "Encryption protects stored data, but the model would still learn identifiable details and could reveal them."
       },
       {
         "key": "B",
-        "text": "De-identify data through masking, tokenization or pseudonymization, and remove direct identifiers not needed for the task",
+        "text": "De-identify data with masking, tokenization or pseudonyms",
         "correct": true,
-        "why": "Privacy-enhancing techniques reduce identifiability while preserving data utility."
+        "why": "Privacy-enhancing techniques reduce identifiability in both the training data and anything the model learns from it."
       },
       {
         "key": "C",
-        "text": "Store patient names in model prompts",
+        "text": "Restrict who can access the trained model",
         "correct": false,
-        "why": "This increases exposure of identifiable data."
+        "why": "Access control helps, but authorized users could still extract memorized patient details."
       },
       {
         "key": "D",
-        "text": "Publish the dataset for transparency",
+        "text": "Train in a private VPC with no internet access",
         "correct": false,
-        "why": "Publishing would expose personal health information."
+        "why": "Network isolation protects data in transit; it does not stop the model from learning identities."
       }
     ],
     "explanation": {
@@ -270,27 +270,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Allow public write access to the bucket",
+        "text": "Encrypt the bucket with a KMS customer managed key",
         "correct": false,
-        "why": "Public write access lets anyone modify the training data, inviting tampering and poisoning."
+        "why": "Encryption protects confidentiality, but anyone with write access could still modify the data."
       },
       {
         "key": "B",
-        "text": "Increase the model's temperature",
+        "text": "Enable S3 Transfer Acceleration for uploads",
         "correct": false,
-        "why": "Temperature has nothing to do with data integrity."
+        "why": "Transfer Acceleration speeds uploads; it does nothing to prevent or detect tampering."
       },
       {
         "key": "C",
-        "text": "Restrict write access with IAM and bucket policies, enable S3 versioning and Object Lock where appropriate, and log access with CloudTrail",
+        "text": "Restrict writes, enable versioning and Object Lock, log with CloudTrail",
         "correct": true,
-        "why": "Limiting who can write, preserving versions and logging changes protect against and reveal tampering."
+        "why": "Limiting who can write, preserving or locking versions and logging changes prevent and reveal tampering."
       },
       {
         "key": "D",
-        "text": "Disable all logging",
+        "text": "Copy the data to a second bucket every night",
         "correct": false,
-        "why": "Without logs, tampering cannot be detected."
+        "why": "A nightly copy may replicate tampered data and does not show who changed what."
       }
     ],
     "explanation": {
@@ -319,27 +319,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Amazon Polly",
+        "text": "AWS CloudTrail management events for Bedrock",
         "correct": false,
-        "why": "Polly converts text to speech and does not record model prompts or responses."
+        "why": "CloudTrail records API calls and who made them, not the full prompt and response content."
       },
       {
         "key": "B",
-        "text": "AWS Cost Explorer",
+        "text": "Amazon CloudWatch metrics for Bedrock",
         "correct": false,
-        "why": "Cost Explorer shows spending, not prompts and responses."
+        "why": "Metrics show counts, latency and errors, not the text of prompts and responses."
       },
       {
         "key": "C",
-        "text": "AWS Snowball",
+        "text": "AWS Config recording for Bedrock resources",
         "correct": false,
-        "why": "Snowball physically transfers data and does not log model invocations."
+        "why": "Config records resource configurations, not model inputs and outputs."
       },
       {
         "key": "D",
-        "text": "Amazon Bedrock model invocation logging to Amazon S3 and/or Amazon CloudWatch Logs",
+        "text": "Bedrock model invocation logging to S3 or CloudWatch Logs",
         "correct": true,
-        "why": "Model invocation logging captures request and response data for Bedrock model calls for auditing and analysis."
+        "why": "Invocation logging captures request and response data for Bedrock model calls, supporting audits."
       }
     ],
     "explanation": {
@@ -370,25 +370,25 @@
         "key": "A",
         "text": "AWS CloudTrail",
         "correct": true,
-        "why": "CloudTrail records API calls, including who made them, when and from where."
+        "why": "CloudTrail logs API calls, including who deleted a guardrail, when and from which IP address."
       },
       {
         "key": "B",
-        "text": "Amazon Polly",
+        "text": "AWS Config",
         "correct": false,
-        "why": "Polly converts text to speech and does not record who called which AWS API."
+        "why": "Config records that the guardrail's configuration changed, but the identity and source IP come from CloudTrail."
       },
       {
         "key": "C",
-        "text": "Amazon Translate",
+        "text": "Amazon CloudWatch Logs",
         "correct": false,
-        "why": "Translate converts languages and keeps no record of API activity."
+        "why": "CloudWatch Logs stores logs you send to it; it does not record AWS API activity by itself."
       },
       {
         "key": "D",
-        "text": "Amazon Rekognition",
+        "text": "Amazon GuardDuty",
         "correct": false,
-        "why": "Rekognition analyzes images and video and does not log account activity."
+        "why": "GuardDuty analyzes activity for threats and produces findings; it is not the complete record of API calls."
       }
     ],
     "explanation": {
@@ -418,27 +418,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Allow unlimited response length",
+        "text": "Fine-tune the model on drug interaction data",
         "correct": false,
-        "why": "Longer responses do not improve accuracy."
+        "why": "Fine-tuning adds knowledge but does not ground answers in sources or check them, so the model can still invent details."
       },
       {
         "key": "B",
-        "text": "Ground responses in authoritative sources using RAG and validate them with contextual grounding checks",
+        "text": "RAG on authoritative sources plus contextual grounding checks",
         "correct": true,
-        "why": "Grounding in verified sources and checking that answers are supported reduces hallucinations."
+        "why": "Grounding in verified sources and checking that answers are supported directly reduces hallucinations."
       },
       {
         "key": "C",
-        "text": "Increase temperature for richer answers",
+        "text": "Set the temperature to zero for deterministic answers",
         "correct": false,
-        "why": "Higher randomness increases the risk of fabricated content."
+        "why": "Deterministic answers can still be wrong; temperature does not verify facts."
       },
       {
         "key": "D",
-        "text": "Remove all source documents",
+        "text": "Tell the model in its system prompt not to invent facts",
         "correct": false,
-        "why": "Without sources, the model relies only on its training data."
+        "why": "An instruction helps a little but cannot stop the model from producing confident errors."
       }
     ],
     "explanation": {
@@ -471,27 +471,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Trust the model's output because it is usually correct",
+        "text": "Ask the model to double-check its own totals",
         "correct": false,
-        "why": "Occasional errors in payments can be costly."
+        "why": "Self-review by the same model can repeat the same mistakes; deterministic checks are more reliable."
       },
       {
         "key": "B",
-        "text": "Raise the temperature",
+        "text": "Lower the temperature for more consistent extraction",
         "correct": false,
-        "why": "More randomness increases the chance of wrong values instead of catching them before payment."
+        "why": "Consistent output can still be consistently wrong; nothing verifies the values."
       },
       {
         "key": "C",
-        "text": "Validate outputs programmatically, for example checking date formats and recomputing totals from line items, and route failures to human review",
+        "text": "Validate dates and recompute totals in code; route failures to people",
         "correct": true,
-        "why": "Deterministic validation catches impossible or inconsistent values, and human review handles exceptions."
+        "why": "Deterministic validation catches impossible or inconsistent values, and human review handles the exceptions."
       },
       {
         "key": "D",
-        "text": "Remove the line items from the input",
+        "text": "Use a larger model for the extraction step",
         "correct": false,
-        "why": "Removing data makes accurate extraction and validation harder."
+        "why": "A larger model makes fewer errors but still needs validation before money is paid."
       }
     ],
     "explanation": {
@@ -520,27 +520,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Increasing max tokens",
+        "text": "Lower the temperature so answers sound more confident",
         "correct": false,
-        "why": "Response length does not indicate how likely an answer is to be correct."
+        "why": "Temperature changes wording consistency, not how likely an answer is to be correct."
       },
       {
         "key": "B",
-        "text": "Always sending everything to humans",
+        "text": "Send every answer to a human before it is shown",
         "correct": false,
-        "why": "This forfeits automation benefits for confident cases."
+        "why": "This removes automation even for confident, routine answers."
       },
       {
         "key": "C",
-        "text": "Always answering automatically",
+        "text": "Answer every question and let users report errors",
         "correct": false,
-        "why": "This ignores uncertainty and risks wrong answers."
+        "why": "Customers would receive wrong answers before anyone catches them."
       },
       {
         "key": "D",
-        "text": "Confidence scoring, for example using grounding or relevance scores, with a threshold that routes low-confidence answers to humans",
+        "text": "Confidence scoring with a threshold for human handoff",
         "correct": true,
-        "why": "Scoring confidence and setting thresholds lets the system act only when likely correct and escalate otherwise."
+        "why": "Scoring confidence, for example with grounding and relevance scores, lets the system answer when confident and escalate otherwise."
       }
     ],
     "explanation": {
@@ -570,27 +570,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Training data leakage through memorization; remove or de-identify sensitive data before fine-tuning and filter outputs for PII",
+        "text": "Memorized training data leaking; de-identify data, filter outputs",
         "correct": true,
-        "why": "Models can memorize and reproduce training data, so sensitive data should not be in training sets, and outputs should be filtered."
+        "why": "Models can memorize and reproduce training data, so sensitive data should be removed before training and outputs filtered."
       },
       {
         "key": "B",
-        "text": "Data residency; change Regions",
+        "text": "Prompt injection; add a Guardrails prompt attack filter",
         "correct": false,
-        "why": "Moving Regions does not stop the model reproducing memorized data."
+        "why": "Clever prompts expose the problem, but the root cause is sensitive data in the training set."
       },
       {
         "key": "C",
-        "text": "Latency; use a faster model",
+        "text": "Hallucination; ground answers with RAG",
         "correct": false,
-        "why": "Response speed is unrelated to a model reproducing memorized training data."
+        "why": "The numbers are real customers' data, not invented, so grounding does not address it."
       },
       {
         "key": "D",
-        "text": "Underfitting; train for more epochs",
+        "text": "Overfitting; train for fewer epochs",
         "correct": false,
-        "why": "More training could increase memorization."
+        "why": "Less training may reduce memorization but the sensitive data would still be in the training set."
       }
     ],
     "explanation": {
@@ -624,27 +624,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Increase temperature on the public chatbot",
+        "text": "Block the chatbot's website and take no other action",
         "correct": false,
-        "why": "The company cannot control, and should not rely on, settings of an unapproved external tool."
+        "why": "Blocking one site without approved alternatives pushes employees to other unapproved tools."
       },
       {
         "key": "B",
-        "text": "Define an acceptable-use policy, provide approved AI tools with appropriate data protections, and train employees on what data may be shared",
+        "text": "Acceptable-use policy, approved tools with data protection, training",
         "correct": true,
-        "why": "Policies, approved alternatives and training address the root cause of risky behavior."
+        "why": "Policies, approved alternatives and training address the root cause and give employees a safe option."
       },
       {
         "key": "C",
-        "text": "Ignore it because the chatbot is free",
+        "text": "Ask employees to delete their chat history",
         "correct": false,
-        "why": "Free consumer tools may store or use submitted data, creating leakage risk."
+        "why": "Deleting history does not undo data already submitted and does not prevent future leaks."
       },
       {
         "key": "D",
-        "text": "Encourage employees to paste more data for better answers",
+        "text": "Allow it for source code but not for customer data",
         "correct": false,
-        "why": "Encouraging employees to paste more data increases the amount of confidential data exposed."
+        "why": "Source code is confidential too, and the consumer tool's data handling is still unvetted."
       }
     ],
     "explanation": {
@@ -673,27 +673,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Make the log bucket public for transparency",
+        "text": "Delete the logs and turn off invocation logging",
         "correct": false,
-        "why": "Public logs would expose customers' personal information to anyone."
+        "why": "The logs are needed for audits; they should be protected, not eliminated."
       },
       {
         "key": "B",
-        "text": "Disable all logging permanently",
+        "text": "Move the logs to S3 Glacier so they are harder to read",
         "correct": false,
-        "why": "Audit requirements still need logs; the logs should be protected, not eliminated."
+        "why": "Storage class does not control who can read the data."
       },
       {
         "key": "C",
-        "text": "Restrict access to the logs, encrypt them with KMS, apply retention limits, and consider masking sensitive data before logging",
+        "text": "Restrict access, encrypt with KMS, set retention, mask PII",
         "correct": true,
-        "why": "Logs of AI interactions are sensitive data and need the same protections as other personal data."
+        "why": "Logs of AI interactions are sensitive data and need least-privilege access, encryption, retention limits and redaction."
       },
       {
         "key": "D",
-        "text": "Keep logs forever without access controls",
+        "text": "Keep the logs but give the bucket a less obvious name",
         "correct": false,
-        "why": "Unlimited retention and open access increase privacy risk."
+        "why": "Obscurity is not access control; the bucket would still be readable by all developers."
       }
     ],
     "explanation": {
@@ -727,27 +727,27 @@
     "options": [
       {
         "key": "A",
-        "text": "AWS Direct Connect",
+        "text": "AWS Glue Data Catalog",
         "correct": false,
-        "why": "Direct Connect provides dedicated network links and has no documentation features."
+        "why": "The Data Catalog describes datasets, not models and their documentation."
       },
       {
         "key": "B",
-        "text": "Amazon ElastiCache",
+        "text": "Amazon SageMaker Model Registry",
         "correct": false,
-        "why": "ElastiCache is an in-memory cache and is not a place to document models."
+        "why": "Model Registry tracks versions and approval status; detailed documentation of data origins and licenses belongs in Model Cards."
       },
       {
         "key": "C",
-        "text": "Amazon Polly",
+        "text": "AWS Artifact",
         "correct": false,
-        "why": "Polly converts text to speech and cannot hold model documentation."
+        "why": "Artifact provides AWS's own compliance reports, not documentation of your models."
       },
       {
         "key": "D",
         "text": "Amazon SageMaker Model Cards",
         "correct": true,
-        "why": "Model Cards document training details, data sources, intended uses and evaluations in one place."
+        "why": "Model Cards document a model's training data, preparation, intended uses and evaluations in one place."
       }
     ],
     "explanation": {
@@ -783,15 +783,15 @@
       },
       {
         "key": "B",
-        "text": "Choosing the font for the chat interface",
+        "text": "Choosing the GPU instance type for training",
         "correct": false,
-        "why": "Visual design is not a security consideration."
+        "why": "Instance choice affects performance and cost, not security and privacy."
       },
       {
         "key": "C",
-        "text": "Maximizing response length",
+        "text": "Selecting the embedding dimension for retrieval",
         "correct": false,
-        "why": "Response length is not a security control."
+        "why": "Embedding dimension is a retrieval quality and cost setting, not a security consideration."
       },
       {
         "key": "D",
@@ -833,27 +833,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Include only the fields the assistant needs and exclude payment details from the knowledge base",
+        "text": "Load only the needed fields and exclude payment data",
         "correct": true,
-        "why": "Data minimization reduces the sensitive data that could leak through retrieval or outputs."
+        "why": "Data that is never loaded cannot leak; minimization is the strongest control here."
       },
       {
         "key": "B",
-        "text": "Store payment details in the system prompt",
+        "text": "Load everything, with a guardrail that masks card numbers",
         "correct": false,
-        "why": "Prompts can be exposed through prompt attacks, so payment details must never be placed in them."
+        "why": "Masking is a useful extra layer, but the sensitive data would still be stored and retrievable."
       },
       {
         "key": "C",
-        "text": "Load payment details but ask the model not to mention them",
+        "text": "Load everything, but encrypt the knowledge base with KMS",
         "correct": false,
-        "why": "Instructions are not a reliable control against leakage."
+        "why": "Encryption protects data at rest; the assistant can still retrieve and reveal it."
       },
       {
         "key": "D",
-        "text": "Load everything in case it is useful later",
+        "text": "Load everything and limit the assistant to sales staff",
         "correct": false,
-        "why": "Unnecessary sensitive data increases risk without benefit."
+        "why": "Access control helps, but sales staff do not need payment details, so they should not be exposed."
       }
     ],
     "explanation": {
@@ -883,27 +883,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Prompt caching",
+        "text": "Contextual grounding checks in Bedrock Guardrails",
         "correct": false,
-        "why": "Prompt caching reduces cost and latency and does not verify answers against rules."
+        "why": "Grounding checks produce a probabilistic score against source text; the company wants logic-based verification against rules."
       },
       {
         "key": "B",
-        "text": "Automated Reasoning checks in Amazon Bedrock Guardrails",
+        "text": "Automated Reasoning checks in Bedrock Guardrails",
         "correct": true,
-        "why": "Automated Reasoning checks use formal logic to verify whether responses comply with encoded policy rules."
+        "why": "Automated Reasoning checks verify responses against a formal representation of policy rules, giving verifiable results."
       },
       {
         "key": "C",
-        "text": "Batch inference",
+        "text": "LLM-as-a-judge review of each answer",
         "correct": false,
-        "why": "Batch inference is an asynchronous execution mode and performs no logical verification."
+        "why": "A judge model gives an assessment, not a formal, verifiable proof against the policy rules."
       },
       {
         "key": "D",
-        "text": "Word filters",
+        "text": "Denied topics in Bedrock Guardrails",
         "correct": false,
-        "why": "Word filters block specific terms and cannot verify logical correctness."
+        "why": "Denied topics block subjects; they do not check whether answers are correct."
       }
     ],
     "explanation": {
@@ -933,27 +933,27 @@
     "options": [
       {
         "key": "A",
-        "text": "AWS Cost Explorer",
+        "text": "AWS CloudTrail for all API activity in the account",
         "correct": false,
-        "why": "Cost Explorer shows spending, not the steps and tool calls an agent performed."
+        "why": "CloudTrail records AWS API calls, but not the agent's reasoning steps and tool inputs and outputs."
       },
       {
         "key": "B",
-        "text": "Amazon S3 Glacier only",
+        "text": "Bedrock model invocation logging of every model call",
         "correct": false,
-        "why": "Glacier stores archives but does not capture agent actions."
+        "why": "Invocation logs capture model calls, but not the tool executions between them."
       },
       {
         "key": "C",
-        "text": "Agent tracing and observability (for example Amazon Bedrock AgentCore Observability or Bedrock Agents traces) combined with CloudTrail",
+        "text": "Agent tracing (for example AgentCore Observability) plus CloudTrail",
         "correct": true,
-        "why": "Agent traces record each step and tool call, while CloudTrail records AWS API activity, together forming an audit trail."
+        "why": "Agent traces capture each step and tool call, and CloudTrail records account API activity, together forming an audit trail."
       },
       {
         "key": "D",
-        "text": "Amazon Polly",
+        "text": "Amazon CloudWatch metrics and alarms for the agent",
         "correct": false,
-        "why": "Polly converts text to speech and does not record agent actions."
+        "why": "Metrics show counts and latency, not a per-session record of actions."
       }
     ],
     "explanation": {
@@ -987,27 +987,27 @@
     "options": [
       {
         "key": "A",
-        "text": "The model was too small",
+        "text": "A prompt injection by the other customer",
         "correct": false,
-        "why": "Model size does not cause cross-tenant leakage."
+        "why": "Injection can cause leaks, but cross-customer data in answers points first to missing separation between tenants."
       },
       {
         "key": "B",
-        "text": "The embedding dimension was too large",
+        "text": "Hallucination by the model",
         "correct": false,
-        "why": "Vector size does not explain data appearing across tenants."
+        "why": "The details came from another customer's real documents; they were not invented."
       },
       {
         "key": "C",
-        "text": "The model's temperature was too low",
+        "text": "The model memorized data during fine-tuning",
         "correct": false,
-        "why": "Temperature does not cause cross-tenant data access."
+        "why": "No shared fine-tuning is described; the data came from retrieval or context at answer time."
       },
       {
         "key": "D",
-        "text": "Missing tenant isolation in retrieval, memory or context, allowing one tenant's data into another tenant's prompts",
+        "text": "Missing tenant isolation in retrieval, memory or context",
         "correct": true,
-        "why": "Without strict per-tenant separation of data and context, information can leak across customers."
+        "why": "Without strict per-tenant separation of data and context, one customer's documents can enter another's prompts."
       }
     ],
     "explanation": {
@@ -1037,27 +1037,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Source citations linking each claim to the retrieved passage it came from",
+        "text": "Citations linking each claim to the passage it came from",
         "correct": true,
-        "why": "Citations let users check claims against the original source, exposing any unsupported statements."
+        "why": "Citations let lawyers check every claim against its original source quickly."
       },
       {
         "key": "B",
-        "text": "Higher temperature",
+        "text": "A confidence score shown with each answer",
         "correct": false,
-        "why": "More randomness makes answers less reliable and no easier to verify."
+        "why": "A score signals reliability but does not show where a claim came from."
       },
       {
         "key": "C",
-        "text": "Longer answers",
+        "text": "A Guardrails contextual grounding check",
         "correct": false,
-        "why": "Longer answers do not show where claims came from, so they are no easier to verify."
+        "why": "Grounding checks block unsupported answers but do not show lawyers the sources."
       },
       {
         "key": "D",
-        "text": "Removing references to save tokens",
+        "text": "Lower temperature for more consistent answers",
         "correct": false,
-        "why": "This removes the ability to verify claims."
+        "why": "Consistency does not make claims verifiable."
       }
     ],
     "explanation": {
@@ -1143,27 +1143,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Increase the model's temperature",
+        "text": "Instruct the agent to ignore instructions found in emails",
         "correct": false,
-        "why": "Randomness does not prevent following injected instructions."
+        "why": "An instruction helps but can be overridden; the agent's ability to forward externally must also be limited."
       },
       {
         "key": "B",
-        "text": "Treat email content as untrusted data, restrict the agent from sending to external addresses without approval, and apply guardrails and monitoring",
+        "text": "Treat email as untrusted, approve external sends, add guardrails",
         "correct": true,
-        "why": "Limiting the agent's actions and treating content as data blocks the injected instruction from causing harm."
+        "why": "Treating content as data and requiring approval for external forwarding blocks the injected instruction from causing harm."
       },
       {
         "key": "C",
-        "text": "Disable logging of agent actions",
+        "text": "Scan attachments with antivirus before the agent reads them",
         "correct": false,
-        "why": "Disabling logging hides the agent's actions, preventing detection of the attack."
+        "why": "The attack is hidden text in the message, which antivirus scanning does not catch."
       },
       {
         "key": "D",
-        "text": "Allow the agent to forward any email automatically",
+        "text": "Log forwarded emails and review them weekly",
         "correct": false,
-        "why": "Unrestricted forwarding lets injected instructions exfiltrate data."
+        "why": "Weekly review finds the leak after the invoices have already been sent."
       }
     ],
     "explanation": {
@@ -1197,27 +1197,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Remove all metadata to simplify the index",
+        "text": "Use a reranker to improve which documents are retrieved",
         "correct": false,
-        "why": "Without metadata, sources cannot be traced."
+        "why": "Better ranking may change answers, but it still would not show which document version or owner caused a wrong one."
       },
       {
         "key": "B",
-        "text": "Increase temperature",
+        "text": "Re-ingest the whole knowledge base every night",
         "correct": false,
-        "why": "Temperature does not help trace sources."
+        "why": "Re-ingesting refreshes content but records nothing about provenance."
       },
       {
         "key": "C",
-        "text": "Record provenance metadata for each document (source, owner, version, date) and return citations so problematic sources can be traced",
+        "text": "Record provenance metadata and return citations",
         "correct": true,
-        "why": "Provenance metadata and citations make it possible to identify and fix the exact source of a wrong answer."
+        "why": "Source, owner, version and date metadata plus citations let teams trace a wrong answer to its document."
       },
       {
         "key": "D",
-        "text": "Disable citations",
+        "text": "Enable model invocation logging for all answers",
         "correct": false,
-        "why": "Citations are what link answers to sources."
+        "why": "Logs show prompts and answers but not which document version or author supplied the content."
       }
     ],
     "explanation": {
@@ -1247,27 +1247,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Public S3 buckets for training data",
+        "text": "Least privilege and logging, but no encryption",
         "correct": false,
-        "why": "Public S3 buckets would expose training data to anyone on the internet."
+        "why": "Missing encryption at rest and in transit leaves data exposed."
       },
       {
         "key": "B",
-        "text": "A single shared admin user and no logging",
+        "text": "Encryption and guardrails, with one shared admin user",
         "correct": false,
-        "why": "Shared admin access and no logs violate basic security principles."
+        "why": "A shared admin account breaks least privilege and accountability."
       },
       {
         "key": "C",
-        "text": "Secrets stored in prompts",
+        "text": "PrivateLink and guardrails, with API keys in environment variables",
         "correct": false,
-        "why": "Prompts are not secure storage. Secrets placed there can be leaked through the model."
+        "why": "Long-term keys in configuration can leak and are not least privilege; applications should use IAM roles."
       },
       {
         "key": "D",
-        "text": "Least-privilege IAM, encryption at rest and in transit, private connectivity where required, guardrails, and logging",
+        "text": "Least privilege, encryption, private connectivity, guardrails, logging",
         "correct": true,
-        "why": "These controls together protect access, data, network paths, content and accountability."
+        "why": "Together these protect access, data, network paths, content and accountability."
       }
     ],
     "explanation": {
