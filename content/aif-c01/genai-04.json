@@ -15,27 +15,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Amazon EC2",
+        "text": "Amazon SageMaker JumpStart",
         "correct": false,
-        "why": "EC2 provides virtual servers that you manage yourself. It does not offer a single API to many providers' models."
+        "why": "JumpStart offers many models, but it deploys them to endpoints on instances you choose and pay for, so there is infrastructure to manage."
       },
       {
         "key": "B",
         "text": "Amazon Bedrock",
         "correct": true,
-        "why": "Amazon Bedrock is a fully managed, serverless service that offers foundation models from Amazon and leading AI companies through a unified API."
+        "why": "Bedrock is fully managed and serverless, offering foundation models from Amazon and leading AI companies through one API."
       },
       {
         "key": "C",
-        "text": "Amazon Comprehend",
+        "text": "Amazon Bedrock AgentCore",
         "correct": false,
-        "why": "Comprehend is a pre-trained NLP service for tasks such as sentiment. It does not provide access to many providers' FMs."
+        "why": "AgentCore hosts and operates agents. It is not the service that provides API access to many providers' models."
       },
       {
         "key": "D",
-        "text": "AWS Glue",
+        "text": "Amazon Kendra",
         "correct": false,
-        "why": "Glue is a data integration and ETL service, not a source of foundation models."
+        "why": "Kendra is an intelligent enterprise search service; it does not provide access to foundation models."
       }
     ],
     "explanation": {
@@ -115,27 +115,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Amazon Polly",
+        "text": "Amazon Bedrock model customization",
         "correct": false,
-        "why": "Polly is a text-to-speech service and offers no control over training generative models."
+        "why": "Bedrock fine-tuning is managed and simple, but it does not let you supply training code or choose instance types."
       },
       {
         "key": "B",
-        "text": "Amazon Quick",
+        "text": "Amazon SageMaker Canvas",
         "correct": false,
-        "why": "Amazon Quick is a business-user workspace for insights and automation, not a platform for controlling model training."
+        "why": "Canvas is a no-code tool for analysts; it hides training code and infrastructure choices."
       },
       {
         "key": "C",
-        "text": "AWS Artifact",
+        "text": "Amazon Bedrock Custom Model Import",
         "correct": false,
-        "why": "Artifact provides compliance reports and does not train models."
+        "why": "Custom Model Import brings already-trained weights into Bedrock; it does not run custom training or let you pick hosting instances."
       },
       {
         "key": "D",
         "text": "Amazon SageMaker AI",
         "correct": true,
-        "why": "SageMaker AI provides full control over training scripts, infrastructure choices, model artifacts and deployment, which suits an experienced ML team."
+        "why": "SageMaker AI gives full control over training scripts, instance types, model artifacts and inference containers."
       }
     ],
     "explanation": {
@@ -167,25 +167,25 @@
         "key": "A",
         "text": "Amazon SageMaker JumpStart",
         "correct": true,
-        "why": "JumpStart is SageMaker AI's model hub, offering pre-trained FMs and solutions that can be deployed and fine-tuned with minimal effort."
+        "why": "JumpStart is SageMaker AI's model hub, with pre-trained FMs that deploy to SageMaker endpoints and can be fine-tuned from Studio."
       },
       {
         "key": "B",
-        "text": "Amazon Macie",
+        "text": "Amazon SageMaker Canvas",
         "correct": false,
-        "why": "Macie discovers sensitive data in Amazon S3 and does not host models."
+        "why": "Canvas offers no-code ML and ready-made models, but it is not the Studio model hub for deploying and fine-tuning FMs on endpoints."
       },
       {
         "key": "C",
-        "text": "AWS CloudTrail",
+        "text": "Amazon Bedrock playgrounds",
         "correct": false,
-        "why": "CloudTrail logs API activity. It does not provide models to deploy."
+        "why": "Playgrounds let you try Bedrock models in the console; they do not deploy models to SageMaker endpoints."
       },
       {
         "key": "D",
-        "text": "Amazon SageMaker Ground Truth",
+        "text": "Amazon SageMaker Model Registry",
         "correct": false,
-        "why": "Ground Truth helps label data with human workers. It is not a model hub."
+        "why": "Model Registry catalogs your own trained model versions; it is not a hub of pre-trained foundation models."
       }
     ],
     "explanation": {
@@ -215,27 +215,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Amazon Translate",
+        "text": "AWS Lambda",
         "correct": false,
-        "why": "Translate converts text between languages and cannot host agents."
+        "why": "Lambda is serverless, but functions have a short maximum duration and no built-in per-session isolation for long-running agents."
       },
       {
         "key": "B",
         "text": "Amazon Bedrock AgentCore Runtime",
         "correct": true,
-        "why": "AgentCore Runtime is a secure, serverless environment for deploying and scaling agents built with any framework, with session isolation and support for long-running workloads."
+        "why": "AgentCore Runtime is a secure, serverless environment for agents built with any framework, with session isolation and long-running support."
       },
       {
         "key": "C",
-        "text": "AWS Artifact",
+        "text": "Amazon Bedrock Agents",
         "correct": false,
-        "why": "Artifact provides compliance documentation and has no agent hosting capability."
+        "why": "Bedrock Agents builds agents by configuration in Bedrock; it does not host an agent already written in an open-source framework."
       },
       {
         "key": "D",
-        "text": "Amazon SageMaker Ground Truth",
+        "text": "Amazon ECS on AWS Fargate",
         "correct": false,
-        "why": "Ground Truth is for data labeling, not for hosting agents."
+        "why": "Fargate could run the agent container, but the team would have to build session isolation, scaling and agent-specific operations itself."
       }
     ],
     "explanation": {
@@ -321,27 +321,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Amazon Inspector",
+        "text": "Amazon Bedrock Agents",
         "correct": false,
-        "why": "Inspector scans workloads for vulnerabilities and does not build agents."
+        "why": "Bedrock Agents is a managed, configuration-based service, not an open-source SDK you build with in code."
       },
       {
         "key": "B",
-        "text": "Amazon Textract",
+        "text": "Amazon Bedrock AgentCore",
         "correct": false,
-        "why": "Textract extracts text from documents and is not used to build agents."
+        "why": "AgentCore provides services to run and operate agents; it is not the SDK used to write them."
       },
       {
         "key": "C",
-        "text": "AWS Config",
+        "text": "Amazon Bedrock Flows",
         "correct": false,
-        "why": "AWS Config records and evaluates resource configurations. It is not an agent SDK."
+        "why": "Flows is a visual builder for predefined workflows, not a code-first agent SDK."
       },
       {
         "key": "D",
         "text": "Strands Agents",
         "correct": true,
-        "why": "Strands Agents is an open-source SDK from AWS that takes a model-driven approach: you define a model, a prompt and tools, and the model plans and calls tools."
+        "why": "Strands Agents is an open-source SDK with a model-driven approach: you give it a model, a prompt and tools, and the model plans and calls tools."
       }
     ],
     "explanation": {
@@ -371,27 +371,27 @@
     "options": [
       {
         "key": "A",
-        "text": "They lower the barrier to entry and speed up time to market because there is no infrastructure to build or manage.",
+        "text": "Lower barrier to entry and faster launch, with no infrastructure",
         "correct": true,
-        "why": "Managed services provide models and capabilities through APIs, so teams focus on the application instead of infrastructure."
+        "why": "Managed services provide models through APIs, so teams focus on the application instead of building infrastructure."
       },
       {
         "key": "B",
-        "text": "They require each customer to pre-train models from scratch.",
+        "text": "AWS becomes responsible for the content the application generates",
         "correct": false,
-        "why": "Managed services provide pre-trained models, so pre-training is not required."
+        "why": "Customers remain responsible for how they use models and for their application's outputs."
       },
       {
         "key": "C",
-        "text": "They remove all responsibility for the content an application generates.",
+        "text": "Models are automatically fine-tuned on each customer's data",
         "correct": false,
-        "why": "Customers remain responsible for how they use models and for their application's outputs under the shared responsibility model."
+        "why": "Customization is optional and customer-driven; base models are not trained on customer data."
       },
       {
         "key": "D",
-        "text": "They guarantee that models never make mistakes.",
+        "text": "Usage costs stay fixed, regardless of how much is used",
         "correct": false,
-        "why": "Managed services do not change the fact that generative models can make errors."
+        "why": "On-demand pricing is usage-based; costs grow with tokens processed."
       }
     ],
     "explanation": {
@@ -536,27 +536,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Amazon Rekognition and Amazon Polly",
+        "text": "Amazon Bedrock and SageMaker JumpStart",
         "correct": false,
-        "why": "These analyze images and generate speech. They do not assist with software development."
+        "why": "These are for building AI applications and hosting models, not AI coding assistance inside the IDE."
       },
       {
         "key": "B",
-        "text": "AWS Artifact and AWS Config",
+        "text": "Amazon Quick and Amazon Bedrock Flows",
         "correct": false,
-        "why": "These provide compliance reports and configuration tracking, not coding assistance."
+        "why": "Quick serves business users and Flows builds generative AI workflows; neither is an IDE coding assistant."
       },
       {
         "key": "C",
         "text": "Amazon Q Developer and Kiro",
         "correct": true,
-        "why": "Amazon Q Developer is an AI coding assistant for IDEs, the CLI and the AWS console, and Kiro is AWS's agentic development environment."
+        "why": "Q Developer assists with code in IDEs, the CLI and the console, and Kiro is AWS's agentic development environment."
       },
       {
         "key": "D",
-        "text": "Amazon Macie and Amazon GuardDuty",
+        "text": "Amazon Bedrock Agents and AgentCore",
         "correct": false,
-        "why": "These are security services for sensitive data discovery and threat detection."
+        "why": "These build and run AI agents for applications; they are not developer coding assistants."
       }
     ],
     "explanation": {
@@ -591,27 +591,27 @@
     "options": [
       {
         "key": "A",
-        "text": "AWS makes the firm's applications compliant automatically, with no customer responsibilities.",
+        "text": "AWS makes applications compliant automatically, with no customer duties",
         "correct": false,
-        "why": "Under the shared responsibility model, customers remain responsible for configuring and using services compliantly."
+        "why": "Under shared responsibility, customers must still configure and use services compliantly."
       },
       {
         "key": "B",
-        "text": "AWS requires the firm to share its data publicly to use generative AI.",
+        "text": "AWS runs every model on hardware dedicated to each customer",
         "correct": false,
-        "why": "Customer data remains private. AWS provides controls to keep it secure."
+        "why": "Managed services use AWS-operated infrastructure; data isolation comes from service controls, not dedicated hardware per customer."
       },
       {
         "key": "C",
-        "text": "AWS infrastructure only supports image generation.",
+        "text": "Model providers get access to data so they can improve security",
         "correct": false,
-        "why": "AWS supports text, image, audio, video and agentic AI workloads."
+        "why": "Bedrock does not share customer prompts or data with model providers."
       },
       {
         "key": "D",
-        "text": "AWS provides security controls such as encryption, private networking and IAM, along with compliance programs and certifications, under the shared responsibility model.",
+        "text": "Encryption, private networking, IAM and compliance programs",
         "correct": true,
-        "why": "Security services, private connectivity, encryption and compliance certifications help regulated firms meet their obligations while keeping control of their data."
+        "why": "Security controls plus compliance certifications help regulated firms meet obligations while keeping control of their data, under shared responsibility."
       }
     ],
     "explanation": {
@@ -648,25 +648,25 @@
         "key": "A",
         "text": "The Amazon Bedrock playgrounds in the console",
         "correct": true,
-        "why": "Bedrock playgrounds let users try models interactively in the console, compare outputs and adjust inference parameters without code."
+        "why": "Playgrounds let anyone try models interactively, compare responses and adjust inference settings without code."
       },
       {
         "key": "B",
-        "text": "Provisioned Throughput",
+        "text": "Amazon Bedrock Model Evaluation jobs",
         "correct": false,
-        "why": "Provisioned Throughput reserves capacity for production traffic. It is not a no-code experimentation tool."
+        "why": "Evaluation jobs need prepared datasets and configuration; they are for systematic comparison, not quick hands-on trials."
       },
       {
         "key": "C",
-        "text": "AWS Config rules",
+        "text": "Amazon Bedrock batch inference",
         "correct": false,
-        "why": "Config rules check resource configurations and have nothing to do with trying models."
+        "why": "Batch inference runs large prompt sets asynchronously from S3; it is not an interactive way to try models."
       },
       {
         "key": "D",
-        "text": "Model invocation logging",
+        "text": "Amazon Bedrock model invocation logging",
         "correct": false,
-        "why": "Logging records requests for auditing and analysis. It does not provide an interactive testing interface."
+        "why": "Logging records requests for auditing; it provides no interface for trying models."
       }
     ],
     "explanation": {
@@ -697,27 +697,27 @@
     "options": [
       {
         "key": "A",
-        "text": "AgentCore Memory for both needs",
+        "text": "AgentCore Memory and AgentCore Identity",
         "correct": false,
-        "why": "Memory stores conversation and long-term information. It does not run code or browse websites."
+        "why": "These store conversation context and manage agent credentials; neither runs code or operates a browser."
       },
       {
         "key": "B",
-        "text": "AgentCore Code Interpreter for running code and AgentCore Browser for web interaction, each in isolated environments",
+        "text": "AgentCore Code Interpreter and AgentCore Browser",
         "correct": true,
-        "why": "Code Interpreter runs agent-generated code in a secure sandbox, and Browser provides a managed, isolated browser for agents to interact with websites."
+        "why": "Code Interpreter runs agent-generated code in a secure sandbox, and Browser gives agents an isolated, managed browser for websites."
       },
       {
         "key": "C",
-        "text": "Amazon Bedrock Guardrails for both needs",
+        "text": "AgentCore Gateway and Policy in AgentCore",
         "correct": false,
-        "why": "Guardrails filter content. They do not execute code or operate a browser."
+        "why": "These expose tools and control which tools agents may call; they do not execute code or browse websites."
       },
       {
         "key": "D",
-        "text": "Amazon Polly and Amazon Translate",
+        "text": "AgentCore Runtime and AgentCore Observability",
         "correct": false,
-        "why": "These generate speech and translate text and cannot run code or browse."
+        "why": "These host the agent and trace its behavior; they do not provide the sandboxed code and browser tools."
       }
     ],
     "explanation": {
@@ -799,27 +799,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Use Amazon Polly to host the model",
+        "text": "Deploy it on a SageMaker AI endpoint and call that endpoint",
         "correct": false,
-        "why": "Polly is a text-to-speech service and cannot host arbitrary models."
+        "why": "This works, but calls go through the SageMaker endpoint API, not Bedrock's unified APIs as required."
       },
       {
         "key": "B",
-        "text": "Store the model in AWS Artifact",
+        "text": "Fine-tune a similar Bedrock model to imitate it",
         "correct": false,
-        "why": "Artifact holds compliance documents, not models."
+        "why": "Fine-tuning a different model does not give access to the open-weight model the company wants."
       },
       {
         "key": "C",
-        "text": "It is impossible to use any model outside the serverless catalog",
+        "text": "Ask AWS to add the model to the serverless catalog",
         "correct": false,
-        "why": "Bedrock offers mechanisms such as Custom Model Import and Bedrock Marketplace to use additional models."
+        "why": "The company cannot control what AWS adds; Bedrock already provides ways to bring in other models."
       },
       {
         "key": "D",
-        "text": "Import the model into Amazon Bedrock using Custom Model Import, or deploy it from Amazon Bedrock Marketplace, where supported",
+        "text": "Use Bedrock Custom Model Import or Bedrock Marketplace",
         "correct": true,
-        "why": "Bedrock provides ways to bring additional models into Bedrock so they can be invoked through the same APIs, subject to supported architectures."
+        "why": "These bring additional supported models into Bedrock so they can be invoked through the same APIs."
       }
     ],
     "explanation": {
@@ -855,25 +855,25 @@
         "key": "A",
         "text": "Amazon Nova",
         "correct": true,
-        "why": "Amazon Nova is Amazon's family of foundation models on Bedrock, covering understanding of text, images and video, as well as creative image and video generation."
+        "why": "Amazon Nova is Amazon's family of foundation models on Bedrock, covering text, image and video understanding plus image and video generation."
       },
       {
         "key": "B",
-        "text": "AWS Glue",
+        "text": "Amazon Bedrock AgentCore",
         "correct": false,
-        "why": "AWS Glue is a serverless data integration and ETL service. It does not provide foundation models."
+        "why": "AgentCore is a set of services for running agents, not a family of models."
       },
       {
         "key": "C",
-        "text": "Amazon Macie",
+        "text": "Amazon Rekognition",
         "correct": false,
-        "why": "Macie is a data security service, not a family of foundation models."
+        "why": "Rekognition analyzes images and video with pre-trained APIs, but it does not generate text or images."
       },
       {
         "key": "D",
-        "text": "Amazon Inspector",
+        "text": "Amazon Q Developer",
         "correct": false,
-        "why": "Inspector is a vulnerability management service."
+        "why": "Q Developer is an AI coding assistant, not a family of foundation models."
       }
     ],
     "explanation": {
@@ -955,27 +955,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Amazon SageMaker Ground Truth",
+        "text": "Amazon Q Developer",
         "correct": false,
-        "why": "Ground Truth labels training data and is not used by sales teams for insights."
+        "why": "Q Developer helps software developers write and maintain code, not sales teams research accounts and dashboards."
       },
       {
         "key": "B",
-        "text": "AWS Key Management Service",
+        "text": "Amazon Bedrock Agents",
         "correct": false,
-        "why": "KMS manages encryption keys and has no research or automation features."
+        "why": "Bedrock Agents is for developers building agents into applications; the sales team wants a ready-to-use workspace."
       },
       {
         "key": "C",
         "text": "Amazon Quick",
         "correct": true,
-        "why": "Amazon Quick brings together AI agents, research, business intelligence and automation in one workspace for business teams."
+        "why": "Amazon Quick brings AI agents, research, business intelligence and automation into one workspace for business teams."
       },
       {
         "key": "D",
-        "text": "Amazon EC2 Auto Scaling",
+        "text": "Amazon SageMaker Canvas",
         "correct": false,
-        "why": "Auto Scaling adjusts compute capacity and is not an AI workspace."
+        "why": "Canvas lets analysts build ML models without code; it is not an agentic workspace for research and automation."
       }
     ],
     "explanation": {
@@ -1062,27 +1062,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Amazon S3 Lifecycle rules",
+        "text": "Amazon Comprehend PII detection",
         "correct": false,
-        "why": "Lifecycle rules move or delete stored objects. They do not filter AI content."
+        "why": "Comprehend can find PII in text, but it does not block inappropriate content or denied topics in model conversations."
       },
       {
         "key": "B",
-        "text": "AWS Cost Explorer",
+        "text": "Amazon Rekognition content moderation",
         "correct": false,
-        "why": "Cost Explorer analyzes spending and has no safety features."
+        "why": "Rekognition moderates images and video, not a text tutor's conversations."
       },
       {
         "key": "C",
-        "text": "Amazon EC2 Spot Instances",
+        "text": "Amazon Bedrock Model Evaluation",
         "correct": false,
-        "why": "Spot Instances reduce compute cost and provide no content safety."
+        "why": "Evaluation measures a model's behavior on test data; it does not block content in live conversations."
       },
       {
         "key": "D",
         "text": "Amazon Bedrock Guardrails",
         "correct": true,
-        "why": "Guardrails provides content filters, denied topics, word filters and sensitive information filters applied to both inputs and outputs."
+        "why": "Guardrails provide content filters, denied topics and PII filters applied to both inputs and outputs."
       }
     ],
     "explanation": {
@@ -1111,27 +1111,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Team A: Amazon Bedrock serverless models. Team B: SageMaker JumpStart or SageMaker AI endpoints.",
+        "text": "A: Bedrock serverless models. B: SageMaker AI or JumpStart endpoints",
         "correct": true,
-        "why": "Bedrock removes instance management, while SageMaker AI endpoints give Team B control over instance types and networking and bill for running instances."
+        "why": "Bedrock removes instance management, while SageMaker endpoints give Team B instance choice and networking control, billed per instance."
       },
       {
         "key": "B",
-        "text": "Team A: SageMaker AI endpoints. Team B: Amazon Bedrock serverless models.",
+        "text": "A: SageMaker AI endpoints. B: Bedrock serverless models",
         "correct": false,
-        "why": "This is reversed. SageMaker endpoints require choosing instances, and Bedrock serverless models do not expose instance choices."
+        "why": "This is reversed: SageMaker endpoints require choosing instances, and Bedrock serverless models do not offer that."
       },
       {
         "key": "C",
-        "text": "Both teams: AWS Artifact",
+        "text": "A: Bedrock Provisioned Throughput. B: Bedrock serverless models",
         "correct": false,
-        "why": "Artifact provides compliance documents and does not host models."
+        "why": "Neither Bedrock option lets Team B choose GPU instance types."
       },
       {
         "key": "D",
-        "text": "Both teams: Amazon Polly",
+        "text": "Both: Bedrock serverless models over AWS PrivateLink",
         "correct": false,
-        "why": "Polly is text to speech and cannot host foundation models."
+        "why": "PrivateLink keeps traffic private, but Team B still could not choose instance types or pay per instance."
       }
     ],
     "explanation": {
@@ -1166,27 +1166,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Measuring only the number of API calls per day",
+        "text": "A benchmark evaluation before launch, repeated yearly",
         "correct": false,
-        "why": "Call volume measures usage, not quality or correctness."
+        "why": "Agent behavior changes as data, tools and usage change; yearly benchmark checks miss problems in real interactions."
       },
       {
         "key": "B",
-        "text": "Continuous agent evaluation using traces of real interactions, for example with Amazon Bedrock AgentCore Evaluations and Observability",
+        "text": "Continuous evaluation of real interaction traces with AgentCore",
         "correct": true,
-        "why": "Evaluating live agent traces against quality criteria shows whether tasks are completed correctly and tools are used appropriately over time."
+        "why": "Evaluating live traces on task completion, tool use and helpfulness shows how the agent actually performs over time."
       },
       {
         "key": "C",
-        "text": "Checking only the model's parameter count",
+        "text": "CloudWatch metrics on request counts and errors",
         "correct": false,
-        "why": "Model size says nothing about whether the agent completes tasks well."
+        "why": "Operational metrics show load and failures, not whether tasks were completed correctly."
       },
       {
         "key": "D",
-        "text": "Running a one-time test before launch and never again",
+        "text": "User thumbs-up ratings as the only quality signal",
         "correct": false,
-        "why": "Agent behavior can change as data, tools and usage evolve. Continuous evaluation is needed."
+        "why": "User ratings are useful but sparse and do not show whether the right tools were used."
       }
     ],
     "explanation": {
@@ -1275,27 +1275,27 @@
     "options": [
       {
         "key": "A",
-        "text": "AgentCore only supports image-generation models",
+        "text": "Agents are configured in the console instead of being coded",
         "correct": false,
-        "why": "AgentCore supports agents using a wide range of models, not just image models."
+        "why": "That describes Bedrock Agents. AgentCore runs agents written in code with any framework."
       },
       {
         "key": "B",
-        "text": "AgentCore requires rewriting every agent in a single proprietary language",
+        "text": "It requires every agent to use models hosted in Amazon Bedrock",
         "correct": false,
-        "why": "AgentCore is designed to work with existing frameworks without rewrites."
+        "why": "AgentCore works with models inside or outside Bedrock."
       },
       {
         "key": "C",
-        "text": "AgentCore is a data labeling service",
+        "text": "It converts every agent to a single AWS framework",
         "correct": false,
-        "why": "Data labeling is SageMaker Ground Truth. AgentCore is for deploying and operating agents."
+        "why": "AgentCore runs existing agents without rewriting them in one framework."
       },
       {
         "key": "D",
-        "text": "AgentCore works with any agent framework and any foundation model, providing runtime, memory, identity, gateway and observability services",
+        "text": "Any framework or model works, with runtime, memory and identity",
         "correct": true,
-        "why": "AgentCore is framework- and model-agnostic, so the enterprise can operate diverse agents on common infrastructure."
+        "why": "AgentCore is framework- and model-agnostic and adds runtime, memory, identity, gateway and observability services."
       }
     ],
     "explanation": {

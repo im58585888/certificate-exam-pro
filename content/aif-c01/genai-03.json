@@ -66,27 +66,27 @@
     "options": [
       {
         "key": "A",
-        "text": "The prompt was too short to be processed.",
+        "text": "The model is serving answers from a stale cache",
         "correct": false,
-        "why": "Prompt length does not explain different outputs for the same input."
+        "why": "A cache would return the same answer each time; here every answer differs."
       },
       {
         "key": "B",
-        "text": "The model is corrupted and must be retrained.",
+        "text": "Retrieval is returning different documents each time",
         "correct": false,
-        "why": "Varying outputs are normal for sampled generation. Retraining is not needed."
+        "why": "This is a plain prompt to an LLM with no retrieval step, so retrieval cannot explain the variation."
       },
       {
         "key": "C",
-        "text": "LLM outputs are nondeterministic when sampling settings allow randomness; lowering temperature reduces variation, but generative outputs should be tested for quality rather than exact text.",
+        "text": "Sampling is random by design; lower temperature and test for quality",
         "correct": true,
-        "why": "Generation samples from probabilities, so identical prompts can yield different outputs. Settings such as temperature control how much variation occurs."
+        "why": "Generation samples from probabilities, so identical prompts can differ. Lower temperature reduces this, and testing should judge quality rather than exact text."
       },
       {
         "key": "D",
-        "text": "The engineer's network connection altered the responses.",
+        "text": "The provider updated the model between the five requests",
         "correct": false,
-        "why": "Network issues do not rewrite model output. The variation comes from sampling."
+        "why": "Model versions do not change between back-to-back requests; sampling explains the variation."
       }
     ],
     "explanation": {
@@ -116,27 +116,27 @@
     "options": [
       {
         "key": "A",
-        "text": "LLMs cannot generate text in full sentences",
+        "text": "Hallucination: the model may invent facts in its answers",
         "correct": false,
-        "why": "LLMs generate fluent text. The difficulty is explaining why, not producing words."
+        "why": "Hallucination concerns false content. The regulator's question is about explaining why a choice was made."
       },
       {
         "key": "B",
-        "text": "LLMs can only process images",
+        "text": "Nondeterminism: the same prompt can give different answers",
         "correct": false,
-        "why": "LLMs process text, and many are multimodal."
+        "why": "Variability makes behavior harder to reproduce, but the core difficulty is explaining the reasoning behind one output."
       },
       {
         "key": "C",
-        "text": "LLMs have no parameters",
+        "text": "Knowledge cutoff: the model lacks current product data",
         "correct": false,
-        "why": "LLMs have very many parameters, which is part of why they are hard to interpret."
+        "why": "A cutoff limits what the model knows, not whether its reasoning can be explained."
       },
       {
         "key": "D",
-        "text": "Low interpretability: it is hard to trace how billions of parameters produced a particular output",
+        "text": "Low interpretability: outputs can't be traced to specific reasons",
         "correct": true,
-        "why": "Large neural models are largely black boxes. Their internal reasoning cannot be fully traced to give a precise causal explanation."
+        "why": "Large models are largely black boxes; their decisions emerge from billions of parameters and cannot be precisely explained."
       }
     ],
     "explanation": {
@@ -182,15 +182,15 @@
       },
       {
         "key": "C",
-        "text": "Zero inference cost",
+        "text": "Lower cost per prediction than task-specific models",
         "correct": false,
-        "why": "FM inference has real costs, typically per token."
+        "why": "Foundation models are often more expensive per request than small task-specific models; the benefit shown is flexibility."
       },
       {
         "key": "D",
-        "text": "Guaranteed accuracy",
+        "text": "Explainability of each output",
         "correct": false,
-        "why": "FMs can make mistakes. Accuracy is never guaranteed."
+        "why": "Foundation models are hard to interpret; explainability is a limitation, not the advantage shown here."
       }
     ],
     "explanation": {
@@ -220,27 +220,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Lower storage requirements",
+        "text": "Adaptability across many unrelated tasks",
         "correct": false,
-        "why": "Replacing a phone tree does not mainly affect storage."
+        "why": "The assistant handles one task, customer questions; the advantage shown is natural conversation."
       },
       {
         "key": "B",
         "text": "Conversational capability and responsiveness",
         "correct": true,
-        "why": "Understanding free-form language and responding naturally in a dialogue is a core strength of generative AI."
+        "why": "Understanding free-form language and responding naturally, including follow-ups, is a core strength of generative AI."
       },
       {
         "key": "C",
-        "text": "Elimination of all errors",
+        "text": "Content generation at scale",
         "correct": false,
-        "why": "Generative assistants can still make mistakes and need safeguards."
+        "why": "The value here is interactive conversation with callers, not producing large volumes of content."
       },
       {
         "key": "D",
-        "text": "Faster model training",
+        "text": "Consistency through deterministic outputs",
         "correct": false,
-        "why": "The improvement is in user interaction, not training speed."
+        "why": "Generative outputs are generally not deterministic; the benefit is flexible, natural dialogue."
       }
     ],
     "explanation": {
@@ -270,27 +270,27 @@
     "options": [
       {
         "key": "A",
-        "text": "The model is overfitting; add regularization.",
+        "text": "Hallucination; ask the model to cite its sources",
         "correct": false,
-        "why": "This is not a training-fit issue. The model simply never saw the new policy."
+        "why": "The model is not inventing facts; it is answering from the only policy it knows. Citations cannot add the new policy."
       },
       {
         "key": "B",
-        "text": "The model's context window is too large; reduce it.",
+        "text": "Nondeterminism; lower the temperature",
         "correct": false,
-        "why": "Context window size does not cause outdated knowledge."
+        "why": "The answer is consistently outdated, not randomly varying. Temperature cannot add new knowledge."
       },
       {
         "key": "C",
-        "text": "The model has a training data cutoff and no access to the new document; supply current information through retrieval augmented generation (RAG).",
+        "text": "Training cutoff; supply the new policy through RAG",
         "correct": true,
-        "why": "Models only know their training data. RAG retrieves up-to-date documents at query time so answers reflect current information."
+        "why": "Models know only their training data. RAG retrieves the current document at query time, without retraining."
       },
       {
         "key": "D",
-        "text": "The model's temperature is too low; increase it.",
+        "text": "Outdated model; fine-tune it on the new policy",
         "correct": false,
-        "why": "Temperature changes randomness, not what the model knows. Higher temperature would not provide the new policy."
+        "why": "Fine-tuning would work slowly and expensively and would need repeating for every policy change; RAG updates instantly."
       }
     ],
     "explanation": {
@@ -321,27 +321,27 @@
     "options": [
       {
         "key": "A",
-        "text": "An image-generation model",
+        "text": "The most capable model, to maximize reply quality",
         "correct": false,
-        "why": "Image generation does not produce text reply suggestions."
+        "why": "Top models are slower and costlier per token, which a simple, high-volume, latency-sensitive task does not need."
       },
       {
         "key": "B",
-        "text": "The largest, most capable model available, regardless of cost",
+        "text": "A model with the longest available context window",
         "correct": false,
-        "why": "The largest models are slower and more expensive per token. A simple task with strict latency and huge volume does not need them."
+        "why": "Short chat suggestions do not need a long context, and long-context models may cost more."
       },
       {
         "key": "C",
-        "text": "A model with the longest available context window",
+        "text": "A large model, served with batch inference to cut cost",
         "correct": false,
-        "why": "Short chat replies do not need a huge context window, and long-context models may cost more."
+        "why": "Batch inference is asynchronous, so it cannot return suggestions within a fraction of a second."
       },
       {
         "key": "D",
-        "text": "A smaller, faster, lower-cost model that performs well enough on this simple task",
+        "text": "A small, fast, low-cost model that does the task well",
         "correct": true,
-        "why": "Smaller models offer lower latency and cost per request, which matters at millions of requests per day for a simple task."
+        "why": "For simple, high-volume, latency-sensitive tasks, smaller models give the best value."
       }
     ],
     "explanation": {
@@ -376,27 +376,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Compliance and constraints, including regional availability and licensing terms",
+        "text": "Compliance constraints: regional availability and license terms",
         "correct": true,
-        "why": "Where a model can run and the legal terms of its use are compliance and constraint factors in model selection."
+        "why": "Where a model can run and whether its terms allow commercial use are compliance and constraint factors."
       },
       {
         "key": "B",
-        "text": "Number of training epochs",
+        "text": "Performance: accuracy on summarization benchmarks",
         "correct": false,
-        "why": "Training epochs apply to model training, not to selecting a model that satisfies regulations."
+        "why": "Accuracy matters, but the stated requirements are about Regions and licensing."
       },
       {
         "key": "C",
-        "text": "Embedding dimension and chunk size",
+        "text": "Cost: price per input and output token",
         "correct": false,
-        "why": "These are retrieval design choices, not compliance factors."
+        "why": "Cost is a selection factor, but nothing in the requirements concerns price."
       },
       {
         "key": "D",
-        "text": "Temperature and top-p",
+        "text": "Modality: support for text and document input",
         "correct": false,
-        "why": "These are inference settings that control randomness, not compliance or licensing requirements."
+        "why": "Modality determines what the model can process; the requirements here concern where and under what terms it is used."
       }
     ],
     "explanation": {
@@ -430,27 +430,27 @@
     "options": [
       {
         "key": "A",
-        "text": "The model's parameter count",
+        "text": "Customer satisfaction ratings of the assistant",
         "correct": false,
-        "why": "Model size says nothing about business outcomes."
+        "why": "Satisfaction shows shoppers like it, but not whether they buy more."
       },
       {
         "key": "B",
-        "text": "Conversion rate of sessions that use the assistant compared with similar sessions that do not",
+        "text": "Conversion rate of assistant sessions versus similar sessions",
         "correct": true,
-        "why": "Conversion rate directly measures whether shoppers buy more often, and comparing against a control isolates the assistant's effect."
+        "why": "Comparing conversion with and without the assistant directly measures its effect on sales."
       },
       {
         "key": "C",
-        "text": "Average number of tokens per response",
+        "text": "Number of conversations the assistant handles each day",
         "correct": false,
-        "why": "Token counts relate to cost and verbosity, not to whether sales increase."
+        "why": "Usage shows adoption, not whether those conversations lead to purchases."
       },
       {
         "key": "D",
-        "text": "BLEU score of the assistant's replies",
+        "text": "Average order value across all site visitors",
         "correct": false,
-        "why": "BLEU measures text overlap with references and does not measure sales impact."
+        "why": "A site-wide average mixes in everyone and is affected by many factors, so it cannot isolate the assistant's effect."
       }
     ],
     "explanation": {
@@ -690,27 +690,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Deploy it as planned because LLMs are always accurate in medical contexts.",
+        "text": "Deploy it, using a medical-specialist model for accuracy",
         "correct": false,
-        "why": "LLMs can hallucinate and make errors, which is dangerous for dosage instructions."
+        "why": "A specialist model reduces errors but cannot eliminate them; dosage instructions still need clinical review."
       },
       {
         "key": "B",
-        "text": "Use the LLM only to draft instructions, with qualified clinicians reviewing and approving every output before it reaches patients.",
+        "text": "Let the LLM draft, with clinicians approving every instruction",
         "correct": true,
-        "why": "For high-stakes outputs, generative AI should assist experts, with human review to catch errors before harm occurs."
+        "why": "For high-stakes outputs, generative AI should assist experts, with human review catching errors before harm occurs."
       },
       {
         "key": "C",
-        "text": "Increase the temperature to get more creative dosage instructions.",
+        "text": "Deploy it with Bedrock Guardrails to block unsafe content",
         "correct": false,
-        "why": "Creativity is the opposite of what dosage instructions need. Higher temperature increases variability and risk."
+        "why": "Guardrails filter harmful content but cannot verify that a dosage is medically correct."
       },
       {
         "key": "D",
-        "text": "Remove all references to medications from the prompts.",
+        "text": "Deploy it with RAG over the hospital's drug formulary",
         "correct": false,
-        "why": "This would make the instructions useless and does not address the accuracy risk."
+        "why": "Grounding in the formulary reduces errors, but a wrong instruction sent straight to a patient is still too risky without review."
       }
     ],
     "explanation": {
@@ -744,27 +744,27 @@
     "options": [
       {
         "key": "A",
-        "text": "The mid-size model, because the middle option is always best",
+        "text": "The mid-size model, as a balance of accuracy and cost",
         "correct": false,
-        "why": "There is no rule that the middle option is best. The decision should follow requirements, cost and latency."
+        "why": "The small model already meets the requirement, so paying more for the mid-size model buys nothing the business needs."
       },
       {
         "key": "B",
-        "text": "None, because no model reached 100%",
+        "text": "The largest model, since accuracy matters most",
         "correct": false,
-        "why": "100% accuracy is rarely achievable. The requirement is 90%, which all three meet."
+        "why": "The extra two points do not change whether the requirement is met, while cost and latency are much higher."
       },
       {
         "key": "C",
-        "text": "The small model, because it meets the requirement at much lower cost and latency",
+        "text": "The small model: it meets the bar at far lower cost and latency",
         "correct": true,
         "why": "Once the quality bar is met, lower cost and faster responses usually provide better overall value."
       },
       {
         "key": "D",
-        "text": "The largest model, because higher accuracy is always worth the cost",
+        "text": "None; fine-tune the small model up to 94% first",
         "correct": false,
-        "why": "The extra 2 points of accuracy do not change whether the requirement is met, but cost and latency are much higher."
+        "why": "Fine-tuning adds cost and effort to exceed a requirement that is already met."
       }
     ],
     "explanation": {
@@ -794,27 +794,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Perfect factual accuracy",
+        "text": "Factual accuracy without human review",
         "correct": false,
         "why": "Generated descriptions can contain errors, so they should be grounded in product data and spot-checked."
       },
       {
         "key": "B",
-        "text": "No need for any product data",
+        "text": "Deterministic, identical outputs",
         "correct": false,
-        "why": "Good descriptions need accurate product attributes as input to avoid invented details."
+        "why": "Generative outputs are typically not deterministic, and identical outputs would defeat the goal of unique descriptions."
       },
       {
         "key": "C",
-        "text": "Deterministic outputs",
+        "text": "Explainable, traceable outputs",
         "correct": false,
-        "why": "Generative outputs are typically nondeterministic. The benefit here is scale."
+        "why": "Explainability is a limitation of large models, not the advantage that matters here."
       },
       {
         "key": "D",
-        "text": "Ability to generate content at scale",
+        "text": "Content generation at scale",
         "correct": true,
-        "why": "Generative AI can draft large volumes of unique content quickly, with humans reviewing samples or edge cases."
+        "why": "Generative AI can draft large volumes of unique content quickly, far beyond what copywriters can produce."
       }
     ],
     "explanation": {
@@ -844,27 +844,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Measure cross-domain performance by evaluating the model on representative datasets from each use case",
+        "text": "Evaluate the model on representative data from each use case",
         "correct": true,
-        "why": "Testing on data from each domain shows whether one model performs adequately across both use cases."
+        "why": "Testing on data from each domain shows whether one model performs well enough across both."
       },
       {
         "key": "B",
-        "text": "Measure only the model's response latency",
+        "text": "Compare public benchmark scores for both kinds of task",
         "correct": false,
-        "why": "Latency matters, but it does not show whether outputs are accurate or useful in each domain."
+        "why": "Benchmarks may not reflect the company's legal documents or customer conversations."
       },
       {
         "key": "C",
-        "text": "Evaluate the model only on a general public benchmark",
+        "text": "Test it only on the legal summaries, the harder use case",
         "correct": false,
-        "why": "General benchmarks may not reflect performance on the company's specific legal and service tasks."
+        "why": "Strong results on one domain do not guarantee good performance on the other."
       },
       {
         "key": "D",
-        "text": "Choose the model with the most parameters and skip evaluation",
+        "text": "Pilot it in customer chat and extend it if users are happy",
         "correct": false,
-        "why": "Model size does not guarantee good performance in either specific domain."
+        "why": "This tests only one domain, and legal summaries need checks that customer chat feedback will not reveal."
       }
     ],
     "explanation": {
@@ -895,27 +895,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Remove numbers from the prompt",
+        "text": "Use chain-of-thought so the model shows its working",
         "correct": false,
-        "why": "The calculation needs the numbers. Removing them makes the task impossible."
+        "why": "Showing steps helps a little, but the model can still make arithmetic errors within those steps."
       },
       {
         "key": "B",
-        "text": "Have the model call a calculation tool or code interpreter to perform the math, then explain the results",
+        "text": "Have the model call a calculator or code tool for the math",
         "correct": true,
         "why": "Deterministic tools compute exact results, while the model handles understanding the request and explaining the output."
       },
       {
         "key": "C",
-        "text": "Ask the model to answer faster",
+        "text": "Fine-tune the model on amortization examples",
         "correct": false,
-        "why": "Speed instructions do not improve arithmetic accuracy."
+        "why": "Fine-tuning improves familiarity with the task but does not make a language model a reliable calculator."
       },
       {
         "key": "D",
-        "text": "Increase the temperature so the model tries different answers",
+        "text": "Use a larger model with stronger reasoning",
         "correct": false,
-        "why": "More randomness makes calculations less reliable."
+        "why": "Larger models make fewer mistakes but are still not exact calculators for multi-step figures."
       }
     ],
     "explanation": {
@@ -945,27 +945,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Image generation quality",
+        "text": "A high maximum output length for long answers",
         "correct": false,
-        "why": "The task is text analysis, not image generation."
+        "why": "The result is a list of inconsistencies, not a long document; the input is what must be large."
       },
       {
         "key": "B",
-        "text": "The smallest possible model size",
+        "text": "Support for prompt caching of long inputs",
         "correct": false,
-        "why": "Small models often have shorter context windows and weaker long-document reasoning."
+        "why": "Caching helps when the same long input is reused, but the essential requirement is fitting the whole document in one request."
       },
       {
         "key": "C",
-        "text": "A large context window (maximum input length) that can hold the whole document",
+        "text": "A large context window that holds the whole document",
         "correct": true,
-        "why": "Comparing sections across a 300-page document in one request requires the model to accept a very long input."
+        "why": "Comparing sections across 300 pages in one request requires the model to accept the entire document as input."
       },
       {
         "key": "D",
-        "text": "Support for speech synthesis",
+        "text": "A small model that responds with low latency",
         "correct": false,
-        "why": "Audio output is unrelated to analyzing long documents."
+        "why": "Small models often have shorter context windows and weaker long-document reasoning."
       }
     ],
     "explanation": {
@@ -999,27 +999,27 @@
     "options": [
       {
         "key": "A",
-        "text": "The context window is too short; double it.",
+        "text": "The prompts are too vague; add more detailed instructions",
         "correct": false,
-        "why": "Context length does not cause biased or toxic outputs."
+        "why": "Clearer prompts help, but stereotypes come from patterns learned in training data, which prompts alone cannot reliably suppress."
       },
       {
         "key": "B",
-        "text": "The model is overfitting to the prompt; remove the prompt.",
+        "text": "The temperature is too high; set it to zero",
         "correct": false,
-        "why": "Removing the prompt makes the tool useless and does not address learned bias."
+        "why": "Lower temperature makes outputs consistent, not unbiased; learned stereotypes can still appear."
       },
       {
         "key": "C",
-        "text": "The tokenizer is broken; switch to a different alphabet.",
+        "text": "The model is too small; switch to a larger model",
         "correct": false,
-        "why": "Tokenization does not cause stereotypes. The issue comes from learned patterns in training data."
+        "why": "Larger models are trained on similar data and can also reproduce bias and toxicity."
       },
       {
         "key": "D",
-        "text": "The model learned patterns from broad internet data that contains biased and toxic content; apply guardrails, testing and human review.",
+        "text": "Patterns learned from biased web data; add guardrails, testing, review",
         "correct": true,
-        "why": "Foundation models reflect their training data. Content filters, bias testing and review reduce harmful outputs."
+        "why": "Models reflect their training data. Content filters, bias testing and review reduce harmful outputs."
       }
     ],
     "explanation": {
@@ -1049,27 +1049,27 @@
     "options": [
       {
         "key": "A",
-        "text": "The measurable benefits (such as hours saved or revenue gained) and the total costs (such as development, inference, integration and maintenance)",
+        "text": "Measurable benefits and the total cost to build and run it",
         "correct": true,
-        "why": "ROI compares the value generated against all costs of building and operating the solution."
+        "why": "ROI compares value generated (time saved, revenue gained) with all costs, including development, inference, integration and maintenance."
       },
       {
         "key": "B",
-        "text": "The number of employees in the company",
+        "text": "The model's benchmark scores and latency",
         "correct": false,
-        "why": "Headcount alone does not quantify benefits or costs of the assistant."
+        "why": "These describe technical quality, not financial return."
       },
       {
         "key": "C",
-        "text": "Only the model's benchmark scores",
+        "text": "The price per 1,000 tokens and the expected volume",
         "correct": false,
-        "why": "Benchmarks measure quality, not financial return."
+        "why": "This estimates part of the cost only; ROI also needs the benefits and the other costs."
       },
       {
         "key": "D",
-        "text": "Only the price per 1,000 tokens",
+        "text": "The number of employees who will use the assistant",
         "correct": false,
-        "why": "Token price is one cost component. ROI also needs the benefits and the other costs."
+        "why": "User count helps estimate benefits but is not a measure of value or cost by itself."
       }
     ],
     "explanation": {
@@ -1099,27 +1099,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Support for diffusion",
+        "text": "The lowest price per input and output token",
         "correct": false,
-        "why": "Diffusion is an image-generation technique and does not affect language support."
+        "why": "A cheap model that performs poorly in Arabic or Japanese would not meet the equal-quality requirement."
       },
       {
         "key": "B",
-        "text": "Multilingual capability verified on those languages",
+        "text": "Verified quality in Japanese, Portuguese and Arabic",
         "correct": true,
-        "why": "The model must perform well in each required language. Evaluating it on those languages confirms suitability."
+        "why": "Multilingual quality varies between models, so testing on each required language is essential."
       },
       {
         "key": "C",
-        "text": "Image-generation resolution",
+        "text": "The largest context window among the candidates",
         "correct": false,
-        "why": "Image generation is irrelevant to multilingual text support."
+        "why": "Support conversations are short; context length does not determine language quality."
       },
       {
         "key": "D",
-        "text": "The smallest parameter count",
+        "text": "Support for image input as well as text",
         "correct": false,
-        "why": "Size alone does not guarantee language coverage. Some small models perform poorly in less common languages."
+        "why": "Nothing in the requirement involves images."
       }
     ],
     "explanation": {
@@ -1149,27 +1149,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Generative AI guarantees perfect summaries.",
+        "text": "Generative models produce reliable summaries with no testing",
         "correct": false,
-        "why": "Summaries can contain errors and should be tested and monitored."
+        "why": "Summaries can contain errors and should be tested before launch, even with a strong model."
       },
       {
         "key": "B",
-        "text": "Generative AI requires a full data science team.",
+        "text": "AWS provides a data science team with every Bedrock account",
         "correct": false,
-        "why": "Managed generative AI services are designed so developers without ML expertise can build features."
+        "why": "Bedrock does not include a data science team; its value is that developers can use models without one."
       },
       {
         "key": "C",
-        "text": "Pre-trained foundation models can be used through APIs and prompts, without collecting data or training a model.",
+        "text": "Pre-trained models work through APIs and prompts, with no training",
         "correct": true,
-        "why": "Using an existing FM through a managed API removes the need for data collection, training and ML infrastructure."
+        "why": "Calling an existing FM through a managed API removes the need for data collection, training and ML infrastructure."
       },
       {
         "key": "D",
-        "text": "Generative AI always runs on the user's laptop for free.",
+        "text": "Summarization models run for free on users' devices",
         "correct": false,
-        "why": "Most FMs run in the cloud and are billed per use."
+        "why": "Most foundation models run in the cloud and are billed per use."
       }
     ],
     "explanation": {
@@ -1198,27 +1198,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Ignore it, because wording never matters",
+        "text": "Use the longest, most detailed prompt possible",
         "correct": false,
-        "why": "The team has observed that wording matters. Ignoring it leads to unpredictable quality."
+        "why": "Length does not remove sensitivity to wording and adds cost; changes still need testing."
       },
       {
         "key": "B",
-        "text": "Retrain the model every time a prompt changes",
+        "text": "Fine-tune the model so wording no longer matters",
         "correct": false,
-        "why": "Retraining is unnecessary and expensive. Prompt sensitivity is handled through prompt engineering and evaluation."
+        "why": "Fine-tuning is costly and models remain sensitive to prompt wording afterward."
       },
       {
         "key": "C",
-        "text": "Use a random prompt for each request",
+        "text": "Set the temperature to zero to remove the sensitivity",
         "correct": false,
-        "why": "Random prompts make quality even less predictable."
+        "why": "Zero temperature makes a given prompt more repeatable, but different wordings still produce different quality."
       },
       {
         "key": "D",
-        "text": "Systematically test prompt variations against an evaluation dataset and manage the chosen prompts as versioned assets",
+        "text": "Test variants against an evaluation set and version the prompts",
         "correct": true,
-        "why": "Treating prompts like code, with testing and versioning, controls quality and makes changes safe."
+        "why": "Treating prompts like code, with evaluation and versioning, controls quality and makes changes safe."
       }
     ],
     "explanation": {
@@ -1248,27 +1248,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Whether the model supports the customization methods the company plans to use, such as fine-tuning, on its chosen platform",
+        "text": "Whether it supports fine-tuning on the chosen platform",
         "correct": true,
-        "why": "Not every model supports every customization method on every platform. Checking up front avoids having to switch models later."
+        "why": "Only some models support fine-tuning or other customization on a given platform, so checking up front avoids switching later."
       },
       {
         "key": "B",
-        "text": "Whether the model has a short name",
+        "text": "Whether it has the largest context window available",
         "correct": false,
-        "why": "A model's name has no effect on its suitability."
+        "why": "Context length is unrelated to adapting a writing style through fine-tuning."
       },
       {
         "key": "C",
-        "text": "Whether the model can generate images",
+        "text": "Whether it scores highest on writing benchmarks",
         "correct": false,
-        "why": "Image generation is irrelevant to adapting a writing style."
+        "why": "Benchmark scores do not tell you whether the model can be fine-tuned on the company's data."
       },
       {
         "key": "D",
-        "text": "Whether the model has the highest temperature setting",
+        "text": "Whether it supports prompt caching",
         "correct": false,
-        "why": "Temperature is a runtime setting available on most models and is not a selection criterion for customization."
+        "why": "Prompt caching helps with repeated prompts, not with customizing a model's style."
       }
     ],
     "explanation": {

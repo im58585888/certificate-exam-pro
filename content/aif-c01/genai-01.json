@@ -173,27 +173,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Transformers, using a self-attention mechanism to weigh how each token relates to the others",
+        "text": "Transformers, using self-attention across all tokens",
         "correct": true,
-        "why": "Transformer models use self-attention to capture relationships between all tokens in a sequence and process tokens in parallel, which enables training at massive scale."
+        "why": "Transformers use self-attention to weigh how every token relates to every other token and process tokens in parallel, enabling training at massive scale."
       },
       {
         "key": "B",
-        "text": "Decision trees, using information gain to split text",
+        "text": "Recurrent neural networks, processing tokens one at a time",
         "correct": false,
-        "why": "Decision trees are a traditional ML method for tabular data. They are not the architecture behind modern LLMs."
+        "why": "RNNs were used for language before transformers, but processing tokens sequentially made them slow to train at scale and weak on long-range context."
       },
       {
         "key": "C",
-        "text": "K-means, grouping words into clusters",
+        "text": "Convolutional neural networks, using sliding filters",
         "correct": false,
-        "why": "K-means is an unsupervised clustering algorithm. It cannot generate language."
+        "why": "CNNs are mainly used for images. They are not the architecture behind modern LLMs."
       },
       {
         "key": "D",
-        "text": "Convolutional neural networks, using image filters",
+        "text": "Diffusion models, removing noise step by step",
         "correct": false,
-        "why": "CNNs are mainly used for images. LLMs are built on a different architecture designed for sequences."
+        "why": "Diffusion models are mainly used to generate images, not text."
       }
     ],
     "explanation": {
@@ -429,27 +429,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Increase the temperature setting",
+        "text": "Switch to a model with a larger context window",
         "correct": false,
-        "why": "Temperature changes how random the output is. It does not reduce the number of tokens billed."
+        "why": "A larger context window allows more tokens but does not make each token cheaper."
       },
       {
         "key": "B",
-        "text": "Reduce the number of input tokens per request, for example by shortening the system prompt and summarizing older chat history",
+        "text": "Cut input tokens: shorter system prompt, summarized history",
         "correct": true,
-        "why": "On-demand FMs are billed per input and output token. Most tokens here are input, so trimming them lowers cost directly."
+        "why": "Nearly all tokens here are input. Trimming the system prompt and summarizing older history lowers cost directly."
       },
       {
         "key": "C",
-        "text": "Switch to a model with a larger context window",
+        "text": "Lower max tokens to limit the length of responses",
         "correct": false,
-        "why": "A larger context window allows more tokens but does not make each token cheaper. It may even encourage sending more tokens."
+        "why": "Responses average only 150 tokens, so capping output saves little compared with the 6,000+ input tokens."
       },
       {
         "key": "D",
-        "text": "Ask users to type longer messages",
+        "text": "Switch to Provisioned Throughput for the model",
         "correct": false,
-        "why": "Longer messages add input tokens and increase cost."
+        "why": "Provisioned Throughput buys dedicated capacity by the hour; it does not reduce the tokens each request consumes and may cost more if underused."
       }
     ],
     "explanation": {
@@ -637,27 +637,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Increasing the temperature so the model explores more answers",
+        "text": "Use a model with a larger context window",
         "correct": false,
-        "why": "Higher temperature adds randomness and would make answers less consistent, not more."
+        "why": "More room lets even more noise in; the problem is what goes into the context, not its size."
       },
       {
         "key": "B",
-        "text": "Context engineering: deliberately selecting, ordering, summarizing and limiting what goes into the context, such as relevant retrieved facts, concise memory and essential instructions",
+        "text": "Context engineering: select, order, summarize and trim context",
         "correct": true,
-        "why": "Context engineering curates the information the model sees at each step, so the right instructions, facts and history are present without noise."
+        "why": "Curating the context at each step keeps the right instructions, facts and memory present without clutter."
       },
       {
         "key": "C",
-        "text": "Pre-training a new model from scratch",
+        "text": "Fine-tune the model on past conversations",
         "correct": false,
-        "why": "Pre-training is extremely costly and does not fix what is placed in the context window at inference time."
+        "why": "Fine-tuning does not change what is placed in the context window at inference time."
       },
       {
         "key": "D",
-        "text": "Removing the system prompt to free up space",
+        "text": "Lower the temperature for more consistent answers",
         "correct": false,
-        "why": "The system prompt carries key instructions. Removing it makes behavior worse."
+        "why": "Lower temperature reduces randomness but cannot supply instructions and facts that are missing from the context."
       }
     ],
     "explanation": {
@@ -900,27 +900,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Pre-training uses a small labeled dataset; fine-tuning uses huge unlabeled datasets.",
+        "text": "Pre-training uses a small labeled set; fine-tuning uses huge unlabeled data",
         "correct": false,
-        "why": "This is reversed. Pre-training uses massive, broad, mostly unlabeled data; fine-tuning uses a smaller, task-specific dataset."
+        "why": "This is reversed: pre-training uses massive, mostly unlabeled data, and fine-tuning uses a smaller, targeted dataset."
       },
       {
         "key": "B",
-        "text": "Pre-training builds general capabilities from massive broad data; fine-tuning further trains the pre-trained model on a smaller, targeted dataset to specialize it.",
+        "text": "Pre-training learns from broad data; fine-tuning specializes on targeted data",
         "correct": true,
-        "why": "Pre-training gives the model broad knowledge, and fine-tuning adapts it to a domain, task or style with far less data and compute."
+        "why": "Pre-training gives the model broad capabilities, and fine-tuning adapts it to a domain, task or style with much less data."
       },
       {
         "key": "C",
-        "text": "Pre-training and fine-tuning are both done at inference time.",
+        "text": "Pre-training happens per request; fine-tuning happens once before deployment",
         "correct": false,
-        "why": "Both are training processes that update model weights. Inference uses the trained model without updating it."
+        "why": "Both are training processes done before use. Requests use the trained model without changing it."
       },
       {
         "key": "D",
-        "text": "Fine-tuning creates a model from scratch, and pre-training adjusts an existing model.",
+        "text": "Fine-tuning builds the base model; pre-training adapts it to one task",
         "correct": false,
-        "why": "This swaps the definitions. Pre-training builds the base model; fine-tuning adapts it."
+        "why": "This swaps them: pre-training builds the base model, and fine-tuning adapts it."
       }
     ],
     "explanation": {
@@ -954,27 +954,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Exact keyword matching only",
+        "text": "Keyword search with a synonym list for each product",
         "correct": false,
-        "why": "Exact keyword matching misses products that use different words with the same meaning."
+        "why": "Synonym lists help a little, but they cannot cover phrases like \"cozy reading chair for a small apartment\" the way meaning-based search can."
       },
       {
         "key": "B",
-        "text": "A GAN that generates new furniture images",
+        "text": "A model fine-tuned to write new product descriptions",
         "correct": false,
-        "why": "Generating images does not retrieve real products that match a request."
+        "why": "Rewriting descriptions does not let shoppers find products by meaning."
       },
       {
         "key": "C",
-        "text": "Semantic search using embeddings of product descriptions and shopper queries",
+        "text": "Semantic search with embeddings of products and queries",
         "correct": true,
-        "why": "Embeddings capture meaning, so a query about a cozy, compact reading chair can match products described differently."
+        "why": "Embeddings capture meaning, so a request can match products described in different words."
       },
       {
         "key": "D",
-        "text": "A text-to-speech engine",
+        "text": "A recommendation model trained on past purchases",
         "correct": false,
-        "why": "Text to speech reads text aloud and does not find products."
+        "why": "Recommendations personalize from behavior; they do not interpret a shopper's typed request."
       }
     ],
     "explanation": {
@@ -1008,27 +1008,27 @@
     "options": [
       {
         "key": "A",
-        "text": "A speech recognition model",
+        "text": "A text-generation model that summarizes each chunk",
         "correct": false,
-        "why": "Speech recognition converts audio to text. The documents are already text and need to be turned into vectors."
+        "why": "Summaries are still text. The vector store needs numeric vectors produced by an embedding model."
       },
       {
         "key": "B",
-        "text": "A text-generation model with high temperature",
+        "text": "A reranker model that scores chunk relevance",
         "correct": false,
-        "why": "Text-generation models produce words, and temperature only affects randomness. Vectors come from embedding models."
+        "why": "A reranker reorders retrieved results at query time; it does not create the vectors that get stored."
       },
       {
         "key": "C",
-        "text": "An image-generation model",
+        "text": "A multimodal model that captions each chunk",
         "correct": false,
-        "why": "Image-generation models create pictures, not vector representations of text."
+        "why": "Captions are text too; converting chunks to vectors requires an embedding model."
       },
       {
         "key": "D",
-        "text": "A text embedding model, such as Amazon Titan Text Embeddings",
+        "text": "A text embedding model, such as Titan Text Embeddings",
         "correct": true,
-        "why": "Embedding models output vectors that represent meaning, which is exactly what is stored and searched in a RAG application."
+        "why": "Embedding models output vectors that represent meaning, which is what a RAG vector store holds."
       }
     ],
     "explanation": {
@@ -1058,27 +1058,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Generative models can follow instructions to adapt tone, style and idioms for each audience, not only translate word meaning.",
+        "text": "They can follow instructions to adapt tone, style and idioms",
         "correct": true,
-        "why": "LLMs can be prompted to rewrite content for cultural context and brand voice, going beyond literal translation."
+        "why": "LLMs can be prompted to rewrite content for each culture and brand voice, going beyond literal translation."
       },
       {
         "key": "B",
-        "text": "Generative models guarantee legally accurate translations without review.",
+        "text": "They translate more literally, preserving meaning word for word",
         "correct": false,
-        "why": "No model guarantees accuracy. Important content still needs human review."
+        "why": "Literal translation is the opposite of what the company wants; it wants tone and idioms adapted."
       },
       {
         "key": "C",
-        "text": "Generative models only work with images.",
+        "text": "Their output is fluent, so it needs no human review",
         "correct": false,
-        "why": "LLMs work with text, and many models are multimodal."
+        "why": "Fluent output can still contain errors or culturally inappropriate phrasing, so important copy needs review."
       },
       {
         "key": "D",
-        "text": "Generative models cannot work with languages other than English.",
+        "text": "They are cheaper per word than any translation service",
         "correct": false,
-        "why": "Many foundation models are multilingual and handle many languages."
+        "why": "Cost varies by model and volume; the benefit here is adaptation, not guaranteed lower price."
       }
     ],
     "explanation": {
@@ -1113,27 +1113,27 @@
     "options": [
       {
         "key": "A",
-        "text": "The number of training epochs",
+        "text": "The temperature parameter",
         "correct": false,
-        "why": "Epochs apply to training, not to how long a deployed model's responses are."
+        "why": "Temperature changes how random the wording is, not how long responses can be."
       },
       {
         "key": "B",
-        "text": "The maximum output tokens (max tokens) inference parameter",
+        "text": "The maximum output tokens parameter",
         "correct": true,
-        "why": "Max tokens limits how many tokens the model can generate per response, capping output cost and latency."
+        "why": "Max tokens sets an upper bound on generated tokens, capping both output cost and latency."
       },
       {
         "key": "C",
-        "text": "The chunk overlap in the knowledge base",
+        "text": "The top-p parameter",
         "correct": false,
-        "why": "Chunk overlap affects how documents are split for retrieval, not response length."
+        "why": "Top-p limits which candidate tokens can be sampled; it does not cap response length."
       },
       {
         "key": "D",
-        "text": "The embedding dimension",
+        "text": "The model's context window",
         "correct": false,
-        "why": "Embedding dimension affects vector size for retrieval, not the length of generated responses."
+        "why": "The context window is a fixed property of the model, covering input and output; it is not a per-response length setting."
       }
     ],
     "explanation": {
@@ -1163,27 +1163,27 @@
     "options": [
       {
         "key": "A",
-        "text": "It retrains itself on every user question before answering.",
+        "text": "It retrieves the most similar answer from its training data",
         "correct": false,
-        "why": "Inference does not change the model's weights. The model is not retrained per question."
+        "why": "LLMs do not store and look up answers; they generate text from learned patterns, which is why they can hallucinate."
       },
       {
         "key": "B",
-        "text": "It looks up the answer in a database of verified facts and copies it exactly.",
+        "text": "It plans the whole answer, then writes it out in one step",
         "correct": false,
-        "why": "LLMs do not look up verified facts unless connected to retrieval. They generate text from learned patterns, which is why they can hallucinate."
+        "why": "Generation is incremental: each token is chosen based on everything generated so far."
       },
       {
         "key": "C",
-        "text": "It generates text one token at a time, each time predicting a likely next token based on the prompt and the tokens generated so far.",
+        "text": "It predicts a likely next token, one at a time, from the text so far",
         "correct": true,
-        "why": "LLMs are autoregressive: they predict the next token repeatedly, using probabilities learned during training, until a stop condition is reached."
+        "why": "LLMs are autoregressive: they repeatedly predict the next token until a stop condition is reached."
       },
       {
         "key": "D",
-        "text": "It runs a fixed set of hand-written grammar rules.",
+        "text": "It fills in a template chosen to match the prompt's intent",
         "correct": false,
-        "why": "LLMs learn language patterns from data rather than following hand-written grammar rules."
+        "why": "LLMs do not select and fill templates; they generate free text token by token."
       }
     ],
     "explanation": {
@@ -1213,27 +1213,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Generative AI requires the studio to label millions of images first.",
+        "text": "It needs the studio's own labeled data before it can be used",
         "correct": false,
-        "why": "Pre-trained generative models can be used immediately through prompts without the studio labeling data."
+        "why": "Pre-trained generative models can be used immediately through prompts, without the studio labeling data."
       },
       {
         "key": "B",
-        "text": "Generative AI can only produce text.",
+        "text": "It produces only text, which other tools must turn into media",
         "correct": false,
-        "why": "Generative AI also produces images, audio, video and code."
+        "why": "Generative models also produce images, audio and video directly from prompts."
       },
       {
         "key": "C",
-        "text": "Generative AI cannot be used for creative work.",
+        "text": "It works for concept art but not for audio or video",
         "correct": false,
-        "why": "Creative content generation is one of generative AI's most prominent uses."
+        "why": "Audio and video generation models exist as well as image models."
       },
       {
         "key": "D",
-        "text": "Generative AI can create images, audio and video from text prompts, speeding up prototyping.",
+        "text": "It can create images, audio and video from text prompts",
         "correct": true,
-        "why": "Image, audio and video generation models turn text prompts into media, which helps teams iterate quickly on creative ideas."
+        "why": "Image, audio and video generation models turn descriptions into media, which speeds up creative prototyping."
       }
     ],
     "explanation": {
@@ -1267,27 +1267,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Higher-dimension vectors can capture more nuance but cost more to store and search; lower dimensions reduce cost and latency at some possible loss of accuracy.",
+        "text": "More dimensions capture more nuance but cost more to store and search",
         "correct": true,
-        "why": "This is the usual trade-off: dimensionality balances retrieval quality against storage, memory and query cost."
+        "why": "Dimensionality trades retrieval quality against storage, memory and query cost."
       },
       {
         "key": "B",
-        "text": "Dimension only matters for image-generation models.",
+        "text": "More dimensions are cheaper because values are stored at lower precision",
         "correct": false,
-        "why": "Dimension is a property of embeddings for text, images and other data used in retrieval, not of image generators."
+        "why": "Precision is a separate setting; with the same precision, more dimensions mean more data to store and compare."
       },
       {
         "key": "C",
-        "text": "Lower-dimension vectors always give more accurate retrieval.",
+        "text": "Fewer dimensions give more accurate retrieval because there is less noise",
         "correct": false,
-        "why": "Fewer dimensions usually capture somewhat less nuance. They are chosen to save storage and speed up search, not for better accuracy."
+        "why": "Fewer dimensions usually capture somewhat less nuance; they are chosen to save cost, not to improve accuracy."
       },
       {
         "key": "D",
-        "text": "Vector dimension has no effect on storage or search cost.",
+        "text": "Dimension affects only ingestion time, not storage or query cost",
         "correct": false,
-        "why": "Larger vectors take more storage and memory and make similarity calculations more expensive."
+        "why": "Larger vectors take more storage and memory and make every similarity comparison more expensive."
       }
     ],
     "explanation": {

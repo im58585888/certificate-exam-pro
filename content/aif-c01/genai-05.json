@@ -172,27 +172,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Lowering max tokens to zero",
+        "text": "Provisioned Throughput for the model in that Region",
         "correct": false,
-        "why": "Zero output tokens would make the application useless."
+        "why": "Provisioned Throughput adds dedicated capacity, but the team would have to size and manage it, which it wants to avoid."
       },
       {
         "key": "B",
-        "text": "Switching to an embedding model",
+        "text": "Batch inference for requests that arrive during spikes",
         "correct": false,
-        "why": "Embedding models produce vectors, not the generated responses the application needs."
+        "why": "Batch inference is asynchronous, so users would not get real-time responses during spikes."
       },
       {
         "key": "C",
-        "text": "Moving the application to Amazon S3 Glacier",
+        "text": "Prompt caching for the application's repeated prompts",
         "correct": false,
-        "why": "Glacier is archival storage and cannot serve model inference."
+        "why": "Caching reduces cost and latency per request but does not raise the Region's throughput limits."
       },
       {
         "key": "D",
-        "text": "Cross-Region inference, which routes requests across multiple Regions using an inference profile",
+        "text": "Cross-Region inference using an inference profile",
         "correct": true,
-        "why": "Cross-Region inference distributes on-demand traffic across Regions in a geography to increase throughput and resilience during bursts."
+        "why": "Cross-Region inference routes on-demand requests to Regions with capacity, increasing throughput and resilience without managing capacity."
       }
     ],
     "explanation": {
@@ -280,27 +280,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Fine-tuned models are always free to run after training.",
+        "text": "Custom models run at no charge once training finishes",
         "correct": false,
-        "why": "Inference on custom models is not free. It is billed like other usage, often with additional storage or capacity costs."
+        "why": "Inference on custom models is billed, and model storage or dedicated capacity often adds cost."
       },
       {
         "key": "B",
-        "text": "Custom models add training costs, and serving them can involve additional costs such as model storage and dedicated capacity, so they usually cost more than using a base model with prompts and RAG.",
+        "text": "They add training cost plus ongoing storage and serving costs",
         "correct": true,
-        "why": "Fine-tuning incurs training charges, and custom models can require paid storage and dedicated or specific inference options, raising total cost."
+        "why": "Fine-tuning incurs training charges, and custom models bring storage and serving costs, so they usually cost more than prompts and RAG."
       },
       {
         "key": "C",
-        "text": "Fine-tuning reduces the cost of every other model in the account.",
+        "text": "They cost the same to run as the base model, with no extras",
         "correct": false,
-        "why": "Customizing one model does not change prices for other models."
+        "why": "Custom models are separate resources with their own deployment options and storage charges."
       },
       {
         "key": "D",
-        "text": "Prompt engineering is more expensive than fine-tuning because it requires GPUs for training.",
+        "text": "Prompting needs GPU training time, so it costs more than tuning",
         "correct": false,
-        "why": "Prompt engineering involves no training at all, making it the cheapest customization approach."
+        "why": "Prompt engineering involves no training at all; it is the cheapest customization approach."
       }
     ],
     "explanation": {
@@ -334,27 +334,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Data residency rules never apply to generative AI.",
+        "text": "Wait for the model to arrive in the closest Region",
         "correct": false,
-        "why": "Data residency and privacy regulations apply to AI workloads that process personal data."
+        "why": "Waiting delays the launch indefinitely; the company needs to choose among workable options now."
       },
       {
         "key": "B",
-        "text": "Regions have no effect on latency.",
+        "text": "Data residency rules do not apply to model inference",
         "correct": false,
-        "why": "Distance between users and the Region affects latency."
+        "why": "Prompts can contain personal data, so residency and privacy rules apply to inference too."
       },
       {
         "key": "C",
-        "text": "Model availability varies by Region, so it may need to choose a different model, use another Region (considering latency and data residency) or use cross-Region inference.",
+        "text": "Choose another model, another Region or cross-Region inference",
         "correct": true,
-        "why": "Regional coverage affects which models are usable where, with trade-offs in latency, compliance and cost."
+        "why": "Model availability varies by Region, so the company must weigh alternatives against latency and data residency."
       },
       {
         "key": "D",
-        "text": "All models are available in every Region at all times.",
+        "text": "Reach the model through a VPC endpoint in the closest Region",
         "correct": false,
-        "why": "Model availability differs by Region and changes over time."
+        "why": "A VPC endpoint provides private connectivity to services in that Region; it cannot make an unavailable model available."
       }
     ],
     "explanation": {
@@ -439,25 +439,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Higher responsiveness, availability and redundancy, such as reserved capacity or multi-Region designs, generally cost more than a single-Region on-demand setup.",
+        "text": "Reserved capacity and multi-Region redundancy cost more",
         "correct": true,
-        "why": "Guaranteed capacity and redundancy add cost. The business must balance that cost against the impact of slowdowns or outages."
+        "why": "Guaranteed capacity and redundancy add cost, which the business weighs against the impact of slowdowns or outages."
       },
       {
         "key": "B",
-        "text": "Responsiveness depends only on the prompt wording.",
+        "text": "Multi-Region costs the same, since only tokens are billed",
         "correct": false,
-        "why": "Capacity, model choice, Region and token counts strongly affect responsiveness."
+        "why": "Running the application across Regions adds infrastructure and operational costs beyond tokens."
       },
       {
         "key": "C",
-        "text": "Availability cannot be improved for generative AI applications.",
+        "text": "On-demand capacity alone keeps it responsive during spikes",
         "correct": false,
-        "why": "Designs such as cross-Region inference, multi-Region deployments and reserved capacity improve availability."
+        "why": "On-demand requests can be throttled during spikes; keeping responsiveness under load needs extra capacity, which costs more."
       },
       {
         "key": "D",
-        "text": "Redundancy always reduces total cost.",
+        "text": "Redundancy lowers total cost by spreading traffic",
         "correct": false,
         "why": "Running in more places or reserving capacity typically increases cost."
       }
@@ -493,27 +493,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Cost depends only on the number of requests, not tokens.",
+        "text": "Cost depends on requests, since each has a fixed price",
         "correct": false,
-        "why": "Token-based pricing means longer requests and responses cost more."
+        "why": "Token-based pricing means longer requests and responses cost more; there is no fixed price per request."
       },
       {
         "key": "B",
-        "text": "Input and output tokens are billed, usually at different per-token rates, so both volumes must be estimated.",
+        "text": "Input and output tokens are both billed, at different rates",
         "correct": true,
-        "why": "Pricing is per input token and per output token, and output tokens often cost more per token, so both must be modeled."
+        "why": "Pricing is per input token and per output token, usually at different rates, so both volumes must be modeled."
       },
       {
         "key": "C",
-        "text": "Only output tokens are billed.",
+        "text": "Only output tokens are billed; input tokens are free",
         "correct": false,
-        "why": "On-demand text models bill for both input and output tokens."
+        "why": "On-demand text models bill for input tokens too, which matters here with 2,000 per request."
       },
       {
         "key": "D",
-        "text": "Tokens are billed only during model training.",
+        "text": "Input and output tokens are billed at one flat rate",
         "correct": false,
-        "why": "Inference tokens are billed with on-demand pricing."
+        "why": "Output tokens are typically priced higher than input tokens, so a single rate would misestimate cost."
       }
     ],
     "explanation": {
@@ -647,21 +647,21 @@
     "options": [
       {
         "key": "A",
-        "text": "Remove max-token limits so responses can be as long as possible",
+        "text": "Raise max tokens so long responses are not truncated",
         "correct": false,
-        "why": "Longer responses mean more output tokens and higher cost."
+        "why": "Allowing longer responses increases output tokens and cost."
       },
       {
         "key": "B",
-        "text": "Send duplicate requests to compare answers",
+        "text": "Use the largest model for all requests to reduce retries",
         "correct": false,
-        "why": "Duplicate requests multiply the number of tokens billed, so they increase cost rather than reduce it."
+        "why": "Larger models cost more per token, which outweighs any savings from fewer retries on simple tasks."
       },
       {
         "key": "C",
-        "text": "Always use the largest available model for every request",
+        "text": "Buy Provisioned Throughput for low, irregular traffic",
         "correct": false,
-        "why": "Larger models typically cost more per token and are unnecessary for simple tasks."
+        "why": "Dedicated capacity is billed hourly, so with low, irregular traffic most of it sits idle and costs more."
       },
       {
         "key": "D",
@@ -707,27 +707,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Per image generated, often varying by resolution and quality settings",
+        "text": "Per image generated, varying by size and quality",
         "correct": true,
-        "why": "Image models are commonly priced per generated image, with price depending on attributes such as size and quality."
+        "why": "Image models are commonly priced per generated image, with the price depending on resolution and quality."
       },
       {
         "key": "B",
-        "text": "Per hour of the user's login time",
+        "text": "Per input token of the text prompt only",
         "correct": false,
-        "why": "Pricing is based on model usage, not login time."
+        "why": "Text tokens are the unit for text models; image generation is priced by the images produced."
       },
       {
         "key": "C",
-        "text": "A single flat fee for unlimited images",
+        "text": "Per hour that the model is deployed",
         "correct": false,
-        "why": "On-demand pricing is usage-based, not unlimited."
+        "why": "Hourly billing applies to dedicated capacity such as Provisioned Throughput, not on-demand use."
       },
       {
         "key": "D",
-        "text": "Per gigabyte of training data uploaded",
+        "text": "A flat monthly fee for unlimited images",
         "correct": false,
-        "why": "On-demand image generation is not priced by training data volume."
+        "why": "On-demand pricing is usage-based, not unlimited."
       }
     ],
     "explanation": {
@@ -758,27 +758,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Switch to batch inference",
+        "text": "Switch to Provisioned Throughput for the large model",
         "correct": false,
-        "why": "Batch inference is asynchronous and far too slow for a live voice conversation."
+        "why": "Dedicated capacity prevents throttling but does not make the large model start responding faster."
       },
       {
         "key": "B",
-        "text": "Use a smaller, faster model (or a latency-optimized option) and stream the response as it is generated",
+        "text": "Use a smaller or latency-optimized model and stream the reply",
         "correct": true,
-        "why": "Smaller or latency-optimized models produce tokens faster, and streaming lets the app start speaking as soon as the first tokens arrive."
+        "why": "Smaller or latency-optimized models produce first tokens sooner, and streaming lets speech start as soon as they arrive."
       },
       {
         "key": "C",
-        "text": "Add more few-shot examples to every prompt",
+        "text": "Add prompt caching for the system prompt",
         "correct": false,
-        "why": "More examples increase input tokens and processing time."
+        "why": "Caching can trim some processing time, but it cannot close a gap of several seconds on a large model."
       },
       {
         "key": "D",
-        "text": "Raise the max-tokens limit",
+        "text": "Raise max tokens so each reply completes in one call",
         "correct": false,
-        "why": "Allowing longer outputs does not make the first tokens arrive sooner."
+        "why": "Allowing longer replies does not make the first tokens arrive sooner."
       }
     ],
     "explanation": {
@@ -858,27 +858,27 @@
     "options": [
       {
         "key": "A",
-        "text": "RAG requires pre-training a new model.",
+        "text": "Pasting the manual is cheaper because there is no vector store",
         "correct": false,
-        "why": "RAG uses existing models with retrieved context. No pre-training is needed."
+        "why": "Hundreds of thousands of tokens per question cost far more than a vector store at most volumes."
       },
       {
         "key": "B",
-        "text": "Both approaches cost exactly the same.",
+        "text": "Both cost the same, since the model reads the same facts",
         "correct": false,
         "why": "Token volumes differ by orders of magnitude, so costs differ significantly."
       },
       {
         "key": "C",
-        "text": "Pasting the full manual is always cheaper because there is no vector store.",
+        "text": "RAG costs more, because embeddings cost as much as output tokens",
         "correct": false,
-        "why": "Hundreds of thousands of tokens per question cost far more than a vector store at most volumes."
+        "why": "Embedding is done once per chunk at ingestion and is cheap compared with sending a whole manual on every question."
       },
       {
         "key": "D",
-        "text": "RAG usually costs less per question because far fewer input tokens are sent, although it adds retrieval infrastructure costs.",
+        "text": "RAG sends far fewer input tokens, though it adds retrieval costs",
         "correct": true,
-        "why": "Sending a few relevant passages instead of a whole manual dramatically cuts input tokens, which usually outweighs the cost of embeddings and a vector store."
+        "why": "Sending a few relevant passages instead of the whole manual cuts input tokens dramatically, outweighing retrieval costs."
       }
     ],
     "explanation": {
@@ -912,27 +912,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Provisioned Throughput with a longer-term (for example six-month) commitment",
+        "text": "Provisioned Throughput with a six-month commitment",
         "correct": true,
-        "why": "Committing to a longer term for Provisioned Throughput lowers the hourly price compared with no commitment."
+        "why": "A longer commitment term lowers the hourly rate for dedicated capacity, rewarding predictable long-term usage."
       },
       {
         "key": "B",
-        "text": "On-demand pricing only",
+        "text": "Provisioned Throughput with no commitment",
         "correct": false,
-        "why": "On-demand does not provide dedicated capacity or commitment discounts."
+        "why": "No-commitment provisioned capacity is more flexible but costs more per hour than a committed term."
       },
       {
         "key": "C",
-        "text": "Amazon EC2 Spot Instances for Bedrock",
+        "text": "On-demand pricing with cross-Region inference",
         "correct": false,
-        "why": "Spot Instances apply to EC2, not to Bedrock model capacity."
+        "why": "On-demand does not provide dedicated capacity or an hourly commitment discount."
       },
       {
         "key": "D",
-        "text": "Batch inference for interactive traffic",
+        "text": "Batch inference scheduled throughout the day",
         "correct": false,
-        "why": "Batch inference is asynchronous and unsuitable for interactive traffic."
+        "why": "Batch is asynchronous and does not provide dedicated capacity for a steady interactive workload."
       }
     ],
     "explanation": {
@@ -964,25 +964,25 @@
         "key": "A",
         "text": "Securing the physical data centers that run Bedrock",
         "correct": false,
-        "why": "Physical security of data centers is AWS's responsibility."
+        "why": "Physical security of facilities is AWS's responsibility."
       },
       {
         "key": "B",
-        "text": "Configuring IAM access, protecting their data, setting guardrails and deciding how the application uses model outputs",
+        "text": "IAM access, data protection, guardrails and use of outputs",
         "correct": true,
-        "why": "Customers are responsible for security in the cloud: identities and permissions, data protection, application behavior and responsible use."
+        "why": "Customers are responsible for security in the cloud: identities, data, application behavior and responsible use of outputs."
       },
       {
         "key": "C",
-        "text": "Patching the Bedrock service software",
+        "text": "Patching and operating the Bedrock service itself",
         "correct": false,
         "why": "AWS operates and patches the managed Bedrock service."
       },
       {
         "key": "D",
-        "text": "Maintaining the hardware that hosts the foundation models",
+        "text": "Isolating its prompts from other Bedrock customers",
         "correct": false,
-        "why": "AWS manages the underlying infrastructure and hardware for Bedrock."
+        "why": "Isolation between customers in the managed service is AWS's responsibility."
       }
     ],
     "explanation": {
@@ -1013,27 +1013,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Agents are billed by the number of users, so cost cannot be reduced.",
+        "text": "Agents are billed per task, so the fix is running fewer tasks",
         "correct": false,
-        "why": "Model usage is billed by tokens, which design changes can reduce."
+        "why": "Model usage is billed by tokens, not per task; the design can be changed to use fewer tokens per task."
       },
       {
         "key": "B",
-        "text": "Increasing temperature will reduce the number of calls.",
+        "text": "Tool calls are billed like output tokens, so remove the tools",
         "correct": false,
-        "why": "Temperature does not reduce the number of agent steps."
+        "why": "Removing tools would break the agent; cost comes from model calls carrying large context."
       },
       {
         "key": "C",
-        "text": "Agents make multiple model calls per task, each with context; limiting steps, trimming tool definitions and history, and using smaller models for simple steps reduce cost.",
+        "text": "Each step is a model call with context; cut steps, context and model size",
         "correct": true,
-        "why": "Agent loops multiply token usage. Reducing calls and context per call, and right-sizing models per step, controls cost."
+        "why": "Agent cost scales with steps times tokens, so limiting steps, trimming context and using smaller models for simple steps reduces it."
       },
       {
         "key": "D",
-        "text": "Agents cost more only because they use images.",
+        "text": "Agents use larger models by default; switch to batch inference",
         "correct": false,
-        "why": "The traces show cost comes from repeated text model calls with large context, not images."
+        "why": "Batch inference is asynchronous and unsuitable for interactive agents, and agents do not default to larger models."
       }
     ],
     "explanation": {

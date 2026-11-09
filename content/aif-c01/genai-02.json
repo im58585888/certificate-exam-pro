@@ -69,27 +69,27 @@
     "options": [
       {
         "key": "A",
-        "text": "MCP is a training technique that fine-tunes models on tool documentation.",
+        "text": "A standard API that every model provider implements for model calls",
         "correct": false,
-        "why": "MCP does not train or change models. It is a protocol used at runtime to connect applications to tools and data."
+        "why": "MCP does not standardize how models are invoked; it standardizes how AI applications connect to external tools and data."
       },
       {
         "key": "B",
-        "text": "MCP is a vector database for storing embeddings.",
+        "text": "A protocol that lets agents delegate tasks to other agents",
         "correct": false,
-        "why": "MCP is not a storage system. It defines how applications communicate with external capability providers."
+        "why": "Agent-to-agent delegation is addressed by agent-to-agent protocols. MCP connects AI applications to tools, resources and prompts."
       },
       {
         "key": "C",
-        "text": "MCP is a client-server protocol in which an AI application's MCP client connects to MCP servers that expose capabilities such as tools, resources and prompts.",
+        "text": "Clients in AI apps connect to servers exposing tools, resources and prompts",
         "correct": true,
-        "why": "This is MCP's architecture: hosts and clients on the AI side, servers on the system side, with a standard way to list and call capabilities."
+        "why": "MCP is client-server: the application's MCP clients connect to MCP servers that advertise capabilities the model can use."
       },
       {
         "key": "D",
-        "text": "MCP is an evaluation metric for summarization.",
+        "text": "A format for documenting a model's training data and limits",
         "correct": false,
-        "why": "Summarization metrics include ROUGE. MCP is an integration protocol."
+        "why": "That describes model cards. MCP is a runtime integration protocol."
       }
     ],
     "explanation": {
@@ -119,27 +119,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Reducing the context window",
+        "text": "RAG over the company's order documentation",
         "correct": false,
-        "why": "A smaller context window does not give the model access to external data."
+        "why": "Documentation describes how orders work; it does not contain the live status of order 48213."
       },
       {
         "key": "B",
-        "text": "Fine-tuning the model on last year's orders",
+        "text": "Fine-tuning the model on recent order histories",
         "correct": false,
-        "why": "Fine-tuning on historical data cannot provide the live status of a specific current order."
+        "why": "Training data is frozen at training time and cannot reflect the current status of a specific order."
       },
       {
         "key": "C",
-        "text": "Increasing the model's temperature",
+        "text": "Long-term memory of the user's past orders",
         "correct": false,
-        "why": "Temperature changes randomness. It cannot give the model access to live order data."
+        "why": "Memory holds what was said before, not the order's current status in the order system."
       },
       {
         "key": "D",
-        "text": "Tool use: the model calls an order-status API and uses the result in its answer",
+        "text": "Tool use: calling an order-status API for live data",
         "correct": true,
-        "why": "Tool use (function calling) lets the model request an external action, such as an API call, and incorporate the live result into its response."
+        "why": "Tool use lets the model request an API call and use the live result in its answer."
       }
     ],
     "explanation": {
@@ -175,25 +175,25 @@
         "key": "A",
         "text": "Supervisor (orchestrator) with specialist sub-agents",
         "correct": true,
-        "why": "A supervisor agent decomposes the task, routes subtasks to specialist agents and aggregates their outputs, exactly as described."
+        "why": "One coordinating agent decomposes the task, delegates to specialists and combines their results."
       },
       {
         "key": "B",
-        "text": "Batch inference",
+        "text": "Sequential pipeline of agents in a fixed order",
         "correct": false,
-        "why": "Batch inference processes many inputs offline. It does not describe agents delegating to each other."
+        "why": "In a pipeline each agent passes output to the next; here one agent delegates and then aggregates."
       },
       {
         "key": "C",
-        "text": "A single-agent pattern with no delegation",
+        "text": "Parallel fan-out with no coordinating agent",
         "correct": false,
-        "why": "The scenario explicitly delegates work to several specialized agents, so it is not a single agent."
+        "why": "The scenario has a coordinating agent that breaks down the work and assembles the final recommendation."
       },
       {
         "key": "D",
-        "text": "Unsupervised clustering",
+        "text": "Decentralized peer-to-peer handoffs between agents",
         "correct": false,
-        "why": "Clustering is an ML technique for grouping data, not an agent collaboration pattern."
+        "why": "In peer handoffs agents pass control to each other directly; here a single agent controls delegation."
       }
     ],
     "explanation": {
@@ -329,27 +329,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Retrain the model every time a user states a preference",
+        "text": "Rely on the context window and keep conversations open for weeks",
         "correct": false,
-        "why": "Retraining per user preference is impractical, slow and expensive."
+        "why": "A context window does not persist across separate conversations, and very long contexts become slow and costly."
       },
       {
         "key": "B",
-        "text": "Store nothing and ask the user to repeat preferences each time",
+        "text": "Store preferences in the system prompt shared by all users",
         "correct": false,
-        "why": "This fails the requirement to remember preferences and creates a poor experience."
+        "why": "A shared system prompt would apply one user's preferences to everyone and expose them to other users."
       },
       {
         "key": "C",
-        "text": "Only increase the model's context window",
+        "text": "Fine-tune the model whenever a user states a preference",
         "correct": false,
-        "why": "A bigger context window helps within one conversation but does not persist preferences across separate sessions."
+        "why": "Retraining per user preference is slow, expensive and impractical."
       },
       {
         "key": "D",
-        "text": "Use short-term (session) memory for the current conversation and long-term memory that stores extracted preferences across sessions",
+        "text": "Session memory for the conversation plus long-term preference memory",
         "correct": true,
-        "why": "Short-term memory keeps the current dialogue coherent, and long-term memory persists user facts and preferences for future sessions."
+        "why": "Short-term memory keeps the current dialogue coherent; long-term memory persists extracted preferences for future sessions."
       }
     ],
     "explanation": {
@@ -380,27 +380,27 @@
     "options": [
       {
         "key": "A",
-        "text": "A reasoning-and-acting loop, in which the agent alternates between reasoning about next steps and taking actions with tools, using each observation to decide what to do next",
+        "text": "A reason-and-act loop: think, call a tool, observe, repeat",
         "correct": true,
-        "why": "The agent iterates: reason, act with a tool, observe the result, and reason again until the goal is complete."
+        "why": "The agent alternates between reasoning and tool calls, using each result to decide the next step (ReAct)."
       },
       {
         "key": "B",
-        "text": "Dimensionality reduction",
+        "text": "A sequential multi-agent pipeline with fixed steps",
         "correct": false,
-        "why": "Dimensionality reduction compresses features and has nothing to do with agent behavior."
+        "why": "One agent is acting here, and the steps were chosen dynamically from what it observed, not fixed in advance."
       },
       {
         "key": "C",
-        "text": "Supervised pre-training",
+        "text": "Chain-of-thought prompting within a single response",
         "correct": false,
-        "why": "Pre-training happens before deployment and is not the runtime behavior described."
+        "why": "Chain-of-thought reasons before one answer; it does not call tools and react to their results."
       },
       {
         "key": "D",
-        "text": "Batch transform",
+        "text": "A predefined Bedrock Flow with three fixed nodes",
         "correct": false,
-        "why": "Batch transform scores a dataset offline. It does not describe step-by-step reasoning and tool calls."
+        "why": "In a flow the steps are defined in advance; here the agent decided it needed the directory lookup only after seeing results."
       }
     ],
     "explanation": {
@@ -488,27 +488,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Give the agent unrestricted permissions and review purchases monthly",
+        "text": "Instruct the agent not to approve purchases above $10,000",
         "correct": false,
-        "why": "Monthly review is after the fact. Large purchases would already be committed without approval."
+        "why": "An instruction is soft guidance that the model may not always follow; the limit needs enforcement in the workflow."
       },
       {
         "key": "B",
-        "text": "Remove the purchase-order tool entirely",
+        "text": "Review all purchase orders in a weekly audit",
         "correct": false,
-        "why": "Removing the tool also blocks the routine small purchases the company wants automated."
+        "why": "A weekly audit happens after large purchases are already committed."
       },
       {
         "key": "C",
-        "text": "Add a human-in-the-loop approval step that the workflow requires before executing purchases above the threshold",
+        "text": "Require human approval in the workflow above the threshold",
         "correct": true,
-        "why": "Requiring human confirmation for high-impact actions keeps autonomy for routine cases while controlling risk."
+        "why": "A required approval step keeps small purchases autonomous while preventing large commitments without a person."
       },
       {
         "key": "D",
-        "text": "Raise the model's temperature so it is more cautious",
+        "text": "Remove the tool and have staff create every order",
         "correct": false,
-        "why": "Temperature controls randomness, not caution, and cannot enforce an approval policy."
+        "why": "This removes the automation the company wants for small purchases."
       }
     ],
     "explanation": {
@@ -542,27 +542,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Single-shot prompting",
+        "text": "Centralized supervisor pattern",
         "correct": false,
-        "why": "Single-shot prompting is a prompt technique with one example, not a way agents communicate."
+        "why": "In a supervisor pattern one coordinator routes all work; here agents hand off to each other directly."
       },
       {
         "key": "B",
-        "text": "Centralized supervisor pattern",
+        "text": "Sequential pipeline pattern",
         "correct": false,
-        "why": "In a supervisor pattern, one coordinator routes every subtask. Here agents hand off directly to each other."
+        "why": "A pipeline runs agents in a fixed order; here the next agent depends on what each agent discovers."
       },
       {
         "key": "C",
-        "text": "Batch transform",
+        "text": "Parallel fan-out and fan-in pattern",
         "correct": false,
-        "why": "Batch transform is an offline inference method, not an agent communication pattern."
+        "why": "Fan-out runs agents at the same time and merges results; here one agent hands the conversation to the next."
       },
       {
         "key": "D",
-        "text": "Decentralized peer-to-peer handoffs (a swarm-style pattern)",
+        "text": "Decentralized peer-to-peer handoffs (swarm-style)",
         "correct": true,
-        "why": "Agents pass control to one another directly based on what they discover, without a central coordinator."
+        "why": "Agents pass control to one another based on what they find, with no central coordinator."
       }
     ],
     "explanation": {
@@ -655,27 +655,27 @@
     "options": [
       {
         "key": "A",
-        "text": "The agent can autonomously plan and take actions in other systems through tools to accomplish goals.",
+        "text": "It plans steps and takes actions in other systems through tools",
         "correct": true,
-        "why": "Agents go beyond answering: they plan multi-step work and act through tools and APIs."
+        "why": "Agents go beyond answering: they plan multi-step work and act through tools and APIs to reach goals."
       },
       {
         "key": "B",
-        "text": "The agent never uses a language model.",
+        "text": "It uses a larger foundation model than a chatbot does",
         "correct": false,
-        "why": "Most agents use language models as their reasoning engine."
+        "why": "Agents and chatbots can use the same models; model size is not what makes something an agent."
       },
       {
         "key": "C",
-        "text": "The agent uses a nicer user interface.",
+        "text": "It remembers earlier messages in the conversation",
         "correct": false,
-        "why": "Interface design does not define an agent. The difference is in capabilities."
+        "why": "Ordinary chatbots also keep conversation history, so this does not distinguish an agent."
       },
       {
         "key": "D",
-        "text": "The agent only answers yes or no questions.",
+        "text": "It can answer questions from company documents",
         "correct": false,
-        "why": "Agents handle complex goals, not just yes or no questions."
+        "why": "A RAG chatbot can do this too; answering from documents is not taking actions."
       }
     ],
     "explanation": {
@@ -705,27 +705,27 @@
     "options": [
       {
         "key": "A",
-        "text": "It removes the need for authentication on the inventory system.",
+        "text": "The inventory data is copied into each agent's knowledge base",
         "correct": false,
-        "why": "MCP servers should still enforce authentication and authorization. The protocol does not remove security needs."
+        "why": "MCP gives agents live access to tools; it does not copy data into each agent."
       },
       {
         "key": "B",
-        "text": "Any MCP-compatible agent or AI application can discover and use the inventory tools without a custom integration for each one.",
+        "text": "Any MCP-compatible agent can use the tools without custom integration",
         "correct": true,
-        "why": "A standard interface means one server works with many clients and frameworks, reducing duplicated integration work."
+        "why": "A standard interface means one server works with many clients and frameworks."
       },
       {
         "key": "C",
-        "text": "It permanently stores the inventory data inside the language model's weights.",
+        "text": "MCP handles security, so the server needs no access controls",
         "correct": false,
-        "why": "MCP does not change model weights. Data is accessed at runtime through the server."
+        "why": "MCP servers still need authentication, authorization and least privilege."
       },
       {
         "key": "D",
-        "text": "It guarantees that the model never hallucinates.",
+        "text": "Agents can read the inventory without any network calls",
         "correct": false,
-        "why": "Live tool data can reduce hallucinations, but nothing guarantees a model never makes mistakes."
+        "why": "Agents call the MCP server over the network or a local transport; data is not embedded in the agent."
       }
     ],
     "explanation": {
@@ -756,27 +756,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Switch to a smaller embedding dimension",
+        "text": "Switch to a model with a larger context window",
         "correct": false,
-        "why": "Embedding dimension affects vector search, not the size of the conversation in the prompt."
+        "why": "More room delays the problem but keeps growing cost and latency, and old turns still crowd out the task."
       },
       {
         "key": "B",
-        "text": "Keep appending every turn to the prompt indefinitely",
+        "text": "Lower max tokens so each response is shorter",
         "correct": false,
-        "why": "This is the cause of the problem. It keeps increasing tokens, latency and cost and eventually exceeds the context window."
+        "why": "The growth is in the input history, not the responses."
       },
       {
         "key": "C",
-        "text": "Summarize or compress older turns and store key facts in long-term memory, retrieving them only when relevant",
+        "text": "Summarize older turns and retrieve stored facts only when relevant",
         "correct": true,
-        "why": "Summarizing history and retrieving stored facts on demand keeps the context small and focused while preserving important information."
+        "why": "Compressing history and retrieving key facts on demand keeps context small and focused while preserving what matters."
       },
       {
         "key": "D",
-        "text": "Delete the system instructions to save tokens",
+        "text": "Start a new session every 20 turns and drop the history",
         "correct": false,
-        "why": "System instructions define the agent's behavior. Removing them degrades quality."
+        "why": "Discarding history loses details the task may still need."
       }
     ],
     "explanation": {
@@ -807,27 +807,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Multi-agent systems never cost more than single agents.",
+        "text": "Several agents usually cost less, because each uses fewer tokens",
         "correct": false,
-        "why": "More agents can mean more model calls and higher cost. The benefit is quality and maintainability, not guaranteed lower cost."
+        "why": "More agents can mean more model calls, so cost may rise. The benefit is accuracy and maintainability."
       },
       {
         "key": "B",
-        "text": "Multi-agent systems eliminate the need for testing.",
+        "text": "One model can then call all 40 tools in parallel",
         "correct": false,
-        "why": "Multi-agent systems need more testing and observability because of interactions between agents."
+        "why": "The issue is choosing the right tool, not running tools in parallel."
       },
       {
         "key": "C",
-        "text": "Multi-agent systems do not use foundation models.",
+        "text": "Tools no longer need detailed descriptions",
         "correct": false,
-        "why": "Each agent typically uses a foundation model for reasoning."
+        "why": "Each specialist still relies on clear tool descriptions to choose correctly."
       },
       {
         "key": "D",
-        "text": "Each specialized agent gets focused instructions and a small, relevant set of tools, which improves tool selection and accuracy.",
+        "text": "Each specialist gets focused instructions and a few relevant tools",
         "correct": true,
-        "why": "Specialization narrows each agent's scope, so the model has fewer, clearer choices and better instructions for its domain."
+        "why": "Narrower scope per agent gives the model fewer, clearer choices and better instructions, which improves tool selection."
       }
     ],
     "explanation": {
@@ -856,27 +856,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Give the agent access to a knowledge base for the handbook and an action (tool) that calls the HR system's API",
+        "text": "A knowledge base for the handbook and an action for the HR API",
         "correct": true,
-        "why": "A knowledge base grounds policy answers in the handbook, and an API tool lets the agent take the action of submitting a request."
+        "why": "The knowledge base grounds policy answers in the handbook, and the action lets the agent submit requests."
       },
       {
         "key": "B",
-        "text": "Fine-tune the model on the handbook and remove all tools",
+        "text": "Two knowledge bases: one for the handbook, one for vacation data",
         "correct": false,
-        "why": "Without a tool, the agent cannot submit vacation requests. Fine-tuning is also harder to keep current than retrieval."
+        "why": "Knowledge bases retrieve information; they cannot submit vacation requests to the HR system."
       },
       {
         "key": "C",
-        "text": "Use only a larger context window",
+        "text": "An action for the HR API, with the handbook pasted into instructions",
         "correct": false,
-        "why": "A larger context window does not let the agent act on the HR system."
+        "why": "Pasting the whole handbook wastes tokens on every request and goes stale when policies change."
       },
       {
         "key": "D",
-        "text": "Use an image classifier",
+        "text": "A model fine-tuned on the handbook with a guardrail for requests",
         "correct": false,
-        "why": "Image classification is unrelated to answering policy questions or submitting requests."
+        "why": "Fine-tuning does not let the agent submit requests, and a guardrail filters content rather than calling the API."
       }
     ],
     "explanation": {
@@ -910,27 +910,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Increasing the maximum output tokens",
+        "text": "Model invocation logging of the final responses",
         "correct": false,
-        "why": "Allowing longer responses does not reveal where errors originate."
+        "why": "Final responses alone do not show which reasoning step or tool call went wrong."
       },
       {
         "key": "B",
-        "text": "Agent observability: tracing each reasoning step, tool call, input and output",
+        "text": "Agent observability: tracing each reasoning step and tool call",
         "correct": true,
-        "why": "Step-by-step traces show exactly where in the agent's workflow things went wrong."
+        "why": "Step-by-step traces of reasoning, tool inputs and outputs show exactly where the workflow fails."
       },
       {
         "key": "C",
-        "text": "Removing all tools",
+        "text": "Bedrock Model Evaluation on a benchmark dataset",
         "correct": false,
-        "why": "Removing tools breaks the agent's functionality rather than diagnosing the problem."
+        "why": "A benchmark score shows overall quality, not why this agent's specific runs fail."
       },
       {
         "key": "D",
-        "text": "Switching to a diffusion model",
+        "text": "CloudWatch alarms on the agent's error rate",
         "correct": false,
-        "why": "Diffusion models generate images and do not help debug agents."
+        "why": "Alarms tell you failures are happening, not which step causes them."
       }
     ],
     "explanation": {
@@ -1014,27 +1014,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Whether the server uses the same embedding model",
+        "text": "Whether the server's tools return results in JSON",
         "correct": false,
-        "why": "MCP servers do not need to share an embedding model with the agent."
+        "why": "Output format matters for integration, but the bigger risk is what an unvetted server can do with its access."
       },
       {
         "key": "B",
-        "text": "Whether the server increases the agent's temperature",
+        "text": "Whether the server supports the agent's framework",
         "correct": false,
-        "why": "MCP servers do not control model inference parameters."
+        "why": "MCP is framework-independent; compatibility is not the main concern."
       },
       {
         "key": "C",
-        "text": "Whether the server's tool descriptions are written in a formal tone",
+        "text": "Whether the server meets the agent's latency budget",
         "correct": false,
-        "why": "Tone does not matter for safety. The concern is what the server can do and whether it is trustworthy."
+        "why": "Performance matters less than whether the server can be trusted with file access."
       },
       {
         "key": "D",
-        "text": "Whether the server is trustworthy and what permissions and data access its tools would have, applying least privilege",
+        "text": "Whether it is trustworthy and what access its tools would have",
         "correct": true,
-        "why": "Tools can read data and take actions. An untrusted or over-privileged server could leak data or perform harmful actions, including through injected instructions in tool descriptions or results."
+        "why": "Tools can read data and take actions. An untrusted or over-privileged server could leak data or act harmfully, including through injected instructions."
       }
     ],
     "explanation": {
@@ -1068,27 +1068,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Resolving routine customer refund requests that require checking order history, applying policy and issuing refunds through an API",
+        "text": "Resolving refund requests: check orders, apply policy, issue refunds",
         "correct": true,
-        "why": "This multi-step task needs reasoning, information lookup and an action through a system, which is what agents are designed for."
+        "why": "This multi-step task needs reasoning, lookups and an action through an API, which is what agents are designed for."
       },
       {
         "key": "B",
-        "text": "Adding two numbers in a spreadsheet cell",
+        "text": "Summarizing each support call transcript after it ends",
         "correct": false,
-        "why": "Simple deterministic arithmetic is handled perfectly by a formula. An agent adds cost and no value."
+        "why": "Summarization is a single generation step; it does not need planning or actions in other systems."
       },
       {
         "key": "C",
-        "text": "Sorting a list of names alphabetically",
+        "text": "Translating product pages into five languages",
         "correct": false,
-        "why": "Sorting is deterministic and handled by standard code."
+        "why": "Translation is a single transformation task that a model or translation service handles without an agent."
       },
       {
         "key": "D",
-        "text": "Displaying a fixed company logo on a website",
+        "text": "Classifying incoming emails by department",
         "correct": false,
-        "why": "Showing a static image needs no AI at all."
+        "why": "Classification is a single prediction; a model or classifier handles it without planning or tool use."
       }
     ],
     "explanation": {
@@ -1168,27 +1168,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Remove the agent's instructions",
+        "text": "Lower the temperature so tool choice is consistent",
         "correct": false,
-        "why": "Instructions guide when and how to use tools. Removing them makes behavior worse."
+        "why": "Consistent choices are not correct choices; the model still cannot tell the two tools apart."
       },
       {
         "key": "B",
-        "text": "Increase the temperature",
+        "text": "Switch to a larger model with stronger reasoning",
         "correct": false,
-        "why": "More randomness makes tool selection less reliable, not more."
+        "why": "Even a strong model cannot reliably choose between two tools whose names and descriptions say nothing useful."
       },
       {
         "key": "C",
-        "text": "Give each tool a clear, distinct name and a detailed description of what it does, when to use it, and its input parameters",
+        "text": "Give the tools distinct names and detailed descriptions and schemas",
         "correct": true,
-        "why": "The model chooses tools based on their names, descriptions and schemas. Clear, distinct descriptions make the right choice obvious."
+        "why": "The model chooses tools from their names, descriptions and input schemas, so clear, distinct descriptions make the right choice obvious."
       },
       {
         "key": "D",
-        "text": "Add ten more similarly named tools",
+        "text": "Merge both tools into one tool that does everything",
         "correct": false,
-        "why": "More overlapping tools increase confusion."
+        "why": "A catch-all tool hides the difference rather than resolving it and makes inputs ambiguous."
       }
     ],
     "explanation": {
@@ -1222,27 +1222,27 @@
     "options": [
       {
         "key": "A",
-        "text": "A larger embedding dimension",
+        "text": "MCP servers for every agent's tools",
         "correct": false,
-        "why": "Embedding size affects vector search, not how independent agents communicate."
+        "why": "MCP connects agents to tools and data; it does not let independent agents discover each other and delegate tasks."
       },
       {
         "key": "B",
-        "text": "Fine-tuning every agent on the same dataset",
+        "text": "A shared vector store that all agents read from",
         "correct": false,
-        "why": "Shared training data does not provide a way for running agents to discover and delegate to each other."
+        "why": "Shared data does not give agents a way to discover each other's capabilities or hand off tasks."
       },
       {
         "key": "C",
-        "text": "Lowering the temperature of each agent",
+        "text": "A supervisor agent built with one vendor's framework",
         "correct": false,
-        "why": "Temperature affects output randomness, not inter-agent communication."
+        "why": "A supervisor in one framework would still need a common protocol to talk to agents built on others."
       },
       {
         "key": "D",
-        "text": "An agent-to-agent communication standard, which complements tool protocols such as MCP by letting agents exchange tasks and results with other agents",
+        "text": "An agent-to-agent protocol, complementing MCP for tools",
         "correct": true,
-        "why": "MCP connects agents to tools and data. Agent-to-agent protocols address agents collaborating with other independent agents."
+        "why": "Agent-to-agent protocols let agents describe capabilities and exchange tasks; MCP covers agent-to-tool connections."
       }
     ],
     "explanation": {
@@ -1276,27 +1276,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Store only necessary information, isolate memories per user, encrypt them, and apply retention and deletion policies",
+        "text": "Minimize stored data, isolate it per user, encrypt it, set retention",
         "correct": true,
-        "why": "Memory holds sensitive data, so minimization, per-user isolation, encryption and retention controls protect privacy and support compliance."
+        "why": "Agent memory holds sensitive data, so minimization, per-user isolation, encryption and retention controls protect privacy."
       },
       {
         "key": "B",
-        "text": "Store every word of every conversation forever to maximize personalization",
+        "text": "Keep full transcripts for every patient to maximize personalization",
         "correct": false,
-        "why": "Storing everything indefinitely increases privacy risk and cost and may violate data-retention requirements."
+        "why": "Keeping everything increases privacy risk and cost and may break retention rules."
       },
       {
         "key": "C",
-        "text": "Store memories in the model's weights by retraining nightly",
+        "text": "Store memories in the system prompt so every session has them",
         "correct": false,
-        "why": "Retraining on patient data nightly is costly and makes it hard to delete specific information."
+        "why": "A system prompt is shared configuration; putting patient data there risks exposing it to others."
       },
       {
         "key": "D",
-        "text": "Share each patient's memories with all other patients' sessions",
+        "text": "Share learned preferences across patients to improve defaults",
         "correct": false,
-        "why": "Mixing memories across users would leak private health information."
+        "why": "Mixing memories across patients would leak private health information."
       }
     ],
     "explanation": {
