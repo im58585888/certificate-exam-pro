@@ -3,7 +3,7 @@ import Link from "next/link";
 import { startQuizAction } from "./actions";
 import { EXAM_LIST, FREE_TRIAL_QUESTIONS, PASS_DAYS, PASS_PRICE_CENTS } from "@/lib/exams";
 import { ensureBank, questionsFor } from "@/lib/questions";
-import { QuestionDemo, RequirementsDemo, StudyCardDemo, TrialPicker } from "@/components/LandingDemos";
+import { QuestionDemo, StudyCardDemo, TrialPicker } from "@/components/LandingDemos";
 import styles from "./landing.module.css";
 
 const PRICE = `$${(PASS_PRICE_CENTS / 100).toFixed(2)}`;
@@ -17,7 +17,7 @@ const FAQ = [
   ["What does AI help me with?", "Two things: breaking complex questions into plain language, and generating study cards from mistakes and key concepts. You work through the reasoning, then keep the lessons in a personal library for later review."],
   ["Does simplifying a question give away the answer?", "The goal is to clarify the scenario and its requirements, not choose an answer for you. You still decide which option fits. Detailed answer explanations help you review the reasoning after you answer."],
   ["How does my study-card library grow?", "As you practice, generate cards from the mistakes and concepts you want to remember. Those cards build up over time into a personal collection you can return to, instead of starting your notes from scratch each session."],
-  ["What can I try for free?", `${FREE_TRIAL_QUESTIONS} practice questions per exam and full answer explanations. No account or payment card needed. The animated examples on this page demonstrate the AI learning workflow.`],
+  ["What can I try for free?", `${FREE_TRIAL_QUESTIONS} practice questions per exam and full answer explanations. No account or payment card needed. The interactive examples on this page demonstrate the AI learning workflow.`],
   ["Are these real AWS exam questions?", "No. All questions are original and follow the official AWS exam guides. This is an independent learning service, not an exam-dump site or an AWS-affiliated product."],
   ["How does pricing work?", `A one-time ${PRICE} payment unlocks one exam for ${PASS_DAYS} days, including practice, timed mock exams, review and analytics. Passes do not renew automatically. Each exam has its own pass.`],
 ];
@@ -55,7 +55,14 @@ export default async function Home() {
           <ul className={styles.featureList}><li>Break down the scenario in plain language</li><li>Find the key requirements and constraints</li><li>Understand the question before choosing an answer</li></ul>
           <a className={styles.textLink} href="#hero-title">Try the question example <span aria-hidden="true">↑</span></a>
         </div>
-        <RequirementsDemo />
+        <div className={styles.requirements}>
+          <p className={styles.smallLabel}>What is the question really asking?</p>
+          <p className={styles.requirementLead}>Connect to S3.<br /><span>Keep traffic private.</span></p>
+          <div className={styles.requirementRow}><span>Resource</span><strong>EC2 in a private subnet</strong></div>
+          <div className={styles.requirementRow}><span>Destination</span><strong>Amazon S3</strong></div>
+          <div className={styles.requirementRow}><span>Constraint</span><strong>No public internet</strong></div>
+          <p className={styles.exampleNote}>Same requirements. Less mental clutter.</p>
+        </div>
       </section>
 
       <section className={`${styles.feature} ${styles.libraryFeature}`} aria-labelledby="library-title">

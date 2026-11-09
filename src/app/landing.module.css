@@ -2,14 +2,6 @@
 .landing :is(button, a, select, summary):focus-visible { outline: 3px solid var(--brand); outline-offset: 5px; }
 .landing button, .landing summary { cursor: pointer; }
 .landing button:disabled { cursor: default; opacity: .7; }
-.gifDemo { margin: 0; min-width: 0; width: 100%; }
-.gifImage { display: block; width: 100%; height: auto; border-radius: 12px; background: #fff; }
-.gifControls { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 10px 3px 0; font-size: 10px; color: var(--soft); }
-.gifControls > span { display: inline-flex; align-items: center; gap: 7px; }
-.gifControls button { min-height: 36px; padding: 8px 0 8px 8px; font-size: 10px; font-weight: 700; color: var(--brand); text-decoration: underline; text-underline-offset: 3px; }
-.playIndicator { width: 5px; height: 5px; border-radius: 50%; background: var(--muted); }
-.playIndicator[data-playing="true"] { background: var(--brand); animation: playbackPulse 2s ease-in-out infinite; }
-@keyframes playbackPulse { 0%, 100% { opacity: 1; } 50% { opacity: .4; } }
 .hero { background: var(--bg); padding: 76px 32px 0; }
 .heroInner { max-width: 1240px; margin: 0 auto; display: grid; grid-template-columns: 1.14fr 1fr; gap: 64px; align-items: center; }
 .heroCopy { animation: arrive .65s ease-out both; }
