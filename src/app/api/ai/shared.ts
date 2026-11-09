@@ -1,5 +1,5 @@
 import "server-only";
-import { spendAllowance } from "@/lib/ai";
+import { failureCode, spendAllowance } from "@/lib/ai";
 import { getAccess } from "@/lib/billing";
 import { one } from "@/lib/db";
 import { ensureBank, getQuestion, type Question } from "@/lib/questions";
@@ -54,7 +54,7 @@ export function textStream(gen: AsyncGenerator<string>): Response {
         else controller.enqueue(enc.encode(value));
       } catch (err) {
         console.error("[ai] stream failed", err);
-        controller.enqueue(enc.encode("\n\nThe tutor hit a problem. Please try again."));
+        controller.enqueue(enc.encode(`\n\nThe tutor hit a problem (${failureCode(err)}). Please try again.`));
         controller.close();
       }
     },

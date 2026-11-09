@@ -119,6 +119,12 @@ export async function spendAllowance(owner: Owner, paid: boolean, admin: boolean
 
 export class AiError extends Error {}
 
+/** A short, safe reason for a failed model call (HTTP status and error type), for messages and logs. */
+export function failureCode(err: unknown): string {
+  if (err instanceof Anthropic.APIError) return `${err.status ?? "network"}${err.type ? ` ${err.type}` : ""}`;
+  return err instanceof AiError ? "declined" : "unexpected";
+}
+
 async function parse<T>(schema: z.ZodType<T>, system: string, user: string, maxTokens = 16000): Promise<T> {
   const res = await client!.beta.messages.parse({
     model: MODEL,

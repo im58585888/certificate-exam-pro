@@ -1,4 +1,4 @@
-import { AiError, aiAvailable, cachedBreakdown, writeBreakdown, type BreakdownLevel } from "@/lib/ai";
+import { AiError, aiAvailable, failureCode, cachedBreakdown, writeBreakdown, type BreakdownLevel } from "@/lib/ai";
 import { fail, LIMIT_MESSAGE, tutorContext } from "../shared";
 
 export const maxDuration = 120;
@@ -16,6 +16,6 @@ export async function POST(req: Request) {
     return Response.json({ breakdown: await writeBreakdown(ctx.q, level) });
   } catch (err) {
     console.error("[ai] breakdown failed", err);
-    return fail(502, err instanceof AiError ? err.message : "The tutor couldn't respond. Please try again in a moment.");
+    return fail(502, err instanceof AiError ? err.message : `The tutor couldn't respond (${failureCode(err)}). Please try again in a moment.`);
   }
 }

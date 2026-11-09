@@ -1,4 +1,4 @@
-import { AiError, aiAvailable, cachedCards, spendAllowance, writeCard } from "@/lib/ai";
+import { AiError, aiAvailable, failureCode, cachedCards, spendAllowance, writeCard } from "@/lib/ai";
 import { currentOwner } from "@/lib/auth";
 import { getAccess } from "@/lib/billing";
 import { getExam } from "@/lib/exams";
@@ -26,6 +26,6 @@ export async function POST(req: Request) {
     return Response.json({ card: await writeCard(body.exam, entry.topic, entry.bank) });
   } catch (err) {
     console.error("[ai] card failed", err);
-    return fail(502, err instanceof AiError ? err.message : "Couldn't write this card. Please try again in a moment.");
+    return fail(502, err instanceof AiError ? err.message : `Couldn't write this card (${failureCode(err)}). Please try again in a moment.`);
   }
 }
