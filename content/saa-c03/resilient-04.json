@@ -14,13 +14,13 @@
     "options": [
       {
         "key": "A",
-        "text": "Scheduled scaling every hour",
+        "text": "Step scaling on ApproximateNumberOfMessagesVisible",
         "correct": false,
-        "why": "Backlogs are driven by message arrival, not the clock."
+        "why": "Raw queue depth doesn't account for how many workers are already running, so steps over- or under-shoot as the fleet changes."
       },
       {
         "key": "B",
-        "text": "A fixed group size equal to the peak",
+        "text": "A fixed group size equal to the peak backlog",
         "correct": false,
         "why": "This wastes capacity at quiet times and can still fall short of unusual peaks."
       },
@@ -32,7 +32,7 @@
       },
       {
         "key": "D",
-        "text": "Publish a custom 'backlog per instance' metric (visible messages divided by running instances) and use target tracking with a target of about 50 messages per instance.",
+        "text": "Target tracking on a backlog-per-instance custom metric",
         "correct": true,
         "why": "Backlog per instance ties capacity directly to queued work and the acceptable latency (10 messages per minute times 5 minutes = 50), so the group scales in proportion to demand."
       }
@@ -64,25 +64,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Have the web tier enqueue orders to Amazon SQS and use a consumer fleet (or Lambda with capped concurrency) that writes to the database at a sustainable rate.",
+        "text": "Queue orders in SQS; write at a steady rate",
         "correct": true,
         "why": "Queue-based load leveling absorbs bursts durably and smooths the write rate to what the database can handle, so no orders are dropped."
       },
       {
         "key": "B",
-        "text": "Enable Multi-AZ.",
+        "text": "Scale the database up to a larger instance class",
         "correct": false,
-        "why": "Multi-AZ improves availability but doesn't add write capacity."
+        "why": "A bigger instance raises the ceiling, but flash-sale bursts can still exceed it and lock contention remains."
       },
       {
         "key": "C",
-        "text": "Add read replicas.",
+        "text": "Add read replicas to take load off the primary",
         "correct": false,
         "why": "Replicas scale reads, while the problem here is write bursts."
       },
       {
         "key": "D",
-        "text": "Retry failed writes immediately from the web tier.",
+        "text": "Retry failed writes immediately from the web tier",
         "correct": false,
         "why": "Immediate retries amplify the burst and the contention."
       }
@@ -115,21 +115,21 @@
     "options": [
       {
         "key": "A",
-        "text": "Direct HTTP calls between services",
+        "text": "SNS topics with subscription filter policies",
         "correct": false,
-        "why": "This tightly couples producers to every consumer."
+        "why": "SNS filters on attributes, but it doesn't receive events from SaaS partners natively or provide schema discovery."
       },
       {
         "key": "B",
-        "text": "Amazon EventBridge event buses with rules using event patterns on event content",
+        "text": "EventBridge event buses with content-based rules",
         "correct": true,
         "why": "EventBridge routes events to targets based on content-matching patterns, supports many targets and SaaS partner event sources, and decouples producers from consumers."
       },
       {
         "key": "C",
-        "text": "Amazon Kinesis Data Firehose",
+        "text": "Kinesis Data Streams with a consumer per service",
         "correct": false,
-        "why": "Firehose delivers data to storage and analytics destinations. It isn't an event router with rules."
+        "why": "Each consumer would read and filter every event in code, and partner events need custom ingestion."
       },
       {
         "key": "D",
@@ -166,9 +166,9 @@
     "options": [
       {
         "key": "A",
-        "text": "An S3 event notification",
+        "text": "A Step Functions workflow that polls the queue",
         "correct": false,
-        "why": "S3 event notifications fire on S3 object changes. The source here is an SQS queue, so they can't help."
+        "why": "Polling in a workflow is custom orchestration to build and run."
       },
       {
         "key": "B",
@@ -178,15 +178,15 @@
       },
       {
         "key": "C",
-        "text": "Amazon EventBridge Pipes with the SQS queue as the source, a filter on status, Lambda enrichment, and Step Functions as the target",
+        "text": "EventBridge Pipes with filter and enrichment",
         "correct": true,
         "why": "Pipes creates managed point-to-point integrations: they poll the source, filter events, optionally enrich them, and deliver to a target, with no glue code."
       },
       {
         "key": "D",
-        "text": "SNS subscription filter policies",
+        "text": "SQS event source mapping with a filter, invoking Lambda",
         "correct": false,
-        "why": "SNS doesn't consume from SQS or enrich events before invoking Step Functions."
+        "why": "Filtering is supported, but the function must still call the enrichment and start workflows itself, which is glue code."
       }
     ],
     "explanation": {
@@ -216,25 +216,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Switch to an SQS FIFO queue.",
+        "text": "Use a separate SNS FIFO topic per team",
         "correct": false,
-        "why": "FIFO ordering doesn't provide per-subscriber filtering."
+        "why": "FIFO doesn't filter, and publishing to multiple topics changes the producer."
       },
       {
         "key": "B",
-        "text": "Create a separate topic per team and publish to each.",
+        "text": "Create a separate topic per team and publish to each",
         "correct": false,
         "why": "The publisher would need to know every consumer's logic, which couples them."
       },
       {
         "key": "C",
-        "text": "Filter messages in each consumer's code.",
+        "text": "Filter messages in each consumer's code",
         "correct": false,
         "why": "This is the current wasteful approach: every queue receives every message and consumers throw most away."
       },
       {
         "key": "D",
-        "text": "Add SNS subscription filter policies to each SQS subscription, matching on message attributes or the message body.",
+        "text": "SNS subscription filter policies on each SQS subscription",
         "correct": true,
         "why": "Filter policies make SNS deliver to a subscriber only the messages that match its criteria, which removes wasted delivery and processing."
       }
@@ -266,21 +266,21 @@
     "options": [
       {
         "key": "A",
-        "text": "A redrive policy on the SNS subscription that sends undeliverable messages to an SQS dead-letter queue",
+        "text": "A redrive policy on the subscription to an SQS DLQ",
         "correct": true,
         "why": "SNS subscriptions can have a DLQ. Messages that exhaust the delivery retries move to SQS instead of being discarded."
       },
       {
         "key": "B",
-        "text": "A longer message retention on the topic",
+        "text": "A longer message retention period on the topic",
         "correct": false,
-        "why": "SNS topics don't store messages for later retrieval."
+        "why": "SNS topics don't store messages for later delivery; there's no retention to extend."
       },
       {
         "key": "C",
-        "text": "SNS FIFO",
+        "text": "A custom delivery policy with more HTTP retries",
         "correct": false,
-        "why": "FIFO topics only deliver to SQS FIFO queues, not HTTPS endpoints, and don't solve failed deliveries."
+        "why": "More retries help short outages, but once the policy ends, messages are still discarded."
       },
       {
         "key": "D",
@@ -316,27 +316,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Increase the visibility timeout to 10 minutes.",
+        "text": "Increase the visibility timeout to 10 minutes",
         "correct": false,
         "why": "The visibility timeout applies after a message is received, not before it's first delivered."
       },
       {
         "key": "B",
-        "text": "A delivery delay: set DelaySeconds to 600 on the message (a message timer) or on the queue (a delay queue).",
+        "text": "Set DelaySeconds to 600 on the message or queue",
         "correct": true,
         "why": "SQS delay queues and message timers keep messages invisible to consumers for up to 15 minutes after sending. 10 minutes is within that limit."
       },
       {
         "key": "C",
-        "text": "Enable long polling for 10 minutes.",
+        "text": "Enable long polling with a 10-minute wait time",
         "correct": false,
         "why": "Long polling waits at most 20 seconds per receive and doesn't postpone delivery."
       },
       {
         "key": "D",
-        "text": "Set message retention to 10 minutes.",
+        "text": "Use an EventBridge Scheduler one-time schedule",
         "correct": false,
-        "why": "Retention deletes messages after the period and doesn't delay them."
+        "why": "This works but adds a scheduler per message, which is more complex than SQS's built-in delay."
       }
     ],
     "explanation": {
@@ -367,25 +367,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Simple routing",
+        "text": "Simple routing with both environments' IPs",
         "correct": false,
         "why": "Simple routing has no weighting or health-aware control."
       },
       {
         "key": "B",
-        "text": "Failover routing",
+        "text": "Failover routing with AWS as the secondary",
         "correct": false,
         "why": "Failover sends all traffic to the primary while it's healthy and doesn't allow percentage splits."
       },
       {
         "key": "C",
-        "text": "Weighted routing with records for both environments, adjusting the weights over time",
+        "text": "Weighted routing for both, adjusting the weights",
         "correct": true,
         "why": "Weighted routing splits DNS responses by weight. Changing the weights gradually shifts traffic, and setting AWS to 0 rolls back."
       },
       {
         "key": "D",
-        "text": "Geolocation routing",
+        "text": "Geolocation routing by user country",
         "correct": false,
         "why": "This routes by user location, not by controllable percentages."
       }
@@ -417,7 +417,7 @@
     "options": [
       {
         "key": "A",
-        "text": "Latency-based routing",
+        "text": "Latency-based routing with health checks",
         "correct": false,
         "why": "Latency routing selects Regions by latency, not multiple healthy instances in one location."
       },
@@ -429,13 +429,13 @@
       },
       {
         "key": "C",
-        "text": "Failover routing",
+        "text": "Failover routing with four secondary records",
         "correct": false,
         "why": "Failover supports only primary and secondary records, not spreading across four."
       },
       {
         "key": "D",
-        "text": "Multivalue answer routing with a health check on each record",
+        "text": "Multivalue answer routing, health check per record",
         "correct": true,
         "why": "Multivalue answer returns up to eight healthy records at random for each query, providing simple DNS-level load distribution that's aware of health."
       }
@@ -467,27 +467,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Create a calculated health check that monitors the three component health checks with a healthy threshold of 2, and associate it with the Region's failover record.",
+        "text": "A calculated health check with a threshold of 2",
         "correct": true,
         "why": "Calculated health checks combine child health checks with AND, OR or at-least-N logic, which fits a 2-of-3 rule."
       },
       {
         "key": "B",
-        "text": "Use multivalue answer routing.",
+        "text": "Multivalue answer routing across the three components",
         "correct": false,
         "why": "This returns multiple healthy IPs rather than evaluating composite health."
       },
       {
         "key": "C",
-        "text": "Associate all three health checks directly with one record.",
+        "text": "Three health checks associated with one record",
         "correct": false,
-        "why": "A record can reference only one health check."
+        "why": "A record can have only one health check associated with it."
       },
       {
         "key": "D",
-        "text": "Increase the health check interval.",
+        "text": "A string-matching health check on a status page",
         "correct": false,
-        "why": "Changing how often checks run doesn't let Route 53 evaluate a 2-of-3 rule across components."
+        "why": "One endpoint check can't express \"two of three components\" without building a custom status page."
       }
     ],
     "explanation": {
@@ -524,13 +524,13 @@
       },
       {
         "key": "B",
-        "text": "A managed switchover (planned switchover) to eu-west-1",
+        "text": "A managed switchover to eu-west-1",
         "correct": true,
         "why": "Switchover waits for the secondary to fully synchronize before changing roles, so there's no data loss (RPO 0). It's designed for planned operations."
       },
       {
         "key": "C",
-        "text": "Restore a snapshot in eu-west-1",
+        "text": "Restore a snapshot in eu-west-1 and repoint the app",
         "correct": false,
         "why": "Restoring from a snapshot loses changes made after the snapshot and takes much longer."
       },
@@ -569,27 +569,27 @@
     "options": [
       {
         "key": "A",
-        "text": "DynamoDB merges the two values automatically.",
+        "text": "DynamoDB merges the two values into one item",
         "correct": false,
         "why": "DynamoDB doesn't merge attribute values. One version wins."
       },
       {
         "key": "B",
-        "text": "Both writes are rejected and the application must retry.",
+        "text": "Both writes are rejected and must be retried",
         "correct": false,
         "why": "Writes succeed locally in each Region. Conflicts are reconciled asynchronously."
       },
       {
         "key": "C",
-        "text": "The most recent write wins (last writer wins), and all replicas converge to that version.",
+        "text": "The latest write wins, and all replicas converge on it",
         "correct": true,
         "why": "Global tables use last-writer-wins reconciliation, so replicas eventually agree on the latest update."
       },
       {
         "key": "D",
-        "text": "The Region listed first in the table configuration always wins.",
+        "text": "The Region created first in the table wins every time",
         "correct": false,
-        "why": "The winner is based on timing, not a fixed Region priority."
+        "why": "There's no Region priority; conflicts resolve by timestamp."
       }
     ],
     "explanation": {
@@ -678,25 +678,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Take snapshots manually in the second Region.",
+        "text": "A scheduled Lambda that copies snapshots to the Region",
         "correct": false,
         "why": "You can't snapshot a volume from another Region, and doing it manually defeats automation."
       },
       {
         "key": "B",
-        "text": "Enable S3 Cross-Region Replication.",
+        "text": "Enable S3 Cross-Region Replication for snapshots",
         "correct": false,
         "why": "EBS snapshots are managed through EC2 APIs, not replicated with S3 CRR rules."
       },
       {
         "key": "C",
-        "text": "Use EBS Multi-Attach across Regions.",
+        "text": "An AWS Backup plan copying the snapshots on a schedule",
         "correct": false,
-        "why": "Multi-Attach works within a single AZ and doesn't copy data across Regions."
+        "why": "AWS Backup can copy its own recovery points, but not snapshots that DLM created, so this means a second backup system."
       },
       {
         "key": "D",
-        "text": "Add cross-Region copy rules to the existing Data Lifecycle Manager policy, specifying the target Region, retention and encryption settings.",
+        "text": "Cross-Region copy rules in the existing DLM policy",
         "correct": true,
         "why": "DLM policies can automatically copy snapshots (and EBS-backed AMIs) to other Regions with their own retention, which covers DR with no scripting."
       }
@@ -729,25 +729,25 @@
     "options": [
       {
         "key": "A",
-        "text": "An RDS Multi-AZ DB cluster deployment, with one writer and two readable standby instances in three AZs",
+        "text": "Multi-AZ DB cluster with two readable standbys",
         "correct": true,
         "why": "Multi-AZ DB clusters use semi-synchronous replication to two readable standbys, give typically faster failover (often under 35 seconds), and let the reader endpoint serve reads."
       },
       {
         "key": "B",
-        "text": "Cross-Region read replicas only",
+        "text": "Cross-Region read replicas with manual promotion",
         "correct": false,
         "why": "Replicas need manual promotion and are aimed at Regional DR or reads, not fast in-Region failover."
       },
       {
         "key": "C",
-        "text": "A single-AZ instance with automated backups",
+        "text": "Single-AZ instance with automated backups",
         "correct": false,
         "why": "This has no standby, so recovery takes much longer."
       },
       {
         "key": "D",
-        "text": "A Multi-AZ DB instance plus manual promotion scripts",
+        "text": "Multi-AZ DB instance with promotion scripts",
         "correct": false,
         "why": "The standby in the instance deployment isn't readable, and failover time doesn't improve."
       }
@@ -780,25 +780,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Disable Multi-AZ.",
+        "text": "Lower the DNS TTL in each application's resolver",
         "correct": false,
-        "why": "This removes automatic failover entirely."
+        "why": "Many client libraries cache DNS regardless, and connections still need re-establishing."
       },
       {
         "key": "B",
-        "text": "Connect applications through Amazon RDS Proxy, which detects failover and routes connections to the new primary without relying on client DNS caching.",
+        "text": "Connect through RDS Proxy, which follows the failover",
         "correct": true,
         "why": "RDS Proxy maintains connections and routes to the new writer, cutting failover disruption for applications (by up to 66% for RDS and Aurora, according to AWS)."
       },
       {
         "key": "C",
-        "text": "Add read replicas.",
+        "text": "Add read replicas and route reads to them",
         "correct": false,
         "why": "Replicas don't speed up writer failover for clients."
       },
       {
         "key": "D",
-        "text": "Increase the DNS TTL for the RDS endpoint.",
+        "text": "Increase the DNS TTL for the RDS endpoint",
         "correct": false,
         "why": "A higher TTL makes clients hold the old address even longer."
       }
@@ -836,13 +836,13 @@
       },
       {
         "key": "B",
-        "text": "Switch to DynamoDB Accelerator",
+        "text": "Scale up and add read replicas to one shard",
         "correct": false,
-        "why": "DAX caches DynamoDB and isn't a Redis session store."
+        "why": "Replicas add read capacity, but all writes still go to one primary with one node's memory."
       },
       {
         "key": "C",
-        "text": "ElastiCache for Redis OSS (or Valkey) with cluster mode enabled: multiple shards, each with a primary and replicas across AZs",
+        "text": "Cluster mode: several shards, replicas across AZs",
         "correct": true,
         "why": "Cluster mode partitions the keyspace across shards, scaling memory and write throughput horizontally, while replicas in each shard provide failover."
       },
@@ -880,25 +880,25 @@
     "options": [
       {
         "key": "A",
-        "text": "The file system must be converted to EFS One Zone.",
+        "text": "Convert the file system to EFS One Zone in 1c",
         "correct": false,
         "why": "One Zone would reduce availability and doesn't fix the missing mount target."
       },
       {
         "key": "B",
-        "text": "The instances need larger EBS volumes.",
+        "text": "The 1c security group blocks outbound HTTPS",
         "correct": false,
-        "why": "EFS is network storage reached through mount targets. The instances' EBS volume size has no effect on mounting."
+        "why": "NFS uses port 2049, not HTTPS, and outbound rules allow all traffic by default."
       },
       {
         "key": "C",
-        "text": "EFS doesn't support more than two AZs.",
+        "text": "EFS supports mount targets in only two AZs",
         "correct": false,
         "why": "Regional EFS file systems support mount targets in every AZ of the Region."
       },
       {
         "key": "D",
-        "text": "There's no EFS mount target in us-east-1c. Create a mount target in a subnet in that AZ, with a security group allowing NFS from the instances.",
+        "text": "There's no mount target in 1c; create one there",
         "correct": true,
         "why": "Clients connect through a mount target in their own AZ. Without one in us-east-1c, those instances can't mount (or would depend on cross-AZ access), so create a mount target in each AZ used."
       }
@@ -930,25 +930,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Deploy an FSx for Windows File Server Multi-AZ file system and migrate the data to it.",
+        "text": "Migrate to an FSx for Windows Multi-AZ file system",
         "correct": true,
         "why": "Multi-AZ file systems keep a synchronously replicated standby in another AZ and fail over automatically, keeping the same DNS name."
       },
       {
         "key": "B",
-        "text": "Switch to Amazon EFS.",
+        "text": "Switch the shares to Amazon EFS with SMB access",
         "correct": false,
-        "why": "EFS is NFS-based and doesn't provide SMB with Windows ACLs."
+        "why": "EFS doesn't support SMB or Windows ACLs."
       },
       {
         "key": "C",
-        "text": "Use S3 File Gateway in AWS.",
+        "text": "Put an FSx File Gateway in front of the shares",
         "correct": false,
-        "why": "File Gateway is for on-premises access to S3, not a highly available Windows share in AWS."
+        "why": "File Gateway caches on premises; it doesn't make the AWS file system highly available."
       },
       {
         "key": "D",
-        "text": "Take more frequent backups of the Single-AZ file system.",
+        "text": "Back up the Single-AZ file system more often",
         "correct": false,
         "why": "Backups help recovery but don't give automatic failover during an AZ outage."
       }
@@ -981,25 +981,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Tape Gateway",
+        "text": "Tape Gateway with virtual tapes in S3",
         "correct": false,
         "why": "Tape Gateway emulates a tape library for backup software, not live block volumes."
       },
       {
         "key": "B",
-        "text": "Volume Gateway in stored mode, taking snapshots to AWS (restorable as EBS volumes)",
+        "text": "Volume Gateway stored mode with EBS snapshots",
         "correct": true,
         "why": "Stored volumes keep the full dataset on premises for low latency and back it up asynchronously to AWS as EBS snapshots, which can be restored for EC2-based recovery."
       },
       {
         "key": "C",
-        "text": "S3 File Gateway",
+        "text": "S3 File Gateway with NFS shares in S3",
         "correct": false,
         "why": "File Gateway provides NFS/SMB file shares, not block volumes."
       },
       {
         "key": "D",
-        "text": "Volume Gateway in cached mode",
+        "text": "Volume Gateway cached mode with local cache",
         "correct": false,
         "why": "Cached mode stores the primary data in AWS and keeps only frequently accessed data locally. The requirement is the entire dataset local."
       }
@@ -1032,27 +1032,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Amazon Data Lifecycle Manager",
+        "text": "Data Lifecycle Manager for EBS and RDS snapshots",
         "correct": false,
         "why": "DLM manages EBS snapshots and AMIs only, not VMware or RDS."
       },
       {
         "key": "B",
-        "text": "AWS DataSync",
+        "text": "AWS DataSync from VMware datastores to S3",
         "correct": false,
         "why": "DataSync moves file data but doesn't provide policy-based VM backups with recovery points."
       },
       {
         "key": "C",
-        "text": "AWS Backup, using Backup gateway to protect the on-premises VMware VMs, alongside backup plans for EC2 and RDS",
+        "text": "AWS Backup with Backup gateway for VMware",
         "correct": true,
         "why": "AWS Backup supports on-premises VMware (through Backup gateway) and AWS services under the same backup plans, vaults and reporting."
       },
       {
         "key": "D",
-        "text": "S3 Cross-Region Replication",
+        "text": "AWS Elastic Disaster Recovery for all servers",
         "correct": false,
-        "why": "CRR replicates S3 objects, not VM backups."
+        "why": "DRS replicates servers for recovery; it isn't a backup service with policies and retention for RDS."
       }
     ],
     "explanation": {
@@ -1140,25 +1140,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Enable cross-zone load balancing.",
+        "text": "Enable appliance mode on the attachment",
         "correct": false,
-        "why": "Cross-zone is an ELB feature and has nothing to do with Transit Gateway routing."
+        "why": "Appliance mode keeps flows symmetric through middleboxes; it doesn't add AZ coverage."
       },
       {
         "key": "B",
-        "text": "Create a second Transit Gateway.",
+        "text": "Create a second Transit Gateway for the third AZ",
         "correct": false,
         "why": "The problem is attachment AZ coverage, not the number of Transit Gateways."
       },
       {
         "key": "C",
-        "text": "Add an internet gateway.",
+        "text": "Add a route to the TGW in the third AZ's route table",
         "correct": false,
-        "why": "An internet gateway doesn't provide private inter-VPC routing."
+        "why": "Routes already exist; without an attachment subnet in that AZ, traffic can't enter the TGW there."
       },
       {
         "key": "D",
-        "text": "Modify the Transit Gateway VPC attachment to include a subnet in the third AZ.",
+        "text": "Add a subnet in the third AZ to the TGW attachment",
         "correct": true,
         "why": "A Transit Gateway attachment places an ENI in each specified AZ's subnet. Resources in an AZ without an attachment subnet can't route through the Transit Gateway."
       }
@@ -1190,25 +1190,25 @@
     "options": [
       {
         "key": "A",
-        "text": "An ECS capacity provider linked to the Auto Scaling group, with managed scaling (and managed termination protection)",
+        "text": "ECS capacity provider with managed scaling",
         "correct": true,
         "why": "With managed scaling, ECS calculates the required instances from pending tasks and adjusts the ASG automatically, so tasks get placed during spikes."
       },
       {
         "key": "B",
-        "text": "Service auto scaling on CPU only",
+        "text": "Service auto scaling on average CPU only",
         "correct": false,
         "why": "Service auto scaling changes task counts but doesn't add EC2 capacity for those tasks."
       },
       {
         "key": "C",
-        "text": "A larger ECS task definition",
+        "text": "Target tracking on the ASG's average CPU",
         "correct": false,
-        "why": "Bigger tasks need even more cluster capacity."
+        "why": "CPU on instances doesn't reflect tasks waiting for placement, so it can't scale for pending tasks."
       },
       {
         "key": "D",
-        "text": "Scheduled ASG scaling at midnight",
+        "text": "Scheduled scaling on the ASG at peak times",
         "correct": false,
         "why": "The spikes don't happen at predictable times, so a fixed midnight schedule won't add capacity when it's needed."
       }
@@ -1241,25 +1241,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Disable health probes.",
+        "text": "Use larger nodes in the same AZ with more pods each",
         "correct": false,
-        "why": "Disabling health probes hides failed pods instead of fixing capacity or AZ resilience."
+        "why": "Larger nodes add capacity but keep the single-AZ failure point."
       },
       {
         "key": "B",
-        "text": "Run nodes across multiple AZs (managed node groups or Karpenter), enable automatic node scaling (Karpenter or Cluster Autoscaler), and spread pods with topology spread constraints.",
+        "text": "Multi-AZ nodes, node autoscaling, topology spread",
         "correct": true,
         "why": "Multi-AZ nodes survive an AZ failure, automatic node provisioning adds capacity for pending pods, and topology spread keeps replicas distributed across AZs."
       },
       {
         "key": "C",
-        "text": "Increase the pod CPU limits.",
+        "text": "Raise pod CPU limits and add liveness probes",
         "correct": false,
         "why": "Larger pods need more capacity and make pending pods worse."
       },
       {
         "key": "D",
-        "text": "Use one very large node.",
+        "text": "Use one very large node with a fixed size",
         "correct": false,
         "why": "One node is a single point of failure, and it doesn't scale elastically."
       }
@@ -1291,25 +1291,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Set reserved concurrency to zero.",
+        "text": "Set reserved concurrency to zero during the event",
         "correct": false,
         "why": "Reserved concurrency of zero throttles every invocation, which disables the function entirely."
       },
       {
         "key": "B",
-        "text": "Remove the security group.",
+        "text": "Assign a larger CIDR block to the single subnet",
         "correct": false,
-        "why": "A security group is required for VPC-attached functions and isn't the cause."
+        "why": "More IP addresses don't help when the whole AZ is impaired."
       },
       {
         "key": "C",
-        "text": "Configure the function with private subnets in multiple AZs (for example, one per AZ) and appropriate security groups.",
+        "text": "Configure private subnets in multiple AZs",
         "correct": true,
         "why": "Lambda runs VPC-attached functions in the subnets you provide. Subnets in several AZs let it keep running if one AZ is impaired."
       },
       {
         "key": "D",
-        "text": "Increase the function's memory.",
+        "text": "Increase the function's memory allocation",
         "correct": false,
         "why": "Memory doesn't affect subnet availability."
       }
@@ -1342,25 +1342,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Use API Gateway usage plans.",
+        "text": "Use API Gateway usage plans in both Regions",
         "correct": false,
         "why": "Usage plans control throttling and quotas, not failover."
       },
       {
         "key": "B",
-        "text": "Point clients to the default execute-api URLs.",
+        "text": "Point clients to each Region's execute-api URL",
         "correct": false,
         "why": "Each Region's URL is different, so clients can't use one hostname for automatic failover."
       },
       {
         "key": "C",
-        "text": "Use an edge-optimized API in one Region only.",
+        "text": "An edge-optimized API in one Region only",
         "correct": false,
         "why": "A single Region gives no Regional failover."
       },
       {
         "key": "D",
-        "text": "Create the api.example.com custom domain name in API Gateway in both Regions (with ACM certificates in each), and use Route 53 failover or latency records with health checks pointing to each Regional domain endpoint.",
+        "text": "Custom domain per Region with Route 53 failover",
         "correct": true,
         "why": "Regional custom domains in each Region present the same hostname, and Route 53 health-checked records route clients to a healthy Region."
       }
@@ -1392,27 +1392,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Custom error responses that map 502/503/504 to a static error page from an S3 origin, with a short error caching TTL",
+        "text": "Custom error responses to an S3 error page",
         "correct": true,
         "why": "Custom error responses replace origin errors with a chosen page and status code. A short error-caching TTL means CloudFront retries the origin soon after it recovers."
       },
       {
         "key": "B",
-        "text": "Geo-restriction",
+        "text": "An origin group failing over to an S3 bucket",
         "correct": false,
-        "why": "This blocks countries and doesn't display fallback pages."
+        "why": "This works for GET requests, but it's more setup than error pages, and it serves the whole site from the bucket."
       },
       {
         "key": "C",
-        "text": "Signed cookies",
+        "text": "Lambda@Edge that rewrites error responses",
         "correct": false,
-        "why": "Signed cookies control access and don't handle origin failures."
+        "why": "Possible, but it's custom code compared with built-in error pages."
       },
       {
         "key": "D",
-        "text": "Field-level encryption",
+        "text": "Route 53 failover to an S3 website endpoint",
         "correct": false,
-        "why": "This protects form fields and is unrelated to error handling."
+        "why": "DNS failover is slower to take effect and needs health checks plus a separate S3 website and hostname setup."
       }
     ],
     "explanation": {
@@ -1448,15 +1448,15 @@
       },
       {
         "key": "B",
-        "text": "A cell-based architecture: multiple independent, identical stacks (cells), each serving a subset of tenants, with a thin routing layer and staged deployments cell by cell",
+        "text": "Cell-based stacks per tenant group, staged deploys",
         "correct": true,
         "why": "Cells isolate failures and bad deployments to a fraction of tenants, which bounds the blast radius."
       },
       {
         "key": "C",
-        "text": "Add more health checks",
+        "text": "Per-tenant throttling on the shared fleet",
         "correct": false,
-        "why": "Health checks detect failures but don't contain them."
+        "why": "Throttling limits load, but a bug triggered by bad input still crashes the whole shared fleet."
       },
       {
         "key": "D",
@@ -1492,27 +1492,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Delete the individual alarms",
+        "text": "Raise thresholds on every individual alarm",
         "correct": false,
         "why": "Deleting the individual alarms throws away the signals engineers need to diagnose incidents."
       },
       {
         "key": "B",
-        "text": "Use CloudTrail Insights",
+        "text": "CloudWatch anomaly detection on each metric",
         "correct": false,
-        "why": "CloudTrail Insights detects API usage anomalies and doesn't combine metric alarms."
+        "why": "Anomaly detection changes thresholds but still pages on each alarm individually."
       },
       {
         "key": "C",
-        "text": "A CloudWatch composite alarm that combines the 5xx and latency alarms with AND logic, with paging actions only on the composite alarm",
+        "text": "A composite alarm (5xx AND latency) that pages",
         "correct": true,
         "why": "Composite alarms evaluate a rule over other alarms' states, which reduces noise by paging only on meaningful combinations while the child alarms keep their history."
       },
       {
         "key": "D",
-        "text": "Increase every alarm's threshold",
+        "text": "Route all alarms to one SNS topic with a filter",
         "correct": false,
-        "why": "Raising every threshold reduces noise only by risking real incidents going unnoticed."
+        "why": "Filtering by alarm name doesn't express \"both conditions at once\"."
       }
     ],
     "explanation": {
@@ -1543,25 +1543,25 @@
     "options": [
       {
         "key": "A",
-        "text": "VPC Flow Logs",
+        "text": "Route 53 health checks on the home page",
         "correct": false,
-        "why": "Flow logs show network metadata and can't validate application workflows."
+        "why": "These check that an endpoint responds, not that a multi-step login and checkout journey works."
       },
       {
         "key": "B",
-        "text": "AWS Config",
+        "text": "AWS X-Ray traces of real user sessions",
         "correct": false,
-        "why": "Config tracks resource configuration, not user journeys."
+        "why": "X-Ray traces requests that users already make; it doesn't generate tests or catch problems before customers."
       },
       {
         "key": "C",
-        "text": "AWS Trusted Advisor",
+        "text": "CloudWatch RUM for real user monitoring",
         "correct": false,
-        "why": "Trusted Advisor checks configurations against best practices."
+        "why": "RUM measures real users' sessions, which means customers still hit the failure first."
       },
       {
         "key": "D",
-        "text": "Amazon CloudWatch Synthetics canaries scripted to exercise the login and checkout flows",
+        "text": "CloudWatch Synthetics canaries for both flows",
         "correct": true,
         "why": "Canaries run scheduled scripts (API calls or headless-browser workflows) against endpoints, catching user-facing failures proactively and publishing metrics and alarms."
       }
@@ -1594,27 +1594,27 @@
     "options": [
       {
         "key": "A",
-        "text": "AWS X-Ray (or CloudWatch Application Signals) distributed tracing across API Gateway, Lambda and downstream calls",
+        "text": "X-Ray (or Application Signals) distributed tracing",
         "correct": true,
         "why": "Tracing follows each request across services and shows a service map with per-segment latency and errors, pinpointing the slow or failing dependency."
       },
       {
         "key": "B",
-        "text": "AWS CloudTrail",
+        "text": "CloudTrail data events for Lambda and DynamoDB",
         "correct": false,
-        "why": "CloudTrail records API management calls, not request latency across application components."
+        "why": "CloudTrail records API calls, not request latency across each hop."
       },
       {
         "key": "C",
-        "text": "Amazon Inspector",
+        "text": "CloudWatch Logs Insights queries per service",
         "correct": false,
-        "why": "Inspector scans for software vulnerabilities. It doesn't trace request latency across services."
+        "why": "Separate logs are what the team already has; they don't connect one request across services."
       },
       {
         "key": "D",
-        "text": "AWS Budgets",
+        "text": "VPC Flow Logs for the Lambda functions",
         "correct": false,
-        "why": "Budgets track spending and can't show which hop in a request path is slow or failing."
+        "why": "Flow logs show network flows, not application request timing."
       }
     ],
     "explanation": {
@@ -1644,25 +1644,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Simple scaling with long cooldowns",
+        "text": "Target tracking with a shorter instance warmup",
         "correct": false,
-        "why": "This is even slower to react than target tracking."
+        "why": "Faster warmup helps reaction a little, but scaling still starts after load rises."
       },
       {
         "key": "B",
-        "text": "Predictive scaling, which forecasts load from historical data and launches capacity ahead of expected demand (used together with dynamic scaling)",
+        "text": "Predictive scaling, combined with dynamic scaling",
         "correct": true,
         "why": "Predictive scaling learns recurring patterns with machine learning and provisions capacity in advance, adapting as patterns shift, with no manual schedules."
       },
       {
         "key": "C",
-        "text": "A fixed maximum capacity",
+        "text": "Simple scaling with long cooldowns",
         "correct": false,
         "why": "A fixed maximum only caps scale-out. It doesn't launch capacity ahead of the predictable morning peak."
       },
       {
         "key": "D",
-        "text": "Scheduled actions updated manually every week",
+        "text": "Scheduled actions updated by hand every week",
         "correct": false,
         "why": "Manual schedules need upkeep and don't adapt automatically to changing patterns."
       }
@@ -1695,27 +1695,27 @@
     "options": [
       {
         "key": "A",
-        "text": "A single distributed two-phase commit across all three databases",
+        "text": "Two-phase commit across all three databases",
         "correct": false,
         "why": "2PC across independent microservice databases is complex, brittle and generally unsupported across managed services."
       },
       {
         "key": "B",
-        "text": "DynamoDB transactions across the three services' databases",
+        "text": "DynamoDB transactions across the three databases",
         "correct": false,
         "why": "The services own separate data stores, and DynamoDB transactions apply only within DynamoDB in one account and Region."
       },
       {
         "key": "C",
-        "text": "The saga pattern, orchestrated by AWS Step Functions, with compensating actions (cancel flight, cancel hotel) triggered by Catch handlers on failure",
+        "text": "Saga with Step Functions and compensating actions",
         "correct": true,
         "why": "Sagas coordinate distributed transactions as local steps with compensations, and Step Functions provides the state tracking, retries and error branching to run them reliably."
       },
       {
         "key": "D",
-        "text": "Fire-and-forget SNS messages to each service",
+        "text": "SNS messages to each service with retries",
         "correct": false,
-        "why": "This gives no coordination or rollback when one step fails."
+        "why": "Fire-and-forget messages don't detect failures or undo earlier reservations."
       }
     ],
     "explanation": {
@@ -1746,25 +1746,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Enable server-side encryption.",
+        "text": "Archive records to S3 with Firehose as a backup",
         "correct": false,
-        "why": "Encryption doesn't affect how long data is kept."
+        "why": "This keeps a copy, but replaying from S3 needs separate code; extended retention allows replay from the stream itself."
       },
       {
         "key": "B",
-        "text": "Add more shards.",
+        "text": "Add more shards to the stream",
         "correct": false,
         "why": "Shards increase throughput, not retention."
       },
       {
         "key": "C",
-        "text": "Enable enhanced fan-out.",
+        "text": "Enable enhanced fan-out for the consumer",
         "correct": false,
         "why": "Enhanced fan-out increases read throughput but doesn't retain data longer."
       },
       {
         "key": "D",
-        "text": "Increase the stream's data retention period to 7 days (or longer, up to 365 days).",
+        "text": "Raise the retention period to 7 days or more",
         "correct": true,
         "why": "Longer retention keeps records available so consumers can rewind to a timestamp and reprocess after fixes."
       }
@@ -1796,27 +1796,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Create an on-demand backup of the table (through DynamoDB or AWS Backup) immediately before running the script.",
+        "text": "Take an on-demand backup right before the script",
         "correct": true,
         "why": "On-demand backups capture the full table at a point in time with no performance impact, and are kept until you delete them, so they can be restored to a new table."
       },
       {
         "key": "B",
-        "text": "Rely on DynamoDB Streams.",
+        "text": "Rely on DynamoDB Streams to replay old values",
         "correct": false,
-        "why": "Streams keep only 24 hours of changes and aren't a restorable backup."
+        "why": "Streams keep only 24 hours of changes and can't restore a table."
       },
       {
         "key": "C",
-        "text": "Increase read capacity.",
+        "text": "Export the table to S3 with an incremental export",
         "correct": false,
-        "why": "Read capacity affects throughput only and doesn't capture a restorable copy of the table."
+        "why": "An export copies data but can't be restored directly into DynamoDB."
       },
       {
         "key": "D",
-        "text": "Enable global tables.",
+        "text": "Enable global tables as a fallback copy",
         "correct": false,
-        "why": "Replicas would receive the script's changes too."
+        "why": "Global tables replicate the script's changes immediately."
       }
     ],
     "explanation": {
@@ -1846,27 +1846,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Nested stacks",
+        "text": "Nested stacks for the database resources",
         "correct": false,
         "why": "Nested stacks organize templates but don't preview impact on their own."
       },
       {
         "key": "B",
-        "text": "Change sets, reviewed for Replacement: True before being executed",
+        "text": "Change sets reviewed for Replacement: True",
         "correct": true,
         "why": "Change sets preview proposed changes, including whether each resource will be modified or replaced, before anything is applied."
       },
       {
         "key": "C",
-        "text": "Drift detection",
+        "text": "Drift detection before each update",
         "correct": false,
         "why": "Drift detection compares actual resources with the template's last deployed state. It doesn't preview pending updates."
       },
       {
         "key": "D",
-        "text": "Stack outputs",
+        "text": "A stack policy that denies all updates",
         "correct": false,
-        "why": "Outputs export values and don't preview changes."
+        "why": "A stack policy can block changes, but it doesn't show what an update will do."
       }
     ],
     "explanation": {

@@ -16,25 +16,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Add a bucket policy to both buckets that allows access from the VPC CIDR range of the instances.",
+        "text": "Add bucket policies that allow access from the instances' VPC CIDR range.",
         "correct": false,
         "why": "S3 bucket policies cannot use a VPC CIDR as a principal. The aws:SourceIp condition only sees public IPs, and aws:SourceVpc only works through a VPC endpoint. Network location is also not an identity, and IAM best practice is to grant access to a principal."
       },
       {
         "key": "B",
-        "text": "Store the access keys in AWS Systems Manager Parameter Store as a SecureString and load them at application startup.",
+        "text": "Store the access keys in Parameter Store as a SecureString and load them at startup.",
         "correct": false,
         "why": "This hides the keys better but they are still long-term IAM user credentials. It also creates a chicken-and-egg problem, because the instance needs credentials to read Parameter Store in the first place."
       },
       {
         "key": "C",
-        "text": "Rotate the IAM user's access keys every 30 days using a cron job on each instance.",
+        "text": "Rotate the IAM user's access keys every 30 days with a cron job on each instance.",
         "correct": false,
         "why": "Rotation shortens the exposure window but the long-term credentials still live on disk, which is exactly what the audit flagged. Anyone who gains shell access, or reads a snapshot or AMI, can still copy them."
       },
       {
         "key": "D",
-        "text": "Create an IAM role with read access to the source bucket and write access to the thumbnail bucket, and attach it to the instances through an instance profile.",
+        "text": "Attach an IAM role with the needed bucket permissions through an instance profile.",
         "correct": true,
         "why": "An instance profile delivers short-lived, automatically rotated credentials through the instance metadata service. Nothing is stored on disk, and the policy can be scoped to exactly the two buckets and actions required."
       }
@@ -72,27 +72,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Create an IAM role in the Production account with read-only DynamoDB permissions and a trust policy that allows the Analytics account to assume it. Grant the data engineers sts:AssumeRole permission for that role.",
+        "text": "A Production role with read-only DynamoDB access that Analytics users can assume",
         "correct": true,
         "why": "This is the standard cross-account pattern. The trust policy says who may assume the role, the permissions policy says what the role can do, and the engineers receive temporary credentials without any new users in Production."
       },
       {
         "key": "B",
-        "text": "Export the table to Amazon S3 every night and copy the export files into a bucket in the Analytics account.",
+        "text": "Nightly table exports to S3, copied into a bucket in the Analytics account",
         "correct": false,
         "why": "This hands the engineers a stale copy rather than access to the table, adds a pipeline to build and pay for, and duplicates sensitive production data into another account. It solves a different problem."
       },
       {
         "key": "C",
-        "text": "Enable VPC peering between the two accounts and query the DynamoDB table over the peering connection.",
+        "text": "VPC peering between the accounts, with a DynamoDB gateway endpoint in each",
         "correct": false,
-        "why": "VPC peering handles network routing and has nothing to do with authorization. DynamoDB is accessed through its regional API endpoint, and IAM decides whether a request is allowed."
+        "why": "Peering and endpoints handle network paths; access to DynamoDB is still governed by IAM in the Production account, which needs a role."
       },
       {
         "key": "D",
-        "text": "Share the Production account's AWS access keys with the data engineers through AWS Secrets Manager.",
+        "text": "An Analytics IAM policy that allows reads on the Production table's ARN",
         "correct": false,
-        "why": "Sharing long-term keys violates least privilege and auditability, because all actions appear as the same identity. It also requires creating an IAM user, which the security team prohibited."
+        "why": "An identity policy in the Analytics account alone can't grant access to another account's table; the Production account must also allow it, for example through a role."
       }
     ],
     "explanation": {
@@ -124,25 +124,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Enable AWS CloudTrail in all Regions and create Amazon EventBridge rules that terminate resources created outside the approved Regions.",
+        "text": "CloudTrail with EventBridge rules that terminate resources in other Regions.",
         "correct": false,
         "why": "This is an after-the-fact, custom-built remediation workflow with a lot of moving parts. There is still a window where non-compliant resources exist, and maintaining it is significant ongoing effort."
       },
       {
         "key": "B",
-        "text": "Create a service control policy (SCP) that denies actions when aws:RequestedRegion is not an approved Region, excluding global services, and attach it to the organization root.",
+        "text": "An SCP on the root that denies requests outside the approved Regions.",
         "correct": true,
         "why": "An SCP sets the maximum available permissions for every principal in the member accounts, including account admins and the member account root user. One policy attached at the root enforces the rule everywhere, including accounts created later."
       },
       {
         "key": "C",
-        "text": "Use AWS Config rules in every account to detect resources created in unapproved Regions and notify the compliance team.",
+        "text": "AWS Config rules in every account that detect resources in other Regions.",
         "correct": false,
         "why": "AWS Config is detective, not preventive: it reports the violation after the resource already exists. The requirement is that no one can create resources outside the approved Regions."
       },
       {
         "key": "D",
-        "text": "Attach an IAM policy to every IAM user and role in each account that denies actions when aws:RequestedRegion is not one of the approved Regions.",
+        "text": "IAM policies on every user and role denying requests to other Regions.",
         "correct": false,
         "why": "This would technically work, but it has to be applied to every identity in 40 accounts and account administrators could simply remove it. It is high-effort and not tamper-proof."
       }
@@ -280,25 +280,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Store the credentials in AWS Secrets Manager, enable automatic rotation using the managed RDS rotation function, and have the Lambda function retrieve the secret at runtime.",
+        "text": "Secrets Manager with managed RDS rotation, read by the function at runtime.",
         "correct": true,
         "why": "Secrets Manager provides built-in rotation templates for RDS that update both the secret and the database user. The function just calls GetSecretValue (ideally with caching), so there is no custom rotation code."
       },
       {
         "key": "B",
-        "text": "Enable IAM database authentication and rotate the IAM user's access keys every 30 days.",
+        "text": "IAM database authentication, rotating an IAM user's access keys every 30 days.",
         "correct": false,
         "why": "IAM database authentication is a valid way to avoid passwords, but Lambda should use its execution role, not IAM user keys. It also requires application code changes to generate auth tokens, and the connection-rate limits make it a poor fit for high-traffic workloads."
       },
       {
         "key": "C",
-        "text": "Store the password in AWS Systems Manager Parameter Store as a SecureString and write a scheduled Lambda function that changes it every 30 days.",
+        "text": "Parameter Store SecureString, with a scheduled Lambda that changes the password.",
         "correct": false,
         "why": "Parameter Store has no native rotation, so you would have to write, test and maintain the rotation logic yourself, including the database password change. That is more effort than a managed rotation feature."
       },
       {
         "key": "D",
-        "text": "Encrypt the environment variable with a customer managed AWS KMS key and rotate the KMS key every 30 days.",
+        "text": "Encrypt the environment variable with a KMS key that rotates every 30 days.",
         "correct": false,
         "why": "Rotating the KMS key changes the encryption key material, not the database password. The actual credential stays the same."
       }
@@ -384,25 +384,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Rely on AWS Shield Standard, which is automatically enabled on all AWS accounts.",
+        "text": "Rely on AWS Shield Standard, which is enabled on all accounts automatically.",
         "correct": false,
         "why": "Shield Standard is free and automatic, but it includes no access to the Shield Response Team and no cost-protection credits."
       },
       {
         "key": "B",
-        "text": "Deploy AWS WAF with rate-based rules on the Application Load Balancers.",
+        "text": "Deploy AWS WAF rate-based rules on the Application Load Balancers.",
         "correct": false,
         "why": "Rate-based rules help against HTTP floods but do not provide expert response or billing protection. WAF is often used together with Shield Advanced, not instead of it."
       },
       {
         "key": "C",
-        "text": "Subscribe to AWS Shield Advanced and enable protection on the load balancers and Amazon CloudFront distributions.",
+        "text": "Subscribe to Shield Advanced and protect the load balancers and CloudFront.",
         "correct": true,
         "why": "Shield Advanced adds 24/7 access to the Shield Response Team (SRT), detailed attack diagnostics, and DDoS cost protection that credits scaling charges caused by attacks on protected resources."
       },
       {
         "key": "D",
-        "text": "Enable Amazon GuardDuty to detect and automatically block DDoS traffic.",
+        "text": "Enable Amazon GuardDuty to detect DDoS traffic and block it automatically.",
         "correct": false,
         "why": "GuardDuty is a threat-detection service that analyses logs. It does not mitigate DDoS traffic inline or provide cost protection."
       }
@@ -436,25 +436,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Add a security group to the S3 bucket that allows inbound traffic only from CloudFront IP ranges.",
+        "text": "A bucket policy allowing only CloudFront's published IP ranges",
         "correct": false,
-        "why": "S3 buckets do not have security groups. Security groups attach to ENIs in a VPC."
+        "why": "CloudFront IP ranges are shared with all customers, and bucket policies on IP don't tie access to this distribution."
       },
       {
         "key": "B",
-        "text": "Enable S3 Transfer Acceleration on the bucket.",
+        "text": "Enable S3 Transfer Acceleration on the bucket",
         "correct": false,
         "why": "Transfer Acceleration speeds up long-distance uploads and downloads using edge locations. It does not restrict who can access the bucket."
       },
       {
         "key": "C",
-        "text": "Use S3 pre-signed URLs for every object and share them in the application.",
+        "text": "Use S3 presigned URLs for every object in the app",
         "correct": false,
         "why": "Pre-signed URLs go directly to S3 and bypass CloudFront, which makes the problem worse. They also expire and are hard to manage for many public previews."
       },
       {
         "key": "D",
-        "text": "Configure an origin access control (OAC) on the CloudFront distribution, block public access on the bucket, and update the bucket policy to allow s3:GetObject only from the CloudFront service principal for that distribution.",
+        "text": "Origin access control, with a bucket policy for the distribution",
         "correct": true,
         "why": "OAC signs CloudFront's requests to S3. The bucket policy grants access only to cloudfront.amazonaws.com with an AWS:SourceArn condition matching the distribution, so direct S3 URLs return Access Denied."
       }
@@ -602,25 +602,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Add inbound DENY rules to the network ACL with rule numbers higher than the existing ALLOW rule for HTTPS.",
+        "text": "Network ACL DENY rules numbered above the HTTPS ALLOW rule",
         "correct": false,
         "why": "NACL evaluation stops at the first match. The HTTPS allow (lower number) would match first, and the deny would never be evaluated."
       },
       {
         "key": "B",
-        "text": "Add inbound DENY rules for the IP addresses to the subnet's network ACL with rule numbers lower than the existing ALLOW rule for HTTPS.",
+        "text": "Network ACL DENY rules numbered below the HTTPS ALLOW rule",
         "correct": true,
         "why": "NACLs support explicit deny rules and evaluate them in ascending rule-number order. A lower-numbered deny matches first, so those IPs are blocked before the broader allow is reached."
       },
       {
         "key": "C",
-        "text": "Remove the route to the internet gateway from the subnet's route table.",
+        "text": "Remove the internet gateway route from the subnet's route table",
         "correct": false,
         "why": "This cuts off all internet traffic, legitimate customers included. It is far too broad."
       },
       {
         "key": "D",
-        "text": "Add deny rules for the IP addresses to the instances' security group.",
+        "text": "Deny rules for the IP addresses in the instances' security group",
         "correct": false,
         "why": "Security groups only support allow rules. There is no way to write an explicit deny in a security group."
       }
@@ -654,9 +654,9 @@
     "options": [
       {
         "key": "A",
-        "text": "Amazon Inspector",
+        "text": "Amazon Inspector with S3 bucket scanning",
         "correct": false,
-        "why": "Inspector finds software vulnerabilities in compute workloads. It does not scan object contents in S3 for sensitive data."
+        "why": "Inspector scans for software vulnerabilities in compute resources; it doesn't classify PII in S3."
       },
       {
         "key": "B",
@@ -706,25 +706,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Create IAM users in each of the 25 accounts that match employee usernames and synchronize passwords nightly with a script.",
+        "text": "IAM users in each account, with passwords synced nightly by a script",
         "correct": false,
         "why": "That means 75,000 potential IAM users, password syncing, and a custom script. It is the most overhead possible and it creates long-term credentials everywhere."
       },
       {
         "key": "B",
-        "text": "Configure a separate SAML 2.0 identity provider and IAM roles manually in each of the 25 accounts.",
+        "text": "A SAML identity provider and roles set up manually in each account",
         "correct": false,
         "why": "Per-account SAML federation works but must be configured and maintained 25 times. Identity Center centralizes this and is the lower-overhead choice."
       },
       {
         "key": "C",
-        "text": "Use Amazon Cognito user pools federated with Active Directory and grant access to the AWS Management Console.",
+        "text": "Amazon Cognito user pools federated with Active Directory",
         "correct": false,
         "why": "Cognito is designed for customer identities in your own web and mobile apps (CIAM), not workforce access to AWS accounts and the console."
       },
       {
         "key": "D",
-        "text": "Enable AWS IAM Identity Center, connect it to Active Directory using AWS Directory Service (AD Connector or AWS Managed Microsoft AD with a trust), and assign permission sets to AD groups for each account.",
+        "text": "IAM Identity Center connected to AD, with permission sets per group",
         "correct": true,
         "why": "IAM Identity Center is the AWS service for workforce single sign-on across accounts in an organization. Connected to AD, it lets users sign in with corporate credentials and receive role-based access defined by permission sets mapped to AD groups."
       }

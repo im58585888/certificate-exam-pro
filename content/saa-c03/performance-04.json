@@ -116,27 +116,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Amazon DocumentDB (with MongoDB compatibility)",
+        "text": "Amazon DocumentDB (MongoDB compatibility)",
         "correct": true,
         "why": "DocumentDB is a managed document database that supports MongoDB APIs and drivers, with storage that scales automatically and read replicas."
       },
       {
         "key": "B",
-        "text": "Amazon Neptune",
+        "text": "Amazon DynamoDB with a JSON document model",
         "correct": false,
-        "why": "Neptune is a graph database with graph query languages. It isn't compatible with MongoDB drivers or queries."
+        "why": "DynamoDB stores JSON items but uses its own API, so MongoDB drivers and queries would need rewriting."
       },
       {
         "key": "C",
-        "text": "Amazon Keyspaces",
+        "text": "Amazon Keyspaces (for Apache Cassandra)",
         "correct": false,
-        "why": "Keyspaces is Apache Cassandra-compatible, not MongoDB-compatible."
+        "why": "Keyspaces is Cassandra-compatible (CQL), not MongoDB-compatible."
       },
       {
         "key": "D",
-        "text": "Amazon RDS for PostgreSQL",
+        "text": "Amazon RDS for PostgreSQL with JSONB columns",
         "correct": false,
-        "why": "Moving to RDS for PostgreSQL would require rewriting data access code away from MongoDB APIs."
+        "why": "JSONB stores documents, but the application's MongoDB drivers and queries would need to be rewritten in SQL."
       }
     ],
     "explanation": {
@@ -268,25 +268,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Migrate to Amazon Redshift.",
+        "text": "Move to RDS for MySQL with io2 Block Express storage",
         "correct": false,
-        "why": "Redshift is a data warehouse, not an OLTP database."
+        "why": "Faster storage helps I/O, but replicas still lag on binlog replication and storage still needs manual sizing."
       },
       {
         "key": "B",
-        "text": "Move to Amazon DynamoDB.",
+        "text": "Move to MySQL on EC2 with semi-synchronous replicas",
         "correct": false,
-        "why": "DynamoDB isn't MySQL-compatible, so the application would need a redesign."
+        "why": "Self-managing MySQL adds operational work, and semi-sync replication slows writes without removing lag."
       },
       {
         "key": "C",
-        "text": "Add more RDS read replicas.",
+        "text": "Add more RDS read replicas in the same Region",
         "correct": false,
-        "why": "More binlog-based replicas can make lag worse and don't fix manual storage management."
+        "why": "More binlog replicas lag the same way during write peaks, and RDS for MySQL limits the replica count."
       },
       {
         "key": "D",
-        "text": "Migrate to Amazon Aurora MySQL-Compatible Edition.",
+        "text": "Migrate to Amazon Aurora MySQL-Compatible Edition",
         "correct": true,
         "why": "Aurora uses shared, distributed storage that grows automatically, supports up to 15 low-lag replicas that read the same storage, and typically delivers higher throughput than standard MySQL."
       }
@@ -370,25 +370,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Enable DynamoDB Streams.",
+        "text": "Enable DynamoDB Streams and keep a list of open orders",
         "correct": false,
-        "why": "Streams capture changes but don't provide a queryable view of open orders on their own."
+        "why": "Maintaining a separate list in code works but is custom logic; a sparse GSI gives the same result natively."
       },
       {
         "key": "B",
-        "text": "Add an attribute (such as OpenFlag) that exists only on open items, removed when an order closes, and create a GSI on it, a sparse index containing just the open orders.",
+        "text": "A sparse GSI on an attribute that only open orders have",
         "correct": true,
         "why": "GSIs only include items that have the index key attributes. A sparse GSI holds only the few thousand open orders, so queries are fast and cheap."
       },
       {
         "key": "C",
-        "text": "Keep scanning, with a larger page size.",
+        "text": "A GSI with Status as the partition key",
         "correct": false,
-        "why": "Scans still read all 500 million items and charge for them."
+        "why": "All 5,000 open orders would share one partition key value, creating a hot partition, and every closed order would sit in the index too."
       },
       {
         "key": "D",
-        "text": "Create an LSI on status.",
+        "text": "Create an LSI on Status for the orders table",
         "correct": false,
         "why": "LSIs must be created at table creation, keep the same partition key, and wouldn't give a compact global view of open orders."
       }
@@ -421,27 +421,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Disable HTTP/2.",
+        "text": "Enable HTTP/3 on the CloudFront distribution",
         "correct": false,
-        "why": "HTTP/2 generally improves performance. Disabling it would hurt."
+        "why": "HTTP/3 improves connection setup but doesn't shrink the uncompressed bundles."
       },
       {
         "key": "B",
-        "text": "Move the files to S3 Glacier Instant Retrieval.",
+        "text": "Minify the bundles and upload them again to S3",
         "correct": false,
-        "why": "Storage class changes don't compress files and add retrieval charges."
+        "why": "Minifying helps a little, but compression saves far more and is a single setting."
       },
       {
         "key": "C",
-        "text": "Enable automatic compression (Gzip and Brotli) in the CloudFront cache behavior's cache policy.",
+        "text": "Enable Gzip and Brotli in the cache policy",
         "correct": true,
         "why": "CloudFront can compress eligible text objects at the edge when viewers support it, which greatly reduces bytes transferred and speeds up page loads."
       },
       {
         "key": "D",
-        "text": "Increase the origin's EC2 instance size.",
+        "text": "Raise the cache TTL on the bundles to one year",
         "correct": false,
-        "why": "The origin is S3, and transfer size is the problem."
+        "why": "Longer caching helps repeat visits, but every first download is still uncompressed."
       }
     ],
     "explanation": {
@@ -472,25 +472,25 @@
     "options": [
       {
         "key": "A",
-        "text": "T instances (burstable)",
+        "text": "G5 instances with NVIDIA A10G GPUs for inference",
         "correct": false,
-        "why": "Burstable CPUs are unsuitable for sustained, heavy inference."
+        "why": "G5 GPUs work for inference, but Inferentia2 is purpose-built for lower-cost, high-throughput deep learning inference."
       },
       {
         "key": "B",
-        "text": "R instances (memory optimized)",
+        "text": "P5 instances with NVIDIA H100 GPUs",
         "correct": false,
-        "why": "R instances have large memory but no ML accelerators, so they're inefficient for deep learning inference."
+        "why": "P5 instances are designed for large-scale training and cost far more per inference."
       },
       {
         "key": "C",
-        "text": "D instances (dense HDD storage)",
+        "text": "Trn1 instances with AWS Trainium",
         "correct": false,
-        "why": "D instances are optimized for storage, not ML compute."
+        "why": "Trainium is purpose-built for training models, not for serving inference."
       },
       {
         "key": "D",
-        "text": "Inf2 instances powered by AWS Inferentia2 (using the AWS Neuron SDK)",
+        "text": "Inf2 instances with AWS Inferentia2",
         "correct": true,
         "why": "Inferentia chips are purpose-built for deep learning inference, offering high throughput and low cost per inference, with Neuron integration for PyTorch and TensorFlow."
       }
@@ -523,25 +523,25 @@
     "options": [
       {
         "key": "A",
-        "text": "G family (graphics-accelerated GPU instances)",
+        "text": "G family (graphics-accelerated GPU)",
         "correct": true,
         "why": "G instances provide NVIDIA or AMD GPUs optimized for graphics-intensive work such as 3D visualization, rendering, game streaming and remote workstations."
       },
       {
         "key": "B",
-        "text": "I family (storage optimized)",
+        "text": "I family (storage optimized, NVMe)",
         "correct": false,
         "why": "I instances target local NVMe I/O, not graphics."
       },
       {
         "key": "C",
-        "text": "X family (memory optimized)",
+        "text": "P family (GPU compute for ML training)",
         "correct": false,
-        "why": "X instances provide very large memory, not GPU graphics."
+        "why": "P instances target ML training and HPC compute rather than graphics workstations, and cost more."
       },
       {
         "key": "D",
-        "text": "C family (compute optimized)",
+        "text": "C family (compute optimized, high CPU)",
         "correct": false,
         "why": "C instances have powerful CPUs but no GPUs for graphics acceleration."
       }
@@ -574,27 +574,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Use a larger instance in the nearest Region.",
+        "text": "A larger instance in the nearest AWS Region",
         "correct": false,
         "why": "Instance size doesn't reduce network path latency."
       },
       {
         "key": "B",
-        "text": "Deploy the processing tier in AWS Wavelength Zones within the 5G carrier's network.",
+        "text": "AWS Wavelength Zones in the 5G carrier's network",
         "correct": true,
         "why": "Wavelength places AWS compute and storage inside carrier 5G networks, so traffic from mobile devices reaches the application without leaving the telecom network."
       },
       {
         "key": "C",
-        "text": "Use Amazon CloudFront.",
+        "text": "An AWS Local Zone in the nearest metro area",
         "correct": false,
-        "why": "CloudFront caches and delivers content, and isn't meant for real-time processing of device video frames."
+        "why": "Local Zones are close to cities, but traffic still leaves the carrier network over the internet; Wavelength sits inside the 5G network."
       },
       {
         "key": "D",
-        "text": "Use AWS Snowball Edge.",
+        "text": "AWS Outposts racks installed at the stadium",
         "correct": false,
-        "why": "Snowball is for data transfer and edge compute in disconnected sites, not a 5G mobile edge platform."
+        "why": "Outposts brings AWS to a data center you operate, not into the carrier's 5G network, and takes months to deploy."
       }
     ],
     "explanation": {
@@ -624,15 +624,15 @@
     "options": [
       {
         "key": "A",
-        "text": "Simple routing",
+        "text": "Geolocation routing by continent",
         "correct": false,
-        "why": "Simple routing returns records without regard to latency or health."
+        "why": "Geolocation routes by where users are, which may not be the lowest-latency Region for them."
       },
       {
         "key": "B",
-        "text": "Failover routing",
+        "text": "Geoproximity routing without bias",
         "correct": false,
-        "why": "Failover is active-passive, so all users go to the primary while it's healthy."
+        "why": "Geoproximity routes by physical distance, which doesn't always match network latency."
       },
       {
         "key": "C",
@@ -642,7 +642,7 @@
       },
       {
         "key": "D",
-        "text": "Weighted routing",
+        "text": "Weighted routing across Regions",
         "correct": false,
         "why": "Weighted routing splits traffic by percentage regardless of latency."
       }
@@ -731,25 +731,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Lower memory",
+        "text": "Raise memory to speed initialization",
         "correct": false,
-        "why": "Less memory means less CPU, which usually makes initialization slower."
+        "why": "More memory helps a little, but a large framework still takes seconds to initialize."
       },
       {
         "key": "B",
-        "text": "Reserved concurrency",
+        "text": "Provisioned concurrency during peak hours",
         "correct": false,
-        "why": "Reserved concurrency guarantees and caps capacity but doesn't make initialization faster."
+        "why": "This removes cold starts while active but costs money and can't anticipate unpredictable traffic."
       },
       {
         "key": "C",
-        "text": "A longer function timeout",
+        "text": "Lazy-load the framework in the handler",
         "correct": false,
-        "why": "The timeout doesn't affect cold-start duration."
+        "why": "Deferring initialization moves the delay to the first request rather than removing it."
       },
       {
         "key": "D",
-        "text": "Lambda SnapStart on published function versions",
+        "text": "Lambda SnapStart on published versions",
         "correct": true,
         "why": "SnapStart snapshots the initialized execution environment when you publish a version and resumes from that snapshot, cutting startup latency for Java (and other supported runtimes) without provisioned concurrency's always-on cost."
       }
@@ -781,27 +781,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Increase the function's ephemeral storage (/tmp) up to the needed size (up to 10,240 MB).",
+        "text": "Increase ephemeral storage (/tmp) up to 10,240 MB",
         "correct": true,
         "why": "Lambda's /tmp defaults to 512 MB and can be configured up to 10 GB, which is enough for these temporary files."
       },
       {
         "key": "B",
-        "text": "Enable provisioned concurrency.",
+        "text": "Stream the files from S3 instead of saving to disk",
         "correct": false,
-        "why": "Provisioned concurrency doesn't change storage limits."
+        "why": "Streaming could avoid disk use but requires rewriting the code, and the 4 GB model must be on disk."
       },
       {
         "key": "C",
-        "text": "Attach an EBS volume to the Lambda function.",
+        "text": "Mount an Amazon EFS file system on the function",
         "correct": false,
-        "why": "Lambda doesn't support EBS. The options are larger /tmp or mounting EFS."
+        "why": "EFS works for large files but adds a VPC, access point and file system to manage; raising /tmp is simpler."
       },
       {
         "key": "D",
-        "text": "Increase the function timeout.",
+        "text": "Package the model in a Lambda layer",
         "correct": false,
-        "why": "A longer timeout gives the function more time but no more disk space, so the write still fails."
+        "why": "Layers are limited to 250 MB unzipped with the function, far too small for a 4 GB model."
       }
     ],
     "explanation": {
@@ -831,27 +831,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Increase Lambda reserved concurrency.",
+        "text": "Increase Lambda reserved concurrency for the function",
         "correct": false,
         "why": "This keeps an unnecessary layer and its cost, and still has account limits."
       },
       {
         "key": "B",
-        "text": "Configure API Gateway with a direct AWS service integration to SQS (SendMessage), using a mapping template to transform the request.",
+        "text": "API Gateway direct service integration with SQS SendMessage",
         "correct": true,
         "why": "API Gateway can call SQS directly through a service integration, which removes the pass-through Lambda and its concurrency limits and cost, while SQS still buffers the load."
       },
       {
         "key": "C",
-        "text": "Replace SQS with synchronous database writes.",
+        "text": "Send requests to Kinesis through a Lambda proxy",
         "correct": false,
-        "why": "Bursts would overwhelm the database, and the buffering would be lost."
+        "why": "This still keeps the Lambda layer that causes the concurrency and cost problem."
       },
       {
         "key": "D",
-        "text": "Add CloudFront caching for POST requests.",
+        "text": "Use an ALB with Lambda targets instead of API Gateway",
         "correct": false,
-        "why": "CloudFront doesn't cache POSTs, so this doesn't help ingestion."
+        "why": "Lambda is still invoked for every request."
       }
     ],
     "explanation": {
@@ -881,25 +881,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Scan the relational table more often.",
+        "text": "Index the score column and cache ORDER BY results",
         "correct": false,
-        "why": "More frequent heavy queries make the load worse."
+        "why": "Caching helps briefly, but scores change thousands of times per second, so the cache is constantly stale."
       },
       {
         "key": "B",
-        "text": "Use DynamoDB Scan sorted by score.",
+        "text": "A DynamoDB GSI with score as the sort key",
         "correct": false,
-        "why": "Scans don't return results sorted globally, and they're costly at this scale."
+        "why": "A GSI can return top scores, but computing each player's exact rank needs counting, which a sorted set does natively."
       },
       {
         "key": "C",
-        "text": "Store scores in an ElastiCache (Valkey or Redis OSS) sorted set, and use sorted-set commands for score updates, rank lookups and top-N queries.",
+        "text": "ElastiCache (Valkey or Redis OSS) sorted sets",
         "correct": true,
         "why": "Sorted sets keep members ordered by score in memory, so updates and rank or range queries are logarithmic-time operations with sub-millisecond latency."
       },
       {
         "key": "D",
-        "text": "Store scores in S3 and query with Athena.",
+        "text": "Store scores in S3 and query them with Athena",
         "correct": false,
         "why": "Athena queries take seconds and aren't suited to real-time ranking."
       }
@@ -931,25 +931,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Increase the table's write capacity.",
+        "text": "Run the 60 GetItem calls in parallel threads",
         "correct": false,
-        "why": "The problem is read round trips, not write capacity."
+        "why": "Parallel calls help, but 60 requests still add overhead; BatchGetItem does it in one round trip."
       },
       {
         "key": "B",
-        "text": "Enable Point-in-time recovery.",
+        "text": "Add DAX in front of the table",
         "correct": false,
-        "why": "PITR is a backup feature and doesn't affect read latency."
+        "why": "DAX reduces each call's latency but still needs 60 sequential round trips."
       },
       {
         "key": "C",
-        "text": "Switch to Scan with a filter.",
+        "text": "Use Query on a GSI containing the 60 items",
         "correct": false,
-        "why": "Scanning reads the entire table, which is far slower and more expensive."
+        "why": "The items are fetched by primary key and don't share a partition key, so a Query isn't possible."
       },
       {
         "key": "D",
-        "text": "Use BatchGetItem to retrieve the items in one request (up to 100 items per call), handling any unprocessed keys.",
+        "text": "Use BatchGetItem, retrying any unprocessed keys",
         "correct": true,
         "why": "BatchGetItem fetches many items in parallel on the service side in one round trip, which cuts total latency sharply."
       }
@@ -982,27 +982,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Amazon CloudWatch Database Insights (Performance Insights), which visualizes database load by top SQL, wait events, users and hosts",
+        "text": "CloudWatch Database Insights (Performance Insights)",
         "correct": true,
         "why": "This tooling breaks database load (average active sessions) down by SQL, waits and dimensions, so the queries behind the spikes are easy to find."
       },
       {
         "key": "B",
-        "text": "AWS Trusted Advisor",
+        "text": "Enhanced Monitoring on the DB instances",
         "correct": false,
-        "why": "Trusted Advisor provides account-level checks, not query-level diagnostics."
+        "why": "Enhanced Monitoring shows OS-level metrics such as processes, but not which SQL statements or wait events drive load."
       },
       {
         "key": "C",
-        "text": "VPC Flow Logs",
+        "text": "CloudWatch Logs Insights on the Aurora error log",
         "correct": false,
-        "why": "Flow logs show network flows, not SQL workload analysis."
+        "why": "The error log doesn't show query-level load or wait events."
       },
       {
         "key": "D",
-        "text": "AWS Config",
+        "text": "AWS X-Ray traces for the application",
         "correct": false,
-        "why": "Config records configuration history, not database performance."
+        "why": "X-Ray traces requests in the app, not the database's SQL load and wait events."
       }
     ],
     "explanation": {
@@ -1032,27 +1032,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Enable Multi-AZ.",
+        "text": "Add ElastiCache in us-east-1 for read queries",
         "correct": false,
-        "why": "Multi-AZ adds a standby in the same Region, which doesn't serve reads or reduce distance."
+        "why": "A cache in us-east-1 still forces every request across the Atlantic."
       },
       {
         "key": "B",
-        "text": "Create a cross-Region read replica in eu-west-1 and route European read traffic to it.",
+        "text": "A cross-Region read replica in eu-west-1 for EU reads",
         "correct": true,
         "why": "A replica in Europe serves reads locally with low latency, while writes continue to go to the primary in us-east-1."
       },
       {
         "key": "C",
-        "text": "Enable RDS storage autoscaling.",
+        "text": "Put CloudFront in front of the database endpoint",
         "correct": false,
-        "why": "Storage size doesn't affect network latency."
+        "why": "CloudFront delivers HTTP content; it can't front a MySQL database connection."
       },
       {
         "key": "D",
-        "text": "Increase the primary instance size.",
+        "text": "Move the primary to eu-west-1 and replicate back",
         "correct": false,
-        "why": "A bigger instance doesn't remove transatlantic network latency."
+        "why": "Moving writes to Europe slows the US users and isn't required, since writes can stay in us-east-1."
       }
     ],
     "explanation": {
@@ -1082,27 +1082,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Enable EBS encryption.",
+        "text": "Change the volume to st1 Throughput Optimized HDD",
         "correct": false,
-        "why": "Encryption protects data at rest. It doesn't raise the volume's throughput ceiling."
+        "why": "st1 can reach 500 MiB/s only on large volumes, short of 600 MiB/s here, and conversion adds risk."
       },
       {
         "key": "B",
-        "text": "Switch to io2 with very high IOPS.",
+        "text": "Switch to io2 with very high provisioned IOPS",
         "correct": false,
         "why": "The need is throughput, not IOPS, and io2 costs more."
       },
       {
         "key": "C",
-        "text": "Modify the gp3 volume to provision additional throughput (for example 600 MiB/s), keeping the same size and IOPS.",
+        "text": "Raise the gp3 volume's provisioned throughput",
         "correct": true,
         "why": "gp3 lets you provision throughput independently of size and IOPS, beyond the 125 MiB/s baseline, and the change happens online."
       },
       {
         "key": "D",
-        "text": "Double the volume size.",
+        "text": "Double the gp3 volume size to 4 TB",
         "correct": false,
-        "why": "gp3 throughput doesn't grow automatically with size. It's provisioned separately."
+        "why": "gp3 throughput is provisioned separately; more capacity doesn't raise it above 125 MiB/s."
       }
     ],
     "explanation": {
@@ -1132,15 +1132,15 @@
     "options": [
       {
         "key": "A",
-        "text": "S3 Glacier Deep Archive",
+        "text": "Copy the data to FSx for Lustre before each run",
         "correct": false,
-        "why": "Archived objects need restores and can't be read directly."
+        "why": "Lustre gives high throughput but means creating a file system and loading data, which the team wants to avoid."
       },
       {
         "key": "B",
-        "text": "S3 Transfer Acceleration",
+        "text": "Mount the bucket with an S3 File Gateway",
         "correct": false,
-        "why": "Acceleration optimizes long-distance transfers, not local file-system access."
+        "why": "File Gateway adds a gateway appliance and a cache in the data path, which limits throughput."
       },
       {
         "key": "C",
@@ -1150,7 +1150,7 @@
       },
       {
         "key": "D",
-        "text": "Mountpoint for Amazon S3, mounting the bucket as a local file system on the instances",
+        "text": "Mountpoint for Amazon S3 on the instances",
         "correct": true,
         "why": "Mountpoint translates file reads and new-file writes into S3 API calls with high throughput. It's designed for read-heavy workloads that don't need full POSIX semantics such as in-place edits or locking."
       }
@@ -1182,27 +1182,27 @@
     "options": [
       {
         "key": "A",
-        "text": "ALBRequestCountPerTarget, with a target of about 1,000",
+        "text": "ALBRequestCountPerTarget at about 1,000",
         "correct": true,
         "why": "Request count per target directly measures the load that degrades performance, so the group scales out before instances saturate."
       },
       {
         "key": "B",
-        "text": "NetworkIn on a single instance",
+        "text": "Average NetworkIn per instance in the group",
         "correct": false,
-        "why": "A single instance's network metric doesn't represent group load in a controllable way."
+        "why": "Network traffic correlates loosely with requests but doesn't track the known 1,000 request limit."
       },
       {
         "key": "C",
-        "text": "Average CPU utilization at 90%",
+        "text": "Average CPU utilization at 40%",
         "correct": false,
-        "why": "CPU doesn't reflect this I/O-bound bottleneck, and 90% reacts even later."
+        "why": "A lower CPU target scales earlier but still doesn't measure the I/O-bound request load."
       },
       {
         "key": "D",
-        "text": "EBS free storage",
+        "text": "Target response time reported by the ALB",
         "correct": false,
-        "why": "Storage has nothing to do with request load."
+        "why": "Target tracking can't use latency directly, and latency reacts after users are already affected."
       }
     ],
     "explanation": {
@@ -1232,25 +1232,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Scale manually each morning and evening",
+        "text": "Scheduled scaling: 8 tasks by day, 2 at night",
         "correct": false,
-        "why": "Manual scaling is error-prone and can't respond to unexpected peaks."
+        "why": "Schedules help but don't react to unexpected peaks or quiet days."
       },
       {
         "key": "B",
-        "text": "ECS Service Auto Scaling with a target tracking policy (for example, average CPU at 60% or ALB requests per target), with sensible minimum and maximum task counts",
+        "text": "ECS Service Auto Scaling with target tracking",
         "correct": true,
         "why": "Service Auto Scaling adjusts the desired task count to keep the metric at its target, adding tasks under load and removing them when idle."
       },
       {
         "key": "C",
-        "text": "Switch to a larger EC2 instance",
+        "text": "Move the service to larger EC2 container instances",
         "correct": false,
-        "why": "Fargate tasks don't run on your instances, and this doesn't add elasticity."
+        "why": "The service runs on Fargate; instance size doesn't add tasks."
       },
       {
         "key": "D",
-        "text": "Increase the task CPU permanently",
+        "text": "Increase each task's CPU and memory permanently",
         "correct": false,
         "why": "Bigger tasks cost more at night and may still saturate at peak."
       }
@@ -1282,27 +1282,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Amazon Route 53",
+        "text": "Network Load Balancer with TLS listeners",
         "correct": false,
-        "why": "Route 53 resolves DNS names and can't inspect or route by gRPC service and method paths."
+        "why": "NLB balances at layer 4 and can't route by gRPC service and method or use gRPC health codes."
       },
       {
         "key": "B",
-        "text": "Classic Load Balancer",
+        "text": "Classic Load Balancer with HTTPS listeners",
         "correct": false,
         "why": "CLB doesn't support gRPC routing or HTTP/2 to targets."
       },
       {
         "key": "C",
-        "text": "Application Load Balancer with a gRPC target group protocol version",
+        "text": "ALB with a gRPC target group protocol version",
         "correct": true,
         "why": "ALB supports end-to-end HTTP/2 and gRPC, routing on gRPC service and method paths, and gRPC-specific health checks."
       },
       {
         "key": "D",
-        "text": "Gateway Load Balancer",
+        "text": "Gateway Load Balancer with GENEVE targets",
         "correct": false,
-        "why": "GWLB inserts network appliances at layer 3 and doesn't do layer-7 gRPC routing."
+        "why": "Gateway Load Balancer inserts virtual appliances; it doesn't route application traffic by path."
       }
     ],
     "explanation": {
@@ -1332,25 +1332,25 @@
     "options": [
       {
         "key": "A",
-        "text": "S3 Inventory",
+        "text": "Redshift Spectrum with external tables in the catalog",
         "correct": false,
-        "why": "S3 Inventory lists objects and can't query databases."
+        "why": "Spectrum queries S3 data from Redshift; it doesn't reach RDS or DynamoDB directly."
       },
       {
         "key": "B",
-        "text": "Amazon Macie",
+        "text": "AWS Glue ETL jobs that join the sources",
         "correct": false,
-        "why": "Macie finds sensitive data and isn't a query engine."
+        "why": "Glue would copy and transform the data, which the analysts want to avoid."
       },
       {
         "key": "C",
-        "text": "AWS DataSync",
+        "text": "AWS DataSync tasks that copy the sources",
         "correct": false,
-        "why": "DataSync copies files and objects, which is the opposite of querying in place."
+        "why": "DataSync moves files; it doesn't run SQL across sources."
       },
       {
         "key": "D",
-        "text": "Amazon Athena federated query, using data source connectors (Lambda-based) for RDS and DynamoDB",
+        "text": "Athena federated query with data source connectors",
         "correct": true,
         "why": "Federated queries let Athena query data in place across relational, NoSQL and other sources through connectors, and join the results with S3 data."
       }
@@ -1382,27 +1382,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Create materialized views for the aggregations, with automatic refresh, and point the dashboards at them (or rely on automatic query rewrite).",
+        "text": "Materialized views with automatic refresh",
         "correct": true,
         "why": "Materialized views precompute and store the results, so dashboard queries read small precomputed tables in milliseconds to seconds, and refresh keeps them current."
       },
       {
         "key": "B",
-        "text": "Increase the WLM query timeout.",
+        "text": "Enable concurrency scaling for the dashboards",
         "correct": false,
-        "why": "Longer timeouts don't make queries faster."
+        "why": "Concurrency scaling handles more simultaneous queries, but each still takes 40 seconds."
       },
       {
         "key": "C",
-        "text": "Export results to CSV nightly.",
+        "text": "Enable short query acceleration",
         "correct": false,
-        "why": "Nightly exports would leave the dashboards stale."
+        "why": "SQA prioritizes short queries; these are long, complex aggregations."
       },
       {
         "key": "D",
-        "text": "Enable Redshift Spectrum.",
+        "text": "Use Redshift Spectrum for the five tables",
         "correct": false,
-        "why": "Spectrum queries S3 data. It doesn't precompute repeated aggregations."
+        "why": "Querying data in S3 is usually slower than local tables and doesn't reuse results."
       }
     ],
     "explanation": {
@@ -1445,21 +1445,21 @@
       },
       {
         "key": "C",
-        "text": "Convert the tables to CSV files in S3.",
+        "text": "Use EVEN distribution for both tables to balance the slices",
         "correct": false,
-        "why": "This loses Redshift's columnar storage optimizations for these frequent joins."
+        "why": "EVEN spreads rows evenly but doesn't co-locate matching customer_id rows, so the join still redistributes data."
       },
       {
         "key": "D",
-        "text": "Use ALL distribution for the 5-billion-row sales table.",
+        "text": "Use ALL distribution for the 5-billion-row sales table",
         "correct": false,
         "why": "ALL copies the entire table to every node. It suits small dimension tables, not huge fact tables."
       },
       {
         "key": "E",
-        "text": "Remove all compression encodings.",
+        "text": "Define customer_id as the sort key on the customer table",
         "correct": false,
-        "why": "Compression reduces I/O. Removing it generally hurts performance."
+        "why": "A sort key helps range filters on that table but doesn't stop redistribution for the join."
       }
     ],
     "explanation": {
@@ -1489,27 +1489,27 @@
     "options": [
       {
         "key": "A",
-        "text": "A provisioned OpenSearch domain sized for peak",
+        "text": "A provisioned OpenSearch domain sized for peak load",
         "correct": false,
         "why": "This pays for peak capacity all the time and requires cluster management."
       },
       {
         "key": "B",
-        "text": "Amazon OpenSearch Serverless collections (search and time-series types)",
+        "text": "OpenSearch Serverless search and time-series collections",
         "correct": true,
         "why": "OpenSearch Serverless scales compute capacity automatically for indexing and search, with no clusters or shards to manage, which suits variable workloads."
       },
       {
         "key": "C",
-        "text": "DynamoDB Scan with contains()",
+        "text": "OpenSearch on EC2 with an Auto Scaling group",
         "correct": false,
-        "why": "This is slow, costly and lacks relevance ranking."
+        "why": "The team would be managing clusters, shards and instances, which it wants to avoid."
       },
       {
         "key": "D",
-        "text": "Amazon Athena",
+        "text": "Amazon Kendra indexes for the logs and products",
         "correct": false,
-        "why": "Athena isn't built for low-latency interactive product search."
+        "why": "Kendra is for enterprise document search, not log analytics or product search with facets."
       }
     ],
     "explanation": {
@@ -1539,27 +1539,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Increase the stream's retention.",
+        "text": "Use PutRecords to send up to 500 records per call",
         "correct": false,
-        "why": "Retention controls how long records are kept, not how many records per second a shard accepts."
+        "why": "Batching cuts API calls, but each 200-byte record still counts against the 1,000 records per second per shard limit."
       },
       {
         "key": "B",
-        "text": "Enable enhanced fan-out.",
+        "text": "Enable enhanced fan-out for every consumer",
         "correct": false,
         "why": "Enhanced fan-out improves reads, not the write record rate."
       },
       {
         "key": "C",
-        "text": "Use the Kinesis Producer Library (KPL) with record aggregation (and collection), deaggregating on the consumer side (for example with the KCL).",
+        "text": "Use the KPL with aggregation; deaggregate in the KCL",
         "correct": true,
         "why": "Aggregation packs many small user records into each Kinesis record, which uses the per-shard byte capacity instead of hitting the record-count limit, so far fewer shards are needed."
       },
       {
         "key": "D",
-        "text": "Use single PutRecord calls with retries.",
+        "text": "Switch the stream to on-demand capacity mode",
         "correct": false,
-        "why": "Single PutRecord calls with retries are the current inefficient pattern that hits the record-count limit."
+        "why": "On-demand scales shards automatically, but you still pay for the shards the record count requires."
       }
     ],
     "explanation": {
@@ -1640,25 +1640,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Amazon Data Firehose with OpenSearch Service as the destination and an S3 backup for failed records",
+        "text": "Data Firehose to OpenSearch with S3 backup",
         "correct": true,
         "why": "Firehose buffers and delivers streaming data to OpenSearch automatically, with retries, optional Lambda transformation and S3 backup, and needs no consumer code."
       },
       {
         "key": "B",
-        "text": "Amazon SQS with manual polling",
+        "text": "CloudWatch Logs subscription filters to a Lambda function",
         "correct": false,
-        "why": "This needs custom polling and loading code."
+        "why": "This works but involves a Lambda function to write and manage for delivery and retries."
       },
       {
         "key": "C",
-        "text": "Nightly batch uploads to OpenSearch",
+        "text": "Nightly batch uploads to OpenSearch from S3",
         "correct": false,
         "why": "Nightly batches don't meet the roughly one-minute freshness requirement."
       },
       {
         "key": "D",
-        "text": "A custom Kinesis Client Library application on EC2",
+        "text": "A Kinesis Client Library application on EC2",
         "correct": false,
         "why": "This works but requires building and operating consumers, which the team wants to avoid."
       }
@@ -1740,15 +1740,15 @@
     "options": [
       {
         "key": "A",
-        "text": "AWS Lambda",
+        "text": "AWS Glue Spark jobs with auto scaling",
         "correct": false,
-        "why": "Lambda's time and memory limits don't fit large Spark jobs."
+        "why": "Glue runs serverless Spark too, but it's designed for ETL with Glue's runtime; EMR Serverless runs open-source Spark apps directly."
       },
       {
         "key": "B",
-        "text": "Amazon RDS",
+        "text": "Amazon Athena for Apache Spark notebooks",
         "correct": false,
-        "why": "RDS is a relational database service. It can't run Apache Spark jobs."
+        "why": "Athena Spark is for interactive notebook analysis rather than scheduled production jobs."
       },
       {
         "key": "C",
@@ -1796,7 +1796,7 @@
       },
       {
         "key": "B",
-        "text": "Run everything on self-managed EC2 for maximum control.",
+        "text": "Run everything on self-managed EC2 for maximum control",
         "correct": false,
         "why": "This contradicts the principle of using serverless and managed services where they fit."
       },
@@ -1808,15 +1808,15 @@
       },
       {
         "key": "D",
-        "text": "Avoid experimentation to reduce risk.",
+        "text": "Build a custom solution first, then adopt managed services",
         "correct": false,
-        "why": "The principle is to experiment more often, which is cheap and fast in the cloud."
+        "why": "This delays benefits and keeps the team running undifferentiated infrastructure."
       },
       {
         "key": "E",
-        "text": "Always choose the largest instance types to be safe.",
+        "text": "Use the largest instance types to absorb overseas latency",
         "correct": false,
-        "why": "Over-provisioning isn't a performance efficiency principle. It wastes resources."
+        "why": "Bigger instances don't reduce network distance to overseas users."
       }
     ],
     "explanation": {

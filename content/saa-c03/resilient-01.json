@@ -16,25 +16,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Put an Application Load Balancer in front of the processing tier.",
+        "text": "Put an ALB in front of the processing tier with health checks",
         "correct": false,
-        "why": "An ALB distributes requests but does not buffer them. When all targets are saturated, requests still fail."
+        "why": "An ALB spreads load but has no buffer; when every instance is saturated, requests still fail and orders are lost."
       },
       {
         "key": "B",
-        "text": "Increase the instance size of the processing tier to handle peak load at all times.",
+        "text": "Run the processing tier at peak size at all times",
         "correct": false,
         "why": "Permanent over-provisioning is expensive, and it still fails if a spike exceeds the chosen size. The tiers remain tightly coupled."
       },
       {
         "key": "C",
-        "text": "Use Amazon SNS to push orders to the processing instances over HTTP.",
+        "text": "Use SNS to push orders to the processing instances over HTTP",
         "correct": false,
         "why": "SNS is push-based. If subscribers are overwhelmed, it retries and eventually drops messages, or sends them to a DLQ, which is not a work queue. Consumers cannot pull at their own pace."
       },
       {
         "key": "D",
-        "text": "Place an Amazon SQS queue between the web tier and the processing tier, and scale the processing tier based on queue depth.",
+        "text": "Put an SQS queue between tiers; scale on queue depth",
         "correct": true,
         "why": "SQS durably stores every order until a worker processes it, absorbing the spike while the processing tier scales out. Scaling on ApproximateNumberOfMessagesVisible (or backlog per instance) matches capacity to the actual work waiting."
       }
@@ -68,25 +68,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Amazon SQS FIFO queue using the customer account ID as the message group ID and content-based or explicit deduplication",
+        "text": "SQS FIFO with account ID as message group ID, with deduplication",
         "correct": true,
         "why": "FIFO queues guarantee strict ordering within each message group and exactly-once processing within the deduplication window. Using the account ID as the group ID keeps each account ordered while different accounts are processed in parallel."
       },
       {
         "key": "B",
-        "text": "Amazon SNS standard topic with multiple SQS standard queue subscribers",
+        "text": "SNS standard topic fanning out to SQS standard queues",
         "correct": false,
         "why": "Standard SNS and SQS provide no ordering or deduplication guarantees."
       },
       {
         "key": "C",
-        "text": "Amazon SQS standard queue with long polling",
+        "text": "SQS standard queue with long polling and a DLQ",
         "correct": false,
-        "why": "Standard queues offer at-least-once delivery and best-effort ordering, so duplicates and out-of-order messages are possible."
+        "why": "Standard queues don't guarantee order and can deliver a message more than once."
       },
       {
         "key": "D",
-        "text": "Amazon SQS FIFO queue using a single, fixed message group ID for all messages",
+        "text": "SQS FIFO with one fixed message group ID for all messages",
         "correct": false,
         "why": "This preserves order and exactly-once delivery, but it forces every message into one sequential stream and throws away the allowed parallelism across accounts."
       }
@@ -224,25 +224,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Weighted routing with a 50/50 split between the ALB and the S3 website",
+        "text": "Weighted routing with a 50/50 split between ALB and S3",
         "correct": false,
-        "why": "Weighted routing splits live traffic by weight, so half of all users would see the maintenance page even while the main site is perfectly healthy."
+        "why": "A 50/50 split sends half of all users to the maintenance page even while the primary site is healthy."
       },
       {
         "key": "B",
-        "text": "Simple routing with both the ALB and S3 website endpoints in one record",
+        "text": "Simple routing with both endpoints in one record",
         "correct": false,
         "why": "Simple routing returns values at random and does not support health checks, so users could land on either site at any time."
       },
       {
         "key": "C",
-        "text": "Latency-based routing between the ALB and the S3 website",
+        "text": "Latency-based routing between the ALB and S3 site",
         "correct": false,
         "why": "Latency routing picks the lowest-latency Region for each user. Some users would be sent to the maintenance page even while the main site is healthy."
       },
       {
         "key": "D",
-        "text": "Failover routing with the ALB as the primary record (with a health check) and the S3 website endpoint as the secondary record",
+        "text": "Failover routing: ALB primary, S3 website secondary",
         "correct": true,
         "why": "Failover routing returns the primary while its health check passes and automatically returns the secondary when it fails. This is the textbook active-passive design."
       }
@@ -335,27 +335,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Store session data in Amazon ElastiCache (Redis OSS or Valkey) and make the web instances stateless.",
+        "text": "Store sessions in ElastiCache; keep instances stateless",
         "correct": true,
         "why": "A shared, low-latency, in-memory store externalizes session state. Any instance can serve any request, and instances can be added or removed freely without logging anyone out."
       },
       {
         "key": "B",
-        "text": "Store session data on each instance's EBS volume.",
+        "text": "Store sessions on each instance's EBS volume",
         "correct": false,
         "why": "EBS volumes are attached to a single instance, and the data is lost to other instances when that instance is terminated."
       },
       {
         "key": "C",
-        "text": "Enable sticky sessions (session affinity) on the ALB target group.",
+        "text": "Enable sticky sessions on the ALB target group",
         "correct": false,
         "why": "Stickiness keeps a user on the same instance but does not survive that instance being terminated. It also creates uneven load. It hides the problem rather than fixing it."
       },
       {
         "key": "D",
-        "text": "Disable scale-in on the Auto Scaling group.",
+        "text": "Set termination protection on all instances in the group",
         "correct": false,
-        "why": "This avoids some logouts but wastes money and still fails when an instance is replaced for health reasons."
+        "why": "Termination protection doesn't stop Auto Scaling from terminating instances or prevent instance failures."
       }
     ],
     "explanation": {
@@ -387,25 +387,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Have the order service call each downstream system's API synchronously.",
+        "text": "Call each downstream system's API synchronously",
         "correct": false,
         "why": "This tightly couples the systems. If shipping is down, orders fail or need custom retry logic, and a slow system slows every order."
       },
       {
         "key": "B",
-        "text": "Publish the order to an Amazon SNS topic that has three Amazon SQS queues subscribed, one per downstream system.",
+        "text": "SNS topic with an SQS queue subscribed for each system",
         "correct": true,
         "why": "SNS fans each message out to every subscribed queue, and each SQS queue durably buffers messages so its consumer can process at its own pace or catch up after downtime, independently of the others."
       },
       {
         "key": "C",
-        "text": "Send the order to a single Amazon SQS queue that all three systems poll.",
+        "text": "One SQS queue that all three systems poll",
         "correct": false,
         "why": "With one queue, each message is consumed by only one consumer. The three systems would compete for messages instead of each getting a copy."
       },
       {
         "key": "D",
-        "text": "Publish to an Amazon SNS topic with each system subscribed through an HTTPS endpoint.",
+        "text": "SNS topic with each system subscribed over HTTPS",
         "correct": false,
         "why": "SNS retries HTTP deliveries for a limited time. A system that is down for maintenance could miss events unless a DLQ and replay process are built. There is no durable per-consumer buffer."
       }
@@ -439,27 +439,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Instance store volumes on each instance, synchronized with rsync",
+        "text": "Instance store volumes on each instance, synced with rsync",
         "correct": false,
         "why": "Instance store is ephemeral, since data is lost when an instance stops or terminates, and custom sync scripts are fragile and not truly concurrent."
       },
       {
         "key": "B",
-        "text": "Amazon EBS General Purpose SSD (gp3) volumes attached to each instance",
+        "text": "EBS gp3 volumes with Multi-Attach on each instance",
         "correct": false,
-        "why": "An EBS volume lives in one AZ and (apart from io1/io2 Multi-Attach within a single AZ) attaches to one instance. Each instance would see different files."
+        "why": "Multi-Attach works only for io1/io2 within one AZ, and needs a cluster file system."
       },
       {
         "key": "C",
-        "text": "Amazon EFS file system with the Standard (Regional) storage class and mount targets in each AZ",
+        "text": "Amazon EFS (Regional) with mount targets in each AZ",
         "correct": true,
         "why": "EFS is a fully managed, elastic NFS file system that many Linux instances across AZs can mount at the same time. Regional storage stores data redundantly across multiple AZs."
       },
       {
         "key": "D",
-        "text": "Amazon FSx for Windows File Server",
+        "text": "Amazon FSx for Lustre with a Scratch deployment",
         "correct": false,
-        "why": "FSx for Windows provides SMB shares with Active Directory integration for Windows workloads. EFS is the native fit for Linux NFS workloads."
+        "why": "Scratch file systems are single-AZ with no replication, so they're not available if an AZ fails."
       }
     ],
     "explanation": {
@@ -491,25 +491,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Use AWS DataSync to copy all data to Amazon S3 in another Region nightly.",
+        "text": "DataSync tasks copying all data to S3 in another Region",
         "correct": false,
         "why": "DataSync moves file and object data. It does not create application-consistent backups of RDS or DynamoDB, and it does not manage retention or compliance."
       },
       {
         "key": "B",
-        "text": "Enable Amazon Data Lifecycle Manager for EBS and rely on each service's native backups for the rest.",
+        "text": "Data Lifecycle Manager for EBS, native backups for the rest",
         "correct": false,
         "why": "DLM covers only EBS snapshots and AMIs. The other services would still be configured inconsistently, with no central compliance view."
       },
       {
         "key": "C",
-        "text": "Write AWS Lambda functions in each account that call each service's snapshot API on a schedule.",
+        "text": "Lambda functions in each account calling snapshot APIs",
         "correct": false,
         "why": "Custom scripts per service and per account mean a lot of code to build, maintain and audit, which is the opposite of least overhead."
       },
       {
         "key": "D",
-        "text": "Use AWS Backup with backup plans deployed through AWS Organizations backup policies, including cross-Region copy rules, and use AWS Backup Audit Manager for compliance reporting.",
+        "text": "AWS Backup with org policies, cross-Region copy, Audit Manager",
         "correct": true,
         "why": "AWS Backup centrally manages backups for EBS, RDS, DynamoDB, EFS and many other services. Organization-level backup policies enforce consistent plans in every account, copy rules handle cross-Region copies, and Audit Manager reports on compliance."
       }
@@ -602,25 +602,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Configure a redrive policy on the source SQS queue that moves messages to a dead-letter queue after a maxReceiveCount of 3.",
+        "text": "A redrive policy to a DLQ with maxReceiveCount of 3",
         "correct": true,
         "why": "With SQS as the event source, the retry behaviour is controlled by the queue. After a message has been received maxReceiveCount times without being deleted, SQS moves it to the DLQ, freeing capacity for valid messages."
       },
       {
         "key": "B",
-        "text": "Configure a dead-letter queue as the Lambda function's asynchronous invocation on-failure destination.",
+        "text": "A DLQ as the function's async on-failure destination",
         "correct": false,
         "why": "Lambda's own DLQ and on-failure destination settings apply to asynchronous invocations. An SQS event source mapping invokes the function synchronously, so failed batches stay in the source queue and this setting is not used."
       },
       {
         "key": "C",
-        "text": "Increase the Lambda function timeout to the maximum of 15 minutes.",
+        "text": "Raise the Lambda timeout to the 15-minute maximum",
         "correct": false,
         "why": "The messages fail because they are malformed, not because they time out. A longer timeout only wastes more compute per failed attempt."
       },
       {
         "key": "D",
-        "text": "Reduce the queue's message retention period to 1 minute.",
+        "text": "Set the queue's message retention period to 1 minute",
         "correct": false,
         "why": "This would delete valid messages too, and the bad messages would be lost rather than kept for investigation."
       }
@@ -658,27 +658,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Add a second Elastic IP address to the existing NAT gateway.",
+        "text": "Add a second Elastic IP address to the NAT gateway",
         "correct": false,
         "why": "Extra IPs increase port capacity for connections, not availability. The gateway still lives only in AZ-a."
       },
       {
         "key": "B",
-        "text": "Create a NAT gateway in a public subnet in each Availability Zone and configure each private subnet's route table to use the NAT gateway in its own AZ.",
+        "text": "A NAT gateway per AZ, each subnet routed to its own AZ's",
         "correct": true,
         "why": "NAT gateways are redundant within one AZ but are zonal resources. One per AZ, with AZ-local routing, means an AZ failure only affects that AZ's instances, and cross-AZ data charges are avoided."
       },
       {
         "key": "C",
-        "text": "Replace the NAT gateway with a larger NAT instance in AZ-a.",
+        "text": "Replace the NAT gateway with a larger NAT instance",
         "correct": false,
         "why": "A NAT instance in AZ-a is still a single point of failure in the same AZ, and it adds patching and scaling work."
       },
       {
         "key": "D",
-        "text": "Attach an internet gateway directly to the private subnets.",
+        "text": "Route both subnets to an egress-only internet gateway",
         "correct": false,
-        "why": "Routing private subnets to an internet gateway makes them public subnets, which requires public IPs and exposes instances. That is not the goal."
+        "why": "Egress-only internet gateways work only for IPv6 traffic; the IPv4 updates and API calls still need NAT."
       }
     ],
     "explanation": {

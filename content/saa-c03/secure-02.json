@@ -14,27 +14,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Grant developers iam:CreateRole and iam:AttachRolePolicy only when the request includes a specific permissions boundary, enforced with the iam:PermissionsBoundary condition key.",
+        "text": "Allow role creation only with a required permissions boundary",
         "correct": true,
         "why": "A permissions boundary caps the maximum permissions any role can have. Requiring it as a condition means every role developers create is capped, no matter what policies they attach."
       },
       {
         "key": "B",
-        "text": "Attach a service control policy that denies iam:CreateRole in the developer accounts.",
+        "text": "An SCP that denies iam:CreateRole in the developer accounts",
         "correct": false,
         "why": "This blocks self-service entirely, which defeats the goal of letting developers create roles."
       },
       {
         "key": "C",
-        "text": "Grant developers IAMFullAccess and review CloudTrail logs weekly for suspicious role creation.",
+        "text": "IAMFullAccess for developers, with weekly CloudTrail reviews",
         "correct": false,
         "why": "IAMFullAccess lets developers create an admin role and assume it. Weekly log review only detects the escalation after it has happened."
       },
       {
         "key": "D",
-        "text": "Require developers to add a Description tag to every role they create.",
+        "text": "Allow role creation only for roles with a \"lambda-\" name prefix",
         "correct": false,
-        "why": "Tags add metadata. They don't limit what permissions a role can have."
+        "why": "A name prefix limits which roles can be created, not what permissions they hold, so developers could still attach administrator access."
       }
     ],
     "explanation": {
@@ -65,27 +65,27 @@
     "options": [
       {
         "key": "A",
-        "text": "The EC2 service quota for ap-southeast-2 is zero.",
+        "text": "The account's EC2 vCPU quota in ap-southeast-2 is zero",
         "correct": false,
-        "why": "Quota problems return a limit-exceeded error, not an explicit authorization deny."
+        "why": "Quota limits produce a limit-exceeded error, not an explicit deny."
       },
       {
         "key": "B",
-        "text": "A service control policy on the account or its OU denies actions in ap-southeast-2.",
+        "text": "An SCP on the account or its OU denies ap-southeast-2",
         "correct": true,
         "why": "SCPs limit every principal in a member account, administrators included. A Region-restriction SCP produces an explicit deny for unapproved Regions even when IAM allows the action."
       },
       {
         "key": "C",
-        "text": "The developer's IAM user is missing the ec2:RunInstances permission.",
+        "text": "A permissions boundary on the user limits EC2 actions",
         "correct": false,
-        "why": "AdministratorAccess allows all actions, and launches in us-east-1 succeed, so the IAM permission is present."
+        "why": "A boundary would block EC2 in every Region, not only ap-southeast-2."
       },
       {
         "key": "D",
-        "text": "The AMI is not shared with the ap-southeast-2 Region.",
+        "text": "The AMI isn't available in ap-southeast-2",
         "correct": false,
-        "why": "A missing AMI returns an invalid-AMI error. It is not an authorization failure."
+        "why": "A missing AMI gives an invalid AMI error, not an explicit deny."
       }
     ],
     "explanation": {
@@ -115,25 +115,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Enable S3 Versioning on all buckets.",
+        "text": "Enable S3 Object Ownership (bucket owner enforced) on every bucket",
         "correct": false,
-        "why": "Versioning protects against deletion. It has no effect on who can read objects."
+        "why": "Disabling ACLs removes one route to public access, but bucket policies can still make buckets public, and future buckets need configuring too."
       },
       {
         "key": "B",
-        "text": "Enable default encryption on all buckets.",
+        "text": "Add an SCP denying s3:PutBucketPolicy for all users",
         "correct": false,
-        "why": "Encrypted objects can still be served publicly if a bucket policy allows it. Encryption does not stop public access."
+        "why": "This blocks legitimate policy changes too, and doesn't cover ACLs or existing public policies."
       },
       {
         "key": "C",
-        "text": "Enable S3 Block Public Access at the account level.",
+        "text": "Enable S3 Block Public Access at the account level",
         "correct": true,
         "why": "Account-level Block Public Access overrides bucket policies and ACLs that grant public access, for all current and future buckets in the account."
       },
       {
         "key": "D",
-        "text": "Run a nightly Lambda function that removes public bucket policies.",
+        "text": "Run a nightly Lambda function that removes public bucket policies",
         "correct": false,
         "why": "This is reactive and leaves a window of exposure. It is also custom code to maintain."
       }
@@ -216,25 +216,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Have the backend generate an S3 presigned URL for the object with a 2-hour expiration.",
+        "text": "Have the backend create a presigned URL that expires in 2 hours",
         "correct": true,
         "why": "A presigned URL carries a signature from the backend's credentials and grants time-limited access to one object. The bucket stays private and the student needs no AWS credentials."
       },
       {
         "key": "B",
-        "text": "Make the videos public and use hard-to-guess object keys.",
+        "text": "Serve the videos through CloudFront with a public cache",
         "correct": false,
-        "why": "Obscurity isn't access control. Anyone with the URL can download forever and share it freely."
+        "why": "A public distribution would let anyone download the videos, not only the logged-in student."
       },
       {
         "key": "C",
-        "text": "Enable S3 Transfer Acceleration on the bucket.",
+        "text": "Give students temporary credentials from STS for the bucket",
         "correct": false,
-        "why": "Acceleration affects transfer speed, not authorization."
+        "why": "Students shouldn't need AWS credentials, and the browser would need to sign requests."
       },
       {
         "key": "D",
-        "text": "Create an IAM user for each student.",
+        "text": "Create an IAM user with S3 read access for each student",
         "correct": false,
         "why": "IAM isn't designed for millions of end users and would create a huge credential-management burden."
       }
@@ -318,25 +318,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Enable default encryption with SSE-KMS on the bucket.",
+        "text": "Enable default encryption with SSE-KMS on the bucket",
         "correct": false,
         "why": "SSE-KMS encrypts data at rest. It doesn't reject unencrypted HTTP connections."
       },
       {
         "key": "B",
-        "text": "Attach an ACM certificate to the bucket.",
+        "text": "Require TLS 1.2 in a Block Public Access setting",
         "correct": false,
-        "why": "S3 endpoints already present AWS certificates, and you can't attach ACM certificates to S3 buckets."
+        "why": "Block Public Access controls public access, not transport encryption."
       },
       {
         "key": "C",
-        "text": "Add a bucket policy statement that denies all s3:* actions when the aws:SecureTransport condition is false.",
+        "text": "Deny requests where aws:SecureTransport is false",
         "correct": true,
         "why": "aws:SecureTransport is false for plain HTTP requests. Denying those requests makes S3 reject any non-TLS access, whatever the client does."
       },
       {
         "key": "D",
-        "text": "Enable S3 Transfer Acceleration, which requires HTTPS.",
+        "text": "Enable S3 Transfer Acceleration, which uses HTTPS",
         "correct": false,
         "why": "Clients can still call the standard endpoint over HTTP. Acceleration doesn't enforce anything on the bucket."
       }
@@ -369,25 +369,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Enable EBS encryption by default in the Region.",
+        "text": "Enable EBS encryption by default in the Region",
         "correct": false,
         "why": "The account-level EBS setting affects new EBS volumes, not managed RDS storage on an existing instance."
       },
       {
         "key": "B",
-        "text": "Modify the DB instance and enable encryption in the console.",
+        "text": "Modify the DB instance to turn on encryption",
         "correct": false,
         "why": "RDS doesn't allow turning on encryption for an existing unencrypted DB instance."
       },
       {
         "key": "C",
-        "text": "Create an encrypted read replica of the unencrypted instance and promote it.",
+        "text": "Create an encrypted read replica, then promote it",
         "correct": false,
         "why": "You can't create an encrypted read replica from an unencrypted RDS instance."
       },
       {
         "key": "D",
-        "text": "Create a snapshot, copy the snapshot with encryption enabled using the KMS key, and restore a new DB instance from the encrypted snapshot.",
+        "text": "Copy a snapshot with encryption, then restore from it",
         "correct": true,
         "why": "Copying a snapshot is the step where encryption can be added. Restoring from the encrypted copy produces an encrypted instance, then you cut the application over to it."
       }
@@ -623,25 +623,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Use an Amazon Cognito identity pool to issue temporary credentials for an IAM role whose policy limits access to the prefix using the ${cognito-identity.amazonaws.com:sub} policy variable.",
+        "text": "Cognito identity pool credentials for the user's prefix",
         "correct": true,
         "why": "Identity pools exchange a user's sign-in token for temporary AWS credentials. The policy variable resolves to each user's unique identity ID, which confines each user to their own prefix."
       },
       {
         "key": "B",
-        "text": "Make the bucket public-write and validate uploads with a Lambda function.",
+        "text": "Presigned upload URLs from the backend for any key",
         "correct": false,
-        "why": "Public write lets anyone upload anything, including malware or huge files. Validating afterwards doesn't prevent abuse."
+        "why": "Presigned URLs go through the company's backend and, as described, don't restrict users to their own prefix for reads."
       },
       {
         "key": "C",
-        "text": "Embed an IAM user's access keys in the app and use a bucket policy to restrict prefixes.",
+        "text": "An IAM user's access keys embedded in the app",
         "correct": false,
         "why": "Keys in a mobile app can be extracted, and every user would share one identity, so per-user isolation is impossible."
       },
       {
         "key": "D",
-        "text": "Create an IAM user for each app user at sign-up.",
+        "text": "An IAM user for each app user, created at sign-up",
         "correct": false,
         "why": "IAM isn't meant for millions of consumer identities and has account-level quotas on users."
       }
@@ -731,19 +731,19 @@
       },
       {
         "key": "B",
-        "text": "API keys with a usage plan",
+        "text": "API keys with a usage plan per partner",
         "correct": false,
         "why": "API keys are for throttling and quotas. They don't validate HMAC signatures."
       },
       {
         "key": "C",
-        "text": "A Lambda authorizer (request type) with authorization caching enabled",
+        "text": "A request Lambda authorizer with caching",
         "correct": true,
         "why": "A Lambda authorizer can run any custom validation logic, including calling on-premises systems, and returns an IAM policy. API Gateway caches the result for a configurable TTL."
       },
       {
         "key": "D",
-        "text": "IAM authorization with SigV4",
+        "text": "IAM authorization with SigV4 signing",
         "correct": false,
         "why": "SigV4 requires AWS credentials. Partners use a proprietary scheme that must be validated by the bank's own key service."
       }
@@ -776,13 +776,13 @@
     "options": [
       {
         "key": "A",
-        "text": "CloudFront geo-restriction",
+        "text": "CloudFront geo-restriction on the premium path",
         "correct": false,
         "why": "Geo-restriction blocks by country. It can't tell subscribers from non-subscribers."
       },
       {
         "key": "B",
-        "text": "AWS WAF rate-based rules",
+        "text": "AWS WAF rate-based rules on the distribution",
         "correct": false,
         "why": "Rate limiting slows abuse but doesn't restrict content to paying users."
       },
@@ -833,19 +833,19 @@
       },
       {
         "key": "B",
-        "text": "S3 Transfer Acceleration",
+        "text": "S3 Object Lock on the bucket in governance mode",
         "correct": false,
-        "why": "Transfer Acceleration only speeds up uploads and downloads over long distances. It provides no integrity evidence for logs."
+        "why": "Governance-mode Object Lock can be bypassed by privileged users and doesn't prove files weren't changed before being locked."
       },
       {
         "key": "C",
-        "text": "Amazon GuardDuty",
+        "text": "Amazon GuardDuty S3 protection for the bucket",
         "correct": false,
         "why": "GuardDuty analyses logs for threats. It doesn't provide cryptographic proof of log integrity."
       },
       {
         "key": "D",
-        "text": "S3 default encryption with SSE-S3",
+        "text": "S3 default encryption with SSE-KMS",
         "correct": false,
         "why": "Encryption protects confidentiality. It doesn't prove a file wasn't modified by someone with access."
       }
@@ -877,27 +877,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Enable VPC Flow Logs for the VPC.",
+        "text": "Enable VPC Flow Logs for the VPC",
         "correct": false,
         "why": "Flow logs capture IP-level metadata, not S3 API calls, principals or object keys."
       },
       {
         "key": "B",
-        "text": "Enable S3 data events for the bucket in the CloudTrail trail.",
+        "text": "Enable S3 data events for the bucket in the trail",
         "correct": true,
         "why": "Data events record object-level API activity (GetObject, PutObject, DeleteObject) with the principal, key and time. They aren't logged by default."
       },
       {
         "key": "C",
-        "text": "Enable CloudTrail Insights.",
+        "text": "Enable CloudTrail Insights on the trail",
         "correct": false,
         "why": "Insights detects unusual rates of management API calls. It doesn't record individual object reads."
       },
       {
         "key": "D",
-        "text": "Enable Amazon S3 Transfer Acceleration logging.",
+        "text": "Enable S3 server access logs and match IP addresses",
         "correct": false,
-        "why": "There is no such audit feature. Acceleration doesn't produce access audit logs."
+        "why": "Server access logs record requests, but they identify requesters less reliably and aren't integrated with CloudTrail for auditing IAM principals."
       }
     ],
     "explanation": {
@@ -928,25 +928,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Run a cron job on an EC2 instance that scans security groups every hour.",
+        "text": "An EventBridge rule plus a custom Lambda function",
         "correct": false,
-        "why": "This is custom, slower and has no built-in compliance history. It is also another server to maintain."
+        "why": "This works but is custom code, and it has no built-in compliance history."
       },
       {
         "key": "B",
-        "text": "Use AWS Trusted Advisor to email the team when SSH is open.",
+        "text": "Trusted Advisor emails when SSH is open",
         "correct": false,
         "why": "Trusted Advisor can flag open ports, but it doesn't remediate automatically or provide per-resource compliance timelines."
       },
       {
         "key": "C",
-        "text": "Use the AWS Config managed rule for restricted SSH with an automatic remediation action that runs an AWS Systems Manager Automation document to revoke the rule.",
+        "text": "AWS Config restricted-ssh rule with SSM auto-remediation",
         "correct": true,
         "why": "Config continuously evaluates security groups against the managed rule, records compliance history, and triggers the managed remediation automatically. No custom code is needed."
       },
       {
         "key": "D",
-        "text": "Enable Amazon GuardDuty to block SSH traffic.",
+        "text": "Amazon GuardDuty to block the SSH traffic",
         "correct": false,
         "why": "GuardDuty detects threats but doesn't modify security groups or track configuration compliance."
       }
@@ -979,25 +979,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Amazon CloudWatch dashboards",
+        "text": "CloudWatch dashboards with cross-account metrics",
         "correct": false,
         "why": "CloudWatch shows metrics and logs. It doesn't normalize security findings or run compliance standards."
       },
       {
         "key": "B",
-        "text": "Amazon Detective",
+        "text": "Amazon Detective with a behavior graph",
         "correct": false,
         "why": "Detective helps investigate findings. It isn't the central aggregation and compliance-scoring hub."
       },
       {
         "key": "C",
-        "text": "AWS Trusted Advisor",
+        "text": "AWS Trusted Advisor with organizational view",
         "correct": false,
         "why": "Trusted Advisor gives best-practice checks but doesn't aggregate GuardDuty, Inspector and Macie findings across an organization."
       },
       {
         "key": "D",
-        "text": "AWS Security Hub with a delegated administrator account",
+        "text": "AWS Security Hub with a delegated administrator",
         "correct": true,
         "why": "Security Hub aggregates findings from AWS security services and partners across accounts and Regions, and runs automated checks against standards such as CIS and AWS Foundational Security Best Practices."
       }
@@ -1190,13 +1190,13 @@
     "options": [
       {
         "key": "A",
-        "text": "Amazon Inspector network reachability",
+        "text": "Amazon Inspector network reachability findings",
         "correct": false,
         "why": "Inspector analyses potential exposure paths. It doesn't record actual traffic flows as they happen."
       },
       {
         "key": "B",
-        "text": "AWS CloudTrail",
+        "text": "AWS CloudTrail management events",
         "correct": false,
         "why": "CloudTrail records API calls, such as someone changing a security group, not packet-level traffic decisions."
       },
@@ -1208,9 +1208,9 @@
       },
       {
         "key": "D",
-        "text": "AWS X-Ray",
+        "text": "VPC Reachability Analyzer",
         "correct": false,
-        "why": "X-Ray traces application requests through services. It doesn't show VPC-level accept or reject decisions."
+        "why": "Reachability Analyzer tests a configured path without sending traffic; it doesn't show which actual flows were accepted or rejected."
       }
     ],
     "explanation": {
@@ -1241,25 +1241,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Configure network ACL rules for the approved domain names.",
+        "text": "Network ACL outbound rules for the approved domains",
         "correct": false,
         "why": "NACLs also only understand IP addresses and CIDRs, not domain names."
       },
       {
         "key": "B",
-        "text": "Use security group outbound rules that reference the approved domain names.",
+        "text": "Route 53 Resolver DNS Firewall allowing only those domains",
         "correct": false,
-        "why": "Security groups work on IP addresses and CIDR ranges, not domain names, and can't do wildcard domain filtering."
+        "why": "DNS Firewall blocks name lookups, but clients connecting directly to IP addresses bypass it, and it doesn't log the blocked connections themselves."
       },
       {
         "key": "C",
-        "text": "Use AWS WAF on the NAT gateway.",
+        "text": "AWS WAF attached to the NAT gateway",
         "correct": false,
         "why": "WAF can't be attached to a NAT gateway. It protects inbound HTTP apps behind ALB, CloudFront, API Gateway and similar."
       },
       {
         "key": "D",
-        "text": "Deploy AWS Network Firewall with a stateful domain-list rule group that allows the approved domains, and route egress traffic through the firewall endpoints.",
+        "text": "Network Firewall with a stateful domain allow list",
         "correct": true,
         "why": "Network Firewall inspects TLS SNI and HTTP Host headers to allow or deny traffic by domain, including wildcards. It logs decisions and scales as a managed service."
       }
@@ -1292,25 +1292,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Place the API behind a Network Load Balancer and publish it as a VPC endpoint service (AWS PrivateLink). Customers create interface endpoints.",
+        "text": "An NLB published as a PrivateLink endpoint service",
         "correct": true,
         "why": "PrivateLink exposes only the service, through ENIs in each customer's subnets. Overlapping CIDRs don't matter, and no route tables or peering are needed."
       },
       {
         "key": "B",
-        "text": "Expose the API publicly and restrict it with security groups.",
+        "text": "A public API restricted with security groups",
         "correct": false,
         "why": "The requirement is private connectivity, and security groups on a public endpoint don't provide it."
       },
       {
         "key": "C",
-        "text": "Create VPC peering connections with each customer VPC.",
+        "text": "VPC peering connections with each customer VPC",
         "correct": false,
         "why": "Peering doesn't work with overlapping CIDRs, exposes routable access between the VPCs, and doesn't scale well to hundreds of connections."
       },
       {
         "key": "D",
-        "text": "Connect all customer VPCs to an AWS Transit Gateway.",
+        "text": "A Transit Gateway connecting all customer VPCs",
         "correct": false,
         "why": "Transit Gateway routes between networks, so overlapping CIDRs cause conflicts and it exposes broader network reachability than one service."
       }
@@ -1394,25 +1394,25 @@
     "options": [
       {
         "key": "A",
-        "text": "An s3:PutObject permission in the Lambda execution role.",
+        "text": "s3:PutObject permission in the Lambda execution role",
         "correct": false,
         "why": "The execution role controls what the function can do, not who can invoke it."
       },
       {
         "key": "B",
-        "text": "An IAM user with Lambda invoke rights for S3 to use.",
+        "text": "lambda:InvokeFunction in an S3 service-linked role",
         "correct": false,
-        "why": "AWS services don't use IAM users. Service principals are authorized through resource policies."
+        "why": "S3 doesn't use a service-linked role for notifications; permission comes from the function's resource-based policy."
       },
       {
         "key": "C",
-        "text": "A statement in the Lambda function's resource-based policy allowing the s3.amazonaws.com principal to call lambda:InvokeFunction, scoped to the bucket's ARN and account.",
+        "text": "A function policy letting S3 invoke it for this bucket",
         "correct": true,
         "why": "Services that push events to Lambda need permission on the function's resource policy. Scoping with SourceArn and SourceAccount prevents other buckets from invoking it."
       },
       {
         "key": "D",
-        "text": "A bucket policy allowing Lambda to read the bucket.",
+        "text": "A bucket policy that allows Lambda to read the bucket",
         "correct": false,
         "why": "Reading the bucket is a separate concern. The failure is S3 lacking permission to invoke the function."
       }
@@ -1503,7 +1503,7 @@
     "options": [
       {
         "key": "A",
-        "text": "Amazon DynamoDB",
+        "text": "Amazon DynamoDB with KMS encryption for the table",
         "correct": false,
         "why": "DynamoDB could store the values, but that means building a config service and encryption handling yourself."
       },
@@ -1515,13 +1515,13 @@
       },
       {
         "key": "C",
-        "text": "An Amazon S3 bucket with a JSON file",
+        "text": "An S3 bucket holding a JSON configuration file",
         "correct": false,
         "why": "S3 works but lacks per-parameter access control, versioned hierarchy semantics and native SecureString encryption, so the team would have to build them."
       },
       {
         "key": "D",
-        "text": "AWS Systems Manager Parameter Store (standard parameters, with SecureString for the tokens)",
+        "text": "Parameter Store standard parameters and SecureString",
         "correct": true,
         "why": "Standard parameters are free, support hierarchies like /app/prod/..., and SecureString parameters are encrypted with KMS. That covers everything required without rotation."
       }
@@ -1553,25 +1553,25 @@
     "options": [
       {
         "key": "A",
-        "text": "IAM Access Analyzer with the organization as the zone of trust",
+        "text": "IAM Access Analyzer, organization as zone of trust",
         "correct": true,
         "why": "Access Analyzer uses automated reasoning over resource policies to generate findings for any resource shared outside the zone of trust, and updates when policies change."
       },
       {
         "key": "B",
-        "text": "Amazon Macie",
+        "text": "Amazon Macie sensitive data discovery jobs",
         "correct": false,
         "why": "Macie focuses on sensitive data in S3, not on policy-based external sharing of roles, keys and functions."
       },
       {
         "key": "C",
-        "text": "VPC Flow Logs",
+        "text": "AWS Config rules for public S3 buckets",
         "correct": false,
-        "why": "Flow logs capture network traffic, not policy permissions."
+        "why": "Config managed rules cover some public access, but not cross-organization access to roles, KMS keys and functions."
       },
       {
         "key": "D",
-        "text": "AWS Trusted Advisor",
+        "text": "AWS Trusted Advisor security checks for all accounts",
         "correct": false,
         "why": "Trusted Advisor has a few checks, such as open S3 buckets, but doesn't comprehensively analyse external access across these resource types."
       }
@@ -1662,25 +1662,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Give all developers ec2:* and rely on naming conventions.",
+        "text": "ec2:* for all developers, with naming conventions",
         "correct": false,
         "why": "Naming conventions aren't enforced, so any developer could stop another team's instances."
       },
       {
         "key": "B",
-        "text": "Use attribute-based access control: tag instances and principals with Project, and allow actions only when aws:ResourceTag/Project equals ${aws:PrincipalTag/Project}.",
+        "text": "ABAC: match the resource and principal Project tags",
         "correct": true,
         "why": "ABAC compares tags at request time. One policy scales to any number of projects, and new instances or teams only need correct tags."
       },
       {
         "key": "C",
-        "text": "Put each project in its own VPC and restrict by VPC ID.",
+        "text": "One VPC per project, with conditions on ec2:Vpc",
         "correct": false,
         "why": "This adds network complexity and still needs per-VPC policy maintenance. It's also not how EC2 start/stop authorization is normally scoped."
       },
       {
         "key": "D",
-        "text": "Create one IAM policy per project listing the instance IDs, and update it when instances change.",
+        "text": "One policy per project, listing its instance IDs",
         "correct": false,
         "why": "This is role-based access with resource lists, which requires constant policy edits as instances and projects change."
       }
@@ -1764,25 +1764,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Create a separate DynamoDB table for each user.",
+        "text": "Create a separate DynamoDB table for each user",
         "correct": false,
         "why": "This doesn't scale (tables are subject to account quotas) and is operationally unmanageable."
       },
       {
         "key": "B",
-        "text": "Filter results in the mobile app so users only see their own data.",
+        "text": "Filter results in the app to show only the user's data",
         "correct": false,
         "why": "Client-side filtering isn't security. A modified app could read anyone's items."
       },
       {
         "key": "C",
-        "text": "Enable DynamoDB encryption with a customer managed key.",
+        "text": "Use a fine-grained condition on dynamodb:Attributes",
         "correct": false,
-        "why": "Encryption at rest doesn't control which authenticated user can read which item."
+        "why": "Attribute conditions restrict which columns are visible, not which items (partition keys) a user can access."
       },
       {
         "key": "D",
-        "text": "Use a condition on dynamodb:LeadingKeys that matches ${cognito-identity.amazonaws.com:sub} in the authenticated role's IAM policy.",
+        "text": "dynamodb:LeadingKeys matched to the Cognito identity ID",
         "correct": true,
         "why": "The LeadingKeys condition restricts access to items whose partition key equals the caller's identity. That is fine-grained, per-user access enforced by IAM."
       }
@@ -1822,19 +1822,19 @@
       },
       {
         "key": "B",
-        "text": "Enable S3 Versioning.",
+        "text": "S3 Object Lock in governance mode on the sensitive bucket",
         "correct": false,
-        "why": "Versioning helps with recovery, not access paths."
+        "why": "Object Lock prevents deletes and overwrites; it doesn't control which network path or bucket is used."
       },
       {
         "key": "C",
-        "text": "A security group on the gateway endpoint that allows only the instances.",
+        "text": "A security group on the gateway endpoint that allows only the instances",
         "correct": false,
         "why": "Gateway endpoints don't have security groups. They are route table targets."
       },
       {
         "key": "D",
-        "text": "S3 Block Public Access on the sensitive bucket.",
+        "text": "S3 Block Public Access on the sensitive bucket",
         "correct": false,
         "why": "This prevents public access but doesn't restrict authenticated access to one endpoint, or stop exfiltration to other buckets."
       },
@@ -1924,25 +1924,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Add a NAT gateway and route the subnets to it.",
+        "text": "Add a NAT gateway and route the subnets to it",
         "correct": false,
         "why": "This works technically but violates the no-internet policy and adds cost."
       },
       {
         "key": "B",
-        "text": "Create an interface VPC endpoint for Secrets Manager in the private subnets, with a security group allowing HTTPS from the function.",
+        "text": "An interface VPC endpoint for Secrets Manager",
         "correct": true,
         "why": "An interface endpoint (PrivateLink) gives a private IP for the Secrets Manager API inside the VPC, so the function reaches it without internet access."
       },
       {
         "key": "C",
-        "text": "Store the credentials in plaintext environment variables.",
+        "text": "Store the credentials in plaintext environment variables",
         "correct": false,
         "why": "This weakens security and bypasses the purpose of Secrets Manager."
       },
       {
         "key": "D",
-        "text": "Move the Lambda function out of the VPC.",
+        "text": "Move the Lambda function out of the VPC",
         "correct": false,
         "why": "The function would lose private access to the RDS database."
       }
@@ -1975,25 +1975,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Pass access keys to each container as environment variables.",
+        "text": "Pass access keys to each container in environment variables",
         "correct": false,
         "why": "Long-term keys in environment variables are a security anti-pattern."
       },
       {
         "key": "B",
-        "text": "Keep the shared instance role and use security groups to separate the services.",
+        "text": "Keep the shared instance role and use security groups",
         "correct": false,
         "why": "Security groups control network traffic, not IAM permissions to DynamoDB or S3."
       },
       {
         "key": "C",
-        "text": "Create a separate IAM task role for each task definition with only the permissions that service needs.",
+        "text": "A separate IAM task role per task definition",
         "correct": true,
         "why": "ECS task roles give each task its own credentials, delivered through the ECS agent, so each container gets only its own permissions even on shared hosts."
       },
       {
         "key": "D",
-        "text": "Run each service on dedicated EC2 instances with different instance roles.",
+        "text": "Dedicated EC2 instances per service with their own roles",
         "correct": false,
         "why": "This works but wastes capacity and adds operational overhead. Task roles solve the problem natively."
       }
@@ -2179,25 +2179,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Mount the file system using TLS.",
+        "text": "Mount the file system using TLS from every client",
         "correct": false,
         "why": "TLS encrypts data in transit, not the data stored on the file system."
       },
       {
         "key": "B",
-        "text": "Enable encryption at rest on the existing file system from the console.",
+        "text": "Enable encryption at rest on the existing file system",
         "correct": false,
         "why": "EFS encryption at rest can only be enabled when a file system is created."
       },
       {
         "key": "C",
-        "text": "Create a new EFS file system with encryption at rest enabled and migrate the data, for example with AWS DataSync, then switch clients to it.",
+        "text": "Create an encrypted file system and migrate with DataSync",
         "correct": true,
         "why": "Because encryption is a creation-time setting, the solution is a new encrypted file system plus a data migration. DataSync handles the copy efficiently."
       },
       {
         "key": "D",
-        "text": "Enable EBS encryption by default.",
+        "text": "Enable EBS encryption by default in the Region",
         "correct": false,
         "why": "EFS isn't EBS, so the setting doesn't apply."
       }
@@ -2282,27 +2282,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Update the KMS key policy to allow the SNS service principal to use kms:GenerateDataKey and kms:Decrypt on the key.",
+        "text": "Allow the SNS service principal in the KMS key policy",
         "correct": true,
         "why": "SNS has to encrypt messages with the queue's key when delivering. Customer managed keys need a key policy statement that grants the SNS service principal those actions."
       },
       {
         "key": "B",
-        "text": "Switch the topic to SNS FIFO.",
+        "text": "Add sqs:SendMessage for SNS to the queue policy",
         "correct": false,
-        "why": "Ordering is unrelated. The failure is a KMS permission problem."
+        "why": "The queue policy already allowed SNS before encryption was enabled; the new failure is SNS's access to the key."
       },
       {
         "key": "C",
-        "text": "Disable long polling on the queue.",
+        "text": "Disable long polling on the queue",
         "correct": false,
         "why": "Polling behavior affects receivers, not SNS's ability to deliver encrypted messages."
       },
       {
         "key": "D",
-        "text": "Increase the queue's visibility timeout.",
+        "text": "Switch the KMS key to the AWS managed key for SQS",
         "correct": false,
-        "why": "The visibility timeout affects message processing after delivery. The messages never arrive at all."
+        "why": "SNS can't use the AWS managed key for SQS because its policy can't be changed to allow the SNS principal."
       }
     ],
     "explanation": {

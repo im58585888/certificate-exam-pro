@@ -71,27 +71,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Hire more DBAs.",
+        "text": "Keep EC2 and automate patching with Systems Manager",
         "correct": false,
-        "why": "Hiring more DBAs adds salary cost to do the same undifferentiated work a managed service automates."
+        "why": "Patch Manager helps with patching, but the DBAs would still own backups, replication and failover."
       },
       {
         "key": "B",
-        "text": "Migrate to Amazon RDS for MySQL (or Aurora), which automates patching, backups, Multi-AZ failover and monitoring.",
+        "text": "Migrate to Amazon RDS for MySQL or Aurora MySQL",
         "correct": true,
         "why": "Managed databases take on undifferentiated operational work, freeing DBAs for higher-value tasks and often lowering overall TCO even if hourly prices are higher."
       },
       {
         "key": "C",
-        "text": "Move MySQL to larger EC2 instances.",
+        "text": "Move MySQL to Graviton EC2 instances with Savings Plans",
         "correct": false,
-        "why": "This increases infrastructure cost without reducing operational effort."
+        "why": "This lowers infrastructure cost but leaves all the operational work, the bigger part of TCO here, with the DBAs."
       },
       {
         "key": "D",
-        "text": "Run MySQL on Spot Instances.",
+        "text": "Run MySQL replicas on Spot and the primary On-Demand",
         "correct": false,
-        "why": "Interruptions are unacceptable for a primary database and add operational risk."
+        "why": "Spot replicas can be interrupted at any time, which adds operational risk and work instead of reducing it."
       }
     ],
     "explanation": {
@@ -121,27 +121,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Convert the volumes to io2.",
+        "text": "Convert the volumes from gp3 to sc1 Cold HDD",
         "correct": false,
-        "why": "io2 costs more per GB than gp3 and adds per-IOPS charges, which makes rarely read data even more expensive."
+        "why": "sc1 is cheaper per GB, but the volumes are still provisioned and attached to a few instances, so other teams still can't easily share the data."
       },
       {
         "key": "B",
-        "text": "Create more EBS snapshots.",
+        "text": "Snapshot the volumes and delete them, restoring when needed",
         "correct": false,
-        "why": "Snapshots add storage cost and don't remove the provisioned volumes."
+        "why": "Restoring 200 TB of volumes for every read is slow and laborious, and the data isn't shared across teams."
       },
       {
         "key": "C",
-        "text": "Move the datasets to Amazon S3 (with an appropriate storage class or Intelligent-Tiering), and access them from compute on demand.",
+        "text": "Move the datasets to S3 with Intelligent-Tiering",
         "correct": true,
         "why": "S3 charges only for data stored, with no provisioned capacity, at a lower per-GB price than EBS. Many consumers can share it, and cold data can tier down automatically."
       },
       {
         "key": "D",
-        "text": "Attach the volumes to larger instances.",
+        "text": "Move the data to an EFS file system in Standard class",
         "correct": false,
-        "why": "This raises compute cost and doesn't change storage cost."
+        "why": "EFS is shareable, but Standard storage costs more per GB than gp3 for rarely read data."
       }
     ],
     "explanation": {
@@ -172,25 +172,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Compress the data after transfer.",
+        "text": "Compress the data in S3 before each monthly transfer",
         "correct": false,
-        "why": "Compressing after transfer doesn't reduce the bytes already transferred."
+        "why": "Compression shrinks the bill somewhat, but it doesn't eliminate inter-Region transfer charges."
       },
       {
         "key": "B",
-        "text": "Use a larger instance type.",
+        "text": "Use S3 Cross-Region Replication to copy data to us-west-2",
         "correct": false,
-        "why": "Instance size doesn't affect data transfer pricing."
+        "why": "Replication still bills inter-Region transfer for the data, and doubles storage."
       },
       {
         "key": "C",
-        "text": "Enable S3 Transfer Acceleration.",
+        "text": "Enable S3 Transfer Acceleration on the bucket",
         "correct": false,
         "why": "Acceleration adds charges and doesn't remove inter-Region transfer."
       },
       {
         "key": "D",
-        "text": "Run the analytics compute in us-east-1, the same Region as the data (or move the data to us-west-2).",
+        "text": "Run the compute in us-east-1, the same Region as the data",
         "correct": true,
         "why": "Data transfer between S3 and EC2 in the same Region is free, while inter-Region transfer is billed per GB. Co-locating compute and data removes the charge."
       }
@@ -222,27 +222,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Change the replication configuration to use filters, so only the critical prefixes (or objects with a specific tag) are replicated, optionally to a lower-cost storage class in the destination.",
+        "text": "Replication rules filtered to the critical prefixes or tags",
         "correct": true,
         "why": "Replication rules can filter by prefix or tags and set the destination storage class, so only needed data is copied and stored economically."
       },
       {
         "key": "B",
-        "text": "Disable versioning on the source bucket.",
+        "text": "Replicate everything, but to S3 Glacier Deep Archive",
         "correct": false,
-        "why": "Replication requires versioning, so disabling it would break replication entirely."
+        "why": "A cheaper destination class lowers storage cost, but all 1.2 PB still incurs replication transfer and request charges."
       },
       {
         "key": "C",
-        "text": "Use S3 Transfer Acceleration for replication.",
+        "text": "Switch to S3 Batch Replication run once a month",
         "correct": false,
-        "why": "Replication doesn't use Transfer Acceleration, and it would add cost."
+        "why": "Batch Replication still copies every object; running it less often adds RPO risk without reducing the data replicated."
       },
       {
         "key": "D",
-        "text": "Replicate everything to S3 Standard in two more Regions.",
+        "text": "Replicate everything, with S3 Replication Time Control enabled",
         "correct": false,
-        "why": "Replicating everything into more Regions multiplies storage and transfer costs instead of reducing them."
+        "why": "RTC adds a per-GB fee for a 15-minute SLA and doesn't reduce what is replicated."
       }
     ],
     "explanation": {
@@ -272,25 +272,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Send flow logs to both CloudWatch Logs and S3.",
+        "text": "Use the Infrequent Access log class for flow log groups",
         "correct": false,
-        "why": "Duplicating destinations increases cost."
+        "why": "IA lowers ingestion cost somewhat, but delivering to S3 and querying with Athena is cheaper still for occasional investigations."
       },
       {
         "key": "B",
-        "text": "Publish flow logs directly to Amazon S3 (in Parquet format with hourly partitions) and query them with Athena when needed.",
+        "text": "Publish flow logs to S3 in Parquet and query with Athena",
         "correct": true,
         "why": "Delivering flow logs to S3 costs less than CloudWatch Logs ingestion, and Parquet plus partitions keeps Athena queries fast and cheap."
       },
       {
         "key": "C",
-        "text": "Increase the CloudWatch Logs retention.",
+        "text": "Sample only 10% of flows using a custom log format",
         "correct": false,
-        "why": "Longer retention increases storage costs."
+        "why": "Flow logs don't support sampling, and missing flows would weaken security investigations."
       },
       {
         "key": "D",
-        "text": "Disable flow logs entirely.",
+        "text": "Disable flow logs except in production VPCs",
         "correct": false,
         "why": "This removes important security visibility."
       }
@@ -322,27 +322,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Replace interface endpoints with NAT gateways in each VPC.",
+        "text": "Replace the interface endpoints with a NAT gateway per VPC",
         "correct": false,
         "why": "NAT gateways also bill hourly and per GB, and they send traffic toward public endpoints, which may violate private-access requirements."
       },
       {
         "key": "B",
-        "text": "Use gateway endpoints for all 10 services.",
+        "text": "Use gateway endpoints for all 10 services instead",
         "correct": false,
         "why": "Gateway endpoints exist only for S3 and DynamoDB."
       },
       {
         "key": "C",
-        "text": "Centralize the interface endpoints in a shared-services VPC, and share private DNS resolution to the spoke VPCs (using Route 53 private hosted zones or Resolver rules), routing traffic over the Transit Gateway.",
+        "text": "Centralize endpoints in a shared VPC; share DNS over the TGW",
         "correct": true,
         "why": "One set of endpoints serves all VPCs, which cuts the number of billed endpoint ENIs dramatically. Weigh the savings against the Transit Gateway data processing cost for the traffic."
       },
       {
         "key": "D",
-        "text": "Add more interface endpoints for redundancy.",
+        "text": "Keep the endpoints but use only one AZ for each",
         "correct": false,
-        "why": "More interface endpoints mean more billed ENI-hours, the exact cost the company wants to cut."
+        "why": "Fewer AZs cuts ENIs by two-thirds but loses AZ resilience, and you'd still run 800 endpoint ENIs."
       }
     ],
     "explanation": {
@@ -371,25 +371,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Spot Instances",
+        "text": "Move the cache to Redis on EC2 Spot Instances",
         "correct": false,
-        "why": "ElastiCache doesn't run on Spot, and a production cache needs stable capacity."
+        "why": "Spot interruptions are unacceptable for a production cache, and self-managing Redis adds operational work."
       },
       {
         "key": "B",
-        "text": "Compute Savings Plans",
+        "text": "Cover the nodes with a 3-year Compute Savings Plan",
         "correct": false,
         "why": "Compute Savings Plans cover EC2, Fargate and Lambda, not ElastiCache nodes."
       },
       {
         "key": "C",
-        "text": "Keep On-Demand pricing",
+        "text": "Switch the cluster to ElastiCache Serverless",
         "correct": false,
-        "why": "On-Demand is the most expensive option for a predictable 24/7 workload."
+        "why": "Serverless bills for storage and compute units used; for a steady 24/7 cluster it usually costs more than reserved nodes."
       },
       {
         "key": "D",
-        "text": "Purchase ElastiCache reserved nodes (1- or 3-year term) for the node type",
+        "text": "Purchase ElastiCache reserved nodes for the node type",
         "correct": true,
         "why": "Reserved nodes give a significant discount over On-Demand pricing for steady, long-running cache clusters."
       }
@@ -421,27 +421,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Use Index State Management to move indexes older than 7 days to UltraWarm (and older ones to cold storage), keeping only recent indexes on hot nodes.",
+        "text": "Use ISM to move indexes older than 7 days to UltraWarm and cold",
         "correct": true,
         "why": "UltraWarm and cold storage use S3-backed storage at much lower cost per GB, and data remains queryable (cold storage after reattaching), so hot nodes can be downsized."
       },
       {
         "key": "B",
-        "text": "Switch hot nodes to larger instances.",
+        "text": "Switch the hot nodes to larger instances with gp3 storage",
         "correct": false,
-        "why": "This increases cost without addressing the storage tiering."
+        "why": "This changes storage price somewhat but keeps all 90 days on expensive hot nodes."
       },
       {
         "key": "C",
-        "text": "Add more hot data nodes.",
+        "text": "Take daily snapshots and keep 7 days on the domain",
         "correct": false,
-        "why": "More hot data nodes add expensive SSD-backed capacity, which increases the bill."
+        "why": "Snapshotted indexes aren't searchable until restored, which is too slow for occasional queries."
       },
       {
         "key": "D",
-        "text": "Delete logs older than 7 days.",
+        "text": "Delete logs older than 7 days after exporting them to S3",
         "correct": false,
-        "why": "Deleting older logs breaks the requirement that they stay searchable for occasional investigations."
+        "why": "Exported logs in S3 are no longer searchable in OpenSearch without extra work."
       }
     ],
     "explanation": {
@@ -471,27 +471,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Add concurrency scaling.",
+        "text": "Enable concurrency scaling with a daily usage limit",
         "correct": false,
         "why": "Concurrency scaling can add cost and doesn't reduce idle time."
       },
       {
         "key": "B",
-        "text": "Schedule pause and resume actions for the cluster outside business hours.",
+        "text": "Schedule pause and resume actions outside business hours",
         "correct": true,
         "why": "While paused, you pay only for storage, not compute. Scheduled actions pause and resume automatically."
       },
       {
         "key": "C",
-        "text": "Buy 3-year reserved nodes for the dev cluster.",
+        "text": "Buy 3-year reserved nodes for the development cluster",
         "correct": false,
         "why": "Reservations bill every hour and aren't worth it for a cluster used about a third of the week."
       },
       {
         "key": "D",
-        "text": "Resize to more nodes.",
+        "text": "Resize the cluster to fewer nodes during the night",
         "correct": false,
-        "why": "Adding nodes raises the hourly compute bill and does nothing about the idle nights and weekends."
+        "why": "Elastic resize causes interruptions, still bills for the remaining nodes, and needs scripting; pausing removes compute cost entirely."
       }
     ],
     "explanation": {
@@ -521,27 +521,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Run the jobs continuously all day.",
+        "text": "Combine all jobs into one large job with more DPUs",
         "correct": false,
-        "why": "Running jobs all day multiplies DPU-hours billed for work that only needs to finish by morning."
+        "why": "Bigger jobs don't lower the price per DPU-hour and make failures harder to isolate."
       },
       {
         "key": "B",
-        "text": "Increase the number of DPUs for every job.",
+        "text": "Enable auto scaling of workers for every job",
         "correct": false,
-        "why": "More DPUs cost more, and may not shorten jobs proportionally."
+        "why": "Auto scaling trims idle workers but still pays the standard price per DPU-hour."
       },
       {
         "key": "C",
-        "text": "Run the non-urgent jobs with the Glue Flex execution class.",
+        "text": "Run the non-urgent jobs with the Glue Flex execution class",
         "correct": true,
         "why": "Flex runs jobs on spare capacity at a lower price per DPU-hour. It suits time-insensitive workloads that can tolerate variable start and run times."
       },
       {
         "key": "D",
-        "text": "Move the ETL to Amazon RDS stored procedures.",
+        "text": "Run the jobs on an EMR cluster that stays up all day",
         "correct": false,
-        "why": "This is a re-architecture that doesn't fit Spark-scale data processing."
+        "why": "An always-on EMR cluster bills around the clock for work that runs once a night."
       }
     ],
     "explanation": {
@@ -571,27 +571,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Set every function to the maximum memory.",
+        "text": "Set every function to the maximum memory of 10 GB",
         "correct": false,
         "why": "I/O-bound functions would cost more without getting faster."
       },
       {
         "key": "B",
-        "text": "Set every function to 128 MB.",
+        "text": "Set every function to 128 MB and raise on timeout",
         "correct": false,
         "why": "CPU-bound functions would run much longer, often costing more and increasing latency."
       },
       {
         "key": "C",
-        "text": "Enable provisioned concurrency on all functions.",
+        "text": "Use Lambda Power Tuning and Compute Optimizer recommendations",
         "correct": false,
         "why": "Provisioned concurrency adds hourly charges for pre-warmed environments and doesn't change memory settings."
       },
       {
         "key": "D",
-        "text": "Use AWS Lambda Power Tuning (and Compute Optimizer Lambda recommendations) to test each function at several memory sizes and choose the best cost/performance setting.",
+        "text": "Pick memory from each function's average CloudWatch duration",
         "correct": true,
-        "why": "Power Tuning runs the function at multiple memory configurations and reports cost and duration, revealing the optimal setting. Compute Optimizer recommends sizes based on usage."
+        "why": "Duration alone doesn't show how cost and speed change at other memory sizes."
       }
     ],
     "explanation": {
@@ -621,27 +621,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Run the service as containers on ECS or EKS (Fargate or EC2), right-sized and covered by Compute Savings Plans, behind a load balancer.",
+        "text": "Run it as ECS or EKS containers with Compute Savings Plans",
         "correct": true,
         "why": "At sustained high utilization, always-on containers with commitment discounts usually cost less than per-request Lambda pricing, while still scaling with Auto Scaling."
       },
       {
         "key": "B",
-        "text": "Enable provisioned concurrency without Savings Plans.",
+        "text": "Enable provisioned concurrency without a Savings Plan",
         "correct": false,
         "why": "Provisioned concurrency adds cost unless its utilization is high and it's covered by a Savings Plan. On its own, it doesn't guarantee savings."
       },
       {
         "key": "C",
-        "text": "Increase Lambda memory to 10 GB.",
+        "text": "Increase Lambda memory to 10 GB to shorten each run",
         "correct": false,
         "why": "Higher memory raises the price per millisecond. Unless duration falls proportionally, cost rises."
       },
       {
         "key": "D",
-        "text": "Move the function into a VPC.",
+        "text": "Switch the functions to arm64 and keep them on Lambda",
         "correct": false,
-        "why": "VPC attachment doesn't reduce Lambda pricing."
+        "why": "arm64 trims the price per GB-second by about 20%, but at sustained high load, containers with commitments save far more."
       }
     ],
     "explanation": {
@@ -672,27 +672,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Add an EFS file system for static files.",
+        "text": "Put static files on an EFS file system mounted by all instances",
         "correct": false,
         "why": "EFS adds storage cost, and the instances still have to serve the traffic."
       },
       {
         "key": "B",
-        "text": "Move static assets to Amazon S3 and serve them through Amazon CloudFront, and scale the EC2 fleet down to what dynamic traffic needs.",
+        "text": "Serve static assets from S3 via CloudFront; shrink the fleet",
         "correct": true,
         "why": "Offloading static content to S3 and CloudFront removes most of the load from EC2, so far fewer instances are needed, while edge caching improves performance."
       },
       {
         "key": "C",
-        "text": "Buy Reserved Instances for all 30 instances.",
+        "text": "Buy Reserved Instances for all 30 instances",
         "correct": false,
         "why": "This discounts an oversized fleet instead of shrinking it."
       },
       {
         "key": "D",
-        "text": "Move to larger instances.",
+        "text": "Put an ElastiCache cluster in front of the static files",
         "correct": false,
-        "why": "Bigger instances don't address the misplaced workload."
+        "why": "A cache adds cost and is meant for data, not file delivery; the instances would still serve the bytes."
       }
     ],
     "explanation": {
@@ -722,27 +722,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Buy Compute Savings Plans.",
+        "text": "Cover the table with a 3-year Compute Savings Plan",
         "correct": false,
         "why": "Compute Savings Plans don't apply to DynamoDB throughput."
       },
       {
         "key": "B",
-        "text": "Switch to on-demand mode.",
+        "text": "Switch the table to on-demand capacity mode",
         "correct": false,
         "why": "On-demand usually costs more per request for steady, predictable throughput."
       },
       {
         "key": "C",
-        "text": "Purchase DynamoDB reserved capacity (1- or 3-year) for the steady baseline of read and write capacity units.",
+        "text": "Buy DynamoDB reserved capacity for the steady baseline",
         "correct": true,
         "why": "Reserved capacity gives a significant discount on provisioned throughput for Standard-class tables in exchange for an upfront commitment."
       },
       {
         "key": "D",
-        "text": "Add DAX.",
+        "text": "Change the table class to Standard-Infrequent Access",
         "correct": false,
-        "why": "DAX may reduce reads but adds node costs. It isn't a discount mechanism for baseline capacity."
+        "why": "Standard-IA lowers storage prices but raises throughput prices, and reserved capacity isn't available for IA tables."
       }
     ],
     "explanation": {
@@ -772,25 +772,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Run the scan more slowly throughout the day.",
+        "text": "Run the scan with a rate limiter through the whole day",
         "correct": false,
         "why": "This spreads the impact but still consumes capacity."
       },
       {
         "key": "B",
-        "text": "Increase provisioned read capacity during the job.",
+        "text": "Increase provisioned read capacity for the job's duration",
         "correct": false,
         "why": "This pays for more capacity and still loads the table."
       },
       {
         "key": "C",
-        "text": "Add a GSI covering all attributes.",
+        "text": "Read from a DynamoDB global table replica in another Region",
         "correct": false,
-        "why": "A GSI duplicates storage and write costs, and the job would still read everything."
+        "why": "A replica adds replicated write and storage costs in a second Region, and the scan still consumes capacity there."
       },
       {
         "key": "D",
-        "text": "Use DynamoDB export to S3 (point-in-time export, full or incremental), and run the analytics with Athena on the exported data.",
+        "text": "Export the table to S3 and query the export with Athena",
         "correct": true,
         "why": "Exports to S3 don't consume table read capacity or affect performance, and Athena queries the data in S3 cheaply."
       }
@@ -822,27 +822,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Move the writer to a provisioned Aurora instance class that matches the steady load, and purchase Reserved Instances for it (keeping Serverless v2 only for variable readers, if useful).",
+        "text": "Move the writer to provisioned Aurora with Reserved Instances",
         "correct": true,
         "why": "For steady, predictable load, provisioned instances with RIs are usually cheaper than paying per ACU-hour for constant capacity."
       },
       {
         "key": "B",
-        "text": "Enable Aurora Backtrack.",
+        "text": "Lower the maximum ACUs to 32 to cap the cost",
         "correct": false,
-        "why": "Backtrack adds cost for change records and is unrelated to compute pricing."
+        "why": "A lower cap would throttle the database below its steady 64-ACU need."
       },
       {
         "key": "C",
-        "text": "Add more Serverless v2 readers.",
+        "text": "Add Serverless v2 readers and send more queries to them",
         "correct": false,
         "why": "Extra Serverless v2 readers add ACU-hours of capacity and don't make the steady writer load any cheaper."
       },
       {
         "key": "D",
-        "text": "Increase the Serverless v2 maximum ACUs.",
+        "text": "Turn on Aurora I/O-Optimized for the cluster",
         "correct": false,
-        "why": "This allows more scaling and doesn't reduce steady-state cost."
+        "why": "I/O-Optimized helps when I/O charges dominate; here the cost is steady compute billed per ACU-hour."
       }
     ],
     "explanation": {
@@ -930,25 +930,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Delete backups older than 3 months.",
+        "text": "Delete backups older than 3 months, keeping monthly ones",
         "correct": false,
-        "why": "This violates the 7-year compliance retention requirement."
+        "why": "Keeping only some recovery points breaks the 7-year daily retention required for compliance."
       },
       {
         "key": "B",
-        "text": "Configure the backup plan lifecycle to transition recovery points to cold storage after 90 days (for supported resource types), and keep the total retention at 7 years.",
+        "text": "Lifecycle recovery points to cold storage after 90 days",
         "correct": true,
         "why": "AWS Backup cold storage is much cheaper for long-term retention of rarely restored backups, and the lifecycle automates the transition."
       },
       {
         "key": "C",
-        "text": "Take backups more frequently.",
+        "text": "Export the backups to S3 Standard-IA buckets yourself",
         "correct": false,
-        "why": "More recovery points increase storage costs."
+        "why": "Recovery points can't simply be exported to S3 for later restore; this would be custom and unsupported."
       },
       {
         "key": "D",
-        "text": "Copy all backups to a second Region.",
+        "text": "Copy all backups to a vault in a second Region",
         "correct": false,
         "why": "This doubles storage costs, unless it's required for DR."
       }
@@ -980,25 +980,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Deleting snapshots doesn't reduce cost, because all blocks are kept forever.",
+        "text": "Nothing is freed, since all blocks are kept until the last delete",
         "correct": false,
         "why": "Blocks no longer referenced by any snapshot are removed, which does reduce storage cost."
       },
       {
         "key": "B",
-        "text": "All newer snapshots become unusable, because they depend on the first snapshot.",
+        "text": "Newer snapshots break, because they depend on the first one",
         "correct": false,
         "why": "EBS preserves referenced blocks, so newer snapshots don't break."
       },
       {
         "key": "C",
-        "text": "Only data blocks not referenced by any remaining snapshot are removed. The remaining snapshots stay complete and restorable, so deleting old snapshots is safe.",
+        "text": "Only unreferenced blocks go; the rest stay complete and restorable",
         "correct": true,
         "why": "EBS tracks block references between snapshots. Deleting a snapshot keeps blocks still needed by others, so every remaining snapshot remains a full point-in-time copy."
       },
       {
         "key": "D",
-        "text": "Snapshots can only be deleted in creation order.",
+        "text": "Snapshots must be deleted in the order they were created",
         "correct": false,
         "why": "Any snapshot can be deleted independently."
       }
@@ -1030,25 +1030,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Replace each ALB with a Network Load Balancer.",
+        "text": "Replace each ALB with a Network Load Balancer",
         "correct": false,
         "why": "NLBs also carry hourly charges, and they lose layer-7 routing."
       },
       {
         "key": "B",
-        "text": "Add more ALBs for redundancy.",
+        "text": "Put CloudFront in front of each ALB to reduce LCUs",
         "correct": false,
-        "why": "This increases cost, and ALBs are already multi-AZ."
+        "why": "CloudFront adds its own cost and doesn't remove the fixed hourly charge for 25 ALBs."
       },
       {
         "key": "C",
-        "text": "Assign public IPs to the instances and remove the ALBs entirely.",
+        "text": "Use one NLB per app with instance targets",
         "correct": false,
-        "why": "This loses health checks and TLS termination, and exposes the instances directly."
+        "why": "NLBs also bill hourly per load balancer, and they lose layer-7 routing."
       },
       {
         "key": "D",
-        "text": "Consolidate the applications behind one (or a few) ALBs, using host-based listener rules (app1.example.com, app2.example.com) to route to separate target groups.",
+        "text": "Consolidate apps behind one ALB with host-based rules",
         "correct": true,
         "why": "One ALB can route to many applications by host header or path. Consolidating removes most per-ALB hourly charges while keeping the applications isolated at the target group level."
       }
@@ -1081,25 +1081,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Use a binpack task placement strategy (on memory or CPU) with capacity provider managed scaling, so tasks are packed densely onto as few instances as possible.",
+        "text": "Binpack placement with capacity provider managed scaling",
         "correct": true,
         "why": "Binpack placement fills instances before using new ones, and managed scaling removes idle instances, which minimizes the number of instances paid for."
       },
       {
         "key": "B",
-        "text": "Use a spread placement strategy across instances.",
+        "text": "Spread placement across instances and Availability Zones",
         "correct": false,
         "why": "Spreading tasks improves availability but uses more instances."
       },
       {
         "key": "C",
-        "text": "Keep one task per instance.",
+        "text": "Random placement across a fixed-size cluster",
         "correct": false,
-        "why": "One task per instance repeats the original waste of dedicated, mostly idle instances."
+        "why": "Random placement leaves capacity fragmented, and a fixed cluster pays for idle instances."
       },
       {
         "key": "D",
-        "text": "Use the largest instance types with no scaling.",
+        "text": "The largest instance types with a fixed instance count",
         "correct": false,
         "why": "Fixed large capacity wastes money when demand is low."
       }
@@ -1132,27 +1132,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Switch to the largest x86 instance classes.",
+        "text": "Move to the latest generation of x86 instance classes",
         "correct": false,
-        "why": "This increases cost without improving price performance."
+        "why": "Newer x86 generations help a little, but Graviton gives a larger price-performance gain for managed engines."
       },
       {
         "key": "B",
-        "text": "Move the managed database, cache and search clusters to AWS Graviton-based instance classes (such as db.r7g, cache.r7g and r7g.search).",
+        "text": "Move the clusters to Graviton-based instance classes",
         "correct": true,
         "why": "Managed services on Graviton typically offer better price performance, and because AWS manages the engine software, applications need no code changes to switch."
       },
       {
         "key": "C",
-        "text": "Disable Multi-AZ everywhere.",
+        "text": "Turn off Multi-AZ on every cluster to halve instances",
         "correct": false,
         "why": "This reduces cost but sacrifices production resilience."
       },
       {
         "key": "D",
-        "text": "Move all clusters to Dedicated Hosts.",
+        "text": "Buy Reserved Instances for the current x86 classes",
         "correct": false,
-        "why": "Managed services don't run on customer Dedicated Hosts, and it would cost more anyway."
+        "why": "RIs discount the current classes but don't improve price performance, and they lock you in."
       }
     ],
     "explanation": {
@@ -1182,27 +1182,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Run SQL Server on Spot Instances.",
+        "text": "Switch to SQL Server Standard edition on RDS",
         "correct": false,
-        "why": "Interruptions are unacceptable for a primary database, and licensing still applies."
+        "why": "Standard edition costs less, but it still carries SQL Server licensing and may lack Enterprise features the app uses."
       },
       {
         "key": "B",
-        "text": "Move the data to DynamoDB unchanged.",
+        "text": "Move the data to Amazon DynamoDB unchanged",
         "correct": false,
         "why": "DynamoDB doesn't support T-SQL, so the application would need a major rewrite."
       },
       {
         "key": "C",
-        "text": "Migrate to Amazon Aurora PostgreSQL with Babelfish, which understands SQL Server's T-SQL and TDS wire protocol, so the application needs minimal changes.",
+        "text": "Migrate to Aurora PostgreSQL with Babelfish for T-SQL",
         "correct": true,
         "why": "Babelfish lets Aurora PostgreSQL accept T-SQL and SQL Server client connections, which removes SQL Server license costs while reducing migration effort."
       },
       {
         "key": "D",
-        "text": "Move to RDS for SQL Server Enterprise on larger instances.",
+        "text": "Move to SQL Server Enterprise on larger EC2 instances",
         "correct": false,
-        "why": "This keeps, or increases, the license costs."
+        "why": "Self-managing SQL Server on EC2 keeps the license cost and adds operational work."
       }
     ],
     "explanation": {
@@ -1232,25 +1232,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Terminated instances continue billing for 30 days.",
+        "text": "Terminated instances keep billing for 30 days",
         "correct": false,
         "why": "EC2 billing stops when instances terminate."
       },
       {
         "key": "B",
-        "text": "Savings Plans charge per terminated instance.",
+        "text": "A Savings Plan still charges for the terminated instances",
         "correct": false,
         "why": "Savings Plans charge the committed hourly amount, not per terminated instance, and aren't mentioned here."
       },
       {
         "key": "C",
-        "text": "EBS snapshots are billed as instance hours.",
+        "text": "EBS snapshots of the instances bill as instance hours",
         "correct": false,
         "why": "Snapshots are billed as storage, not instance capacity."
       },
       {
         "key": "D",
-        "text": "The Capacity Reservations are still active. They are billed at the On-Demand rate whether or not instances run in them, and must be cancelled.",
+        "text": "The Capacity Reservations are active and must be cancelled",
         "correct": true,
         "why": "Capacity Reservations charge for reserved capacity until cancelled or expired, even when unused."
       }
@@ -1282,25 +1282,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Configure ECR lifecycle policies to expire untagged images and keep only the most recent N tagged images per repository.",
+        "text": "Add ECR lifecycle policies to expire old images",
         "correct": true,
         "why": "Lifecycle policies automatically clean up images by age or count, keeping storage limited to what's needed."
       },
       {
         "key": "B",
-        "text": "Enable ECR image scanning.",
+        "text": "Enable ECR enhanced scanning on every repository",
         "correct": false,
         "why": "Scanning improves security but doesn't reduce storage."
       },
       {
         "key": "C",
-        "text": "Replicate images to another Region.",
+        "text": "Enable pull-through cache for the base images",
         "correct": false,
-        "why": "Replicating images to another Region doubles the stored images and increases ECR storage cost."
+        "why": "Pull-through cache reduces upstream pulls; it doesn't delete old images your pipeline pushed."
       },
       {
         "key": "D",
-        "text": "Delete the repositories and recreate them monthly.",
+        "text": "Delete and recreate the repositories every month",
         "correct": false,
         "why": "This is disruptive and risks deleting images still in use."
       }
@@ -1332,25 +1332,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Choose the Region closest to the CEO's office.",
+        "text": "The Region closest to the company's headquarters",
         "correct": false,
         "why": "Latency doesn't matter for overnight batch jobs, so proximity isn't a cost factor."
       },
       {
         "key": "B",
-        "text": "Choose the US Region with the lowest prices for the required services (for example, compare with the Pricing Calculator), and keep data and compute in the same Region.",
+        "text": "The lowest-cost US Region, with data and compute together",
         "correct": true,
         "why": "Prices vary by Region. With no latency requirement, a lower-cost US Region, with data and compute co-located, minimizes cost."
       },
       {
         "key": "C",
-        "text": "Choose the newest Region.",
+        "text": "The newest US Region, with the latest instance types",
         "correct": false,
         "why": "Newness doesn't imply lower cost and may mean fewer services."
       },
       {
         "key": "D",
-        "text": "Spread the platform across all US Regions.",
+        "text": "An even spread across all US Regions for resilience",
         "correct": false,
         "why": "This adds inter-Region data transfer and complexity without benefit."
       }
@@ -1384,25 +1384,25 @@
     "options": [
       {
         "key": "A",
-        "text": "AWS Pricing Calculator",
+        "text": "Cost Explorer reports saved and shared per team",
         "correct": false,
-        "why": "The calculator estimates planned costs, not actual billing."
+        "why": "Cost Explorer's views are what the team has outgrown; they don't provide line-item, resource-level data for custom dashboards."
       },
       {
         "key": "B",
-        "text": "AWS Budgets email alerts",
+        "text": "AWS Budgets reports emailed daily to the team",
         "correct": false,
         "why": "Budgets send threshold alerts, not detailed line-item data for custom analysis."
       },
       {
         "key": "C",
-        "text": "Configure AWS Data Exports (Cost and Usage Report 2.0) to deliver detailed billing data to S3, query it with Athena, and visualize it with QuickSight (for example, the Cloud Intelligence Dashboards).",
+        "text": "Data Exports (CUR 2.0) to S3, Athena and QuickSight",
         "correct": true,
         "why": "CUR 2.0 through Data Exports provides the most granular billing data (including resource IDs and tags), which Athena and QuickSight can analyze flexibly."
       },
       {
         "key": "D",
-        "text": "CloudTrail logs",
+        "text": "CloudTrail logs analyzed with CloudTrail Lake",
         "correct": false,
         "why": "CloudTrail records API activity, not billing line items."
       }
@@ -1434,25 +1434,25 @@
     "options": [
       {
         "key": "A",
-        "text": "AWS Config aggregators",
+        "text": "AWS Organizations OUs for each business unit",
         "correct": false,
-        "why": "Aggregators centralize configuration compliance, not billing."
+        "why": "OUs group accounts but can't map tags or split shared costs, and rebuilding the OU structure is disruptive."
       },
       {
         "key": "B",
-        "text": "Amazon Macie",
+        "text": "Cost allocation tags on every resource",
         "correct": false,
-        "why": "Macie classifies sensitive data in S3. It has no role in mapping costs to business units."
+        "why": "Tags help, but they don't map whole accounts, split shared costs, or apply one consistent definition across tools."
       },
       {
         "key": "C",
-        "text": "IAM groups",
+        "text": "AWS Budgets filtered per business unit",
         "correct": false,
-        "why": "IAM groups manage permissions, not cost mappings."
+        "why": "Each budget needs its own filter, which is the error-prone rebuilding the team wants to avoid."
       },
       {
         "key": "D",
-        "text": "AWS Cost Categories, with rules mapping accounts, tags and services to business units, and split charge rules for shared costs",
+        "text": "AWS Cost Categories with rules and split charges",
         "correct": true,
         "why": "Cost Categories apply consistent business mappings to costs, including split charges, and appear as a dimension in Cost Explorer, Budgets and Data Exports."
       }

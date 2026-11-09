@@ -66,25 +66,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Create an EBS snapshot of the volume and create a new volume from the snapshot in us-east-1c.",
+        "text": "Snapshot the volume; create a new volume in us-east-1c",
         "correct": true,
         "why": "EBS volumes are bound to one AZ, but snapshots are stored regionally. A new volume can be created from a snapshot in any AZ in the Region."
       },
       {
         "key": "B",
-        "text": "Change the volume's Availability Zone property.",
+        "text": "Modify the volume's Availability Zone with Elastic Volumes",
         "correct": false,
-        "why": "You can't change a volume's AZ after creation."
+        "why": "Elastic Volumes changes size, type and performance, not the Availability Zone."
       },
       {
         "key": "C",
-        "text": "Enable EBS Multi-Attach across AZs.",
+        "text": "Enable Multi-Attach and attach it in us-east-1c",
         "correct": false,
-        "why": "Multi-Attach is limited to io1 and io2 volumes and instances in the same AZ."
+        "why": "Multi-Attach works only within a single AZ, for io1 and io2 volumes."
       },
       {
         "key": "D",
-        "text": "Detach the volume and attach it to an instance in us-east-1c.",
+        "text": "Detach the volume and attach it in us-east-1c",
         "correct": false,
         "why": "An EBS volume can only attach to instances in its own Availability Zone."
       }
@@ -117,27 +117,27 @@
     "options": [
       {
         "key": "A",
-        "text": "An Auto Scaling group with min and max of 1",
+        "text": "Auto Scaling group with minimum and maximum of 1",
         "correct": false,
-        "why": "The ASG would launch a new instance with a new instance ID and private IP, which breaks the license binding."
+        "why": "A replacement instance gets a new instance ID and usually a new private IP, which breaks the license."
       },
       {
         "key": "B",
-        "text": "EC2 automatic instance recovery (default auto-recovery or a CloudWatch alarm with the recover action on StatusCheckFailed_System)",
+        "text": "EC2 automatic instance recovery on system check failure",
         "correct": true,
         "why": "Recovery moves the instance to healthy hardware while keeping its instance ID, private IPs, Elastic IPs and metadata. That's ideal for single instances that can't be replaced by a new one."
       },
       {
         "key": "C",
-        "text": "A spread placement group",
+        "text": "A spread placement group for the single instance",
         "correct": false,
         "why": "Spread placement lowers correlated failure between instances but doesn't recover a failed one."
       },
       {
         "key": "D",
-        "text": "Enable termination protection",
+        "text": "Termination protection plus a CloudWatch reboot alarm",
         "correct": false,
-        "why": "This prevents accidental termination but doesn't recover from hardware failure."
+        "why": "A reboot doesn't help when the underlying host hardware has failed."
       }
     ],
     "explanation": {
@@ -168,25 +168,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Increase the deregistration delay.",
+        "text": "Increase the deregistration delay on the group",
         "correct": false,
         "why": "The deregistration delay applies to targets leaving the group, not joining it."
       },
       {
         "key": "B",
-        "text": "Disable cross-zone load balancing.",
+        "text": "Use the least outstanding requests algorithm",
         "correct": false,
-        "why": "This affects distribution across AZs, not ramp-up of new targets."
+        "why": "This favors less-busy targets, but new targets with no requests outstanding would attract even more traffic."
       },
       {
         "key": "C",
-        "text": "Enable slow start mode on the target group with an appropriate duration.",
+        "text": "Enable slow start mode on the target group",
         "correct": true,
         "why": "Slow start ramps up a new target's share of requests linearly over the configured period, giving it time to warm caches and JIT compilers."
       },
       {
         "key": "D",
-        "text": "Enable sticky sessions.",
+        "text": "Enable sticky sessions with a duration cookie",
         "correct": false,
         "why": "Stickiness doesn't limit the initial flood of new sessions to fresh targets."
       }
@@ -219,25 +219,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Run in us-east-1 with a cross-Region read replica in eu-west-1.",
+        "text": "us-east-1 primary with a cross-Region read replica in eu-west-1",
         "correct": false,
         "why": "Read replicas can't accept writes, and there's no automatic failover of the application."
       },
       {
         "key": "B",
-        "text": "Use a single Region with Multi-AZ everywhere.",
+        "text": "One Region with Multi-AZ deployments everywhere",
         "correct": false,
         "why": "Multi-AZ doesn't survive a Regional failure or give EU users local latency."
       },
       {
         "key": "C",
-        "text": "Use Route 53 simple routing with both Regions' ALBs.",
+        "text": "Route 53 simple routing to both Regions' ALBs",
         "correct": false,
         "why": "Simple routing has no health checks or latency awareness."
       },
       {
         "key": "D",
-        "text": "Deploy the full stack (ALB, compute, DynamoDB global table replicas) in both Regions, and use Route 53 latency-based routing with health checks (or Global Accelerator) to direct users.",
+        "text": "Full stack in both Regions with global tables; latency routing",
         "correct": true,
         "why": "Latency routing sends users to the nearest Region, health checks remove a failed Region automatically, and global tables allow local reads and writes in both."
       }
@@ -269,27 +269,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Amazon Route 53 Application Recovery Controller (routing controls and readiness checks)",
+        "text": "Route 53 Application Recovery Controller",
         "correct": true,
         "why": "ARC routing controls act as on/off switches wired to Route 53 health checks, served by a highly available multi-Region cluster, and readiness checks audit that the recovery environment is prepared."
       },
       {
         "key": "B",
-        "text": "Route 53 weighted routing edited in the console",
+        "text": "Route 53 weighted records edited during an incident",
         "correct": false,
         "why": "Console edits depend on the Route 53 control plane and are error-prone during incidents."
       },
       {
         "key": "C",
-        "text": "AWS Elastic Disaster Recovery",
+        "text": "AWS Elastic Disaster Recovery (DRS) failover",
         "correct": false,
-        "why": "DRS replicates servers for recovery. It doesn't provide traffic switches and readiness auditing for multi-Region apps."
+        "why": "DRS replicates servers for recovery, but it doesn't provide highly available traffic switching or readiness checks for a warm standby."
       },
       {
         "key": "D",
-        "text": "CloudFront origin failover",
+        "text": "AWS Global Accelerator traffic dials per Region",
         "correct": false,
-        "why": "Origin failover is automatic per request for CloudFront origins, not a managed, operator-controlled Regional traffic switch."
+        "why": "Traffic dials shift traffic, but they're changed through the Global Accelerator control plane and include no readiness checks."
       }
     ],
     "explanation": {
@@ -384,19 +384,19 @@
       },
       {
         "key": "B",
-        "text": "AWS Global Accelerator with endpoint groups for both Regions' NLBs and health checks",
+        "text": "Global Accelerator with endpoint groups for both NLBs",
         "correct": true,
         "why": "Clients connect to two static anycast IPs that never change. Global Accelerator detects unhealthy endpoints and reroutes traffic to the healthy Region within seconds, with no DNS involved."
       },
       {
         "key": "C",
-        "text": "CloudFront with origin failover",
+        "text": "CloudFront with an origin group for failover",
         "correct": false,
         "why": "CloudFront handles HTTP(S) content delivery, not arbitrary game protocols to NLBs."
       },
       {
         "key": "D",
-        "text": "Route 53 multivalue answer routing",
+        "text": "Route 53 multivalue answers with health checks",
         "correct": false,
         "why": "This still relies on DNS resolution and client behavior."
       }
@@ -429,9 +429,9 @@
     "options": [
       {
         "key": "A",
-        "text": "Three SQS standard queues written separately by the publisher",
+        "text": "Three SQS FIFO queues written separately by the publisher",
         "correct": false,
-        "why": "Standard queues don't guarantee order or deduplication, and the publisher becomes coupled to the consumers."
+        "why": "Writing to three queues separately isn't atomic; a failure can leave one system missing an event."
       },
       {
         "key": "B",
@@ -441,7 +441,7 @@
       },
       {
         "key": "C",
-        "text": "An Amazon SNS FIFO topic with three subscribed Amazon SQS FIFO queues, using the stock symbol as the message group ID",
+        "text": "SNS FIFO topic to three SQS FIFO queues, grouped by symbol",
         "correct": true,
         "why": "SNS FIFO preserves ordering and deduplication per message group and fans out to SQS FIFO queues, so each consumer gets an ordered, deduplicated copy."
       },
@@ -480,25 +480,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Move cron to the developers' laptops.",
+        "text": "A cron instance with EC2 automatic recovery",
         "correct": false,
-        "why": "Laptops sleep, go offline and leave with employees, so they're less reliable than the single server they'd replace, and they aren't secure."
+        "why": "Recovery restores the instance after host failures, but it's still one instance and doesn't help with OS or software failures."
       },
       {
         "key": "B",
-        "text": "Run cron on two EC2 instances.",
+        "text": "Run cron on two EC2 instances with a lock file",
         "correct": false,
         "why": "Every job would run twice unless you build locking, and you'd still manage servers."
       },
       {
         "key": "C",
-        "text": "Use an Auto Scaling group of one instance running cron.",
+        "text": "An Auto Scaling group of one instance running cron",
         "correct": false,
         "why": "It recovers the host, but jobs scheduled during replacement are missed, and servers still need managing."
       },
       {
         "key": "D",
-        "text": "Use Amazon EventBridge Scheduler to invoke the Lambda functions or ECS tasks on their cron schedules, with retry policies and dead-letter queues.",
+        "text": "EventBridge Scheduler invoking Lambda or ECS, with retries",
         "correct": true,
         "why": "EventBridge Scheduler is a serverless, highly available scheduler with cron and rate expressions, built-in retries and DLQs. There's no server to fail."
       }
@@ -582,25 +582,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Configure a dead-letter queue on the Kinesis stream.",
+        "text": "A dead-letter queue on the stream for the failing records",
         "correct": false,
-        "why": "Kinesis streams don't have DLQs. Failure handling is configured on the Lambda event source mapping."
+        "why": "Kinesis streams don't have dead-letter queues; failures are handled in the event source mapping."
       },
       {
         "key": "B",
-        "text": "Enable BisectBatchOnFunctionError, set MaximumRetryAttempts (and/or MaximumRecordAgeInSeconds), and configure an on-failure destination (SQS or SNS) for records that still fail.",
+        "text": "Bisect batches, cap retries, on-failure destination",
         "correct": true,
         "why": "Bisecting splits failing batches to isolate the bad record, the retry limits stop endless retries, and the failed record's metadata goes to the destination so the shard keeps moving."
       },
       {
         "key": "C",
-        "text": "Increase the stream's retention period.",
+        "text": "Increase the stream's retention period",
         "correct": false,
         "why": "Longer retention delays data loss but doesn't unblock the shard."
       },
       {
         "key": "D",
-        "text": "Increase the batch size to 10,000.",
+        "text": "Increase the batch size to 10,000",
         "correct": false,
         "why": "Bigger batches still contain the bad record and make each retry more expensive."
       }
@@ -633,25 +633,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Enable provisioned concurrency.",
+        "text": "Enable provisioned concurrency on the function",
         "correct": false,
         "why": "It reduces cold starts but doesn't affect async retry behavior."
       },
       {
         "key": "B",
-        "text": "Increase the function timeout to 15 minutes.",
+        "text": "Set retry attempts to 0 and add a dead-letter queue",
         "correct": false,
-        "why": "The timeout controls how long one invocation can run, not how long Lambda keeps retrying an event."
+        "why": "Dropping retries entirely discards emails that would succeed a minute later, which the business still wants sent."
       },
       {
         "key": "C",
-        "text": "Set MaximumEventAgeInSeconds to 900 and configure an on-failure destination (such as SQS) to capture discarded events.",
+        "text": "Maximum event age of 900 seconds, on-failure destination",
         "correct": true,
         "why": "Maximum event age discards events older than the limit instead of retrying them, and the on-failure destination keeps a record of them for review."
       },
       {
         "key": "D",
-        "text": "Set reserved concurrency to 0.",
+        "text": "Set reserved concurrency to 0 during API outages",
         "correct": false,
         "why": "This throttles all invocations, so no emails would be sent at all."
       }
@@ -742,13 +742,13 @@
     "options": [
       {
         "key": "A",
-        "text": "Promote an Aurora Replica",
+        "text": "Promote an Aurora Replica to be the writer",
         "correct": false,
         "why": "Replicas already contain the deleted state, because replication is near-instant."
       },
       {
         "key": "B",
-        "text": "Restore last night's snapshot",
+        "text": "Restore last night's snapshot to the cluster",
         "correct": false,
         "why": "This loses almost a day of changes and also creates a new cluster."
       },
@@ -760,7 +760,7 @@
       },
       {
         "key": "D",
-        "text": "Aurora Backtrack, rewinding the cluster to a point just before the DELETE",
+        "text": "Aurora Backtrack to just before the DELETE",
         "correct": true,
         "why": "Backtrack rewinds an Aurora MySQL cluster in place to an earlier time, typically within minutes, keeping the same cluster and endpoints. It must have been enabled beforehand."
       }
@@ -793,27 +793,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Enable automated backups with a 14-day (or longer) retention period, and use point-in-time restore when needed.",
+        "text": "Automated backups, 14-day retention, PITR",
         "correct": true,
         "why": "Automated backups combine daily snapshots with transaction logs, allowing restores to any second within the retention period (up to 35 days)."
       },
       {
         "key": "B",
-        "text": "Enable Multi-AZ.",
+        "text": "Enable Multi-AZ with a synchronous standby",
         "correct": false,
         "why": "Multi-AZ replicates corruption to the standby and isn't a backup."
       },
       {
         "key": "C",
-        "text": "Create a read replica.",
+        "text": "Create a read replica as a recovery copy",
         "correct": false,
         "why": "Read replicas mirror changes, including corruption, so they can't recover past states."
       },
       {
         "key": "D",
-        "text": "Take manual snapshots every day.",
+        "text": "Take manual snapshots every hour with a script",
         "correct": false,
-        "why": "Daily snapshots only allow restores to snapshot times, not to any second."
+        "why": "Hourly snapshots still lose up to an hour of data; recovery to the second needs automated backups with transaction logs."
       }
     ],
     "explanation": {
@@ -843,27 +843,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Enable Multi-AZ in eu-central-1.",
+        "text": "Enable Multi-AZ in eu-central-1",
         "correct": false,
         "why": "Multi-AZ protects against AZ failures, not Regional ones."
       },
       {
         "key": "B",
-        "text": "Enable cross-Region automated backup replication to eu-west-1, and restore with point-in-time recovery there when needed.",
+        "text": "Cross-Region automated backup replication",
         "correct": true,
         "why": "RDS can replicate automated snapshots and transaction logs to another Region, which enables PITR in the DR Region without running a replica."
       },
       {
         "key": "C",
-        "text": "Create a cross-Region read replica in eu-west-1.",
+        "text": "A cross-Region read replica in eu-west-1",
         "correct": false,
         "why": "A replica gives a lower RTO but means paying for a running instance, which is more than the lowest-cost requirement allows."
       },
       {
         "key": "D",
-        "text": "Export the database to S3 in the same Region monthly.",
+        "text": "Copy manual snapshots to eu-west-1 once a day",
         "correct": false,
-        "why": "Same-Region, monthly exports don't survive a Regional outage and have a poor RPO."
+        "why": "Daily snapshot copies allow restore, but only to the last copy, not a recent point in time."
       }
     ],
     "explanation": {
@@ -893,25 +893,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Nothing. The replica fails over automatically like Multi-AZ.",
+        "text": "Nothing; the replica fails over automatically like Multi-AZ",
         "correct": false,
         "why": "Cross-Region RDS read replicas don't fail over automatically. Promotion is required."
       },
       {
         "key": "B",
-        "text": "Restore last night's snapshot in us-west-2.",
+        "text": "Restore last night's snapshot in us-west-2",
         "correct": false,
         "why": "This loses a day of data when an up-to-date replica is available."
       },
       {
         "key": "C",
-        "text": "Promote the read replica in us-west-2 to a standalone DB instance, and point the application to its endpoint.",
+        "text": "Promote the replica, then repoint the app to its endpoint",
         "correct": true,
         "why": "Promotion converts the replica into an independent, writable instance. It's a manual (or scripted) step, and the endpoint differs from the old primary's."
       },
       {
         "key": "D",
-        "text": "Enable Multi-AZ on the replica first.",
+        "text": "Enable Multi-AZ on the replica before using it",
         "correct": false,
         "why": "Multi-AZ adds AZ-level HA after promotion. It doesn't make the replica writable."
       }
@@ -944,25 +944,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Aurora writes data to S3 synchronously on each commit.",
+        "text": "Aurora writes each commit to S3 synchronously",
         "correct": false,
         "why": "Backups go to S3 continuously, but commits are acknowledged by the distributed storage quorum, not S3."
       },
       {
         "key": "B",
-        "text": "Aurora uses EBS Multi-Attach across AZs.",
+        "text": "Aurora uses EBS Multi-Attach across the AZs",
         "correct": false,
         "why": "Aurora doesn't use EBS volumes for its cluster storage."
       },
       {
         "key": "C",
-        "text": "Aurora automatically creates a hidden Multi-AZ standby instance.",
+        "text": "Aurora keeps a hidden Multi-AZ standby instance",
         "correct": false,
         "why": "Without Aurora Replicas, there's no standby instance. Availability comes from the storage layer plus instance recreation."
       },
       {
         "key": "D",
-        "text": "Aurora's cluster volume stores six copies of data across three Availability Zones, independent of the DB instances.",
+        "text": "The cluster volume keeps six copies across three AZs",
         "correct": true,
         "why": "Aurora separates compute from a distributed storage layer that replicates six ways across three AZs, so committed data survives an AZ loss even if the only instance must be replaced."
       }
@@ -994,7 +994,7 @@
     "options": [
       {
         "key": "A",
-        "text": "ElastiCache Global Datastore with a secondary cluster in the second Region",
+        "text": "ElastiCache Global Datastore with a secondary Region",
         "correct": true,
         "why": "Global Datastore replicates across Regions with typically sub-second lag, serves local reads in secondary Regions, and lets you promote a secondary to primary for DR."
       },
@@ -1006,13 +1006,13 @@
       },
       {
         "key": "C",
-        "text": "Amazon DAX",
+        "text": "Cross-Region read replicas of the Redis OSS cluster",
         "correct": false,
-        "why": "DAX caches DynamoDB, not Redis workloads, and is Regional."
+        "why": "ElastiCache doesn't offer per-cluster cross-Region read replicas; Global Datastore provides this."
       },
       {
         "key": "D",
-        "text": "Daily ElastiCache snapshots copied to the second Region",
+        "text": "Daily snapshots copied to the second Region",
         "correct": false,
         "why": "Snapshots have poor RPO and a slow restore RTO, and give no live local reads."
       }
@@ -1045,27 +1045,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Export the tables to an S3 bucket in the same account nightly.",
+        "text": "Export the tables nightly to S3 in the same account",
         "correct": false,
         "why": "A same-account bucket is exposed if the account is compromised, and a custom pipeline means more effort."
       },
       {
         "key": "B",
-        "text": "Use an AWS Backup plan for the DynamoDB tables with copy rules that copy recovery points to a backup vault in a separate account and Region, ideally with Vault Lock.",
+        "text": "AWS Backup copies to another account and Region",
         "correct": true,
         "why": "AWS Backup supports cross-account and cross-Region copies of DynamoDB backups with centrally managed retention, and Vault Lock makes the copies immutable."
       },
       {
         "key": "C",
-        "text": "Enable DynamoDB global tables.",
+        "text": "DynamoDB global tables in a second account",
         "correct": false,
-        "why": "Global tables replicate data, including deletes and corruption, and live in the same account. They aren't backups."
+        "why": "Global tables replicate within an account and copy deletions or corruption; they aren't backups."
       },
       {
         "key": "D",
-        "text": "Enable PITR only.",
+        "text": "PITR with cross-Region copies done by a script",
         "correct": false,
-        "why": "PITR backups stay in the same account and Region."
+        "why": "PITR stays in the source account and Region; custom scripts add effort and no central enforcement."
       }
     ],
     "explanation": {
@@ -1108,13 +1108,13 @@
       },
       {
         "key": "C",
-        "text": "S3 Replication Time Control (S3 RTC) on the Cross-Region Replication rule, with replication metrics and event notifications",
+        "text": "S3 Replication Time Control with metrics and events",
         "correct": true,
         "why": "S3 RTC is backed by an SLA to replicate 99.99% of objects within 15 minutes, and provides metrics and events for objects that exceed the threshold."
       },
       {
         "key": "D",
-        "text": "S3 Transfer Acceleration",
+        "text": "S3 Transfer Acceleration on both buckets",
         "correct": false,
         "why": "Acceleration affects client uploads, not bucket-to-bucket replication."
       }
@@ -1147,25 +1147,25 @@
     "options": [
       {
         "key": "A",
-        "text": "S3 Lifecycle transitions",
+        "text": "S3 Lifecycle transitions to the central bucket",
         "correct": false,
         "why": "Lifecycle rules change storage classes or expire objects. They can't copy to other buckets."
       },
       {
         "key": "B",
-        "text": "S3 Cross-Region Replication",
+        "text": "S3 Cross-Region Replication to the central bucket",
         "correct": false,
         "why": "CRR copies to a different Region, but here the destination is in the same Region."
       },
       {
         "key": "C",
-        "text": "S3 Transfer Acceleration",
+        "text": "S3 Batch Operations copy jobs run every hour",
         "correct": false,
-        "why": "It speeds up client transfers and doesn't copy objects between buckets."
+        "why": "Batch Operations copies on demand from a manifest; it isn't continuous, automatic copying."
       },
       {
         "key": "D",
-        "text": "S3 Same-Region Replication (SRR) from each source bucket to the central bucket, with ownership override to the destination account",
+        "text": "S3 Same-Region Replication to the central bucket",
         "correct": true,
         "why": "SRR asynchronously copies new objects to a bucket in the same Region, including in another account. Ownership override makes the security account own the replicas."
       }
@@ -1198,25 +1198,25 @@
     "options": [
       {
         "key": "A",
-        "text": "S3 Multi-Region Access Points with failover controls (active/passive routing configuration)",
+        "text": "S3 Multi-Region Access Points with failover controls",
         "correct": true,
         "why": "Multi-Region Access Points provide a global endpoint that routes to the nearest bucket over the AWS network, and failover controls can shift traffic between Regions within minutes."
       },
       {
         "key": "B",
-        "text": "S3 Transfer Acceleration",
+        "text": "S3 Transfer Acceleration on both buckets",
         "correct": false,
         "why": "Acceleration optimizes transfers to one bucket and doesn't route or fail over between Regions."
       },
       {
         "key": "C",
-        "text": "CloudFront with one bucket as the origin",
+        "text": "CloudFront with an origin group of the two buckets",
         "correct": false,
-        "why": "A single origin gives no Regional failover for S3 API access."
+        "why": "Origin groups fail over only for GET requests on errors and don't route by latency or support writes."
       },
       {
         "key": "D",
-        "text": "Route 53 latency-based routing to the two bucket website endpoints",
+        "text": "Route 53 latency routing to the bucket endpoints",
         "correct": false,
         "why": "This only works for public website endpoints, doesn't support authenticated S3 API requests, and gives no S3-native failover controls."
       }
@@ -1249,21 +1249,21 @@
     "options": [
       {
         "key": "A",
-        "text": "S3 Cross-Region Replication",
+        "text": "AWS DataSync scheduled task between file systems",
         "correct": false,
-        "why": "CRR replicates S3 objects, not EFS file systems."
+        "why": "DataSync can copy on a schedule, but it's a sync job to manage, not continuous replication."
       },
       {
         "key": "B",
-        "text": "Amazon EFS replication to a destination file system in us-west-2",
+        "text": "EFS replication to a file system in us-west-2",
         "correct": true,
         "why": "EFS replication continuously and automatically keeps a replica in another Region (or AZ) in sync, with an RPO measured in minutes. Failover makes the replica writable."
       },
       {
         "key": "C",
-        "text": "EFS lifecycle management",
+        "text": "AWS Backup copies of EFS to us-west-2",
         "correct": false,
-        "why": "Lifecycle moves files between storage classes. It doesn't replicate across Regions."
+        "why": "Backups must be restored before use and aren't a continuously updated copy."
       },
       {
         "key": "D",
@@ -1300,25 +1300,25 @@
     "options": [
       {
         "key": "A",
-        "text": "One Zone file systems can't be mounted by more than one instance.",
+        "text": "One Zone file systems can be mounted by only one instance",
         "correct": false,
         "why": "One Zone file systems can be mounted concurrently by many instances."
       },
       {
         "key": "B",
-        "text": "One Zone doesn't support NFS.",
+        "text": "One Zone supports NFS only within its own subnet",
         "correct": false,
-        "why": "Every EFS file system, One Zone included, uses NFSv4. Protocol support isn't what changes."
+        "why": "One Zone can be mounted from other AZs (with cross-AZ charges); that isn't the main risk."
       },
       {
         "key": "C",
-        "text": "One Zone file systems store data in a single AZ, so an AZ outage makes the data unavailable (and it could be lost), and instances in other AZs incur cross-AZ access.",
+        "text": "Data lives in one AZ, so an AZ outage makes it unavailable",
         "correct": true,
         "why": "EFS One Zone trades multi-AZ redundancy for lower cost. It suits development or easily recreated data, not a multi-AZ production system."
       },
       {
         "key": "D",
-        "text": "One Zone file systems can't be backed up.",
+        "text": "One Zone file systems can't be backed up by AWS Backup",
         "correct": false,
         "why": "One Zone file systems support AWS Backup (and have automatic backups enabled by default)."
       }
@@ -1351,25 +1351,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Store images on EBS volumes.",
+        "text": "Use ECR pull-through cache rules in the DR Region",
         "correct": false,
-        "why": "EBS volumes are AZ-scoped and aren't a container registry."
+        "why": "Pull-through caching is for upstream public registries; it still needs the primary to be reachable."
       },
       {
         "key": "B",
-        "text": "Pull images from the primary Region during failover.",
+        "text": "Pull images from the primary Region during failover",
         "correct": false,
         "why": "If the primary Region is down, its registry may be unreachable, which is exactly what happened in the drill."
       },
       {
         "key": "C",
-        "text": "Rebuild images from source in the DR Region during an incident.",
+        "text": "Rebuild images from source in the DR Region",
         "correct": false,
         "why": "This is slow, depends on build pipelines and dependencies, and is error-prone under pressure."
       },
       {
         "key": "D",
-        "text": "Configure ECR cross-Region replication so that images pushed to the primary registry are automatically replicated to the DR Region, and reference the local registry in DR task definitions.",
+        "text": "ECR cross-Region replication, with DR tasks using it",
         "correct": true,
         "why": "ECR replication copies images automatically on push, so they're already available in the DR Region when the primary Region is impaired."
       }
@@ -1460,7 +1460,7 @@
     "options": [
       {
         "key": "A",
-        "text": "A blue/green deployment: run the new version in a separate target group (or environment) and shift traffic using ALB weighted target groups, shifting back immediately if needed.",
+        "text": "Blue/green with ALB weighted target groups",
         "correct": true,
         "why": "Blue/green keeps the old version running, so rollback is just shifting traffic back. Weighted target groups allow gradual, controlled cutover."
       },
@@ -1472,15 +1472,15 @@
       },
       {
         "key": "C",
-        "text": "Manually SSH into instances to update code",
+        "text": "A rolling deployment, 25% of instances at a time",
         "correct": false,
-        "why": "Manual changes are slow, error-prone and hard to roll back."
+        "why": "Rolling deployments change instances in place, so rolling back still means redeploying them."
       },
       {
         "key": "D",
-        "text": "Increase the Auto Scaling group's capacity",
+        "text": "Deploy to a new ASG, then swap DNS records",
         "correct": false,
-        "why": "More capacity doesn't reduce deployment risk."
+        "why": "DNS swaps are all-or-nothing and depend on client caching, so traffic can't shift gradually or back instantly."
       }
     ],
     "explanation": {
@@ -1511,27 +1511,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Use Lambda reserved concurrency",
+        "text": "Weighted alias at 10%, adjusted by hand",
         "correct": false,
-        "why": "Concurrency controls don't split traffic between versions."
+        "why": "Weighted aliases split traffic but don't shift or roll back automatically."
       },
       {
         "key": "B",
-        "text": "AWS CodeDeploy with a Lambda alias and a Canary10Percent10Minutes deployment configuration, with the CloudWatch alarm configured for automatic rollback",
+        "text": "CodeDeploy with Canary10Percent10Minutes and alarm rollback",
         "correct": true,
         "why": "CodeDeploy shifts alias traffic between Lambda versions using canary or linear configurations, monitors alarms, and rolls back automatically on failure."
       },
       {
         "key": "C",
-        "text": "Deploy to a separate function and change the API Gateway integration manually",
+        "text": "A separate function with a manual API Gateway switch",
         "correct": false,
         "why": "A manual switch isn't gradual, isn't monitored, and doesn't roll back automatically."
       },
       {
         "key": "D",
-        "text": "Publish a new version and update the alias to 100% immediately",
+        "text": "Update the alias to 100% and roll back if alarms fire",
         "correct": false,
-        "why": "All-at-once deployments expose every user to a bad release."
+        "why": "All users get the new version at once, and rollback depends on someone acting."
       }
     ],
     "explanation": {
@@ -1562,7 +1562,7 @@
     "options": [
       {
         "key": "A",
-        "text": "Update the launch template only",
+        "text": "Update the launch template and wait for scale-in",
         "correct": false,
         "why": "Existing instances keep the old AMI until they're replaced. Updating the template alone does nothing to them."
       },
@@ -1574,13 +1574,13 @@
       },
       {
         "key": "C",
-        "text": "An Auto Scaling instance refresh with a minimum healthy percentage of 90%, using the updated launch template, with automatic rollback enabled",
+        "text": "Instance refresh at 90% minimum healthy, with rollback",
         "correct": true,
         "why": "Instance refresh replaces instances in batches while keeping the minimum healthy percentage, waits for health checks, and can roll back if replacements fail."
       },
       {
         "key": "D",
-        "text": "Create a second ASG and delete the first manually",
+        "text": "Create a second ASG, then delete the first one manually",
         "correct": false,
         "why": "This can work as a blue/green approach, but it's manual and slower than the built-in instance refresh."
       }
@@ -1612,25 +1612,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Disable health checks during launch.",
+        "text": "Install software from an S3 mirror in user data",
         "correct": false,
-        "why": "Disabling health checks only hides failed launches. Broken instances would then receive traffic."
+        "why": "A mirror helps reliability, but installing at boot is still slow."
       },
       {
         "key": "B",
-        "text": "Use larger instance types.",
+        "text": "Use larger instance types to install faster",
         "correct": false,
         "why": "Instance size doesn't fix repository availability."
       },
       {
         "key": "C",
-        "text": "Add more retries to the user data script.",
+        "text": "Add more retries to the user data script",
         "correct": false,
         "why": "Retries mask the problem but still depend on external repositories and slow boots."
       },
       {
         "key": "D",
-        "text": "Build and test golden AMIs with the software pre-installed using EC2 Image Builder pipelines, and launch instances from those AMIs.",
+        "text": "Golden AMIs built with EC2 Image Builder pipelines",
         "correct": true,
         "why": "Pre-baked, tested images remove the dependency on external repositories at boot and shorten launch time. Image Builder automates building, patching, testing and distributing them."
       }
@@ -1668,21 +1668,21 @@
       },
       {
         "key": "B",
-        "text": "AWS Trusted Advisor",
+        "text": "AWS Resilience Hub assessments",
         "correct": false,
-        "why": "Trusted Advisor reviews configurations but doesn't inject failures."
+        "why": "Resilience Hub assesses architecture against RTO/RPO targets but doesn't run controlled failure experiments by itself."
       },
       {
         "key": "C",
-        "text": "Amazon Inspector",
+        "text": "Amazon CloudWatch Synthetics canaries",
         "correct": false,
-        "why": "Amazon Inspector scans workloads for software vulnerabilities. It can't simulate AZ outages or node failovers."
+        "why": "Canaries test endpoints continuously; they don't inject faults."
       },
       {
         "key": "D",
-        "text": "AWS Config",
+        "text": "AWS Systems Manager Automation runbooks",
         "correct": false,
-        "why": "Config tracks configuration compliance and doesn't run chaos experiments."
+        "why": "Runbooks can stop instances, but they lack built-in guardrails that halt experiments on alarms."
       }
     ],
     "explanation": {
@@ -1763,27 +1763,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Enable VPC Flow Logs.",
+        "text": "Enable AWS Config rules on the instances",
         "correct": false,
-        "why": "Flow logs capture network traffic, not Health events."
+        "why": "Config tracks resource configuration, not AWS Health events."
       },
       {
         "key": "B",
-        "text": "Enable detailed monitoring on the instance.",
+        "text": "Enable detailed monitoring on the instances",
         "correct": false,
         "why": "Metrics don't include AWS scheduled maintenance notices."
       },
       {
         "key": "C",
-        "text": "Create Amazon EventBridge rules for AWS Health events (such as scheduled instance retirement) that notify through SNS and optionally trigger automation.",
+        "text": "EventBridge rules for AWS Health events",
         "correct": true,
         "why": "AWS Health publishes account-specific events to EventBridge, so teams can alert and automate responses such as stop/starting or replacing affected instances."
       },
       {
         "key": "D",
-        "text": "Check the AWS status page weekly.",
+        "text": "Subscribe to the public AWS Health Dashboard RSS feed",
         "correct": false,
-        "why": "The public status page shows broad service status, not account-specific scheduled events, and weekly checks are too infrequent."
+        "why": "The public feed covers service-wide events, not account-specific instance retirements."
       }
     ],
     "explanation": {
@@ -1813,25 +1813,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Order a Direct Connect connection per Region.",
+        "text": "A Direct Connect connection ordered per Region",
         "correct": false,
         "why": "This works but is costly and unnecessary when a Direct Connect gateway exists."
       },
       {
         "key": "B",
-        "text": "Create a Site-to-Site VPN to each VPC instead.",
+        "text": "Site-to-Site VPN to each VPC instead of DX",
         "correct": false,
         "why": "This loses Direct Connect's consistent performance and doesn't use the existing DX."
       },
       {
         "key": "C",
-        "text": "Peer the three VPCs and connect Direct Connect to only one.",
+        "text": "Peer the three VPCs; connect DX to only one",
         "correct": false,
-        "why": "VPC peering is non-transitive, so on-premises traffic can't route through one VPC to peered VPCs."
+        "why": "VPC peering isn't transitive, so on-premises traffic can't reach peered VPCs through one."
       },
       {
         "key": "D",
-        "text": "Create a Direct Connect gateway, attach a private or transit virtual interface to it, and associate the VPCs' virtual private gateways (or Transit Gateways) in each Region.",
+        "text": "A Direct Connect gateway associated with each Region",
         "correct": true,
         "why": "A Direct Connect gateway is a global resource that connects a DX connection to VPCs or Transit Gateways in multiple Regions (outside China) through one virtual interface."
       }
@@ -1864,21 +1864,21 @@
     "options": [
       {
         "key": "A",
-        "text": "Amazon MQ for ActiveMQ with an active/standby deployment across two AZs",
+        "text": "Amazon MQ for ActiveMQ, active/standby across two AZs",
         "correct": true,
         "why": "Amazon MQ runs ActiveMQ as a managed service with JMS compatibility. Active/standby brokers in two AZs with shared storage fail over automatically."
       },
       {
         "key": "B",
-        "text": "Amazon Kinesis Data Streams",
+        "text": "Amazon MQ for RabbitMQ in a cluster deployment",
         "correct": false,
-        "why": "Kinesis Data Streams is a streaming data log with its own API. It doesn't speak JMS or act as an ActiveMQ-compatible broker."
+        "why": "RabbitMQ doesn't support JMS natively like ActiveMQ, so the application would need changes."
       },
       {
         "key": "C",
-        "text": "Amazon SQS",
+        "text": "Amazon SQS with the JMS client library",
         "correct": false,
-        "why": "SQS isn't JMS-native. Migrating would require code changes, although a JMS client library exists."
+        "why": "The SQS JMS library covers a subset of JMS, and broker features would need application changes."
       },
       {
         "key": "D",
@@ -1914,25 +1914,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Remove health checks entirely.",
+        "text": "Raise the unhealthy threshold and interval",
         "correct": false,
-        "why": "Without health checks, truly failed instances would keep receiving traffic."
+        "why": "This delays detection of real instance failures and may still fail all at once on longer blips."
       },
       {
         "key": "B",
-        "text": "Make the ELB health check a shallow liveness check of the instance and app process only, and monitor dependencies separately with alarms, so shared dependency failures don't mark every instance unhealthy.",
+        "text": "Shallow liveness check; monitor dependencies separately",
         "correct": true,
         "why": "Deep health checks that include shared dependencies can fail everywhere at once, causing mass replacement. Shallow checks replace only genuinely broken instances."
       },
       {
         "key": "C",
-        "text": "Make the health check query every dependency more often.",
+        "text": "Make the health check query every dependency more often",
         "correct": false,
         "why": "This amplifies the problem and adds load on the dependencies."
       },
       {
         "key": "D",
-        "text": "Point the health check at the database endpoint directly.",
+        "text": "Point the health check at the database endpoint directly",
         "correct": false,
         "why": "Load balancer health checks must target the registered targets, and the failure mode would remain."
       }
@@ -1964,25 +1964,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Use Spot Instances for the extra capacity.",
+        "text": "Use Spot Instances for the extra capacity",
         "correct": false,
         "why": "Spot capacity may be scarce or interrupted exactly when it's needed during regional events."
       },
       {
         "key": "B",
-        "text": "Run all 12 instances in one AZ.",
+        "text": "Keep 4 per AZ with a warm pool in each AZ",
         "correct": false,
-        "why": "An AZ failure would then take out everything."
+        "why": "A warm pool speeds launch but still needs new capacity to start during a large event."
       },
       {
         "key": "C",
-        "text": "Provision 6 instances in each of the three AZs (18 total), so the remaining two AZs can handle peak load without launching new instances.",
+        "text": "6 instances in each of three AZs (18 in total)",
         "correct": true,
         "why": "Pre-provisioning enough capacity in the surviving AZs means the system doesn't depend on launching instances during an incident, which is the definition of static stability."
       },
       {
         "key": "D",
-        "text": "Keep 4 per AZ and rely on Auto Scaling to replace capacity.",
+        "text": "Keep 4 per AZ and rely on Auto Scaling to replace capacity",
         "correct": false,
         "why": "This depends on the EC2 control plane and capacity being available during an incident, which isn't guaranteed."
       }

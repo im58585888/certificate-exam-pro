@@ -68,25 +68,25 @@
     "options": [
       {
         "key": "A",
-        "text": "On-Demand Instances",
+        "text": "On-Demand Instances in an Auto Scaling group",
         "correct": false,
         "why": "On-Demand is flexible but the most expensive per hour. You pay for guaranteed capacity the workload doesn't need."
       },
       {
         "key": "B",
-        "text": "Spot Instances, using a diversified set of instance types",
+        "text": "Spot Instances across several instance types",
         "correct": true,
         "why": "Spot gives up to 90% off On-Demand for spare capacity. The jobs are fault-tolerant, checkpointed and flexible on timing, which is the ideal Spot profile, and diversifying instance types improves capacity availability."
       },
       {
         "key": "C",
-        "text": "Dedicated Hosts",
+        "text": "Dedicated Hosts sized for the peak job count",
         "correct": false,
         "why": "Dedicated Hosts are for licensing or compliance needs that require a physical server. They are among the most expensive options."
       },
       {
         "key": "D",
-        "text": "3-year All Upfront Reserved Instances",
+        "text": "3-year All Upfront Reserved Instances for the fleet",
         "correct": false,
         "why": "RIs suit steady, predictable baseline usage. Committing for three years to a bursty, flexible batch workload risks paying for unused capacity."
       }
@@ -275,25 +275,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Create a DynamoDB interface VPC endpoint in each subnet.",
+        "text": "Create a DynamoDB interface VPC endpoint in each subnet",
         "correct": false,
         "why": "Interface endpoints for DynamoDB also bypass NAT but carry hourly and per-GB charges. When the traffic originates inside the VPC, the free gateway endpoint is the cheaper option."
       },
       {
         "key": "B",
-        "text": "Create a DynamoDB gateway VPC endpoint and add it to the private subnets' route tables.",
+        "text": "Create a DynamoDB gateway endpoint in the route tables",
         "correct": true,
         "why": "Gateway endpoints for DynamoDB (and S3) are free. Traffic to DynamoDB is routed privately through the endpoint instead of through the NAT gateway, eliminating those per-GB NAT charges."
       },
       {
         "key": "C",
-        "text": "Replace the NAT gateway with NAT instances on smaller EC2 instance types.",
+        "text": "Replace the NAT gateway with smaller NAT instances",
         "correct": false,
         "why": "NAT instances avoid the per-GB processing fee but add instance costs, bandwidth limits, patching and HA work. The traffic still takes an unnecessary path."
       },
       {
         "key": "D",
-        "text": "Move the application servers into public subnets with public IP addresses.",
+        "text": "Move the app servers to public subnets with public IPs",
         "correct": false,
         "why": "This avoids NAT but exposes the servers to the internet and adds public IPv4 address charges. It trades cost for a worse security posture."
       }
@@ -435,25 +435,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Create an AWS Budgets cost budget of $2,000 per account with an alert on forecasted spend exceeding 100%, notifying the group leader by email.",
+        "text": "AWS Budgets cost budget with a forecasted-spend email alert",
         "correct": true,
         "why": "AWS Budgets natively supports alerts on both actual and forecasted cost thresholds, with email or SNS notifications. It is configuration only, with no code."
       },
       {
         "key": "B",
-        "text": "Create a CloudWatch billing alarm on EstimatedCharges in each account.",
+        "text": "A CloudWatch billing alarm on EstimatedCharges per account",
         "correct": false,
         "why": "Billing alarms fire on actual accumulated charges, not forecasts, so leaders would be alerted only after the allowance is already spent."
       },
       {
         "key": "C",
-        "text": "Enable Cost Explorer and ask group leaders to check it daily.",
+        "text": "Cost Explorer forecasts that group leaders review each day",
         "correct": false,
         "why": "Cost Explorer shows spend and forecasts but doesn't send threshold alerts, and relying on manual daily checks is error-prone."
       },
       {
         "key": "D",
-        "text": "Write a Lambda function that calls the Cost Explorer API daily and emails a report.",
+        "text": "A daily Lambda function that emails a Cost Explorer report",
         "correct": false,
         "why": "This works but is custom code to build and maintain for something Budgets does out of the box."
       }

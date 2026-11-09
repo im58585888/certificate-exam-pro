@@ -16,25 +16,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Create one or more read replicas, direct the reporting queries and article reads to the replicas, and keep writes on the primary.",
+        "text": "Add read replicas and send reports and article reads to them",
         "correct": true,
         "why": "Read replicas offload read traffic, including heavy reporting, from the primary. The reports no longer compete with page reads on the same instance."
       },
       {
         "key": "B",
-        "text": "Enable automated backups with a 35-day retention period.",
+        "text": "Move the database to a larger instance with more vCPUs",
         "correct": false,
-        "why": "Backups have no effect on query performance."
+        "why": "A bigger instance helps a little, but reports and page reads still compete on one database during the morning run."
       },
       {
         "key": "C",
-        "text": "Increase the allocated storage of the DB instance.",
+        "text": "Increase allocated storage to raise gp2 baseline IOPS",
         "correct": false,
         "why": "More storage (and the gp2 IOPS that come with it) does not address CPU and memory contention caused by heavy analytical queries."
       },
       {
         "key": "D",
-        "text": "Enable Multi-AZ on the DB instance.",
+        "text": "Enable Multi-AZ and send reads to the standby instance",
         "correct": false,
         "why": "In the Multi-AZ instance deployment, the standby cannot serve reads. It improves availability, not read performance."
       }
@@ -68,25 +68,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Create a global secondary index on the leaderboard attribute.",
+        "text": "Create a GSI on the leaderboard attribute and query it",
         "correct": false,
         "why": "A GSI changes which query patterns are efficient but does not reduce latency below DynamoDB's normal millisecond range."
       },
       {
         "key": "B",
-        "text": "Add Amazon DynamoDB Accelerator (DAX) in front of the table and use the DAX client in the application.",
+        "text": "Add DAX in front of the table and use the DAX client",
         "correct": true,
         "why": "DAX is an in-memory, write-through cache that speaks the DynamoDB API. Cached eventually consistent reads return in microseconds, and the application only swaps in the DAX client."
       },
       {
         "key": "C",
-        "text": "Enable DynamoDB Streams and process leaderboard updates with Lambda.",
+        "text": "Cache leaderboards in ElastiCache with custom app logic",
         "correct": false,
-        "why": "Streams capture item changes for event-driven processing. They do not speed up reads."
+        "why": "ElastiCache can reach sub-millisecond reads, but it needs new caching logic in the application, which the team wants to avoid."
       },
       {
         "key": "D",
-        "text": "Switch the table to provisioned capacity with a higher read capacity setting.",
+        "text": "Switch to provisioned capacity with higher read capacity",
         "correct": false,
         "why": "More capacity raises throughput limits but DynamoDB still returns in single-digit milliseconds. It won't reach microseconds."
       }
@@ -120,25 +120,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Enable S3 Cross-Region Replication to buckets in every Region where customers live.",
+        "text": "Replicate the bucket to Regions near customers with CRR",
         "correct": false,
         "why": "This reduces latency for some Regions but adds storage, replication and routing complexity, and it doesn't reduce request volume the way edge caching does."
       },
       {
         "key": "B",
-        "text": "Move the assets to Amazon EFS and serve them from EC2 instances.",
+        "text": "Serve the assets from EC2 instances backed by Amazon EFS",
         "correct": false,
         "why": "This adds servers to manage, keeps content in a single Region, and doesn't bring it closer to users."
       },
       {
         "key": "C",
-        "text": "Create an Amazon CloudFront distribution with the S3 bucket as the origin and serve assets through CloudFront.",
+        "text": "Put a CloudFront distribution in front of the S3 bucket",
         "correct": true,
         "why": "CloudFront caches content at hundreds of edge locations close to users. Repeated requests are served from cache, which improves latency and cuts origin (S3) requests."
       },
       {
         "key": "D",
-        "text": "Enable S3 Transfer Acceleration for downloads.",
+        "text": "Enable S3 Transfer Acceleration for asset downloads",
         "correct": false,
         "why": "Transfer Acceleration optimizes the network path to the bucket, mainly for uploads. It does not cache content, so every request still hits S3."
       }
@@ -287,25 +287,25 @@
     "options": [
       {
         "key": "A",
-        "text": "In a cluster placement group in a single Availability Zone, using instances that support enhanced networking (and EFA for MPI)",
+        "text": "Cluster placement group in one AZ, with ENA and EFA",
         "correct": true,
         "why": "Cluster placement groups pack instances close together within one AZ on a low-latency, high-bisection-bandwidth network segment. Elastic Fabric Adapter further accelerates MPI."
       },
       {
         "key": "B",
-        "text": "In a spread placement group across multiple Availability Zones",
+        "text": "Spread placement group across multiple AZs, with ENA",
         "correct": false,
         "why": "Spread placement groups put each instance on distinct hardware to reduce correlated failure. They are designed for a small number of critical instances, and they increase distance between nodes rather than reducing it."
       },
       {
         "key": "C",
-        "text": "Across three Availability Zones behind a Network Load Balancer",
+        "text": "Three AZs behind a Network Load Balancer, with EFA",
         "correct": false,
         "why": "Cross-AZ traffic adds latency, and a load balancer is not part of node-to-node MPI communication."
       },
       {
         "key": "D",
-        "text": "In a partition placement group with one instance per partition",
+        "text": "Partition placement group, one instance per partition",
         "correct": false,
         "why": "Partition groups isolate groups of instances on separate racks for large distributed systems like HDFS, Cassandra or Kafka. They optimize fault isolation, not minimum latency."
       }
@@ -339,7 +339,7 @@
     "options": [
       {
         "key": "A",
-        "text": "General Purpose SSD (gp3)",
+        "text": "General Purpose SSD (gp3) at maximum provisioned IOPS",
         "correct": false,
         "why": "gp3 is excellent for most workloads, but for sustained, consistent sub-millisecond latency at the highest IOPS and 99.999% durability, Provisioned IOPS io2 is the purpose-built choice."
       },
@@ -351,15 +351,15 @@
       },
       {
         "key": "C",
-        "text": "Cold HDD (sc1)",
+        "text": "Instance store NVMe volumes in a RAID 0 array",
         "correct": false,
-        "why": "sc1 is the lowest-cost HDD option for infrequently accessed data. It is the opposite of what this workload needs."
+        "why": "Instance store is fast but ephemeral: data is lost when the instance stops, which fails the durability requirement."
       },
       {
         "key": "D",
-        "text": "Throughput Optimized HDD (st1)",
+        "text": "Provisioned IOPS SSD (io1) on a Nitro instance",
         "correct": false,
-        "why": "st1 is designed for large, sequential throughput workloads such as big data and log processing. Its random IOPS and latency are far too poor for transaction logs."
+        "why": "io1 provides high IOPS, but io2 Block Express offers higher durability (99.999%) and performance for the same purpose."
       }
     ],
     "explanation": {
@@ -443,21 +443,21 @@
     "options": [
       {
         "key": "A",
-        "text": "Amazon SNS standard topic",
+        "text": "Amazon SNS FIFO topic with an SQS queue per consumer",
         "correct": false,
-        "why": "SNS pushes and forgets. It has no retention for replay and no per-key ordering in standard topics."
+        "why": "SNS FIFO plus queues fans out in order, but each queue deletes messages once consumed, so there's no 24-hour replay from the source."
       },
       {
         "key": "B",
-        "text": "Amazon Data Firehose",
+        "text": "Amazon Data Firehose with three delivery destinations",
         "correct": false,
         "why": "Firehose is a delivery service that buffers and loads data into destinations such as S3 or Redshift. It does not support multiple custom real-time consumers or replay."
       },
       {
         "key": "C",
-        "text": "Amazon SQS standard queue",
+        "text": "Amazon SQS FIFO queue with message group per vehicle",
         "correct": false,
-        "why": "A message in SQS is deleted after one consumer processes it. It cannot serve multiple independent consumers of the same data, doesn't guarantee order, and can't replay data."
+        "why": "A message is deleted after one consumer processes it, so three applications can't each read the same data or replay it."
       },
       {
         "key": "D",
@@ -547,27 +547,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Enable S3 Object Lambda to resize images on every GET request.",
+        "text": "Use S3 Object Lambda to resize images on each GET request",
         "correct": false,
         "why": "Object Lambda transforms data at read time, so the resize work repeats on every request. The requirement is to create thumbnails once, on upload."
       },
       {
         "key": "B",
-        "text": "Configure an S3 event notification for ObjectCreated events that invokes an AWS Lambda function to generate the thumbnails.",
+        "text": "S3 ObjectCreated event notifications that invoke Lambda",
         "correct": true,
         "why": "S3 events trigger Lambda within seconds of each upload. Lambda scales automatically with the number of uploads and bills per request and per millisecond, so idle time costs nothing."
       },
       {
         "key": "C",
-        "text": "Run a cron job on an EC2 instance every minute that lists new objects and resizes them.",
+        "text": "An EC2 cron job each minute that lists and resizes new objects",
         "correct": false,
         "why": "Polling adds delay and wastes list requests. The instance costs money around the clock, and one instance may not keep up with bursts."
       },
       {
         "key": "D",
-        "text": "Use AWS Batch with a compute environment that is always running.",
+        "text": "AWS Batch with a compute environment kept above 0 vCPUs",
         "correct": false,
-        "why": "An always-on compute environment costs money when idle, and Batch is designed for queued batch jobs, not per-object, near-instant processing."
+        "why": "A compute environment with minimum vCPUs above zero costs money when idle, and Batch is designed for queued jobs, not per-object, near-instant processing."
       }
     ],
     "explanation": {

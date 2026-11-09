@@ -117,25 +117,25 @@
     "options": [
       {
         "key": "A",
-        "text": "All On-Demand instances of a single type",
+        "text": "On-Demand only, using one instance type for all 40 instances",
         "correct": false,
-        "why": "This is reliable but misses the large Spot savings available for the interruption-tolerant burst capacity."
+        "why": "Reliable, but it misses the large Spot savings available for the interruption-tolerant burst capacity."
       },
       {
         "key": "B",
-        "text": "All Spot Instances of a single type",
+        "text": "Spot only, using several instance types and capacity rebalancing",
         "correct": false,
-        "why": "The baseline could vanish during a Spot capacity reclaim, and a single type raises interruption risk."
+        "why": "Even with diversification, the 4-instance baseline could disappear during a Spot capacity reclaim, so the baseline isn't guaranteed."
       },
       {
         "key": "C",
-        "text": "Dedicated Hosts for all capacity",
+        "text": "On-Demand base of 4 with Savings Plans; scale out on Reserved Instances",
         "correct": false,
-        "why": "Dedicated Hosts are expensive and designed for licensing and compliance, not elastic web tiers."
+        "why": "Reservations bill every hour whether used or not, so committing to peak capacity wastes money most of the day."
       },
       {
         "key": "D",
-        "text": "A mixed instances policy with an On-Demand base capacity of 4, 0% On-Demand above base (the rest Spot), multiple instance types, and the price-capacity-optimized Spot allocation strategy",
+        "text": "Mixed instances: On-Demand base of 4, Spot above it, several types",
         "correct": true,
         "why": "The baseline stays on reliable On-Demand (coverable by Savings Plans), while burst capacity uses much cheaper Spot. Diversifying across instance types and using price-capacity-optimized allocation reduces interruptions."
       }
@@ -167,27 +167,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Purchase RDS Reserved Instances for the instance class and deployment (Multi-AZ) with a 3-year term",
+        "text": "RDS Reserved Instances, Multi-AZ, 3-year term",
         "correct": true,
         "why": "RDS Reserved Instances give a significant discount over On-Demand for steady, long-running databases. A 3-year term with more upfront payment gives the largest discount."
       },
       {
         "key": "B",
-        "text": "Use Spot Instances for the database",
+        "text": "A Compute Savings Plan covering the database hours",
         "correct": false,
-        "why": "RDS doesn't run on Spot, and interruptions would be unacceptable for a production database."
+        "why": "Compute Savings Plans cover EC2, Fargate and Lambda usage. They do not apply to Amazon RDS instances."
       },
       {
         "key": "C",
-        "text": "Purchase EC2 Instance Savings Plans",
+        "text": "EC2 Instance Savings Plans for the r6g family",
         "correct": false,
         "why": "EC2 Instance Savings Plans apply to EC2 usage, not to Amazon RDS database instances."
       },
       {
         "key": "D",
-        "text": "Keep paying On-Demand",
+        "text": "On-Demand pricing with Aurora I/O-Optimized",
         "correct": false,
-        "why": "On-Demand has no commitment but is the most expensive way to run a predictable 24/7 database for years."
+        "why": "Changing engines and storage pricing doesn't add a commitment discount; On-Demand stays the most expensive way to run a steady 24/7 database for years."
       }
     ],
     "explanation": {
@@ -268,27 +268,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Move the databases to larger instances to finish work faster",
+        "text": "Schedule a Lambda function to stop clusters for up to 7 days",
         "correct": false,
-        "why": "Larger instances cost more per hour and still run idle most of the time."
+        "why": "Aurora restarts stopped clusters automatically after 7 days, and the schedule is custom code to build and maintain."
       },
       {
         "key": "B",
-        "text": "Purchase 3-year Reserved Instances for the development clusters",
+        "text": "Buy 3-year Reserved Instances for the development clusters",
         "correct": false,
         "why": "Reservations bill for every hour whether used or not. That locks in paying for mostly-idle databases."
       },
       {
         "key": "C",
-        "text": "Convert the development clusters to Aurora Serverless v2 with a low minimum capacity (and auto-pause where supported), so they scale down when idle",
+        "text": "Convert them to Aurora Serverless v2 with a low minimum capacity",
         "correct": true,
         "why": "Serverless v2 bills per ACU-second and scales automatically with demand, so idle dev databases cost very little without anyone starting or stopping them."
       },
       {
         "key": "D",
-        "text": "Enable Multi-AZ on each development cluster",
+        "text": "Move them to smaller burstable db.t4g instances that run 24/7",
         "correct": false,
-        "why": "Multi-AZ adds instances and cost, which development environments rarely need."
+        "why": "Smaller instances cost less, but they still bill every hour while sitting idle nights and weekends."
       }
     ],
     "explanation": {
@@ -319,25 +319,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Enable point-in-time recovery.",
-        "correct": false,
-        "why": "PITR adds backup cost and doesn't reduce throughput cost."
-      },
-      {
-        "key": "B",
-        "text": "Keep on-demand and add a global secondary index.",
-        "correct": false,
-        "why": "GSIs add write and storage cost and don't change the pricing model."
-      },
-      {
-        "key": "C",
-        "text": "Enable DynamoDB Accelerator (DAX).",
+        "text": "Keep on-demand mode and add a DAX cluster in front of the table",
         "correct": false,
         "why": "DAX can reduce read costs for hot items, but it adds cluster cost and doesn't address the choice of capacity mode."
       },
       {
+        "key": "B",
+        "text": "Change the table class to Standard-Infrequent Access",
+        "correct": false,
+        "why": "Standard-IA lowers storage prices but raises request prices, the wrong trade for a table with steady traffic."
+      },
+      {
+        "key": "C",
+        "text": "Keep on-demand mode and enable adaptive capacity",
+        "correct": false,
+        "why": "Adaptive capacity is automatic and handles hot partitions; it doesn't change what you pay per request."
+      },
+      {
         "key": "D",
-        "text": "Switch to provisioned capacity mode with auto scaling, and consider reserved capacity for the steady baseline.",
+        "text": "Switch to provisioned mode with auto scaling and reserved capacity",
         "correct": true,
         "why": "For steady, predictable traffic, provisioned capacity is usually cheaper per request than on-demand. Auto scaling follows the daily curve, and reserved capacity discounts the baseline further."
       }
@@ -369,25 +369,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Change the table class to DynamoDB Standard-Infrequent Access.",
+        "text": "Change the table class to DynamoDB Standard-Infrequent Access",
         "correct": true,
         "why": "Standard-IA tables have much lower storage prices (with higher per-request costs), which suits storage-dominated tables with infrequent access, while keeping the same performance and APIs."
       },
       {
         "key": "B",
-        "text": "Add DAX.",
+        "text": "Add a DAX cluster to serve the infrequent reads from cache",
         "correct": false,
-        "why": "DAX adds cost and targets read latency, not storage."
+        "why": "DAX adds cost and targets read latency, not the storage that dominates the bill."
       },
       {
         "key": "C",
-        "text": "Export the table to S3 Glacier Deep Archive and delete it.",
+        "text": "Export old items to S3 Glacier Deep Archive and delete them",
         "correct": false,
         "why": "The data must stay queryable at millisecond latency, which Glacier Deep Archive can't provide."
       },
       {
         "key": "D",
-        "text": "Switch to on-demand capacity mode.",
+        "text": "Switch the table from provisioned to on-demand capacity mode",
         "correct": false,
         "why": "The capacity mode affects throughput pricing, not the storage cost that dominates here."
       }
@@ -420,25 +420,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Increase the table's capacity so the job runs faster.",
+        "text": "Run the deletion job with a parallel scan to finish faster",
         "correct": false,
-        "why": "This spends more money on a job that TTL makes unnecessary."
+        "why": "A parallel scan finishes sooner but reads the same data and consumes the same capacity; TTL makes the job unnecessary."
       },
       {
         "key": "B",
-        "text": "Enable DynamoDB Time to Live (TTL) on an expiration timestamp attribute.",
+        "text": "Enable DynamoDB TTL on an expiration timestamp attribute",
         "correct": true,
         "why": "TTL deletes expired items automatically in the background at no cost, without consuming write capacity. No scanning jobs are needed."
       },
       {
         "key": "C",
-        "text": "Enable point-in-time recovery.",
+        "text": "Use a DynamoDB Streams trigger to delete old sessions",
         "correct": false,
-        "why": "PITR creates backups. It doesn't delete expired data."
+        "why": "Streams fire on writes, not on time passing, so a trigger can't detect when a session expires."
       },
       {
         "key": "D",
-        "text": "Run the deletion job hourly instead of nightly.",
+        "text": "Run the deletion job hourly instead of nightly",
         "correct": false,
         "why": "More frequent scans consume even more capacity."
       }
@@ -577,21 +577,21 @@
       },
       {
         "key": "B",
-        "text": "S3 Inventory reports in every bucket, analysed manually",
+        "text": "S3 Inventory reports in every bucket, analyzed with Athena",
         "correct": false,
         "why": "Inventory provides object lists but needs you to build the analysis across 900 buckets yourself."
       },
       {
         "key": "C",
-        "text": "Amazon Macie",
+        "text": "AWS Trusted Advisor cost optimization checks in each account",
         "correct": false,
-        "why": "Macie finds sensitive data. It isn't a cost-analysis tool."
+        "why": "Trusted Advisor has a few S3 checks but no organization-wide storage usage or activity trends, nor checks for incomplete uploads and noncurrent versions."
       },
       {
         "key": "D",
-        "text": "AWS CloudTrail",
+        "text": "Cost Explorer grouped by account and S3 usage type",
         "correct": false,
-        "why": "CloudTrail logs API calls and doesn't provide storage-usage analytics or recommendations."
+        "why": "Cost Explorer shows what S3 costs, but not activity trends or bucket-level recommendations such as incomplete multipart uploads."
       }
     ],
     "explanation": {
@@ -730,25 +730,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Enable S3 Transfer Acceleration for downloads.",
+        "text": "Enable S3 Transfer Acceleration for the downloads",
         "correct": false,
         "why": "Acceleration can improve speed but adds per-GB charges on top of egress, increasing cost."
       },
       {
         "key": "B",
-        "text": "Move the files to S3 Standard-IA.",
+        "text": "Move the installer files to S3 Standard-IA",
         "correct": false,
         "why": "This lowers storage cost but adds retrieval fees on every download, and does nothing for egress."
       },
       {
         "key": "C",
-        "text": "Serve the files through Amazon CloudFront with the S3 bucket as the origin.",
+        "text": "Serve the files through CloudFront with S3 as the origin",
         "correct": true,
         "why": "Transfer from S3 to CloudFront is free, CloudFront's delivery pricing is typically lower than S3 internet egress (especially with volume), and edge caching speeds up global downloads."
       },
       {
         "key": "D",
-        "text": "Replicate the bucket to every Region.",
+        "text": "Replicate the bucket to a Region on each continent",
         "correct": false,
         "why": "Replication adds storage and inter-Region transfer costs, and you'd still pay internet egress from each Region."
       }
@@ -831,27 +831,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Set a 30-day retention on the log groups and export or stream logs to S3 with a lifecycle rule transitioning to a Glacier class and expiring after 1 year.",
+        "text": "30-day retention, then export to S3 with Glacier lifecycle rules",
         "correct": true,
         "why": "By default CloudWatch Logs never expire. Setting retention removes old data automatically, and S3 archive classes store the yearly archive far more cheaply."
       },
       {
         "key": "B",
-        "text": "Delete all log groups monthly.",
+        "text": "Keep default retention; move log groups to Infrequent Access",
         "correct": false,
-        "why": "This breaks the 30-day searchable and 1-year archive requirements."
+        "why": "The Infrequent Access log class lowers ingestion cost, but with no retention set the stored logs, and the bill, keep growing forever."
       },
       {
         "key": "C",
-        "text": "Switch to detailed monitoring.",
+        "text": "30-day retention, then copy logs to a second log group for 1 year",
         "correct": false,
-        "why": "Detailed monitoring is about metrics frequency and adds cost."
+        "why": "Keeping a year of logs in CloudWatch Logs storage costs far more than an S3 archive class."
       },
       {
         "key": "D",
-        "text": "Keep the default retention and buy more CloudWatch capacity.",
+        "text": "Set 1-year retention on all log groups and keep them searchable",
         "correct": false,
-        "why": "The default is 'never expire', so the logs, and the bill, keep growing forever."
+        "why": "This meets compliance but keeps a full year in CloudWatch Logs storage, much more than the 30 days that needs to be searchable."
       }
     ],
     "explanation": {
@@ -882,27 +882,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Enable CloudTrail.",
+        "text": "Separate IAM roles per unit, with CloudTrail logs per role",
         "correct": false,
-        "why": "CloudTrail records API activity, not cost attribution."
+        "why": "CloudTrail records who called which API, not what each resource costs."
       },
       {
         "key": "B",
-        "text": "Tag resources with a BusinessUnit tag, activate it as a cost allocation tag in the Billing console, and group costs by the tag in Cost Explorer or cost and usage reports.",
+        "text": "Cost allocation tags by business unit, grouped in Cost Explorer",
         "correct": true,
         "why": "Activated cost allocation tags appear as dimensions in billing data, so costs can be filtered and grouped by business unit."
       },
       {
         "key": "C",
-        "text": "Use AWS Budgets only.",
+        "text": "AWS Budgets per business unit, with no resource tagging",
         "correct": false,
-        "why": "Budgets alert on thresholds but need tags or accounts to attribute costs to units in the first place."
+        "why": "Budgets need tags or separate accounts to know which costs belong to which unit."
       },
       {
         "key": "D",
-        "text": "Create four IAM groups.",
+        "text": "Resource groups per business unit, viewed in the console",
         "correct": false,
-        "why": "IAM groups control permissions and don't attribute resource costs."
+        "why": "Resource groups organize resources for management; without activated cost allocation tags, billing data can't be grouped by unit."
       }
     ],
     "explanation": {
@@ -983,25 +983,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Merge all workloads into a single account.",
+        "text": "Merge all workloads into a single AWS account",
         "correct": false,
         "why": "This loses the security and blast-radius isolation of separate accounts. Consolidated billing gives the savings without merging."
       },
       {
         "key": "B",
-        "text": "Enable Cost Explorer in each account.",
+        "text": "Enable Cost Explorer and RI reports in each account",
         "correct": false,
         "why": "Visibility alone doesn't combine usage or share discounts."
       },
       {
         "key": "C",
-        "text": "Sell all Reserved Instances on the Marketplace.",
+        "text": "Sell the unused Reserved Instances on the RI Marketplace",
         "correct": false,
         "why": "Selling loses the discounts entirely instead of applying them where there's matching usage."
       },
       {
         "key": "D",
-        "text": "Join the accounts to an AWS Organizations organization with consolidated billing.",
+        "text": "Join an AWS Organizations org with consolidated billing",
         "correct": true,
         "why": "Consolidated billing combines usage across accounts for volume pricing tiers, and shares RI and Savings Plans discounts across accounts, so unused reservations cover On-Demand usage elsewhere."
       }
@@ -1034,27 +1034,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Create snapshots of the volumes, move the snapshots to the EBS Snapshots Archive tier, and delete the volumes.",
+        "text": "Snapshot the volumes, archive the snapshots, delete the volumes",
         "correct": true,
         "why": "Unattached volumes are billed at full provisioned size. Archived snapshots cost far less, and can be restored (within 24–72 hours) if a volume is ever needed."
       },
       {
         "key": "B",
-        "text": "Keep the volumes attached to a single stopped instance.",
+        "text": "Attach the volumes to one stopped instance until needed",
         "correct": false,
         "why": "Stopped instances still incur EBS charges for all attached volumes, so nothing is saved."
       },
       {
         "key": "C",
-        "text": "Convert the volumes to io2.",
+        "text": "Convert the volumes to sc1 Cold HDD and keep them",
         "correct": false,
-        "why": "io2 is more expensive per GB and per IOPS."
+        "why": "sc1 is cheaper than gp3 per GB, but you still pay for the full provisioned size of 300 volumes, far more than archived snapshots. Not all volume sizes qualify either."
       },
       {
         "key": "D",
-        "text": "Delete all the volumes immediately without backups.",
+        "text": "Take standard snapshots and keep both snapshots and volumes",
         "correct": false,
-        "why": "The few volumes that might be needed would be lost."
+        "why": "Keeping the volumes means paying for them in full; this adds snapshot cost instead of saving anything."
       }
     ],
     "explanation": {
@@ -1085,25 +1085,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Move to a Network Load Balancer.",
+        "text": "Move from the Application Load Balancer to a Network Load Balancer",
         "correct": false,
         "why": "The load balancer type doesn't change the public IPs assigned to instances."
       },
       {
         "key": "B",
-        "text": "Launch the instances in private subnets without public IPv4 addresses, keeping the internet-facing ALB in public subnets, and use NAT or VPC endpoints for any outbound needs.",
+        "text": "Launch instances in private subnets without public IPv4 addresses",
         "correct": true,
         "why": "AWS charges hourly for every public IPv4 address. Instances behind an ALB don't need public IPs, so removing them saves money and shrinks the attack surface."
       },
       {
         "key": "C",
-        "text": "Enable detailed monitoring.",
+        "text": "Release the public IPs and assign IPv6 addresses to the ALB only",
         "correct": false,
-        "why": "Detailed monitoring changes how often metrics are collected. It has no effect on public IPv4 address charges."
+        "why": "Removing the instances' IPv4 addresses is the right idea, but they still need private subnets and the ALB still needs IPv4 for most users; switching the ALB to IPv6-only would affect users."
       },
       {
         "key": "D",
-        "text": "Replace each public IP with an Elastic IP.",
+        "text": "Replace each instance's public IP with an Elastic IP address",
         "correct": false,
         "why": "Elastic IPs are public IPv4 addresses too and are billed the same way."
       }
@@ -1135,27 +1135,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Increase task CPU and memory.",
+        "text": "Right-size each task's CPU and memory to its average usage",
         "correct": false,
-        "why": "Larger tasks cost more per hour, and only help if they shorten runtime enough."
+        "why": "Right-sizing can trim cost, but it saves far less than Spot pricing and risks out-of-memory failures at peak."
       },
       {
         "key": "B",
-        "text": "Run the tasks on Lambda with a 15-minute timeout.",
+        "text": "Move the tasks to Lambda functions with a 15-minute timeout",
         "correct": false,
         "why": "Long batch tasks may exceed Lambda's 15-minute limit, and it requires rework."
       },
       {
         "key": "C",
-        "text": "Run the tasks on Fargate Spot using a capacity provider strategy.",
+        "text": "Run the tasks on Fargate Spot via a capacity provider strategy",
         "correct": true,
         "why": "Fargate Spot runs interruption-tolerant tasks on spare capacity at a steep discount compared with regular Fargate, with no servers to manage."
       },
       {
         "key": "D",
-        "text": "Move the tasks to EC2 Dedicated Hosts.",
+        "text": "Run the tasks on ECS with EC2 Spot Instances in an ASG",
         "correct": false,
-        "why": "Dedicated Hosts are expensive and bring back instance management."
+        "why": "EC2 Spot is cheap, but it brings back EC2 instance management, which the company wants to avoid."
       }
     ],
     "explanation": {
@@ -1186,25 +1186,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Move the functions into a VPC.",
+        "text": "Attach the functions to a VPC to avoid public data transfer",
         "correct": false,
         "why": "VPC attachment doesn't lower Lambda pricing, and it may require NAT or endpoints that add cost."
       },
       {
         "key": "B",
-        "text": "Enable provisioned concurrency on all functions.",
+        "text": "Enable provisioned concurrency on the busiest functions",
         "correct": false,
         "why": "Provisioned concurrency adds cost for pre-initialized environments. It improves latency, not cost."
       },
       {
         "key": "C",
-        "text": "Increase every function's timeout.",
+        "text": "Lower memory to the minimum on every function",
         "correct": false,
-        "why": "The timeout doesn't change billed duration unless functions run longer."
+        "why": "Lower memory also lowers CPU, so functions can run longer and cost the same or more, and some may fail."
       },
       {
         "key": "D",
-        "text": "Switch the functions to the arm64 (Graviton) architecture.",
+        "text": "Switch the functions to the arm64 (Graviton) architecture",
         "correct": true,
         "why": "arm64 Lambda functions have a lower price per GB-second and often better performance, so pure-Python functions typically move with just a configuration change."
       }
@@ -1237,25 +1237,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Migrate to API Gateway HTTP APIs with a JWT authorizer.",
+        "text": "Migrate to API Gateway HTTP APIs with a JWT authorizer",
         "correct": true,
         "why": "HTTP APIs cost significantly less per million requests than REST APIs and natively support Lambda proxy integrations and JWT (Cognito) authorizers, which covers everything this API uses."
       },
       {
         "key": "B",
-        "text": "Add usage plans.",
+        "text": "Add usage plans and API keys to throttle heavy callers",
         "correct": false,
         "why": "Usage plans provide throttling and quotas, not lower prices."
       },
       {
         "key": "C",
-        "text": "Use an edge-optimized endpoint.",
+        "text": "Switch the REST API to an edge-optimized endpoint",
         "correct": false,
         "why": "The endpoint type affects latency, not per-request pricing."
       },
       {
         "key": "D",
-        "text": "Enable API caching.",
+        "text": "Enable API caching on the REST API stage",
         "correct": false,
         "why": "Caching adds hourly cost. It could reduce Lambda calls, but API Gateway still charges per request."
       }
@@ -1288,25 +1288,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Run the primary node on Spot and the rest On-Demand.",
+        "text": "Primary on Spot; core and task nodes On-Demand",
         "correct": false,
         "why": "The primary node is the most critical. Interrupting it ends the cluster."
       },
       {
         "key": "B",
-        "text": "Keep the primary and core nodes On-Demand, and run the task nodes on Spot Instances (using instance fleets with multiple types).",
+        "text": "Primary and core On-Demand; task nodes on Spot fleets",
         "correct": true,
         "why": "Task nodes hold no HDFS data, so losing them only slows jobs. Spot saves a lot there, while the primary and core nodes stay stable."
       },
       {
         "key": "C",
-        "text": "Use Dedicated Hosts for all nodes.",
+        "text": "Primary On-Demand; core and task nodes on Spot fleets",
         "correct": false,
-        "why": "This increases cost and has nothing to do with the goal."
+        "why": "Core nodes store HDFS data, so Spot interruptions there risk data loss and failed jobs."
       },
       {
         "key": "D",
-        "text": "Run all nodes on Spot Instances.",
+        "text": "All nodes on Spot fleets across several instance types",
         "correct": false,
         "why": "Losing the primary node terminates the cluster, and losing core nodes can lose HDFS data and fail jobs."
       }
@@ -1397,27 +1397,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Switch to a FIFO queue.",
+        "text": "Switch the standard queue to a FIFO queue",
         "correct": false,
         "why": "FIFO queues cost more per request and don't reduce empty receives."
       },
       {
         "key": "B",
-        "text": "Decrease the visibility timeout.",
+        "text": "Decrease the visibility timeout on the queue",
         "correct": false,
         "why": "The visibility timeout affects redelivery of in-flight messages, not empty polls."
       },
       {
         "key": "C",
-        "text": "Enable long polling by setting ReceiveMessageWaitTimeSeconds (or WaitTimeSeconds) to up to 20 seconds.",
+        "text": "Enable long polling with a 20-second wait time",
         "correct": true,
         "why": "Long polling waits for messages to arrive before responding, which sharply reduces empty responses and the number of billed requests."
       },
       {
         "key": "D",
-        "text": "Increase message retention.",
+        "text": "Raise the batch size to 10 messages per receive",
         "correct": false,
-        "why": "Retention doesn't affect polling frequency."
+        "why": "Batching cuts requests when messages exist, but an empty queue still returns empty responses on every tight-loop poll."
       }
     ],
     "explanation": {
@@ -1447,25 +1447,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Move all services into a single Availability Zone.",
+        "text": "Move all services into a single Availability Zone",
         "correct": false,
         "why": "This removes inter-AZ charges but sacrifices resilience to an AZ failure."
       },
       {
         "key": "B",
-        "text": "Enable VPC Flow Logs.",
+        "text": "Add VPC endpoints so services call each other privately",
         "correct": false,
-        "why": "Flow logs help analyse traffic but add cost and don't reduce transfer."
+        "why": "Interface endpoints add hourly and per-GB charges and don't keep traffic within one AZ."
       },
       {
         "key": "C",
-        "text": "Route traffic between services through public IP addresses.",
+        "text": "Route service traffic through public IP addresses instead",
         "correct": false,
         "why": "Traffic using public or Elastic IPs is billed at least the same, and it's less secure."
       },
       {
         "key": "D",
-        "text": "Prefer AZ-local communication, for example by routing to service instances and caches in the same AZ (AZ-aware service discovery, or disabling cross-zone load balancing where appropriate), while keeping instances in all AZs for failover.",
+        "text": "Keep calls AZ-local with AZ-aware routing; stay in all AZs",
         "correct": true,
         "why": "Data transfer between AZs is billed per GB in each direction, but traffic within an AZ over private IPs is free. Keeping steady-state traffic AZ-local removes most of the charge without giving up multi-AZ deployment."
       }
