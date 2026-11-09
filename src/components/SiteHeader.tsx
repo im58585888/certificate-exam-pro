@@ -11,6 +11,7 @@ export async function SiteHeader() {
         <Link href="/" aria-label="Certificate Exam Pro home"><Logo /></Link>
         <nav className="flex flex-wrap items-center gap-1 text-sm font-semibold text-soft">
           <Link className="rounded-lg px-3 py-2 hover:text-ink" href="/practice">Practice</Link>
+          <Link className="rounded-lg px-3 py-2 hover:text-ink" href="/study">Study sheet</Link>
           {user && <Link className="rounded-lg px-3 py-2 hover:text-ink" href="/dashboard">Dashboard</Link>}
           <Link className="rounded-lg px-3 py-2 hover:text-ink" href="/pricing">Pricing</Link>
           {user ? (

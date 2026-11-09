@@ -8,6 +8,7 @@ import type { Feedback, PublicQuestion } from "@/lib/questions";
 import { ExplanationPanel, OptionList, QuestionMeta, QuestionText, Verdict } from "./QuestionParts";
 import { FlagButton } from "./FlagButton";
 import { ReportQuestion } from "./ReportQuestion";
+import { Tutor } from "./Tutor";
 
 export interface QuizPlayerProps {
   sessionId: string;
@@ -21,6 +22,8 @@ export interface QuizPlayerProps {
   waitlist?: boolean;
   /** Exam code shown in the paywall, e.g. "AIF-C01". */
   examCode: string;
+  /** Whether the AI tutor is switched on. */
+  tutor: boolean;
 }
 
 const MODE_LABEL: Record<Mode, string> = { trial: "Free trial", practice: "Practice", reinforce: "Strengthen weak areas", review: "Review mistakes", flagged: "Flagged questions", exam: "Timed mock exam" };
@@ -31,7 +34,7 @@ function formatClock(ms: number) {
   return `${h ? `${h}:` : ""}${String(m).padStart(h ? 2 : 1, "0")}:${String(sec).padStart(2, "0")}`;
 }
 
-export function QuizPlayer({ sessionId, mode, questions, initialFlags, initial, deadline, signedIn, waitlist, examCode }: QuizPlayerProps) {
+export function QuizPlayer({ sessionId, mode, questions, initialFlags, initial, deadline, signedIn, waitlist, examCode, tutor }: QuizPlayerProps) {
   const isExam = mode === "exam";
   const [answers, setAnswers] = useState(initial);
   const [index, setIndex] = useState(() => Math.max(0, questions.findIndex((q) => !initial[q.id])));
@@ -150,6 +153,7 @@ export function QuizPlayer({ sessionId, mode, questions, initialFlags, initial, 
           <FlagButton flagged={flags.has(q.id)} onChange={(on) => setFlag(q.id, on)} />
         </div>
         <QuestionText q={q} />
+        {tutor && !isExam && <Tutor key={`tutor-${q.id}`} sessionId={sessionId} questionId={q.id} answered={!!feedback} />}
         {feedback && <div className="mt-4"><Verdict correct={feedback.correct} /></div>}
         <div className="mt-4"><OptionList q={q} picks={picks} feedback={feedback} onToggle={toggle} disabled={pending} /></div>
         {feedback && stillWeak === q.id && flags.has(q.id) && (

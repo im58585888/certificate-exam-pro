@@ -1,5 +1,6 @@
 import { notFound, redirect } from "next/navigation";
 import type { Metadata } from "next";
+import { aiAvailable } from "@/lib/ai";
 import { paymentsMode } from "@/lib/billing";
 import { getExam } from "@/lib/exams";
 import { QuizPlayer, type QuizPlayerProps } from "@/components/QuizPlayer";
@@ -43,6 +44,7 @@ export default async function QuizPage({ params }: PageProps<"/quiz/[id]">) {
       signedIn={!!owner.userId}
       examCode={getExam(session.exam)?.code ?? session.exam.toUpperCase()}
       waitlist={paymentsMode === "waitlist"}
+      tutor={aiAvailable}
     />
   );
 }

@@ -1,0 +1,21 @@
+import { AiError, aiAvailable, cachedBreakdown, writeBreakdown, type BreakdownLevel } from "@/lib/ai";
+import { fail, LIMIT_MESSAGE, tutorContext } from "../shared";
+
+export const maxDuration = 120;
+
+export async function POST(req: Request) {
+  if (!aiAvailable) return fail(503, "The AI tutor isn't available right now.");
+  const body = await req.json().catch(() => ({}));
+  const ctx = await tutorContext(body.sessionId, body.questionId);
+  if (ctx instanceof Response) return ctx;
+  const level: BreakdownLevel = body.level === "simple" ? "simple" : "standard";
+  const hit = await cachedBreakdown(ctx.q, level);
+  if (hit) return Response.json({ breakdown: hit });
+  if (!(await ctx.spend())) return fail(429, LIMIT_MESSAGE);
+  try {
+    return Response.json({ breakdown: await writeBreakdown(ctx.q, level) });
+  } catch (err) {
+    console.error("[ai] breakdown failed", err);
+    return fail(502, err instanceof AiError ? err.message : "The tutor couldn't respond. Please try again in a moment.");
+  }
+}

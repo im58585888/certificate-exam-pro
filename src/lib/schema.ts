@@ -138,4 +138,17 @@ alter table flags enable row level security;
 
 -- v5: passes are per exam (null = legacy all-exam pass)
 alter table entitlements add column if not exists exam text;
+
+-- v6: AI tutor content, generated once and shared (question breakdowns, answer walk-throughs, study-sheet concept cards).
+-- source_hash ties each row to the question or topic text it was written from, so admin edits trigger a rewrite.
+create table if not exists ai_content (
+  key text not null,
+  kind text not null,
+  source_hash text not null,
+  content jsonb not null,
+  model text,
+  created_at timestamptz not null default now(),
+  primary key (key, kind)
+);
+alter table ai_content enable row level security;
 `;

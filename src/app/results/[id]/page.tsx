@@ -3,12 +3,15 @@ import { notFound, redirect } from "next/navigation";
 import type { Metadata } from "next";
 import { SessionFlagButton } from "@/components/FlagButton";
 import { ReportQuestion } from "@/components/ReportQuestion";
+import { Tutor } from "@/components/Tutor";
 import { DOMAIN_LABEL, ExplanationPanel, OptionList, QuestionMeta, QuestionText } from "@/components/QuestionParts";
+import { aiAvailable } from "@/lib/ai";
 import { getAccess, paymentsMode } from "@/lib/billing";
 import { getExam, PASS_DAYS, PASS_PRICE_CENTS } from "@/lib/exams";
 import { ensureBank, feedbackFor, getQuestion, toPublic } from "@/lib/questions";
 import { flagsFor } from "@/lib/flags";
 import { loadOwnedSession, sessionAttempts } from "@/lib/quiz";
+import { studySheet } from "@/lib/studysheet";
 
 export const metadata: Metadata = { title: "Results", robots: { index: false } };
 
@@ -37,6 +40,10 @@ export default async function ResultsPage({ params }: PageProps<"/results/[id]">
     const rows = answered.filter((x) => x.q.domain === d.id);
     return { ...d, n: rows.length, ok: rows.filter((x) => x.a!.correct).length };
   }).filter((d) => d.n > 0);
+
+  const sessionTopics = new Set(answered.map((x) => x.q.topic));
+  const sheet = (await studySheet(owner, session.exam)).filter((t) => sessionTopics.has(t.topic));
+  const newTopics = sheet.filter((t) => t.firstSessionId === id).length;
 
   const ordered = [...items].sort((x, y) => Number(x.a?.correct ?? false) - Number(y.a?.correct ?? false));
 
@@ -76,6 +83,18 @@ export default async function ResultsPage({ params }: PageProps<"/results/[id]">
               </div>
             ))}
           </div>
+        </div>
+      )}
+
+      {sheet.length > 0 && (
+        <div className="card mt-8 flex flex-wrap items-center justify-between gap-4 p-5">
+          <div>
+            <h2 className="font-extrabold">Added to your study sheet</h2>
+            <p className="mt-1 text-sm text-soft">
+              {newTopics ? `${newTopics} new concept${newTopics === 1 ? "" : "s"}` : "No new concepts"}{sheet.length > newTopics ? `, ${sheet.length - newTopics} updated` : ""}: {sheet.slice(0, 5).map((t) => t.topic).join(", ")}{sheet.length > 5 ? "…" : ""}
+            </p>
+          </div>
+          <Link className="btn-primary" href={`/study/${session.exam}`}>Open study sheet</Link>
         </div>
       )}
 
@@ -125,6 +144,7 @@ export default async function ResultsPage({ params }: PageProps<"/results/[id]">
                 {a || access.active ? (
                   <>
                     <div className="mt-4"><OptionList q={pub} picks={a?.picks ?? []} feedback={fb} /></div>
+                    {a && aiAvailable && <Tutor sessionId={id} questionId={q.id} answered />}
                     <ExplanationPanel feedback={fb!} />
                     <ReportQuestion questionId={q.id} />
                   </>

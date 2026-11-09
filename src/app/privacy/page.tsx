@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = { title: "Privacy Policy" };
 
 const CONTACT = process.env.SUPPORT_EMAIL || "im58585888@gmail.com";
-const UPDATED = "September 26, 2026";
+const UPDATED = "November 8, 2026";
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
@@ -37,7 +37,7 @@ export default function Privacy() {
           <li><b>Practice history.</b> The questions you answer, the options you pick, whether they were correct, time spent, and your practice and exam sessions.</li>
           <li><b>Free-trial visitors.</b> A random identifier in a cookie so your trial progress is saved without an account. If you later sign up, this history moves into your account.</li>
           <li><b>Network information.</b> To limit abuse (for example repeated login attempts or free-trial resets) we store a one-way keyed hash of your IP address, never the IP address itself.</li>
-          <li><b>Things you send us.</b> Question reports you submit and, if you join the waitlist, your email address.</li>
+          <li><b>Things you send us.</b> Question reports you submit, questions you type to the AI tutor, and, if you join the waitlist, your email address.</li>
           <li><b>Payments.</b> When paid passes are available, payments are handled by Stripe. We receive a payment reference, the amount and the pass dates. We never see or store your card details.</li>
         </ul>
       </Section>
@@ -45,7 +45,7 @@ export default function Privacy() {
       <Section title="How we use it">
         <ul className="space-y-2">
           <li>To create your account and sign you in.</li>
-          <li>To run the service: grade answers, schedule review of questions you missed, and show your analytics and readiness score.</li>
+          <li>To run the service: grade answers, schedule review of questions you missed, build your study sheet, and show your analytics and readiness score.</li>
           <li>To provide the pass you paid for.</li>
           <li>To keep the service secure and prevent abuse of the free trial and sign-in.</li>
           <li>To send account emails you ask for, such as password reset links, and to tell waitlist members when passes open.</li>
@@ -69,6 +69,7 @@ export default function Privacy() {
           <li><b>Vercel</b> hosts the website.</li>
           <li><b>Supabase</b> hosts our database (United States).</li>
           <li><b>Stripe</b> processes payments, when available.</li>
+          <li><b>Anthropic</b> provides the AI tutor. When you use it, we send the practice question, its answer options and explanations, and any follow-up questions you type. We don&apos;t send your name, email address or account details, and Anthropic doesn&apos;t use this data to train its models.</li>
           <li>An email delivery provider sends account emails, when enabled.</li>
         </ul>
         <p>We may also disclose information if required by law.</p>
