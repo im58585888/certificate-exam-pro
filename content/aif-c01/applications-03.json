@@ -216,27 +216,27 @@
     "options": [
       {
         "key": "A",
-        "text": "A role, context (the policy), an instruction (answer in two sentences) and the input question",
+        "text": "A role, context, an instruction and the input question",
         "correct": true,
-        "why": "The prompt sets a role, supplies relevant context, gives an explicit instruction with a constraint, and provides the input."
+        "why": "It sets a role (support assistant), supplies context (the baggage policy), gives an instruction with a constraint (two sentences) and includes the customer's question."
       },
       {
         "key": "B",
-        "text": "A negative prompt only",
+        "text": "A role, few-shot examples, an instruction and the input question",
         "correct": false,
-        "why": "There is no instruction about what to avoid."
+        "why": "The prompt contains no example question-and-answer pairs, so it has no few-shot examples."
       },
       {
         "key": "C",
-        "text": "Only an input question",
+        "text": "Context, a negative prompt, an output schema and the input question",
         "correct": false,
-        "why": "The prompt includes much more than the question: a role, context and instructions."
+        "why": "Nothing in the prompt says what to avoid, and \"two sentences\" is a length instruction, not a structured output schema."
       },
       {
         "key": "D",
-        "text": "Model weights and hyperparameters",
+        "text": "A role, a chain-of-thought instruction and the input question",
         "correct": false,
-        "why": "Prompts do not contain weights or hyperparameters."
+        "why": "The prompt never asks the model to reason step by step, so there is no chain-of-thought instruction."
       }
     ],
     "explanation": {
@@ -365,27 +365,27 @@
     "options": [
       {
         "key": "A",
-        "text": "\"Write about our product in any length, any tone, for anyone.\"",
+        "text": "\"Write a detailed, comprehensive, engaging and persuasive description of our product that customers will love.\"",
         "correct": false,
-        "why": "Removing constraints keeps the output generic."
+        "why": "This adds adjectives but no specifics: it still does not name the product, the audience, the key points, the length or the format."
       },
       {
         "key": "B",
-        "text": "\"Write something good.\"",
+        "text": "\"You are a world-class copywriter with 20 years of experience. Write about our product for our website.\"",
         "correct": false,
-        "why": "This is even vaguer and gives the model no useful direction."
+        "why": "A persona helps tone, but the model still does not know which product, which audience or what to highlight, so the output stays generic."
       },
       {
         "key": "C",
-        "text": "\"Product. Write. Now. Fast.\"",
+        "text": "\"Write about our product. Do not be generic, vague, boring or repetitive, and do not use clichés or filler.\"",
         "correct": false,
-        "why": "Terse fragments lack the context and constraints the model needs."
+        "why": "Telling the model only what to avoid gives it nothing concrete to write about. It still lacks the product details and audience."
       },
       {
         "key": "D",
-        "text": "\"Write a 100-word description of our SmartThermo thermostat for homeowners, highlighting energy savings and app control, in a friendly tone, as one paragraph.\"",
+        "text": "\"Write a 100-word, friendly description of the SmartThermo thermostat for homeowners, covering energy savings and app control.\"",
         "correct": true,
-        "why": "This is specific about subject, audience, key points, length, tone and format, giving the model clear direction."
+        "why": "This states the product, audience, key points, length and tone, which gives the model clear direction."
       }
     ],
     "explanation": {
@@ -415,27 +415,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Iteratively test prompt variations against a fixed set of representative inputs and compare results with defined quality criteria",
+        "text": "Test variants on a fixed set of representative inputs against defined criteria",
         "correct": true,
-        "why": "Systematic experimentation with consistent test inputs and criteria shows which changes actually improve quality."
+        "why": "Consistent test inputs and criteria show which changes actually improve quality across the variety of real requests."
       },
       {
         "key": "B",
-        "text": "Change the prompt randomly in production and hope for the best",
+        "text": "Ask several colleagues which version of the prompt reads best",
         "correct": false,
-        "why": "Untested changes in production risk degrading quality for real users."
+        "why": "How a prompt reads to people does not show how the model's outputs change. The outputs need to be tested."
       },
       {
         "key": "C",
-        "text": "Test each change on a single input only",
+        "text": "Try each new version on one or two inputs and keep it if it looks better",
         "correct": false,
-        "why": "A single input cannot show whether a change helps across the variety of real requests."
+        "why": "One or two inputs cannot show whether a change helps across the range of real requests, and may hide regressions."
       },
       {
         "key": "D",
-        "text": "Write the longest prompt possible",
+        "text": "Deploy each version to all users and watch for complaints",
         "correct": false,
-        "why": "Longer is not automatically better; unnecessary length adds cost and can confuse the model."
+        "why": "This exposes every user to untested changes and relies on complaints instead of measured quality."
       }
     ],
     "explanation": {
@@ -469,27 +469,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Ask the model to be creative",
+        "text": "Add a stop sequence after the closing brace of the JSON",
         "correct": false,
-        "why": "Creativity works against strict formatting."
+        "why": "A stop sequence only ends generation. If the model starts with prose, the output still is not valid JSON."
       },
       {
         "key": "B",
-        "text": "Specify the exact JSON schema in the instructions, include an example of valid output, and ask for JSON only with no extra text",
+        "text": "Give the exact JSON schema and an example, and ask for JSON only",
         "correct": true,
-        "why": "Explicit format instructions plus an example make the expected structure unambiguous."
+        "why": "Explicit format instructions plus an example make the expected structure unambiguous, which is the most direct fix."
       },
       {
         "key": "C",
-        "text": "Increase the temperature",
+        "text": "Set the temperature to zero so the output is deterministic",
         "correct": false,
-        "why": "More randomness makes format compliance less reliable."
+        "why": "Deterministic output can still be prose. Temperature does not tell the model which format to use."
       },
       {
         "key": "D",
-        "text": "Remove all instructions and rely on the model to guess",
+        "text": "Raise max tokens so long JSON responses are not cut off",
         "correct": false,
-        "why": "Without instructions, the model has no reason to return JSON."
+        "why": "The problem is prose instead of JSON, not truncation, so allowing longer outputs does not help."
       }
     ],
     "explanation": {
@@ -519,27 +519,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Remove the policy so there is less to check",
+        "text": "Add more detailed instructions for each task to the same prompt",
         "correct": false,
-        "why": "The policy check is a required part of the task."
+        "why": "Making the single prompt even longer adds to the confusion that causes the inconsistency."
       },
       {
         "key": "B",
-        "text": "Add more tasks to the same prompt",
+        "text": "Switch to a model with a larger context window",
         "correct": false,
-        "why": "More tasks in one prompt increase confusion and inconsistency."
+        "why": "The prompt already fits; the problem is too many tasks at once, not input length."
       },
       {
         "key": "C",
-        "text": "Break the task into smaller steps, each with its own focused prompt, and pass outputs from one step to the next (prompt chaining)",
+        "text": "Split the work into a chain of focused prompts, one per step",
         "correct": true,
-        "why": "Focused prompts per step are easier for the model to follow and allow checking intermediate results."
+        "why": "Focused prompts per step are easier for the model to follow, and intermediate outputs can be checked (prompt chaining)."
       },
       {
         "key": "D",
-        "text": "Increase the temperature",
+        "text": "Lower the temperature so the long prompt is followed consistently",
         "correct": false,
-        "why": "Higher temperature adds randomness, which makes a long multi-part prompt even less consistent."
+        "why": "Lower temperature reduces random variation but does not fix a prompt that asks for four different tasks at once."
       }
     ],
     "explanation": {
@@ -573,27 +573,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Use a higher temperature",
+        "text": "Put the instructions after the email instead of before it",
         "correct": false,
-        "why": "Randomness does not help separate data from instructions."
+        "why": "Moving the instructions does not mark the email as data, so sentences inside it can still be read as instructions."
       },
       {
         "key": "B",
-        "text": "Put the email before any instructions with no separation",
+        "text": "Add a negative instruction: do not reply in French",
         "correct": false,
-        "why": "Mixing data and instructions without separation increases confusion."
+        "why": "This blocks one example but not the general problem; the next email could contain a different embedded instruction."
       },
       {
         "key": "C",
-        "text": "Increase max tokens",
+        "text": "Lower the temperature so instructions are followed more strictly",
         "correct": false,
-        "why": "Output length does not affect how the model interprets embedded text."
+        "why": "Temperature does not help the model tell instructions apart from text inside the data."
       },
       {
         "key": "D",
-        "text": "Wrap the email in clear delimiters or tags (for example <email>...</email>) and instruct the model to treat that content only as data to summarize",
+        "text": "Wrap the email in tags and say to treat it only as data",
         "correct": true,
-        "why": "Delimiters separate untrusted data from instructions and make the model's task clearer, reducing accidental instruction following."
+        "why": "Delimiters separate untrusted data from instructions and make the task explicit, reducing accidental instruction following."
       }
     ],
     "explanation": {
@@ -623,27 +623,27 @@
     "options": [
       {
         "key": "A",
-        "text": "It assigns a role or persona that shapes the tone, vocabulary and perspective of the response",
+        "text": "It sets a persona that shapes tone, vocabulary and perspective",
         "correct": true,
-        "why": "Role prompting sets context for how the model should respond, influencing style and level of detail."
+        "why": "Role prompting tells the model how to respond: who it is speaking as and to whom, which shapes style and level of detail."
       },
       {
         "key": "B",
-        "text": "It sets the temperature to zero",
+        "text": "It gives the model medical knowledge it would not otherwise have",
         "correct": false,
-        "why": "Temperature is an inference parameter, not set through prompt text."
+        "why": "A persona does not add knowledge. The model only has what it learned in training or what is supplied in context."
       },
       {
         "key": "C",
-        "text": "It retrains the model as a medical model",
+        "text": "It makes the model's medical answers verified and safe to follow",
         "correct": false,
-        "why": "Prompts do not retrain models. The role only affects the current response."
+        "why": "A persona does not verify anything; medical answers still need grounding and professional review."
       },
       {
         "key": "D",
-        "text": "It certifies the response as medical advice",
+        "text": "It replaces the need for any other instructions in the prompt",
         "correct": false,
-        "why": "A persona does not make output authoritative or certified."
+        "why": "A role sets the voice, but the model still needs the actual task, context and any constraints."
       }
     ],
     "explanation": {
@@ -729,27 +729,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Remove the system prompt",
+        "text": "Repeat the instruction at the end of every user message",
         "correct": false,
-        "why": "This removes the existing instruction and weakens control further."
+        "why": "Repetition adds tokens but is still a soft instruction that determined users can work around."
       },
       {
         "key": "B",
-        "text": "Configure Amazon Bedrock Guardrails with a denied topic for competitor discussions, applied to inputs and outputs",
+        "text": "Add a Bedrock Guardrails denied topic for competitor discussions",
         "correct": true,
-        "why": "Guardrails enforce policies independently of the prompt, adding a second layer that is harder to bypass."
+        "why": "Guardrails enforce the policy on inputs and outputs independently of the prompt, adding a layer that is much harder to bypass."
       },
       {
         "key": "C",
-        "text": "Repeat the instruction ten times in the prompt",
+        "text": "Lower the temperature so the model follows its instructions",
         "correct": false,
-        "why": "Repetition adds tokens and is still a soft instruction that can be bypassed."
+        "why": "Temperature controls randomness. It does not stop users from steering the model off-policy."
       },
       {
         "key": "D",
-        "text": "Increase the temperature",
+        "text": "Fine-tune the model on conversations that avoid competitors",
         "correct": false,
-        "why": "Randomness makes behavior less predictable."
+        "why": "Fine-tuning is costly and still only influences behavior; it does not enforce the rule the way a guardrail does."
       }
     ],
     "explanation": {
@@ -779,27 +779,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Distillation: shrinking the model before testing it",
+        "text": "Distillation: building a smaller model to test cheaply",
         "correct": false,
-        "why": "Distillation is an optimization step, not an exploration method."
+        "why": "Distillation produces a smaller model for a known task. It is not a way to explore what a model can do."
       },
       {
         "key": "B",
-        "text": "Pre-training: building a new model to learn its abilities",
+        "text": "Evaluation: scoring the model on a public benchmark",
         "correct": false,
-        "why": "Pre-training is costly and unnecessary to learn what an existing model can do."
+        "why": "A public benchmark gives general scores, not insight into this team's legal-research use case, and it is not a prompting benefit."
       },
       {
         "key": "C",
-        "text": "Discovery: using prompt experimentation to explore model capabilities and limitations for the use case",
+        "text": "Discovery: exploring capabilities through prompt experimentation",
         "correct": true,
-        "why": "Prompting is a fast, cheap way to discover what a model can and cannot do before committing to a design."
+        "why": "Prompting is a fast, cheap way to discover what a model handles well and where it fails before committing to a design."
       },
       {
         "key": "D",
-        "text": "Data labeling: annotating training examples",
+        "text": "Fine-tuning: adapting the model to legal research first",
         "correct": false,
-        "why": "Labeling prepares training data and does not explore model capabilities."
+        "why": "Fine-tuning before understanding the model's baseline strengths is premature and costly."
       }
     ],
     "explanation": {
@@ -829,27 +829,27 @@
     "options": [
       {
         "key": "A",
-        "text": "In the embedding model configuration",
+        "text": "In the first user message of each conversation",
         "correct": false,
-        "why": "Embedding configuration affects retrieval, not assistant behavior."
+        "why": "Instructions in a user message are treated as part of the conversation and can be overridden or lost as it grows."
       },
       {
         "key": "B",
-        "text": "In the model's training data",
+        "text": "In a fine-tuning dataset for the model",
         "correct": false,
-        "why": "Changing training data requires retraining and is not how runtime instructions are set."
+        "why": "Fine-tuning to set role and tone is costly and slow to change; persistent runtime instructions belong in the system prompt."
       },
       {
         "key": "C",
-        "text": "In the stop sequence field",
+        "text": "In the knowledge base the assistant retrieves from",
         "correct": false,
-        "why": "Stop sequences end generation and cannot hold instructions."
+        "why": "Knowledge bases supply facts when relevant; they are not a reliable place for rules that must apply to every turn."
       },
       {
         "key": "D",
-        "text": "In the system prompt, which sets behavior for the whole conversation",
+        "text": "In the system prompt for the conversation",
         "correct": true,
-        "why": "System prompts hold role, rules and tone that apply across turns, separate from user messages."
+        "why": "The system prompt holds persistent role, rules and tone that apply across all turns, separate from user messages."
       }
     ],
     "explanation": {
@@ -880,27 +880,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Providing context: include the relevant policy text in the prompt, for example through retrieval",
+        "text": "Providing context: include the policy text, for example via retrieval",
         "correct": true,
-        "why": "Supplying the specific policy as context lets the model answer accurately instead of generically."
+        "why": "Supplying the actual policy as context lets the model answer accurately instead of generically."
       },
       {
         "key": "B",
-        "text": "Raising top-k",
+        "text": "Role prompting: tell the model it is a refund-policy expert",
         "correct": false,
-        "why": "Top-k affects sampling diversity, not knowledge."
+        "why": "A role changes tone but does not give the model the company's actual policy."
       },
       {
         "key": "C",
-        "text": "Using a negative prompt only",
+        "text": "Chain-of-thought: ask the model to reason step by step",
         "correct": false,
-        "why": "Saying what not to do does not give the model the missing policy information."
+        "why": "Reasoning steps do not help when the model lacks the policy information in the first place."
       },
       {
         "key": "D",
-        "text": "Shortening the prompt to one word",
+        "text": "Few-shot prompting: show examples of polite refund answers",
         "correct": false,
-        "why": "Less information makes answers even more generic."
+        "why": "Generic examples teach format and tone, not the company's specific policy details."
       }
     ],
     "explanation": {
@@ -930,27 +930,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Chain-of-thought reduces cost because answers are more accurate",
+        "text": "Accuracy rises at no extra cost, because only input tokens are billed",
         "correct": false,
-        "why": "Accuracy does not reduce token billing. Longer outputs cost more."
+        "why": "Output tokens are billed too, usually at a higher rate than input tokens, so longer responses cost more."
       },
       {
         "key": "B",
-        "text": "Higher accuracy comes with more output tokens, increasing cost and latency; the team should decide whether the accuracy gain justifies it",
+        "text": "Accuracy rises, but more output tokens raise cost and latency",
         "correct": true,
-        "why": "Chain-of-thought produces reasoning text that is billed and takes time to generate."
+        "why": "Chain-of-thought produces reasoning text that is billed and takes time to generate, so the gain must justify it."
       },
       {
         "key": "C",
-        "text": "Chain-of-thought has no effect on latency",
+        "text": "Cost rises, but latency is unchanged because responses are streamed",
         "correct": false,
-        "why": "Every extra output token takes time to generate, so longer chain-of-thought responses increase latency."
+        "why": "Streaming shows tokens sooner, but generating 600 tokens still takes longer to finish than 80."
       },
       {
         "key": "D",
-        "text": "Chain-of-thought requires fine-tuning",
+        "text": "Latency rises, but cost is unchanged because output tokens are free",
         "correct": false,
-        "why": "It is a prompting technique and needs no training."
+        "why": "Output tokens are not free; they are typically priced higher than input tokens."
       }
     ],
     "explanation": {
@@ -984,27 +984,27 @@
     "options": [
       {
         "key": "A",
-        "text": "It guarantees the model never makes mistakes",
+        "text": "It lets the model process the prompt with far fewer tokens",
         "correct": false,
-        "why": "Better structure improves results but cannot guarantee perfection."
+        "why": "Adding headings and separate instructions does not meaningfully reduce tokens; the benefit is clarity."
       },
       {
         "key": "B",
-        "text": "It reduces the context window size",
+        "text": "It improves retrieval, because each section is embedded separately",
         "correct": false,
-        "why": "Prompt structure does not change the model's context window."
+        "why": "Prompts are not embedded and retrieved in sections; this concerns RAG documents, not prompt structure."
       },
       {
         "key": "C",
-        "text": "Separating requirements into distinct, clearly labeled instructions makes each one easier for the model to identify and follow",
+        "text": "Separate, labeled instructions are easier for the model to find and follow",
         "correct": true,
         "why": "Clear structure reduces ambiguity, so the model is less likely to miss or confuse requirements."
       },
       {
         "key": "D",
-        "text": "It retrains the model with the new structure",
+        "text": "It makes the model's output identical across runs",
         "correct": false,
-        "why": "Restructuring a prompt does not change model weights."
+        "why": "Structure improves instruction following but does not make sampled output deterministic."
       }
     ],
     "explanation": {
@@ -1034,27 +1034,27 @@
     "options": [
       {
         "key": "A",
-        "text": "The temperature is too low; increase it",
+        "text": "The temperature is too low; raise it so other labels appear",
         "correct": false,
-        "why": "Randomness does not correct biased examples and would make outputs less reliable."
+        "why": "More randomness would produce random labels, not correct ones. The bias comes from the examples."
       },
       {
         "key": "B",
-        "text": "Remove the label names from the instructions",
+        "text": "The model is too small; switch to a larger model",
         "correct": false,
-        "why": "Without label names, the model does not know which categories exist."
+        "why": "A larger model would still be steered by five examples that all show the same label."
       },
       {
         "key": "C",
-        "text": "The model needs pre-training from scratch",
+        "text": "The prompt is too long; remove the examples entirely",
         "correct": false,
-        "why": "The issue is in the prompt examples, not the base model."
+        "why": "Going zero-shot removes the bias but also the guidance; balanced examples are the better fix."
       },
       {
         "key": "D",
-        "text": "The examples are not representative; include balanced, diverse examples covering each category",
+        "text": "The examples are unbalanced; use examples from every category",
         "correct": true,
-        "why": "Models imitate the examples they see. Examples from only one class bias the output toward that class."
+        "why": "Models imitate their examples. Representative, balanced examples remove the pull toward one label."
       }
     ],
     "explanation": {
@@ -1083,27 +1083,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Prompt engineering can significantly improve response quality quickly and cheaply, without training, and should be tried before more costly approaches",
+        "text": "It often improves quality quickly and cheaply, with no training",
         "correct": true,
-        "why": "Prompting needs no data preparation or training and often achieves the needed quality."
+        "why": "Prompting needs no data preparation or training and often reaches the needed quality, so it comes before costlier approaches."
       },
       {
         "key": "B",
-        "text": "Prompt engineering guarantees zero hallucinations",
+        "text": "It permanently changes the model's behavior for all users",
         "correct": false,
-        "why": "No technique guarantees zero hallucinations."
+        "why": "Prompts affect only the requests they are part of; the model itself does not change."
       },
       {
         "key": "C",
-        "text": "Fine-tuning is impossible on AWS",
+        "text": "It removes the need to evaluate the model's outputs",
         "correct": false,
-        "why": "Fine-tuning is supported in Amazon Bedrock and SageMaker AI."
+        "why": "Prompted applications still need evaluation to confirm quality."
       },
       {
         "key": "D",
-        "text": "Prompt engineering permanently changes the model's weights",
+        "text": "AWS requires it before a model can be fine-tuned",
         "correct": false,
-        "why": "Prompts influence a single response only. They never change the model's weights."
+        "why": "There is no such requirement; prompting first is a cost-effective practice, not a prerequisite."
       }
     ],
     "explanation": {
@@ -1133,27 +1133,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Batch inference",
+        "text": "Chain-of-thought prompting within a single response",
         "correct": false,
-        "why": "Batch inference is an execution mode, not a quality pattern."
+        "why": "Chain-of-thought asks for reasoning before one answer. It does not produce a draft, critique it and then revise it."
       },
       {
         "key": "B",
-        "text": "A multi-step prompting pattern in which the model generates a draft, critiques it against criteria and revises it",
+        "text": "A generate, critique and revise pattern across several steps",
         "correct": true,
-        "why": "Generate-critique-revise patterns use additional prompting steps to improve quality."
+        "why": "The model drafts, checks the draft against explicit criteria, then revises, using extra steps to improve quality."
       },
       {
         "key": "C",
-        "text": "Model distillation",
+        "text": "Few-shot prompting with examples of good final answers",
         "correct": false,
-        "why": "Distillation trains a smaller model and does not involve self-review at runtime."
+        "why": "Examples show what good looks like, but there is no separate review-and-revise step."
       },
       {
         "key": "D",
-        "text": "Continued pre-training",
+        "text": "LLM-as-a-judge evaluation of a test dataset",
         "correct": false,
-        "why": "Continued pre-training is a training method, not a runtime review step."
+        "why": "LLM-as-a-judge scores outputs for evaluation offline; it does not revise answers before they are delivered."
       }
     ],
     "explanation": {

@@ -14,27 +14,27 @@
     "options": [
       {
         "key": "A",
-        "text": "AWS Artifact",
+        "text": "Amazon Kendra",
         "correct": false,
-        "why": "Artifact provides compliance documents, not a database."
+        "why": "Kendra is a managed enterprise search service with its own ML ranking. It does not let you store your own embeddings and run k-NN queries over them."
       },
       {
         "key": "B",
-        "text": "Amazon Polly",
+        "text": "Amazon S3 Vectors",
         "correct": false,
-        "why": "Polly converts text to speech and cannot store or search vectors."
+        "why": "S3 Vectors stores and queries vectors at low cost, but it does not provide full-text keyword search, so it cannot cover both requirements."
       },
       {
         "key": "C",
-        "text": "Amazon OpenSearch Service (or OpenSearch Serverless)",
+        "text": "Amazon OpenSearch Service",
         "correct": true,
-        "why": "OpenSearch supports vector (k-NN) search and keyword search, and can combine them in hybrid queries, making it a common RAG vector store."
+        "why": "OpenSearch supports k-NN vector search and full-text search, and can combine them in hybrid queries, which makes it a common RAG vector store."
       },
       {
         "key": "D",
-        "text": "Amazon Transcribe",
+        "text": "Amazon DynamoDB",
         "correct": false,
-        "why": "Transcribe converts speech to text and has no vector search capability."
+        "why": "DynamoDB is a key-value and document database. It does not offer native k-NN vector search or full-text search."
       }
     ],
     "explanation": {
@@ -118,25 +118,25 @@
         "key": "A",
         "text": "Amazon Neptune Analytics",
         "correct": true,
-        "why": "Neptune Analytics is a graph analytics engine with vector search, enabling retrieval that follows relationships (GraphRAG) as well as semantic similarity."
+        "why": "Neptune Analytics combines graph analytics with vector similarity search, so retrieval can follow relationships between entities (GraphRAG) as well as semantic similarity."
       },
       {
         "key": "B",
-        "text": "Amazon Polly",
+        "text": "Amazon OpenSearch Service",
         "correct": false,
-        "why": "Polly generates speech from text. It cannot store graph relationships or run vector search."
+        "why": "OpenSearch provides vector and keyword search, but it does not model or traverse relationships between entities, so multi-hop questions are still missed."
       },
       {
         "key": "C",
-        "text": "Amazon Translate",
+        "text": "Amazon Aurora PostgreSQL with pgvector",
         "correct": false,
-        "why": "Translate converts languages and does not store graphs or vectors."
+        "why": "pgvector adds vector search to a relational database. Multi-hop relationship queries would need complex joins; it is not designed for graph traversal."
       },
       {
         "key": "D",
-        "text": "AWS Trusted Advisor",
+        "text": "Amazon Kendra",
         "correct": false,
-        "why": "Trusted Advisor provides account recommendations, not data storage."
+        "why": "Kendra is enterprise document search. It does not store a graph of entities or combine graph traversal with vector search."
       }
     ],
     "explanation": {
@@ -166,27 +166,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Amazon Comprehend",
+        "text": "Amazon OpenSearch Serverless",
         "correct": false,
-        "why": "Comprehend analyzes text and does not store vectors."
+        "why": "OpenSearch Serverless gives fast vector search, but keeping billions of vectors indexed for occasional queries costs far more than purpose-built low-cost storage."
       },
       {
         "key": "B",
         "text": "Amazon S3 Vectors",
         "correct": true,
-        "why": "S3 Vectors provides durable, cost-optimized vector storage with native similarity queries, suited to large datasets that are queried less frequently."
+        "why": "S3 Vectors stores and queries vectors at very large scale with low storage cost, suited to workloads where sub-second latency is acceptable."
       },
       {
         "key": "C",
-        "text": "AWS Config",
+        "text": "Amazon Aurora PostgreSQL with pgvector",
         "correct": false,
-        "why": "Config records resource configurations, not embeddings."
+        "why": "Aurora with pgvector is convenient alongside relational data, but provisioning database capacity for billions of rarely queried vectors is not the lowest-cost option."
       },
       {
         "key": "D",
-        "text": "An in-memory cache sized for all vectors",
+        "text": "Amazon MemoryDB with vector search",
         "correct": false,
-        "why": "Keeping billions of vectors in memory is expensive. It suits ultra-low-latency needs, not lowest cost."
+        "why": "MemoryDB keeps vectors in memory for the lowest latency, which is the most expensive way to store billions of rarely queried vectors."
       }
     ],
     "explanation": {
@@ -222,9 +222,9 @@
       },
       {
         "key": "B",
-        "text": "Amazon Polly",
+        "text": "Amazon DynamoDB",
         "correct": false,
-        "why": "Polly converts text to speech and has no storage capability."
+        "why": "DynamoDB is a key-value and document database without native vector similarity search, so it cannot serve as the vector store on its own."
       },
       {
         "key": "C",
@@ -234,9 +234,9 @@
       },
       {
         "key": "D",
-        "text": "AWS Artifact",
+        "text": "Amazon Athena",
         "correct": false,
-        "why": "Artifact is a portal for compliance reports, not a database."
+        "why": "Athena runs SQL queries over data in S3. It has no vector index or similarity search for embeddings."
       },
       {
         "key": "E",
@@ -278,27 +278,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Fine-tuning",
+        "text": "Fine-tuning on labeled product examples",
         "correct": false,
-        "why": "Fine-tuning requires labeled data, training compute and hosting the custom model."
+        "why": "Fine-tuning needs labeled data, training compute and a hosted custom model, so it costs more than trying prompts first."
       },
       {
         "key": "B",
-        "text": "Continued pre-training on all company documents",
+        "text": "Continued pre-training on company documents",
         "correct": false,
-        "why": "Continued pre-training requires training compute and large datasets, making it costly."
+        "why": "Continued pre-training uses large volumes of data and training compute, which is far more expensive than prompting."
       },
       {
         "key": "C",
-        "text": "In-context learning with well-designed prompts and examples",
+        "text": "In-context learning with prompts and examples",
         "correct": true,
-        "why": "In-context learning needs no training or infrastructure. You only pay for the extra prompt tokens."
+        "why": "In-context learning needs no training or infrastructure; you pay only for the extra prompt tokens, so it is the cheapest place to start."
       },
       {
         "key": "D",
-        "text": "Pre-training from scratch",
+        "text": "Pre-training a new model from scratch",
         "correct": false,
-        "why": "Pre-training is by far the most expensive option, requiring massive data and compute."
+        "why": "Pre-training from scratch is by far the most expensive option, needing massive data and compute."
       }
     ],
     "explanation": {
@@ -333,27 +333,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Increase the temperature",
+        "text": "Use RAG to add the house style guide to each prompt",
         "correct": false,
-        "why": "Higher randomness would worsen consistency."
+        "why": "RAG adds information to the prompt and even more tokens, but it does not reliably change how the model writes."
       },
       {
         "key": "B",
-        "text": "Use RAG to retrieve style guides",
+        "text": "Keep the few-shot prompt and lower the temperature",
         "correct": false,
-        "why": "RAG adds information to the prompt but does not reliably change how the model writes, and it adds tokens."
+        "why": "Lower temperature reduces variation somewhat, but the long, costly prompts remain and the model can still drift from the style."
       },
       {
         "key": "C",
-        "text": "Pre-train a new model from scratch",
+        "text": "Use prompt caching for the few-shot examples",
         "correct": false,
-        "why": "Pre-training is excessive and extremely costly for a style requirement."
+        "why": "Caching cuts the cost of the repeated examples, but it does not stop the occasional drift from the house style."
       },
       {
         "key": "D",
-        "text": "Fine-tune the model on many examples of the desired style and format",
+        "text": "Fine-tune the model on examples of the style and format",
         "correct": true,
-        "why": "Fine-tuning teaches consistent style and format, so prompts can be shorter and outputs more consistent at high volume."
+        "why": "Fine-tuning teaches consistent style and format, so prompts can be short and output stays consistent at high volume."
       }
     ],
     "explanation": {
@@ -382,27 +382,27 @@
     "options": [
       {
         "key": "A",
-        "text": "RAG, because it keeps answers current by updating the index and can cite sources",
+        "text": "RAG, because updates need only re-indexing and answers can cite articles",
         "correct": true,
-        "why": "Weekly updates and citation requirements favor RAG, which updates through re-indexing and returns source passages."
+        "why": "Weekly updates and citations favor RAG, which updates by re-indexing documents and returns the source passages."
       },
       {
         "key": "B",
-        "text": "Fine-tuning, because it can cite exact articles",
+        "text": "Fine-tuning, because the articles become part of the model's knowledge",
         "correct": false,
-        "why": "A fine-tuned model cannot reliably cite which article a fact came from."
+        "why": "A fine-tuned model blends articles into its weights and cannot reliably cite which article an answer came from."
       },
       {
         "key": "C",
-        "text": "Fine-tuning weekly, because it is cheaper than RAG",
+        "text": "Fine-tuning, with the model retrained every week as articles change",
         "correct": false,
-        "why": "Weekly fine-tuning adds recurring training cost and still cannot provide citations."
+        "why": "Weekly retraining adds recurring cost and delay, and still does not provide citations."
       },
       {
         "key": "D",
-        "text": "Neither; use the base model alone",
+        "text": "Continued pre-training on the full article collection",
         "correct": false,
-        "why": "The base model does not know the company's articles."
+        "why": "Continued pre-training is costly, needs repeating as articles change, and cannot cite sources."
       }
     ],
     "explanation": {
@@ -432,27 +432,27 @@
     "options": [
       {
         "key": "A",
-        "text": "An image-generation model",
+        "text": "A RAG application over the agency's booking policies",
         "correct": false,
-        "why": "Image generation is unrelated to booking travel."
+        "why": "RAG can answer questions about policies, but it cannot book flights or change reservations."
       },
       {
         "key": "B",
-        "text": "An AI agent that plans the steps and calls booking APIs as tools",
+        "text": "An AI agent that plans the steps and calls the booking APIs",
         "correct": true,
-        "why": "Agents use FM reasoning to break down a request and call APIs to take the required actions."
+        "why": "Agents use FM reasoning to break down the request and call booking APIs as tools to make the changes."
       },
       {
         "key": "C",
-        "text": "A text embedding model alone",
+        "text": "A model fine-tuned on past booking conversations",
         "correct": false,
-        "why": "Embeddings support search but cannot book flights or update itineraries."
+        "why": "Fine-tuning can improve how the model talks about bookings, but without tools it cannot actually call the booking systems."
       },
       {
         "key": "D",
-        "text": "A summarization prompt",
+        "text": "A prompt template that drafts itinerary change emails",
         "correct": false,
-        "why": "Summarizing text does not take actions in booking systems."
+        "why": "A template can draft messages to customers, but it does not perform the bookings and updates."
       }
     ],
     "explanation": {
@@ -482,27 +482,27 @@
     "options": [
       {
         "key": "A",
-        "text": "An agent only translates text",
+        "text": "An agent is a larger model that gives more detailed answers",
         "correct": false,
-        "why": "Agents perform a wide range of multi-step tasks, not only translation."
+        "why": "Agents typically use an ordinary foundation model. What makes them agents is planning and tool use, not model size."
       },
       {
         "key": "B",
-        "text": "An agent is a type of vector database",
+        "text": "An agent is a RAG system that retrieves documents for each prompt",
         "correct": false,
-        "why": "Vector databases store embeddings. Agents may use them as tools but are not databases."
+        "why": "An agent may use retrieval as one of its tools, but retrieval alone does not plan steps or take actions."
       },
       {
         "key": "C",
-        "text": "An agent orchestrates multiple steps, deciding which tools, data sources and model calls are needed to complete a task, rather than producing one response to one prompt",
+        "text": "An agent plans multi-step work and decides which tools and calls to make",
         "correct": true,
-        "why": "Agents coordinate reasoning, tool use and memory across steps to reach a goal."
+        "why": "Agents orchestrate a task: they reason about the goal, choose tools, data sources and model calls, and act on the results."
       },
       {
         "key": "D",
-        "text": "An agent is a smaller version of a foundation model",
+        "text": "An agent is a prompt template reused across many requests",
         "correct": false,
-        "why": "Agents use foundation models; they are not smaller models."
+        "why": "A prompt template standardizes a single model call. It does not plan steps or call tools."
       }
     ],
     "explanation": {
@@ -738,27 +738,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Skip vectors and fine-tune the model instead",
+        "text": "Fine-tune a model on the documents instead of using RAG",
         "correct": false,
-        "why": "Fine-tuning is slower and more expensive and does not give a RAG prototype."
+        "why": "Fine-tuning is slower and more expensive than a managed RAG prototype and cannot cite sources."
       },
       {
         "key": "B",
-        "text": "Install an open-source vector database on self-managed EC2 instances",
+        "text": "Run an open-source vector database on self-managed EC2",
         "correct": false,
-        "why": "Self-managing a database adds setup and operational work the startup wants to avoid."
+        "why": "Self-managing a database is exactly the setup and operational work the startup wants to avoid."
       },
       {
         "key": "C",
-        "text": "Create an Amazon Bedrock knowledge base and let it create a managed vector store with the quick-create option",
+        "text": "Create a Bedrock knowledge base with a quick-created vector store",
         "correct": true,
-        "why": "Bedrock Knowledge Bases can create and configure a supported vector store for you, minimizing setup effort."
+        "why": "Bedrock Knowledge Bases can create and configure a vector store for you and handle ingestion, so there is nothing to manage."
       },
       {
         "key": "D",
-        "text": "Store vectors in spreadsheets",
+        "text": "Provision an Aurora PostgreSQL cluster with pgvector",
         "correct": false,
-        "why": "Spreadsheets cannot perform efficient similarity search."
+        "why": "Aurora with pgvector works as a vector store, but the startup would have to provision and configure it, which it wants to avoid."
       }
     ],
     "explanation": {
@@ -788,25 +788,25 @@
     "options": [
       {
         "key": "A",
-        "text": "RAG requires pre-training a new model each time documents change.",
+        "text": "RAG has no ongoing costs once the documents are indexed",
         "correct": false,
-        "why": "RAG updates by re-indexing documents, not by training."
+        "why": "RAG has ongoing costs: vector storage, retrieval and extra input tokens on every request."
       },
       {
         "key": "B",
-        "text": "Pre-training from scratch is the cheapest way to add company knowledge.",
+        "text": "A fine-tuned model is free to run once training is finished",
         "correct": false,
-        "why": "Pre-training is the most expensive customization option."
+        "why": "Custom models still incur inference charges, and often model storage or dedicated capacity costs."
       },
       {
         "key": "C",
-        "text": "Fine-tuning has no cost beyond the first request.",
+        "text": "In-context learning costs more per request than fine-tuning at any volume",
         "correct": false,
-        "why": "Fine-tuning has training costs and ongoing costs for using the custom model."
+        "why": "At low or moderate volume, prompting is cheaper overall because it has no training or hosting costs."
       },
       {
         "key": "D",
-        "text": "RAG adds ongoing retrieval and vector storage costs and more input tokens per request, while fine-tuning adds upfront training cost and ongoing custom model costs but can shorten prompts.",
+        "text": "RAG adds retrieval and input tokens; fine-tuning adds training and hosting",
         "correct": true,
         "why": "This captures where each approach spends money: RAG on retrieval and context tokens, fine-tuning on training and custom model hosting."
       }
@@ -841,27 +841,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Give the agent a knowledge base for policy documents and an action that calls the claims API",
+        "text": "Give the agent a knowledge base for policies and an action for the claims API",
         "correct": true,
-        "why": "The knowledge base grounds answers in policy text, and the action lets the agent file claims."
+        "why": "The knowledge base grounds answers in the policy documents, and the action lets the agent file claims through the API."
       },
       {
         "key": "B",
-        "text": "Use only a larger context window",
+        "text": "Fine-tune the model on policy wording and file claims through a knowledge base",
         "correct": false,
-        "why": "A larger context window cannot call the claims API."
+        "why": "A knowledge base retrieves documents; it cannot call the claims API, so claims would never be filed."
       },
       {
         "key": "C",
-        "text": "Fine-tune the model on claims forms and give it no tools",
+        "text": "Give the agent only the claims API and paste all policies into its instructions",
         "correct": false,
-        "why": "Without a tool, the agent cannot file claims, and fine-tuning does not keep policy text current."
+        "why": "Pasting every policy into the instructions wastes tokens, may not fit the context, and goes stale as policies change."
       },
       {
         "key": "D",
-        "text": "Use Amazon Polly to read policies aloud",
+        "text": "Use a Bedrock Flow that summarizes the policy documents for each request",
         "correct": false,
-        "why": "Reading aloud does not answer questions or file claims."
+        "why": "Summaries can help answer questions, but the flow has no way to file claims through the API."
       }
     ],
     "explanation": {
@@ -891,27 +891,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Image resolution",
+        "text": "Context window (maximum input length)",
         "correct": false,
-        "why": "The required output is a written report, so image resolution has no bearing on the choice."
+        "why": "The prompts are short, so the input limit is not the constraint. The concern is how much the model can generate."
       },
       {
         "key": "B",
         "text": "Maximum output length (output token limit)",
         "correct": true,
-        "why": "Long reports need a model whose maximum output token limit can accommodate thousands of words."
+        "why": "A 5,000-word report needs a model whose output token limit can accommodate it, or responses will be truncated."
       },
       {
         "key": "C",
-        "text": "Embedding dimension",
+        "text": "Support for prompt caching",
         "correct": false,
-        "why": "Embedding dimension relates to vector search, not report length."
+        "why": "Prompt caching helps when a long prompt prefix is repeated. These prompts are short."
       },
       {
         "key": "D",
-        "text": "Number of supported audio voices",
+        "text": "Embedding dimension",
         "correct": false,
-        "why": "Voices are irrelevant to written reports."
+        "why": "Embedding dimension applies to retrieval models, not to how long a generated report can be."
       }
     ],
     "explanation": {
@@ -941,27 +941,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Increase temperature",
+        "text": "Retrieve 50 candidate passages instead of 20",
         "correct": false,
-        "why": "Temperature affects generation randomness, not passage relevance."
+        "why": "More candidates make prompts even longer and more expensive without putting the most useful passages first."
       },
       {
         "key": "B",
-        "text": "Disable embeddings",
+        "text": "Lower the temperature so the model ignores weak passages",
         "correct": false,
-        "why": "Without embeddings, semantic retrieval stops working."
+        "why": "Temperature affects generation randomness. Weak passages would still be in the prompt and still be paid for."
       },
       {
         "key": "C",
-        "text": "Use a reranker model to score candidates for relevance and pass only the top few to the FM",
+        "text": "Rerank the candidates and pass only the top few to the FM",
         "correct": true,
-        "why": "Reranking reorders retrieved candidates by relevance to the question so fewer, better passages are used."
+        "why": "A reranker scores each candidate against the question, so fewer, more relevant passages reach the model."
       },
       {
         "key": "D",
-        "text": "Pass all 100 passages instead",
+        "text": "Switch to an embedding model with larger vectors",
         "correct": false,
-        "why": "Sending even more passages adds tokens, cost and irrelevant noise, making the problem worse."
+        "why": "A different embedding model might change initial results, but it does not directly reorder candidates by relevance or trim the prompt."
       }
     ],
     "explanation": {
@@ -991,27 +991,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Grant full administrator permissions to avoid errors",
+        "text": "Grant administrator access but require MFA on the agent's role",
         "correct": false,
-        "why": "Broad permissions mean any mistake or prompt injection can cause serious damage."
+        "why": "MFA protects human sign-ins. An agent acting with admin rights could still cause broad damage through a mistake or prompt injection."
       },
       {
         "key": "B",
-        "text": "Let the agent create its own permissions",
+        "text": "Grant administrator access and review its CloudTrail logs weekly",
         "correct": false,
-        "why": "Self-granted permissions remove any control over what the agent can do."
+        "why": "Weekly review happens after the fact; destructive actions would already have taken effect."
       },
       {
         "key": "C",
-        "text": "Disable logging to protect privacy",
+        "text": "Grant read-only access everywhere so it cannot change anything",
         "correct": false,
-        "why": "Without logs, harmful actions cannot be detected or investigated."
+        "why": "Read-only access is safe but prevents the agent from fixing anything, which defeats its purpose."
       },
       {
         "key": "D",
-        "text": "Grant only the minimum permissions each task requires, require human approval for destructive actions, and log every action",
+        "text": "Grant least privilege per task, require approval for destructive actions, log all",
         "correct": true,
-        "why": "Least privilege, approvals and audit logging limit the damage an agent mistake or a manipulated agent could cause."
+        "why": "Scoped permissions, human approval and audit logs limit the damage a mistaken or manipulated agent could do while still letting it work."
       }
     ],
     "explanation": {
@@ -1045,27 +1045,27 @@
     "options": [
       {
         "key": "A",
-        "text": "A fine-tuned model may perform the task with a much shorter prompt, so the savings on input tokens across 50 million requests can outweigh training and custom model costs",
+        "text": "A fine-tuned model can use a much shorter prompt, saving input tokens at scale",
         "correct": true,
-        "why": "At very high volume, eliminating thousands of example tokens per request can save more than fine-tuning costs."
+        "why": "At 50 million requests a month, removing thousands of example tokens per request can save more than the training and custom model costs."
       },
       {
         "key": "B",
-        "text": "Fine-tuning removes the need for evaluation",
+        "text": "Fine-tuned models are billed per request instead of per token",
         "correct": false,
-        "why": "Fine-tuned models must still be evaluated."
+        "why": "Custom model inference is still billed by usage and capacity; fine-tuning does not switch pricing to a per-request fee."
       },
       {
         "key": "C",
-        "text": "Few-shot prompts become more accurate at higher volume",
+        "text": "Fine-tuned models do not need evaluation before production",
         "correct": false,
-        "why": "Request volume does not change how accurate a prompt is. It only multiplies the token cost of long prompts."
+        "why": "Fine-tuned models still need evaluation. This is not a cost advantage."
       },
       {
         "key": "D",
-        "text": "Fine-tuning makes all tokens free",
+        "text": "Few-shot prompts become less accurate as request volume grows",
         "correct": false,
-        "why": "Inference tokens on custom models are still billed."
+        "why": "Volume does not change prompt accuracy; it only multiplies the token cost of long prompts."
       }
     ],
     "explanation": {
@@ -1099,27 +1099,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Delete the knowledge base and use the base model",
+        "text": "Increase the number of chunks retrieved per query",
         "correct": false,
-        "why": "The base model does not know the company's documents."
+        "why": "Retrieving more chunks cannot find documents that were never added to the index."
       },
       {
         "key": "B",
-        "text": "Run a sync (ingestion job) for the data source so new documents are chunked, embedded and indexed",
+        "text": "Run a sync (ingestion job) so new documents are indexed",
         "correct": true,
-        "why": "New or changed documents must be ingested into the vector index before they can be retrieved."
+        "why": "New documents must be ingested (chunked, embedded and indexed) before they can be retrieved."
       },
       {
         "key": "C",
-        "text": "Fine-tune the model daily",
+        "text": "Switch the knowledge base to a larger embedding model",
         "correct": false,
-        "why": "Fine-tuning is unnecessary. RAG updates through ingestion."
+        "why": "A different embedding model does not add the new documents to the index."
       },
       {
         "key": "D",
-        "text": "Increase the temperature",
+        "text": "Fine-tune the model every day on the new documents",
         "correct": false,
-        "why": "Temperature does not add documents to the index."
+        "why": "Fine-tuning is unnecessary and costly. RAG updates through ingestion, not training."
       }
     ],
     "explanation": {
@@ -1150,27 +1150,27 @@
     "options": [
       {
         "key": "A",
-        "text": "It guarantees investment returns",
+        "text": "One agent handles every step, which keeps the design simple",
         "correct": false,
-        "why": "No AI system can guarantee investment returns. The value is faster research, with humans still deciding."
+        "why": "The design uses several specialized agents, not one, so this does not describe it."
       },
       {
         "key": "B",
-        "text": "It removes the need for regulatory compliance",
+        "text": "Advisors no longer need to review the final report",
         "correct": false,
-        "why": "Financial advice remains regulated regardless of tooling."
+        "why": "The design deliberately keeps human advisors reviewing reports, which is appropriate for investment advice."
       },
       {
         "key": "C",
-        "text": "Specialized agents automate time-consuming research steps, giving advisors a draft report faster while they keep final judgment",
+        "text": "Specialist agents automate research, giving advisors drafts sooner",
         "correct": true,
-        "why": "Agents save analyst time on gathering and analysis, while humans retain responsibility for advice."
+        "why": "Agents save time on gathering and analysis while advisors keep responsibility for the final advice."
       },
       {
         "key": "D",
-        "text": "It eliminates the need for any data sources",
+        "text": "Reports become deterministic, so each run is identical",
         "correct": false,
-        "why": "The agents rely on market data and filings to work."
+        "why": "Multi-agent systems built on FMs are not deterministic; that is not the benefit of this design."
       }
     ],
     "explanation": {
@@ -1200,27 +1200,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Pick the one with the most marketing coverage",
+        "text": "Choose the model with the best public benchmark scores",
         "correct": false,
-        "why": "Marketing coverage does not indicate fitness for the team's task."
+        "why": "Public benchmarks may not reflect the team's specific tasks, so they are a starting point, not the deciding factor."
       },
       {
         "key": "B",
-        "text": "Pick the newest model without testing",
+        "text": "Choose the newest model, since it is likely the strongest",
         "correct": false,
-        "why": "Newer does not always mean better or cheaper for a specific use case."
+        "why": "Newer does not always mean better or cheaper for a particular use case."
       },
       {
         "key": "C",
-        "text": "Choose randomly",
+        "text": "Choose the cheapest model, since all three meet requirements",
         "correct": false,
-        "why": "Random selection ignores measurable differences."
+        "why": "They meet modality and compliance requirements, but quality on the actual task has not been tested yet."
       },
       {
         "key": "D",
-        "text": "Evaluate all three on a representative dataset of the team's own tasks, comparing quality, latency and cost",
+        "text": "Evaluate all three on the team's own tasks for quality, latency and cost",
         "correct": true,
-        "why": "Testing on real tasks shows which model best balances quality, speed and cost for this specific use case."
+        "why": "Testing on representative tasks shows which model best balances quality, speed and cost for this use case."
       }
     ],
     "explanation": {

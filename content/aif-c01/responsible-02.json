@@ -415,42 +415,46 @@
     ],
     "difficulty": "medium",
     "type": "single",
-    "stem": "A public-sector agency uses AI to prioritize benefit applications for review. It wants independent experts to periodically review samples of decisions for fairness and correctness.",
-    "prompt": "Which practice is this?",
+    "stem": "A public-sector agency uses an ML model to prioritize benefit applications for caseworkers. Each quarter, it wants independent experts to look back at a sample of past decisions and judge whether they were fair and correct. The review must not delay any individual application.",
+    "prompt": "Which practice meets these requirements?",
     "options": [
       {
         "key": "A",
-        "text": "Batch inference",
-        "correct": false,
-        "why": "Batch inference is a way of running predictions, not an oversight practice."
+        "text": "Periodic human audits of a sample of past decisions",
+        "correct": true,
+        "why": "A human audit has qualified reviewers examine a sample of completed decisions after the fact, which matches the quarterly, independent, look-back review and adds no delay to live applications."
       },
       {
         "key": "B",
-        "text": "Prompt caching",
+        "text": "Amazon Augmented AI reviews of low-confidence predictions",
         "correct": false,
-        "why": "Prompt caching is a cost and latency optimization, not a way for people to review AI decisions."
+        "why": "Amazon A2I sends individual predictions to reviewers before they are used, which adds a step to live applications. It also covers only low-confidence cases, not a fairness review of a sample of all decisions."
       },
       {
         "key": "C",
-        "text": "Human audits",
-        "correct": true,
-        "why": "Human audits have qualified reviewers examine model decisions to identify bias, errors and trustworthiness issues that metrics might miss."
+        "text": "SageMaker Clarify bias metrics on the training data",
+        "correct": false,
+        "why": "Pre-training bias metrics measure imbalance in the dataset before the model is built. They do not involve independent experts judging real decisions the model has already made."
       },
       {
         "key": "D",
-        "text": "Distillation",
+        "text": "Bias drift monitoring with SageMaker Model Monitor",
         "correct": false,
-        "why": "Distillation is a model training technique."
+        "why": "Bias drift monitoring is automated and tracks statistical metrics over time. It is useful, but it is not experts judging whether specific decisions were fair and correct."
       }
     ],
     "explanation": {
-      "answer": "Human audits involve people, often independent or domain experts, reviewing samples of AI outputs and decisions for fairness, accuracy and compliance. They complement automated metrics and support accountability.",
-      "concept": "Audit findings should feed back into data improvements, policy changes and retraining.",
-      "examTip": "People periodically reviewing AI decisions = human audits.",
+      "answer": "Human audits are periodic reviews in which qualified, ideally independent, people examine samples of AI decisions for fairness, accuracy and compliance. They complement automated metrics and do not change the live decision flow.",
+      "concept": "Tell the human-oversight options apart by timing: Amazon A2I reviews individual predictions before they are acted on; human audits review a sample of decisions afterward; Clarify and Model Monitor provide automated metrics.",
+      "examTip": "\"Experts periodically review a sample of past decisions\" = human audit. \"Route low-confidence predictions to a person before acting\" = Amazon A2I.",
       "references": [
         {
           "title": "Responsible AI at AWS",
           "url": "https://aws.amazon.com/ai/responsible-ai/"
+        },
+        {
+          "title": "Using Amazon Augmented AI for human review",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/a2i-use-augmented-ai-a2i-human-review-loops.html"
         }
       ]
     }

@@ -215,48 +215,52 @@
       "model-size",
       "cost-performance"
     ],
-    "difficulty": "medium",
+    "difficulty": "hard",
     "type": "single",
-    "stem": "A team notices that its monthly Amazon Bedrock bill is dominated by a large premium model used for simple FAQ classification tasks.",
-    "prompt": "Which change is MOST likely to reduce cost without hurting results?",
+    "stem": "A company's monthly Amazon Bedrock bill is dominated by a large premium model that classifies customer FAQs into 12 categories. The prompts are short, traffic varies widely through the day, and users need an answer in real time. A test shows that a smaller model in the same family classifies the FAQs with the same accuracy.",
+    "prompt": "Which change will reduce cost the MOST while still meeting these requirements?",
     "options": [
       {
         "key": "A",
-        "text": "Evaluate a smaller, cheaper model for the simple tasks and use the premium model only where its capability is needed",
-        "correct": true,
-        "why": "Per-token prices vary widely by model. Simple tasks often perform well on smaller models at a fraction of the cost."
+        "text": "Purchase Provisioned Throughput for the premium model",
+        "correct": false,
+        "why": "Provisioned Throughput is billed by the hour for dedicated capacity. With widely varying traffic much of it would sit idle, and the company would still be paying premium-model rates for a task a smaller model handles."
       },
       {
         "key": "B",
-        "text": "Send each request twice and pick the better answer",
+        "text": "Send the FAQ requests to Bedrock batch inference",
         "correct": false,
-        "why": "Sending every request twice doubles the tokens billed and therefore roughly doubles the cost."
+        "why": "Batch inference is cheaper per token, but it processes requests asynchronously. Users need answers in real time, so batch does not meet the requirements."
       },
       {
         "key": "C",
-        "text": "Increase the response length",
+        "text": "Enable prompt caching for the FAQ classification prompts",
         "correct": false,
-        "why": "Longer responses mean more output tokens, and output tokens are billed, so cost goes up, not down."
+        "why": "Prompt caching saves money when a long, identical prefix is reused. These prompts are short, so there is little to cache and the premium per-token price still applies."
       },
       {
         "key": "D",
-        "text": "Add more instructions to every prompt",
-        "correct": false,
-        "why": "Longer prompts add input tokens and increase cost."
+        "text": "Switch the FAQ classification to the smaller model",
+        "correct": true,
+        "why": "The smaller model meets the accuracy requirement at a much lower per-token price, works on demand for variable traffic, and answers in real time."
       }
     ],
     "explanation": {
-      "answer": "Different models have different prices and capabilities. Matching each task to the least expensive model that meets quality requirements is one of the most effective cost optimizations. Some teams route requests between models based on complexity.",
-      "concept": "Amazon Bedrock Intelligent Prompt Routing can route requests between models in a family to balance quality and cost.",
-      "examTip": "Expensive model on simple tasks → right-size the model.",
+      "answer": "When a cheaper model meets the quality bar, right-sizing the model is usually the biggest saving, because per-token prices differ widely between models. It also keeps on-demand pricing, which fits variable traffic, and real-time responses.",
+      "concept": "Match each Bedrock cost lever to its workload: smaller models for simple tasks; batch inference for non-urgent bulk work; prompt caching for long repeated prefixes; Provisioned Throughput for steady, high, predictable traffic.",
+      "examTip": "Check the constraints before choosing a cost lever: \"real time\" rules out batch, \"short prompts\" weakens prompt caching, and \"variable traffic\" argues against Provisioned Throughput.",
       "references": [
         {
           "title": "Amazon Bedrock pricing",
           "url": "https://aws.amazon.com/bedrock/pricing/"
         },
         {
-          "title": "Evaluate the performance of Amazon Bedrock resources",
-          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/evaluation.html"
+          "title": "Process multiple prompts with batch inference",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/batch-inference.html"
+        },
+        {
+          "title": "Prompt caching for faster model inference",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-caching.html"
         }
       ]
     }

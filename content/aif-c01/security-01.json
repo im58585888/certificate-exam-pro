@@ -630,42 +630,46 @@
     ],
     "difficulty": "medium",
     "type": "single",
-    "stem": "A security team wants continuous threat detection for its AWS accounts running AI workloads, including alerts for unusual API activity such as credentials being used from suspicious locations.",
-    "prompt": "Which AWS service provides this?",
+    "stem": "A company runs several AI workloads on AWS. The security team wants to be alerted automatically when the workloads' AWS credentials are used from unusual locations or start making API calls that deviate from their normal pattern. The team does not want to write or maintain its own detection rules.",
+    "prompt": "Which AWS service meets these requirements?",
     "options": [
       {
         "key": "A",
-        "text": "AWS Artifact",
+        "text": "AWS CloudTrail",
         "correct": false,
-        "why": "Artifact provides compliance reports, not threat detection."
+        "why": "CloudTrail records the API calls, which is the raw evidence. It does not analyze them for anomalies or raise alerts on its own, so the team would have to build its own detection logic, which it wants to avoid."
       },
       {
         "key": "B",
-        "text": "Amazon Polly",
+        "text": "AWS Config",
         "correct": false,
-        "why": "Polly converts text to speech and does not analyze account activity for threats."
+        "why": "AWS Config records resource configurations and checks them against rules. It answers \"is this resource set up correctly?\", not \"is someone misusing these credentials right now?\""
       },
       {
         "key": "C",
         "text": "Amazon GuardDuty",
         "correct": true,
-        "why": "GuardDuty continuously monitors accounts and workloads for malicious activity and anomalous behavior using threat intelligence and machine learning."
+        "why": "GuardDuty continuously analyzes CloudTrail events, VPC flow logs and DNS logs with threat intelligence and machine learning. It flags unusual API activity and credential use from suspicious locations, with no rules to write."
       },
       {
         "key": "D",
-        "text": "Amazon Translate",
+        "text": "Amazon Inspector",
         "correct": false,
-        "why": "Translate converts text between languages and provides no threat detection."
+        "why": "Inspector scans EC2 instances, container images and Lambda functions for software vulnerabilities and network exposure. It does not watch how credentials are being used."
       }
     ],
     "explanation": {
-      "answer": "Amazon GuardDuty is a threat detection service that analyzes sources such as CloudTrail events, VPC flow logs and DNS logs to identify suspicious activity, including compromised credentials and unusual API calls. It includes protection plans for various workload types.",
-      "concept": "Threat detection is part of the security considerations for AI systems, alongside vulnerability management and infrastructure protection.",
-      "examTip": "Detect malicious activity in AWS accounts = GuardDuty.",
+      "answer": "Amazon GuardDuty is a managed threat detection service. It analyzes account activity (CloudTrail management and data events), network activity (VPC flow logs) and DNS queries, and produces findings such as anomalous API behavior or credentials used from unusual locations, without customers writing detection rules.",
+      "concept": "Know the four look-alikes: CloudTrail records activity, GuardDuty detects threats in that activity, Config checks configuration compliance, and Inspector finds software vulnerabilities.",
+      "examTip": "\"Detect suspicious activity\" or \"compromised credentials\" with no custom rules = GuardDuty. \"Who did what\" = CloudTrail.",
       "references": [
         {
           "title": "What is Amazon GuardDuty?",
           "url": "https://docs.aws.amazon.com/guardduty/latest/ug/what-is-guardduty.html"
+        },
+        {
+          "title": "AWS CloudTrail User Guide",
+          "url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-user-guide.html"
         }
       ]
     }

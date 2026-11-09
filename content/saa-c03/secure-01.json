@@ -325,40 +325,40 @@
       "xss",
       "alb"
     ],
-    "difficulty": "easy",
+    "difficulty": "medium",
     "type": "single",
-    "stem": "A retail company's customer portal runs on Amazon EC2 instances behind an Application Load Balancer. Penetration testers found that the portal is vulnerable to SQL injection and cross-site scripting (XSS) attacks in form fields. Developers need several weeks to fix the code, and the company wants protection in place immediately.",
-    "prompt": "Which AWS service should the solutions architect use to mitigate these attacks right away?",
+    "stem": "A retail company's customer portal runs on Amazon EC2 instances behind an Application Load Balancer. Penetration testers found that form fields on the portal are vulnerable to SQL injection and cross-site scripting (XSS). Developers need several weeks to fix the code, and the company wants the attacks blocked immediately without changing the application.",
+    "prompt": "Which solution meets these requirements?",
     "options": [
       {
         "key": "A",
-        "text": "AWS Shield Standard",
+        "text": "Subscribe to AWS Shield Advanced and enable automatic application-layer DDoS mitigation",
         "correct": false,
-        "why": "Shield Standard protects against network- and transport-layer (L3/L4) DDoS attacks such as SYN floods. It does not inspect HTTP request contents for injection payloads."
+        "why": "Shield Advanced protects against DDoS attacks, including at the application layer, by mitigating floods of requests. It does not inspect individual requests for SQL injection or XSS payloads."
       },
       {
         "key": "B",
-        "text": "AWS WAF with AWS managed rule groups for SQL injection and known bad inputs, associated with the Application Load Balancer",
+        "text": "Associate AWS WAF with the ALB and add the managed rule groups for SQL injection and XSS",
         "correct": true,
-        "why": "AWS WAF is a layer-7 web application firewall that inspects headers, query strings and bodies. The managed rule groups (such as the SQL database and core rule sets) block common SQLi and XSS patterns within minutes, with no code changes."
+        "why": "AWS WAF inspects HTTP request contents at layer 7. Attaching a web ACL with AWS managed rule groups to the ALB blocks common SQL injection and XSS patterns right away, acting as a virtual patch with no code changes."
       },
       {
         "key": "C",
-        "text": "Security groups that allow only ports 80 and 443",
+        "text": "Put Amazon CloudFront in front of the ALB and allow only CloudFront traffic to reach it",
         "correct": false,
-        "why": "Security groups filter by IP, port and protocol. SQL injection and XSS arrive on port 443 inside legitimate-looking HTTP requests, so a security group cannot tell them apart."
+        "why": "This hides the ALB from direct access, but CloudFront on its own forwards the malicious form submissions unchanged. Without a WAF web ACL, nothing inspects the request contents."
       },
       {
         "key": "D",
-        "text": "Amazon Inspector",
+        "text": "Enable Amazon Inspector on the EC2 instances and remediate the findings it reports",
         "correct": false,
-        "why": "Inspector scans EC2 instances, container images and Lambda functions for software vulnerabilities and network exposure. It finds problems but does not block live attacks."
+        "why": "Inspector reports known vulnerabilities in installed software packages and network exposure. It does not block live requests, and the flaw here is in the company's own application code."
       }
     ],
     "explanation": {
-      "answer": "AWS WAF inspects HTTP(S) requests and can block or count those that match rules. It can be attached to an Application Load Balancer, Amazon CloudFront, Amazon API Gateway, AWS AppSync or Amazon Cognito user pools. AWS managed rule groups provide ready-made SQL injection and XSS protection that works as a virtual patch while developers fix the code.",
-      "concept": "Match the layer to the tool. Security groups and NACLs work at L3/L4 (IP and port). Shield Standard and Advanced cover DDoS. WAF covers L7 content: SQLi, XSS, rate limiting, geo-blocking and bot control. Inspector and GuardDuty detect problems but do not block traffic inline.",
-      "examTip": "SQL injection, cross-site scripting, 'rate-limit by IP' or 'block countries' means AWS WAF on ALB, CloudFront or API Gateway. Note that WAF cannot attach to a Network Load Balancer.",
+      "answer": "AWS WAF is a layer-7 web application firewall that can be associated with an ALB, CloudFront, API Gateway, AppSync or Cognito. AWS managed rule groups (such as the core rule set and SQL database rule set) block common SQL injection and XSS patterns, protecting the application while developers fix the code.",
+      "concept": "Match the threat to the layer. Security groups and NACLs filter IPs and ports. Shield handles DDoS volume. WAF inspects request contents (SQLi, XSS, bad bots, rate limits, geo-blocking). Inspector and GuardDuty detect problems but do not block requests inline.",
+      "examTip": "SQL injection or XSS = AWS WAF. CloudFront alone and Shield do not inspect payloads, and WAF cannot be attached to a Network Load Balancer.",
       "references": [
         {
           "title": "AWS WAF Developer Guide",

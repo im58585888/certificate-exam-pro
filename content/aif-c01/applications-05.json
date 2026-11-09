@@ -112,27 +112,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Batch inference makes training faster",
+        "text": "Regularization: the base model's size prevents overfitting",
         "correct": false,
-        "why": "Batch inference is an inference mode and has nothing to do with training efficiency."
+        "why": "Large models can still overfit small datasets. The advantage comes from reusing what the model already learned."
       },
       {
         "key": "B",
-        "text": "Transfer learning: the model reuses general knowledge from pre-training and only needs to adapt to the new task",
+        "text": "Transfer learning: it reuses general knowledge from pre-training",
         "correct": true,
-        "why": "Pre-trained knowledge transfers to the new task, so far less task-specific data is needed."
+        "why": "Pre-trained knowledge transfers to the new task, so far less task-specific data is needed than training from scratch."
       },
       {
         "key": "C",
-        "text": "Temperature tuning improves training",
+        "text": "In-context learning: the examples act as one long prompt",
         "correct": false,
-        "why": "Temperature is an inference parameter that affects generation randomness. It plays no role in training."
+        "why": "Fine-tuning updates the model's weights; it does not place the examples in the prompt at inference time."
       },
       {
         "key": "D",
-        "text": "Overfitting: the model memorizes the small dataset",
+        "text": "Distillation: the base model teaches a copy of itself",
         "correct": false,
-        "why": "Overfitting is a risk with small datasets, not the reason fine-tuning works well."
+        "why": "Distillation trains a smaller model from a larger one's outputs. Fine-tuning on labeled examples is a different technique."
       }
     ],
     "explanation": {
@@ -162,27 +162,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Random unrelated images",
+        "text": "Unlabeled domain documents in one large text file",
         "correct": false,
-        "why": "Images unrelated to the task do not teach FAQ writing."
+        "why": "Unlabeled text is used for continued pre-training. Fine-tuning for a style needs examples of the desired outputs."
       },
       {
         "key": "B",
-        "text": "A list of hyperparameters with no examples",
+        "text": "Product images with captions describing each product",
         "correct": false,
-        "why": "Hyperparameters configure training but cannot replace training examples."
+        "why": "The goal is writing FAQ text in a style; image-caption pairs do not teach that."
       },
       {
         "key": "C",
-        "text": "Labeled examples of prompts paired with the desired completions, stored in a file such as JSON Lines in Amazon S3",
+        "text": "Prompt-completion pairs in JSON Lines files in Amazon S3",
         "correct": true,
-        "why": "Supervised fine-tuning learns from input-output pairs that show the desired behavior."
+        "why": "Supervised fine-tuning learns from input-output pairs showing the desired behavior, supplied as JSON Lines in S3 for Bedrock."
       },
       {
         "key": "D",
-        "text": "Only the model's name",
+        "text": "Embeddings of existing FAQs stored in a vector database",
         "correct": false,
-        "why": "A model name contains no examples of the desired behavior, so it provides nothing to learn from."
+        "why": "Embeddings support retrieval for RAG. They are not training examples for fine-tuning."
       }
     ],
     "explanation": {
@@ -212,27 +212,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Increase the temperature during training",
+        "text": "Use all 50,000 transcripts, since more data improves results",
         "correct": false,
-        "why": "Temperature is an inference setting and does not fix data quality."
+        "why": "Training on errors, rude replies and outdated policies teaches the model to reproduce them, regardless of volume."
       },
       {
         "key": "B",
-        "text": "Use all 50,000 as-is because more data is always better",
+        "text": "Fix only the rude responses and keep everything else",
         "correct": false,
-        "why": "Training on errors and rude responses teaches the model to reproduce them."
+        "why": "Duplicates, errors and outdated policy answers would still teach the model wrong behavior."
       },
       {
         "key": "C",
-        "text": "Delete all transcripts and fine-tune on nothing",
+        "text": "Keep the newest 5,000 transcripts and discard the rest",
         "correct": false,
-        "why": "Fine-tuning learns from examples. With no transcripts at all, there is nothing to fine-tune on."
+        "why": "Recency removes some outdated answers, but recent transcripts can still contain errors, rudeness and duplicates."
       },
       {
         "key": "D",
-        "text": "Curate the data: remove low-quality, duplicate and outdated examples and keep high-quality, representative ones",
+        "text": "Remove low-quality, duplicate and outdated examples first",
         "correct": true,
-        "why": "The model learns from examples, so poor-quality examples teach poor behavior. Curation improves the resulting model."
+        "why": "Curating for accurate, high-quality, current, deduplicated examples matters more than raw quantity."
       }
     ],
     "explanation": {
@@ -261,27 +261,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Representativeness: the training data should reflect the full range of users and inputs the model will see",
+        "text": "Representativeness of the training data",
         "correct": true,
-        "why": "Data from only one region does not represent other regions' language and products, so performance suffers for them."
+        "why": "Data from only one region does not represent the other regions' spelling and products, so the model performs worse for them."
       },
       {
         "key": "B",
-        "text": "Vector dimension",
+        "text": "Consistency of labels across annotators",
         "correct": false,
-        "why": "Vector dimension relates to embeddings, not fine-tuning data coverage."
+        "why": "Nothing suggests the labels were inconsistent. The gap is in which customers the data covered."
       },
       {
         "key": "C",
-        "text": "Prompt caching",
+        "text": "Sufficient overall dataset size",
         "correct": false,
-        "why": "Prompt caching is an inference optimization, not a data principle."
+        "why": "The problem is specific to customer groups that were missing, not the total number of examples."
       },
       {
         "key": "D",
-        "text": "Lower learning rate",
+        "text": "Documentation of data lineage",
         "correct": false,
-        "why": "Training settings do not fix missing types of data."
+        "why": "Lineage helps traceability but would not by itself prevent poor performance for missing customer groups."
       }
     ],
     "explanation": {
@@ -315,27 +315,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Unsupervised clustering",
+        "text": "Supervised fine-tuning on human-written answers",
         "correct": false,
-        "why": "Clustering groups data and does not use human rankings to train responses."
+        "why": "Here reviewers ranked model responses rather than writing ideal answers; rankings are preference data used in RLHF."
       },
       {
         "key": "B",
         "text": "Reinforcement learning from human feedback (RLHF)",
         "correct": true,
-        "why": "RLHF uses human preference judgments to train a reward signal that guides the model toward preferred responses."
+        "why": "RLHF trains a reward model from human preference rankings and uses it to steer the model toward preferred responses."
       },
       {
         "key": "C",
-        "text": "Tokenization",
+        "text": "Instruction tuning with labeled prompt-response pairs",
         "correct": false,
-        "why": "Tokenization splits text and is not a training technique."
+        "why": "Instruction tuning uses examples of ideal responses, not rankings of several model responses."
       },
       {
         "key": "D",
-        "text": "Batch transform",
+        "text": "Continued pre-training on human-reviewed text",
         "correct": false,
-        "why": "Batch transform is an offline inference method."
+        "why": "Continued pre-training uses unlabeled domain text and does not learn from preference rankings."
       }
     ],
     "explanation": {
@@ -367,27 +367,27 @@
     "options": [
       {
         "key": "A",
-        "text": "All four techniques are the same and use identical data",
+        "text": "Continued pre-training adapts a model with labeled task examples",
         "correct": false,
-        "why": "The four techniques differ in purpose, in the kind of data they use and in cost, so they are not interchangeable."
+        "why": "Adapting a model with labeled task examples is fine-tuning. Continued pre-training uses unlabeled domain text."
       },
       {
         "key": "B",
-        "text": "Distillation makes a model larger; continued pre-training uses only images",
+        "text": "Distillation trains a larger model to imitate a smaller, faster one",
         "correct": false,
-        "why": "Distillation produces a smaller model, and continued pre-training uses domain data of the model's modality, typically text."
+        "why": "This is reversed: distillation trains a smaller student to imitate a larger teacher."
       },
       {
         "key": "C",
-        "text": "Pre-training builds a model from scratch on massive data; continued pre-training extends a pre-trained model with more unlabeled domain data; fine-tuning adapts it with labeled task examples; distillation trains a smaller model to mimic a larger one",
+        "text": "Continued pre-training extends a model with unlabeled domain data",
         "correct": true,
-        "why": "Each definition matches the purpose and data used by the technique."
+        "why": "Continued pre-training continues self-supervised training on unlabeled domain data, deepening the model's domain knowledge."
       },
       {
         "key": "D",
-        "text": "Fine-tuning builds a model from scratch; pre-training adds a few examples",
+        "text": "Fine-tuning builds a new model from scratch on broad data",
         "correct": false,
-        "why": "This reverses pre-training and fine-tuning."
+        "why": "Building a model from scratch on broad data is pre-training. Fine-tuning adapts an existing model."
       }
     ],
     "explanation": {
@@ -421,27 +421,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Skip documentation of the data sources",
+        "text": "Encrypt the notes with AWS KMS and fine-tune on them as-is",
         "correct": false,
-        "why": "Documenting data lineage is required for governance and audits."
+        "why": "Encryption protects the data at rest, but the model could still learn and later reveal the PHI."
       },
       {
         "key": "B",
-        "text": "Publish the training data publicly for transparency",
+        "text": "Run the fine-tuning job in a private VPC with no internet access",
         "correct": false,
-        "why": "Publishing PHI would be a serious privacy violation."
+        "why": "Network isolation protects data in transit but does not stop the model from memorizing PHI."
       },
       {
         "key": "C",
-        "text": "Fine-tune on raw notes to maximize accuracy",
+        "text": "Restrict who can invoke the fine-tuned model afterward",
         "correct": false,
-        "why": "Training on raw PHI risks leakage through model outputs and may violate regulations."
+        "why": "Access control helps, but authorized users could still extract memorized PHI. The data should be minimized before training."
       },
       {
         "key": "D",
-        "text": "De-identify or remove PHI not needed for the task, confirm consent and legal basis, and restrict access to the training data",
+        "text": "De-identify PHI not needed, confirm the legal basis, restrict access",
         "correct": true,
-        "why": "Models can memorize training data, so sensitive data must be minimized and governed before training."
+        "why": "Models can memorize training data, so sensitive data must be minimized, used lawfully and protected before training."
       }
     ],
     "explanation": {
@@ -475,27 +475,27 @@
     "options": [
       {
         "key": "A",
-        "text": "The model overfit a very small dataset; add more diverse examples, use a validation set and train for fewer epochs",
+        "text": "Overfitting; add diverse examples, use validation and fewer epochs",
         "correct": true,
-        "why": "Too little data and too much training cause memorization. More varied data and validation-based stopping improve generalization."
+        "why": "Too little data trained for too long causes memorization; more varied data and validation-based stopping improve generalization."
       },
       {
         "key": "B",
-        "text": "The embedding model was wrong",
+        "text": "Underfitting; train for more epochs on the same 40 examples",
         "correct": false,
-        "why": "Fine-tuning a generation model does not depend on a separate embedding model."
+        "why": "Reproducing training examples word for word is overfitting, and more epochs would make it worse."
       },
       {
         "key": "C",
-        "text": "The temperature was too low during training",
+        "text": "Catastrophic forgetting; lower the learning rate",
         "correct": false,
-        "why": "Temperature is an inference setting. It is not used during training and cannot cause overfitting."
+        "why": "Forgetting means losing earlier general skills. The symptom here is memorizing a tiny dataset."
       },
       {
         "key": "D",
-        "text": "The model underfit; train for even more epochs",
+        "text": "Data drift; retrain on newer examples",
         "correct": false,
-        "why": "The symptoms show memorization, which more training would worsen."
+        "why": "Drift is a change in production data over time. This problem appeared immediately from how the model was trained."
       }
     ],
     "explanation": {
@@ -529,27 +529,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Amazon Route 53",
+        "text": "Amazon Augmented AI (Amazon A2I)",
         "correct": false,
-        "why": "Route 53 is a DNS and domain registration service. It does not manage human labeling work."
+        "why": "A2I routes individual model predictions to people for review. It is not a workflow for creating a training dataset."
       },
       {
         "key": "B",
         "text": "Amazon SageMaker Ground Truth",
         "correct": true,
-        "why": "Ground Truth manages human labeling workflows, including private expert workforces and review steps, for creating training data."
+        "why": "Ground Truth manages human labeling and data-generation workflows, including private expert workforces and quality checks."
       },
       {
         "key": "C",
-        "text": "AWS Trusted Advisor",
+        "text": "Amazon Bedrock Model Evaluation",
         "correct": false,
-        "why": "Trusted Advisor gives account recommendations."
+        "why": "Model Evaluation can use human reviewers to score model outputs, but it does not produce a training dataset of expert-written responses."
       },
       {
         "key": "D",
-        "text": "Amazon CloudFront",
+        "text": "Amazon SageMaker Data Wrangler",
         "correct": false,
-        "why": "CloudFront is a content delivery network, not a labeling service."
+        "why": "Data Wrangler prepares and transforms existing data; it does not manage people writing and reviewing new examples."
       }
     ],
     "explanation": {
@@ -629,27 +629,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Both models are merged into one larger model",
+        "text": "The small model drafts and the large model corrects it at inference",
         "correct": false,
-        "why": "Distillation produces a smaller model, not a merged larger one."
+        "why": "Distillation happens during training; afterward only the small model is used for inference."
       },
       {
         "key": "B",
-        "text": "The small model teaches the large model",
+        "text": "The small model teaches the large model to respond faster",
         "correct": false,
-        "why": "Knowledge flows from the larger, more capable model to the smaller one."
+        "why": "Knowledge flows from the larger, more capable model to the smaller one, not the other way."
       },
       {
         "key": "C",
-        "text": "The large model is deleted after training",
+        "text": "Both are fine-tuned on the prompts and the better one is kept",
         "correct": false,
-        "why": "Distillation does not delete the teacher model."
+        "why": "Distillation does not train both and pick one; it trains the smaller model on the larger model's responses."
       },
       {
         "key": "D",
-        "text": "The large model is the teacher that generates high-quality responses, and the small model is the student trained on them",
+        "text": "The large teacher generates responses; the small student trains on them",
         "correct": true,
-        "why": "Distillation uses the teacher's outputs as training data for the student."
+        "why": "The teacher's responses to the use-case prompts become training data for the smaller, cheaper student model."
       }
     ],
     "explanation": {
@@ -735,27 +735,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Bedrock creates a private copy of the model for the customer; the customer's data is not used to improve the base model, and access is controlled with IAM",
+        "text": "A private copy only the customer can access via IAM",
         "correct": true,
-        "why": "Customized models are private to the customer's account, and training data is not used to train the base model."
+        "why": "Bedrock creates a private customized model; the customer's data is not used to improve the base model, and IAM controls access."
       },
       {
         "key": "B",
-        "text": "Anyone with the model name can invoke it",
+        "text": "A private copy, but the provider uses the data to improve the base model",
         "correct": false,
-        "why": "Invocation requires IAM permissions in the owning account."
+        "why": "Bedrock does not share customer training data with model providers or use it to improve base models."
       },
       {
         "key": "C",
-        "text": "The model provider receives the training data to improve its base model",
+        "text": "A shared model that other customers in the same Region can use",
         "correct": false,
-        "why": "Customer training data is not shared with providers to improve base models."
+        "why": "Custom models are private to the account that created them."
       },
       {
         "key": "D",
-        "text": "The customized model becomes publicly available to all Bedrock customers",
+        "text": "The fine-tuned weights are merged into the base model for all users",
         "correct": false,
-        "why": "Custom models are private to the account that created them."
+        "why": "Customization creates a separate private model; the base model is unchanged."
       }
     ],
     "explanation": {
@@ -838,27 +838,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Zero-shot prompting",
+        "text": "Full fine-tuning of every weight at a lower learning rate",
         "correct": false,
-        "why": "Zero-shot prompting does not train any parameters."
+        "why": "Full fine-tuning still updates all weights, which needs the large GPU budget the team lacks."
       },
       {
         "key": "B",
-        "text": "Batch transform",
+        "text": "Continued pre-training on a small domain dataset",
         "correct": false,
-        "why": "Batch transform runs inference, not training."
+        "why": "Continued pre-training also updates the model's weights and typically uses large unlabeled datasets."
       },
       {
         "key": "C",
         "text": "Parameter-efficient fine-tuning (PEFT), such as LoRA",
         "correct": true,
-        "why": "PEFT methods train a small set of added parameters, greatly reducing compute and memory compared with full fine-tuning."
+        "why": "PEFT freezes most weights and trains a small set of added parameters, greatly reducing compute and memory."
       },
       {
         "key": "D",
-        "text": "Pre-training from scratch",
+        "text": "Model distillation into a smaller student model",
         "correct": false,
-        "why": "Pre-training trains all weights from scratch and is the most expensive option."
+        "why": "Distillation produces a smaller model, but it does not describe training only added parameters on the large model."
       }
     ],
     "explanation": {
@@ -887,27 +887,27 @@
     "options": [
       {
         "key": "A",
-        "text": "The team needs answers based on documents that change hourly",
+        "text": "Answers must reflect documents that change every hour",
         "correct": false,
-        "why": "Frequently changing knowledge is better served by RAG."
+        "why": "Frequently changing knowledge is better served by RAG, which updates by re-indexing."
       },
       {
         "key": "B",
-        "text": "The team wants to launch tomorrow with zero ML effort",
+        "text": "Every answer must cite the document it came from",
         "correct": false,
-        "why": "Fine-tuning requires data preparation, training and evaluation time."
+        "why": "Citations come from retrieval. A fine-tuned model cannot reliably cite sources."
       },
       {
         "key": "C",
-        "text": "The team has no training data at all",
+        "text": "The team has only 20 examples of the desired output",
         "correct": false,
-        "why": "Fine-tuning needs labeled training examples. Without any data, it is not an option."
+        "why": "Twenty examples are too few to fine-tune reliably; few-shot prompting is the better use of them."
       },
       {
         "key": "D",
-        "text": "Prompting and RAG cannot reliably achieve a required specialized behavior, style or format, and the team has high-quality labeled examples",
+        "text": "Prompts and RAG can't achieve a required style, and good labeled data exists",
         "correct": true,
-        "why": "Fine-tuning is worth its cost when cheaper approaches fall short on behavior and good training data exists."
+        "why": "Fine-tuning is worth its cost when cheaper approaches fall short on behavior and quality training data is available."
       }
     ],
     "explanation": {
@@ -937,27 +937,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Whether the team has the legal right and appropriate licenses to use the content for training",
+        "text": "Whether the team has the rights and licenses to train on the content",
         "correct": true,
-        "why": "Using copyrighted content without rights creates intellectual property and legal risk."
+        "why": "Using copyrighted content without rights creates intellectual property and legal risk, which must be resolved before anything else."
       },
       {
         "key": "B",
-        "text": "Which temperature to use at inference",
+        "text": "Whether the articles contain personal data that must be removed",
         "correct": false,
-        "why": "Inference settings do not address legal rights to training data."
+        "why": "Personal data matters, but the scenario highlights restrictive copyright terms, which determine whether the data can be used at all."
       },
       {
         "key": "C",
-        "text": "Whether the articles are long enough",
+        "text": "Whether the articles are balanced across topics",
         "correct": false,
-        "why": "Length is secondary to whether the data may legally be used."
+        "why": "Balance affects quality, but it is secondary to whether the content may legally be used."
       },
       {
         "key": "D",
-        "text": "How many GPUs to use",
+        "text": "Whether the articles' sources are documented for lineage",
         "correct": false,
-        "why": "Compute choices do not resolve legal concerns."
+        "why": "Documenting sources is good practice but does not settle whether training on them is permitted."
       }
     ],
     "explanation": {
@@ -987,27 +987,27 @@
     "options": [
       {
         "key": "A",
-        "text": "AWS Artifact",
+        "text": "Amazon Bedrock model customization",
         "correct": false,
-        "why": "Artifact provides compliance reports and agreements. It cannot train models."
+        "why": "Bedrock customization is managed and simple, but it does not accept custom training scripts or let you choose instance types."
       },
       {
         "key": "B",
-        "text": "Amazon SageMaker AI (training jobs, including through SageMaker JumpStart)",
+        "text": "Amazon SageMaker AI training jobs",
         "correct": true,
-        "why": "SageMaker AI training jobs support custom scripts, distributed training and choice of instance types."
+        "why": "SageMaker AI training jobs support custom scripts and containers, distributed training libraries and your choice of GPU instances."
       },
       {
         "key": "C",
-        "text": "Amazon Polly",
+        "text": "Amazon Bedrock Custom Model Import",
         "correct": false,
-        "why": "Polly is a text-to-speech service and cannot run custom distributed training jobs."
+        "why": "Custom Model Import brings in a model that was already trained elsewhere; it does not run the training."
       },
       {
         "key": "D",
-        "text": "Amazon Route 53",
+        "text": "Amazon SageMaker Canvas",
         "correct": false,
-        "why": "Route 53 is a DNS service. It has no model training capability."
+        "why": "Canvas is a no-code tool for business analysts; it does not run custom distributed training scripts."
       }
     ],
     "explanation": {
@@ -1036,27 +1036,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Increase the number of epochs",
+        "text": "Train on all the labels and let the model average them out",
         "correct": false,
-        "why": "More training on inconsistent data does not fix the labels."
+        "why": "Contradictory labels teach contradictory behavior; the model cannot know which definition was intended."
       },
       {
         "key": "B",
-        "text": "Use the inconsistent labels; the model will figure it out",
+        "text": "Drop the examples where annotators disagree and keep the rest",
         "correct": false,
-        "why": "Contradictory labels teach contradictory behavior."
+        "why": "This loses data and leaves the root cause in place: annotators still use different definitions."
       },
       {
         "key": "C",
-        "text": "Create clear labeling guidelines with examples, retrain annotators, and measure agreement between annotators before using the data",
+        "text": "Write labeling guidelines, retrain annotators and check agreement",
         "correct": true,
-        "why": "Consistent labels require shared definitions and quality checks; inconsistent labels confuse the model."
+        "why": "Shared definitions, examples and inter-annotator agreement checks produce consistent labels."
       },
       {
         "key": "D",
-        "text": "Switch to a diffusion model",
+        "text": "Keep only the labels from the most senior annotator",
         "correct": false,
-        "why": "Changing model type does not fix label quality."
+        "why": "One person's labels discard most of the data and may carry that person's own biases."
       }
     ],
     "explanation": {
@@ -1085,27 +1085,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Custom models cannot be invoked at all",
+        "text": "Custom models run on the base model's shared on-demand capacity",
         "correct": false,
-        "why": "Custom models can be invoked once deployed through the supported options."
+        "why": "Custom models are separate private resources; how they are served and billed differs from the base model."
       },
       {
         "key": "B",
-        "text": "Custom models are free to invoke",
+        "text": "Custom models are billed only for training, not for inference",
         "correct": false,
-        "why": "Invocation and storage of custom models are billed."
+        "why": "Using a custom model incurs inference charges, and often model storage or dedicated capacity costs."
       },
       {
         "key": "C",
-        "text": "The base model is replaced for all customers",
+        "text": "Custom models replace the base model for all Bedrock users",
         "correct": false,
-        "why": "Customization creates a private copy; the base model is unchanged."
+        "why": "Customization creates a private copy; the base model is unchanged for everyone."
       },
       {
         "key": "D",
-        "text": "Custom models are separate resources; depending on the model, invoking them can require options such as Provisioned Throughput or on-demand custom model deployment, with their own pricing and model storage charges",
+        "text": "Custom models are separate resources with their own deployment and pricing",
         "correct": true,
-        "why": "Customized models are hosted as your private resources, which affects how they are deployed and billed."
+        "why": "Depending on the model, custom models use options such as Provisioned Throughput or on-demand custom deployment, plus storage charges."
       }
     ],
     "explanation": {
@@ -1138,27 +1138,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Synthetic data must be reviewed for accuracy, diversity and bias, and checked against licensing terms of the generating model, because errors and biases can be amplified",
+        "text": "Review it for accuracy, diversity, bias and the generator's license terms",
         "correct": true,
         "why": "Synthetic data can introduce or amplify errors and bias, and some model terms restrict using outputs for training."
       },
       {
         "key": "B",
-        "text": "Synthetic data guarantees better results than real data",
+        "text": "Generate as much as possible, since volume outweighs quality",
         "correct": false,
-        "why": "Synthetic data can help but does not guarantee better results."
+        "why": "Large volumes of unreviewed synthetic data can amplify the generating model's errors and biases."
       },
       {
         "key": "C",
-        "text": "Synthetic data never needs review",
+        "text": "Use it only for validation data, not for training",
         "correct": false,
-        "why": "Unreviewed synthetic data can contain hallucinations and biases."
+        "why": "Synthetic data is commonly used for training once reviewed; restricting it to validation misses the point and does not address quality."
       },
       {
         "key": "D",
-        "text": "Synthetic data can only be images",
+        "text": "Rely on the generating model being larger than the model being trained",
         "correct": false,
-        "why": "Synthetic text data is commonly generated for language model training."
+        "why": "A larger generator still hallucinates and carries biases, so its synthetic examples still need review."
       }
     ],
     "explanation": {

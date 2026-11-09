@@ -16,25 +16,25 @@
         "key": "A",
         "text": "Decrease the temperature",
         "correct": true,
-        "why": "Lower temperature makes the model favor the most likely tokens, yielding more consistent, focused and deterministic responses."
+        "why": "Lower temperature makes the model favor the most likely tokens, so answers become more consistent and stay closer to the approved wording."
       },
       {
         "key": "B",
-        "text": "Increase the temperature",
+        "text": "Increase top-p to 1.0",
         "correct": false,
-        "why": "Higher temperature makes token selection more random, producing more varied and creative output, the opposite of what the team wants."
+        "why": "Raising top-p widens the pool of candidate tokens the model can sample from, which makes wording more varied, not more consistent."
       },
       {
         "key": "C",
-        "text": "Remove all stop sequences",
+        "text": "Add a stop sequence after each sentence",
         "correct": false,
-        "why": "Stop sequences control where generation ends. Removing them does not reduce variability."
+        "why": "A stop sequence only controls where generation ends. It would cut answers short without making the wording more focused or factual."
       },
       {
         "key": "D",
         "text": "Increase the maximum output tokens",
         "correct": false,
-        "why": "Max tokens limits response length. Allowing longer answers does not make them more consistent."
+        "why": "Max tokens only caps response length. Allowing longer answers gives the model more room to drift, not less."
       }
     ],
     "explanation": {
@@ -263,27 +263,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Amazon SageMaker Ground Truth",
+        "text": "Amazon Kendra",
         "correct": false,
-        "why": "Ground Truth labels training data with human workers and does not provide RAG."
+        "why": "Kendra is an intelligent search service that can act as a retriever, but on its own it does not connect results to a foundation model and manage the whole RAG workflow as described."
       },
       {
         "key": "B",
         "text": "Amazon Bedrock Knowledge Bases",
         "correct": true,
-        "why": "Bedrock Knowledge Bases manages the full RAG workflow: ingestion, chunking, embeddings, vector storage, retrieval and prompt augmentation."
+        "why": "Bedrock Knowledge Bases is managed RAG: it ingests documents from S3, chunks them, creates embeddings, stores vectors and retrieves passages for the FM."
       },
       {
         "key": "C",
-        "text": "AWS Config",
+        "text": "Amazon OpenSearch Serverless",
         "correct": false,
-        "why": "AWS Config tracks resource configurations and compliance, not document retrieval."
+        "why": "OpenSearch Serverless can store and search vectors, but the company would still have to build chunking, embedding and the connection to the model itself."
       },
       {
         "key": "D",
-        "text": "Amazon Polly",
+        "text": "Amazon Bedrock Agents",
         "correct": false,
-        "why": "Polly converts text to speech. It does not ingest documents, create embeddings or retrieve passages."
+        "why": "Agents orchestrate multi-step tasks and tool calls. An agent can use a knowledge base, but it is not the managed ingestion and retrieval pipeline being asked for."
       }
     ],
     "explanation": {
@@ -318,27 +318,27 @@
     "options": [
       {
         "key": "A",
-        "text": "A fine-tuned model with no retrieval",
+        "text": "Fine-tune the model on the source documents",
         "correct": false,
-        "why": "A fine-tuned model blends knowledge into its weights and cannot point to the specific documents behind an answer."
+        "why": "Fine-tuning blends the documents into the model's weights, so the model cannot point to which document a given answer came from."
       },
       {
         "key": "B",
-        "text": "An image-generation model",
+        "text": "Lower the temperature so answers stay close to sources",
         "correct": false,
-        "why": "Image generation does not provide sourced text answers."
+        "why": "Lower temperature makes answers more consistent, but it does not attach or display any source documents for reviewers."
       },
       {
         "key": "C",
-        "text": "A RAG application that returns citations to the retrieved passages used to generate each answer",
+        "text": "Use RAG and return citations to the retrieved passages",
         "correct": true,
-        "why": "RAG retrieves specific source passages, so the application can return them as citations for verification."
+        "why": "RAG retrieves specific passages for each answer, so the application can show them as citations that reviewers can check."
       },
       {
         "key": "D",
-        "text": "A higher temperature setting",
+        "text": "Enable a contextual grounding check in Bedrock Guardrails",
         "correct": false,
-        "why": "Temperature affects randomness and has nothing to do with sourcing."
+        "why": "A grounding check blocks answers that are not supported by the context, but it does not show reviewers which documents were used."
       }
     ],
     "explanation": {
@@ -430,9 +430,9 @@
       },
       {
         "key": "C",
-        "text": "Whether the model name is short",
+        "text": "The number of GPUs in the provider's training cluster",
         "correct": false,
-        "why": "A model's name does not affect its capabilities or cost."
+        "why": "How a provider trained the model is not something you can evaluate or use. Selection is based on the model's observable cost, speed, quality and capabilities."
       },
       {
         "key": "D",
@@ -442,9 +442,9 @@
       },
       {
         "key": "E",
-        "text": "The color of the provider's logo",
+        "text": "The embedding dimension used by the team's knowledge base",
         "correct": false,
-        "why": "Branding has no bearing on model suitability."
+        "why": "Embedding dimension is a setting of the retrieval system, chosen separately. It does not determine which chat model to select."
       }
     ],
     "explanation": {
@@ -478,27 +478,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Choose a larger, more capable model, accepting higher cost and latency because the task requires it",
+        "text": "Choose the larger model and accept its higher cost and latency",
         "correct": true,
         "why": "When smaller models fail the quality bar on complex reasoning, the extra cost of a more capable model is justified."
       },
       {
         "key": "B",
-        "text": "Choose a model at random",
+        "text": "Choose a smaller model and lower its temperature",
         "correct": false,
-        "why": "Random selection ignores the evaluation results."
+        "why": "Lower temperature makes outputs more consistent, but it does not give a small model the reasoning ability to catch subtle clauses."
       },
       {
         "key": "C",
-        "text": "Choose an image-generation model",
+        "text": "Choose a smaller model and raise its maximum output tokens",
         "correct": false,
-        "why": "The task is text reasoning, not image generation."
+        "why": "Allowing longer outputs does not improve reasoning quality. The small model would still miss subtle clauses."
       },
       {
         "key": "D",
-        "text": "Choose the smallest model to minimize cost, even though it misses clauses",
+        "text": "Choose the smallest model and accept some missed clauses",
         "correct": false,
-        "why": "Missing clauses in legal review creates risk that outweighs the savings."
+        "why": "Missed clauses in contract review create legal risk that outweighs the cost savings."
       }
     ],
     "explanation": {
@@ -527,27 +527,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Generate the answer, then embed the question, then retrieve passages",
+        "text": "Retrieve chunks, embed the question, generate the answer, add the chunks",
         "correct": false,
-        "why": "Retrieval must happen before generation so the model can use the retrieved passages."
+        "why": "Chunks cannot be retrieved before the question is embedded, and adding them after generation means the model never uses them."
       },
       {
         "key": "B",
-        "text": "Embed the question, search the vector store for similar chunks, add the retrieved chunks to the prompt, then generate the answer",
+        "text": "Embed the question, retrieve similar chunks, add them to the prompt, generate",
         "correct": true,
-        "why": "This is the RAG query flow: retrieve relevant context by similarity, augment the prompt, then generate."
+        "why": "This is the RAG query flow: retrieve relevant context by similarity, augment the prompt with it, then generate the answer."
       },
       {
         "key": "C",
-        "text": "Fine-tune the model on the question, then answer",
+        "text": "Embed the question, generate a draft, retrieve chunks, then correct the draft",
         "correct": false,
-        "why": "RAG does not train the model per question."
+        "why": "Generating before retrieval means the first answer is not grounded. Standard RAG retrieves first so the model answers from the context."
       },
       {
         "key": "D",
-        "text": "Translate the question, then generate an image",
+        "text": "Generate the answer, embed it, then retrieve chunks to cite as sources",
         "correct": false,
-        "why": "These steps are unrelated to answering questions with retrieved documents."
+        "why": "Retrieving after generation can find supporting passages, but the answer itself was not grounded in them, so it can still be wrong."
       }
     ],
     "explanation": {
@@ -576,27 +576,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Sorting invoices by date",
+        "text": "A model that forecasts next quarter's sales from history",
         "correct": false,
-        "why": "Sorting is deterministic and needs no generative model."
+        "why": "Sales forecasting uses numeric time-series data. It does not involve retrieving documents to answer questions."
       },
       {
         "key": "B",
-        "text": "Predicting tomorrow's temperature from sensor readings",
+        "text": "A tool that generates marketing images from text prompts",
         "correct": false,
-        "why": "Weather prediction from sensor data is a forecasting problem."
+        "why": "Image generation creates new content from a prompt. It does not need to retrieve facts from a document collection."
       },
       {
         "key": "C",
-        "text": "An employee assistant that answers HR and IT questions from internal handbooks and wikis",
+        "text": "An assistant that answers HR questions from internal handbooks",
         "correct": true,
-        "why": "Answering from internal documents is the core RAG use case, grounding responses in company knowledge."
+        "why": "Answering from a specific body of internal documents is the core RAG use case: retrieve the relevant passages, then generate the answer."
       },
       {
         "key": "D",
-        "text": "Generating abstract art with no reference material",
+        "text": "A classifier that flags fraudulent card transactions",
         "correct": false,
-        "why": "Abstract art generation does not need retrieved documents."
+        "why": "Fraud detection is a classification task on transaction data, usually best served by a traditional ML model."
       }
     ],
     "explanation": {
@@ -626,27 +626,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Prompt caching permanently trains the model on the prompt",
+        "text": "The model learns the prompt so it no longer needs to be sent",
         "correct": false,
-        "why": "Caching does not change model weights. It reuses processed context temporarily."
+        "why": "Prompt caching does not train the model. The prompt is still sent; the processed prefix is reused for a limited time."
       },
       {
         "key": "B",
-        "text": "Prompt caching is only for image models",
+        "text": "It expands the context window for long reference documents",
         "correct": false,
-        "why": "Prompt caching applies to supported text and multimodal models with repeated prompt content."
+        "why": "Caching does not change the context window. The model's maximum input length stays the same."
       },
       {
         "key": "C",
-        "text": "Prompt caching makes the model more creative",
+        "text": "Identical questions are answered from stored responses",
         "correct": false,
-        "why": "Caching affects cost and latency, not creativity."
+        "why": "That describes response caching in an application. Prompt caching reuses the processed prompt prefix; the model still generates a new response."
       },
       {
         "key": "D",
-        "text": "Prompt caching can significantly reduce cost and latency for repeated prompt prefixes, which matches this workload",
+        "text": "It cuts cost and latency when a long prompt prefix is reused",
         "correct": true,
-        "why": "Caching the repeated prefix means it is not fully reprocessed and billed at the full rate on every request."
+        "why": "Cached prefix tokens are billed at a reduced rate and processed faster, which suits sending the same long system prompt and document every time."
       }
     ],
     "explanation": {
@@ -676,27 +676,27 @@
     "options": [
       {
         "key": "A",
-        "text": "The maximum output tokens setting is too low; increase it or ask for more concise answers",
+        "text": "The max tokens limit is too low; raise it or ask for shorter answers",
         "correct": true,
-        "why": "Responses stopping at exactly the same token count indicate the max-tokens limit is truncating them."
+        "why": "Responses stopping at exactly the same token count mean the max tokens setting is truncating them."
       },
       {
         "key": "B",
-        "text": "The model needs fine-tuning",
+        "text": "A stop sequence is triggering early; remove the stop sequences",
         "correct": false,
-        "why": "Truncation at a fixed length is a configuration issue, not a training issue."
+        "why": "A stop sequence ends output at a specific string, so cut-offs would vary in length. Stopping at exactly 100 tokens every time points to the length limit."
       },
       {
         "key": "C",
-        "text": "The embedding model is wrong; replace it",
+        "text": "The context window is full; shorten the input prompt",
         "correct": false,
-        "why": "Embedding models are used for retrieval and do not truncate generated responses."
+        "why": "A full context window causes errors or truncated input, not output that consistently stops at exactly 100 tokens."
       },
       {
         "key": "D",
-        "text": "The temperature is too low; increase it",
+        "text": "The temperature is too low; increase it for longer answers",
         "correct": false,
-        "why": "Temperature affects randomness, not response length cutoffs."
+        "why": "Temperature affects how random the wording is, not how long responses can be."
       }
     ],
     "explanation": {
@@ -726,27 +726,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Use an image-generation model",
+        "text": "Retrieve more chunks for each query",
         "correct": false,
-        "why": "Image generation is irrelevant to text retrieval quality."
+        "why": "Retrieving more chapter-sized chunks adds even more unrelated text to the prompt, which makes the problem worse."
       },
       {
         "key": "B",
-        "text": "Use smaller, more focused chunks (or a hierarchical or semantic chunking strategy) so retrieved passages match the question more precisely",
+        "text": "Split documents into smaller, focused chunks",
         "correct": true,
-        "why": "Smaller, coherent chunks make similarity search more precise and reduce irrelevant content in the prompt."
+        "why": "Smaller, coherent chunks (or semantic or hierarchical chunking) make similarity search precise, so retrieved passages match the question."
       },
       {
         "key": "C",
-        "text": "Increase the temperature",
+        "text": "Use an embedding model with more dimensions",
         "correct": false,
-        "why": "Randomness does not fix retrieval of the wrong content."
+        "why": "A better embedding model cannot fix chunks that each mix many topics; every chunk's vector still blends unrelated content."
       },
       {
         "key": "D",
-        "text": "Remove the vector store and send no context",
+        "text": "Lower the temperature so answers stick to the context",
         "correct": false,
-        "why": "Without retrieval, the model loses access to the manuals entirely."
+        "why": "Temperature affects generation, not which passages are retrieved. The wrong chapters would still be in the prompt."
       }
     ],
     "explanation": {
@@ -828,27 +828,27 @@
     "options": [
       {
         "key": "A",
-        "text": "High temperature for both",
+        "text": "High temperature for both applications",
         "correct": false,
-        "why": "High randomness would make extraction inconsistent."
+        "why": "High randomness would make the extractor's structured output inconsistent from run to run."
       },
       {
         "key": "B",
-        "text": "High temperature for the extractor and low for the story generator",
+        "text": "High for the extractor and low for the story generator",
         "correct": false,
-        "why": "This is reversed: extraction needs low randomness and creative writing benefits from higher randomness."
+        "why": "This is reversed: extraction needs low randomness, and creative writing benefits from higher randomness."
       },
       {
         "key": "C",
-        "text": "Temperature 0 for both",
+        "text": "Temperature 0 for both applications",
         "correct": false,
-        "why": "Zero temperature would make stories repetitive and dull."
+        "why": "Near-zero temperature would make the children's stories repetitive and predictable."
       },
       {
         "key": "D",
-        "text": "Low temperature for the extractor and higher temperature for the story generator",
+        "text": "Low for the extractor and higher for the story generator",
         "correct": true,
-        "why": "Extraction needs consistency, so low randomness; storytelling benefits from variety, so higher randomness."
+        "why": "Extraction needs consistent output, so low randomness; storytelling benefits from variety, so higher randomness."
       }
     ],
     "explanation": {
@@ -878,27 +878,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Attach metadata (such as country) to documents and apply metadata filters at retrieval time based on the user's location",
+        "text": "Tag documents by country and filter retrieval on the user's country",
         "correct": true,
-        "why": "Metadata filtering restricts retrieval to documents relevant to the user's country, preventing answers from the wrong policy set."
+        "why": "Metadata filtering restricts retrieval to the policies that apply to the user, so German employees get German policies."
       },
       {
         "key": "B",
-        "text": "Increase the temperature",
+        "text": "Lower the temperature so answers follow the documents closely",
         "correct": false,
-        "why": "Temperature does not influence which documents are retrieved."
+        "why": "The model is already following documents; they are just the wrong country's. Temperature does not change which documents are retrieved."
       },
       {
         "key": "C",
-        "text": "Remove all German documents",
+        "text": "Add a reranker to reorder the retrieved passages",
         "correct": false,
-        "why": "That would make correct German answers impossible."
+        "why": "A reranker scores relevance to the question, but US and German policies on the same topic are equally relevant. It cannot know the user's country."
       },
       {
         "key": "D",
-        "text": "Use a larger max-token setting",
+        "text": "Fine-tune the model on the German HR policies",
         "correct": false,
-        "why": "Longer outputs do not fix retrieving the wrong documents."
+        "why": "Fine-tuning does not control retrieval, would need repeating for every country, and would not stop US documents from being retrieved."
       }
     ],
     "explanation": {
@@ -928,27 +928,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Embed every row of the warehouse as text and use vector similarity search to sum values",
+        "text": "Embed each table row and use vector search to find the totals",
         "correct": false,
-        "why": "Vector search finds similar text. It cannot reliably compute totals across many rows."
+        "why": "Vector search finds similar text. It cannot reliably add up values across many rows to compute totals."
       },
       {
         "key": "B",
-        "text": "Use a capability that converts the natural-language question into a SQL query against the structured data, such as structured data retrieval in Amazon Bedrock Knowledge Bases",
+        "text": "Generate SQL from the question and run it against the warehouse",
         "correct": true,
-        "why": "Aggregations over tables require generating and running queries. Text-to-SQL retrieval computes accurate numbers from structured data."
+        "why": "Text-to-SQL (for example structured data retrieval in Bedrock Knowledge Bases) computes accurate totals from the tables and grounds the answer in them."
       },
       {
         "key": "C",
-        "text": "Ask the model to guess the totals from its training data",
+        "text": "Export the tables to text files and add them to a knowledge base",
         "correct": false,
-        "why": "The model has no knowledge of the company's sales data and would hallucinate numbers."
+        "why": "Document retrieval returns passages, not computed aggregates, so the model would have to guess the totals."
       },
       {
         "key": "D",
         "text": "Fine-tune the model on last quarter's sales report",
         "correct": false,
-        "why": "Fine-tuning does not let a model compute accurate aggregations on current data."
+        "why": "A fine-tuned model cannot query current data and would not compute accurate totals for new questions."
       }
     ],
     "explanation": {
@@ -978,27 +978,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Number of output languages for audio",
+        "text": "Context window: the maximum input length the model accepts",
         "correct": false,
-        "why": "Audio output is not part of the requirement."
+        "why": "Context length matters for long inputs, but the requirement here is adapting the model's tone and terminology with examples."
       },
       {
         "key": "B",
-        "text": "The model's release year only",
+        "text": "Modality: whether the model accepts images as input",
         "correct": false,
-        "why": "Release year alone does not tell you whether customization is supported."
+        "why": "Modality is a valid criterion, but nothing in the scenario involves images."
       },
       {
         "key": "C",
-        "text": "Customization: whether the model supports fine-tuning or other customization in Amazon Bedrock",
+        "text": "Customization: whether the model supports fine-tuning in Bedrock",
         "correct": true,
-        "why": "Only some models support customization methods in Bedrock, so this requirement narrows the choice."
+        "why": "Only some models support fine-tuning in Amazon Bedrock, so planning to adapt tone with examples makes this the deciding criterion."
       },
       {
         "key": "D",
-        "text": "Image resolution",
+        "text": "Latency: how quickly the model starts responding",
         "correct": false,
-        "why": "Image resolution is irrelevant to adapting text tone and terminology."
+        "why": "Latency is a valid criterion, but the scenario's stated need is future customization."
       }
     ],
     "explanation": {
@@ -1085,27 +1085,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Model X, because quality always outweighs latency",
+        "text": "Model X, because higher quality outweighs a slower start",
         "correct": false,
-        "why": "In interactive applications, slow responses can cause users to leave before seeing any answer."
+        "why": "Model Y already meets the quality bar, and research shows the slow start makes users abandon the chat."
       },
       {
         "key": "B",
-        "text": "Neither, because latency cannot be measured",
+        "text": "Model X with response streaming enabled",
         "correct": false,
-        "why": "Latency is measurable and is a standard selection criterion."
+        "why": "Streaming shows tokens as they are generated, but Model X is slow to produce its first token, which is the delay users notice."
       },
       {
         "key": "C",
-        "text": "Model X with a higher temperature",
+        "text": "Model X with a lower maximum output token limit",
         "correct": false,
-        "why": "Temperature only changes how random the output is. It does not make Model X respond any faster."
+        "why": "Capping output length shortens long answers but does not make the first token arrive sooner."
       },
       {
         "key": "D",
-        "text": "Model Y, because latency strongly affects user experience and it meets the quality requirement",
+        "text": "Model Y, because it meets the quality bar and responds quickly",
         "correct": true,
-        "why": "When both models meet quality needs, the faster one better serves an interactive experience where delays cause abandonment."
+        "why": "When both models meet quality needs, the faster one better serves an interactive feature where delays cause abandonment."
       }
     ],
     "explanation": {
@@ -1136,27 +1136,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Instruct the model to answer only from the provided context and to say \"I don't know\" otherwise, and enable a contextual grounding check in Amazon Bedrock Guardrails",
+        "text": "Restrict answers to the provided context and add a contextual grounding check",
         "correct": true,
-        "why": "Explicit grounding instructions plus an automated grounding check reduce answers that are unsupported by the retrieved sources."
+        "why": "Explicit grounding instructions plus an automated grounding check reduce answers that go beyond the retrieved sources."
       },
       {
         "key": "B",
-        "text": "Switch to an embedding model for generation",
+        "text": "Retrieve more chunks per query so every answer is covered",
         "correct": false,
-        "why": "Embedding models produce vectors, not answers."
+        "why": "More context can help coverage, but it does not stop the model from adding facts that are not in the documents."
       },
       {
         "key": "C",
-        "text": "Raise the temperature to make answers more complete",
+        "text": "Fine-tune the model on the same documents as the knowledge base",
         "correct": false,
-        "why": "Higher randomness increases the chance of unsupported content."
+        "why": "Fine-tuning adds knowledge to the weights but does not make the model refuse when the answer is missing from the retrieved context."
       },
       {
         "key": "D",
-        "text": "Remove the retrieved context to shorten prompts",
+        "text": "Set the temperature to zero so answers are deterministic",
         "correct": false,
-        "why": "Without context, the model has nothing to ground its answers in."
+        "why": "Deterministic output can still contain unsupported claims. Temperature does not enforce grounding."
       }
     ],
     "explanation": {
@@ -1185,27 +1185,27 @@
     "options": [
       {
         "key": "A",
-        "text": "The model generates only one token in total",
+        "text": "The model generates a single token and then stops",
         "correct": false,
-        "why": "Top-k limits candidate tokens at each step, not the total number of tokens generated."
+        "why": "Top-k limits the candidates at each step, not the total length of the response."
       },
       {
         "key": "B",
-        "text": "The model always picks the single most likely next token, making output highly deterministic",
+        "text": "The model always picks the most likely next token",
         "correct": true,
-        "why": "With k = 1, only the top-ranked token is considered at each step, which is greedy decoding."
+        "why": "With k = 1 only the top-ranked token is considered at each step (greedy decoding), so the output is highly deterministic."
       },
       {
         "key": "C",
-        "text": "The model becomes maximally creative",
+        "text": "The model samples from the top 1% most likely tokens",
         "correct": false,
-        "why": "Restricting candidates to one token removes randomness, the opposite of creativity."
+        "why": "That resembles top-p, which uses a cumulative probability. Top-k uses a fixed number of candidate tokens."
       },
       {
         "key": "D",
-        "text": "The model retrieves one document from a knowledge base",
+        "text": "The model returns only the top-ranked retrieved passage",
         "correct": false,
-        "why": "Top-k in inference parameters controls token sampling, not retrieval (although retrieval also has a similar number-of-results setting)."
+        "why": "Retrieval has its own result-count setting. Top-k in inference parameters controls token sampling."
       }
     ],
     "explanation": {

@@ -112,27 +112,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Indirect prompt injection through retrieved content",
+        "text": "Indirect prompt injection through retrieved web content",
         "correct": true,
-        "why": "Instructions hidden in data the model processes, rather than in the user's prompt, manipulate the model's output."
+        "why": "Instructions hidden in content the model processes, rather than in the user's prompt, manipulate the output. That is indirect prompt injection."
       },
       {
         "key": "B",
-        "text": "Overfitting",
+        "text": "Jailbreaking by the user to bypass safety rules",
         "correct": false,
-        "why": "Overfitting is a training issue, not manipulation through retrieved content."
+        "why": "The user did nothing unusual. The malicious instruction came from the web page the assistant summarized."
       },
       {
         "key": "C",
-        "text": "Underfitting",
+        "text": "Poisoning of the model's training data",
         "correct": false,
-        "why": "Underfitting concerns model training quality."
+        "why": "Nothing was added to training data. The instruction was picked up at runtime from a page the assistant read."
       },
       {
         "key": "D",
-        "text": "Token pricing",
+        "text": "Hallucination caused by missing context",
         "correct": false,
-        "why": "Pricing is unrelated to malicious instructions."
+        "why": "The model did not invent the advice; it repeated an instruction planted in the content it retrieved."
       }
     ],
     "explanation": {
@@ -166,27 +166,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Overfitting; add regularization",
+        "text": "Jailbreaking; add a Guardrails prompt attack filter",
         "correct": false,
-        "why": "Leaking a system prompt is a prompt-handling problem, not a training problem, so regularization would not help."
+        "why": "A prompt attack filter helps detect extraction attempts, but secrets in a prompt remain at risk. The root fix is keeping them out of prompts."
       },
       {
         "key": "B",
-        "text": "Prompt exposure (prompt leaking); never place secrets or sensitive data in prompts, and keep credentials in a secrets manager accessed by the application, not the model",
+        "text": "Prompt leaking; keep secrets out of prompts, in a secrets manager",
         "correct": true,
-        "why": "Anything in a prompt can potentially be extracted, so secrets must never be placed there."
+        "why": "Anything in a prompt can potentially be extracted. Credentials belong in a service such as Secrets Manager, used by the application, never sent to the model."
       },
       {
         "key": "C",
-        "text": "Data drift; retrain the model",
+        "text": "Hallucination; lower the temperature",
         "correct": false,
-        "why": "This is not a change in data distribution. Retraining would not prevent prompt extraction."
+        "why": "The bot revealed real content from its prompt; nothing was invented, and temperature would not prevent extraction."
       },
       {
         "key": "D",
-        "text": "Hallucination; lower the temperature",
+        "text": "Data poisoning; validate the training data",
         "correct": false,
-        "why": "The model revealed real content, not invented content."
+        "why": "No training data was involved. The sensitive details were placed directly in the system prompt."
       }
     ],
     "explanation": {
@@ -215,27 +215,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Model distillation",
+        "text": "Indirect prompt injection through retrieved content",
         "correct": false,
-        "why": "Distillation is a legitimate training technique."
+        "why": "Injection hides instructions for the model to follow. Here the attacker planted false facts, which corrupts the knowledge source instead."
       },
       {
         "key": "B",
-        "text": "Prompt caching",
+        "text": "Hallucination caused by gaps in the documents",
         "correct": false,
-        "why": "Prompt caching is a cost optimization, not an attack."
+        "why": "The model is faithfully repeating what it retrieved; the documents themselves are false."
       },
       {
         "key": "C",
-        "text": "Poisoning of the data that the model relies on",
+        "text": "Poisoning of the knowledge source the model relies on",
         "correct": true,
-        "why": "Introducing malicious or false data into training or retrieval sources corrupts the model's outputs; this is poisoning."
+        "why": "Deliberately inserting false data into the sources a model learns from or retrieves from is poisoning."
       },
       {
         "key": "D",
-        "text": "Temperature tuning",
+        "text": "Prompt leaking of the knowledge base contents",
         "correct": false,
-        "why": "Temperature is an inference parameter, not an attack."
+        "why": "Leaking means sensitive content is revealed. Here false content was added to the source."
       }
     ],
     "explanation": {
@@ -264,27 +264,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Data residency; move Regions",
+        "text": "Prompt leaking; remove sensitive details from the system prompt",
         "correct": false,
-        "why": "Changing Regions does not stop misuse of the application."
+        "why": "Nobody extracted the prompt. Outsiders are using the chatbot for tasks it was never meant for."
       },
       {
         "key": "B",
-        "text": "Underfitting; train the model longer",
+        "text": "Jailbreaking; enable the Guardrails prompt attack filter",
         "correct": false,
-        "why": "This is misuse of the application, not a model training problem."
+        "why": "The users are not bypassing safety rules to get harmful content; they are redirecting the app to unrelated work at the company's expense."
       },
       {
         "key": "C",
-        "text": "Hallucination; add citations",
+        "text": "Data poisoning; validate the chatbot's knowledge sources",
         "correct": false,
-        "why": "The issue is unintended use, not fabricated content."
+        "why": "No sources were corrupted. The problem is misuse of the application's scope."
       },
       {
         "key": "D",
-        "text": "Prompt hijacking (misusing the application for unintended tasks); restrict scope with instructions, denied topics in guardrails, input validation and rate limits",
+        "text": "Hijacking; restrict scope with denied topics, validation and rate limits",
         "correct": true,
-        "why": "The application is being redirected to tasks it was not built for. Scope restrictions, guardrails and rate limits reduce misuse."
+        "why": "Redirecting an application to unintended tasks is hijacking. Tight scoping, guardrail denied topics, input checks and rate limits reduce it."
       }
     ],
     "explanation": {
@@ -314,27 +314,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Amazon Bedrock Guardrails content filters, including the prompt attack filter",
+        "text": "Guardrails content filters with the prompt attack filter",
         "correct": true,
-        "why": "Guardrails includes a prompt attack category that detects jailbreak and prompt injection attempts in inputs."
+        "why": "The prompt attack filter detects jailbreak and prompt injection attempts in user input before it reaches the model."
       },
       {
         "key": "B",
-        "text": "Amazon Bedrock batch inference",
+        "text": "Guardrails sensitive information filters for PII",
         "correct": false,
-        "why": "Batch inference runs prompts asynchronously and offers no attack detection."
+        "why": "These filters mask or block personal data. They do not detect attempts to override the model's instructions."
       },
       {
         "key": "C",
-        "text": "Amazon Bedrock Provisioned Throughput",
+        "text": "Guardrails contextual grounding checks",
         "correct": false,
-        "why": "Provisioned Throughput reserves capacity and does not inspect prompts."
+        "why": "Grounding checks flag responses not supported by the source documents. They do not inspect inputs for attacks."
       },
       {
         "key": "D",
-        "text": "Amazon Titan Text Embeddings",
+        "text": "Bedrock model invocation logging",
         "correct": false,
-        "why": "Embedding models create vectors and do not block attacks."
+        "why": "Logging records requests for later review but does not block anything before it reaches the model."
       }
     ],
     "explanation": {
@@ -364,27 +364,27 @@
     "options": [
       {
         "key": "A",
-        "text": "AWS Artifact",
+        "text": "Bedrock Flows, which chain prompts into a workflow",
         "correct": false,
-        "why": "Artifact provides compliance reports, not prompt version control."
+        "why": "Flows orchestrate steps. They do not provide versioned, shared prompts that teams can pin to and roll back."
       },
       {
         "key": "B",
-        "text": "Amazon Bedrock Prompt Management, which stores prompts with versions that applications can reference",
+        "text": "Bedrock Prompt Management, which versions prompts",
         "correct": true,
-        "why": "Prompt Management lets teams create, version and reuse prompts, so applications can pin to a tested version and roll back."
+        "why": "Prompt Management stores prompts with immutable versions, so applications can pin to a tested version and roll back."
       },
       {
         "key": "C",
-        "text": "Amazon Bedrock Provisioned Throughput",
+        "text": "Bedrock model invocation logging, which records prompts",
         "correct": false,
-        "why": "Provisioned Throughput is about capacity, not prompt versioning."
+        "why": "Logging shows what was sent after the fact, but it does not stop one team's edit from changing everyone's prompt."
       },
       {
         "key": "D",
-        "text": "Amazon Polly",
+        "text": "Bedrock Guardrails, which filter prompt content",
         "correct": false,
-        "why": "Polly converts text to speech. It has no features for storing or versioning prompts."
+        "why": "Guardrails block harmful or off-policy content; they do not manage prompt versions."
       }
     ],
     "explanation": {
@@ -414,27 +414,27 @@
     "options": [
       {
         "key": "A",
-        "text": "It retrains the model with each prompt variant",
+        "text": "It fine-tunes the model on the best-performing variant",
         "correct": false,
-        "why": "Prompt Management does not train models."
+        "why": "Prompt Management does not train models. It stores and versions prompts and their settings."
       },
       {
         "key": "B",
-        "text": "It replaces the need for evaluation entirely",
+        "text": "It automatically chooses and deploys the best variant",
         "correct": false,
-        "why": "Systematic evaluation is still needed to judge which variant performs best across many inputs."
+        "why": "You compare variants and decide; it does not pick a winner or deploy it for you."
       },
       {
         "key": "C",
-        "text": "It supports creating prompt variants, testing and comparing them, and saving the chosen configuration as a version",
+        "text": "It lets you create and compare variants, then save one as a version",
         "correct": true,
-        "why": "Prompt Management includes variants for comparison and versioning for controlled deployment."
+        "why": "Prompt Management supports variants with different models or settings, side-by-side comparison, and saving a chosen configuration as a version."
       },
       {
         "key": "D",
-        "text": "It can only store one prompt per AWS account",
+        "text": "It stores prompts, but each prompt can have only one variant",
         "correct": false,
-        "why": "An account can store many prompts and versions in Prompt Management, not just one."
+        "why": "A prompt can have multiple variants for comparison."
       }
     ],
     "explanation": {
@@ -471,15 +471,15 @@
       },
       {
         "key": "B",
-        "text": "Store the API keys for the email system in the system prompt",
+        "text": "Rely on a system prompt telling the agent to ignore instructions in emails",
         "correct": false,
-        "why": "Secrets in prompts can be leaked through injection or exposure."
+        "why": "A system-prompt instruction helps but is soft guidance that injected text can override. On its own it is not an adequate defense."
       },
       {
         "key": "C",
-        "text": "Grant the agent full access to all company mailboxes",
+        "text": "Fine-tune the agent's model on examples of injection attempts",
         "correct": false,
-        "why": "Broad access increases the damage an injected instruction could cause."
+        "why": "Fine-tuning may reduce some attacks but is costly and does not limit what a successfully manipulated agent can do."
       },
       {
         "key": "D",
@@ -525,21 +525,21 @@
     "options": [
       {
         "key": "A",
-        "text": "AWS Config",
+        "text": "Amazon Bedrock Agents",
         "correct": false,
-        "why": "Config evaluates resource configurations."
+        "why": "Agents decide steps dynamically with action groups and knowledge bases; they do not have workflow nodes that reference managed prompt versions."
       },
       {
         "key": "B",
-        "text": "Amazon Inspector",
+        "text": "Amazon Bedrock Knowledge Bases",
         "correct": false,
-        "why": "Inspector scans for software vulnerabilities."
+        "why": "Knowledge Bases provide retrieval for RAG. They are not a workflow builder."
       },
       {
         "key": "C",
-        "text": "Amazon Macie",
+        "text": "Amazon Bedrock Guardrails",
         "correct": false,
-        "why": "Macie discovers sensitive data in S3 and does not run workflows."
+        "why": "Guardrails filter content in prompts and responses; they do not orchestrate workflow steps."
       },
       {
         "key": "D",
@@ -578,27 +578,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Validate and sanitize model outputs before displaying them, for example escaping HTML and allowing only approved link domains",
+        "text": "Escape HTML and allow only approved link domains before display",
         "correct": true,
-        "why": "Treating model output as untrusted and sanitizing it prevents injected links or scripts from harming users."
+        "why": "Treating model output as untrusted and sanitizing it prevents injected links or scripts from reaching users."
       },
       {
         "key": "B",
-        "text": "Display model output exactly as generated",
+        "text": "Lower the temperature so outputs are more predictable",
         "correct": false,
-        "why": "Raw output could contain harmful content inserted through injection."
+        "why": "Predictable output can still contain an injected link or script; temperature does not sanitize anything."
       },
       {
         "key": "C",
-        "text": "Increase max tokens",
+        "text": "Instruct the model not to include links or code in answers",
         "correct": false,
-        "why": "Length limits do not address harmful content."
+        "why": "Instructions can be overridden by injected content, so the page would still be exposed without output validation."
       },
       {
         "key": "D",
-        "text": "Increase temperature",
+        "text": "Log every response so harmful ones can be found later",
         "correct": false,
-        "why": "Randomness does not remove harmful content."
+        "why": "Logging helps investigations but does not stop harmful content from being displayed in the first place."
       }
     ],
     "explanation": {
@@ -676,27 +676,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Split the document into random fragments",
+        "text": "Move the question before the document instead of after it",
         "correct": false,
-        "why": "Random fragmentation destroys context and does not help with format."
+        "why": "The format instruction would still be far from where the model writes its answer, so it would still be underweighted."
       },
       {
         "key": "B",
-        "text": "Increase temperature",
+        "text": "Lower the temperature so the format is followed",
         "correct": false,
-        "why": "More randomness reduces instruction following."
+        "why": "Temperature reduces randomness but does not fix an instruction the model is effectively overlooking."
       },
       {
         "key": "C",
-        "text": "Restate the key instructions and output format after the document, close to the question",
+        "text": "Restate the format instruction after the document, near the question",
         "correct": true,
-        "why": "With long contexts, placing or repeating key instructions near the question helps the model apply them."
+        "why": "In long prompts, putting or repeating key instructions next to the question helps the model apply them."
       },
       {
         "key": "D",
-        "text": "Remove the format instruction entirely",
+        "text": "Use a model with a larger context window",
         "correct": false,
-        "why": "Removing the instruction makes compliance even less likely."
+        "why": "The document already fits. The issue is where the instruction sits, not the input limit."
       }
     ],
     "explanation": {
@@ -726,27 +726,27 @@
     "options": [
       {
         "key": "A",
-        "text": "A good system prompt guarantees safety",
+        "text": "A detailed prompt is enough if it lists every banned topic",
         "correct": false,
-        "why": "Jailbreaks and injections show that prompts alone cannot guarantee safety."
+        "why": "Listing topics helps, but determined users can still find phrasings and tricks that get around prompt instructions."
       },
       {
         "key": "B",
-        "text": "Prompt engineering is only useful for image models",
+        "text": "Safety comes mainly from choosing the largest available model",
         "correct": false,
-        "why": "Prompt engineering applies to text and multimodal models."
+        "why": "Larger models can still be jailbroken; model size is not a safety control."
       },
       {
         "key": "C",
-        "text": "Guardrails are unnecessary if the model is large",
+        "text": "Setting temperature to zero prevents harmful outputs",
         "correct": false,
-        "why": "Model size does not remove the need for safety controls."
+        "why": "Temperature controls randomness, not safety. A deterministic model can still produce harmful content."
       },
       {
         "key": "D",
-        "text": "Prompts are soft guidance that determined users can sometimes circumvent, so safety requires additional controls such as guardrails, monitoring and testing",
+        "text": "Prompts are soft guidance; add guardrails, monitoring and testing",
         "correct": true,
-        "why": "Prompt instructions influence but do not enforce behavior. Defense in depth is needed for public applications."
+        "why": "Instructions influence but do not enforce behavior, so public apps need layered controls such as guardrails, monitoring and red-teaming."
       }
     ],
     "explanation": {
@@ -776,27 +776,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Versioning prompts in Prompt Management and logging which prompt version each request used",
+        "text": "Version prompts in Prompt Management and log the version per request",
         "correct": true,
-        "why": "Versioned prompts plus request logging create an audit trail linking outputs to the exact prompt used."
+        "why": "Immutable prompt versions plus request logging link each output to the exact prompt that produced it."
       },
       {
         "key": "B",
-        "text": "Storing prompts only in developers' notes",
+        "text": "Save a copy of the prompt in a shared document after each change",
         "correct": false,
-        "why": "Personal notes are not reliable, controlled records."
+        "why": "A manual copy shows the text but not which version was actually live on a given date, and copies get skipped."
       },
       {
         "key": "C",
-        "text": "Using a higher temperature",
+        "text": "Use AWS CloudTrail to see which prompt each request used",
         "correct": false,
-        "why": "Temperature is unrelated to auditability."
+        "why": "CloudTrail records API calls and who made them, but it does not capture the prompt content sent to the model."
       },
       {
         "key": "D",
-        "text": "Editing the prompt in place whenever needed",
+        "text": "Edit the prompt in place and note changes in release notes",
         "correct": false,
-        "why": "In-place edits overwrite history, making it impossible to know what was used."
+        "why": "In-place edits overwrite history, so the exact prompt used on a past date cannot be proven."
       }
     ],
     "explanation": {
@@ -830,27 +830,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Switch to pre-training",
+        "text": "Use the few-shot prompt, because any accuracy gain is worth it",
         "correct": false,
-        "why": "Pre-training is far more expensive and unnecessary."
+        "why": "A 1% gain at four times the token cost may not be worth it; the decision should weigh quality against cost."
       },
       {
         "key": "B",
-        "text": "Keep the zero-shot prompt unless the 1% improvement is worth four times the cost",
+        "text": "Keep zero-shot unless the 1% gain justifies four times the cost",
         "correct": true,
-        "why": "Prompt techniques should be chosen by balancing quality gains against token cost and latency."
+        "why": "When zero-shot already meets requirements, extra examples are worth it only if the small gain matters more than the much higher cost."
       },
       {
         "key": "C",
-        "text": "Always use few-shot because it is more advanced",
+        "text": "Fine-tune a model to get the gain without the long prompts",
         "correct": false,
-        "why": "More examples are not automatically better when the gain is small and the cost large."
+        "why": "Fine-tuning adds training and hosting cost and effort, which is hard to justify for a 1% gain."
       },
       {
         "key": "D",
-        "text": "Remove instructions to save tokens",
+        "text": "Switch to a larger model for better summaries instead",
         "correct": false,
-        "why": "Removing instructions would hurt quality."
+        "why": "A larger model costs more per token and has not been shown to help; zero-shot already meets requirements."
       }
     ],
     "explanation": {
@@ -881,27 +881,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Use a larger embedding model",
+        "text": "Guardrails denied topic for customer contact details",
         "correct": false,
-        "why": "Embedding models do not filter generated responses."
+        "why": "Denied topics block whole responses about a subject; here the summaries are needed, only the PII must be hidden."
       },
       {
         "key": "B",
-        "text": "Raise the temperature",
+        "text": "Lower the temperature so the model repeats less",
         "correct": false,
-        "why": "Higher temperature adds randomness to the wording but does nothing to detect or remove PII."
+        "why": "Temperature does not detect or remove personal information."
       },
       {
         "key": "C",
-        "text": "Configure Amazon Bedrock Guardrails sensitive information filters to mask or block PII in outputs",
+        "text": "Guardrails sensitive information filters to mask PII",
         "correct": true,
-        "why": "Sensitive information filters detect PII such as phone numbers and emails and can mask or block them in responses."
+        "why": "Sensitive information filters detect PII such as phone numbers and emails and can mask it while keeping the rest of the response."
       },
       {
         "key": "D",
-        "text": "Increase max tokens",
+        "text": "Amazon Macie to scan the assistant's responses",
         "correct": false,
-        "why": "Longer outputs do not prevent PII exposure."
+        "why": "Macie discovers sensitive data stored in Amazon S3; it does not filter model responses in real time."
       }
     ],
     "explanation": {
@@ -987,27 +987,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Use a larger context window",
+        "text": "Add a guardrail denied topic for competitor products",
         "correct": false,
-        "why": "Context size does not affect what the model learned during training."
+        "why": "This might block some outputs after the damage, but the model would still be trained on manipulated data."
       },
       {
         "key": "B",
-        "text": "Train on all submissions without review to maximize data size",
+        "text": "Fine-tune on more data so the bad entries are diluted",
         "correct": false,
-        "why": "Unreviewed data allows poisoning to succeed."
+        "why": "Thousands of coordinated entries can survive dilution, and the poisoned data still shapes the model."
       },
       {
         "key": "C",
-        "text": "Increase the temperature after fine-tuning",
+        "text": "Lower the learning rate during fine-tuning",
         "correct": false,
-        "why": "Temperature does not undo poisoned training."
+        "why": "A lower learning rate changes how fast the model learns, not whether it learns from manipulated examples."
       },
       {
         "key": "D",
-        "text": "Curate and validate fine-tuning data, filtering suspicious or anomalous submissions and controlling data provenance before training",
+        "text": "Curate and validate training data and check its provenance",
         "correct": true,
-        "why": "Data curation and provenance checks stop poisoned examples from entering the training set."
+        "why": "Filtering suspicious or anomalous submissions and controlling where data comes from stops poisoned examples before training."
       }
     ],
     "explanation": {
@@ -1037,27 +1037,27 @@
     "options": [
       {
         "key": "A",
-        "text": "\"If the answer is not in the provided information, say you don't know.\"",
+        "text": "\"If the answer is not in the information provided, say you don't know.\"",
         "correct": true,
-        "why": "Explicitly permitting the model to say it does not know reduces pressure to fabricate an answer."
+        "why": "Permitting the model to admit it does not know reduces the pressure to fabricate an answer."
       },
       {
         "key": "B",
-        "text": "\"Be as creative as possible.\"",
+        "text": "\"Answer as completely and confidently as you can.\"",
         "correct": false,
-        "why": "Creativity increases the chance of invented facts."
+        "why": "Pushing for complete, confident answers encourages the model to fill gaps with invented content."
       },
       {
         "key": "C",
-        "text": "\"Answer in exactly 500 words.\"",
+        "text": "\"Think step by step before giving your final answer.\"",
         "correct": false,
-        "why": "Forcing length can encourage padding with invented content."
+        "why": "Step-by-step reasoning helps logic problems but does not supply missing knowledge; the model can still invent facts."
       },
       {
         "key": "D",
-        "text": "\"Always give an answer, no matter what.\"",
+        "text": "\"Give a detailed answer of at least 300 words.\"",
         "correct": false,
-        "why": "This encourages fabrication when the answer is unknown."
+        "why": "Forcing length encourages padding with invented details when the real answer is short or unknown."
       }
     ],
     "explanation": {
@@ -1087,27 +1087,27 @@
     "options": [
       {
         "key": "A",
-        "text": "They are sent literally to the model as curly-brace text",
+        "text": "They are sent to the model as literal curly-brace text",
         "correct": false,
-        "why": "Variables are substituted with real values before invocation."
+        "why": "Variables are replaced with real values before the prompt is sent."
       },
       {
         "key": "B",
-        "text": "They are variables that the application fills in with actual values when invoking the prompt",
+        "text": "The application supplies values that replace them at runtime",
         "correct": true,
-        "why": "Variables let one prompt template serve many requests with different inputs."
+        "why": "Prompt templates use variables that the application fills in when it invokes the prompt, so one template serves many requests."
       },
       {
         "key": "C",
-        "text": "They trigger fine-tuning",
+        "text": "Bedrock fills them in automatically from a knowledge base",
         "correct": false,
-        "why": "Filling in template variables happens at request time and never triggers any model training."
+        "why": "Bedrock does not populate variables from a knowledge base; the caller provides the values."
       },
       {
         "key": "D",
-        "text": "They are embedding vectors",
+        "text": "The model infers suitable values from the conversation",
         "correct": false,
-        "why": "They are placeholders for text values, not vectors."
+        "why": "The model never sees the placeholders as questions to fill; they must be supplied before invocation."
       }
     ],
     "explanation": {
@@ -1136,27 +1136,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Increase the temperature",
+        "text": "Lower the temperature so labels are more consistent",
         "correct": false,
-        "why": "Randomness makes classification less consistent."
+        "why": "Consistent but wrong labels do not help; the model still does not understand how the similar categories differ."
       },
       {
         "key": "B",
-        "text": "Remove the category list",
+        "text": "Use chain-of-thought so the model reasons about each email",
         "correct": false,
-        "why": "Without the categories, the model cannot classify correctly."
+        "why": "Reasoning helps somewhat, but without definitions and examples the model still lacks the company-specific distinctions."
       },
       {
         "key": "C",
-        "text": "Few-shot prompting with clear category definitions and examples that show how similar categories differ",
+        "text": "Add category definitions and examples that contrast similar ones",
         "correct": true,
-        "why": "Definitions plus targeted examples help the model learn the distinctions between similar categories."
+        "why": "Definitions plus few-shot examples for easily confused categories teach the model the distinctions it is missing."
       },
       {
         "key": "D",
-        "text": "Pre-train a new model from scratch",
+        "text": "Fine-tune a model before trying other prompt changes",
         "correct": false,
-        "why": "Pre-training is far too costly as a next step."
+        "why": "Fine-tuning is costlier and slower; better instructions and examples should be tried first."
       }
     ],
     "explanation": {

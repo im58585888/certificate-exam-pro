@@ -14,27 +14,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Area under the ROC curve",
+        "text": "BLEU",
         "correct": false,
-        "why": "AUC evaluates binary classifiers, not generated summaries."
+        "why": "BLEU also measures n-gram overlap with references, but it is precision-oriented and was designed for machine translation, not summarization."
       },
       {
         "key": "B",
-        "text": "ROUGE (Recall-Oriented Understudy for Gisting Evaluation)",
+        "text": "ROUGE",
         "correct": true,
-        "why": "ROUGE measures overlap of n-grams and sequences between generated and reference text and is a standard summarization metric."
+        "why": "ROUGE (Recall-Oriented Understudy for Gisting Evaluation) measures word and phrase overlap with reference summaries and is the standard summarization metric."
       },
       {
         "key": "C",
-        "text": "Precision at a fixed threshold for fraud",
+        "text": "BERTScore",
         "correct": false,
-        "why": "This is a classification metric unrelated to summarization."
+        "why": "BERTScore compares meaning using embeddings rather than counting overlapping words and phrases."
       },
       {
         "key": "D",
-        "text": "Root mean squared error",
+        "text": "Perplexity",
         "correct": false,
-        "why": "RMSE measures numeric prediction error for regression, not text overlap."
+        "why": "Perplexity measures how well a model predicts text and needs no reference summary, so it does not compare against human-written summaries."
       }
     ],
     "explanation": {
@@ -163,27 +163,27 @@
     "options": [
       {
         "key": "A",
-        "text": "LLM-as-a-judge, where an evaluator model scores responses against defined criteria",
+        "text": "LLM-as-a-judge scoring responses against a rubric",
         "correct": true,
-        "why": "An evaluator LLM can assess qualities such as helpfulness and correctness at scale, with human spot checks for calibration."
+        "why": "An evaluator model can assess helpfulness, correctness and tone at scale, with human spot checks to calibrate it."
       },
       {
         "key": "B",
-        "text": "Counting the number of words in each response",
+        "text": "BERTScore against reference answers",
         "correct": false,
-        "why": "Length says little about helpfulness or correctness."
+        "why": "BERTScore needs a reference answer for every response and measures similarity, not helpfulness or tone."
       },
       {
         "key": "C",
-        "text": "Asking the chatbot to rate itself with no criteria",
+        "text": "ROUGE against reference answers",
         "correct": false,
-        "why": "Self-rating without criteria or an independent judge is unreliable."
+        "why": "ROUGE counts word overlap with references, which says little about helpfulness or tone."
       },
       {
         "key": "D",
-        "text": "Measuring only response latency",
+        "text": "Human review of a 1% random sample",
         "correct": false,
-        "why": "Response speed says nothing about whether answers are helpful, correct or appropriately toned."
+        "why": "Sampling keeps costs down but covers only a small fraction of the responses; it does not scale evaluation to all of them."
       }
     ],
     "explanation": {
@@ -213,27 +213,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Token count only",
+        "text": "LLM-as-a-judge with an empathy rubric",
         "correct": false,
-        "why": "Counting tokens measures length, which does not indicate whether a response is compassionate."
+        "why": "A judge model scales well, but it is still an automated method, and for such a sensitive use case trained people should judge compassion."
       },
       {
         "key": "B",
-        "text": "Human-in-the-loop evaluation, in which trained reviewers rate responses for empathy and appropriateness",
+        "text": "Human evaluation by trained reviewers",
         "correct": true,
-        "why": "Subjective qualities such as empathy are best judged by people using clear guidelines."
+        "why": "Subjective, high-stakes qualities such as empathy and appropriateness are best judged by trained people using clear guidelines."
       },
       {
         "key": "C",
-        "text": "Inference latency only",
+        "text": "BERTScore against reference condolence messages",
         "correct": false,
-        "why": "Speed does not indicate emotional appropriateness."
+        "why": "Semantic similarity to a reference does not show whether a response feels compassionate to the reader."
       },
       {
         "key": "D",
-        "text": "BLEU score only",
+        "text": "Toxicity scores from automatic evaluation",
         "correct": false,
-        "why": "Word overlap cannot assess empathy or appropriateness."
+        "why": "Low toxicity shows a response is not harmful, not that it is empathetic and appropriate."
       }
     ],
     "explanation": {
@@ -262,27 +262,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Amazon Inspector",
+        "text": "Amazon Bedrock Guardrails",
         "correct": false,
-        "why": "Inspector scans for software vulnerabilities."
+        "why": "Guardrails filter content in production; they do not run evaluation jobs comparing models on a dataset."
       },
       {
         "key": "B",
-        "text": "AWS Cost Explorer",
+        "text": "Amazon Bedrock Prompt Management",
         "correct": false,
-        "why": "Cost Explorer analyzes AWS spending. It does not evaluate or compare model outputs."
+        "why": "Prompt Management compares prompt variants, but it does not run automatic, judge-based and human evaluation jobs across models."
       },
       {
         "key": "C",
         "text": "Amazon Bedrock Model Evaluation",
         "correct": true,
-        "why": "Bedrock Model Evaluation runs evaluation jobs with automatic metrics, LLM-as-a-judge and human workflows on built-in or custom datasets."
+        "why": "Bedrock Model Evaluation runs managed evaluation jobs with automatic metrics, LLM-as-a-judge and human reviewers on your own datasets."
       },
       {
         "key": "D",
-        "text": "AWS Config",
+        "text": "Amazon SageMaker Model Monitor",
         "correct": false,
-        "why": "AWS Config evaluates resource configurations, not model outputs."
+        "why": "Model Monitor tracks deployed models for drift over time; it does not compare candidate foundation models."
       }
     ],
     "explanation": {
@@ -311,27 +311,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Benchmarks measure only latency",
+        "text": "A score above 90% predicts similar results on its claims questions",
         "correct": false,
-        "why": "Most benchmarks measure task performance, not just speed."
+        "why": "Benchmarks cover particular tasks and data; performance on a specialized domain can differ significantly."
       },
       {
         "key": "B",
-        "text": "Benchmarks are useless and should be ignored",
+        "text": "Benchmarks measure speed and cost, not answer quality",
         "correct": false,
-        "why": "Benchmarks provide helpful standardized comparisons as a starting point."
+        "why": "Most benchmarks measure task performance, so this misdescribes them."
       },
       {
         "key": "C",
-        "text": "A high benchmark score guarantees performance on any task",
+        "text": "Benchmarks are unreliable, so rely on user feedback only",
         "correct": false,
-        "why": "Benchmarks cover particular tasks and data; performance on other domains can differ significantly."
+        "why": "Benchmarks are a useful starting point; user feedback alone comes too late to choose a model."
       },
       {
         "key": "D",
-        "text": "Public benchmarks are useful for initial comparison, but performance must be validated on the team's own representative data",
+        "text": "Benchmarks help shortlist; validate on the team's own claims questions",
         "correct": true,
-        "why": "Benchmarks may not reflect a specific domain, so task-specific evaluation is necessary."
+        "why": "Benchmarks give a standardized starting point, but only representative data from the use case shows real performance."
       }
     ],
     "explanation": {
@@ -361,27 +361,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Evaluate retrieval (for example context relevance and coverage) separately from generation (for example faithfulness and correctness)",
+        "text": "Evaluate retrieval relevance separately from answer faithfulness",
         "correct": true,
-        "why": "Measuring each stage separately pinpoints whether retrieval or generation is the weak link."
+        "why": "Measuring each stage separately shows whether retrieval or generation is the weak link."
       },
       {
         "key": "B",
-        "text": "Measure only end-to-end latency",
+        "text": "Score end-to-end answer correctness with an LLM judge",
         "correct": false,
-        "why": "Latency does not reveal which stage produces poor answers."
+        "why": "End-to-end scores show answers are poor but not whether retrieval or generation caused it."
       },
       {
         "key": "C",
-        "text": "Count the number of documents in the knowledge base",
+        "text": "Collect user thumbs-up and thumbs-down ratings on answers",
         "correct": false,
-        "why": "Document count says nothing about retrieval or generation quality."
+        "why": "User ratings reveal dissatisfaction, not which stage of the pipeline is failing."
       },
       {
         "key": "D",
-        "text": "Increase temperature and see if answers improve",
+        "text": "Compare answers to reference answers using BLEU",
         "correct": false,
-        "why": "This is not a diagnostic evaluation and may worsen answers."
+        "why": "BLEU measures overlap of the final answer only, so it cannot separate retrieval problems from generation problems."
       }
     ],
     "explanation": {
@@ -411,27 +411,27 @@
     "options": [
       {
         "key": "A",
-        "text": "ROUGE score of the agent's messages",
+        "text": "ROUGE of the agent's replies against reference replies",
         "correct": false,
-        "why": "Text overlap does not show whether meetings were booked correctly."
+        "why": "Text overlap shows how replies are worded, not whether meetings were actually booked correctly."
       },
       {
         "key": "B",
-        "text": "Task completion and correctness of actions, including whether the right tools were called with the right parameters",
+        "text": "Task completion and whether the right tools got the right parameters",
         "correct": true,
-        "why": "For agents, success means completing the task correctly, not just producing fluent text."
+        "why": "For agents, success means completing the task correctly, so evaluation must check actions and tool calls."
       },
       {
         "key": "C",
-        "text": "The color scheme of the user interface",
+        "text": "User ratings of how polite and clear the replies are",
         "correct": false,
-        "why": "UI appearance does not measure agent correctness."
+        "why": "Polite, clear replies can still accompany a booking that failed or was made for the wrong time."
       },
       {
         "key": "D",
-        "text": "Number of tokens per response",
+        "text": "Average latency and tokens per conversation",
         "correct": false,
-        "why": "Token count measures cost, not task success."
+        "why": "Speed and cost matter, but they do not show whether bookings are correct."
       }
     ],
     "explanation": {
@@ -465,27 +465,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Model parameter count and embedding dimension",
+        "text": "ROUGE and BERTScore on sampled conversations",
         "correct": false,
-        "why": "These are technical attributes that do not show business impact."
+        "why": "These measure text similarity to references, not whether customers' issues are resolved at an acceptable cost."
       },
       {
         "key": "B",
-        "text": "Only BLEU and ROUGE",
+        "text": "Average latency and tokens per response",
         "correct": false,
-        "why": "Text-overlap metrics do not show resolution, satisfaction or cost."
+        "why": "These are operational metrics; they do not show resolution or satisfaction."
       },
       {
         "key": "C",
         "text": "Task completion rate, user satisfaction and cost per interaction",
         "correct": true,
-        "why": "These measure whether customers' issues are resolved, whether they are satisfied, and at what cost."
+        "why": "These measure whether issues get resolved, whether customers are satisfied, and at what cost, which ties the assistant to business value."
       },
       {
         "key": "D",
-        "text": "Number of GPUs used",
+        "text": "Toxicity and robustness scores from model evaluation",
         "correct": false,
-        "why": "Infrastructure details are not business outcomes."
+        "why": "These are important safety and quality checks, but they do not show business impact."
       }
     ],
     "explanation": {
@@ -515,27 +515,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Check whether the model supports image input",
+        "text": "BERTScore of drafts against the team's past content",
         "correct": false,
-        "why": "Modality support does not measure productivity."
+        "why": "Similarity to past content says nothing about whether the team now works faster."
       },
       {
         "key": "B",
-        "text": "Measure BLEU against random text",
+        "text": "Number of drafts generated per user each week",
         "correct": false,
-        "why": "Comparing against random text is meaningless."
+        "why": "Usage shows adoption, not whether approved content gets produced faster."
       },
       {
         "key": "C",
-        "text": "Count the model's parameters",
+        "text": "LLM-judge quality scores for the generated drafts",
         "correct": false,
-        "why": "Model size does not indicate productivity impact."
+        "why": "Draft quality matters, but the objective is productivity, which needs time and output measured against a baseline."
       },
       {
         "key": "D",
-        "text": "Compare time to produce approved content and output volume before and after adoption, along with how often staff use and keep the drafts",
+        "text": "Time to approved content and output volume, before and after",
         "correct": true,
-        "why": "Productivity gains and real engagement show whether the FM is delivering the intended business value."
+        "why": "Comparing productivity before and after adoption directly measures whether the FM meets the business objective."
       }
     ],
     "explanation": {
@@ -623,25 +623,25 @@
         "key": "A",
         "text": "Faithfulness (groundedness) to the retrieved context",
         "correct": true,
-        "why": "Faithfulness checks whether the answer is supported by the provided context, regardless of real-world truth."
+        "why": "Faithfulness checks whether every claim is supported by the provided context, regardless of real-world truth."
       },
       {
         "key": "B",
-        "text": "Embedding dimension",
+        "text": "Answer correctness against a reference answer",
         "correct": false,
-        "why": "Embedding size does not evaluate answer support."
+        "why": "The fact is true, so it could still score as correct; correctness does not check whether the answer came from the sources."
       },
       {
         "key": "C",
-        "text": "Retrieval latency",
+        "text": "Context relevance of the retrieved passages",
         "correct": false,
-        "why": "Latency measures speed, not whether the answer is grounded."
+        "why": "Relevance scores the retrieved passages, not whether the answer added information beyond them."
       },
       {
         "key": "D",
-        "text": "Token cost",
+        "text": "Context coverage of the retrieval results",
         "correct": false,
-        "why": "Token cost measures spending. It cannot tell whether an answer is supported by the retrieved sources."
+        "why": "Coverage measures whether retrieval found the needed information, not whether the answer stayed within it."
       }
     ],
     "explanation": {
@@ -726,27 +726,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Deploy changes directly and wait for complaints",
+        "text": "Spot-check the question type each change targets",
         "correct": false,
-        "why": "Deploying untested changes and waiting for complaints exposes real users to regressions first."
+        "why": "Testing only the targeted cases misses regressions in other question types, which is exactly the problem."
       },
       {
         "key": "B",
-        "text": "Avoid all prompt changes forever",
+        "text": "Monitor user ratings in production after each change",
         "correct": false,
-        "why": "Applications must evolve; the solution is safe testing, not freezing."
+        "why": "Production feedback detects regressions only after users have been affected."
       },
       {
         "key": "C",
-        "text": "Maintain a representative evaluation (golden) dataset and rerun automated evaluations on every change before deploying",
+        "text": "Rerun a representative golden dataset on every change",
         "correct": true,
-        "why": "A fixed, representative test set evaluated on each change reveals regressions across question types."
+        "why": "A fixed, representative test set evaluated before each deployment reveals regressions across all question types."
       },
       {
         "key": "D",
-        "text": "Test only the newest question type after each change",
+        "text": "Use an LLM judge on outputs for the changed questions only",
         "correct": false,
-        "why": "Testing only new cases misses regressions in existing ones."
+        "why": "Judging only the changed questions does not catch breakage elsewhere."
       }
     ],
     "explanation": {
@@ -775,27 +775,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Evaluate only the final routing decision",
+        "text": "Measure end-to-end accuracy on a larger test set",
         "correct": false,
-        "why": "This shows the outcome but not where errors originate."
+        "why": "A larger test set gives a more precise 70%, but still does not show which step fails."
       },
       {
         "key": "B",
-        "text": "Measure only cost per document",
+        "text": "Score the final routed documents with an LLM judge",
         "correct": false,
-        "why": "Cost does not identify quality problems."
+        "why": "Judging only the final output shows the outcome, not where errors originate."
       },
       {
         "key": "C",
-        "text": "Evaluate only the summarization step with ROUGE",
+        "text": "Evaluate only the summarization step, the most complex one",
         "correct": false,
-        "why": "One step's metric cannot explain failures in the others."
+        "why": "Assuming the cause skips the other three steps, any of which could be failing."
       },
       {
         "key": "D",
-        "text": "Evaluate each step individually with its own metrics, in addition to the end-to-end outcome",
+        "text": "Evaluate each step with its own metrics, plus end to end",
         "correct": true,
-        "why": "Step-level metrics reveal which step drives failures, while end-to-end metrics show overall business success."
+        "why": "Step-level metrics show which step drives failures, while end-to-end metrics measure overall success."
       }
     ],
     "explanation": {
@@ -825,27 +825,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Run an A/B test, sending a portion of real traffic to the new version and comparing satisfaction and task completion with the current version",
+        "text": "A/B test with part of real traffic on the new version",
         "correct": true,
-        "why": "A/B testing measures real user outcomes in production with a control group."
+        "why": "An A/B test measures real customer outcomes, such as satisfaction and task completion, against a control group."
       },
       {
         "key": "B",
-        "text": "Roll out to 100% immediately",
+        "text": "Rerun the offline evaluation with a larger test set",
         "correct": false,
-        "why": "Full rollout without validation risks harming all users if offline results do not hold."
+        "why": "More offline data improves the estimate but still does not measure real customer satisfaction."
       },
       {
         "key": "C",
-        "text": "Compare token counts only",
+        "text": "Roll out to everyone, then compare with last month's scores",
         "correct": false,
-        "why": "Token counts do not reflect satisfaction."
+        "why": "Before-and-after comparisons are confounded by other changes over time, and everyone is exposed at once."
       },
       {
         "key": "D",
-        "text": "Ask the development team which version they prefer",
+        "text": "Have an LLM judge rate both versions on past chats",
         "correct": false,
-        "why": "Internal preference is not evidence of customer impact."
+        "why": "This is still an offline evaluation; it does not measure real customers' satisfaction."
       }
     ],
     "explanation": {
@@ -874,27 +874,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Increase the judge's temperature",
+        "text": "Switch to a larger judge model and keep the same rubric",
         "correct": false,
-        "why": "More randomness makes the judge less consistent."
+        "why": "Larger judges can share the same length bias; the rubric and calibration are what need fixing."
       },
       {
         "key": "B",
-        "text": "Calibrate the judge against human ratings, refine the rubric (for example penalize unnecessary length) and keep periodic human review",
+        "text": "Calibrate the judge against human ratings and penalize needless length",
         "correct": true,
-        "why": "Judge models have biases such as length preference; calibration and clear rubrics improve reliability."
+        "why": "Comparing the judge with human ratings and refining the rubric corrects known biases, with periodic human review to confirm."
       },
       {
         "key": "C",
-        "text": "Stop evaluating altogether",
+        "text": "Replace the judge with ROUGE against reference answers",
         "correct": false,
-        "why": "Evaluation is still needed; the method should be improved."
+        "why": "ROUGE cannot assess open-ended qualities the judge was chosen for and has its own length effects."
       },
       {
         "key": "D",
-        "text": "Trust the judge completely",
+        "text": "Ask the judge to explain its reasoning before scoring",
         "correct": false,
-        "why": "Known biases would distort evaluation results."
+        "why": "Explanations can help, but they do not by themselves remove a systematic preference for longer answers."
       }
     ],
     "explanation": {
@@ -923,27 +923,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Embedding dimension",
+        "text": "Model capability: the FM needs to be more accurate",
         "correct": false,
-        "why": "Retrieval configuration does not address workflow integration."
+        "why": "The FM already performs well on individual questions, so accuracy is not the gap."
       },
       {
         "key": "B",
-        "text": "The number of supported languages",
+        "text": "Latency: the responses need to arrive faster",
         "correct": false,
-        "why": "Language support is not the issue described."
+        "why": "The delay comes from how the AI step fits the work, not from response speed."
       },
       {
         "key": "C",
-        "text": "How well the AI is engineered into the actual task and workflow, not just its standalone output quality",
+        "text": "Task engineering: fitting the AI into how the work is done",
         "correct": true,
-        "why": "Business value depends on fitting the model into the real task flow so it removes work rather than adding steps."
+        "why": "Business value depends on integrating the model into the real task flow so it removes work instead of adding steps."
       },
       {
         "key": "D",
-        "text": "The model's training cutoff date",
+        "text": "Cost: the per-token price is too high",
         "correct": false,
-        "why": "Cutoff dates do not explain poor workflow fit."
+        "why": "Cost is not the issue described; employees are slowed by the workflow."
       }
     ],
     "explanation": {
@@ -974,27 +974,27 @@
     "options": [
       {
         "key": "A",
-        "text": "ROUGE against a random sentence",
+        "text": "BERTScore against one example answer",
         "correct": false,
-        "why": "Comparing to an arbitrary reference is meaningless."
+        "why": "With many valid creative answers, similarity to a single example would penalize good answers that differ from it."
       },
       {
         "key": "B",
-        "text": "BLEU against a single reference",
+        "text": "BLEU against a single reference answer",
         "correct": false,
-        "why": "Overlap metrics need references and penalize valid creative variation."
+        "why": "Overlap with one reference penalizes valid creative variation."
       },
       {
         "key": "C",
-        "text": "RMSE",
+        "text": "Perplexity of each answer under the model",
         "correct": false,
-        "why": "RMSE measures error on numeric predictions and cannot assess open-ended creative text."
+        "why": "Perplexity measures how predictable text is to a model, not whether an answer is good."
       },
       {
         "key": "D",
-        "text": "Rubric-based evaluation with an LLM judge and human reviewers, which does not require a single reference answer",
+        "text": "Rubric-based scoring by an LLM judge and human reviewers",
         "correct": true,
-        "why": "Rubric-based judging assesses qualities such as relevance and creativity without needing a reference text."
+        "why": "Rubric-based judging assesses relevance, coherence and creativity without needing a reference answer."
       }
     ],
     "explanation": {
@@ -1024,27 +1024,27 @@
     "options": [
       {
         "key": "A",
-        "text": "RAG evaluation in Amazon Bedrock Evaluations for knowledge bases",
+        "text": "RAG evaluation in Amazon Bedrock Evaluations",
         "correct": true,
-        "why": "Bedrock offers RAG evaluation jobs that assess retrieval and retrieve-and-generate quality with LLM-as-a-judge metrics."
+        "why": "Bedrock evaluates knowledge bases in retrieve-only and retrieve-and-generate modes, with metrics such as correctness, completeness and faithfulness."
       },
       {
         "key": "B",
-        "text": "Amazon CloudWatch billing alarms",
+        "text": "Bedrock Guardrails contextual grounding checks",
         "correct": false,
-        "why": "Billing alarms track cost, not answer quality."
+        "why": "Grounding checks filter individual responses at runtime; they do not evaluate retrieval quality across a test set."
       },
       {
         "key": "C",
-        "text": "Amazon Polly",
+        "text": "SageMaker Model Monitor for the knowledge base",
         "correct": false,
-        "why": "Polly converts text to speech and has no capability to evaluate retrieval or answer quality."
+        "why": "Model Monitor tracks drift for SageMaker endpoints; it does not evaluate Bedrock knowledge base retrieval and answers."
       },
       {
         "key": "D",
-        "text": "AWS Trusted Advisor",
+        "text": "Bedrock model invocation logging",
         "correct": false,
-        "why": "Trusted Advisor gives account best-practice checks, not RAG evaluation."
+        "why": "Logging records requests and responses but does not score them."
       }
     ],
     "explanation": {
@@ -1075,9 +1075,9 @@
     "options": [
       {
         "key": "A",
-        "text": "Embedding vector dimension",
+        "text": "BERTScore of answers against reference answers",
         "correct": false,
-        "why": "Vector size is a technical configuration."
+        "why": "Similarity to reference answers is a technical quality metric; it does not show business impact."
       },
       {
         "key": "B",
@@ -1087,9 +1087,9 @@
       },
       {
         "key": "C",
-        "text": "The model provider's logo color",
+        "text": "Average response latency in milliseconds",
         "correct": false,
-        "why": "Branding has no bearing on business value."
+        "why": "Latency is an operational metric. It affects experience but does not show whether billing issues are resolved."
       },
       {
         "key": "D",
@@ -1099,9 +1099,9 @@
       },
       {
         "key": "E",
-        "text": "Number of layers in the model",
+        "text": "Toxicity score from automatic model evaluation",
         "correct": false,
-        "why": "Architecture details do not reflect business outcomes."
+        "why": "Toxicity is a safety check, not a measure of business value."
       }
     ],
     "explanation": {
@@ -1130,27 +1130,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Rely on a public benchmark score only",
+        "text": "Use a public benchmark score and the provider's model card",
         "correct": false,
-        "why": "Benchmarks may not reflect the bank's tasks and do not provide audit evidence for its use case."
+        "why": "These describe the model in general, not its behavior on the bank's tasks, so they are not defensible evidence for this use."
       },
       {
         "key": "B",
-        "text": "Combine automatic metrics and LLM-as-a-judge on a representative dataset with human expert review of samples and high-risk cases, document results, and keep monitoring after launch",
+        "text": "Layer automatic, judge and expert review; document it and monitor",
         "correct": true,
-        "why": "Layered evaluation balances scale and depth, and documentation plus ongoing monitoring supports audit and governance needs."
+        "why": "Combining automatic metrics, LLM-as-a-judge and human expert review balances scale and depth; documentation and monitoring satisfy auditors."
       },
       {
         "key": "C",
-        "text": "Have one developer try a few prompts",
+        "text": "Have human experts review every response before launch",
         "correct": false,
-        "why": "Ad hoc testing is neither thorough nor defensible."
+        "why": "Reviewing every response is thorough but does not scale, and launch-time review alone misses issues that appear later."
       },
       {
         "key": "D",
-        "text": "Skip evaluation because the model is from a reputable provider",
+        "text": "Run LLM-as-a-judge on a large test set and launch if it passes",
         "correct": false,
-        "why": "Provider reputation does not validate behavior on the bank's specific use case."
+        "why": "This scales, but without expert review of high-risk cases, documentation or monitoring it is not defensible to auditors."
       }
     ],
     "explanation": {
