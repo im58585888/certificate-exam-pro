@@ -13,27 +13,27 @@
     "options": [
       {
         "key": "A",
-        "text": "The decision tree is more transparent and interpretable; the large neural network is more of a black box",
+        "text": "The tree is more interpretable; the network is more of a black box",
         "correct": true,
-        "why": "Simple models expose their decision logic; very large neural networks are hard to interpret directly."
+        "why": "Simple models expose their decision logic, while very large neural networks are hard to interpret directly."
       },
       {
         "key": "B",
-        "text": "Neither model can make predictions",
+        "text": "The network is more interpretable, since its weights are visible",
         "correct": false,
-        "why": "Both models make predictions; they differ in interpretability."
+        "why": "The weights can be read, but billions of numbers do not explain decisions in a way people can follow."
       },
       {
         "key": "C",
-        "text": "The neural network is more transparent because it is larger",
+        "text": "Both are equally interpretable once SHAP is applied",
         "correct": false,
-        "why": "Larger, more complex models are generally harder to interpret."
+        "why": "SHAP adds after-the-fact explanations; it does not make the network transparent by design like the tree."
       },
       {
         "key": "D",
-        "text": "Both models are equally transparent",
+        "text": "The tree is less interpretable, since it has many branches",
         "correct": false,
-        "why": "The tree's rules are readable, while the neural network's internal weights are not meaningful to people."
+        "why": "A small tree's rules can be read directly; that is what makes it interpretable."
       }
     ],
     "explanation": {
@@ -64,27 +64,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Amazon Polly",
+        "text": "SageMaker Clarify pre-training bias metrics",
         "correct": false,
-        "why": "Polly converts text to speech and cannot explain model decisions."
+        "why": "Pre-training metrics analyze the dataset for bias; they do not explain individual decisions."
       },
       {
         "key": "B",
-        "text": "Amazon SageMaker Clarify explainability, which uses SHAP-based feature attributions",
+        "text": "SageMaker Clarify explainability with SHAP attributions",
         "correct": true,
-        "why": "Clarify computes how much each feature contributed to individual predictions, supporting explanations to applicants."
+        "why": "Clarify computes how much each feature contributed to each individual prediction, supporting explanations to applicants."
       },
       {
         "key": "C",
-        "text": "Amazon CloudFront",
+        "text": "SageMaker Model Monitor feature attribution drift",
         "correct": false,
-        "why": "CloudFront delivers content and has no explainability features."
+        "why": "Attribution drift tracks how feature importance changes over time; it does not explain each applicant's decision."
       },
       {
         "key": "D",
-        "text": "AWS Artifact",
+        "text": "SageMaker Model Cards for the loan model",
         "correct": false,
-        "why": "Artifact provides AWS compliance reports. It cannot explain which features drove a model's decision."
+        "why": "Model cards document the model overall; they do not give per-applicant explanations."
       }
     ],
     "explanation": {
@@ -113,27 +113,27 @@
     "options": [
       {
         "key": "A",
-        "text": "AWS Snowball",
+        "text": "Amazon SageMaker Model Registry",
         "correct": false,
-        "why": "Snowball is a physical data transfer device."
+        "why": "Model Registry tracks versions and approval status; full documentation of intended use, risks and limitations belongs in Model Cards."
       },
       {
         "key": "B",
-        "text": "Amazon Route 53",
+        "text": "AWS Glue Data Catalog",
         "correct": false,
-        "why": "Route 53 is a DNS service and cannot store model documentation."
+        "why": "The Data Catalog describes datasets, not models and their risk documentation."
       },
       {
         "key": "C",
         "text": "Amazon SageMaker Model Cards",
         "correct": true,
-        "why": "SageMaker Model Cards provide a standardized way to document model details, intended uses, risk ratings and evaluation results."
+        "why": "Model Cards provide a standard format for intended uses, training details, evaluation results, risk ratings and limitations."
       },
       {
         "key": "D",
-        "text": "Amazon Polly",
+        "text": "AWS Artifact",
         "correct": false,
-        "why": "Polly converts text to speech and has no model documentation features."
+        "why": "Artifact provides AWS's own compliance reports, not documentation of your models."
       }
     ],
     "explanation": {
@@ -162,25 +162,25 @@
     "options": [
       {
         "key": "A",
-        "text": "The linear model is always more accurate",
+        "text": "Choose the deep model, since higher accuracy matters most",
         "correct": false,
-        "why": "The scenario states the linear model is slightly less accurate."
+        "why": "In regulated credit decisions, the ability to explain each decision can outweigh a small accuracy gain."
       },
       {
         "key": "B",
-        "text": "Interpretability never matters if accuracy is higher",
+        "text": "Choose the deep model; regulators accept accuracy over explanations",
         "correct": false,
-        "why": "Regulations and fairness reviews often require explanations."
+        "why": "Credit regulations typically require explainable reasons for decisions, regardless of accuracy."
       },
       {
         "key": "C",
-        "text": "Deep learning models cannot be used anywhere",
+        "text": "Average both models' predictions to get both benefits",
         "correct": false,
-        "why": "Deep learning is widely used; the issue is fit for regulated decisions."
+        "why": "An ensemble is harder to explain than either model alone and loses the linear model's transparency."
       },
       {
         "key": "D",
-        "text": "There is often a trade-off between performance and interpretability; in regulated, high-impact decisions, the more interpretable model may be preferred if its accuracy is acceptable",
+        "text": "Prefer the interpretable model if its accuracy is acceptable",
         "correct": true,
         "why": "Interpretability supports accountability and compliance, which can outweigh small accuracy gains in high-stakes decisions."
       }
@@ -217,27 +217,27 @@
     "options": [
       {
         "key": "A",
-        "text": "An open-source (open-weight) model with published documentation of its training data and a clear license",
+        "text": "An open-weight model with documented data and a clear license",
         "correct": true,
-        "why": "Open weights, documented data and clear licensing enable inspection, reproducibility and understanding of permitted uses."
+        "why": "Open weights, documented training data and clear licensing allow inspection, reproduction and an understanding of permitted uses."
       },
       {
         "key": "B",
-        "text": "Any model, because all models publish their training data",
+        "text": "A proprietary model with a detailed model card",
         "correct": false,
-        "why": "Many models do not disclose their training data in detail."
+        "why": "A model card helps, but the institute could not inspect the weights or verify the training data."
       },
       {
         "key": "C",
-        "text": "A model chosen by lowest price only",
+        "text": "A model accessed through the Amazon Bedrock API",
         "correct": false,
-        "why": "Price says nothing about whether the weights, training data or license terms can be inspected."
+        "why": "API access lets you use a model, not inspect its architecture and weights."
       },
       {
         "key": "D",
-        "text": "A proprietary model with no documentation",
+        "text": "The highest-scoring model on a public benchmark",
         "correct": false,
-        "why": "Without documentation or access, the institute cannot inspect the model or its data."
+        "why": "Benchmark scores say nothing about transparency of weights, data or license terms."
       }
     ],
     "explanation": {
@@ -319,27 +319,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Vector search",
+        "text": "User-feedback mechanisms",
         "correct": false,
-        "why": "Vector search retrieves similar content and does not make AI decisions transparent to customers."
+        "why": "Feedback channels collect ratings and corrections; the scenario describes explaining decisions and offering recourse."
       },
       {
         "key": "B",
-        "text": "Prompt caching",
+        "text": "Model documentation with model cards",
         "correct": false,
-        "why": "Prompt caching is a cost and latency optimization, not a way of explaining decisions to customers."
+        "why": "Model cards document a model for internal and audit use; this is a message to each customer about their decision."
       },
       {
         "key": "C",
-        "text": "AI decision transparency, a principle of human-centered design for explainable AI",
+        "text": "AI decision transparency",
         "correct": true,
-        "why": "Disclosing AI involvement, key factors and recourse options makes decisions understandable and contestable."
+        "why": "Telling customers AI was involved, the main factors and how to request human review makes decisions understandable and contestable."
       },
       {
         "key": "D",
-        "text": "Hyperparameter tuning",
+        "text": "Data minimization",
         "correct": false,
-        "why": "Hyperparameter tuning optimizes model training and does not explain decisions to customers."
+        "why": "Data minimization limits what data is collected; it does not explain decisions."
       }
     ],
     "explanation": {
@@ -419,27 +419,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Ground answers with RAG and display citations to the source documents used",
+        "text": "Ground answers with RAG and show citations to the sources",
         "correct": true,
-        "why": "Citations let users verify claims and understand the basis for each answer."
+        "why": "Citations show which documents support each answer, so users can verify it."
       },
       {
         "key": "B",
-        "text": "Hide the sources to keep answers concise",
+        "text": "Lower the temperature so answers are more consistent",
         "correct": false,
-        "why": "Hiding sources reduces users' ability to verify answers."
+        "why": "Consistency does not show users where an answer came from."
       },
       {
         "key": "C",
-        "text": "Use a larger model with no retrieval",
+        "text": "Add a contextual grounding check to block unsupported answers",
         "correct": false,
-        "why": "A larger model alone cannot show where an answer came from."
+        "why": "Grounding checks block unsupported answers but do not show users the sources."
       },
       {
         "key": "D",
-        "text": "Increase the temperature",
+        "text": "Ask the model to describe how it reached each answer",
         "correct": false,
-        "why": "More randomness reduces, rather than increases, transparency."
+        "why": "Self-generated explanations can be plausible but unfaithful, and they do not point to sources."
       }
     ],
     "explanation": {
@@ -469,27 +469,27 @@
     "options": [
       {
         "key": "A",
-        "text": "AWS Direct Connect",
+        "text": "Amazon SageMaker Model Cards",
         "correct": false,
-        "why": "Direct Connect provides private network links."
+        "why": "Model cards can record evaluation results, but they do not run the evaluations that produce them."
       },
       {
         "key": "B",
         "text": "Amazon Bedrock Model Evaluation",
         "correct": true,
-        "why": "Bedrock Model Evaluation produces reports on metrics such as accuracy, robustness and toxicity, which can be documented and shared."
+        "why": "Bedrock Model Evaluation produces reports on accuracy, robustness and toxicity that can be documented and shared."
       },
       {
         "key": "C",
-        "text": "Amazon S3 Glacier",
+        "text": "Amazon Bedrock Guardrails",
         "correct": false,
-        "why": "Glacier is archival storage. It cannot evaluate model accuracy, robustness or toxicity."
+        "why": "Guardrails filter content in production; they do not produce evaluation evidence."
       },
       {
         "key": "D",
-        "text": "Amazon EC2 Auto Scaling",
+        "text": "Amazon CloudWatch metrics",
         "correct": false,
-        "why": "Auto Scaling adjusts capacity and does not evaluate models."
+        "why": "Metrics show operational performance, not accuracy, robustness or toxicity."
       }
     ],
     "explanation": {
@@ -518,27 +518,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Moderation models cannot be documented",
+        "text": "Publish everything, since transparency outweighs any risk",
         "correct": false,
-        "why": "Moderation models can and should be documented, with care about sensitive details."
+        "why": "Revealing exact thresholds and rules can help bad actors evade moderation."
       },
       {
         "key": "B",
-        "text": "Transparency never has any downsides",
+        "text": "Keep every moderation detail confidential, including policies",
         "correct": false,
-        "why": "Revealing exploitable details can help bad actors bypass safeguards."
+        "why": "Total secrecy undermines trust; principles, policies and evaluation results can be shared safely."
       },
       {
         "key": "C",
-        "text": "Greater transparency can sometimes reduce safety by helping adversaries; organizations balance disclosure, for example sharing principles and evaluation results without revealing exploitable details",
+        "text": "Share principles and results, not exploitable details",
         "correct": true,
-        "why": "Full disclosure of thresholds can enable evasion, so transparency is balanced against safety."
+        "why": "Balancing disclosure builds trust without giving adversaries a map for evading safeguards."
       },
       {
         "key": "D",
-        "text": "Safety requires hiding the existence of moderation",
+        "text": "Publish only the thresholds, as they are least sensitive",
         "correct": false,
-        "why": "Hiding that moderation exists undermines trust; principles and policies can be shared."
+        "why": "Exact thresholds are among the most exploitable details for evading moderation."
       }
     ],
     "explanation": {
@@ -567,27 +567,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Zero-shot and few-shot explanations",
+        "text": "Pre-training and post-training explanations",
         "correct": false,
-        "why": "These are prompting techniques, not explanation types."
+        "why": "These terms describe when bias is measured, not whether an explanation covers all predictions or one."
       },
       {
         "key": "B",
-        "text": "Batch and real-time explanations",
+        "text": "Bias metrics and drift metrics",
         "correct": false,
-        "why": "These describe inference timing, not explanation scope."
+        "why": "These measure fairness and change over time, not feature influence across all customers versus one."
       },
       {
         "key": "C",
-        "text": "Precision and recall",
+        "text": "Interpretable and post-hoc explanations",
         "correct": false,
-        "why": "These are evaluation metrics, not explanation types."
+        "why": "These describe how explanations are produced, not their scope across all predictions or one."
       },
       {
         "key": "D",
-        "text": "Global explanations (overall feature importance) and local explanations (attributions for a single prediction)",
+        "text": "Global and local explanations",
         "correct": true,
-        "why": "Global explanations describe overall model behavior; local explanations describe one prediction."
+        "why": "Global explanations summarize feature importance across all predictions; local explanations attribute a single prediction."
       }
     ],
     "explanation": {
@@ -674,27 +674,27 @@
     "options": [
       {
         "key": "A",
-        "text": "In a SageMaker Model Card for the model, kept current through the model's lifecycle",
+        "text": "In a SageMaker Model Card kept current over the lifecycle",
         "correct": true,
         "why": "Model Cards record approvals, risk ratings, evaluation results and intended and out-of-scope uses in one place."
       },
       {
         "key": "B",
-        "text": "In the model's prompt",
+        "text": "In SageMaker Model Registry version metadata only",
         "correct": false,
-        "why": "A prompt is runtime input to the model, not a controlled governance record that auditors can rely on."
+        "why": "The registry tracks versions and approval status, but risk ratings and out-of-scope uses belong in the model card."
       },
       {
         "key": "C",
-        "text": "Nowhere, because models document themselves",
+        "text": "In the CloudTrail logs of the training job",
         "correct": false,
-        "why": "Models do not produce governance documentation on their own."
+        "why": "CloudTrail shows who called which API, not risk ratings and intended uses."
       },
       {
         "key": "D",
-        "text": "In random spreadsheets on individual laptops",
+        "text": "In the README of the model's code repository",
         "correct": false,
-        "why": "Scattered, uncontrolled records are unreliable for audits."
+        "why": "A README is informal and not tied to the model's approval and lifecycle records."
       }
     ],
     "explanation": {
@@ -723,27 +723,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Explainability reduces cloud costs to zero",
+        "text": "It increases accuracy by revealing the best features",
         "correct": false,
-        "why": "Explainability tools have their own costs."
+        "why": "Explainability helps understanding; it does not by itself make models more accurate."
       },
       {
         "key": "B",
-        "text": "Explainability builds user trust, helps detect bias and errors, and supports regulatory and audit requirements",
+        "text": "It builds trust, helps catch bias and errors, and supports audits",
         "correct": true,
-        "why": "Understanding why models behave as they do supports trust, debugging, fairness and compliance."
+        "why": "Understanding why models behave as they do supports trust, debugging, fairness reviews and compliance."
       },
       {
         "key": "C",
-        "text": "Explainability is only needed for image models",
+        "text": "It lowers inference cost by simplifying predictions",
         "correct": false,
-        "why": "Explainability matters for all kinds of models, especially in high-stakes decisions."
+        "why": "Explanation tools add work; they do not reduce inference cost."
       },
       {
         "key": "D",
-        "text": "Explainability always increases model accuracy",
+        "text": "It removes the need for human review of decisions",
         "correct": false,
-        "why": "Explainability helps understanding; it does not automatically make models more accurate."
+        "why": "Explanations help reviewers; they do not replace human oversight where it is needed."
       }
     ],
     "explanation": {
@@ -772,27 +772,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Deleting old datasets immediately",
+        "text": "Model invocation logging enabled from launch",
         "correct": false,
-        "why": "Deleting data without records makes the problem worse."
+        "why": "Invocation logs show inputs and outputs in production, not how training data was sourced and processed."
       },
       {
         "key": "B",
-        "text": "Increasing the temperature",
+        "text": "A model card describing intended uses only",
         "correct": false,
-        "why": "Temperature does not record data history."
+        "why": "A card limited to intended uses would not record the datasets and processing steps."
       },
       {
         "key": "C",
-        "text": "Documenting training data sources, processing steps and versions (data lineage), for example in model cards",
+        "text": "Documented data lineage: sources, processing and versions",
         "correct": true,
-        "why": "Knowing exactly what data and processing produced a model makes its behavior explainable and reproducible."
+        "why": "Recording training data sources, processing steps and versions makes model behavior explainable and reproducible."
       },
       {
         "key": "D",
-        "text": "Using a larger model",
+        "text": "CloudTrail logs of who started each training job",
         "correct": false,
-        "why": "Model size does not provide documentation."
+        "why": "These show who ran training, not which data and processing were used."
       }
     ],
     "explanation": {
@@ -826,27 +826,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Display suggestions in larger fonts",
+        "text": "Require one-click approval of every suggestion",
         "correct": false,
-        "why": "Visual emphasis without context may increase over-reliance."
+        "why": "A quick confirmation step quickly becomes a rubber stamp and does not help doctors judge reliability."
       },
       {
         "key": "B",
-        "text": "Hide confidence scores to keep the interface simple",
+        "text": "Show only the top suggestion to reduce clutter",
         "correct": false,
-        "why": "Hiding uncertainty encourages blind trust."
+        "why": "Removing context makes it harder for doctors to judge when to question the AI."
       },
       {
         "key": "C",
-        "text": "Remove the doctors from the decision",
+        "text": "Use a more accurate model so reliance is justified",
         "correct": false,
-        "why": "Removing human oversight in high-stakes medical decisions increases risk."
+        "why": "Any model is sometimes wrong; doctors still need signals of when to look closer."
       },
       {
         "key": "D",
-        "text": "Show the model's confidence and the key evidence for each suggestion, and highlight low-confidence cases for closer review",
+        "text": "Show confidence and key evidence; flag low-confidence cases",
         "correct": true,
-        "why": "Communicating uncertainty and reasoning helps experts decide when to trust or question the AI."
+        "why": "Communicating uncertainty and evidence helps experts decide when to trust or question the AI."
       }
     ],
     "explanation": {
@@ -875,27 +875,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Measure both interpretability needs and performance against requirements: compare accuracy, check whether explanation tools give stakeholders sufficient insight for the complex model, and choose the option that meets both",
+        "text": "Measure accuracy and whether explanations meet stakeholder needs",
         "correct": true,
         "why": "An objective decision weighs measured performance against the level of explanation the use case requires."
       },
       {
         "key": "B",
-        "text": "Pick randomly",
+        "text": "Choose the simpler model, since simpler is safer",
         "correct": false,
-        "why": "Picking at random ignores both the performance and the transparency requirements of the use case."
+        "why": "Simplicity may sacrifice needed performance when explanation tools would be sufficient."
       },
       {
         "key": "C",
-        "text": "Always pick the simplest model",
+        "text": "Choose the more accurate model, since the risk is only moderate",
         "correct": false,
-        "why": "Simplicity alone may sacrifice needed performance when explanation tools are sufficient."
+        "why": "Moderate risk still requires checking that decisions can be explained adequately."
       },
       {
         "key": "D",
-        "text": "Always pick the most accurate model",
+        "text": "Choose the model the team knows best",
         "correct": false,
-        "why": "Accuracy alone ignores transparency and accountability needs."
+        "why": "Familiarity is not evidence that a model meets performance and transparency needs."
       }
     ],
     "explanation": {
@@ -925,9 +925,9 @@
     "options": [
       {
         "key": "A",
-        "text": "AWS Snowball Edge",
+        "text": "Amazon SageMaker Model Monitor",
         "correct": false,
-        "why": "Snowball Edge is for data transfer and edge computing."
+        "why": "Model Monitor tracks data and model drift in production; it is not a transparency or documentation tool."
       },
       {
         "key": "B",
@@ -943,15 +943,15 @@
       },
       {
         "key": "D",
-        "text": "Amazon EC2 Spot Instances",
+        "text": "AWS CloudTrail",
         "correct": false,
-        "why": "Spot Instances are a pricing option for compute."
+        "why": "CloudTrail records API activity; it does not show how models behave or were built."
       },
       {
         "key": "E",
-        "text": "Amazon CloudFront",
+        "text": "Amazon Bedrock Guardrails",
         "correct": false,
-        "why": "CloudFront delivers content and has no transparency features."
+        "why": "Guardrails filter content; they do not document or evaluate a model's transparency."
       }
     ],
     "explanation": {
@@ -985,27 +985,27 @@
     "options": [
       {
         "key": "A",
-        "text": "LLMs cannot produce any text explanations",
+        "text": "Self-explanations are reliable if temperature is set to zero",
         "correct": false,
-        "why": "LLMs can produce explanations; the issue is reliability."
+        "why": "Temperature affects randomness, not whether an explanation reflects the model's actual computation."
       },
       {
         "key": "B",
-        "text": "Self-generated explanations from LLMs may not faithfully reflect the model's internal process, so they should not be treated as reliable explanations for high-stakes decisions",
+        "text": "Self-explanations may not reflect the real process; don't rely on them",
         "correct": true,
         "why": "An LLM's explanation is itself generated text and can be a plausible rationalization rather than a faithful account."
       },
       {
         "key": "C",
-        "text": "LLM self-explanations are always faithful",
+        "text": "Self-explanations are reliable for sufficiently large models",
         "correct": false,
-        "why": "Research shows self-explanations can be unfaithful to the actual computation."
+        "why": "Larger models also produce plausible but unfaithful explanations."
       },
       {
         "key": "D",
-        "text": "Higher temperature makes explanations more faithful",
+        "text": "LLMs cannot produce explanations of their reasoning",
         "correct": false,
-        "why": "Temperature affects randomness, not faithfulness."
+        "why": "LLMs can produce explanations; the problem is that they may not be faithful."
       }
     ],
     "explanation": {

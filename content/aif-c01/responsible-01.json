@@ -265,27 +265,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Content filters with configurable strength for each harmful category",
+        "text": "Content filters with adjustable strength per category",
         "correct": true,
-        "why": "Content filters detect categories such as hate, insults, sexual content, violence and misconduct, with adjustable filter strength for inputs and outputs."
+        "why": "Content filters detect hate, insults, sexual content, violence and misconduct, with a configurable strength for inputs and outputs."
       },
       {
         "key": "B",
-        "text": "Contextual grounding check only",
+        "text": "Denied topics for hate, insults and violence",
         "correct": false,
-        "why": "Grounding checks detect hallucinations relative to sources. They do not filter hateful or violent content."
+        "why": "Denied topics block subject areas you describe; detecting harmful language with adjustable strength is what content filters do."
       },
       {
         "key": "C",
-        "text": "Model invocation logging",
+        "text": "Word filters with the managed profanity list",
         "correct": false,
-        "why": "Logging records requests and responses but does not block content."
+        "why": "Word filters match specific words; they miss harmful content phrased without listed words and have no strength setting."
       },
       {
         "key": "D",
-        "text": "Word filters only for product names",
+        "text": "Sensitive information filters for user messages",
         "correct": false,
-        "why": "Word filters block specific words or phrases. They cannot reliably detect the full range of harmful content categories."
+        "why": "These detect personal data such as phone numbers, not hateful or violent content."
       }
     ],
     "explanation": {
@@ -364,27 +364,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Data drift",
+        "text": "Defamation of the photographer",
         "correct": false,
-        "why": "Data drift is a change in input data over time, not a legal risk about ownership of content."
+        "why": "Defamation involves false statements that harm reputation; the claim here is about copying protected work."
       },
       {
         "key": "B",
-        "text": "Token pricing",
+        "text": "Privacy violation from using personal data",
         "correct": false,
-        "why": "Pricing is unrelated to copyright claims."
+        "why": "The complaint is about reproducing a creative work, not misuse of personal information."
       },
       {
         "key": "C",
-        "text": "Intellectual property infringement claims",
+        "text": "Intellectual property (copyright) infringement",
         "correct": true,
-        "why": "Generated content that resembles copyrighted material can lead to IP infringement claims."
+        "why": "Generated content that closely resembles copyrighted material can lead to infringement claims."
       },
       {
         "key": "D",
-        "text": "Underfitting",
+        "text": "Loss of customer trust from inaccurate output",
         "correct": false,
-        "why": "Underfitting is a model training issue, not a legal risk."
+        "why": "Trust may suffer, but the legal risk the photographer raises is copyright infringement."
       }
     ],
     "explanation": {
@@ -414,27 +414,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Overfitting leading to slower responses",
+        "text": "Prompt injection by the customer",
         "correct": false,
-        "why": "The problem is fabricated information, not speed or training fit."
+        "why": "Nothing suggests the customer manipulated the chatbot; it invented the policy on its own."
       },
       {
         "key": "B",
-        "text": "High embedding dimensions",
+        "text": "Bias against certain customer groups",
         "correct": false,
-        "why": "Embedding configuration does not explain a fabricated policy."
+        "why": "The problem is false information given to a customer, not unequal treatment of groups."
       },
       {
         "key": "C",
-        "text": "Excessive batch inference",
+        "text": "Intellectual property infringement",
         "correct": false,
-        "why": "Batch inference has nothing to do with chatbot hallucinations."
+        "why": "No one's protected work was reproduced; the chatbot made up a policy."
       },
       {
         "key": "D",
-        "text": "Hallucination leading to end-user harm, potential legal liability and loss of customer trust",
+        "text": "Hallucination causing user harm, liability and lost trust",
         "correct": true,
-        "why": "The fabricated policy misled a customer, which can create liability and damage trust in the brand."
+        "why": "A fabricated policy that a customer relied on can create legal liability and damage trust in the brand."
       }
     ],
     "explanation": {
@@ -468,27 +468,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Biased model outputs that may violate anti-discrimination laws",
+        "text": "Biased outputs that may break anti-discrimination law",
         "correct": true,
-        "why": "Outputs that disadvantage protected groups can lead to discrimination claims and regulatory action."
+        "why": "Rankings that disadvantage a protected group in hiring can lead to discrimination claims and regulatory action."
       },
       {
         "key": "B",
-        "text": "Model distillation cost",
+        "text": "Intellectual property infringement in the resumes",
         "correct": false,
-        "why": "Training cost is not a legal discrimination risk."
+        "why": "The issue is unfair ranking of candidates, not use of copyrighted material."
       },
       {
         "key": "C",
-        "text": "Vector store latency",
+        "text": "Data residency violations for applicant data",
         "correct": false,
-        "why": "Retrieval speed is not related to fairness or law."
+        "why": "Nothing in the scenario concerns where applicant data is stored."
       },
       {
         "key": "D",
-        "text": "Prompt caching expiration",
+        "text": "Hallucinated candidate qualifications",
         "correct": false,
-        "why": "Caching behavior is unrelated to discriminatory outcomes."
+        "why": "The tool ranks candidates unfairly; it is not inventing qualifications."
       }
     ],
     "explanation": {
@@ -522,27 +522,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Denied topics for \"customer calls\"",
+        "text": "A denied topic for payment and identity details",
         "correct": false,
-        "why": "Denying the whole topic would block the summaries entirely."
+        "why": "Denied topics block whole responses, which would stop the summaries instead of hiding only the sensitive numbers."
       },
       {
         "key": "B",
-        "text": "Amazon Bedrock Guardrails sensitive information filters set to mask those PII types in outputs",
+        "text": "Sensitive information filters set to mask those PII types",
         "correct": true,
-        "why": "Masking replaces detected PII with placeholders while allowing the rest of the summary through."
+        "why": "Masking replaces detected card numbers and SSNs with placeholders while letting the rest of the summary through."
       },
       {
         "key": "C",
-        "text": "Removing all guardrails",
+        "text": "Word filters listing known card numbers",
         "correct": false,
-        "why": "This removes the protection the team needs."
+        "why": "Word filters match fixed terms; card numbers and SSNs vary, so they need pattern-based PII detection."
       },
       {
         "key": "D",
-        "text": "Increasing the temperature",
+        "text": "A content filter for misconduct at high strength",
         "correct": false,
-        "why": "Temperature does not detect or remove sensitive information."
+        "why": "Content filters target harmful categories, not personal data."
       }
     ],
     "explanation": {
@@ -628,27 +628,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Rely on each model provider's default behavior",
+        "text": "Use each model provider's built-in safety settings",
         "correct": false,
-        "why": "Defaults differ between providers and may not match company policy."
+        "why": "Providers' defaults differ, so policies would not be consistent across models."
       },
       {
         "key": "B",
-        "text": "Write separate, different safety prompts for each model",
+        "text": "Put the same safety rules in every model's system prompt",
         "correct": false,
-        "why": "Separate prompts lead to inconsistent policies and are soft controls."
+        "why": "Prompt rules are soft guidance and behave differently across models; they are not an enforced, consistent policy."
       },
       {
         "key": "C",
-        "text": "Define one guardrail in Amazon Bedrock Guardrails and apply it to Bedrock model calls and, through the ApplyGuardrail API, to text from other models",
+        "text": "One Bedrock guardrail, applied to other models via ApplyGuardrail",
         "correct": true,
-        "why": "The ApplyGuardrail API evaluates any text against a guardrail, so the same policy works regardless of which model produced it."
+        "why": "The ApplyGuardrail API evaluates any text against a guardrail, so the same policy applies to Bedrock and non-Bedrock models."
       },
       {
         "key": "D",
-        "text": "Use only Provisioned Throughput",
+        "text": "Host every model on SageMaker AI with Model Monitor",
         "correct": false,
-        "why": "Capacity settings do not enforce safety policies."
+        "why": "Model Monitor tracks drift over time; it does not filter harmful inputs and outputs."
       }
     ],
     "explanation": {
@@ -678,27 +678,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Hide that the assistant is AI to make it feel more personal",
+        "text": "Add a disclaimer at the end of the terms of service",
         "correct": false,
-        "why": "Concealing AI use increases the risk of misplaced reliance and erodes trust."
+        "why": "A buried disclaimer does not stop users in the conversation from mistaking the assistant for a doctor."
       },
       {
         "key": "B",
-        "text": "Remove all guardrails",
+        "text": "Use a medical-specialist model so its advice is safe",
         "correct": false,
-        "why": "Removing guardrails takes away safeguards and makes it more likely users receive harmful or misleading content."
+        "why": "A better model does not stop users over-relying on it; they still need to know it is AI and where its limits are."
       },
       {
         "key": "C",
-        "text": "Increase the temperature for more engaging replies",
+        "text": "Add Guardrails content filters for violence and misconduct",
         "correct": false,
-        "why": "More randomness increases risk in a health context."
+        "why": "These filters target harmful content, not users mistaking general suggestions for medical advice."
       },
       {
         "key": "D",
-        "text": "Clearly disclose that users are interacting with AI, state its limitations, and route medical questions to qualified professionals",
+        "text": "Disclose it is AI, state its limits, route medical questions",
         "correct": true,
-        "why": "Transparency about AI use and its limits, plus escalation paths, prevents users from over-relying on the assistant."
+        "why": "Telling users they are talking to AI, explaining its limits and escalating medical questions prevents misplaced reliance."
       }
     ],
     "explanation": {
@@ -727,27 +727,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Word filters (custom words and phrases, plus a managed profanity list)",
+        "text": "Word filters with custom words and a profanity list",
         "correct": true,
-        "why": "Word filters block exact words and phrases you specify, such as brand names, and can include a managed profanity list."
+        "why": "Word filters block exact custom words and phrases, such as brand names, and include a managed profanity list."
       },
       {
         "key": "B",
-        "text": "Contextual grounding check",
+        "text": "Denied topics describing competitor products",
         "correct": false,
-        "why": "Grounding checks evaluate whether answers are supported by sources, not whether specific words appear."
+        "why": "Denied topics work on subject matter, not an exact list of terms, and could still let a brand name through in passing."
       },
       {
         "key": "C",
-        "text": "Automated Reasoning checks",
+        "text": "Content filters for insults at high strength",
         "correct": false,
-        "why": "Automated reasoning validates logical consistency with policies, not word lists."
+        "why": "Content filters detect harmful categories, not specific brand names or slang terms."
       },
       {
         "key": "D",
-        "text": "Model distillation",
+        "text": "Contextual grounding checks on generated content",
         "correct": false,
-        "why": "Distillation is a model customization technique."
+        "why": "Grounding checks compare answers with source documents; they do not block specific words."
       }
     ],
     "explanation": {
@@ -876,27 +876,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Choose the largest model regardless of need",
+        "text": "The larger model, because it will stay useful longer",
         "correct": false,
-        "why": "Using more compute than needed increases energy consumption without benefit."
+        "why": "Using far more compute than the task needs increases energy use with no benefit for the current requirement."
       },
       {
         "key": "B",
-        "text": "Pre-train a new model from scratch",
+        "text": "The larger model, run on energy-efficient instances",
         "correct": false,
-        "why": "Pre-training has a very large environmental footprint and is unnecessary here."
+        "why": "Efficient hardware helps, but an oversized model still uses more energy than one that meets the requirement."
       },
       {
         "key": "C",
-        "text": "Run both models on every request",
+        "text": "Pre-train a smaller custom model for the task",
         "correct": false,
-        "why": "Running both models on every request doubles inference compute and energy use with no benefit."
+        "why": "Pre-training from scratch has a very large energy footprint when an existing model already meets the requirement."
       },
       {
         "key": "D",
-        "text": "Choose the smaller model, because it meets requirements with lower energy use and environmental impact",
+        "text": "The smaller model that meets requirements with less energy",
         "correct": true,
-        "why": "Right-sizing models reduces compute and energy use, supporting sustainability without sacrificing required quality."
+        "why": "Right-sizing reduces compute and energy use without sacrificing the required accuracy."
       }
     ],
     "explanation": {
@@ -930,9 +930,9 @@
     "options": [
       {
         "key": "A",
-        "text": "Guaranteed elimination of all errors",
+        "text": "The need to pick a Region close to its users",
         "correct": false,
-        "why": "This is not a risk, and no AI system can eliminate all errors."
+        "why": "Region choice is a design consideration, not a legal or business risk of generative AI."
       },
       {
         "key": "B",
@@ -948,15 +948,15 @@
       },
       {
         "key": "D",
-        "text": "Reduced need for any human oversight",
+        "text": "Token-based pricing for each request",
         "correct": false,
-        "why": "Generative AI generally increases the need for oversight in sensitive uses."
+        "why": "Pricing is a cost model, not one of the recognized legal or business risks."
       },
       {
         "key": "E",
-        "text": "Automatic compliance with all regulations",
+        "text": "Support for multiple languages",
         "correct": false,
-        "why": "AI tools do not make applications compliant automatically."
+        "why": "Multilingual support is a capability, not a risk."
       }
     ],
     "explanation": {
@@ -985,27 +985,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Contextual grounding check, which scores grounding and relevance",
+        "text": "Contextual grounding check with grounding and relevance scores",
         "correct": true,
-        "why": "The contextual grounding check measures whether a response is grounded in the source and relevant to the query, and blocks responses below set thresholds."
+        "why": "The grounding check scores whether a response is supported by the retrieved source and relevant to the query, blocking those below thresholds."
       },
       {
         "key": "B",
-        "text": "Sensitive information filters",
+        "text": "Automated Reasoning checks against policy rules",
         "correct": false,
-        "why": "These detect PII, not unsupported content."
+        "why": "Automated Reasoning verifies answers against formal rules you encode, not against the documents retrieved for each question."
       },
       {
         "key": "C",
-        "text": "Denied topics",
+        "text": "Denied topics for questions outside the documents",
         "correct": false,
-        "why": "Denied topics block subjects, not ungrounded answers."
+        "why": "Denied topics block subject areas; they cannot tell whether an answer is supported by the retrieved text."
       },
       {
         "key": "D",
-        "text": "Word filters",
+        "text": "Content filters at their highest strength",
         "correct": false,
-        "why": "Word filters block specific terms and cannot judge whether an answer is supported by sources."
+        "why": "Content filters target harmful content, not unsupported or irrelevant answers."
       }
     ],
     "explanation": {
@@ -1087,27 +1087,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Agree; guardrails guarantee zero harmful outputs",
+        "text": "Agree, if every filter is set to the highest strength",
         "correct": false,
-        "why": "Guardrails reduce but cannot guarantee elimination of harmful outputs."
+        "why": "Even at maximum strength filters miss some content and can block legitimate content; testing and monitoring are still needed."
       },
       {
         "key": "B",
-        "text": "Only monitor latency",
+        "text": "Agree, but check invocation counts each month",
         "correct": false,
-        "why": "Latency monitoring does not detect harmful content."
+        "why": "Usage counts say nothing about whether harmful outputs are getting through."
       },
       {
         "key": "C",
-        "text": "Guardrails reduce risk but are not perfect; the company should still test, red-team, monitor outputs and review incidents",
+        "text": "Guardrails reduce risk; still test, red-team, monitor, review",
         "correct": true,
-        "why": "No filter catches everything. Ongoing testing and monitoring are needed to find gaps and tune policies."
+        "why": "No filter catches everything, so ongoing testing, monitoring and incident review find gaps and tune policies."
       },
       {
         "key": "D",
-        "text": "Disable guardrails and rely on prompts",
+        "text": "Replace the guardrails with detailed system prompts",
         "correct": false,
-        "why": "Prompts alone are weaker controls than guardrails."
+        "why": "Prompts are softer controls than guardrails; removing guardrails increases risk."
       }
     ],
     "explanation": {
@@ -1138,27 +1138,27 @@
     "options": [
       {
         "key": "A",
-        "text": "The cost of running a model",
+        "text": "Random error that varies from one prediction to the next",
         "correct": false,
-        "why": "Cost is unrelated to the definition of bias."
+        "why": "Bias is systematic, not random variation between predictions."
       },
       {
         "key": "B",
-        "text": "The temperature setting of a model",
+        "text": "The gap between training and validation accuracy",
         "correct": false,
-        "why": "Temperature is an inference parameter, not bias."
+        "why": "That gap indicates overfitting, not bias in the responsible AI sense."
       },
       {
         "key": "C",
-        "text": "Any random error in a single prediction",
+        "text": "A model giving different outputs for the same prompt",
         "correct": false,
-        "why": "Bias is systematic, not random noise in an individual prediction."
+        "why": "That describes nondeterminism, not bias."
       },
       {
         "key": "D",
-        "text": "Systematic errors or skew in data or models that lead to unfair or inaccurate outcomes for certain groups or cases",
+        "text": "Systematic skew that produces unfair or inaccurate outcomes",
         "correct": true,
-        "why": "Bias in AI refers to systematic skew that produces unfair or inaccurate results, often affecting particular groups."
+        "why": "Bias is a systematic deviation from data or modeling that unfairly favors or disfavors certain groups or outcomes."
       }
     ],
     "explanation": {
@@ -1189,27 +1189,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Amazon Bedrock Guardrails can be associated with Bedrock agents and used with knowledge base queries, applying the same policies",
+        "text": "One guardrail can serve the agent and knowledge base queries",
         "correct": true,
-        "why": "Guardrails integrate with Bedrock model invocation, Agents and Knowledge Bases, so consistent safeguards can be applied."
+        "why": "Guardrails can be associated with Bedrock agents and applied to knowledge base queries, giving consistent policies."
       },
       {
         "key": "B",
-        "text": "Guardrails work only with image models",
+        "text": "Guardrails cover agents only; knowledge bases need their own filters",
         "correct": false,
-        "why": "Guardrails support text, and some filters support images."
+        "why": "Guardrails also apply to knowledge base RetrieveAndGenerate queries."
       },
       {
         "key": "C",
-        "text": "Each knowledge base requires a new model to be trained for safety",
+        "text": "Guardrails apply only to direct model calls",
         "correct": false,
-        "why": "Safety is configured with guardrails, not by training new models."
+        "why": "Guardrails integrate with agents, knowledge bases and flows, not only direct calls."
       },
       {
         "key": "D",
-        "text": "Guardrails cannot be used with agents",
+        "text": "Each component needs its own separate guardrail",
         "correct": false,
-        "why": "Guardrails can be associated with Bedrock agents."
+        "why": "The same guardrail can be reused across components; separate copies are not required."
       }
     ],
     "explanation": {
@@ -1239,27 +1239,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Increasing the image resolution",
+        "text": "Model invocation logging of every image request",
         "correct": false,
-        "why": "Higher resolution makes images more realistic but does not identify their origin."
+        "why": "Logs record what the organization generated, but they cannot identify an image found later outside its systems."
       },
       {
         "key": "B",
-        "text": "Invisible watermarking of AI-generated images, with a way to detect the watermark",
+        "text": "Invisible watermarks that can later be detected",
         "correct": true,
-        "why": "Some image-generation models, such as Amazon's, embed invisible watermarks that can later be detected to identify AI-generated images."
+        "why": "Some image models embed invisible watermarks that can be detected to identify AI-generated images."
       },
       {
         "key": "C",
-        "text": "Batch inference",
+        "text": "Content filters on the image prompts",
         "correct": false,
-        "why": "Batch inference changes how requests are processed, not provenance."
+        "why": "Prompt filters block harmful requests; they do not mark images as AI-generated."
       },
       {
         "key": "D",
-        "text": "Prompt caching",
+        "text": "Storing generated images in a separate S3 bucket",
         "correct": false,
-        "why": "Caching affects cost and latency, not content provenance."
+        "why": "Where the organization stores images does not help identify a copy circulating elsewhere."
       }
     ],
     "explanation": {

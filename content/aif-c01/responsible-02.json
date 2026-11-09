@@ -14,27 +14,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Amazon Polly",
+        "text": "SageMaker Clarify post-training bias metrics",
         "correct": false,
-        "why": "Polly converts text to speech and does not analyze datasets."
+        "why": "Post-training metrics analyze a trained model's predictions; the team wants to check the data before training."
       },
       {
         "key": "B",
-        "text": "Amazon Route 53",
+        "text": "SageMaker Model Monitor bias drift monitoring",
         "correct": false,
-        "why": "Route 53 is a DNS service and has no capability to analyze training data for bias."
+        "why": "Bias drift monitoring watches a deployed model over time; no model exists yet."
       },
       {
         "key": "C",
-        "text": "Amazon SageMaker Clarify pre-training bias analysis",
+        "text": "SageMaker Clarify pre-training bias analysis",
         "correct": true,
-        "why": "SageMaker Clarify computes pre-training bias metrics, such as class imbalance and differences in label proportions across groups, on the dataset."
+        "why": "Clarify's pre-training metrics, such as class imbalance and differences in label proportions, measure bias in the dataset before training."
       },
       {
         "key": "D",
-        "text": "AWS Cost Explorer",
+        "text": "Amazon Macie sensitive data discovery",
         "correct": false,
-        "why": "Cost Explorer analyzes AWS spending. It cannot measure representation or label differences in a dataset."
+        "why": "Macie finds sensitive data in S3; it does not measure representation or label differences across groups."
       }
     ],
     "explanation": {
@@ -64,27 +64,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Measure only overall accuracy",
+        "text": "Compare overall accuracy with the previous model",
         "correct": false,
         "why": "Overall accuracy can hide large differences between groups."
       },
       {
         "key": "B",
-        "text": "Increase the model's size",
+        "text": "Run pre-training bias metrics on the training data",
         "correct": false,
-        "why": "A bigger model does not show whether predictions are biased."
+        "why": "Data metrics show imbalance in the dataset, not whether the trained model's predictions differ by group."
       },
       {
         "key": "C",
-        "text": "Skip testing because the training data was large",
+        "text": "Manually review a few predictions for each group",
         "correct": false,
-        "why": "Dataset size does not guarantee fairness. Large datasets can still encode bias against some groups."
+        "why": "A handful of examples cannot reliably reveal systematic differences in accuracy or approval rates."
       },
       {
         "key": "D",
-        "text": "Run post-training bias metrics with SageMaker Clarify and perform subgroup analysis of the predictions",
+        "text": "Clarify post-training bias metrics and subgroup analysis",
         "correct": true,
-        "why": "Post-training bias analysis compares prediction outcomes and error rates across groups to reveal unfair behavior."
+        "why": "Post-training bias analysis compares prediction outcomes and error rates across groups before deployment."
       }
     ],
     "explanation": {
@@ -118,27 +118,27 @@
     "options": [
       {
         "key": "A",
-        "text": "SageMaker Model Monitor bias drift monitoring, using SageMaker Clarify metrics",
+        "text": "Model Monitor bias drift monitoring with Clarify metrics",
         "correct": true,
-        "why": "Model Monitor can track bias metrics over time on live predictions and alert when they drift beyond thresholds."
+        "why": "Model Monitor can track bias metrics on live predictions over time and alert when they drift beyond thresholds."
       },
       {
         "key": "B",
-        "text": "Amazon Polly",
+        "text": "Model Monitor data quality monitoring",
         "correct": false,
-        "why": "Polly generates speech from text and cannot monitor deployed models for fairness drift."
+        "why": "Data quality monitoring tracks statistical changes in inputs, not whether outcomes have become less fair across groups."
       },
       {
         "key": "C",
-        "text": "Amazon S3 Lifecycle rules",
+        "text": "A one-time Clarify bias report run each year",
         "correct": false,
-        "why": "Lifecycle rules manage storage classes, not model fairness."
+        "why": "Annual reports leave long gaps; the requirement is automatic monitoring in production."
       },
       {
         "key": "D",
-        "text": "AWS Artifact",
+        "text": "CloudWatch alarms on the endpoint's error rate",
         "correct": false,
-        "why": "Artifact provides compliance reports and does not monitor models."
+        "why": "Error rates show technical failures, not unfair outcomes."
       }
     ],
     "explanation": {
@@ -168,27 +168,27 @@
     "options": [
       {
         "key": "A",
-        "text": "File naming conventions",
+        "text": "Higher image resolution so lesions are clearer",
         "correct": false,
-        "why": "File names do not affect what the model learns about different skin tones."
+        "why": "Sharper images do not fix the model's lack of exposure to darker skin tones."
       },
       {
         "key": "B",
-        "text": "Diversity and balance, so all skin tones are well represented",
+        "text": "Diversity and balance across skin tones",
         "correct": true,
-        "why": "An unbalanced dataset leads to worse performance for under-represented skin tones, which is both an accuracy and fairness problem."
+        "why": "With 90% light skin tones, the model will perform worse for others; balanced, diverse data fixes the gap."
       },
       {
         "key": "C",
-        "text": "Image compression format",
+        "text": "Label consistency between annotators",
         "correct": false,
-        "why": "Compression format does not address representation of skin tones."
+        "why": "Nothing suggests labels are inconsistent; the problem is who is represented in the data."
       },
       {
         "key": "D",
-        "text": "The number of duplicate images",
+        "text": "Total dataset size, by adding more images of any kind",
         "correct": false,
-        "why": "Adding duplicates would not improve representation of under-represented groups."
+        "why": "Adding more images of the same mix keeps the imbalance."
       }
     ],
     "explanation": {
@@ -217,27 +217,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Translate the forum posts before training",
+        "text": "Use the full scrape and filter outputs with guardrails",
         "correct": false,
-        "why": "Translation does not remove toxicity or misinformation."
+        "why": "Guardrails catch some outputs, but a model trained on toxic and false text will keep producing it."
       },
       {
         "key": "B",
-        "text": "Use as much raw data as possible without review",
+        "text": "Use only the most recent forum posts",
         "correct": false,
-        "why": "Unreviewed data introduces toxicity, bias and misinformation into the model."
+        "why": "Recent posts can be just as toxic and inaccurate; recency is not curation."
       },
       {
         "key": "C",
-        "text": "Use curated, trustworthy data sources and filter out toxic, inaccurate and irrelevant content",
+        "text": "Use curated, trustworthy sources and filter toxic content",
         "correct": true,
         "why": "Models reproduce what they learn, so curated, high-quality sources reduce toxic and false outputs."
       },
       {
         "key": "D",
-        "text": "Only use data from a single forum",
+        "text": "Use the full scrape but train for fewer epochs",
         "correct": false,
-        "why": "A single uncurated source is still uncurated and less diverse."
+        "why": "Training less does not stop the model learning harmful patterns from the data."
       }
     ],
     "explanation": {
@@ -267,27 +267,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Perfect generalization",
+        "text": "High bias (underfitting)",
         "correct": false,
-        "why": "A large training-versus-new-data gap is the opposite of good generalization."
+        "why": "Underfit models perform poorly even on training data; this model does very well on it."
       },
       {
         "key": "B",
-        "text": "Low latency",
+        "text": "Data drift in production",
         "correct": false,
-        "why": "Latency is unrelated to these symptoms, which describe how the model fits its training data."
+        "why": "Drift is a change in data after deployment; here instability appears just from retraining on similar samples."
       },
       {
         "key": "C",
-        "text": "High bias (underfitting)",
+        "text": "Class imbalance in the labels",
         "correct": false,
-        "why": "High bias models are too simple and perform poorly even on training data."
+        "why": "Imbalance does not explain predictions swinging between retraining runs."
       },
       {
         "key": "D",
         "text": "High variance (overfitting)",
         "correct": true,
-        "why": "High variance means the model is very sensitive to the specific training data, which shows up as overfitting and unstable predictions."
+        "why": "High variance means sensitivity to the specific training sample, shown as unstable models and a training-versus-new-data gap."
       }
     ],
     "explanation": {
@@ -318,27 +318,27 @@
     "options": [
       {
         "key": "A",
-        "text": "The training data under-represents other dialects, so the model is biased toward the dominant group; add representative data for the other dialects and evaluate per group",
+        "text": "Other dialects are under-represented; add their data, evaluate per group",
         "correct": true,
         "why": "Performance gaps across groups come from unrepresentative data; targeted data collection and per-group evaluation address them."
       },
       {
         "key": "B",
-        "text": "The model has too little data overall; add more of the dominant dialect",
+        "text": "The model is too small; use a larger architecture",
         "correct": false,
-        "why": "The scenario shows that more dominant-dialect data does not help other dialects."
+        "why": "A larger model trained on the same skewed data would still underperform for the other dialects."
       },
       {
         "key": "C",
-        "text": "The model needs a higher temperature",
+        "text": "The labels are inconsistent; retrain the annotators",
         "correct": false,
-        "why": "Temperature does not change what a speech model has learned about dialects."
+        "why": "Nothing points to labeling problems; the gap follows which dialects are in the data."
       },
       {
         "key": "D",
-        "text": "The model is perfect; users should change how they speak",
+        "text": "The model overfits; add regularization",
         "correct": false,
-        "why": "Shifting the burden to users ignores the model's fairness problem."
+        "why": "Regularization reduces overfitting in general but does not supply the missing dialect data."
       }
     ],
     "explanation": {
@@ -533,27 +533,27 @@
     "options": [
       {
         "key": "A",
-        "text": "The model has too few parameters",
+        "text": "The model has too few parameters to be fair",
         "correct": false,
-        "why": "Model size does not explain proxy-driven disparities."
+        "why": "Model size does not explain disparities driven by one specific feature."
       },
       {
         "key": "B",
-        "text": "Removing race always eliminates racial bias",
+        "text": "Race data is still leaking through a hidden column",
         "correct": false,
-        "why": "Correlated proxy features can still encode the removed attribute."
+        "why": "The analysis shows the disparity is driven by postal code, not by a leftover race column."
       },
       {
         "key": "C",
-        "text": "The temperature was set incorrectly",
+        "text": "The model is overfitting to rare postal codes",
         "correct": false,
-        "why": "Temperature does not apply to this kind of model decision and does not cause proxy bias."
+        "why": "Overfitting would add noise, not a systematic pattern across racial groups."
       },
       {
         "key": "D",
-        "text": "Postal code acts as a proxy for race, so bias persists even though the attribute was removed",
+        "text": "Postal code acts as a proxy for race",
         "correct": true,
-        "why": "Features correlated with protected attributes can reintroduce bias indirectly."
+        "why": "Features correlated with a protected attribute can reintroduce bias even after the attribute itself is removed."
       }
     ],
     "explanation": {
@@ -583,27 +583,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Use an existing pre-trained model, adapting it with prompts, RAG or light fine-tuning, instead of pre-training from scratch",
+        "text": "Use an existing model, adapted with prompts, RAG or light tuning",
         "correct": true,
-        "why": "Reusing existing models avoids the very large energy footprint of pre-training."
+        "why": "Reusing a pre-trained model avoids the very large energy footprint of pre-training."
       },
       {
         "key": "B",
-        "text": "Pre-train from scratch to have full control",
+        "text": "Pre-train a smaller model, since smaller uses less energy",
         "correct": false,
-        "why": "Pre-training consumes enormous compute and energy and is unnecessary when existing models suffice."
+        "why": "Even a small model's pre-training costs far more energy than reusing an existing model that already does the job."
       },
       {
         "key": "C",
-        "text": "Pre-train several models in parallel and pick the best",
+        "text": "Pre-train in a Region powered by renewable energy",
         "correct": false,
-        "why": "Pre-training several models in parallel multiplies the already large energy cost of pre-training."
+        "why": "Cleaner energy helps, but avoiding unnecessary pre-training saves far more."
       },
       {
         "key": "D",
-        "text": "Run the largest model available for every request",
+        "text": "Fine-tune the largest available model for the task",
         "correct": false,
-        "why": "Over-sized models waste energy on simple tasks."
+        "why": "An oversized model uses more energy for every request than the task needs."
       }
     ],
     "explanation": {
@@ -693,27 +693,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Test with a single prompt",
+        "text": "Run a toxicity evaluation on a large set of prompts",
         "correct": false,
-        "why": "One prompt cannot reveal systematic differences between groups."
+        "why": "Toxicity scores catch offensive content, not subtler differences in quality or stereotypes between groups."
       },
       {
         "key": "B",
-        "text": "Create paired test prompts that differ only in implied gender, then compare outputs with automated metrics and human review",
+        "text": "Paired prompts that differ only in implied gender, then compare",
         "correct": true,
-        "why": "Controlled paired prompts isolate the effect of the attribute, revealing bias in generated text."
+        "why": "Controlled paired prompts isolate the effect of gender, and automated metrics plus human review reveal differences."
       },
       {
         "key": "C",
-        "text": "Measure only token count",
+        "text": "Check the provider's published bias benchmark",
         "correct": false,
-        "why": "Token count does not capture stereotypes."
+        "why": "A general benchmark does not test this specific job-description use case."
       },
       {
         "key": "D",
-        "text": "Assume the model is unbiased because it is popular",
+        "text": "Ask the model whether its descriptions are biased",
         "correct": false,
-        "why": "Popularity does not demonstrate fairness."
+        "why": "A model's self-assessment is not reliable evidence of its own bias."
       }
     ],
     "explanation": {
@@ -749,21 +749,21 @@
       },
       {
         "key": "B",
-        "text": "Data residency",
+        "text": "Data drift since training",
         "correct": false,
-        "why": "Residency is about where data is stored."
+        "why": "The model is poor even on its training data, so drift is not the cause."
       },
       {
         "key": "C",
-        "text": "High bias (underfitting): the model is too simple to capture the patterns",
+        "text": "High bias (underfitting): the model is too simple",
         "correct": true,
-        "why": "Poor results everywhere, including on training data, indicate the model is too simple."
+        "why": "Poor results everywhere, including on training data, indicate the model is too simple to capture the patterns."
       },
       {
         "key": "D",
-        "text": "Prompt injection",
+        "text": "Class imbalance across customer groups",
         "correct": false,
-        "why": "Prompt injection is an attack on LLM applications, not a fit problem."
+        "why": "Imbalance would hurt some groups more than others; here every group is predicted poorly."
       }
     ],
     "explanation": {
@@ -793,25 +793,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Use the recordings immediately because the company owns them",
+        "text": "Encrypt the recordings before using them for training",
         "correct": false,
-        "why": "Ownership does not override privacy commitments and regulations about purpose."
+        "why": "Encryption protects the data but does not provide a legal basis for the new purpose."
       },
       {
         "key": "B",
-        "text": "Delete the privacy notice",
+        "text": "Use them, since quality assurance covers model training",
         "correct": false,
-        "why": "Removing the notice does not change obligations already made to customers."
+        "why": "Training a model is a new purpose beyond what customers were told."
       },
       {
         "key": "C",
-        "text": "Publish the recordings for transparency",
+        "text": "Use them once customer names are removed",
         "correct": false,
-        "why": "Publishing personal recordings would violate privacy."
+        "why": "De-identification helps, but the company still needs a legal basis or consent for the new purpose."
       },
       {
         "key": "D",
-        "text": "Confirm it has an appropriate legal basis and consent for the new purpose, and de-identify personal data as needed",
+        "text": "Confirm a legal basis or consent, and de-identify personal data",
         "correct": true,
         "why": "Using data beyond its stated purpose requires a legal basis or consent, and minimizing personal data reduces privacy risk."
       }
@@ -843,27 +843,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Foundation model evaluations in SageMaker AI (powered by SageMaker Clarify)",
+        "text": "SageMaker AI foundation model evaluations (Clarify)",
         "correct": true,
-        "why": "SageMaker AI provides foundation model evaluation for dimensions such as accuracy, toxicity, stereotyping and robustness."
+        "why": "SageMaker AI evaluates foundation models for dimensions such as stereotyping, toxicity, factual knowledge and robustness."
       },
       {
         "key": "B",
-        "text": "AWS Cost Explorer",
+        "text": "SageMaker Model Monitor on the endpoint",
         "correct": false,
-        "why": "Cost Explorer analyzes spending and cannot evaluate a model for stereotyping or toxicity."
+        "why": "Model Monitor tracks drift in production; it does not run pre-deployment stereotyping and knowledge evaluations."
       },
       {
         "key": "C",
-        "text": "Amazon Route 53 health checks",
+        "text": "SageMaker Clarify pre-training bias metrics",
         "correct": false,
-        "why": "Route 53 health checks monitor endpoint availability, not model bias."
+        "why": "Pre-training metrics analyze tabular training datasets, not a foundation model's generated text."
       },
       {
         "key": "D",
-        "text": "Amazon S3 Transfer Acceleration",
+        "text": "Amazon Bedrock Guardrails content filters",
         "correct": false,
-        "why": "Transfer Acceleration speeds uploads and has nothing to do with evaluation."
+        "why": "Guardrails filter content at runtime; they do not evaluate a model before deployment."
       }
     ],
     "explanation": {
@@ -897,27 +897,27 @@
     "options": [
       {
         "key": "A",
-        "text": "The model is fair because overall accuracy is high",
+        "text": "The model is fair, because overall accuracy is high",
         "correct": false,
         "why": "High overall accuracy can hide poor performance for small groups."
       },
       {
         "key": "B",
-        "text": "The model has effectively overfit to the majority groups and has high error for the under-represented group, an effect of bias and variance on demographic groups",
+        "text": "It fits the majority well; sparse data leaves the small group erratic",
         "correct": true,
-        "why": "Sparse data for a group leads to unreliable, high-variance predictions for that group."
+        "why": "Groups with little data get less accurate, less stable predictions, an effect of bias and variance on demographic groups."
       },
       {
         "key": "C",
-        "text": "The issue is caused by token pricing",
+        "text": "The small group's records are mislabeled",
         "correct": false,
-        "why": "Pricing does not affect model accuracy for groups."
+        "why": "Nothing points to labeling errors; the group simply has too few examples."
       },
       {
         "key": "D",
-        "text": "The model needs a smaller context window",
+        "text": "The model underfits every group equally",
         "correct": false,
-        "why": "Context window size is irrelevant to this model's group performance."
+        "why": "The model is very accurate for most groups, so it is not underfitting."
       }
     ],
     "explanation": {
@@ -996,27 +996,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Remove small-business applicants from the dataset entirely",
+        "text": "Duplicate the segment's records many times",
         "correct": false,
-        "why": "Removing them guarantees poor performance for that segment."
+        "why": "Duplicating the same few records can cause overfitting to them; new representative data is better."
       },
       {
         "key": "B",
-        "text": "No risk exists because 2% is enough for any model",
+        "text": "No risk, because the overall model is accurate",
         "correct": false,
-        "why": "Small segments are often poorly learned, especially if their patterns differ."
+        "why": "Overall accuracy can hide poor performance for a small, important segment."
       },
       {
         "key": "C",
-        "text": "Increase the model's temperature",
+        "text": "Remove the segment so it does not skew the model",
         "correct": false,
-        "why": "Temperature is irrelevant to this classification model's training data."
+        "why": "Removing it guarantees poor performance for those applicants."
       },
       {
         "key": "D",
-        "text": "The model may perform poorly or unfairly for small-business applicants; collect more representative data and evaluate that segment separately",
+        "text": "Risk of poor or unfair results; get more data, evaluate it",
         "correct": true,
-        "why": "Under-represented segments often see higher error rates. More data and per-segment evaluation address the risk."
+        "why": "Under-represented segments often see higher error rates, so more data and per-segment evaluation address the risk."
       }
     ],
     "explanation": {
@@ -1045,27 +1045,27 @@
     "options": [
       {
         "key": "A",
-        "text": "A feedback loop that amplifies existing popularity bias",
+        "text": "A feedback loop that amplifies popularity bias",
         "correct": true,
-        "why": "The model's own outputs influence future training data, reinforcing and amplifying the initial bias."
+        "why": "The model's own outputs shape future data, reinforcing and amplifying the initial bias toward popular items."
       },
       {
         "key": "B",
-        "text": "Prompt caching",
+        "text": "Historical bias in the original training labels",
         "correct": false,
-        "why": "Caching is a cost optimization, not a bias pattern."
+        "why": "The bias grows because of the model's own effect over time, not only because of the starting data."
       },
       {
         "key": "C",
-        "text": "Underfitting due to a small model",
+        "text": "Sampling bias from collecting data in one region",
         "correct": false,
-        "why": "The issue is self-reinforcing exposure, not model capacity."
+        "why": "Nothing suggests data came from one region; exposure drives the pattern."
       },
       {
         "key": "D",
-        "text": "Data residency",
+        "text": "Proxy bias from a feature linked to creators",
         "correct": false,
-        "why": "Residency concerns where data is stored."
+        "why": "The pattern comes from popularity reinforcing itself, not a feature standing in for a protected attribute."
       }
     ],
     "explanation": {
@@ -1095,27 +1095,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Choose the model with the longest name",
+        "text": "Choose the model with the top public benchmark score",
         "correct": false,
-        "why": "A model's name has no bearing on its safety, fairness, licensing or fitness for the use case."
+        "why": "Benchmarks show general capability, not fairness, safety or licensing for this use case."
       },
       {
         "key": "B",
-        "text": "Review the provider's documentation on intended use, limitations, safety evaluations and licensing, and evaluate the model on fairness and safety for the use case",
+        "text": "Review its documentation, limits and license; test fairness and safety",
         "correct": true,
-        "why": "Responsible selection considers documented limitations, safety and fairness evaluations, licensing and fit for the intended use."
+        "why": "Responsible selection weighs documented limitations, licensing and evaluations of fairness and safety for the use case."
       },
       {
         "key": "C",
-        "text": "Choose whichever model was released most recently",
+        "text": "Choose the newest model from the largest provider",
         "correct": false,
-        "why": "Recency does not indicate suitability or safety for a use case."
+        "why": "Recency and provider size do not demonstrate suitability or safety."
       },
       {
         "key": "D",
-        "text": "Skip evaluation to launch faster",
+        "text": "Choose the model with the lowest price per token",
         "correct": false,
-        "why": "Skipping evaluation increases the risk of harmful or unfair outputs."
+        "why": "Cost matters, but alone it ignores safety, fairness and licensing."
       }
     ],
     "explanation": {
@@ -1149,27 +1149,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Test once before launch and never again",
+        "text": "Run a full evaluation once a year",
         "correct": false,
-        "why": "Truthfulness can degrade as products and policies change."
+        "why": "Products and policies change far more often than yearly checks can catch."
       },
       {
         "key": "B",
-        "text": "Monitor only how many users log in",
+        "text": "Track user satisfaction ratings only",
         "correct": false,
-        "why": "Usage counts do not indicate whether answers are accurate."
+        "why": "Users may not notice inaccurate answers, so satisfaction alone does not measure truthfulness."
       },
       {
         "key": "C",
-        "text": "Regularly evaluate sampled production answers against current authoritative sources, with automated grounding checks and human review, and track results over time",
+        "text": "Regularly check sampled answers against current sources",
         "correct": true,
-        "why": "Continuous evaluation against current sources reveals declining truthfulness as information changes."
+        "why": "Ongoing evaluation against current sources, with grounding checks and human review, shows when truthfulness declines."
       },
       {
         "key": "D",
-        "text": "Increase the max-token limit",
+        "text": "Monitor latency and error rates on the endpoint",
         "correct": false,
-        "why": "Longer answers do not improve truthfulness."
+        "why": "These are operational metrics; they say nothing about whether answers are true."
       }
     ],
     "explanation": {
@@ -1202,27 +1202,27 @@
     "options": [
       {
         "key": "A",
-        "text": "The model will hallucinate images",
+        "text": "It will overfit, because 20 years is too much data",
         "correct": false,
-        "why": "This is a recommendation model and does not generate images."
+        "why": "More data generally helps generalization; the problem is what the labels reflect."
       },
       {
         "key": "B",
-        "text": "The model will require more GPUs",
+        "text": "It will drift as the company grows",
         "correct": false,
-        "why": "Compute needs are unrelated to the fairness risk."
+        "why": "Drift may happen later, but the main risk comes from the historical decisions it learns from."
       },
       {
         "key": "C",
-        "text": "The model will be too slow",
+        "text": "It will be hard to explain to managers",
         "correct": false,
-        "why": "Historical bias affects fairness, not speed."
+        "why": "Explainability is a concern, but the main risk is reproducing unfair past decisions."
       },
       {
         "key": "D",
-        "text": "The model learns and perpetuates historical bias against part-time employees",
+        "text": "It learns and repeats bias against part-time employees",
         "correct": true,
-        "why": "Training on historically biased decisions teaches the model to reproduce those biases."
+        "why": "Training on historically biased decisions teaches the model to reproduce, and scale, that bias."
       }
     ],
     "explanation": {
