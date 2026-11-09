@@ -1,0 +1,27 @@
+.header { position: relative; z-index: 20; border-bottom: 1px solid var(--line); background: var(--surface); }
+.inner { max-width: 1304px; min-height: 76px; margin: auto; padding: 14px 32px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+.brand { flex-shrink: 0; display: flex; align-items: center; }
+.desktopNav { display: flex; align-items: center; gap: 8px; }
+.header nav :is(a, button) { display: flex; align-items: center; min-height: 44px; padding: 11px 16px; font-size: 12px; font-weight: 650; color: var(--soft); border-radius: 7px; transition: background .2s, color .2s; }
+.header nav :is(a, button):hover { background: var(--bg); color: var(--brand); }
+.header nav .signup { background: var(--brand); color: var(--on-brand); margin-left: 10px; }
+.header nav .signup:hover { background: var(--brand); color: var(--on-brand); filter: brightness(1.1); }
+.header :is(a, button, summary):focus-visible { outline: 3px solid var(--brand); outline-offset: 3px; }
+.mobileMenu { display: none; }
+@media (max-width: 850px) {
+  .inner { min-height: 68px; padding: 12px 20px; gap: 12px; }
+  .desktopNav { display: none; }
+  .mobileMenu { display: block; }
+  .mobileMenu summary { cursor: pointer; list-style: none; padding: 10px 0 10px 10px; min-height: 44px; display: flex; gap: 10px; align-items: center; font-size: 12px; font-weight: 700; color: var(--ink); }
+  .mobileMenu summary::-webkit-details-marker { display: none; }
+  .mobileMenu summary span { color: var(--brand); font-size: 20px; font-weight: 400; transition: transform .2s; }
+  .mobileMenu[open] summary span { transform: rotate(45deg); }
+  .mobileMenu nav { position: absolute; top: calc(100% - 1px); right: 0; left: 0; padding: 12px 20px 20px; border-bottom: 1px solid var(--line); background: var(--surface); box-shadow: 0 16px 24px -20px #17153a44; }
+  .mobileMenu nav :is(a, button) { width: 100%; }
+  .header nav .signup { margin: 8px 0 0; justify-content: center; }
+}
+@media (max-width: 380px) {
+  .inner { padding-left: 16px; padding-right: 16px; }
+  .brand > span { gap: 6px; }
+  .brand > span > span:first-of-type { font-size: 13px; }
+}
