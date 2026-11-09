@@ -118,7 +118,7 @@
       },
       {
         "key": "B",
-        "text": "Jailbreaking by the user to bypass safety rules",
+        "text": "Jailbreaking by the user to bypass the model's safety rules",
         "correct": false,
         "why": "The user did nothing unusual. The malicious instruction came from the web page the assistant summarized."
       },
@@ -166,7 +166,7 @@
     "options": [
       {
         "key": "A",
-        "text": "Jailbreaking; add a Guardrails prompt attack filter",
+        "text": "Jailbreaking; add a Guardrails prompt attack filter to the agent",
         "correct": false,
         "why": "A prompt attack filter helps detect extraction attempts, but secrets in a prompt remain at risk. The root fix is keeping them out of prompts."
       },
@@ -320,13 +320,13 @@
       },
       {
         "key": "B",
-        "text": "Guardrails sensitive information filters for PII",
+        "text": "Guardrails sensitive information filters to mask PII",
         "correct": false,
         "why": "These filters mask or block personal data. They do not detect attempts to override the model's instructions."
       },
       {
         "key": "C",
-        "text": "Guardrails contextual grounding checks",
+        "text": "Guardrails contextual grounding checks on responses",
         "correct": false,
         "why": "Grounding checks flag responses not supported by the source documents. They do not inspect inputs for attacks."
       },
@@ -688,7 +688,7 @@
       },
       {
         "key": "C",
-        "text": "Restate the format instruction after the document, near the question",
+        "text": "Repeat the format instruction after the document",
         "correct": true,
         "why": "In long prompts, putting or repeating key instructions next to the question helps the model apply them."
       },
@@ -1043,19 +1043,19 @@
       },
       {
         "key": "B",
-        "text": "\"Answer as completely and confidently as you can.\"",
+        "text": "\"Answer every question as completely and confidently as you can.\"",
         "correct": false,
         "why": "Pushing for complete, confident answers encourages the model to fill gaps with invented content."
       },
       {
         "key": "C",
-        "text": "\"Think step by step before giving your final answer.\"",
+        "text": "\"Think through the question step by step before giving your answer.\"",
         "correct": false,
         "why": "Step-by-step reasoning helps logic problems but does not supply missing knowledge; the model can still invent facts."
       },
       {
         "key": "D",
-        "text": "\"Give a detailed answer of at least 300 words.\"",
+        "text": "\"Give a detailed, thorough answer of at least 300 words every time.\"",
         "correct": false,
         "why": "Forcing length encourages padding with invented details when the real answer is short or unknown."
       }

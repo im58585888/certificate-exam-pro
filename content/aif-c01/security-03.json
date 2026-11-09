@@ -309,7 +309,7 @@
     "options": [
       {
         "key": "A",
-        "text": "Archive transcripts to S3 Glacier after 18 months",
+        "text": "Archive transcripts to S3 Glacier once they are 18 months old",
         "correct": false,
         "why": "Archiving keeps the data; the regulation requires deleting it."
       },
@@ -321,7 +321,7 @@
       },
       {
         "key": "C",
-        "text": "Automated retention, such as S3 Lifecycle and log retention",
+        "text": "Automated deletion with S3 Lifecycle and log retention",
         "correct": true,
         "why": "A defined retention policy with automated expiration ensures transcripts are deleted on schedule."
       },
@@ -408,7 +408,7 @@
     "options": [
       {
         "key": "A",
-        "text": "Monitoring and observation, with logging, metrics and alerts",
+        "text": "Monitoring and observation of data use",
         "correct": true,
         "why": "Continuous monitoring of data access and use detects anomalies and policy violations."
       },
@@ -723,7 +723,7 @@
       },
       {
         "key": "B",
-        "text": "Data lifecycle management with classification and ownership",
+        "text": "Lifecycle management by classification and owner",
         "correct": true,
         "why": "Classifying data, assigning owners and handling it by classification from creation to deletion is lifecycle governance."
       },

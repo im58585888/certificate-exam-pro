@@ -70,7 +70,7 @@
       },
       {
         "key": "B",
-        "text": "Top-p (nucleus sampling)",
+        "text": "Top-p",
         "correct": true,
         "why": "Top-p keeps the most likely tokens until their cumulative probability reaches p, and samples only from that set."
       },
@@ -368,25 +368,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Pre-train a new model every week",
+        "text": "Pre-train a new model each week on the catalog",
         "correct": false,
         "why": "Pre-training is extremely expensive and would still be out of date between runs."
       },
       {
         "key": "B",
-        "text": "Rely on the base model's training data",
+        "text": "Rely on what the base model learned in training",
         "correct": false,
         "why": "The base model knows nothing about the company's current catalog."
       },
       {
         "key": "C",
-        "text": "Fine-tune the model daily on the latest catalog",
+        "text": "Fine-tune the model every day on the latest catalog",
         "correct": false,
         "why": "Daily fine-tuning is costly and still lags behind changes that occur many times a day."
       },
       {
         "key": "D",
-        "text": "Use RAG or tools to retrieve current catalog data at query time",
+        "text": "Retrieve current catalog data at query time (RAG or tools)",
         "correct": true,
         "why": "Retrieving data at query time always reflects the latest information without retraining the model."
       }
@@ -783,21 +783,21 @@
       },
       {
         "key": "B",
-        "text": "Stop sequences and top-k",
+        "text": "Context window and output length",
         "correct": false,
-        "why": "These are runtime parameters, not selection criteria."
+        "why": "The task is describing images in three languages; input and output length are not the deciding factors."
       },
       {
         "key": "C",
-        "text": "Modality (image input) and multilingual support",
+        "text": "Modality and multilingual support",
         "correct": true,
         "why": "The model must accept images and produce good descriptions in all three languages."
       },
       {
         "key": "D",
-        "text": "Training cutoff date and model name",
+        "text": "Training cutoff date and model size",
         "correct": false,
-        "why": "These do not determine whether the model can describe images in multiple languages."
+        "why": "Cutoff and size matter for knowledge and cost, but a model must first accept images and handle all three languages."
       }
     ],
     "explanation": {
@@ -1136,7 +1136,7 @@
     "options": [
       {
         "key": "A",
-        "text": "Restrict answers to the provided context and add a contextual grounding check",
+        "text": "Limit answers to the given context; add a grounding check",
         "correct": true,
         "why": "Explicit grounding instructions plus an automated grounding check reduce answers that go beyond the retrieved sources."
       },

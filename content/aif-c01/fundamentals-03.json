@@ -25,7 +25,7 @@
       },
       {
         "key": "C",
-        "text": "Define business goal, collect and prepare data, train and evaluate model, deploy, monitor",
+        "text": "Define business goal, prepare data, train, evaluate, deploy, monitor",
         "correct": true,
         "why": "The lifecycle starts with the business problem, then data, then model development and evaluation, then deployment and ongoing monitoring."
       },
@@ -166,9 +166,9 @@
     "options": [
       {
         "key": "A",
-        "text": "SageMaker Model Cards",
+        "text": "SageMaker Autopilot leaderboards",
         "correct": false,
-        "why": "Model Cards document a model's intended use, risks and performance. They do not run training experiments."
+        "why": "Autopilot searches across algorithms and preprocessing for tabular data; tuning a chosen model's hyperparameters is automatic model tuning."
       },
       {
         "key": "B",
@@ -178,15 +178,15 @@
       },
       {
         "key": "C",
-        "text": "SageMaker Model Monitor",
+        "text": "SageMaker Model Monitor baselines",
         "correct": false,
-        "why": "Model Monitor watches deployed models for drift. It does not search for training settings."
+        "why": "Model Monitor baselines are used to detect drift in production, not to search for hyperparameters."
       },
       {
         "key": "D",
-        "text": "SageMaker Ground Truth",
+        "text": "SageMaker Clarify explainability",
         "correct": false,
-        "why": "Ground Truth creates labeled datasets with human labelers. It does not tune hyperparameters."
+        "why": "Clarify explains predictions and measures bias; it does not tune training settings."
       }
     ],
     "explanation": {
@@ -216,27 +216,27 @@
     "options": [
       {
         "key": "A",
-        "text": "AWS Artifact",
+        "text": "Amazon SageMaker Model Registry",
         "correct": false,
-        "why": "AWS Artifact provides compliance reports. It does not monitor model performance."
+        "why": "Model Registry versions and approves models; it does not watch production data for drift."
       },
       {
         "key": "B",
-        "text": "Amazon Polly",
+        "text": "Amazon SageMaker Clarify bias reports",
         "correct": false,
-        "why": "Polly converts text to speech and has nothing to do with model monitoring."
+        "why": "Clarify bias reports measure fairness across groups, not overall degradation from changing buying habits."
       },
       {
         "key": "C",
         "text": "Amazon SageMaker Model Monitor",
         "correct": true,
-        "why": "Model Monitor continuously compares production data and predictions against a baseline and alerts on data drift and model quality degradation."
+        "why": "Model Monitor compares production data and predictions with a baseline and alerts on data drift and quality degradation."
       },
       {
         "key": "D",
         "text": "Amazon SageMaker Ground Truth",
         "correct": false,
-        "why": "Ground Truth helps create labeled data but does not watch deployed models for drift."
+        "why": "Ground Truth labels data with human workers; it does not monitor deployed models."
       }
     ],
     "explanation": {
@@ -267,27 +267,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Stop retraining the model",
+        "text": "Schedule the notebooks to run nightly with a cron job",
         "correct": false,
-        "why": "Models need retraining as data changes. Stopping retraining leads to degraded predictions."
+        "why": "A schedule runs the steps automatically but does not version the workflow or record lineage, so models still cannot be reproduced."
       },
       {
         "key": "B",
-        "text": "Use larger notebook instances so the steps run faster",
+        "text": "Document the notebook order in a runbook",
         "correct": false,
-        "why": "Speed does not fix skipped steps or reproducibility. The process itself needs to be automated and versioned."
+        "why": "A runbook still relies on people following steps correctly, which is the cause of the skipped steps."
       },
       {
         "key": "C",
-        "text": "Have a second person watch the notebooks being run",
+        "text": "Store each trained model in SageMaker Model Registry",
         "correct": false,
-        "why": "Manual oversight still relies on people following steps correctly and does not record a reproducible definition of the workflow."
+        "why": "The registry versions models, but the process that produced them would still be manual and unreproducible."
       },
       {
         "key": "D",
-        "text": "Automate the workflow as a repeatable pipeline with Amazon SageMaker Pipelines",
+        "text": "Automate the steps as a SageMaker Pipelines workflow",
         "correct": true,
-        "why": "SageMaker Pipelines defines the steps (process, train, evaluate, register) as code that runs the same way every time and records lineage, making retraining reproducible."
+        "why": "SageMaker Pipelines defines the steps as code that runs the same way each time and records lineage, making retraining reproducible."
       }
     ],
     "explanation": {
@@ -491,7 +491,7 @@
       },
       {
         "key": "D",
-        "text": "Accuracy is misleading because the classes are highly imbalanced; use F1 score or recall for the fraud class.",
+        "text": "Accuracy is misleading because classes are imbalanced; use recall or F1 for fraud.",
         "correct": true,
         "why": "With 99% legitimate transactions, predicting \"not fraud\" always gives 99% accuracy. F1 and recall on the fraud class reveal that no fraud is caught."
       }
@@ -523,27 +523,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Return on investment, such as incremental revenue from recommendations compared with development and operating costs",
+        "text": "Return on investment (benefit versus total cost)",
         "correct": true,
-        "why": "ROI ties the model to business outcomes and costs, which is what determines whether it is worth funding."
+        "why": "ROI ties the model to business outcomes and costs, which determines whether it is worth funding."
       },
       {
         "key": "B",
-        "text": "The model's F1 score on the test set",
+        "text": "The model's F1 score on the held-out test set",
         "correct": false,
-        "why": "F1 is a technical model metric. It does not show whether the model creates business value relative to its cost."
+        "why": "F1 measures technical quality, not whether the model creates value relative to its cost."
       },
       {
         "key": "C",
-        "text": "The number of layers in the neural network",
+        "text": "Click-through rate in an offline replay test",
         "correct": false,
-        "why": "Model architecture details say nothing about business value."
+        "why": "Offline replay estimates behavior but does not compare real value with cost."
       },
       {
         "key": "D",
-        "text": "The size of the training dataset",
+        "text": "The model's average latency in production",
         "correct": false,
-        "why": "Dataset size describes the input, not the business outcome or return."
+        "why": "Latency is an operational metric, not a measure of business value."
       }
     ],
     "explanation": {
@@ -579,7 +579,7 @@
       },
       {
         "key": "B",
-        "text": "A managed API service, such as invoking the model through Amazon Bedrock",
+        "text": "A managed API service, such as calling the model via Amazon Bedrock",
         "correct": true,
         "why": "With a managed API, AWS runs and scales the model infrastructure, and the company pays per request or token. No servers or GPUs to manage."
       },
@@ -628,27 +628,27 @@
     "options": [
       {
         "key": "A",
-        "text": "AWS Artifact",
+        "text": "The Amazon Bedrock serverless model catalog",
         "correct": false,
-        "why": "Artifact provides compliance reports and agreements, not models."
+        "why": "Bedrock serverless models run in AWS-managed infrastructure, not deployed into the team's own account."
       },
       {
         "key": "B",
-        "text": "Amazon Transcribe",
+        "text": "Amazon SageMaker Canvas",
         "correct": false,
-        "why": "Transcribe is a speech-to-text service. It does not offer a catalog of models to deploy."
+        "why": "Canvas is a no-code tool for analysts, not a hub for deploying and fine-tuning open-source models."
       },
       {
         "key": "C",
         "text": "Amazon SageMaker JumpStart",
         "correct": true,
-        "why": "SageMaker JumpStart is a hub of pre-trained and foundation models, including open-source ones, that can be deployed and fine-tuned in your account with a few clicks."
+        "why": "JumpStart offers pre-trained and open-source models that deploy into your account with a few clicks and can be fine-tuned."
       },
       {
         "key": "D",
-        "text": "AWS Trusted Advisor",
+        "text": "Amazon Bedrock Custom Model Import",
         "correct": false,
-        "why": "Trusted Advisor recommends cost, security and performance improvements. It does not host models."
+        "why": "Custom Model Import brings in weights you already have; it is not a one-click catalog of public models."
       }
     ],
     "explanation": {
@@ -678,27 +678,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Amazon Polly",
+        "text": "Amazon Q Developer",
         "correct": false,
-        "why": "Polly converts text to speech. It is not a development environment."
+        "why": "Q Developer is an AI coding assistant; turning requests into requirements, designs and tasks for agents is Kiro's spec-driven approach."
       },
       {
         "key": "B",
-        "text": "AWS Config",
+        "text": "Amazon Bedrock Agents",
         "correct": false,
-        "why": "AWS Config records and evaluates resource configurations for compliance. It does not help write code."
+        "why": "Bedrock Agents builds agents into applications; it is not a development environment."
       },
       {
         "key": "C",
-        "text": "Amazon Rekognition",
+        "text": "Amazon Quick",
         "correct": false,
-        "why": "Rekognition analyzes images and video, not software requirements."
+        "why": "Amazon Quick is a workspace for business users, not a software development environment."
       },
       {
         "key": "D",
         "text": "Kiro",
         "correct": true,
-        "why": "Kiro is an agentic AI development environment that supports spec-driven development, turning prompts into requirements, designs and tasks that AI agents help implement."
+        "why": "Kiro is an agentic development environment that turns requests into requirements, designs and tasks that AI agents help implement."
       }
     ],
     "explanation": {
@@ -730,25 +730,25 @@
         "key": "A",
         "text": "Amazon Quick",
         "correct": true,
-        "why": "Amazon Quick is an agentic AI workspace for business users that brings together data analysis and dashboards, research, and workflow automation with AI agents."
+        "why": "Amazon Quick is an agentic AI workspace for business users, combining data questions, dashboards, research and workflow automation."
       },
       {
         "key": "B",
-        "text": "Amazon EC2 GPU instances",
+        "text": "Amazon SageMaker Canvas",
         "correct": false,
-        "why": "EC2 provides raw compute that technical teams must manage. It is not a business-user AI workspace."
+        "why": "Canvas builds ML predictions without code, but it is not a workspace for dashboards, research and automation."
       },
       {
         "key": "C",
-        "text": "AWS CloudTrail",
+        "text": "Amazon Q Developer",
         "correct": false,
-        "why": "CloudTrail logs API activity for auditing and does not answer business questions."
+        "why": "Q Developer helps software developers, not business analysts."
       },
       {
         "key": "D",
-        "text": "Amazon SageMaker AI training jobs",
+        "text": "Amazon Bedrock Agents",
         "correct": false,
-        "why": "Training jobs build custom models and require ML and coding skills. They are not a workspace for business analysts."
+        "why": "Bedrock Agents is for developers building agents into applications, not a ready-made workspace for analysts."
       }
     ],
     "explanation": {
@@ -840,9 +840,9 @@
       },
       {
         "key": "B",
-        "text": "Keeping experiment results only in individual data scientists' memories",
+        "text": "Tuning each model by hand before every release",
         "correct": false,
-        "why": "MLOps tracks experiments and lineage systematically so work can be reproduced and audited."
+        "why": "Manual tuning is not repeatable; MLOps automates training and tuning in pipelines."
       },
       {
         "key": "C",
@@ -852,15 +852,15 @@
       },
       {
         "key": "D",
-        "text": "Training each model only once and never updating it",
+        "text": "Retraining on a fixed schedule only, with no monitoring",
         "correct": false,
-        "why": "Models drift over time. Never updating them leads to steadily worse predictions."
+        "why": "Without monitoring, degradation between retraining runs goes unnoticed."
       },
       {
         "key": "E",
-        "text": "Deploying models by copying files manually to servers whenever someone remembers",
+        "text": "Sending new models straight to all traffic after training",
         "correct": false,
-        "why": "Manual, ad hoc deployment is the problem MLOps solves. MLOps automates deployment through repeatable processes."
+        "why": "MLOps validates models and rolls them out gradually or behind approval, rather than exposing all users at once."
       }
     ],
     "explanation": {
@@ -894,15 +894,15 @@
     "options": [
       {
         "key": "A",
-        "text": "Precision",
+        "text": "Area under the ROC curve (AUC)",
         "correct": false,
-        "why": "Precision measures the share of predicted positives that are correct. It does not apply to continuous predictions."
+        "why": "AUC evaluates binary classifiers across thresholds. Rent prediction is a regression task."
       },
       {
         "key": "B",
-        "text": "Recall",
+        "text": "F1 score of the predictions",
         "correct": false,
-        "why": "Recall is a classification metric for how many positive cases were found. Rent prediction is a regression task."
+        "why": "F1 combines precision and recall for classification; it does not measure error in dollars."
       },
       {
         "key": "C",
@@ -912,9 +912,9 @@
       },
       {
         "key": "D",
-        "text": "BLEU score",
+        "text": "Recall of the predictions",
         "correct": false,
-        "why": "BLEU evaluates machine-translated text against reference translations. It does not measure numeric prediction error."
+        "why": "Recall measures how many positive cases a classifier found; it does not apply to numeric predictions."
       }
     ],
     "explanation": {
@@ -996,25 +996,25 @@
         "key": "A",
         "text": "Amazon SageMaker Autopilot",
         "correct": true,
-        "why": "SageMaker Autopilot automatically builds, trains and tunes candidate models on tabular data and shows a leaderboard, while keeping visibility into how models were built."
+        "why": "Autopilot automatically explores preprocessing, tries algorithms, tunes them and ranks candidates on a leaderboard, with notebooks for inspection."
       },
       {
         "key": "B",
-        "text": "Amazon Polly",
+        "text": "Amazon SageMaker Ground Truth",
         "correct": false,
-        "why": "Polly converts text to speech and does not build models."
+        "why": "Ground Truth helps label data; the team's data is already labeled."
       },
       {
         "key": "C",
-        "text": "Amazon Macie",
+        "text": "SageMaker automatic model tuning",
         "correct": false,
-        "why": "Macie discovers sensitive data in Amazon S3. It does not train models."
+        "why": "Automatic model tuning tunes one chosen algorithm's hyperparameters; it does not explore preprocessing and algorithms."
       },
       {
         "key": "D",
-        "text": "AWS CloudTrail",
+        "text": "Amazon SageMaker JumpStart",
         "correct": false,
-        "why": "CloudTrail records API calls and has no model-building capability."
+        "why": "JumpStart offers pre-trained models; it does not search for the best model for a tabular dataset."
       }
     ],
     "explanation": {
@@ -1045,27 +1045,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Pre-training from scratch is the cheapest and fastest way to get a capable model.",
+        "text": "It is the fastest way to get a capable model for one task",
         "correct": false,
-        "why": "Pre-training from scratch is the most expensive and slowest option, requiring massive data and compute."
+        "why": "Pre-training from scratch is the slowest and most expensive option."
       },
       {
         "key": "B",
-        "text": "Pre-training from scratch requires very large datasets, significant compute and expertise, so most companies start from an existing pre-trained model instead.",
+        "text": "It takes huge data, compute and skill; most reuse existing models",
         "correct": true,
-        "why": "Training a foundation model demands huge amounts of data, accelerated compute and specialized skills. Starting from an existing model and adapting it is far more practical for most organizations."
+        "why": "Training a foundation model demands massive data, accelerated compute and specialized expertise, so adapting an existing model is more practical."
       },
       {
         "key": "C",
-        "text": "Pre-training from scratch does not need any data.",
+        "text": "It needs less data than fine-tuning, since it starts fresh",
         "correct": false,
-        "why": "Pre-training needs enormous amounts of data, typically billions of tokens or more."
+        "why": "Pre-training needs vastly more data than fine-tuning."
       },
       {
         "key": "D",
-        "text": "Pre-trained models can never be adapted, so training from scratch is required for any customization.",
+        "text": "It is required whenever a company wants to customize a model",
         "correct": false,
-        "why": "Pre-trained models can be adapted through prompting, RAG, fine-tuning and continued pre-training."
+        "why": "Existing models can be adapted with prompting, RAG, fine-tuning and continued pre-training."
       }
     ],
     "explanation": {
@@ -1099,15 +1099,15 @@
     "options": [
       {
         "key": "A",
-        "text": "Model deployment",
+        "text": "Feature engineering",
         "correct": false,
-        "why": "Deployment comes after training. The scientist is still trying to understand the raw data."
+        "why": "Feature engineering creates or transforms model inputs; studying distributions and missing values to understand the data is EDA."
       },
       {
         "key": "B",
-        "text": "Model monitoring",
+        "text": "Data labeling and annotation",
         "correct": false,
-        "why": "Monitoring tracks a deployed model's behavior. This work happens before any model is built."
+        "why": "Labeling attaches answers to examples; the scientist is examining the data, not labeling it."
       },
       {
         "key": "C",
@@ -1117,9 +1117,9 @@
       },
       {
         "key": "D",
-        "text": "Inference",
+        "text": "Model validation and testing",
         "correct": false,
-        "why": "Inference is using a trained model to make predictions. No model exists yet."
+        "why": "Validation evaluates a trained model; no model exists yet."
       }
     ],
     "explanation": {
@@ -1149,27 +1149,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Overfitting",
+        "text": "Data drift across all the production models",
         "correct": false,
-        "why": "Overfitting is a property of a single model's fit to data. The problem described is about processes and maintainability across many models."
+        "why": "Drift degrades accuracy over time; the problem described is fragile, inconsistent processes."
       },
       {
         "key": "B",
-        "text": "Hallucination",
+        "text": "Overfitting in each team's individual models",
         "correct": false,
-        "why": "Hallucination is a generative model producing false content. The issue here is operational, not model output."
+        "why": "Overfitting concerns how a model fits data, not how models are built and operated."
       },
       {
         "key": "C",
-        "text": "Class imbalance",
+        "text": "Unfair bias across different customer groups",
         "correct": false,
-        "why": "Class imbalance concerns the distribution of labels in a dataset, not how models are built and operated."
+        "why": "Nothing in the scenario concerns unfair outcomes; it concerns maintainability."
       },
       {
         "key": "D",
-        "text": "Accumulated technical debt from non-standardized, non-repeatable ML processes",
+        "text": "Technical debt from ad hoc, unrepeatable processes",
         "correct": true,
-        "why": "Ad hoc scripts, undocumented data and custom deployments create ML technical debt, making systems fragile and costly to change. MLOps standardization reduces it."
+        "why": "Ad hoc scripts, undocumented data and custom deployments create technical debt; MLOps standardization reduces it."
       }
     ],
     "explanation": {

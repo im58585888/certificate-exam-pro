@@ -662,27 +662,27 @@
     "options": [
       {
         "key": "A",
-        "text": "ML is always cheaper than a few hand-written rules.",
+        "text": "ML is cheaper to build than a few hand-written rules",
         "correct": false,
-        "why": "ML has costs for data, training, hosting and monitoring. It is valuable here because of scale and complexity, not because it is always cheaper."
+        "why": "ML has costs for data, training, hosting and monitoring; its value here comes from scale and complexity, not lower cost."
       },
       {
         "key": "B",
-        "text": "ML guarantees that every fraudulent order is caught.",
+        "text": "ML needs no retraining once fraud patterns are learned",
         "correct": false,
-        "why": "No ML model is perfect. ML reduces fraud but will still produce some false positives and false negatives."
+        "why": "Fraud patterns change, so models must be monitored and retrained to keep up."
       },
       {
         "key": "C",
-        "text": "ML removes the need for any labeled historical data.",
+        "text": "ML works without any labeled historical data",
         "correct": false,
-        "why": "Supervised fraud models learn best from labeled examples of past fraud. ML does not remove the value of historical data."
+        "why": "Supervised fraud models learn best from labeled examples of past fraud."
       },
       {
         "key": "D",
-        "text": "ML can learn complex, changing patterns from large volumes of data and score every order automatically at scale.",
+        "text": "ML learns complex, changing patterns and scores every order",
         "correct": true,
-        "why": "Fraud patterns are complex and shifting, and volumes are huge. ML scales to score every order and can be retrained as patterns change, which fixed rules struggle to match."
+        "why": "ML scales to score millions of orders and can be retrained as patterns change, which fixed rules struggle to match."
       }
     ],
     "explanation": {
@@ -713,27 +713,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Train a traditional supervised ML model on the tabular data and use explainability tooling to report the factors behind each decision.",
+        "text": "A traditional ML model on the tabular data, plus explainability",
         "correct": true,
-        "why": "Labeled tabular data suits a traditional classifier, which is cheaper, more consistent and more explainable. Tools such as SageMaker Clarify can show which features drove each decision."
+        "why": "Labeled tabular data suits a traditional classifier, and tools such as SageMaker Clarify can report the factors behind each decision."
       },
       {
         "key": "B",
-        "text": "Use an image-generation model to visualize applicant risk.",
+        "text": "A foundation model prompted with each application and the rules",
         "correct": false,
-        "why": "Image generation does not make approval decisions and does nothing to meet the explanation requirement."
+        "why": "A general FM is hard to explain and can be inconsistent between runs, which conflicts with the regulatory requirement."
       },
       {
         "key": "C",
-        "text": "Prompt a large general-purpose foundation model with each application and ask it to decide.",
+        "text": "A foundation model fine-tuned on past approval decisions",
         "correct": false,
-        "why": "A general FM is hard to explain, can be inconsistent between runs, and is not designed for decisions on tabular data. That conflicts with the regulatory explanation requirement."
+        "why": "Fine-tuning does not make an FM's decisions explainable, and it is more costly than a traditional model."
       },
       {
         "key": "D",
-        "text": "Use unsupervised clustering and reject applicants in the riskiest cluster.",
+        "text": "Unsupervised clustering, rejecting the riskiest cluster",
         "correct": false,
-        "why": "Clustering ignores the labeled outcomes the bank already has and gives no clear per-applicant reasons for rejection."
+        "why": "Clustering ignores the labeled outcomes and gives no clear per-applicant reasons."
       }
     ],
     "explanation": {
@@ -766,27 +766,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Amazon Polly",
+        "text": "Amazon Bedrock",
         "correct": false,
-        "why": "Polly converts text to speech. It is not an ML development platform."
+        "why": "Bedrock provides managed foundation models; it is not a platform for training custom models with your own algorithms."
       },
       {
         "key": "B",
         "text": "Amazon SageMaker AI",
         "correct": true,
-        "why": "SageMaker AI is the fully managed service for the whole ML lifecycle: data preparation, building, training, tuning, deploying and monitoring custom models."
+        "why": "SageMaker AI covers the whole ML lifecycle: data preparation, building, training, tuning and deploying custom models."
       },
       {
         "key": "C",
-        "text": "Amazon Comprehend",
+        "text": "Amazon SageMaker Canvas",
         "correct": false,
-        "why": "Comprehend is a pre-trained NLP API. It does not provide a platform for building and training custom models with your own algorithms."
+        "why": "Canvas is a no-code tool; it does not let data scientists bring their own algorithms."
       },
       {
         "key": "D",
-        "text": "AWS Artifact",
+        "text": "AWS Glue",
         "correct": false,
-        "why": "AWS Artifact provides compliance reports and agreements. It has nothing to do with training models."
+        "why": "Glue prepares and moves data; it does not train or deploy models."
       }
     ],
     "explanation": {
@@ -816,27 +816,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Writing a custom training script in a SageMaker AI notebook",
+        "text": "A custom training script in a SageMaker AI notebook",
         "correct": false,
         "why": "Custom training scripts require Python and ML expertise, which the analysts do not have."
       },
       {
         "key": "B",
-        "text": "Amazon Transcribe",
+        "text": "SageMaker Autopilot through the Python SDK",
         "correct": false,
-        "why": "Transcribe converts speech to text and cannot build a lead-conversion model."
+        "why": "Autopilot automates model building, but calling it through the SDK requires coding."
       },
       {
         "key": "C",
         "text": "Amazon SageMaker Canvas",
         "correct": true,
-        "why": "SageMaker Canvas is a no-code visual interface that lets business analysts import data, build ML models and generate predictions without writing code."
+        "why": "Canvas is a visual, no-code interface for importing data, building models and generating predictions."
       },
       {
         "key": "D",
-        "text": "AWS Lambda",
+        "text": "Amazon Bedrock, prompting with the past leads",
         "correct": false,
-        "why": "Lambda runs code you write. It does not provide a visual ML model-building experience."
+        "why": "LLMs are poorly suited to predictions on structured tabular data, and the analysts would still need to build an application."
       }
     ],
     "explanation": {
@@ -929,25 +929,25 @@
         "key": "A",
         "text": "Amazon Augmented AI (Amazon A2I)",
         "correct": true,
-        "why": "Amazon A2I builds human review workflows for ML predictions, for example sending low-confidence Textract or Rekognition results to reviewers."
+        "why": "A2I routes predictions that meet conditions, such as low confidence, to human reviewers before they are used."
       },
       {
         "key": "B",
-        "text": "Amazon Polly",
+        "text": "Amazon SageMaker Ground Truth",
         "correct": false,
-        "why": "Polly converts text to speech and has no role in reviewing predictions."
+        "why": "Ground Truth labels training data; it is not designed to review live predictions before they are acted on."
       },
       {
         "key": "C",
         "text": "Amazon SageMaker Model Monitor",
         "correct": false,
-        "why": "Model Monitor detects data and model quality drift on endpoints over time. It does not route individual predictions to human reviewers."
+        "why": "Model Monitor detects drift over time; it does not route individual predictions to people."
       },
       {
         "key": "D",
-        "text": "AWS CloudTrail",
+        "text": "Amazon Bedrock Model Evaluation with human reviewers",
         "correct": false,
-        "why": "CloudTrail records API activity for auditing. It does not provide a human review workflow."
+        "why": "Human evaluation jobs score a model on test data; they do not review production claims before processing."
       }
     ],
     "explanation": {
@@ -1101,7 +1101,7 @@
       },
       {
         "key": "C",
-        "text": "Whether the cost of building and maintaining a model outweighs the benefit for so few customers",
+        "text": "Whether building and maintaining a model costs more than it returns",
         "correct": true,
         "why": "With 40 customers and close personal contact, a model would cost far more than the value it adds, and there is too little data to train it reliably. A cost-benefit analysis comes first."
       },
@@ -1243,27 +1243,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Collect and label 100,000 emails, then train a custom model from scratch",
+        "text": "Collect and label emails, then train a custom model",
         "correct": false,
-        "why": "This would take months and requires an ML team. It does not fit a two-week timeline with no labeled data."
+        "why": "This would take months and needs an ML team, which does not fit a two-week timeline."
       },
       {
         "key": "B",
-        "text": "Use a pre-trained foundation model through a managed service such as Amazon Bedrock, with well-designed prompts",
+        "text": "A pre-trained FM through Amazon Bedrock, with good prompts",
         "correct": true,
-        "why": "Foundation models can generate varied, natural text out of the box. A managed API lets a team without ML expertise ship quickly using prompts, with no training data required."
+        "why": "Foundation models generate varied, natural text out of the box, and a managed API needs no ML team or training data."
       },
       {
         "key": "C",
-        "text": "Use k-means clustering on past emails",
+        "text": "Fine-tune an open-source model on public email datasets",
         "correct": false,
-        "why": "Clustering groups emails but cannot write new responses."
+        "why": "Fine-tuning and hosting a model needs ML skills and time the startup does not have."
       },
       {
         "key": "D",
-        "text": "Use a linear regression model to predict the reply text",
+        "text": "A rule-based template system for common questions",
         "correct": false,
-        "why": "Regression predicts numbers, not free-form text."
+        "why": "Templates cannot handle the wide variety of customer questions the feature must cover."
       }
     ],
     "explanation": {

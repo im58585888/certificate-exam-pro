@@ -124,7 +124,7 @@
       },
       {
         "key": "B",
-        "text": "Model Monitor data quality monitoring",
+        "text": "Model Monitor data quality monitoring on the endpoint",
         "correct": false,
         "why": "Data quality monitoring tracks statistical changes in inputs, not whether outcomes have become less fair across groups."
       },
@@ -318,25 +318,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Other dialects are under-represented; add their data, evaluate per group",
+        "text": "Other dialects are under-represented; add their data, test by group",
         "correct": true,
         "why": "Performance gaps across groups come from unrepresentative data; targeted data collection and per-group evaluation address them."
       },
       {
         "key": "B",
-        "text": "The model is too small; use a larger architecture",
+        "text": "The model is too small; switch to a larger model architecture",
         "correct": false,
         "why": "A larger model trained on the same skewed data would still underperform for the other dialects."
       },
       {
         "key": "C",
-        "text": "The labels are inconsistent; retrain the annotators",
+        "text": "The labels are inconsistent; retrain the annotators first",
         "correct": false,
         "why": "Nothing points to labeling problems; the gap follows which dialects are in the data."
       },
       {
         "key": "D",
-        "text": "The model overfits; add regularization",
+        "text": "The model is overfitting; add stronger regularization",
         "correct": false,
         "why": "Regularization reduces overfitting in general but does not supply the missing dialect data."
       }
@@ -693,13 +693,13 @@
     "options": [
       {
         "key": "A",
-        "text": "Run a toxicity evaluation on a large set of prompts",
+        "text": "Run a toxicity evaluation on a large, varied set of prompts",
         "correct": false,
         "why": "Toxicity scores catch offensive content, not subtler differences in quality or stereotypes between groups."
       },
       {
         "key": "B",
-        "text": "Paired prompts that differ only in implied gender, then compare",
+        "text": "Paired prompts differing only in implied gender, then compare",
         "correct": true,
         "why": "Controlled paired prompts isolate the effect of gender, and automated metrics plus human review reveal differences."
       },
@@ -743,7 +743,7 @@
     "options": [
       {
         "key": "A",
-        "text": "High variance (overfitting)",
+        "text": "High variance (overfitting) to the training data",
         "correct": false,
         "why": "Overfitting shows good training performance and poor new-data performance, not poor performance everywhere."
       },
@@ -761,7 +761,7 @@
       },
       {
         "key": "D",
-        "text": "Class imbalance across customer groups",
+        "text": "Class imbalance across the customer groups",
         "correct": false,
         "why": "Imbalance would hurt some groups more than others; here every group is predicted poorly."
       }
@@ -849,7 +849,7 @@
       },
       {
         "key": "B",
-        "text": "SageMaker Model Monitor on the endpoint",
+        "text": "SageMaker Model Monitor on the production endpoint",
         "correct": false,
         "why": "Model Monitor tracks drift in production; it does not run pre-deployment stereotyping and knowledge evaluations."
       },
@@ -897,25 +897,25 @@
     "options": [
       {
         "key": "A",
-        "text": "The model is fair, because overall accuracy is high",
+        "text": "The model is fair, because its overall accuracy is high",
         "correct": false,
         "why": "High overall accuracy can hide poor performance for small groups."
       },
       {
         "key": "B",
-        "text": "It fits the majority well; sparse data leaves the small group erratic",
+        "text": "Sparse data for the small group makes its predictions unreliable",
         "correct": true,
         "why": "Groups with little data get less accurate, less stable predictions, an effect of bias and variance on demographic groups."
       },
       {
         "key": "C",
-        "text": "The small group's records are mislabeled",
+        "text": "The small group's records were mislabeled by the annotators",
         "correct": false,
         "why": "Nothing points to labeling errors; the group simply has too few examples."
       },
       {
         "key": "D",
-        "text": "The model underfits every group equally",
+        "text": "The model underfits all patient groups equally",
         "correct": false,
         "why": "The model is very accurate for most groups, so it is not underfitting."
       }
@@ -1008,7 +1008,7 @@
       },
       {
         "key": "C",
-        "text": "Remove the segment so it does not skew the model",
+        "text": "Remove the segment so it does not skew the overall model",
         "correct": false,
         "why": "Removing it guarantees poor performance for those applicants."
       },
@@ -1095,19 +1095,19 @@
     "options": [
       {
         "key": "A",
-        "text": "Choose the model with the top public benchmark score",
+        "text": "Choose the model with the top score on public benchmarks",
         "correct": false,
         "why": "Benchmarks show general capability, not fairness, safety or licensing for this use case."
       },
       {
         "key": "B",
-        "text": "Review its documentation, limits and license; test fairness and safety",
+        "text": "Check its documentation and license; test fairness and safety",
         "correct": true,
         "why": "Responsible selection weighs documented limitations, licensing and evaluations of fairness and safety for the use case."
       },
       {
         "key": "C",
-        "text": "Choose the newest model from the largest provider",
+        "text": "Choose the newest model from the largest model provider",
         "correct": false,
         "why": "Recency and provider size do not demonstrate suitability or safety."
       },
@@ -1167,7 +1167,7 @@
       },
       {
         "key": "D",
-        "text": "Monitor latency and error rates on the endpoint",
+        "text": "Monitor latency and error rates on the model endpoint",
         "correct": false,
         "why": "These are operational metrics; they say nothing about whether answers are true."
       }

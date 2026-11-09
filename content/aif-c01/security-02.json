@@ -14,7 +14,7 @@
     "options": [
       {
         "key": "A",
-        "text": "A model card describing the model's intended use",
+        "text": "A model card describing the model's intended use and limits",
         "correct": false,
         "why": "Model cards document purpose and evaluations, but without lineage records they cannot trace exact dataset versions and processing steps."
       },
@@ -128,7 +128,7 @@
       },
       {
         "key": "B",
-        "text": "IAM policies on the Glue Data Catalog table",
+        "text": "IAM policies on the Glue Data Catalog table and database",
         "correct": false,
         "why": "IAM can allow or deny access to a table, but not to specific columns and rows."
       },
@@ -270,25 +270,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Encrypt the bucket with a KMS customer managed key",
+        "text": "Encrypt the bucket with a KMS customer managed key and rotate it",
         "correct": false,
         "why": "Encryption protects confidentiality, but anyone with write access could still modify the data."
       },
       {
         "key": "B",
-        "text": "Enable S3 Transfer Acceleration for uploads",
+        "text": "Enable S3 Transfer Acceleration and require HTTPS for uploads",
         "correct": false,
         "why": "Transfer Acceleration speeds uploads; it does nothing to prevent or detect tampering."
       },
       {
         "key": "C",
-        "text": "Restrict writes, enable versioning and Object Lock, log with CloudTrail",
+        "text": "Restrict writes, use versioning and Object Lock, log with CloudTrail",
         "correct": true,
         "why": "Limiting who can write, preserving or locking versions and logging changes prevent and reveal tampering."
       },
       {
         "key": "D",
-        "text": "Copy the data to a second bucket every night",
+        "text": "Copy the data nightly to a second bucket in another Region",
         "correct": false,
         "why": "A nightly copy may replicate tampered data and does not show who changed what."
       }
@@ -337,7 +337,7 @@
       },
       {
         "key": "D",
-        "text": "Bedrock model invocation logging to S3 or CloudWatch Logs",
+        "text": "Bedrock model invocation logging (S3 or CloudWatch Logs)",
         "correct": true,
         "why": "Invocation logging captures request and response data for Bedrock model calls, supporting audits."
       }
@@ -471,7 +471,7 @@
     "options": [
       {
         "key": "A",
-        "text": "Ask the model to double-check its own totals",
+        "text": "Ask the model to double-check its own totals before output",
         "correct": false,
         "why": "Self-review by the same model can repeat the same mistakes; deterministic checks are more reliable."
       },
@@ -483,7 +483,7 @@
       },
       {
         "key": "C",
-        "text": "Validate dates and recompute totals in code; route failures to people",
+        "text": "Validate dates and totals in code; send failures to people",
         "correct": true,
         "why": "Deterministic validation catches impossible or inconsistent values, and human review handles the exceptions."
       },
@@ -582,7 +582,7 @@
       },
       {
         "key": "C",
-        "text": "Hallucination; ground answers with RAG",
+        "text": "Hallucination; ground the answers with RAG and citations",
         "correct": false,
         "why": "The numbers are real customers' data, not invented, so grounding does not address it."
       },
@@ -630,7 +630,7 @@
       },
       {
         "key": "B",
-        "text": "Acceptable-use policy, approved tools with data protection, training",
+        "text": "A usage policy, approved AI tools and staff training",
         "correct": true,
         "why": "Policies, approved alternatives and training address the root cause and give employees a safe option."
       },
@@ -945,13 +945,13 @@
       },
       {
         "key": "C",
-        "text": "Agent tracing (for example AgentCore Observability) plus CloudTrail",
+        "text": "Agent tracing (such as AgentCore Observability) plus CloudTrail",
         "correct": true,
         "why": "Agent traces capture each step and tool call, and CloudTrail records account API activity, together forming an audit trail."
       },
       {
         "key": "D",
-        "text": "Amazon CloudWatch metrics and alarms for the agent",
+        "text": "Amazon CloudWatch metrics and alarms for the agent's runtime",
         "correct": false,
         "why": "Metrics show counts and latency, not a per-session record of actions."
       }
@@ -993,7 +993,7 @@
       },
       {
         "key": "B",
-        "text": "Hallucination by the model",
+        "text": "Hallucination by the underlying model",
         "correct": false,
         "why": "The details came from another customer's real documents; they were not invented."
       },
@@ -1005,7 +1005,7 @@
       },
       {
         "key": "D",
-        "text": "Missing tenant isolation in retrieval, memory or context",
+        "text": "Missing tenant isolation in retrieval or memory",
         "correct": true,
         "why": "Without strict per-tenant separation of data and context, one customer's documents can enter another's prompts."
       }
@@ -1043,13 +1043,13 @@
       },
       {
         "key": "B",
-        "text": "A confidence score shown with each answer",
+        "text": "A confidence score displayed alongside each answer",
         "correct": false,
         "why": "A score signals reliability but does not show where a claim came from."
       },
       {
         "key": "C",
-        "text": "A Guardrails contextual grounding check",
+        "text": "A Guardrails contextual grounding check on answers",
         "correct": false,
         "why": "Grounding checks block unsupported answers but do not show lawyers the sources."
       },

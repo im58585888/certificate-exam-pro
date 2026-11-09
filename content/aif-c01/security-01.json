@@ -87,7 +87,7 @@
       },
       {
         "key": "D",
-        "text": "Create an interface VPC endpoint (PrivateLink) for Bedrock",
+        "text": "Create an interface VPC endpoint (PrivateLink)",
         "correct": true,
         "why": "PrivateLink interface endpoints keep traffic between the VPC and Bedrock on the AWS network."
       }
@@ -129,7 +129,7 @@
       },
       {
         "key": "B",
-        "text": "AWS owned keys, which Bedrock uses by default",
+        "text": "AWS owned keys, which Bedrock uses by default for encryption",
         "correct": false,
         "why": "AWS owned keys protect data, but the company cannot manage or disable them."
       },
@@ -585,7 +585,7 @@
     "options": [
       {
         "key": "A",
-        "text": "A Guardrails denied topic for salary information",
+        "text": "A Guardrails denied topic covering salary information",
         "correct": false,
         "why": "This would also block HR staff who are entitled to the data; the fix is retrieving only what each user may see."
       },
@@ -597,7 +597,7 @@
       },
       {
         "key": "C",
-        "text": "Encrypt the HR documents with a separate KMS key",
+        "text": "Encrypt the HR documents with a separate KMS customer key",
         "correct": false,
         "why": "The knowledge base can decrypt documents to serve them, so encryption alone does not restrict which users see them."
       },

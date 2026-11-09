@@ -302,7 +302,7 @@
       },
       {
         "key": "D",
-        "text": "Project 1 is a traditional machine learning classification task, and Project 2 is a generative AI task.",
+        "text": "Project 1 is traditional ML classification; Project 2 is generative AI.",
         "correct": true,
         "why": "Assigning tickets to fixed categories is supervised classification. Creating new reply text is content generation, the defining feature of generative AI."
       }
@@ -715,7 +715,7 @@
       },
       {
         "key": "D",
-        "text": "The orders table is structured data, and the scanned contracts and call recordings are unstructured data.",
+        "text": "The orders table is structured; the contracts and recordings are unstructured.",
         "correct": true,
         "why": "Tabular data with a fixed schema is structured. Images and audio have no predefined schema, so they are unstructured."
       }
@@ -852,9 +852,9 @@
     "options": [
       {
         "key": "A",
-        "text": "A real-time endpoint that is always running",
+        "text": "A real-time endpoint kept running all week",
         "correct": false,
-        "why": "A real-time endpoint is designed for low-latency, per-request predictions and runs continuously. Paying for always-on capacity to score data once a week is wasteful."
+        "why": "A real-time endpoint is built for low-latency, per-request predictions and bills continuously, which is wasteful for a weekly scoring job."
       },
       {
         "key": "B",
@@ -1053,27 +1053,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Model latency",
+        "text": "Overfitting to the applicants in the training data",
         "correct": false,
-        "why": "Latency is how long the model takes to respond. The problem is unfair outcomes for a group, not speed."
+        "why": "Overfitting is a general failure to generalize; this is a systematic pattern against one group."
       },
       {
         "key": "B",
-        "text": "Underfitting",
+        "text": "Data drift since the model was trained",
         "correct": false,
-        "why": "Underfitting means the model fails to learn patterns at all. This model has learned a pattern too well, including an unfair one from the history."
+        "why": "Nothing changed after training; the model learned the pattern from past decisions."
       },
       {
         "key": "C",
-        "text": "Bias in the model's outputs caused by biased training data",
+        "text": "Bias learned from historically biased training data",
         "correct": true,
-        "why": "The model learned patterns from historically skewed decisions and reproduces them, systematically disadvantaging one group. That is bias, which harms fairness."
+        "why": "The model learned patterns from skewed historical decisions and reproduces them, systematically disadvantaging one group."
       },
       {
         "key": "D",
-        "text": "Hallucination",
+        "text": "Hallucination of applicant qualifications",
         "correct": false,
-        "why": "Hallucination describes a generative model inventing plausible but false content. A scoring model consistently disadvantaging a group is bias."
+        "why": "Hallucination describes generative models inventing content; this scoring model is consistently unfair."
       }
     ],
     "explanation": {
@@ -1125,7 +1125,7 @@
       },
       {
         "key": "D",
-        "text": "An algorithm is the set of steps used to learn from data, and a model is the trained result that makes predictions on new data.",
+        "text": "An algorithm is the procedure that learns from data; a model is the trained result that makes predictions.",
         "correct": true,
         "why": "The algorithm, such as gradient-boosted trees, is the method. Running it on training data produces a model with learned parameters that is used for inference."
       }
@@ -1157,27 +1157,27 @@
     "options": [
       {
         "key": "A",
-        "text": "A large language model, a type of foundation model",
+        "text": "A large language model (a foundation model)",
         "correct": true,
         "why": "Large language models are foundation models pre-trained on huge text corpora. Their general capabilities let one model perform many language tasks through prompting."
       },
       {
         "key": "B",
-        "text": "A narrow, task-specific classifier",
+        "text": "A fine-tuned, task-specific text classifier",
         "correct": false,
-        "why": "A task-specific classifier is trained for one job, such as spam detection. This model handles many different tasks without separate training."
+        "why": "A task-specific classifier is trained for one job. This model handles many different tasks without separate training."
       },
       {
         "key": "C",
-        "text": "A k-means clustering model",
+        "text": "An embedding model for semantic search",
         "correct": false,
-        "why": "K-means groups data points into clusters. It cannot summarize, translate or write code."
+        "why": "An embedding model turns text into vectors; it cannot summarize, translate or write code."
       },
       {
         "key": "D",
-        "text": "A reinforcement learning agent",
+        "text": "A diffusion model for image generation",
         "correct": false,
-        "why": "A reinforcement learning agent learns actions from rewards in an environment. Broad pre-training on text describes a language model."
+        "why": "Diffusion models generate images; this model works with text across many tasks."
       }
     ],
     "explanation": {
@@ -1280,7 +1280,7 @@
       },
       {
         "key": "B",
-        "text": "The models use self-supervised learning, in which the training labels come from the text itself, such as predicting the next token.",
+        "text": "Self-supervised learning: labels come from the text, such as the next token",
         "correct": true,
         "why": "In self-supervised learning the data provides its own labels. Predicting the next token, or a masked token, from surrounding text lets models learn from unlabeled text at scale."
       },

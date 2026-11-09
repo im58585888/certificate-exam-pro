@@ -78,7 +78,7 @@
       },
       {
         "key": "C",
-        "text": "Sampling is random by design; lower temperature and test for quality",
+        "text": "Sampling is random; lower the temperature and test for quality",
         "correct": true,
         "why": "Generation samples from probabilities, so identical prompts can differ. Lower temperature reduces this, and testing should judge quality rather than exact text."
       },
@@ -382,13 +382,13 @@
       },
       {
         "key": "B",
-        "text": "Performance: accuracy on summarization benchmarks",
+        "text": "Performance: accuracy on public summarization benchmarks",
         "correct": false,
         "why": "Accuracy matters, but the stated requirements are about Regions and licensing."
       },
       {
         "key": "C",
-        "text": "Cost: price per input and output token",
+        "text": "Cost: price per input and output token at expected volume",
         "correct": false,
         "why": "Cost is a selection factor, but nothing in the requirements concerns price."
       },
@@ -750,7 +750,7 @@
       },
       {
         "key": "B",
-        "text": "The largest model, since accuracy matters most",
+        "text": "The largest model, since accuracy matters most for this task",
         "correct": false,
         "why": "The extra two points do not change whether the requirement is met, while cost and latency are much higher."
       },
@@ -945,7 +945,7 @@
     "options": [
       {
         "key": "A",
-        "text": "A high maximum output length for long answers",
+        "text": "A high maximum output length for long, detailed answers",
         "correct": false,
         "why": "The result is a list of inconsistencies, not a long document; the input is what must be large."
       },
@@ -1017,7 +1017,7 @@
       },
       {
         "key": "D",
-        "text": "Patterns learned from biased web data; add guardrails, testing, review",
+        "text": "Patterns learned from biased web data; add guardrails and review",
         "correct": true,
         "why": "Models reflect their training data. Content filters, bias testing and review reduce harmful outputs."
       }
@@ -1055,13 +1055,13 @@
       },
       {
         "key": "B",
-        "text": "The model's benchmark scores and latency",
+        "text": "The model's benchmark scores and its average latency",
         "correct": false,
         "why": "These describe technical quality, not financial return."
       },
       {
         "key": "C",
-        "text": "The price per 1,000 tokens and the expected volume",
+        "text": "The price per 1,000 tokens multiplied by expected volume",
         "correct": false,
         "why": "This estimates part of the cost only; ROI also needs the benefits and the other costs."
       },
@@ -1204,13 +1204,13 @@
       },
       {
         "key": "B",
-        "text": "Fine-tune the model so wording no longer matters",
+        "text": "Fine-tune the model so prompt wording no longer matters",
         "correct": false,
         "why": "Fine-tuning is costly and models remain sensitive to prompt wording afterward."
       },
       {
         "key": "C",
-        "text": "Set the temperature to zero to remove the sensitivity",
+        "text": "Set the temperature to zero to remove the wording sensitivity",
         "correct": false,
         "why": "Zero temperature makes a given prompt more repeatable, but different wordings still produce different quality."
       },

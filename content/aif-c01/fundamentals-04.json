@@ -223,27 +223,27 @@
     "options": [
       {
         "key": "A",
-        "text": "The model is 62% of the way through training.",
+        "text": "62% of similar training images were dogs",
         "correct": false,
-        "why": "The score is produced at inference time for one input. It is unrelated to training progress."
+        "why": "The score is about this prediction, not the share of dogs in the training data."
       },
       {
         "key": "B",
-        "text": "The model estimates its certainty in the prediction; ML outputs are probabilistic, so the application should decide how to handle lower-confidence results.",
+        "text": "The model's estimated certainty; low scores may need special handling",
         "correct": true,
-        "why": "ML predictions come with a confidence estimate. Applications often set thresholds, for example sending low-confidence results for human review."
+        "why": "ML outputs are probabilistic, so applications set thresholds, for example routing low-confidence results to people."
       },
       {
         "key": "C",
-        "text": "62% of the image's pixels are a dog.",
+        "text": "Predictions like this are correct 62% of the time on all images",
         "correct": false,
-        "why": "A classification confidence score does not measure the area of the image covered by the object."
+        "why": "A single score is the model's certainty for this input, not its overall accuracy."
       },
       {
         "key": "D",
-        "text": "The image is guaranteed to contain a dog 62% of the time it is viewed.",
+        "text": "About 62% of the image area contains the dog",
         "correct": false,
-        "why": "The image either contains a dog or not. The score reflects the model's certainty, not a property of the image."
+        "why": "A classification score does not measure how much of the image the object covers."
       }
     ],
     "explanation": {
@@ -277,27 +277,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Adding more columns through feature crosses",
+        "text": "Feature crosses that combine related columns",
         "correct": false,
-        "why": "Feature crosses increase the number of features, which makes the problem worse."
+        "why": "Feature crosses add new combined features, which increases the number of columns."
       },
       {
         "key": "B",
-        "text": "Machine translation",
+        "text": "Clustering the rows into similar groups",
         "correct": false,
-        "why": "Translation converts text between languages and is unrelated to reducing numeric features."
+        "why": "Clustering groups rows; it does not compress 900 columns into fewer variables."
       },
       {
         "key": "C",
-        "text": "Dimensionality reduction, such as principal component analysis (PCA)",
+        "text": "Dimensionality reduction such as PCA",
         "correct": true,
-        "why": "Dimensionality reduction transforms many correlated features into fewer variables that retain most of the variance, speeding up training and reducing noise."
+        "why": "Dimensionality reduction transforms many correlated features into a few variables that keep most of the information."
       },
       {
         "key": "D",
-        "text": "Reinforcement learning",
+        "text": "Scaling every column to the same range",
         "correct": false,
-        "why": "Reinforcement learning trains agents with rewards and does not compress input features."
+        "why": "Scaling changes ranges but keeps all 900 columns."
       }
     ],
     "explanation": {
@@ -327,27 +327,27 @@
     "options": [
       {
         "key": "A",
-        "text": "A time-series forecasting model for support ticket volume",
+        "text": "A model fine-tuned on public support forums and old tickets",
         "correct": false,
-        "why": "Forecasting ticket volume helps staffing but does not answer customer questions."
+        "why": "Public forums do not reflect the company's own manuals and release notes."
       },
       {
         "key": "B",
-        "text": "An image classifier trained on product screenshots",
+        "text": "A chatbot on a general-purpose LLM with no retrieval",
         "correct": false,
-        "why": "Classifying screenshots does not answer written questions from documentation."
+        "why": "Without retrieval, answers come from general knowledge, not the company's documentation."
       },
       {
         "key": "C",
-        "text": "A clustering model that groups manuals by length",
+        "text": "A classifier that routes questions to support teams",
         "correct": false,
-        "why": "Grouping manuals by length does not produce answers to questions."
+        "why": "Routing sends questions to people; it does not answer them from the documentation."
       },
       {
         "key": "D",
-        "text": "A knowledge-base question-answering application that retrieves relevant documentation and uses a foundation model to compose the answer",
+        "text": "A RAG app that retrieves the docs and has an FM compose answers",
         "correct": true,
-        "why": "Grounding answers in retrieved company documents gives accurate, specific responses. This is the retrieval augmented generation pattern used by knowledge bases."
+        "why": "Retrieving relevant documentation and grounding the FM's answer in it gives specific, accurate answers."
       }
     ],
     "explanation": {
@@ -381,7 +381,7 @@
     "options": [
       {
         "key": "A",
-        "text": "The model performs well on new, unseen data, not just the data it was trained on.",
+        "text": "The model performs well on new data, not only its training data",
         "correct": true,
         "why": "Generalization is the ability to make accurate predictions on new data. It is the real goal of training."
       },
@@ -393,15 +393,15 @@
       },
       {
         "key": "C",
-        "text": "The model can be used for any task in any industry.",
+        "text": "The model performs equally well across all customer groups",
         "correct": false,
-        "why": "Generalizing refers to performance on unseen data for its task, not universal applicability."
+        "why": "Equal performance across groups is fairness. Generalization is about performing well on unseen data."
       },
       {
         "key": "D",
-        "text": "The model has the most parameters possible.",
+        "text": "The model's training and test accuracy are both low",
         "correct": false,
-        "why": "Model size does not guarantee generalization. Large models can still overfit."
+        "why": "Low accuracy everywhere is underfitting, not good generalization."
       }
     ],
     "explanation": {
@@ -432,27 +432,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Send each transaction as a prompt to a large language model and parse its answer",
+        "text": "Prompt an LLM with each transaction and parse its answer",
         "correct": false,
-        "why": "LLM inference is far slower and more expensive per call, and outputs can vary. It does not meet a 5 ms, very low-cost-per-prediction requirement."
+        "why": "LLM inference is far slower and costlier per call and can vary between runs, missing the 5 ms and cost requirements."
       },
       {
         "key": "B",
-        "text": "Train a compact traditional ML classifier, such as gradient-boosted trees, on the labeled data and serve it from a low-latency endpoint",
+        "text": "A small ML classifier trained on the labeled data, served fast",
         "correct": true,
-        "why": "A compact model on structured data gives fast, consistent and very cheap predictions at high volume, which suits strict latency and cost constraints."
+        "why": "A compact model on structured data gives fast, consistent and very cheap predictions at high volume."
       },
       {
         "key": "C",
-        "text": "Ask human reviewers to label each transaction in real time",
+        "text": "A fine-tuned small LLM served on dedicated GPU instances",
         "correct": false,
-        "why": "People cannot review 50,000 transactions per second in milliseconds."
+        "why": "Even a small LLM is slower and costlier per prediction than a compact classifier on tabular data."
       },
       {
         "key": "D",
-        "text": "Generate a synthetic image of each transaction and classify the image",
+        "text": "Batch scoring of all transactions every hour",
         "correct": false,
-        "why": "Converting transactions to images adds latency and cost and provides no benefit over using the structured data directly."
+        "why": "Decisions are needed within milliseconds for each transaction, not hourly."
       }
     ],
     "explanation": {
@@ -589,27 +589,27 @@
     "options": [
       {
         "key": "A",
-        "text": "An AI agent that can reason about the request, call internal tools and APIs, and update the ticket",
+        "text": "An agent that reasons, calls internal tools and updates tickets",
         "correct": true,
-        "why": "Agents combine an FM's reasoning with tool use to complete multi-step tasks, which is what these routine requests need."
+        "why": "Agents interpret the request, call the systems involved and update tickets, completing the multi-step work."
       },
       {
         "key": "B",
-        "text": "A demand forecasting model",
+        "text": "A RAG chatbot that answers employee questions about IT policies",
         "correct": false,
-        "why": "Forecasting predicts future volumes, which can help staffing but does not complete individual requests."
+        "why": "Answering policy questions does not reset passwords or update tickets."
       },
       {
         "key": "C",
-        "text": "A sentiment analysis model",
+        "text": "A classifier that routes each request to the right IT team",
         "correct": false,
-        "why": "Sentiment analysis only labels the tone of text. It cannot check policies, call systems or update tickets."
+        "why": "Routing still leaves the work to people; it does not complete the request."
       },
       {
         "key": "D",
-        "text": "An image generation model",
+        "text": "A model that drafts replies for IT staff to send",
         "correct": false,
-        "why": "Generating images does not complete IT requests."
+        "why": "Drafting replies helps staff but does not perform the actions in the systems."
       }
     ],
     "explanation": {
@@ -643,27 +643,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Both datasets are labeled because they contain emails.",
+        "text": "Both datasets are labeled, because both contain customer emails",
         "correct": false,
         "why": "Containing data does not make it labeled. Labels are the target values attached to each example."
       },
       {
         "key": "B",
-        "text": "Dataset 1 is labeled and can train a supervised classifier; Dataset 2 is unlabeled.",
+        "text": "Dataset 1 is labeled and can train a classifier; Dataset 2 is unlabeled",
         "correct": true,
         "why": "Dataset 1 pairs each email with its correct category, which supervised learning needs. Dataset 2 has no target values."
       },
       {
         "key": "C",
-        "text": "Dataset 2 is labeled because the emails have senders.",
+        "text": "Dataset 2 is labeled, because each email has a sender address",
         "correct": false,
         "why": "Sender metadata is not the target the team wants to predict, so it does not make the data labeled for this task."
       },
       {
         "key": "D",
-        "text": "Neither dataset can be used for machine learning.",
+        "text": "Neither is labeled, because category tags are not true labels",
         "correct": false,
-        "why": "Labeled data supports supervised learning, and unlabeled data supports unsupervised and self-supervised learning."
+        "why": "Category tags that match the prediction target are exactly what labels are, so Dataset 1 is labeled."
       }
     ],
     "explanation": {
@@ -744,27 +744,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Guaranteed zero errors",
+        "text": "Higher accuracy than human moderators",
         "correct": false,
-        "why": "ML models still make mistakes. The benefit is coverage at scale, not perfection."
+        "why": "The model sends suspicious listings to moderators; the gain is coverage, not superior accuracy."
       },
       {
         "key": "B",
-        "text": "Eliminating all human involvement",
+        "text": "Removing the need for moderators",
         "correct": false,
-        "why": "Moderators still review suspicious listings. The model assists rather than fully replaces them."
+        "why": "Moderators still review flagged listings."
       },
       {
         "key": "C",
-        "text": "Reducing data storage costs",
+        "text": "Explainable decisions for every listing",
         "correct": false,
-        "why": "Screening listings does not reduce how much data is stored."
+        "why": "Nothing in the scenario concerns explanations."
       },
       {
         "key": "D",
         "text": "Solution scalability",
         "correct": true,
-        "why": "The model screens every one of millions of listings, a volume humans could not cover, while people handle only the flagged ones."
+        "why": "The model screens every one of millions of listings, a volume people could not cover."
       }
     ],
     "explanation": {
@@ -794,27 +794,27 @@
     "options": [
       {
         "key": "A",
-        "text": "A simple baseline, such as predicting the most common outcome or the current business rule",
+        "text": "A simple baseline such as the current business rule",
         "correct": true,
-        "why": "A baseline shows whether the model improves on what already exists. If 84% of customers never churn, 84% accuracy adds nothing."
+        "why": "A baseline shows whether the model improves on what exists; if 84% of customers never churn, 84% accuracy adds nothing."
       },
       {
         "key": "B",
-        "text": "A model from an unrelated industry",
+        "text": "The model's own accuracy on its training data",
         "correct": false,
-        "why": "Results from a different problem and dataset are not a meaningful comparison."
+        "why": "Training accuracy helps detect overfitting but does not show value over the status quo."
       },
       {
         "key": "C",
-        "text": "The training accuracy of the same model",
+        "text": "A churn model published by another company",
         "correct": false,
-        "why": "Training accuracy is usually optimistic. It helps detect overfitting but does not show business value over the status quo."
+        "why": "A different business and dataset is not a meaningful comparison."
       },
       {
         "key": "D",
-        "text": "The number of GPUs used for training",
+        "text": "A larger model trained on the same data",
         "correct": false,
-        "why": "Compute used for training says nothing about whether the model's predictions add value."
+        "why": "Comparing model sizes says nothing about whether either beats a simple baseline."
       }
     ],
     "explanation": {
@@ -894,27 +894,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Use AWS Artifact",
+        "text": "Call a similar model through the Amazon Bedrock API",
         "correct": false,
-        "why": "Artifact provides compliance documents and does not host models."
+        "why": "A similar model is not the specific version required, and Bedrock does not allow custom inference code."
       },
       {
         "key": "B",
-        "text": "Use only Amazon Polly",
+        "text": "Bring it in with Bedrock Custom Model Import",
         "correct": false,
-        "why": "Polly is a text-to-speech service and cannot run arbitrary open-source models."
+        "why": "Custom Model Import serves supported models on managed infrastructure, without custom inference code or instance control."
       },
       {
         "key": "C",
-        "text": "Self-host the model on Amazon SageMaker AI endpoints or Amazon EC2 instances",
+        "text": "Self-host on SageMaker AI endpoints or Amazon EC2",
         "correct": true,
-        "why": "Self-hosting gives control over the exact model version, custom inference code and instance types, which the lab requires and can manage."
+        "why": "Self-hosting gives control over the exact model version, custom inference code and dedicated instances."
       },
       {
         "key": "D",
-        "text": "Avoid deploying the model",
+        "text": "SageMaker AI serverless inference",
         "correct": false,
-        "why": "The lab needs to run the model, so avoiding deployment does not meet the requirement."
+        "why": "Serverless inference does not provide dedicated instances the lab controls."
       }
     ],
     "explanation": {
@@ -945,27 +945,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Amazon Rekognition for appointments and Amazon Textract for policies",
+        "text": "Amazon Lex for both, with an intent for each policy",
         "correct": false,
-        "why": "Rekognition analyzes images and Textract extracts text from scans. Neither runs a chatbot or answers questions."
+        "why": "Defining intents for thousands of pages of policies is impractical; open questions need document search."
       },
       {
         "key": "B",
-        "text": "Amazon Comprehend for both needs",
+        "text": "Amazon Kendra for both needs",
         "correct": false,
-        "why": "Comprehend analyzes text but cannot run a booking conversation or act as a search engine over handbooks."
+        "why": "Kendra can answer policy questions but cannot run a booking conversation that collects details."
       },
       {
         "key": "C",
-        "text": "Amazon Polly for appointments and Amazon Translate for policies",
+        "text": "Amazon Lex for booking, Amazon Comprehend for policies",
         "correct": false,
-        "why": "Polly speaks text and Translate converts languages. Neither manages a booking conversation or searches handbooks."
+        "why": "Comprehend analyzes text but does not search handbooks to answer questions."
       },
       {
         "key": "D",
-        "text": "Amazon Lex for the appointment-booking conversation and Amazon Kendra to find answers in the handbooks",
+        "text": "Amazon Lex for booking, Amazon Kendra for handbook answers",
         "correct": true,
-        "why": "Lex handles intents and collects slot values such as ID, date and time. Kendra searches the handbooks to answer policy questions, and the two can be integrated."
+        "why": "Lex handles intents and collects slots such as ID, date and time; Kendra searches the handbooks for answers."
       }
     ],
     "explanation": {
@@ -999,27 +999,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Clean and fix the data first, because model quality depends heavily on data quality.",
+        "text": "Clean and fix the data before training",
         "correct": true,
         "why": "Poor-quality data leads to poor models. Handling missing values and fixing labels is essential before training."
       },
       {
         "key": "B",
-        "text": "Agree, because larger models are immune to bad data.",
+        "text": "Train a larger model, which can tolerate noisy data",
         "correct": false,
-        "why": "Larger models also learn from errors in the data. Wrong labels teach the wrong patterns regardless of model size."
+        "why": "Larger models also learn from errors; wrong labels teach the wrong patterns regardless of size."
       },
       {
         "key": "C",
-        "text": "Train on the data as-is and fix problems after deployment.",
+        "text": "Train now and fix the data problems after deployment",
         "correct": false,
-        "why": "Deploying a model trained on flawed data puts poor predictions in front of users. Problems should be fixed before training."
+        "why": "Deploying a model trained on flawed data puts poor predictions in front of users."
       },
       {
         "key": "D",
-        "text": "Delete the labels and switch to unsupervised learning.",
+        "text": "Drop the labels and switch to unsupervised learning",
         "correct": false,
-        "why": "Throwing away labels removes the information needed for the prediction task. Fixing the bad labels is the right step."
+        "why": "Throwing away labels removes the information needed for the prediction task."
       }
     ],
     "explanation": {
@@ -1049,27 +1049,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Parameters are set manually before training; hyperparameters are learned from data.",
+        "text": "Parameters are set before training; hyperparameters are learned",
         "correct": false,
-        "why": "This is reversed. Parameters such as weights are learned, while hyperparameters are set before training."
+        "why": "This is reversed: parameters such as weights are learned, and hyperparameters are set before training."
       },
       {
         "key": "B",
-        "text": "Parameters, such as weights, are learned during training; hyperparameters, such as learning rate, are chosen before training to control how learning happens.",
+        "text": "Parameters are learned in training; hyperparameters are set before it",
         "correct": true,
-        "why": "Weights are adjusted by the training algorithm. Hyperparameters configure that algorithm and are chosen by people or tuning jobs."
+        "why": "Weights are adjusted by the training algorithm; hyperparameters such as learning rate configure that training."
       },
       {
         "key": "C",
-        "text": "They are the same thing.",
+        "text": "Parameters exist only in neural networks; hyperparameters in all ML",
         "correct": false,
-        "why": "They play different roles: one is learned during training, the other controls the training process."
+        "why": "Most ML models have learned parameters, not only neural networks."
       },
       {
         "key": "D",
-        "text": "Hyperparameters only exist in generative AI models.",
+        "text": "Hyperparameters are inference settings such as temperature",
         "correct": false,
-        "why": "Hyperparameters exist in nearly all ML algorithms, including decision trees and linear models."
+        "why": "Temperature is an inference parameter; hyperparameters control training."
       }
     ],
     "explanation": {
@@ -1156,27 +1156,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Train a transformer model from scratch on GPU instances",
+        "text": "Train a transformer from scratch on GPU instances",
         "correct": false,
-        "why": "Training from scratch needs ML expertise, large data and significant compute, which is unnecessary here."
+        "why": "Training from scratch needs ML expertise, large data and significant compute."
       },
       {
         "key": "B",
-        "text": "Amazon Polly",
+        "text": "Amazon Comprehend's built-in topic modeling",
         "correct": false,
-        "why": "Polly converts text to speech and cannot classify emails."
+        "why": "Topic modeling discovers its own topics without labels; it will not map emails to the company's 12 departments."
       },
       {
         "key": "C",
-        "text": "Amazon Comprehend custom classification trained on the labeled emails",
+        "text": "Comprehend custom classification on the labeled emails",
         "correct": true,
-        "why": "Comprehend custom classification trains a text classifier on your own labels with no ML expertise, then classifies new documents through an API."
+        "why": "Custom classification trains a classifier on your own labels with no ML expertise and classifies new emails through an API."
       },
       {
         "key": "D",
-        "text": "Amazon Rekognition Custom Labels",
+        "text": "A SageMaker AI training job with a built-in text algorithm",
         "correct": false,
-        "why": "Rekognition Custom Labels classifies images, not text emails."
+        "why": "Built-in algorithms still require configuring training and deployment, which needs more ML expertise."
       }
     ],
     "explanation": {
@@ -1207,27 +1207,27 @@
     "options": [
       {
         "key": "A",
-        "text": "There is no difference; the terms are marketing synonyms.",
+        "text": "Generative AI uses LLMs; agentic AI uses traditional ML",
         "correct": false,
-        "why": "The terms describe different capabilities. Agentic AI acts on the world through tools, not just generates content."
+        "why": "Agentic systems usually rely on foundation models for reasoning."
       },
       {
         "key": "B",
-        "text": "Agentic AI cannot use foundation models.",
+        "text": "Agentic AI is generative AI with a larger context window",
         "correct": false,
-        "why": "Most agentic systems use foundation models as their reasoning engine."
+        "why": "Context size is not the difference; agents plan and act through tools."
       },
       {
         "key": "C",
-        "text": "Generative AI uses neural networks, but agentic AI uses only hand-written rules.",
+        "text": "Generative AI answers questions; agentic AI only writes code",
         "correct": false,
-        "why": "Agentic systems usually rely on foundation models (neural networks) for reasoning. They are not rule-based."
+        "why": "Agents do many kinds of multi-step tasks, not only coding."
       },
       {
         "key": "D",
-        "text": "A generative AI assistant produces content in response to a prompt, while an agentic AI system autonomously plans and takes multi-step actions with tools to achieve a goal.",
+        "text": "Generative AI creates content; agentic AI plans and acts with tools",
         "correct": true,
-        "why": "Generative AI responds with content. Agentic AI adds goal pursuit, planning, tool use, memory and acting on external systems."
+        "why": "Agentic systems add goal pursuit, planning, tool use and memory on top of generative models."
       }
     ],
     "explanation": {
@@ -1257,31 +1257,31 @@
     "difficulty": "medium",
     "type": "single",
     "stem": "An ML team maps AWS services to the stages of its pipeline: data preparation, model training and evaluation, deployment, and monitoring.",
-    "prompt": "Which mapping is correct?",
+    "prompt": "Which mapping, in the order data preparation, training, deployment and monitoring, is correct?",
     "options": [
       {
         "key": "A",
-        "text": "Data preparation: SageMaker Data Wrangler; training: SageMaker AI training jobs; deployment: SageMaker AI endpoints; monitoring: SageMaker Model Monitor",
+        "text": "Data Wrangler, training jobs, endpoints, Model Monitor",
         "correct": true,
-        "why": "Each tool matches its stage: Data Wrangler prepares data, training jobs build models, endpoints serve them, and Model Monitor tracks production quality."
+        "why": "Each tool matches its stage: Data Wrangler prepares data, training jobs build models, endpoints serve them and Model Monitor tracks quality."
       },
       {
         "key": "B",
-        "text": "Monitoring: AWS Artifact; training: AWS Config",
+        "text": "Data Wrangler, training jobs, Model Monitor, endpoints",
         "correct": false,
-        "why": "Artifact provides compliance reports and Config tracks resource configurations. Neither trains or monitors ML models."
+        "why": "This swaps the last two: endpoints serve the model, and Model Monitor tracks it afterward."
       },
       {
         "key": "C",
-        "text": "Training: Amazon Polly; deployment: Amazon Translate",
+        "text": "Ground Truth, Model Registry, endpoints, Clarify",
         "correct": false,
-        "why": "Polly and Translate are pre-trained AI services. They do not train or deploy custom models."
+        "why": "Ground Truth labels data and Model Registry versions models; neither prepares data or trains models."
       },
       {
         "key": "D",
-        "text": "Data preparation: SageMaker Model Monitor; monitoring: SageMaker Data Wrangler",
+        "text": "Feature Store, Autopilot, batch transform, CloudTrail",
         "correct": false,
-        "why": "This swaps the two tools. Data Wrangler prepares data, and Model Monitor watches deployed models."
+        "why": "CloudTrail records API activity; it does not monitor model quality."
       }
     ],
     "explanation": {

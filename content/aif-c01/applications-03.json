@@ -779,7 +779,7 @@
     "options": [
       {
         "key": "A",
-        "text": "Distillation: building a smaller model to test cheaply",
+        "text": "Distillation: building a smaller copy of the model to test cheaply",
         "correct": false,
         "why": "Distillation produces a smaller model for a known task. It is not a way to explore what a model can do."
       },
@@ -791,7 +791,7 @@
       },
       {
         "key": "C",
-        "text": "Discovery: exploring capabilities through prompt experimentation",
+        "text": "Discovery: exploring capabilities by experimenting with prompts",
         "correct": true,
         "why": "Prompting is a fast, cheap way to discover what a model handles well and where it fails before committing to a design."
       },
@@ -880,13 +880,13 @@
     "options": [
       {
         "key": "A",
-        "text": "Providing context: include the policy text, for example via retrieval",
+        "text": "Providing context: add the policy text, such as through retrieval",
         "correct": true,
         "why": "Supplying the actual policy as context lets the model answer accurately instead of generically."
       },
       {
         "key": "B",
-        "text": "Role prompting: tell the model it is a refund-policy expert",
+        "text": "Role prompting: tell the model it is an expert on the refund policy",
         "correct": false,
         "why": "A role changes tone but does not give the model the company's actual policy."
       },

@@ -284,13 +284,13 @@
       },
       {
         "key": "B",
-        "text": "Use a single prompt with no tools",
+        "text": "Use one agent with all three analyses in its prompt",
         "correct": false,
-        "why": "A single prompt would mix three large analyses and lose the benefits of specialization and concurrency."
+        "why": "One agent handling three large analyses at once loses specialization and runs them one after another."
       },
       {
         "key": "C",
-        "text": "Parallel (fan-out/fan-in): run the three specialist agents at the same time, then aggregate",
+        "text": "Parallel fan-out to three agents, then aggregate",
         "correct": true,
         "why": "Independent subtasks can run concurrently, reducing total time, and a final step merges the results."
       },
@@ -560,7 +560,7 @@
       },
       {
         "key": "D",
-        "text": "Decentralized peer-to-peer handoffs (swarm-style)",
+        "text": "Decentralized peer-to-peer handoffs",
         "correct": true,
         "why": "Agents pass control to one another based on what they find, with no central coordinator."
       }
@@ -661,13 +661,13 @@
       },
       {
         "key": "B",
-        "text": "It uses a larger foundation model than a chatbot does",
+        "text": "It uses a larger foundation model than a standard chatbot does",
         "correct": false,
         "why": "Agents and chatbots can use the same models; model size is not what makes something an agent."
       },
       {
         "key": "C",
-        "text": "It remembers earlier messages in the conversation",
+        "text": "It remembers earlier messages within the same conversation",
         "correct": false,
         "why": "Ordinary chatbots also keep conversation history, so this does not distinguish an agent."
       },
@@ -756,7 +756,7 @@
     "options": [
       {
         "key": "A",
-        "text": "Switch to a model with a larger context window",
+        "text": "Switch to a model with a larger context window to hold all turns",
         "correct": false,
         "why": "More room delays the problem but keeps growing cost and latency, and old turns still crowd out the task."
       },
@@ -916,7 +916,7 @@
       },
       {
         "key": "B",
-        "text": "Agent observability: tracing each reasoning step and tool call",
+        "text": "Agent observability: traces of each step and tool call",
         "correct": true,
         "why": "Step-by-step traces of reasoning, tool inputs and outputs show exactly where the workflow fails."
       },
@@ -1014,7 +1014,7 @@
     "options": [
       {
         "key": "A",
-        "text": "Whether the server's tools return results in JSON",
+        "text": "Whether the server's tools return their results in JSON format",
         "correct": false,
         "why": "Output format matters for integration, but the bigger risk is what an unvetted server can do with its access."
       },
@@ -1074,13 +1074,13 @@
       },
       {
         "key": "B",
-        "text": "Summarizing each support call transcript after it ends",
+        "text": "Summarizing each support call transcript after the call ends",
         "correct": false,
         "why": "Summarization is a single generation step; it does not need planning or actions in other systems."
       },
       {
         "key": "C",
-        "text": "Translating product pages into five languages",
+        "text": "Translating product pages into five languages for new markets",
         "correct": false,
         "why": "Translation is a single transformation task that a model or translation service handles without an agent."
       },
@@ -1180,7 +1180,7 @@
       },
       {
         "key": "C",
-        "text": "Give the tools distinct names and detailed descriptions and schemas",
+        "text": "Give the tools distinct names, descriptions and schemas",
         "correct": true,
         "why": "The model chooses tools from their names, descriptions and input schemas, so clear, distinct descriptions make the right choice obvious."
       },

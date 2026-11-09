@@ -223,7 +223,7 @@
       },
       {
         "key": "B",
-        "text": "A proprietary model with a detailed model card",
+        "text": "A proprietary model with a detailed, published model card",
         "correct": false,
         "why": "A model card helps, but the institute could not inspect the weights or verify the training data."
       },
@@ -235,7 +235,7 @@
       },
       {
         "key": "D",
-        "text": "The highest-scoring model on a public benchmark",
+        "text": "The highest-scoring open model on a public benchmark",
         "correct": false,
         "why": "Benchmark scores say nothing about transparency of weights, data or license terms."
       }
@@ -270,9 +270,9 @@
     "options": [
       {
         "key": "A",
-        "text": "Batch inference",
+        "text": "AI decision transparency",
         "correct": false,
-        "why": "Batch inference is a processing mode, not a design principle."
+        "why": "Decision transparency explains AI involvement and reasons; here users rate and flag answers to improve the system."
       },
       {
         "key": "B",
@@ -282,15 +282,15 @@
       },
       {
         "key": "C",
-        "text": "Model distillation",
+        "text": "Human audits of model decisions",
         "correct": false,
-        "why": "Distillation trains a smaller model from a larger one. It does not collect feedback from users."
+        "why": "Audits are periodic expert reviews; the scenario has every user rating and flagging answers."
       },
       {
         "key": "D",
-        "text": "Data residency",
+        "text": "Model cards for documentation",
         "correct": false,
-        "why": "Residency is about where data is stored."
+        "why": "Model cards document a model; they do not collect feedback from users."
       }
     ],
     "explanation": {
@@ -680,7 +680,7 @@
       },
       {
         "key": "B",
-        "text": "In SageMaker Model Registry version metadata only",
+        "text": "In the version metadata of SageMaker Model Registry only",
         "correct": false,
         "why": "The registry tracks versions and approval status, but risk ratings and out-of-scope uses belong in the model card."
       },
@@ -723,7 +723,7 @@
     "options": [
       {
         "key": "A",
-        "text": "It increases accuracy by revealing the best features",
+        "text": "It increases accuracy by revealing which features matter most",
         "correct": false,
         "why": "Explainability helps understanding; it does not by itself make models more accurate."
       },
@@ -772,7 +772,7 @@
     "options": [
       {
         "key": "A",
-        "text": "Model invocation logging enabled from launch",
+        "text": "Model invocation logging enabled from the first launch",
         "correct": false,
         "why": "Invocation logs show inputs and outputs in production, not how training data was sourced and processed."
       },
@@ -790,7 +790,7 @@
       },
       {
         "key": "D",
-        "text": "CloudTrail logs of who started each training job",
+        "text": "CloudTrail logs showing who started each training job",
         "correct": false,
         "why": "These show who ran training, not which data and processing were used."
       }
@@ -832,13 +832,13 @@
       },
       {
         "key": "B",
-        "text": "Show only the top suggestion to reduce clutter",
+        "text": "Show only the top suggestion to reduce clutter on screen",
         "correct": false,
         "why": "Removing context makes it harder for doctors to judge when to question the AI."
       },
       {
         "key": "C",
-        "text": "Use a more accurate model so reliance is justified",
+        "text": "Use a more accurate model so that reliance is justified",
         "correct": false,
         "why": "Any model is sometimes wrong; doctors still need signals of when to look closer."
       },
@@ -991,7 +991,7 @@
       },
       {
         "key": "B",
-        "text": "Self-explanations may not reflect the real process; don't rely on them",
+        "text": "Self-explanations may not reflect how answers were really produced",
         "correct": true,
         "why": "An LLM's explanation is itself generated text and can be a plausible rationalization rather than a faithful account."
       },

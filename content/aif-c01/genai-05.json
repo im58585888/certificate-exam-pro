@@ -388,25 +388,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Increasing the temperature",
+        "text": "Provisioned Throughput for the model",
         "correct": false,
-        "why": "Temperature affects randomness and does not reduce processing of repeated tokens."
+        "why": "Dedicated capacity avoids throttling but does not stop the 40-page contract being processed in full on every question."
       },
       {
         "key": "B",
-        "text": "Adding more examples to the prompt",
+        "text": "Batch inference for the follow-up questions",
         "correct": false,
-        "why": "More examples add tokens and increase cost."
+        "why": "Batch is asynchronous, so users would wait for answers, and the contract would still be processed each time."
       },
       {
         "key": "C",
-        "text": "Switching to a diffusion model",
+        "text": "A model with a larger context window",
         "correct": false,
-        "why": "Diffusion models generate images and cannot answer contract questions."
+        "why": "A larger window allows more input but does not reduce the cost of re-sending the same contract."
       },
       {
         "key": "D",
-        "text": "Prompt caching for the repeated prompt prefix",
+        "text": "Prompt caching for the repeated prefix",
         "correct": true,
         "why": "Prompt caching stores the processed repeated portion of a prompt, so subsequent requests reuse it at lower cost and with lower latency."
       }
@@ -713,7 +713,7 @@
       },
       {
         "key": "B",
-        "text": "Per input token of the text prompt only",
+        "text": "Per input token of the text prompt only, not per image",
         "correct": false,
         "why": "Text tokens are the unit for text models; image generation is priced by the images produced."
       },
@@ -758,7 +758,7 @@
     "options": [
       {
         "key": "A",
-        "text": "Switch to Provisioned Throughput for the large model",
+        "text": "Switch to Provisioned Throughput for the same large model",
         "correct": false,
         "why": "Dedicated capacity prevents throttling but does not make the large model start responding faster."
       },
@@ -776,7 +776,7 @@
       },
       {
         "key": "D",
-        "text": "Raise max tokens so each reply completes in one call",
+        "text": "Raise max tokens so each reply completes in a single call",
         "correct": false,
         "why": "Allowing longer replies does not make the first tokens arrive sooner."
       }
@@ -808,7 +808,7 @@
     "options": [
       {
         "key": "A",
-        "text": "Mandatory multi-year contracts",
+        "text": "Mandatory multi-year contracts with minimum spend",
         "correct": false,
         "why": "AWS generative AI services do not require multi-year contracts for on-demand use."
       },
@@ -1025,7 +1025,7 @@
       },
       {
         "key": "C",
-        "text": "Each step is a model call with context; cut steps, context and model size",
+        "text": "Every step is a model call; trim steps, context and model size",
         "correct": true,
         "why": "Agent cost scales with steps times tokens, so limiting steps, trimming context and using smaller models for simple steps reduces it."
       },

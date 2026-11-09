@@ -14,13 +14,13 @@
     "options": [
       {
         "key": "A",
-        "text": "Amazon Kendra",
+        "text": "Amazon Kendra enterprise search",
         "correct": false,
         "why": "Kendra is a managed enterprise search service with its own ML ranking. It does not let you store your own embeddings and run k-NN queries over them."
       },
       {
         "key": "B",
-        "text": "Amazon S3 Vectors",
+        "text": "Amazon S3 Vectors buckets",
         "correct": false,
         "why": "S3 Vectors stores and queries vectors at low cost, but it does not provide full-text keyword search, so it cannot cover both requirements."
       },
@@ -32,7 +32,7 @@
       },
       {
         "key": "D",
-        "text": "Amazon DynamoDB",
+        "text": "Amazon DynamoDB tables",
         "correct": false,
         "why": "DynamoDB is a key-value and document database. It does not offer native k-NN vector search or full-text search."
       }
@@ -65,25 +65,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Store embeddings in Amazon S3 Glacier Deep Archive",
+        "text": "Store embeddings in Amazon OpenSearch Serverless",
         "correct": false,
-        "why": "Glacier Deep Archive is for long-term archives with retrieval times of hours. It cannot perform similarity search."
+        "why": "OpenSearch Serverless is a strong vector store, but it is a separate database, which the company wants to avoid."
       },
       {
         "key": "B",
-        "text": "Use Amazon Polly to read embeddings aloud",
+        "text": "Store embeddings in Amazon S3 Vectors",
         "correct": false,
-        "why": "Polly converts text to speech and has nothing to do with storing vectors."
+        "why": "S3 Vectors is a separate service; embeddings could not be queried with SQL alongside the relational data."
       },
       {
         "key": "C",
-        "text": "Store embeddings in AWS CloudTrail logs",
+        "text": "Store embeddings as attributes in Amazon DynamoDB",
         "correct": false,
-        "why": "CloudTrail records API activity. It is not a database for embeddings."
+        "why": "DynamoDB is a separate database and has no native vector similarity search."
       },
       {
         "key": "D",
-        "text": "Use the pgvector extension in Aurora PostgreSQL to store and search embeddings",
+        "text": "Use the pgvector extension in Aurora PostgreSQL",
         "correct": true,
         "why": "pgvector adds vector data types and similarity search to PostgreSQL, so embeddings live alongside relational data and are queried with SQL."
       }
@@ -695,7 +695,7 @@
       },
       {
         "key": "B",
-        "text": "In-context learning (few-shot prompting)",
+        "text": "In-context learning",
         "correct": true,
         "why": "Providing examples in the prompt lets the model infer the pattern at inference time with no training."
       },
@@ -744,7 +744,7 @@
       },
       {
         "key": "B",
-        "text": "Run an open-source vector database on self-managed EC2",
+        "text": "Run an open-source vector database on self-managed EC2 instances",
         "correct": false,
         "why": "Self-managing a database is exactly the setup and operational work the startup wants to avoid."
       },
@@ -991,7 +991,7 @@
     "options": [
       {
         "key": "A",
-        "text": "Grant administrator access but require MFA on the agent's role",
+        "text": "Grant administrator access but require MFA on the agent's IAM role",
         "correct": false,
         "why": "MFA protects human sign-ins. An agent acting with admin rights could still cause broad damage through a mistake or prompt injection."
       },
@@ -1009,7 +1009,7 @@
       },
       {
         "key": "D",
-        "text": "Grant least privilege per task, require approval for destructive actions, log all",
+        "text": "Least privilege per task, approval for destructive actions, full logs",
         "correct": true,
         "why": "Scoped permissions, human approval and audit logs limit the damage a mistaken or manipulated agent could do while still letting it work."
       }
@@ -1045,13 +1045,13 @@
     "options": [
       {
         "key": "A",
-        "text": "A fine-tuned model can use a much shorter prompt, saving input tokens at scale",
+        "text": "A fine-tuned model needs a far shorter prompt, saving input tokens",
         "correct": true,
         "why": "At 50 million requests a month, removing thousands of example tokens per request can save more than the training and custom model costs."
       },
       {
         "key": "B",
-        "text": "Fine-tuned models are billed per request instead of per token",
+        "text": "Fine-tuned models are billed per request instead of per input token",
         "correct": false,
         "why": "Custom model inference is still billed by usage and capacity; fine-tuning does not switch pricing to a per-request fee."
       },
@@ -1200,7 +1200,7 @@
     "options": [
       {
         "key": "A",
-        "text": "Choose the model with the best public benchmark scores",
+        "text": "Choose the model with the best scores on public benchmark leaderboards",
         "correct": false,
         "why": "Public benchmarks may not reflect the team's specific tasks, so they are a starting point, not the deciding factor."
       },
@@ -1218,7 +1218,7 @@
       },
       {
         "key": "D",
-        "text": "Evaluate all three on the team's own tasks for quality, latency and cost",
+        "text": "Test all three on the team's own tasks for quality, latency and cost",
         "correct": true,
         "why": "Testing on representative tasks shows which model best balances quality, speed and cost for this use case."
       }

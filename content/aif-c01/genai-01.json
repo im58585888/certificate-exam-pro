@@ -20,7 +20,7 @@
       },
       {
         "key": "B",
-        "text": "A unit of text, such as a word or part of a word, that the model processes",
+        "text": "A unit of text, such as a word or part of a word",
         "correct": true,
         "why": "Models break text into tokens, often whole words, sub-words or punctuation. Input and output length and pricing are measured in tokens."
       },
@@ -81,7 +81,7 @@
       },
       {
         "key": "C",
-        "text": "Embeddings, which represent text as numeric vectors that capture meaning",
+        "text": "Embeddings, which turn text into vectors that capture meaning",
         "correct": true,
         "why": "Embedding models map text to vectors so that items with similar meaning are close together, enabling semantic search beyond exact keywords."
       },
@@ -141,7 +141,7 @@
       },
       {
         "key": "D",
-        "text": "Chunking, so that relevant passages can be retrieved precisely and fit within the model's context window",
+        "text": "Chunking, so passages can be retrieved precisely and fit the context",
         "correct": true,
         "why": "Chunking divides documents into passages that are embedded separately. Retrieval then returns only the most relevant passages, which fit in the prompt."
       }
@@ -276,15 +276,15 @@
     "options": [
       {
         "key": "A",
-        "text": "A k-nearest neighbors model",
+        "text": "A variational autoencoder (VAE)",
         "correct": false,
-        "why": "k-NN classifies points by their nearest neighbors. It does not generate new data."
+        "why": "A VAE is generative but uses an encoder and decoder trained together, not two networks competing against each other."
       },
       {
         "key": "B",
-        "text": "A decision tree ensemble",
+        "text": "A diffusion model with a denoiser",
         "correct": false,
-        "why": "Tree ensembles are traditional ML models for prediction and do not generate images."
+        "why": "Diffusion models learn to remove noise step by step; they do not pit a generator against a discriminator."
       },
       {
         "key": "C",
@@ -294,9 +294,9 @@
       },
       {
         "key": "D",
-        "text": "A transformer encoder",
+        "text": "A transformer encoder-decoder",
         "correct": false,
-        "why": "A transformer encoder is a single network using self-attention. It does not involve two competing networks."
+        "why": "A transformer uses self-attention in one network; it does not involve two competing networks."
       }
     ],
     "explanation": {
@@ -381,21 +381,21 @@
       },
       {
         "key": "B",
-        "text": "Evaluation, deployment, model selection, fine-tuning, data selection",
+        "text": "Model selection, data selection, fine-tuning, pre-training, deployment, evaluation, feedback",
         "correct": false,
-        "why": "Evaluation and deployment come after models are selected and adapted, not first."
+        "why": "Fine-tuning cannot come before pre-training, and evaluation should come before deployment."
       },
       {
         "key": "C",
-        "text": "Fine-tuning, pre-training, feedback, deployment, data selection",
+        "text": "Data selection, pre-training, model selection, deployment, fine-tuning, evaluation, feedback",
         "correct": false,
-        "why": "Pre-training must happen before fine-tuning, and data selection comes at the start."
+        "why": "Model selection should precede pre-training, and a model should be fine-tuned and evaluated before deployment."
       },
       {
         "key": "D",
-        "text": "Deployment, pre-training, data selection, feedback, evaluation",
+        "text": "Data selection, model selection, fine-tuning, pre-training, evaluation, feedback, deployment",
         "correct": false,
-        "why": "A model cannot be deployed before it exists, and data selection must come before pre-training."
+        "why": "Pre-training comes before fine-tuning, and feedback comes from a deployed model, not before deployment."
       }
     ],
     "explanation": {
@@ -429,7 +429,7 @@
     "options": [
       {
         "key": "A",
-        "text": "Switch to a model with a larger context window",
+        "text": "Switch to a newer model with a larger context window",
         "correct": false,
         "why": "A larger context window allows more tokens but does not make each token cheaper."
       },
@@ -447,7 +447,7 @@
       },
       {
         "key": "D",
-        "text": "Switch to Provisioned Throughput for the model",
+        "text": "Switch to Provisioned Throughput for the same model",
         "correct": false,
         "why": "Provisioned Throughput buys dedicated capacity by the hour; it does not reduce the tokens each request consumes and may cost more if underused."
       }
@@ -483,9 +483,9 @@
     "options": [
       {
         "key": "A",
-        "text": "The model's temperature",
+        "text": "The model's maximum output tokens",
         "correct": false,
-        "why": "Temperature is a setting that controls randomness. It is not a size limit."
+        "why": "Max output tokens caps the response; an input that is too long exceeds the context window."
       },
       {
         "key": "B",
@@ -495,7 +495,7 @@
       },
       {
         "key": "C",
-        "text": "The model's context window, measured in tokens",
+        "text": "The model's context window (token limit)",
         "correct": true,
         "why": "The context window is the maximum number of tokens the model can process in one request, including input and generated output."
       },
@@ -583,27 +583,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Code generation and developer assistance",
+        "text": "Code generation",
         "correct": true,
         "why": "Generative AI models trained on code can suggest, write, explain and test code, which is a major productivity use case."
       },
       {
         "key": "B",
-        "text": "Speech recognition",
+        "text": "Text summarization",
         "correct": false,
-        "why": "Speech recognition converts audio to text and does not write or explain code."
+        "why": "Summarization condenses documents; the team wants help writing, testing and explaining code."
       },
       {
         "key": "C",
-        "text": "Demand forecasting",
+        "text": "Semantic search",
         "correct": false,
-        "why": "Forecasting predicts future quantities and does not help write code."
+        "why": "Semantic search finds relevant content by meaning; it does not write or test code."
       },
       {
         "key": "D",
-        "text": "Image moderation",
+        "text": "Conversational AI assistant",
         "correct": false,
-        "why": "Image moderation flags unsafe images and has nothing to do with programming."
+        "why": "A general chat assistant converses, but the use case described is generating and explaining code in the IDE."
       }
     ],
     "explanation": {
@@ -637,7 +637,7 @@
     "options": [
       {
         "key": "A",
-        "text": "Use a model with a larger context window",
+        "text": "Use a model with a larger context window and send everything",
         "correct": false,
         "why": "More room lets even more noise in; the problem is what goes into the context, not its size."
       },
@@ -649,7 +649,7 @@
       },
       {
         "key": "C",
-        "text": "Fine-tune the model on past conversations",
+        "text": "Fine-tune the model on the team's past conversations",
         "correct": false,
         "why": "Fine-tuning does not change what is placed in the context window at inference time."
       },
@@ -740,21 +740,21 @@
     "options": [
       {
         "key": "A",
-        "text": "Reinforcement learning",
-        "correct": false,
-        "why": "Reinforcement learning trains agents with rewards and is not a retrieval method."
-      },
-      {
-        "key": "B",
         "text": "Keyword (lexical) search",
         "correct": false,
         "why": "Keyword search matches exact words. Comparing vectors by distance is a different technique."
       },
       {
-        "key": "C",
-        "text": "Model distillation",
+        "key": "B",
+        "text": "Hybrid keyword and vector search",
         "correct": false,
-        "why": "Distillation trains a smaller model from a larger one and does not retrieve documents."
+        "why": "Hybrid search combines keyword matching with vectors; this system compares embeddings only."
+      },
+      {
+        "key": "C",
+        "text": "Reranking of retrieved results",
+        "correct": false,
+        "why": "Reranking reorders results after retrieval; the system described retrieves by vector distance."
       },
       {
         "key": "D",
@@ -799,21 +799,21 @@
       },
       {
         "key": "B",
-        "text": "Data labeling",
+        "text": "Instruction tuning",
         "correct": false,
-        "why": "Data labeling attaches answers to training examples. It does not improve requests to a deployed model."
+        "why": "Instruction tuning trains a model on instruction-response pairs; rewriting requests does not change the model."
       },
       {
         "key": "C",
-        "text": "Fine-tuning",
+        "text": "Retrieval augmented generation",
         "correct": false,
-        "why": "Fine-tuning changes model weights with training data. Rewriting requests does not change the model."
+        "why": "RAG retrieves documents to add to a prompt; the analyst is rewriting the instructions themselves."
       },
       {
         "key": "D",
-        "text": "Pre-training",
+        "text": "Fine-tuning",
         "correct": false,
-        "why": "Pre-training builds a model from scratch on huge datasets, which is unrelated to improving individual requests."
+        "why": "Fine-tuning changes model weights with training data. Rewriting requests does not change the model."
       }
     ],
     "explanation": {
@@ -1113,7 +1113,7 @@
     "options": [
       {
         "key": "A",
-        "text": "The temperature parameter",
+        "text": "The temperature inference parameter",
         "correct": false,
         "why": "Temperature changes how random the wording is, not how long responses can be."
       },
@@ -1125,13 +1125,13 @@
       },
       {
         "key": "C",
-        "text": "The top-p parameter",
+        "text": "The top-p inference parameter",
         "correct": false,
         "why": "Top-p limits which candidate tokens can be sampled; it does not cap response length."
       },
       {
         "key": "D",
-        "text": "The model's context window",
+        "text": "The model's context window size",
         "correct": false,
         "why": "The context window is a fixed property of the model, covering input and output; it is not a per-response length setting."
       }
@@ -1163,7 +1163,7 @@
     "options": [
       {
         "key": "A",
-        "text": "It retrieves the most similar answer from its training data",
+        "text": "It retrieves the most similar answer stored from its training data",
         "correct": false,
         "why": "LLMs do not store and look up answers; they generate text from learned patterns, which is why they can hallucinate."
       },

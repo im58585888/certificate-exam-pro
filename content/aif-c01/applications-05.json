@@ -887,7 +887,7 @@
     "options": [
       {
         "key": "A",
-        "text": "Answers must reflect documents that change every hour",
+        "text": "Answers must reflect source documents that change every hour",
         "correct": false,
         "why": "Frequently changing knowledge is better served by RAG, which updates by re-indexing."
       },
@@ -899,13 +899,13 @@
       },
       {
         "key": "C",
-        "text": "The team has only 20 examples of the desired output",
+        "text": "The team has only 20 examples of the desired output style",
         "correct": false,
         "why": "Twenty examples are too few to fine-tune reliably; few-shot prompting is the better use of them."
       },
       {
         "key": "D",
-        "text": "Prompts and RAG can't achieve a required style, and good labeled data exists",
+        "text": "Prompting and RAG fall short on style, and labeled examples exist",
         "correct": true,
         "why": "Fine-tuning is worth its cost when cheaper approaches fall short on behavior and quality training data is available."
       }
@@ -1085,7 +1085,7 @@
     "options": [
       {
         "key": "A",
-        "text": "Custom models run on the base model's shared on-demand capacity",
+        "text": "Custom models run on the base model's shared on-demand inference capacity",
         "correct": false,
         "why": "Custom models are separate private resources; how they are served and billed differs from the base model."
       },
@@ -1103,7 +1103,7 @@
       },
       {
         "key": "D",
-        "text": "Custom models are separate resources with their own deployment and pricing",
+        "text": "Custom models are separate resources, deployed and priced on their own",
         "correct": true,
         "why": "Depending on the model, custom models use options such as Provisioned Throughput or on-demand custom deployment, plus storage charges."
       }

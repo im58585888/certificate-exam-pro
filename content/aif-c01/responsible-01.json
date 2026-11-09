@@ -414,25 +414,25 @@
     "options": [
       {
         "key": "A",
-        "text": "Prompt injection by the customer",
+        "text": "Prompt injection by the customer in the chat",
         "correct": false,
         "why": "Nothing suggests the customer manipulated the chatbot; it invented the policy on its own."
       },
       {
         "key": "B",
-        "text": "Bias against certain customer groups",
+        "text": "Bias against certain groups of customers",
         "correct": false,
         "why": "The problem is false information given to a customer, not unequal treatment of groups."
       },
       {
         "key": "C",
-        "text": "Intellectual property infringement",
+        "text": "Intellectual property infringement claims",
         "correct": false,
         "why": "No one's protected work was reproduced; the chatbot made up a policy."
       },
       {
         "key": "D",
-        "text": "Hallucination causing user harm, liability and lost trust",
+        "text": "Hallucination, causing user harm and liability",
         "correct": true,
         "why": "A fabricated policy that a customer relied on can create legal liability and damage trust in the brand."
       }
@@ -522,13 +522,13 @@
     "options": [
       {
         "key": "A",
-        "text": "A denied topic for payment and identity details",
+        "text": "A denied topic covering payment and identity details",
         "correct": false,
         "why": "Denied topics block whole responses, which would stop the summaries instead of hiding only the sensitive numbers."
       },
       {
         "key": "B",
-        "text": "Sensitive information filters set to mask those PII types",
+        "text": "Sensitive information filters that mask those PII types",
         "correct": true,
         "why": "Masking replaces detected card numbers and SSNs with placeholders while letting the rest of the summary through."
       },
@@ -628,7 +628,7 @@
     "options": [
       {
         "key": "A",
-        "text": "Use each model provider's built-in safety settings",
+        "text": "Rely on each model provider's own built-in safety settings",
         "correct": false,
         "why": "Providers' defaults differ, so policies would not be consistent across models."
       },
@@ -826,27 +826,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Guardrails only check user inputs",
+        "text": "Guardrails check only the user's inputs to the model",
         "correct": false,
-        "why": "This is incomplete. Guardrails also evaluate model outputs, not only what users send."
+        "why": "Guardrails also evaluate model outputs, not only what users send."
       },
       {
         "key": "B",
-        "text": "Guardrails only check model responses",
+        "text": "Guardrails check only the model's responses to users",
         "correct": false,
-        "why": "This is incomplete. Guardrails also evaluate user inputs, not only the model's responses."
+        "why": "Guardrails also evaluate user inputs, not only the model's responses."
       },
       {
         "key": "C",
-        "text": "Guardrails can evaluate both user inputs and model responses",
+        "text": "Guardrails check both user inputs and model responses",
         "correct": true,
         "why": "Guardrails policies apply to prompts before they reach the model and to responses before they reach users."
       },
       {
         "key": "D",
-        "text": "Guardrails only work during model training",
+        "text": "Guardrails check training data before fine-tuning",
         "correct": false,
-        "why": "Guardrails operate at inference time, not during training."
+        "why": "Guardrails operate on prompts and responses at inference time, not on training data."
       }
     ],
     "explanation": {
@@ -991,7 +991,7 @@
       },
       {
         "key": "B",
-        "text": "Automated Reasoning checks against policy rules",
+        "text": "Automated Reasoning checks against the written policy rules",
         "correct": false,
         "why": "Automated Reasoning verifies answers against formal rules you encode, not against the documents retrieved for each question."
       },
@@ -1034,9 +1034,9 @@
     "options": [
       {
         "key": "A",
-        "text": "Latency",
+        "text": "Fairness",
         "correct": false,
-        "why": "Latency measures response speed. It says nothing about how personal data is collected or protected."
+        "why": "Fairness concerns equitable outcomes across groups; this scenario is about how personal data is collected and protected."
       },
       {
         "key": "B",
@@ -1046,15 +1046,15 @@
       },
       {
         "key": "C",
-        "text": "Model size",
+        "text": "Transparency",
         "correct": false,
-        "why": "Model size has nothing to do with how personal data is handled."
+        "why": "Transparency is about openness on how the system works; minimizing and protecting data is privacy and security."
       },
       {
         "key": "D",
-        "text": "Creativity",
+        "text": "Controllability",
         "correct": false,
-        "why": "Creativity is not a responsible AI dimension related to data handling."
+        "why": "Controllability is the ability to monitor and steer a system; the scenario concerns personal data handling."
       }
     ],
     "explanation": {
@@ -1093,13 +1093,13 @@
       },
       {
         "key": "B",
-        "text": "Agree, but check invocation counts each month",
+        "text": "Agree, but review invocation counts and costs each month",
         "correct": false,
         "why": "Usage counts say nothing about whether harmful outputs are getting through."
       },
       {
         "key": "C",
-        "text": "Guardrails reduce risk; still test, red-team, monitor, review",
+        "text": "Guardrails reduce risk; still test, red-team and monitor",
         "correct": true,
         "why": "No filter catches everything, so ongoing testing, monitoring and incident review find gaps and tune policies."
       },

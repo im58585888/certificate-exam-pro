@@ -64,27 +64,27 @@
     "options": [
       {
         "key": "A",
-        "text": "Perplexity of an image model",
+        "text": "ROUGE",
         "correct": false,
-        "why": "This is not a translation evaluation metric."
+        "why": "ROUGE is recall-oriented and is the standard metric for summarization rather than translation."
       },
       {
         "key": "B",
-        "text": "Mean absolute error",
+        "text": "BERTScore",
         "correct": false,
-        "why": "MAE measures numeric error, not text similarity."
+        "why": "BERTScore compares meaning using embeddings rather than measuring n-gram precision against reference translations."
       },
       {
         "key": "C",
-        "text": "BLEU (Bilingual Evaluation Understudy)",
+        "text": "BLEU",
         "correct": true,
         "why": "BLEU is a precision-oriented n-gram overlap metric originally designed for evaluating machine translation."
       },
       {
         "key": "D",
-        "text": "F1 score for fraud",
+        "text": "Perplexity",
         "correct": false,
-        "why": "F1 evaluates classification, not translation quality."
+        "why": "Perplexity measures how predictable text is to a model and needs no reference translation."
       }
     ],
     "explanation": {
@@ -163,7 +163,7 @@
     "options": [
       {
         "key": "A",
-        "text": "LLM-as-a-judge scoring responses against a rubric",
+        "text": "LLM-as-a-judge with a scoring rubric",
         "correct": true,
         "why": "An evaluator model can assess helpfulness, correctness and tone at scale, with human spot checks to calibrate it."
       },
@@ -417,13 +417,13 @@
       },
       {
         "key": "B",
-        "text": "Task completion and whether the right tools got the right parameters",
+        "text": "Task completion and correct tool use with the right parameters",
         "correct": true,
         "why": "For agents, success means completing the task correctly, so evaluation must check actions and tool calls."
       },
       {
         "key": "C",
-        "text": "User ratings of how polite and clear the replies are",
+        "text": "User ratings of how polite and clear the agent's replies are",
         "correct": false,
         "why": "Polite, clear replies can still accompany a booking that failed or was made for the wrong time."
       },
@@ -465,7 +465,7 @@
     "options": [
       {
         "key": "A",
-        "text": "ROUGE and BERTScore on sampled conversations",
+        "text": "ROUGE and BERTScore on a sample of conversations against references",
         "correct": false,
         "why": "These measure text similarity to references, not whether customers' issues are resolved at an acceptable cost."
       },
@@ -483,7 +483,7 @@
       },
       {
         "key": "D",
-        "text": "Toxicity and robustness scores from model evaluation",
+        "text": "Toxicity and robustness scores from Bedrock model evaluation",
         "correct": false,
         "why": "These are important safety and quality checks, but they do not show business impact."
       }
@@ -527,7 +527,7 @@
       },
       {
         "key": "C",
-        "text": "LLM-judge quality scores for the generated drafts",
+        "text": "LLM-judge quality scores for each of the generated drafts",
         "correct": false,
         "why": "Draft quality matters, but the objective is productivity, which needs time and output measured against a baseline."
       },
@@ -627,7 +627,7 @@
       },
       {
         "key": "B",
-        "text": "Answer correctness against a reference answer",
+        "text": "Answer correctness compared with a reference answer",
         "correct": false,
         "why": "The fact is true, so it could still score as correct; correctness does not check whether the answer came from the sources."
       },
@@ -880,7 +880,7 @@
       },
       {
         "key": "B",
-        "text": "Calibrate the judge against human ratings and penalize needless length",
+        "text": "Calibrate the judge to human ratings; penalize needless length",
         "correct": true,
         "why": "Comparing the judge with human ratings and refining the rubric corrects known biases, with periodic human review to confirm."
       },
@@ -941,7 +941,7 @@
       },
       {
         "key": "D",
-        "text": "Cost: the per-token price is too high",
+        "text": "Cost: the per-token price of the model is too high",
         "correct": false,
         "why": "Cost is not the issue described; employees are slowed by the workflow."
       }
@@ -974,19 +974,19 @@
     "options": [
       {
         "key": "A",
-        "text": "BERTScore against one example answer",
+        "text": "BERTScore against one example answer for each question",
         "correct": false,
         "why": "With many valid creative answers, similarity to a single example would penalize good answers that differ from it."
       },
       {
         "key": "B",
-        "text": "BLEU against a single reference answer",
+        "text": "BLEU against a single reference answer for each question",
         "correct": false,
         "why": "Overlap with one reference penalizes valid creative variation."
       },
       {
         "key": "C",
-        "text": "Perplexity of each answer under the model",
+        "text": "Perplexity of each answer under a language model",
         "correct": false,
         "why": "Perplexity measures how predictable text is to a model, not whether an answer is good."
       },

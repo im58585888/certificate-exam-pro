@@ -77,7 +77,7 @@
       },
       {
         "key": "C",
-        "text": "Bedrock does not use customer prompts and responses to train the base foundation models and does not share them with model providers.",
+        "text": "Bedrock doesn't use prompts to train base models or share them with providers",
         "correct": true,
         "why": "AWS states that Bedrock does not store or use your prompts and completions to train AWS or third-party models, and does not distribute them to providers."
       },
@@ -652,7 +652,7 @@
       },
       {
         "key": "B",
-        "text": "Amazon Bedrock Model Evaluation jobs",
+        "text": "Amazon Bedrock Model Evaluation jobs on a test set",
         "correct": false,
         "why": "Evaluation jobs need prepared datasets and configuration; they are for systematic comparison, not quick hands-on trials."
       },
@@ -1166,7 +1166,7 @@
     "options": [
       {
         "key": "A",
-        "text": "A benchmark evaluation before launch, repeated yearly",
+        "text": "A benchmark evaluation before launch, repeated once a year",
         "correct": false,
         "why": "Agent behavior changes as data, tools and usage change; yearly benchmark checks miss problems in real interactions."
       },
@@ -1184,7 +1184,7 @@
       },
       {
         "key": "D",
-        "text": "User thumbs-up ratings as the only quality signal",
+        "text": "User thumbs-up ratings as the only signal of answer quality",
         "correct": false,
         "why": "User ratings are useful but sparse and do not show whether the right tools were used."
       }
