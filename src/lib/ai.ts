@@ -34,8 +34,8 @@ const BreakdownSchema = z.object({
   clues: z.array(z.object({ phrase: z.string(), meaning: z.string() })).describe("Exact phrases from the question that matter, and what each signals"),
   terms: z.array(z.object({ term: z.string(), plain: z.string(), example: z.string() })).describe("3-7 terms a beginner may not know"),
   options: z.array(z.object({ name: z.string(), what: z.string(), analogy: z.string(), keyFacts: z.array(z.string()) }))
-    .describe("One entry per technology or approach that appears in the answer options, described on its own terms"),
-  table: Table.nullable().describe("A small reference table only when it makes a concept clearer (at most 5 rows); otherwise null"),
+    .describe("One entry per technology, approach or concept in the answer options, described on its own terms; keyFacts must never confirm or contradict an option's claim"),
+  table: Table.nullable().describe("A small reference table only when it makes a concept clearer (at most 5 rows), never one that settles the answer; otherwise null"),
   yourMove: z.string().describe("1-2 sentences on how to check each option against the requirements, without naming the answer"),
 });
 export type Breakdown = z.infer<typeof BreakdownSchema>;
@@ -62,7 +62,9 @@ Only state AWS facts you are confident are accurate and current. If something de
 
 const BREAKDOWN_RULES = `The learner is looking at a practice question and has NOT answered it yet. Break the question down so they can reason it out themselves.
 
-You are not told the correct answer and must not suggest one: don't rank options, don't say which fits the scenario, and don't describe any option as right, wrong, best or a trap. Describe each technology on its own terms, including its general strengths and limits, so the learner can do the matching.`;
+You are not told the correct answer and must not suggest one: don't rank options, don't say which fits the scenario, and don't describe any option as right, wrong, best or a trap. Describe each technology on its own terms, including its general strengths and limits, so the learner can do the matching.
+
+Some options are claims rather than technologies (for example "Standard-IA has a 90-day minimum storage duration"). For those, explain the concept the claim is about and what the learner would need to know to judge it, but never state whether the claim is true or give the fact that settles it. Likewise, don't do the calculation or comparison that decides the question: set up the arithmetic or the comparison and leave the final step to the learner.`;
 
 const LEVEL_NOTE: Record<BreakdownLevel, string> = {
   standard: "Pitch it at someone who knows basic IT but is new to this AWS topic.",
@@ -83,7 +85,9 @@ function questionText(q: Question, withAnswer: boolean): string {
   return lines.join("\n");
 }
 
-const hashQuestion = (q: Question) => sha256(JSON.stringify([q.stem, q.prompt, q.options])).slice(0, 16);
+// Bump when the prompts change so saved explanations are rewritten with the new instructions.
+const PROMPT_VERSION = 2;
+const hashQuestion = (q: Question) => sha256(JSON.stringify([PROMPT_VERSION, q.stem, q.prompt, q.options])).slice(0, 16);
 
 // ---------- Cache ----------
 
@@ -218,7 +222,7 @@ export function chat(q: Question, answered: boolean, turns: ChatTurn[]): AsyncGe
 const CARD_RULES = `Write a study-sheet card for one exam topic, based on the practice questions below (with their correct answers, concepts and exam tips). Capture the ideas those questions test, so a learner can review the topic in under a minute. Keep each point to one short sentence.`;
 
 const topicKey = (exam: string, topic: string) => `topic:${exam}:${topic}`;
-const hashTopic = (qs: Question[]) => sha256(JSON.stringify(qs.map((q) => [q.id, q.explanation.concept]))).slice(0, 16);
+const hashTopic = (qs: Question[]) => sha256(JSON.stringify([PROMPT_VERSION, qs.map((q) => [q.id, q.explanation.concept])])).slice(0, 16);
 
 export async function cachedCards(exam: string, topics: { topic: string; questions: Question[] }[]): Promise<Map<string, ConceptCard>> {
   if (!topics.length) return new Map();
