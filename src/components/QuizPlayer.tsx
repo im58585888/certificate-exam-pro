@@ -6,7 +6,7 @@ import { finishQuizAction, keepFlagAction, setFlagAction, submitAnswerAction } f
 import type { Mode } from "@/lib/engine";
 import type { Feedback, PublicQuestion } from "@/lib/questions";
 import { ExplanationPanel, OptionList, QuestionMeta, QuestionText, Verdict } from "./QuestionParts";
-import { Fireworks } from "./Fireworks";
+import { Fireworks, useCelebrationSound } from "./Fireworks";
 import { FlagButton } from "./FlagButton";
 import { ReportQuestion } from "./ReportQuestion";
 import { Tutor } from "./Tutor";
@@ -45,6 +45,7 @@ export function QuizPlayer({ sessionId, mode, questions, initialFlags, initial, 
   const [paywall, setPaywall] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [celebrate, setCelebrate] = useState(0); // bumps on each correct practice answer to launch fireworks
+  const [sound, toggleSound] = useCelebrationSound();
   const [now, setNow] = useState(() => Date.now());
   const [pending, startTransition] = useTransition();
   const shownAt = useRef(0);
@@ -140,7 +141,7 @@ export function QuizPlayer({ sessionId, mode, questions, initialFlags, initial, 
 
   return (
     <div ref={topRef} className="mx-auto grid max-w-6xl gap-5 px-4 py-6 lg:grid-cols-[minmax(0,1fr)_280px]">
-      {!isExam && <Fireworks trigger={celebrate} />}
+      {!isExam && <Fireworks trigger={celebrate} sound={sound} />}
       <section className="card p-5 md:p-7" aria-live="polite">
         <div className="flex items-center gap-3">
           <span className="text-sm font-bold whitespace-nowrap text-soft">{index + 1}/{questions.length}</span>
@@ -227,6 +228,11 @@ export function QuizPlayer({ sessionId, mode, questions, initialFlags, initial, 
           </p>
         )}
         <p className="mt-4 text-xs text-muted">Tip: press 1–5 to choose, Enter to check, F to flag.</p>
+        {!isExam && (
+          <button type="button" onClick={toggleSound} aria-pressed={sound} className="mt-3 text-xs font-semibold text-soft hover:text-brand">
+            {sound ? "🔊 Celebration sound on" : "🔇 Celebration sound off"}
+          </button>
+        )}
       </aside>
 
       {paywall && (
