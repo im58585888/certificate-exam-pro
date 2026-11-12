@@ -6,6 +6,7 @@ import { finishQuizAction, keepFlagAction, setFlagAction, submitAnswerAction } f
 import type { Mode } from "@/lib/engine";
 import type { Feedback, PublicQuestion } from "@/lib/questions";
 import { ExplanationPanel, OptionList, QuestionMeta, QuestionText, Verdict } from "./QuestionParts";
+import { Fireworks } from "./Fireworks";
 import { FlagButton } from "./FlagButton";
 import { ReportQuestion } from "./ReportQuestion";
 import { Tutor } from "./Tutor";
@@ -43,6 +44,7 @@ export function QuizPlayer({ sessionId, mode, questions, initialFlags, initial, 
   const [stillWeak, setStillWeak] = useState<string | null>(null); // question id showing the "still weak?" prompt
   const [paywall, setPaywall] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [celebrate, setCelebrate] = useState(0); // bumps on each correct practice answer to launch fireworks
   const [now, setNow] = useState(() => Date.now());
   const [pending, startTransition] = useTransition();
   const shownAt = useRef(0);
@@ -70,6 +72,7 @@ export function QuizPlayer({ sessionId, mode, questions, initialFlags, initial, 
     if (res.status === "error") { setError(res.message); return false; }
     setAnswers((a) => ({ ...a, [qid]: { picks: p, feedback: res.status === "graded" ? res.feedback : undefined } }));
     if (res.status === "graded" && res.flagPrompt) setStillWeak(qid);
+    if (res.status === "graded" && res.feedback.correct) setCelebrate((n) => n + 1);
     return true;
   }, [sessionId]);
 
@@ -137,6 +140,7 @@ export function QuizPlayer({ sessionId, mode, questions, initialFlags, initial, 
 
   return (
     <div ref={topRef} className="mx-auto grid max-w-6xl gap-5 px-4 py-6 lg:grid-cols-[minmax(0,1fr)_280px]">
+      {!isExam && <Fireworks trigger={celebrate} />}
       <section className="card p-5 md:p-7" aria-live="polite">
         <div className="flex items-center gap-3">
           <span className="text-sm font-bold whitespace-nowrap text-soft">{index + 1}/{questions.length}</span>
