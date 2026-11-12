@@ -11,10 +11,10 @@ import { allowAttempt, clientIpHash, recordAttempt } from "./request";
 // The AI tutor: explanations are written once per question (or topic) and shared by every learner.
 // Only follow-up chat and first-time generation call the model.
 
-// Content that is written once and shared (breakdowns, walk-throughs, cards) uses a stronger model;
-// follow-up chat, paid for on every message, uses a fast low-cost one. Override either in the environment.
+// Everything runs on the low-cost model by default. Override either in the environment, e.g.
+// AI_MODEL_CONTENT=claude-sonnet-5-5 for richer saved breakdowns, walk-throughs and cards.
 const MODELS = {
-  content: process.env.AI_MODEL_CONTENT || "claude-sonnet-5-5",
+  content: process.env.AI_MODEL_CONTENT || "claude-haiku-5-5",
   chat: process.env.AI_MODEL_CHAT || "claude-haiku-5-5",
 };
 
