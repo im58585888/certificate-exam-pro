@@ -3,7 +3,8 @@ import Link from "next/link";
 import { startQuizAction } from "./actions";
 import { EXAM_LIST, FREE_TRIAL_QUESTIONS, PASS_DAYS, PASS_PRICE_CENTS } from "@/lib/exams";
 import { ensureBank, questionsFor } from "@/lib/questions";
-import { StudyCardDemo, TrialPicker, TutorDemo } from "@/components/LandingDemos";
+import { TrialPicker } from "@/components/LandingDemos";
+import { HeroTutorAnimation, MemoryFlow, TutorFlow } from "@/components/TutorVisuals";
 import styles from "./landing.module.css";
 
 const PRICE = `$${(PASS_PRICE_CENTS / 100).toFixed(2)}`;
@@ -13,21 +14,14 @@ export const metadata: Metadata = {
   description: "An AI tutor on every practice question: it breaks the question down, shows what it's testing, walks you through how to answer, and answers your follow-up questions. Practice AIF-C01 and SAA-C03.",
 };
 
-const TUTOR_STEPS = [
-  ["🎯", "What it's testing", "Names the skill behind the question, so you know which concept to reach for.", "Before you answer"],
-  ["✨", "Break it down", "Retells the scenario in plain English, spots the clues in the wording and explains every term and option, without giving the answer away.", "Before you answer"],
-  ["💡", "How to answer", "Walks through the reasoning step by step: the hard requirement, why each wrong option fails, and the exam tip to remember.", "After you answer"],
-  ["💬", "Chat with it", "Still unsure? Ask a follow-up in your own words, like \"why not a NAT gateway?\", and get a clear answer.", "Any time"],
-];
-
 const FAQ = [
-  ["What does the AI tutor do?", "On every practice question it can break the question down (what it's testing, the scenario in plain English, the clues in the wording and the terms you need), walk you through how to answer once you've chosen, and answer follow-up questions in a chat."],
-  ["Does the breakdown give away the answer?", "No. Before you answer, the tutor explains the question and the options but leaves the choice to you. The step-by-step answer walk-through unlocks after you've answered."],
-  ["Can I use the tutor during a mock exam?", "Timed mock exams stay exam-realistic, so the tutor is off until you submit. Then you can review every question with it."],
-  ["What is the study sheet?", "Every session you finish adds to it. It groups the topics you've practised, weakest first, lists the questions you missed, and turns them into concept cards and a printable cheat sheet."],
-  ["What can I try for free?", `${FREE_TRIAL_QUESTIONS} practice questions per exam, with the AI tutor and full answer explanations. No account or payment card needed.`],
-  ["Are these real AWS exam questions?", "No. All questions are original and follow the official AWS exam guides. This is an independent learning service, not an exam-dump site or an AWS-affiliated product."],
-  ["How does pricing work?", `A one-time ${PRICE} payment unlocks one exam for ${PASS_DAYS} days, including practice, timed mock exams, review and analytics. Passes do not renew automatically. Each exam has its own pass.`],
+  ["What does the AI tutor do?", "It breaks each question down, shows what it's testing, explains the answer step by step and answers your follow-up questions."],
+  ["Does it give away the answer?", "No. Before you answer, it explains the question but leaves the choice to you. The answer walk-through unlocks after."],
+  ["Can I use it during a mock exam?", "Mock exams stay realistic, so the tutor switches on after you submit."],
+  ["What is the study sheet?", "Every session adds to it: your weakest topics first, the questions you missed, and a printable cheat sheet."],
+  ["What can I try for free?", `${FREE_TRIAL_QUESTIONS} questions per exam, AI tutor included. No account or card needed.`],
+  ["Are these real AWS exam questions?", "No. They're original questions that follow the official AWS exam guides. We're not affiliated with AWS."],
+  ["How does pricing work?", `${PRICE} unlocks one exam for ${PASS_DAYS} days. One payment, no auto-renewal.`],
 ];
 
 export default async function Home() {
@@ -40,36 +34,25 @@ export default async function Home() {
           <div className={styles.heroCopy}>
             <p className={styles.eyebrow}>✨ An AI tutor on every question</p>
             <h1 id="hero-title">Stuck on an AWS question?<br /><span>Ask your AI tutor.</span></h1>
-            <p className={styles.heroDescription}>It breaks the question down, shows what it&apos;s really testing, walks you through how to answer, and chats with you until it clicks. Like a patient teacher sitting next to you.</p>
+            <p className={styles.heroDescription}>Breaks it down. Explains the why. Answers your questions.</p>
             <TrialPicker exams={EXAM_LIST.map((exam) => ({ slug: exam.slug, name: exam.shortName, code: exam.code }))} count={FREE_TRIAL_QUESTIONS} />
             <a className={styles.textLink} href="#how-it-works">See what the tutor does <span aria-hidden="true">↓</span></a>
           </div>
-          <TutorDemo />
+          <HeroTutorAnimation />
         </div>
         <div className={styles.heroFootnote}><span>Learn why the answer is right, not just which one.</span><span>AIF-C01 <i aria-hidden="true">/</i> SAA-C03</span></div>
       </section>
 
-      <section id="how-it-works" className={styles.learningIntro} aria-labelledby="learning-title">
-        <p className={styles.eyebrow}>Meet your AI tutor</p>
-        <h2 id="learning-title">Every question becomes<br />a lesson.</h2>
-        <p>Right beside each practice question. Ask as much as you need.</p>
+      <section id="how-it-works" className={styles.visualSection} aria-labelledby="learning-title">
+        <p className={styles.eyebrow}>How the tutor works</p>
+        <h2 id="learning-title">From stuck to <span>“got it”</span><br />in four taps.</h2>
+        <TutorFlow />
       </section>
 
-      <section className={styles.tutorSteps4} aria-label="What the AI tutor does">
-        {TUTOR_STEPS.map(([icon, title, body, when]) => (
-          <article key={title}><span className={styles.stepIcon} aria-hidden="true">{icon}</span><h3>{title}</h3><p>{body}</p><small>{when}</small></article>
-        ))}
-      </section>
-
-      <section className={`${styles.feature} ${styles.libraryFeature}`} aria-labelledby="library-title">
-        <div className={styles.featureNumber}>✨ <span>It remembers, too</span></div>
-        <div className={styles.featureBody}>
-          <h2 id="library-title">Every mistake.<br /><span>A lesson worth keeping.</span></h2>
-          <p>Every session you finish adds to your study sheet. The tutor turns your weakest topics and missed questions into concept cards and a printable cheat sheet.</p>
-          <ul className={styles.featureList}><li>Weakest topics first, with the questions you missed</li><li>Concept cards with key points, look-alikes and exam traps</li><li>A one-page cheat sheet to print before exam day</li></ul>
-          <p className={styles.featureAside}>Your next session starts with everything you&apos;ve learned so far.</p>
-        </div>
-        <StudyCardDemo />
+      <section className={`${styles.visualSection} ${styles.memorySection}`} aria-labelledby="library-title">
+        <p className={styles.eyebrow}>It remembers, too</p>
+        <h2 id="library-title">Every mistake becomes<br /><span>your study sheet.</span></h2>
+        <MemoryFlow />
       </section>
 
       <section id="exams" className={styles.exams} aria-labelledby="exams-title">
