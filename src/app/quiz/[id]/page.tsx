@@ -1,13 +1,13 @@
 import { notFound, redirect } from "next/navigation";
 import type { Metadata } from "next";
 import { aiAvailable } from "@/lib/ai";
-import { paymentsMode } from "@/lib/billing";
+import { getAccess, paymentsMode } from "@/lib/billing";
 import { getExam } from "@/lib/exams";
 import { QuizPlayer, type QuizPlayerProps } from "@/components/QuizPlayer";
 import { query } from "@/lib/db";
 import { flagsFor } from "@/lib/flags";
 import { ensureBank, feedbackFor, getQuestion, toPublic } from "@/lib/questions";
-import { isExpired, loadOwnedSession, sessionAttempts } from "@/lib/quiz";
+import { deadlineOf, isExpired, loadOwnedSession, resumeSession, sessionAttempts } from "@/lib/quiz";
 
 export const metadata: Metadata = { title: "Practice", robots: { index: false } };
 
@@ -16,7 +16,8 @@ export default async function QuizPage({ params }: PageProps<"/quiz/[id]">) {
   const { id } = await params;
   const loaded = await loadOwnedSession(id);
   if (!loaded) notFound();
-  const { session, owner } = loaded;
+  const { owner } = loaded;
+  const session = await resumeSession(loaded.session);
   if (session.finished_at) redirect(`/results/${id}`);
   if (isExpired(session)) {
     await query(`update quiz_sessions set finished_at = now() where id = $1 and finished_at is null`, [id]);
@@ -40,7 +41,8 @@ export default async function QuizPage({ params }: PageProps<"/quiz/[id]">) {
       questions={questions.map((q) => toPublic(q, id))}
       initialFlags={flagged}
       initial={initial}
-      deadline={session.time_limit_sec ? new Date(session.created_at).getTime() + session.time_limit_sec * 1000 : null}
+      deadline={deadlineOf(session)}
+      canSave={!!owner.userId && session.mode !== "trial" && (await getAccess(owner.userId, session.exam)).active}
       signedIn={!!owner.userId}
       examCode={getExam(session.exam)?.code ?? session.exam.toUpperCase()}
       waitlist={paymentsMode === "waitlist"}

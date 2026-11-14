@@ -1,5 +1,6 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { randomBytes } from "node:crypto";
 import { one, query } from "@/lib/db";
@@ -252,6 +253,28 @@ export async function keepFlagAction(sessionId: string, questionId: string): Pro
   if (!loaded || !loaded.session.question_ids.includes(questionId)) return { ok: false };
   await keepFlag(loaded.owner, questionId);
   return { ok: true };
+}
+
+/** "Save & finish later" (paid feature): lists the session on the dashboard and stops a mock exam's clock until it's reopened. */
+export async function saveQuizAction(sessionId: string): Promise<{ error: string } | void> {
+  const loaded = await loadOwnedSession(sessionId);
+  if (!loaded || !loaded.owner.userId) return { error: "Sign in to save your progress." };
+  const { session, owner } = loaded;
+  if (session.finished_at || isExpired(session)) return { error: "This session has already ended." };
+  if (session.mode === "trial" || !(await getAccess(owner.userId, session.exam)).active) return { error: "Saving sessions is part of the exam pass." };
+  await query(
+    `update quiz_sessions set saved_at = now(), paused_at = case when time_limit_sec is not null then coalesce(paused_at, now()) end where id = $1`,
+    [sessionId],
+  );
+  redirect(`/dashboard?exam=${session.exam}&saved=1`);
+}
+
+/** Removes a session from the dashboard's saved list without deleting its answers; a saved mock exam is submitted as is. */
+export async function discardSavedAction(form: FormData) {
+  const loaded = await loadOwnedSession(String(form.get("sessionId") ?? ""));
+  if (!loaded || !loaded.owner.userId) redirect("/dashboard");
+  await query(`update quiz_sessions set saved_at = null, finished_at = coalesce(finished_at, now()) where id = $1`, [loaded.session.id]);
+  revalidatePath("/dashboard");
 }
 
 export async function finishQuizAction(sessionId: string) {

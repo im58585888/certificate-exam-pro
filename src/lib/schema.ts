@@ -63,6 +63,11 @@ alter table users add column if not exists email_verified boolean not null defau
 alter table users add column if not exists last_login_at timestamptz;
 
 alter table attempts add column if not exists ip_hash text;
+-- "Save & finish later" (paid): saved_at lists the session on the dashboard; a saved mock exam's clock stops at paused_at,
+-- and the paused time is added to its deadline on resume.
+alter table quiz_sessions add column if not exists saved_at timestamptz;
+alter table quiz_sessions add column if not exists paused_at timestamptz;
+alter table quiz_sessions add column if not exists paused_sec int not null default 0;
 create index if not exists attempts_ip_idx on attempts (ip_hash, created_at);
 
 create table if not exists password_resets (

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { startQuizAction } from "../actions";
+import { discardSavedAction, startQuizAction } from "../actions";
 import { AccuracyLine, DailyColumns, DomainBars, type DayPoint } from "@/components/Charts";
 import { getUser } from "@/lib/auth";
 import { getAccess } from "@/lib/billing";
@@ -10,11 +10,15 @@ import { attemptsFor, dueCount, masteryBy, readiness, reviewQueue, weakestTopics
 import { DEFAULT_EXAM, EXAM_LIST, getExam } from "@/lib/exams";
 import { flagsFor } from "@/lib/flags";
 import { ensureBank, questionsFor } from "@/lib/questions";
+import { deadlineOf, isExpired, type QuizSession } from "@/lib/quiz";
 
 export const metadata: Metadata = { title: "Dashboard" };
 
 const DAYS = 30;
 const iso = (d: Date) => d.toISOString().slice(0, 10);
+
+const MODE_NAME: Record<string, string> = { exam: "Timed mock exam", practice: "Practice", reinforce: "Weak areas", review: "Review mistakes", flagged: "Flagged questions" };
+const clock = (sec: number) => `${Math.floor(sec / 60)} min`;
 
 function Stat({ label, value, note }: { label: string; value: string; note?: string }) {
   return (
@@ -30,12 +34,24 @@ export default async function Dashboard({ searchParams }: PageProps<"/dashboard"
   await ensureBank();
   const user = await getUser();
   if (!user) redirect("/login?next=/dashboard");
-  const { welcome, reset, exam: examParam } = await searchParams;
+  const { welcome, reset, saved: justSaved, exam: examParam } = await searchParams;
   // Requested exam, else the one practiced most recently, else the default.
   const recent = await query<{ exam: string }>(`select exam from quiz_sessions where user_id = $1 order by created_at desc limit 1`, [user.id]);
   const EXAM = typeof examParam === "string" && getExam(examParam) ? examParam : getExam(recent[0]?.exam ?? "") ? recent[0].exam : DEFAULT_EXAM;
   const exam = getExam(EXAM)!;
   const access = await getAccess(user.id, EXAM);
+
+  // Sessions saved with "Save & finish later", across all exams (a running clock that has since expired drops off).
+  const savedRows = await query<QuizSession & { answered: number }>(
+    `select s.*, (select count(*)::int from attempts a where a.session_id = s.id) as answered
+     from quiz_sessions s where s.user_id = $1 and s.saved_at is not null and s.finished_at is null order by s.saved_at desc limit 10`,
+    [user.id],
+  );
+  const savedSessions = savedRows.filter((s) => !isExpired(s)).map((s) => {
+    const deadline = deadlineOf(s);
+    const left = deadline ? Math.max(0, Math.round((deadline - (s.paused_at ? new Date(s.paused_at) : new Date()).getTime()) / 1000)) : null;
+    return { ...s, left };
+  });
   const bank = questionsFor(EXAM);
   const attempts = await attemptsFor({ userId: user.id }, EXAM);
 
@@ -113,6 +129,36 @@ export default async function Dashboard({ searchParams }: PageProps<"/dashboard"
           <Link className="btn-primary" href={`/practice/${EXAM}`}>Practice now</Link>
         </div>
       </div>
+
+      {justSaved && (
+        <p className="mt-6 rounded-xl bg-ok-soft px-4 py-3 text-sm font-semibold text-ok" role="status">💾 Saved. Your answers are kept{savedSessions.some((s) => s.paused_at) ? " and the exam clock is paused" : ""}. Pick up where you left off below.</p>
+      )}
+      {savedSessions.length > 0 && (
+        <section className="card mt-6 p-6" aria-labelledby="saved-title">
+          <h2 id="saved-title" className="font-extrabold">Saved sessions</h2>
+          <ul className="mt-3 divide-y divide-line">
+            {savedSessions.map((s) => (
+              <li key={s.id} className="flex flex-wrap items-center gap-3 py-3">
+                <div className="min-w-0 flex-1">
+                  <p className="font-semibold">{getExam(s.exam)?.code ?? s.exam.toUpperCase()} · {MODE_NAME[s.mode] ?? s.mode}</p>
+                  <p className="text-xs text-muted">
+                    {s.answered} of {s.question_ids.length} answered
+                    {s.left !== null && <> · {s.paused_at ? `⏸ ${clock(s.left)} left on the clock` : `⏱ clock running, ${clock(s.left)} left`}</>}
+                    {" · saved "}{new Date(s.saved_at!).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
+                  </p>
+                </div>
+                <form action={discardSavedAction}>
+                  <input type="hidden" name="sessionId" value={s.id} />
+                  <button className="btn-ghost !px-3 !py-1.5 !text-xs" title={s.mode === "exam" ? "Submits the exam with the answers so far" : "Ends the session; your answers stay in your stats"}>
+                    {s.mode === "exam" ? "Submit as is" : "End session"}
+                  </button>
+                </form>
+                <Link className="btn-primary !px-4 !py-1.5 !text-sm" href={`/quiz/${s.id}`}>Resume</Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
 
       {total === 0 ? (
         <div className="card mt-8 p-10 text-center">

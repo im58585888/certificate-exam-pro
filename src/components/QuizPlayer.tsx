@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState, useTransition } from "react";
-import { finishQuizAction, keepFlagAction, setFlagAction, submitAnswerAction } from "@/app/actions";
+import { finishQuizAction, keepFlagAction, saveQuizAction, setFlagAction, submitAnswerAction } from "@/app/actions";
 import type { Mode } from "@/lib/engine";
 import type { Feedback, PublicQuestion } from "@/lib/questions";
 import { ExplanationPanel, OptionList, QuestionMeta, QuestionText, Verdict } from "./QuestionParts";
@@ -25,6 +25,8 @@ export interface QuizPlayerProps {
   examCode: string;
   /** Whether the AI tutor is switched on. */
   tutor: boolean;
+  /** Paid, signed-in sessions can be saved and resumed later (a mock exam's clock pauses while saved). */
+  canSave?: boolean;
 }
 
 const MODE_LABEL: Record<Mode, string> = { trial: "Free trial", practice: "Practice", reinforce: "Strengthen weak areas", review: "Review mistakes", flagged: "Flagged questions", exam: "Timed mock exam" };
@@ -35,7 +37,7 @@ function formatClock(ms: number) {
   return `${h ? `${h}:` : ""}${String(m).padStart(h ? 2 : 1, "0")}:${String(sec).padStart(2, "0")}`;
 }
 
-export function QuizPlayer({ sessionId, mode, questions, initialFlags, initial, deadline, signedIn, waitlist, examCode, tutor }: QuizPlayerProps) {
+export function QuizPlayer({ sessionId, mode, questions, initialFlags, initial, deadline, signedIn, waitlist, examCode, tutor, canSave }: QuizPlayerProps) {
   const isExam = mode === "exam";
   const [answers, setAnswers] = useState(initial);
   const [index, setIndex] = useState(() => Math.max(0, questions.findIndex((q) => !initial[q.id])));
@@ -79,6 +81,7 @@ export function QuizPlayer({ sessionId, mode, questions, initialFlags, initial, 
 
   const finish = useCallback(() => startTransition(() => finishQuizAction(sessionId)), [sessionId]);
 
+
   // Exam mode: persist the current selection when moving away from a question.
   const saveExamDraft = useCallback(async () => {
     if (!isExam || draft.length !== q.selectCount) return true;
@@ -86,6 +89,12 @@ export function QuizPlayer({ sessionId, mode, questions, initialFlags, initial, 
     if (prev && prev.length === draft.length && prev.every((k) => draft.includes(k))) return true;
     return submit(q.id, draft);
   }, [isExam, draft, q, answers, submit]);
+
+  const saveForLater = () => startTransition(async () => {
+    if (!(await saveExamDraft())) return;
+    const r = await saveQuizAction(sessionId);
+    if (r?.error) setError(r.error);
+  });
 
   // Optimistic: the flag shows immediately and rolls back if the server refuses.
   const setFlag = useCallback((qid: string, on: boolean) => {
@@ -221,6 +230,14 @@ export function QuizPlayer({ sessionId, mode, questions, initialFlags, initial, 
         </div>
         {!isExam && answeredCount > 0 && (
           <button className="btn-ghost mt-5 w-full" onClick={finish} disabled={pending}>End session &amp; see results</button>
+        )}
+        {canSave && (
+          <>
+            <button className={`btn-ghost w-full ${!isExam && answeredCount > 0 ? "mt-2" : "mt-5"}`} onClick={saveForLater} disabled={pending}>
+              <span aria-hidden>💾</span> Save &amp; finish later
+            </button>
+            <p className="mt-1.5 text-xs text-muted">{isExam ? "Your answers are kept and the clock pauses until you come back." : "Your answers are kept. Resume any time from your dashboard."}</p>
+          </>
         )}
         {flags.size > 0 && (
           <p className="mt-4 flex items-center gap-2 text-xs text-muted">

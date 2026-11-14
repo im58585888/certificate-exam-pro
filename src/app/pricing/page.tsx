@@ -14,6 +14,7 @@ const PAID = [
   "Adaptive sessions that target your weak and flagged topics",
   "Spaced review that brings missed questions back until you've got them",
   "Timed 65-question mock exams with an estimated score",
+  "Save any session and finish later; a mock exam's clock pauses while you're away",
   "Analytics: domain mastery, readiness, accuracy trend, pace",
 ];
 
