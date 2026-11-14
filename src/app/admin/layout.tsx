@@ -6,6 +6,7 @@ export const metadata: Metadata = { title: "Admin", robots: { index: false } };
 
 const TABS = [
   ["/admin", "Overview"],
+  ["/admin/traffic", "Traffic"],
   ["/admin/questions", "Questions"],
   ["/admin/reports", "Reports"],
   ["/admin/users", "Users"],

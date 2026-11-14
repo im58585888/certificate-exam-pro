@@ -151,4 +151,44 @@ create table if not exists ai_content (
   primary key (key, kind)
 );
 alter table ai_content enable row level security;
+
+-- v7: cookie-free traffic analytics. visitor = daily-rotating hash (no raw IPs); location comes from Vercel's geo headers.
+create table if not exists visits (
+  id bigserial primary key,
+  visitor text not null,
+  started_at timestamptz not null default now(),
+  last_at timestamptz not null default now(),
+  source text not null,
+  medium text not null,
+  campaign text,
+  content text,
+  referrer_host text,
+  landing_path text not null,
+  country text,
+  region text,
+  city text,
+  device text,
+  os text,
+  pageviews int not null default 1
+);
+create index if not exists visits_started_idx on visits (started_at);
+create index if not exists visits_visitor_idx on visits (visitor, last_at desc);
+create table if not exists page_views (
+  id bigserial primary key,
+  visit_id bigint not null references visits(id) on delete cascade,
+  path text not null,
+  created_at timestamptz not null default now()
+);
+create index if not exists page_views_created_idx on page_views (created_at);
+create table if not exists conversions (
+  id bigserial primary key,
+  visit_id bigint references visits(id) on delete set null,
+  visitor text not null,
+  kind text not null,
+  created_at timestamptz not null default now()
+);
+create index if not exists conversions_created_idx on conversions (created_at);
+alter table visits enable row level security;
+alter table page_views enable row level security;
+alter table conversions enable row level security;
 `;

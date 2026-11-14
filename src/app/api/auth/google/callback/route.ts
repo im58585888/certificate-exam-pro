@@ -4,6 +4,7 @@ import { signIn, signOutEverywhere } from "@/lib/auth";
 import { one, query } from "@/lib/db";
 import { exchangeCode, GOOGLE_STATE_COOKIE, googleConfigured } from "@/lib/google";
 import { appOrigin } from "@/lib/request";
+import { recordConversion } from "@/lib/traffic";
 
 // Completes Google sign-in: validates state, exchanges the code, then finds, links or creates the account.
 export async function GET(req: Request) {
@@ -45,6 +46,7 @@ export async function GET(req: Request) {
       `insert into users (email, name, google_sub, email_verified) values ($1, $2, $3, true) returning id`,
       [profile.email.toLowerCase(), profile.name, profile.sub],
     );
+    await recordConversion("signup");
   }
   await query(`update users set email_verified = true where id = $1`, [user!.id]);
   await signIn(user!.id);

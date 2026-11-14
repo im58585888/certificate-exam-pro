@@ -14,6 +14,7 @@ import { FREE_TRIAL_QUESTIONS, getExam, TRIAL_NETWORK_CAP, PASS_DAYS, PASS_PRICE
 import { ensureBank, feedbackFor, getQuestion, grade, type Feedback } from "@/lib/questions";
 import { isExpired, loadOwnedSession } from "@/lib/quiz";
 import { REPORT_REASONS } from "@/lib/reports";
+import { recordConversion } from "@/lib/traffic";
 
 // ---------- Auth ----------
 
@@ -41,6 +42,7 @@ export async function registerAction(_: FormState, form: FormData): Promise<Form
     `insert into users (email, name, password_hash) values ($1, $2, $3) returning id`,
     [email, name, await hashPassword(password)],
   );
+  await recordConversion("signup");
   await signIn(user!.id);
   redirect(safeNext(form.get("next")));
 }
@@ -186,6 +188,7 @@ export async function startQuizAction(form: FormData) {
     `insert into quiz_sessions (user_id, anon_id, exam, mode, question_ids, time_limit_sec) values ($1, $2, $3, $4, $5, $6) returning id`,
     [owner.userId ?? null, owner.anonId ?? null, examSlug, mode, picked.map((q) => q.id), mode === "exam" ? exam.examMinutes * 60 : null],
   );
+  if (mode === "trial") await recordConversion("trial");
   redirect(`/quiz/${row!.id}`);
 }
 
@@ -269,6 +272,7 @@ export async function checkoutAction(form: FormData) {
     if (process.env.NODE_ENV === "production") throw new Error("Payments are not configured.");
     redirect(`/checkout/dev?exam=${exam.slug}`);
   }
+  await recordConversion("checkout");
   const origin = await appOrigin();
   const session = await stripe.checkout.sessions.create({
     mode: "payment",
@@ -338,5 +342,6 @@ export async function joinWaitlistAction(_: WaitlistState, form: FormData): Prom
      on conflict (email) do update set user_id = coalesce(waitlist.user_id, excluded.user_id)`,
     [email, user?.id ?? null, String(form.get("source") ?? "pricing").slice(0, 40)],
   );
+  await recordConversion("waitlist");
   return { joined: true };
 }

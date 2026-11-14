@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = { title: "Privacy Policy" };
 
 const CONTACT = process.env.SUPPORT_EMAIL || "im58585888@gmail.com";
-const UPDATED = "November 8, 2026";
+const UPDATED = "November 13, 2026";
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
@@ -75,10 +75,21 @@ export default function Privacy() {
         <p>We may also disclose information if required by law.</p>
       </Section>
 
+      <Section title="Visit statistics">
+        <p>
+          To understand which posts and ads bring people to the site, we record anonymous visit statistics: the pages viewed, the website or campaign link
+          that sent you (for example a Facebook post or a link tagged with utm_ parameters), your approximate location (country, region and city, worked out
+          by our hosting provider from your IP address), and your device type and operating system. We don&apos;t store your IP address. Visits are grouped
+          using a code that changes every day, so we can count visitors without recognizing you from one day to the next, and we note when a visit leads to a
+          free trial, sign-up or waitlist request. No cookies are used for this, and if your browser sends a Global Privacy Control or Do Not Track signal,
+          we don&apos;t record your visits at all. We keep these statistics for about 13 months.
+        </p>
+      </Section>
+
       <Section title="Cookies">
         <p>
           We use only strictly necessary cookies: one to keep you signed in, one to save free-trial progress, and a short-lived one that protects Google sign-in
-          from forgery. We do not use advertising or third-party tracking cookies.
+          from forgery. We do not use advertising or third-party tracking cookies. Our visit statistics don&apos;t use cookies at all (see below).
         </p>
       </Section>
 
