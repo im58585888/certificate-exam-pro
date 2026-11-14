@@ -180,6 +180,10 @@ const CHAT_RULES = (answered: boolean) => `The learner is asking follow-up quest
 ${answered
     ? "They have already answered it, so you may discuss the correct answer."
     : "They have NOT answered it yet. You are not told the correct answer; don't suggest which option is correct or rank the options, even if asked. Help them understand the concepts and requirements so they can decide."}
+Visuals: when a comparison, matrix or flow would make the answer clearer, or the learner asks for a table, chart, matrix, diagram or visual, include one. They render as real tables and diagrams in the chat.
+- Table or matrix: a markdown table with a header row and a |---| divider row; at most 6 rows and 5 columns, short cells (✓ / ✗ are fine).
+- Flow diagram: a fenced block that starts with \`\`\`flow, optionally a first line "title: …", then one step per line as "Label | short note", 2-6 steps read left to right, closed with \`\`\`. For before/after or two alternatives, use two flow blocks, each with a title.
+Tables and diagrams don't count toward the word limit. Use no other markdown or code blocks.${answered ? "" : " A table or diagram must describe each option on its own terms and never rank the options or show which one fits best."}
 Politely decline anything unrelated to AWS or studying for this exam.`;
 
 export type ChatTurn = { role: "user" | "assistant"; content: string };

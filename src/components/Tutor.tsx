@@ -2,6 +2,7 @@
 
 import { Fragment, useRef, useState, type ReactNode } from "react";
 import type { Breakdown, BreakdownLevel } from "@/lib/ai";
+import { ChatMarkdown } from "./ChatMarkdown";
 
 // ---------- Small helpers ----------
 
@@ -174,8 +175,8 @@ function Chat({ sessionId, questionId, answered }: { sessionId: string; question
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const suggestions = answered
-    ? ["Why exactly is my choice wrong?", "Give me a real-world example", "How would the exam try to trick me here?"]
-    : ["Explain the scenario even more simply", "What should I look for in the options?", "Give me a real-world analogy"];
+    ? ["Why exactly is my choice wrong?", "Give me a real-world example", "How would the exam try to trick me here?", "Show it as a table or diagram"]
+    : ["Explain the scenario even more simply", "What should I look for in the options?", "Give me a real-world analogy", "Show it as a table or diagram"];
 
   const ask = async (text: string) => {
     const q = text.trim();
@@ -202,7 +203,7 @@ function Chat({ sessionId, questionId, answered }: { sessionId: string; question
             <p key={i} className="ml-auto w-fit max-w-[85%] rounded-2xl rounded-br-sm bg-brand px-3.5 py-2 text-sm text-on-brand">{t.content}</p>
           ) : (
             <div key={i} className="max-w-[95%] rounded-2xl rounded-bl-sm bg-surface-2 px-4 py-3">
-              {t.content ? <MiniMarkdown text={t.content} /> : <span className="text-sm text-muted">Thinking…</span>}
+              {t.content ? <ChatMarkdown text={t.content} /> : <span className="text-sm text-muted">Thinking…</span>}
             </div>
           ))}
         </div>
