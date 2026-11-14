@@ -2,11 +2,19 @@ import Link from "next/link";
 import { requireAdmin } from "@/lib/auth";
 import { one, query } from "@/lib/db";
 import { appOrigin } from "@/lib/request";
+import { STATS_TZ } from "@/lib/traffic";
 import { LinkBuilder } from "./LinkBuilder";
 
 const RANGES = [1, 7, 30, 90] as const;
 
 interface Row { label: string; sub?: string | null; visits: number; visitors: number; bounces: number; trials: number; signups: number; waitlist: number; checkouts: number }
+
+// Ranges are whole calendar days in STATS_TZ ("7 days" = today and the 6 days before), so the totals, the tables and the
+// daily chart all cover exactly the same visits. $1 = days, $2 = time zone.
+const SINCE = `(date_trunc('day', now() at time zone $2) - ($1::int - 1) * interval '1 day') at time zone $2`;
+
+// A conversion counts once per visit, so a visit that starts three trial quizzes is one trial and "visit → trial" stays ≤ 100%.
+const CONVERTED = (kind: string) => `count(distinct c.visit_id) filter (where c.kind = '${kind}')::int`;
 
 // Every breakdown is the same query grouped by a different (whitelisted) column of the visit.
 const GROUPS = {
@@ -25,14 +33,12 @@ async function breakdown(group: keyof typeof GROUPS, days: number, where = "true
     `select ${label} as label, ${sub} as sub,
        count(distinct v.id)::int as visits, count(distinct v.visitor)::int as visitors,
        count(distinct v.id) filter (where v.pageviews = 1)::int as bounces,
-       count(c.id) filter (where c.kind = 'trial')::int as trials,
-       count(c.id) filter (where c.kind = 'signup')::int as signups,
-       count(c.id) filter (where c.kind = 'waitlist')::int as waitlist,
-       count(c.id) filter (where c.kind = 'checkout')::int as checkouts
+       ${CONVERTED("trial")} as trials, ${CONVERTED("signup")} as signups,
+       ${CONVERTED("waitlist")} as waitlist, ${CONVERTED("checkout")} as checkouts
      from visits v left join conversions c on c.visit_id = v.id
-     where v.started_at > now() - ($1::int * interval '1 day') and ${where}
+     where v.started_at >= ${SINCE} and ${where}
      group by 1, 2 order by visits desc, trials desc limit ${limit}`,
-    [days],
+    [days, STATS_TZ],
   );
 }
 
@@ -90,25 +96,32 @@ export default async function TrafficPage({ searchParams }: PageProps<"/admin/tr
   const days = (RANGES as readonly number[]).includes(asked) ? asked : 30;
 
   const t = (await one<Record<string, number>>(
-    `select count(distinct v.id)::int as visits, count(distinct v.visitor)::int as visitors, coalesce(sum(v.pageviews), 0)::int as pageviews,
-       count(distinct v.id) filter (where v.pageviews = 1)::int as bounces,
-       (select count(*)::int from conversions c where c.kind = 'trial' and c.created_at > now() - ($1::int * interval '1 day')) as trials,
-       (select count(*)::int from conversions c where c.kind = 'signup' and c.created_at > now() - ($1::int * interval '1 day')) as signups,
-       (select count(*)::int from conversions c where c.kind = 'waitlist' and c.created_at > now() - ($1::int * interval '1 day')) as waitlist
-     from visits v where v.started_at > now() - ($1::int * interval '1 day')`,
-    [days],
+    `select count(*)::int as visits, coalesce(sum(v.pageviews), 0)::int as pageviews,
+       count(*) filter (where v.pageviews = 1)::int as bounces,
+       (select count(*)::int from (select distinct visitor, (started_at at time zone $2)::date from visits where started_at >= ${SINCE}) x) as visitors,
+       (select count(distinct visit_id)::int from conversions c join visits w on w.id = c.visit_id where c.kind = 'trial' and w.started_at >= ${SINCE}) as trials,
+       (select count(distinct visit_id)::int from conversions c join visits w on w.id = c.visit_id where c.kind = 'signup' and w.started_at >= ${SINCE}) as signups,
+       (select count(distinct visit_id)::int from conversions c join visits w on w.id = c.visit_id where c.kind = 'waitlist' and w.started_at >= ${SINCE}) as waitlist,
+       (select count(distinct visitor)::int from conversions c where c.visit_id is null and c.created_at >= ${SINCE}) as untracked
+     from visits v where v.started_at >= ${SINCE}`,
+    [days, STATS_TZ],
   ))!;
 
+  // One bar per calendar day of the range (at least a week, so "Today" still shows recent days).
+  const chartDays = Math.max(days, 7);
   const daily = await query<{ day: string; visitors: number; visits: number; trials: number }>(
-    `with d as (select generate_series(current_date - ($1::int - 1), current_date, interval '1 day')::date as day)
+    `with d as (select ((now() at time zone $2)::date - g)::date as day from generate_series(0, $1::int - 1) g),
+     v as (select (started_at at time zone $2)::date as day, visitor, id from visits where started_at >= ${SINCE})
      select to_char(d.day, 'Mon DD') as day,
-       (select count(distinct visitor)::int from visits v where v.started_at::date = d.day) as visitors,
-       (select count(*)::int from visits v where v.started_at::date = d.day) as visits,
-       (select count(*)::int from conversions c where c.kind = 'trial' and c.created_at::date = d.day) as trials
+       (select count(distinct visitor)::int from v where v.day = d.day) as visitors,
+       (select count(*)::int from v where v.day = d.day) as visits,
+       (select count(distinct c.visit_id)::int from conversions c join v on v.id = c.visit_id where c.kind = 'trial' and v.day = d.day) as trials
      from d order by d.day`,
-    [Math.min(Math.max(days, 7), 30)],
+    [chartDays, STATS_TZ],
   );
   const peak = Math.max(1, ...daily.map((d) => d.visitors));
+  const labelEvery = chartDays <= 7 ? 1 : chartDays <= 30 ? 5 : 14;
+  const tzLabel = new Intl.DateTimeFormat("en-US", { timeZone: STATS_TZ, timeZoneName: "short" }).formatToParts().find((p) => p.type === "timeZoneName")?.value ?? STATS_TZ;
 
   const [sources, campaigns, countries, cities, landing, referrers, devices] = await Promise.all([
     breakdown("source", days),
@@ -120,8 +133,8 @@ export default async function TrafficPage({ searchParams }: PageProps<"/admin/tr
     breakdown("device", days, "true", 10),
   ]);
   const pages = await query<{ path: string; views: number }>(
-    `select path, count(*)::int as views from page_views where created_at > now() - ($1::int * interval '1 day') group by 1 order by 2 desc limit 10`,
-    [days],
+    `select p.path, count(*)::int as views from page_views p join visits v on v.id = p.visit_id where v.started_at >= ${SINCE} group by 1 order by 2 desc limit 10`,
+    [days, STATS_TZ],
   );
 
   return (
@@ -131,35 +144,40 @@ export default async function TrafficPage({ searchParams }: PageProps<"/admin/tr
         <nav className="flex gap-1 rounded-xl border border-line bg-surface p-1 text-sm font-semibold">
           {RANGES.map((r) => (
             <Link key={r} href={`/admin/traffic?days=${r}`} className={`rounded-lg px-3 py-1.5 ${r === days ? "bg-brand text-on-brand" : "text-soft hover:bg-surface-2"}`}>
-              {r === 1 ? "24 hours" : `${r} days`}
+              {r === 1 ? "Today" : `${r} days`}
             </Link>
           ))}
         </nav>
       </div>
 
       <section className="grid grid-cols-2 gap-4 md:grid-cols-4">
-        <Stat label="Visitors" value={t.visitors.toLocaleString()} note="Each person counted once per day" />
+        <Stat label="Visitors" value={t.visitors.toLocaleString()} note={days === 1 ? "Unique people today" : "Unique people per day, added up"} />
         <Stat label="Visits" value={t.visits.toLocaleString()} note={`${(t.visits ? t.pageviews / t.visits : 0).toFixed(1)} pages per visit`} />
         <Stat label="Bounce rate" value={pct(t.bounces, t.visits)} note="Visits that saw only one page" />
         <Stat label="Page views" value={t.pageviews.toLocaleString()} />
         <Stat label="Free trials started" value={t.trials.toLocaleString()} note={`${pct(t.trials, t.visits)} of visits`} />
         <Stat label="Sign-ups" value={t.signups.toLocaleString()} note={`${pct(t.signups, t.visits)} of visits`} />
-        <Stat label="Waitlist joins" value={t.waitlist.toLocaleString()} />
+        <Stat label="Waitlist joins" value={t.waitlist.toLocaleString()} note={t.untracked ? `+${t.untracked} from people who block tracking` : undefined} />
         <Stat label="Top source" value={sources[0] ? `${SOURCE_ICON[sources[0].label] ?? "🔗"} ${sources[0].label}` : "–"} note={sources[0] ? `${sources[0].visits} visits` : undefined} />
       </section>
 
       <section className="card p-5">
         <h2 className="font-extrabold">Visitors per day</h2>
-        <p className="text-xs text-muted">Bar = visitors. Green number = free trials started that day.</p>
-        <div className="mt-4 flex h-40 items-end gap-1" role="img" aria-label="Visitors per day">
+        <p className="text-xs text-muted">Last {chartDays} days, {tzLabel}. Number above a bar = visitors; green = free trials started that day.</p>
+        <div className="mt-4 flex h-44 items-end gap-1" role="img" aria-label="Visitors per day">
           {daily.map((d) => (
-            <div key={d.day} className="group relative flex h-full flex-1 flex-col justify-end" title={`${d.day}: ${d.visitors} visitors, ${d.visits} visits, ${d.trials} trials`}>
-              {d.trials > 0 && <span className="mb-1 text-center text-[10px] font-bold text-ok">{d.trials}</span>}
-              <div className="rounded-t-[4px] bg-brand/80 group-hover:bg-brand" style={{ height: `${Math.max(2, (d.visitors / peak) * 100)}%` }} />
+            <div key={d.day} className="group relative flex h-full min-w-0 flex-1 flex-col justify-end" title={`${d.day}: ${d.visitors} visitors, ${d.visits} visits, ${d.trials} trials`}>
+              {d.trials > 0 && <span className="text-center text-[10px] font-bold text-ok">{d.trials}</span>}
+              {d.visitors > 0 && chartDays <= 31 && <span className="text-center text-[10px] font-semibold tabular-nums text-soft">{d.visitors}</span>}
+              <div className={`rounded-t-[4px] ${d.visitors ? "bg-brand/80 group-hover:bg-brand" : "bg-line"}`} style={{ height: `${d.visitors ? Math.max(3, (d.visitors / peak) * 85) : 1}%` }} />
             </div>
           ))}
         </div>
-        <div className="mt-1 flex justify-between text-[10px] text-muted"><span>{daily[0]?.day}</span><span>{daily.at(-1)?.day}</span></div>
+        <div className="mt-1 flex gap-1 text-[10px] text-muted">
+          {daily.map((d, i) => (
+            <span key={d.day} className="min-w-0 flex-1 overflow-visible whitespace-nowrap text-center">{i % labelEvery === (daily.length - 1) % labelEvery ? d.day : ""}</span>
+          ))}
+        </div>
       </section>
 
       <Table title="Sources" hint="Where each visit came from: UTM tags first, then the referring site. 'direct' = typed URL, bookmark or an app that hides the referrer." rows={sources} first="Source / medium"

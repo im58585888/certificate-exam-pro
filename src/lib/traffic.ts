@@ -11,6 +11,8 @@ export type ConversionKind = "trial" | "signup" | "waitlist" | "checkout";
 
 const BOT = /bot|crawl|spider|slurp|preview|facebookexternalhit|meta-external|embedly|headless|lighthouse|python|curl|wget|httpclient|axios|node-fetch|vercel/i;
 const VISIT_GAP_MIN = 30;
+/** Days (the "once a day" visitor count, the daily chart, the date ranges) follow this time zone, not UTC. */
+export const STATS_TZ = process.env.STATS_TIMEZONE || "America/Los_Angeles";
 
 /** Referrer host or utm_source → a channel name the dashboard groups by. */
 const SOURCES: [RegExp, string][] = [
@@ -81,7 +83,7 @@ async function visitorKey(): Promise<{ visitor: string; ua: string } | null> {
   const ua = h.get("user-agent") ?? "";
   if (!ua || BOT.test(ua)) return null;
   const ip = h.get("x-forwarded-for")?.split(",")[0]?.trim() || h.get("x-real-ip") || "unknown";
-  const day = new Date().toISOString().slice(0, 10);
+  const day = new Intl.DateTimeFormat("en-CA", { timeZone: STATS_TZ }).format(new Date());
   const visitor = createHash("sha256").update(`${process.env.AUTH_SECRET ?? "dev-secret"}:visit:${day}:${ip}:${ua}`).digest("hex").slice(0, 32);
   return { visitor, ua };
 }
@@ -122,11 +124,13 @@ export async function recordHit(hit: Hit): Promise<void> {
   }
 }
 
-/** Credits a conversion to the visitor's latest visit today that came from somewhere (falling back to a direct visit). Never throws: analytics must not break sign-up or checkout. */
+/** Credits a conversion to the visitor's latest visit today that came from somewhere (falling back to a direct visit).
+ *  Each kind counts once per visitor per day, so starting several trial quizzes is still one trial. Never throws: analytics must not break sign-up or checkout. */
 export async function recordConversion(kind: ConversionKind): Promise<void> {
   try {
     const key = await visitorKey();
     if (!key) return;
+    if (await one(`select 1 from conversions where visitor = $1 and kind = $2`, [key.visitor, kind])) return;
     const visit = await one<{ id: number }>(`select id from visits where visitor = $1 order by (source <> 'direct') desc, last_at desc limit 1`, [key.visitor]);
     await query(`insert into conversions (visit_id, visitor, kind) values ($1, $2, $3)`, [visit?.id ?? null, key.visitor, kind]);
   } catch (err) {
