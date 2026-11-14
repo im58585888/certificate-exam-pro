@@ -7,6 +7,7 @@ const checkLinks = process.argv.includes("--links");
 const EXAM_DOMAINS = {
   "saa-c03": { secure: 0.30, resilient: 0.26, performance: 0.24, cost: 0.20 },
   "aif-c01": { fundamentals: 0.20, genai: 0.24, applications: 0.28, responsible: 0.14, security: 0.14 },
+  "clf-c02": { concepts: 0.24, compliance: 0.30, technology: 0.34, billing: 0.12 },
 };
 const examSlug = dir.replace(/\/+$/, "").split("/").pop();
 const DOMAINS = EXAM_DOMAINS[examSlug];

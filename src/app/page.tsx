@@ -11,7 +11,7 @@ const PRICE = `$${(PASS_PRICE_CENTS / 100).toFixed(2)}`;
 
 export const metadata: Metadata = {
   title: "AWS exam prep with an AI tutor · Certificate Exam Pro",
-  description: "An AI tutor on every practice question: it breaks the question down, shows what it's testing, walks you through how to answer, and answers your follow-up questions. Practice AIF-C01 and SAA-C03.",
+  description: "An AI tutor on every practice question: it breaks the question down, shows what it's testing, walks you through how to answer, and answers your follow-up questions. Practice CLF-C02, AIF-C01 and SAA-C03.",
 };
 
 const FAQ = [
@@ -40,7 +40,7 @@ export default async function Home() {
           </div>
           <HeroTutorAnimation />
         </div>
-        <div className={styles.heroFootnote}><span>Learn why the answer is right, not just which one.</span><span>AIF-C01 <i aria-hidden="true">/</i> SAA-C03</span></div>
+        <div className={styles.heroFootnote}><span>Learn why the answer is right, not just which one.</span><span>CLF-C02 <i aria-hidden="true">/</i> AIF-C01 <i aria-hidden="true">/</i> SAA-C03</span></div>
       </section>
 
       <section id="how-it-works" className={styles.visualSection} aria-labelledby="learning-title">

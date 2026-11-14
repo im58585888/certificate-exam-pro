@@ -13,7 +13,7 @@ export default async function StudyIndex() {
     <div className="mx-auto max-w-4xl px-4 py-10">
       <h1 className="text-3xl font-extrabold tracking-tight">Your study sheets</h1>
       <p className="mt-2 text-soft">Every practice session adds the concepts it covered to your sheet for that exam, with the mistakes you made.</p>
-      <div className="mt-8 grid gap-4 md:grid-cols-2">
+      <div className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {exams.map(({ exam, answered }) => (
           <div key={exam.slug} className="card p-6">
             <p className="eyebrow">{exam.code}</p>

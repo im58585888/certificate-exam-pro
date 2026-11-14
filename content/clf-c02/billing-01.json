@@ -1,0 +1,996 @@
+[
+  {
+    "id": "clf-bil-001",
+    "domain": "billing",
+    "topic": "EC2 Pricing Models",
+    "tags": [
+      "on-demand"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A developer needs EC2 capacity for a short, unpredictable test that can't be interrupted, with no long-term commitment.",
+    "prompt": "Which pricing option fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "On-Demand Instances",
+        "correct": true,
+        "why": "On-Demand charges per second or hour with no commitment and no interruptions."
+      },
+      {
+        "key": "B",
+        "text": "Reserved Instances",
+        "correct": false,
+        "why": "RIs require a one- or three-year commitment."
+      },
+      {
+        "key": "C",
+        "text": "Dedicated Hosts",
+        "correct": false,
+        "why": "Dedicated Hosts are for licensing or compliance needs and cost more."
+      },
+      {
+        "key": "D",
+        "text": "Spot Instances",
+        "correct": false,
+        "why": "Spot can be interrupted, so it doesn't meet this requirement."
+      }
+    ],
+    "explanation": {
+      "answer": "On-Demand Instances let you pay for compute by the second or hour with no long-term commitments.",
+      "concept": "Best for short-term, spiky or unpredictable workloads that can't be interrupted.",
+      "examTip": "Short, unpredictable, no interruptions = On-Demand.",
+      "references": [
+        {
+          "title": "Amazon EC2 pricing",
+          "url": "https://aws.amazon.com/ec2/pricing/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-bil-002",
+    "domain": "billing",
+    "topic": "EC2 Pricing Models",
+    "tags": [
+      "spot"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A company runs image-rendering jobs that can stop and restart at any time and wants the lowest possible compute price.",
+    "prompt": "Which pricing option fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Reserved Instances",
+        "correct": false,
+        "why": "RIs need a commitment and suit steady workloads."
+      },
+      {
+        "key": "B",
+        "text": "Spot Instances",
+        "correct": true,
+        "why": "Spot uses spare capacity at up to 90% off On-Demand, suitable for interruptible work."
+      },
+      {
+        "key": "C",
+        "text": "Dedicated Instances",
+        "correct": false,
+        "why": "Dedicated Instances cost more, so it doesn't meet this requirement."
+      },
+      {
+        "key": "D",
+        "text": "On-Demand Instances",
+        "correct": false,
+        "why": "On-Demand is reliable but more expensive."
+      }
+    ],
+    "explanation": {
+      "answer": "Spot Instances use spare EC2 capacity at steep discounts but can be reclaimed by AWS with a two-minute warning.",
+      "concept": "Ideal for batch, CI/CD, rendering and other flexible workloads.",
+      "examTip": "Interruptible + cheapest = Spot.",
+      "references": [
+        {
+          "title": "Spot Instances",
+          "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-spot-instances.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-bil-003",
+    "domain": "billing",
+    "topic": "EC2 Pricing Models",
+    "tags": [
+      "reserved"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company runs a database server on the same EC2 instance type 24/7 and will for the next three years.",
+    "prompt": "Which option gives the BIGGEST discount for this steady use?",
+    "options": [
+      {
+        "key": "A",
+        "text": "On-Demand Instances billed per second with no commitment",
+        "correct": false,
+        "why": "On-Demand has no discount, so it doesn't meet this requirement."
+      },
+      {
+        "key": "B",
+        "text": "A one-year commitment with no upfront payment",
+        "correct": false,
+        "why": "One-year, no-upfront terms give smaller discounts."
+      },
+      {
+        "key": "C",
+        "text": "A three-year commitment paid all upfront",
+        "correct": true,
+        "why": "Longer terms and more upfront payment give the largest discounts."
+      },
+      {
+        "key": "D",
+        "text": "Spot Instances that can be interrupted at short notice",
+        "correct": false,
+        "why": "Spot can interrupt a database server, which isn't what this scenario needs."
+      }
+    ],
+    "explanation": {
+      "answer": "Reserved Instances and Savings Plans give the largest discounts for three-year terms paid all upfront, for steady, predictable usage.",
+      "concept": "Discounts can be up to 72% compared with On-Demand.",
+      "examTip": "Steady 24/7 for years = 3-year commitment, all upfront for the max discount.",
+      "references": [
+        {
+          "title": "Reserved Instances for Amazon EC2",
+          "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-reserved-instances.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-bil-004",
+    "domain": "billing",
+    "topic": "EC2 Pricing Models",
+    "tags": [
+      "savings-plans"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company wants a discount in exchange for committing to a consistent amount of compute spend per hour, while keeping flexibility to change instance families and Regions.",
+    "prompt": "Which option fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Standard Reserved Instances",
+        "correct": false,
+        "why": "Standard RIs are tied to specific instance attributes."
+      },
+      {
+        "key": "B",
+        "text": "Spot Instances",
+        "correct": false,
+        "why": "Spot isn't a commitment discount, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "C",
+        "text": "Dedicated Hosts",
+        "correct": false,
+        "why": "Dedicated Hosts are physical servers, so it doesn't meet this requirement."
+      },
+      {
+        "key": "D",
+        "text": "Compute Savings Plans",
+        "correct": true,
+        "why": "Compute Savings Plans apply to any instance family, size, Region, OS and tenancy, plus Fargate and Lambda."
+      }
+    ],
+    "explanation": {
+      "answer": "Savings Plans offer lower prices for a commitment to a consistent amount of usage (in $/hour) for one or three years.",
+      "concept": "Compute Savings Plans are the most flexible; EC2 Instance Savings Plans give more discount but less flexibility.",
+      "examTip": "$/hour commitment with flexibility = Compute Savings Plans.",
+      "references": [
+        {
+          "title": "What are Savings Plans?",
+          "url": "https://docs.aws.amazon.com/savingsplans/latest/userguide/what-is-savings-plans.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-bil-005",
+    "domain": "billing",
+    "topic": "EC2 Pricing Models",
+    "tags": [
+      "dedicated"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company's compliance rules require that its EC2 instances run on hardware that isn't shared with other AWS customers. It doesn't need control over instance placement on specific servers.",
+    "prompt": "Which option fits BEST at the lowest cost?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Dedicated Instances",
+        "correct": true,
+        "why": "Dedicated Instances run on hardware dedicated to one customer."
+      },
+      {
+        "key": "B",
+        "text": "Dedicated Hosts with host affinity",
+        "correct": false,
+        "why": "Dedicated Hosts add server-level control that isn't required here."
+      },
+      {
+        "key": "C",
+        "text": "Default tenancy On-Demand Instances",
+        "correct": false,
+        "why": "These can share hardware with other customers."
+      },
+      {
+        "key": "D",
+        "text": "Spot Instances",
+        "correct": false,
+        "why": "Spot runs on shared capacity, which isn't what this scenario needs."
+      }
+    ],
+    "explanation": {
+      "answer": "Dedicated Instances run in a VPC on hardware dedicated to a single customer.",
+      "concept": "Dedicated Hosts add visibility and control over the physical server, often for licensing.",
+      "examTip": "Single-tenant hardware, no host control needed = Dedicated Instances.",
+      "references": [
+        {
+          "title": "Amazon EC2 Dedicated Instances",
+          "url": "https://aws.amazon.com/ec2/pricing/dedicated-instances/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-bil-006",
+    "domain": "billing",
+    "topic": "EC2 Pricing Models",
+    "tags": [
+      "capacity-reservations"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company must be sure it can launch 50 instances of a specific type in one AZ during a product launch next week, without a long-term commitment.",
+    "prompt": "Which option fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Spot Instances",
+        "correct": false,
+        "why": "Spot capacity isn't guaranteed, which isn't what this scenario needs."
+      },
+      {
+        "key": "B",
+        "text": "On-Demand Capacity Reservations",
+        "correct": true,
+        "why": "Capacity Reservations reserve capacity in a specific AZ for any duration."
+      },
+      {
+        "key": "C",
+        "text": "Compute Savings Plans",
+        "correct": false,
+        "why": "Savings Plans give discounts but don't reserve capacity."
+      },
+      {
+        "key": "D",
+        "text": "A larger instance type",
+        "correct": false,
+        "why": "This doesn't guarantee capacity either, which isn't what this scenario needs."
+      }
+    ],
+    "explanation": {
+      "answer": "On-Demand Capacity Reservations reserve compute capacity in a specific AZ for any duration, billed at On-Demand rates whether used or not.",
+      "concept": "Combine with Savings Plans for discounts.",
+      "examTip": "Guarantee capacity in an AZ, no commitment = On-Demand Capacity Reservation.",
+      "references": [
+        {
+          "title": "On-Demand Capacity Reservations",
+          "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-capacity-reservations.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-bil-007",
+    "domain": "billing",
+    "topic": "EC2 Pricing Models",
+    "tags": [
+      "ri-types"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A company wants a Reserved Instance discount but expects to change instance families during the term.",
+    "prompt": "Which type should it buy?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Spot Instances",
+        "correct": false,
+        "why": "Spot isn't a reservation, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "B",
+        "text": "Scheduled Reserved Instances",
+        "correct": false,
+        "why": "These aren't the flexible option and aren't generally available for new purchases."
+      },
+      {
+        "key": "C",
+        "text": "Convertible Reserved Instances",
+        "correct": true,
+        "why": "Convertible RIs can be exchanged for different instance families, OS and tenancy."
+      },
+      {
+        "key": "D",
+        "text": "Standard Reserved Instances",
+        "correct": false,
+        "why": "Standard RIs can't be exchanged for different instance families."
+      }
+    ],
+    "explanation": {
+      "answer": "Convertible Reserved Instances offer a discount and let you exchange them for RIs with different attributes during the term.",
+      "concept": "Standard RIs give a bigger discount but less flexibility.",
+      "examTip": "Need to change instance family later = Convertible RI (or Compute Savings Plan).",
+      "references": [
+        {
+          "title": "Reserved Instances for Amazon EC2",
+          "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-reserved-instances.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-bil-008",
+    "domain": "billing",
+    "topic": "Service Pricing",
+    "tags": [
+      "data-transfer"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company asks how AWS charges for data transfer.",
+    "prompt": "Which statement is generally correct?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Transfer in and out of AWS is free in every Region",
+        "correct": false,
+        "why": "Data transfer out to the internet is charged."
+      },
+      {
+        "key": "B",
+        "text": "Every transfer costs the same per GB in every Region",
+        "correct": false,
+        "why": "Prices vary by Region and destination, so it doesn't meet this requirement."
+      },
+      {
+        "key": "C",
+        "text": "Inbound is charged per GB; outbound to the internet is free",
+        "correct": false,
+        "why": "This is reversed, which isn't what this scenario needs."
+      },
+      {
+        "key": "D",
+        "text": "Inbound from the internet is free; outbound is charged",
+        "correct": true,
+        "why": "This is the general AWS data transfer pricing model."
+      }
+    ],
+    "explanation": {
+      "answer": "Data transfer into AWS from the internet is generally free. Data transfer out to the internet and between Regions is charged per GB.",
+      "concept": "Data transfer within the same AZ using private IPs is often free; between AZs is charged.",
+      "examTip": "In = free. Out = charged.",
+      "references": [
+        {
+          "title": "Amazon EC2 On-Demand pricing (data transfer)",
+          "url": "https://aws.amazon.com/ec2/pricing/on-demand/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-bil-009",
+    "domain": "billing",
+    "topic": "Cost Management Tools",
+    "tags": [
+      "pricing-calculator"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "Before building, a company wants to estimate the monthly cost of a planned architecture on AWS.",
+    "prompt": "Which tool should it use?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Pricing Calculator",
+        "correct": true,
+        "why": "The Pricing Calculator estimates costs for architectures you plan to build."
+      },
+      {
+        "key": "B",
+        "text": "AWS Cost and Usage Report",
+        "correct": false,
+        "why": "CUR shows detailed actual usage, so it doesn't meet this requirement."
+      },
+      {
+        "key": "C",
+        "text": "AWS Budgets",
+        "correct": false,
+        "why": "Budgets track spending against limits, so it doesn't meet this requirement."
+      },
+      {
+        "key": "D",
+        "text": "AWS Cost Explorer",
+        "correct": false,
+        "why": "Cost Explorer analyzes past and current spending, not planned architectures."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Pricing Calculator lets you estimate the cost of AWS services for your use case before you build.",
+      "concept": "Estimates can be saved and shared.",
+      "examTip": "Estimate before building = Pricing Calculator.",
+      "references": [
+        {
+          "title": "What is AWS Pricing Calculator?",
+          "url": "https://docs.aws.amazon.com/pricing-calculator/latest/userguide/what-is-pricing-calculator.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-bil-010",
+    "domain": "billing",
+    "topic": "Cost Management Tools",
+    "tags": [
+      "budgets"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A company wants an email alert when its monthly AWS spending is forecast to exceed $5,000.",
+    "prompt": "Which service should it use?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Pricing Calculator",
+        "correct": false,
+        "why": "The Pricing Calculator estimates planned costs; it doesn't alert."
+      },
+      {
+        "key": "B",
+        "text": "AWS Budgets",
+        "correct": true,
+        "why": "Budgets set cost or usage thresholds and send alerts, including on forecasts."
+      },
+      {
+        "key": "C",
+        "text": "AWS Trusted Advisor",
+        "correct": false,
+        "why": "Trusted Advisor gives recommendations, not budget alerts."
+      },
+      {
+        "key": "D",
+        "text": "AWS CloudTrail",
+        "correct": false,
+        "why": "CloudTrail logs API calls, so it doesn't solve the problem described here."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Budgets lets you set custom cost and usage budgets and alerts you when actual or forecasted amounts exceed them.",
+      "concept": "Budget actions can apply IAM or SCP controls automatically.",
+      "examTip": "Alert when spend will exceed X = AWS Budgets.",
+      "references": [
+        {
+          "title": "Managing your costs with AWS Budgets",
+          "url": "https://docs.aws.amazon.com/cost-management/latest/userguide/budgets-managing-costs.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-bil-011",
+    "domain": "billing",
+    "topic": "Cost Management Tools",
+    "tags": [
+      "cost-explorer"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A finance manager wants to visualize spending over the last 12 months by service and see a forecast.",
+    "prompt": "Which tool fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Artifact",
+        "correct": false,
+        "why": "Artifact provides compliance reports, so it doesn't meet this requirement."
+      },
+      {
+        "key": "B",
+        "text": "AWS Pricing Calculator",
+        "correct": false,
+        "why": "The Pricing Calculator estimates planned architectures."
+      },
+      {
+        "key": "C",
+        "text": "AWS Cost Explorer",
+        "correct": true,
+        "why": "Cost Explorer visualizes historical costs and forecasts future spending."
+      },
+      {
+        "key": "D",
+        "text": "Amazon Inspector",
+        "correct": false,
+        "why": "Inspector scans for vulnerabilities, which isn't what this scenario needs."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Cost Explorer lets you view and analyze costs and usage with graphs, filters and forecasts.",
+      "concept": "It also provides RI and Savings Plans recommendations.",
+      "examTip": "Analyze past spend + forecast = Cost Explorer.",
+      "references": [
+        {
+          "title": "What is AWS Cost Explorer?",
+          "url": "https://docs.aws.amazon.com/cost-management/latest/userguide/ce-what-is.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-bil-012",
+    "domain": "billing",
+    "topic": "Cost Management Tools",
+    "tags": [
+      "cur"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company wants the most detailed, line-item billing data delivered to Amazon S3 for its own analysis.",
+    "prompt": "Which feature fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Budgets reports emailed on a schedule",
+        "correct": false,
+        "why": "These summarize budget status, which isn't what this scenario needs."
+      },
+      {
+        "key": "B",
+        "text": "AWS Pricing Calculator estimates exported to CSV",
+        "correct": false,
+        "why": "This estimates planned costs, so it doesn't meet this requirement."
+      },
+      {
+        "key": "C",
+        "text": "AWS Cost Explorer graphs grouped by service",
+        "correct": false,
+        "why": "Cost Explorer visualizes and filters costs, but the Cost and Usage Report is the most detailed line-item data delivered to S3."
+      },
+      {
+        "key": "D",
+        "text": "AWS Cost and Usage Reports (via Data Exports)",
+        "correct": true,
+        "why": "CUR delivers detailed line-item cost and usage data to S3."
+      }
+    ],
+    "explanation": {
+      "answer": "The AWS Cost and Usage Report provides the most comprehensive cost and usage data, delivered to an S3 bucket for analysis.",
+      "concept": "Data Exports can deliver CUR 2.0 and query it with Athena or QuickSight.",
+      "examTip": "Most detailed billing data = Cost and Usage Report.",
+      "references": [
+        {
+          "title": "What are AWS Data Exports?",
+          "url": "https://docs.aws.amazon.com/cur/latest/userguide/what-is-data-exports.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-bil-013",
+    "domain": "billing",
+    "topic": "Consolidated Billing",
+    "tags": [
+      "consolidated"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company has 12 AWS accounts and wants one bill and combined usage for volume discounts.",
+    "prompt": "Which feature provides this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Consolidated billing in AWS Organizations",
+        "correct": true,
+        "why": "Consolidated billing gives one bill and aggregates usage across accounts."
+      },
+      {
+        "key": "B",
+        "text": "Separate credit cards for each account",
+        "correct": false,
+        "why": "This keeps bills separate, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "C",
+        "text": "AWS Cost Explorer only",
+        "correct": false,
+        "why": "Cost Explorer analyzes costs but doesn't combine billing."
+      },
+      {
+        "key": "D",
+        "text": "AWS Budgets",
+        "correct": false,
+        "why": "Budgets track spending; they don't combine bills."
+      }
+    ],
+    "explanation": {
+      "answer": "Consolidated billing combines usage across accounts in an organization, producing one bill and possibly lower tiered prices.",
+      "concept": "Reserved Instance and Savings Plans discounts can be shared across accounts.",
+      "examTip": "One bill + shared volume discounts = consolidated billing.",
+      "references": [
+        {
+          "title": "Consolidated billing for AWS Organizations",
+          "url": "https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/consolidated-billing.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-bil-014",
+    "domain": "billing",
+    "topic": "Consolidated Billing",
+    "tags": [
+      "tags"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company wants to see costs broken down by project and department in its bills.",
+    "prompt": "What should it use?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Security groups named after projects",
+        "correct": false,
+        "why": "Security groups don't appear as cost categories."
+      },
+      {
+        "key": "B",
+        "text": "Cost allocation tags",
+        "correct": true,
+        "why": "Activated tags let you group costs by project or department."
+      },
+      {
+        "key": "C",
+        "text": "IAM password policies",
+        "correct": false,
+        "why": "These set password rules, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "D",
+        "text": "Separate AWS Regions for each department",
+        "correct": false,
+        "why": "Regions aren't a cost attribution tool, so it doesn't meet this requirement."
+      }
+    ],
+    "explanation": {
+      "answer": "Cost allocation tags label resources so you can organize and track costs by categories such as project, team or environment.",
+      "concept": "Tags must be activated in the Billing console to appear in cost reports.",
+      "examTip": "Costs by project/team = cost allocation tags.",
+      "references": [
+        {
+          "title": "Using cost allocation tags",
+          "url": "https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-bil-015",
+    "domain": "billing",
+    "topic": "Service Pricing",
+    "tags": [
+      "free-tier"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A student wants to understand what the AWS Free Tier offers.",
+    "prompt": "Which statement is correct?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Every AWS service is free for the first year at any usage level",
+        "correct": false,
+        "why": "The Free Tier has usage limits; it doesn't make every service free at any level."
+      },
+      {
+        "key": "B",
+        "text": "Access requires a paid Enterprise Support plan to activate",
+        "correct": false,
+        "why": "The Free Tier is available to new and eligible customers without a paid support plan."
+      },
+      {
+        "key": "C",
+        "text": "Free usage of many services, within set limits and time periods",
+        "correct": true,
+        "why": "The Free Tier offers free usage up to specified limits, with some offers time-limited."
+      },
+      {
+        "key": "D",
+        "text": "Unlimited EC2 usage of any instance type for one year",
+        "correct": false,
+        "why": "Free Tier compute is limited, so it doesn't meet this requirement."
+      }
+    ],
+    "explanation": {
+      "answer": "The AWS Free Tier lets eligible customers try many services free within limits. Some offers are always free; others are time-limited or credit-based.",
+      "concept": "Usage beyond limits is billed at normal rates.",
+      "examTip": "Free Tier = free within limits; watch usage.",
+      "references": [
+        {
+          "title": "AWS Free Tier",
+          "url": "https://aws.amazon.com/free/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-bil-016",
+    "domain": "billing",
+    "topic": "Service Pricing",
+    "tags": [
+      "s3-pricing"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company asks what drives its Amazon S3 bill.",
+    "prompt": "Which factors affect S3 cost?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Mainly the length of the bucket names that are chosen",
+        "correct": false,
+        "why": "This doesn't affect price, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "B",
+        "text": "Mainly the number of buckets created in the account",
+        "correct": false,
+        "why": "Bucket count isn't a main cost driver, so it doesn't meet this requirement."
+      },
+      {
+        "key": "C",
+        "text": "Mainly the number of IAM users that access the buckets",
+        "correct": false,
+        "why": "IAM users aren't billed, so it doesn't meet this requirement."
+      },
+      {
+        "key": "D",
+        "text": "Storage amount and class, requests, retrieval and data out",
+        "correct": true,
+        "why": "These are the main S3 cost factors, so it meets the requirement described here."
+      }
+    ],
+    "explanation": {
+      "answer": "S3 pricing depends on storage used and storage class, requests and data retrievals, data transfer out and optional features.",
+      "concept": "Choosing the right storage class can greatly reduce costs.",
+      "examTip": "S3 cost = GB stored (by class) + requests + retrieval + transfer out.",
+      "references": [
+        {
+          "title": "How AWS pricing works",
+          "url": "https://docs.aws.amazon.com/whitepapers/latest/how-aws-pricing-works/welcome.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-bil-017",
+    "domain": "billing",
+    "topic": "Service Pricing",
+    "tags": [
+      "lambda-pricing"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company asks how AWS Lambda is billed.",
+    "prompt": "Which statement is correct?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Per number of requests and compute duration",
+        "correct": true,
+        "why": "Lambda charges for requests and duration, based on memory allocated."
+      },
+      {
+        "key": "B",
+        "text": "Per server hour, whether used or not",
+        "correct": false,
+        "why": "Lambda doesn't bill for idle servers, so it doesn't meet this requirement."
+      },
+      {
+        "key": "C",
+        "text": "Per line of code deployed",
+        "correct": false,
+        "why": "Code size doesn't drive pricing, which isn't what this scenario needs."
+      },
+      {
+        "key": "D",
+        "text": "A fixed monthly fee per function",
+        "correct": false,
+        "why": "Lambda has no fixed fee per function, which isn't what this scenario needs."
+      }
+    ],
+    "explanation": {
+      "answer": "Lambda charges for the number of requests and the duration your code runs, measured in GB-seconds based on memory.",
+      "concept": "A free tier includes a set number of requests and compute time each month.",
+      "examTip": "Lambda = requests + duration × memory.",
+      "references": [
+        {
+          "title": "AWS Lambda pricing",
+          "url": "https://aws.amazon.com/lambda/pricing/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-bil-018",
+    "domain": "billing",
+    "topic": "Cost Management Tools",
+    "tags": [
+      "anomaly-detection"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company wants to be alerted automatically when spending on a service suddenly jumps in an unusual way.",
+    "prompt": "Which feature fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Pricing Calculator",
+        "correct": false,
+        "why": "This estimates planned costs, so it doesn't meet this requirement."
+      },
+      {
+        "key": "B",
+        "text": "AWS Cost Anomaly Detection",
+        "correct": true,
+        "why": "Cost Anomaly Detection uses ML to find unusual spending and alert you."
+      },
+      {
+        "key": "C",
+        "text": "Amazon Polly",
+        "correct": false,
+        "why": "Polly converts text to speech, so it doesn't meet this requirement."
+      },
+      {
+        "key": "D",
+        "text": "AWS Artifact",
+        "correct": false,
+        "why": "Artifact provides compliance reports, so it doesn't solve the problem described here."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Cost Anomaly Detection uses machine learning to monitor costs and alert you to unusual spending.",
+      "concept": "It complements fixed-threshold alerts from AWS Budgets.",
+      "examTip": "Unusual spend spikes = Cost Anomaly Detection.",
+      "references": [
+        {
+          "title": "Detecting unusual spend with AWS Cost Anomaly Detection",
+          "url": "https://docs.aws.amazon.com/cost-management/latest/userguide/manage-ad.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-bil-019",
+    "domain": "billing",
+    "topic": "EC2 Pricing Models",
+    "tags": [
+      "multi-select"
+    ],
+    "difficulty": "hard",
+    "type": "multi",
+    "stem": "A company is matching pricing models to workloads.",
+    "prompt": "Which TWO pairings are MOST cost-effective? (Select TWO.)",
+    "options": [
+      {
+        "key": "A",
+        "text": "Steady 24/7 web servers for three years – Savings Plans",
+        "correct": true,
+        "why": "Commitment discounts fit steady usage, so it meets the requirement described here."
+      },
+      {
+        "key": "B",
+        "text": "A short unpredictable test – Dedicated Hosts",
+        "correct": false,
+        "why": "Dedicated Hosts add cost without benefit here."
+      },
+      {
+        "key": "C",
+        "text": "A steady 24/7 database – Spot Instances",
+        "correct": false,
+        "why": "Interruptions would disrupt a steady database."
+      },
+      {
+        "key": "D",
+        "text": "A two-day test – three-year Reserved Instances",
+        "correct": false,
+        "why": "A long commitment for a short test wastes money."
+      },
+      {
+        "key": "E",
+        "text": "Fault-tolerant batch jobs – Spot Instances",
+        "correct": true,
+        "why": "Spot gives deep discounts for interruptible work."
+      }
+    ],
+    "explanation": {
+      "answer": "Match pricing to workload: Spot for interruptible, Savings Plans/RIs for steady, On-Demand for short or unpredictable.",
+      "concept": "Many architectures combine all three.",
+      "examTip": "Steady=commit, flexible=Spot, short/unknown=On-Demand.",
+      "references": [
+        {
+          "title": "Amazon EC2 pricing",
+          "url": "https://aws.amazon.com/ec2/pricing/"
+        }
+      ]
+    },
+    "selectCount": 2
+  },
+  {
+    "id": "clf-bil-020",
+    "domain": "billing",
+    "topic": "Service Pricing",
+    "tags": [
+      "pricing-principles"
+    ],
+    "difficulty": "medium",
+    "type": "multi",
+    "stem": "A manager asks what AWS's general pricing principles are.",
+    "prompt": "Which TWO statements describe AWS pricing? (Select TWO.)",
+    "options": [
+      {
+        "key": "A",
+        "text": "Pay as you go",
+        "correct": true,
+        "why": "You pay for services as you use them, so it meets the requirement described here."
+      },
+      {
+        "key": "B",
+        "text": "Pay less when you reserve or commit",
+        "correct": true,
+        "why": "Commitments like Savings Plans lower prices."
+      },
+      {
+        "key": "C",
+        "text": "Pay extra for using the Management Console",
+        "correct": false,
+        "why": "The console is free, so it doesn't meet this requirement."
+      },
+      {
+        "key": "D",
+        "text": "Pay the same regardless of how much you use",
+        "correct": false,
+        "why": "Prices often decrease per unit with volume."
+      },
+      {
+        "key": "E",
+        "text": "Pay a mandatory setup fee for every service",
+        "correct": false,
+        "why": "Most services have no setup fee, so it doesn't solve the problem described here."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS pricing principles: pay as you go, save when you commit, and pay less per unit by using more (volume tiers).",
+      "concept": "AWS also has lowered prices many times as its scale grew.",
+      "examTip": "Pay as you go, save when you commit, pay less by using more.",
+      "references": [
+        {
+          "title": "How AWS pricing works",
+          "url": "https://docs.aws.amazon.com/whitepapers/latest/how-aws-pricing-works/welcome.html"
+        }
+      ]
+    },
+    "selectCount": 2
+  }
+]

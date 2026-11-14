@@ -1,0 +1,1234 @@
+[
+  {
+    "id": "clf-tec-026",
+    "domain": "technology",
+    "topic": "EC2",
+    "tags": [
+      "ec2-basics"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A company needs virtual servers where it controls the operating system and installed software.",
+    "prompt": "Which service provides this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Fargate",
+        "correct": false,
+        "why": "Fargate runs containers without giving you control of the host operating system."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Lightsail containers",
+        "correct": false,
+        "why": "Lightsail container services run containers without OS-level control of the servers."
+      },
+      {
+        "key": "C",
+        "text": "Amazon EC2",
+        "correct": true,
+        "why": "EC2 provides resizable virtual servers with full OS control."
+      },
+      {
+        "key": "D",
+        "text": "AWS Lambda",
+        "correct": false,
+        "why": "Lambda runs functions without OS access."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon EC2 provides virtual servers (instances) where you choose the OS, instance type and software.",
+      "concept": "EC2 is infrastructure as a service: more control, more management.",
+      "examTip": "Virtual servers with OS control = EC2.",
+      "references": [
+        {
+          "title": "What is Amazon EC2?",
+          "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/concepts.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-027",
+    "domain": "technology",
+    "topic": "EC2",
+    "tags": [
+      "instance-families"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company runs an in-memory analytics workload that needs a lot of RAM relative to CPU.",
+    "prompt": "Which EC2 instance family fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Storage optimized (I family)",
+        "correct": false,
+        "why": "Storage optimized instances focus on high local disk I/O."
+      },
+      {
+        "key": "B",
+        "text": "Compute optimized (C family)",
+        "correct": false,
+        "why": "Compute optimized instances have high CPU relative to memory."
+      },
+      {
+        "key": "C",
+        "text": "Accelerated computing (G or P family)",
+        "correct": false,
+        "why": "These include GPUs for graphics or ML, which isn't what this scenario needs."
+      },
+      {
+        "key": "D",
+        "text": "Memory optimized (R or X family)",
+        "correct": true,
+        "why": "Memory optimized instances are designed for large in-memory datasets."
+      }
+    ],
+    "explanation": {
+      "answer": "Memory optimized instances deliver fast performance for workloads that process large datasets in memory.",
+      "concept": "Families: general purpose (M, T), compute (C), memory (R, X), storage (I, D), accelerated (P, G, Inf, Trn).",
+      "examTip": "Lots of RAM = memory optimized (R/X).",
+      "references": [
+        {
+          "title": "Amazon EC2 instance types",
+          "url": "https://aws.amazon.com/ec2/instance-types/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-028",
+    "domain": "technology",
+    "topic": "EC2",
+    "tags": [
+      "compute-optimized"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company runs batch jobs that do heavy mathematical calculations and need high CPU performance.",
+    "prompt": "Which instance family fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Compute optimized",
+        "correct": true,
+        "why": "Compute optimized instances suit CPU-intensive workloads like batch processing and HPC."
+      },
+      {
+        "key": "B",
+        "text": "Memory optimized",
+        "correct": false,
+        "why": "These focus on large memory, so it doesn't meet this requirement."
+      },
+      {
+        "key": "C",
+        "text": "Burstable general purpose T instances",
+        "correct": false,
+        "why": "T instances suit low baseline CPU with occasional bursts."
+      },
+      {
+        "key": "D",
+        "text": "Storage optimized",
+        "correct": false,
+        "why": "These focus on fast local storage, so it doesn't meet this requirement."
+      }
+    ],
+    "explanation": {
+      "answer": "Compute optimized instances (C family) are ideal for compute-bound applications such as batch processing, gaming servers and scientific modeling.",
+      "concept": "Match instance families to the workload's bottleneck.",
+      "examTip": "CPU-heavy = compute optimized (C).",
+      "references": [
+        {
+          "title": "Amazon EC2 instance types",
+          "url": "https://aws.amazon.com/ec2/instance-types/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-029",
+    "domain": "technology",
+    "topic": "EC2",
+    "tags": [
+      "gpu"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A research team trains deep learning models and needs GPUs.",
+    "prompt": "Which EC2 instance category should it choose?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Storage optimized",
+        "correct": false,
+        "why": "These focus on disk I/O, which isn't what this scenario needs."
+      },
+      {
+        "key": "B",
+        "text": "Accelerated computing",
+        "correct": true,
+        "why": "Accelerated computing instances include GPUs or ML chips."
+      },
+      {
+        "key": "C",
+        "text": "Memory optimized",
+        "correct": false,
+        "why": "These focus on RAM, not GPUs, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "D",
+        "text": "General purpose",
+        "correct": false,
+        "why": "General purpose instances don't include GPUs for training."
+      }
+    ],
+    "explanation": {
+      "answer": "Accelerated computing instances (such as P, G, Trn and Inf) use hardware accelerators like GPUs and AWS Trainium for ML and graphics.",
+      "concept": "AWS Trainium is for training; AWS Inferentia is for inference.",
+      "examTip": "GPUs / ML chips = accelerated computing.",
+      "references": [
+        {
+          "title": "Amazon EC2 instance types",
+          "url": "https://aws.amazon.com/ec2/instance-types/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-030",
+    "domain": "technology",
+    "topic": "Serverless",
+    "tags": [
+      "lambda"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A company wants to run code when a file is uploaded to S3, without managing servers.",
+    "prompt": "Which service should it use?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon EC2",
+        "correct": false,
+        "why": "EC2 requires managing servers, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "B",
+        "text": "AWS Batch",
+        "correct": false,
+        "why": "Batch schedules batch jobs on compute it provisions; it isn't the simplest way to run code on each upload event."
+      },
+      {
+        "key": "C",
+        "text": "AWS Lambda",
+        "correct": true,
+        "why": "Lambda runs code in response to events, such as S3 uploads, without servers to manage."
+      },
+      {
+        "key": "D",
+        "text": "AWS Outposts",
+        "correct": false,
+        "why": "Outposts runs AWS on premises, so it doesn't meet this requirement."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Lambda runs your code in response to events and automatically manages the compute resources.",
+      "concept": "You pay for requests and compute time; functions can run for up to 15 minutes.",
+      "examTip": "Event-driven code, no servers = Lambda.",
+      "references": [
+        {
+          "title": "What is AWS Lambda?",
+          "url": "https://docs.aws.amazon.com/lambda/latest/dg/welcome.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-031",
+    "domain": "technology",
+    "topic": "Containers",
+    "tags": [
+      "ecs"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company wants to run Docker containers on AWS using an AWS-native orchestration service.",
+    "prompt": "Which service fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Lightsail",
+        "correct": false,
+        "why": "Lightsail offers simple hosting, not AWS's main container orchestration service."
+      },
+      {
+        "key": "B",
+        "text": "AWS Batch",
+        "correct": false,
+        "why": "Batch can run container jobs but is for batch processing, not general container orchestration."
+      },
+      {
+        "key": "C",
+        "text": "AWS Lambda",
+        "correct": false,
+        "why": "Lambda runs functions, not a container orchestration service for Docker workloads."
+      },
+      {
+        "key": "D",
+        "text": "Amazon ECS",
+        "correct": true,
+        "why": "ECS is AWS's fully managed container orchestration service."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon ECS is a fully managed container orchestration service for running and scaling containerized applications.",
+      "concept": "ECS can run containers on EC2 instances or on AWS Fargate.",
+      "examTip": "AWS-native container orchestration = ECS.",
+      "references": [
+        {
+          "title": "What is Amazon ECS?",
+          "url": "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/Welcome.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-032",
+    "domain": "technology",
+    "topic": "Containers",
+    "tags": [
+      "eks"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company already uses Kubernetes on premises and wants a managed Kubernetes control plane on AWS.",
+    "prompt": "Which service should it use?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon EKS",
+        "correct": true,
+        "why": "EKS provides managed Kubernetes on AWS, so it meets the requirement described here."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Lightsail",
+        "correct": false,
+        "why": "Lightsail is for simple hosting, which isn't what this scenario needs."
+      },
+      {
+        "key": "C",
+        "text": "AWS Batch",
+        "correct": false,
+        "why": "Batch runs batch jobs, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "D",
+        "text": "Amazon ECS",
+        "correct": false,
+        "why": "ECS is AWS's own orchestrator, not Kubernetes."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon EKS runs the Kubernetes control plane for you, so you can run Kubernetes workloads on AWS.",
+      "concept": "EKS supports EC2 nodes and AWS Fargate.",
+      "examTip": "Kubernetes = EKS.",
+      "references": [
+        {
+          "title": "What is Amazon EKS?",
+          "url": "https://docs.aws.amazon.com/eks/latest/userguide/what-is-eks.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-033",
+    "domain": "technology",
+    "topic": "Containers",
+    "tags": [
+      "fargate"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A team wants to run containers without provisioning or managing any EC2 instances.",
+    "prompt": "Which option fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "ECS on self-managed EC2 instances",
+        "correct": false,
+        "why": "This requires managing EC2 instances, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "B",
+        "text": "AWS Fargate",
+        "correct": true,
+        "why": "Fargate is serverless compute for containers with ECS or EKS."
+      },
+      {
+        "key": "C",
+        "text": "AWS Outposts",
+        "correct": false,
+        "why": "Outposts runs AWS on premises, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "D",
+        "text": "Amazon Lightsail instances",
+        "correct": false,
+        "why": "Lightsail provides virtual servers to manage."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Fargate removes the need to manage servers for containers. You define CPU and memory per task or pod.",
+      "concept": "Fargate works with both Amazon ECS and Amazon EKS.",
+      "examTip": "Containers without servers = Fargate.",
+      "references": [
+        {
+          "title": "AWS Fargate",
+          "url": "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/AWS_Fargate.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-034",
+    "domain": "technology",
+    "topic": "Scaling & Load Balancing",
+    "tags": [
+      "elb"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A web application runs on several EC2 instances, and traffic needs to be spread across them.",
+    "prompt": "Which service should it use?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon CloudFront",
+        "correct": false,
+        "why": "CloudFront caches content at the edge; it doesn't spread requests across a group of instances in a VPC."
+      },
+      {
+        "key": "B",
+        "text": "AWS Direct Connect",
+        "correct": false,
+        "why": "Direct Connect links on-premises networks to AWS."
+      },
+      {
+        "key": "C",
+        "text": "Elastic Load Balancing",
+        "correct": true,
+        "why": "ELB distributes incoming traffic across multiple targets."
+      },
+      {
+        "key": "D",
+        "text": "Amazon Route 53 Resolver",
+        "correct": false,
+        "why": "Resolver handles DNS resolution within VPCs."
+      }
+    ],
+    "explanation": {
+      "answer": "Elastic Load Balancing distributes traffic across EC2 instances, containers and IP addresses in multiple AZs and checks their health.",
+      "concept": "Types include Application Load Balancer (HTTP/HTTPS), Network Load Balancer (TCP/UDP) and Gateway Load Balancer.",
+      "examTip": "Spread traffic across instances = Elastic Load Balancing.",
+      "references": [
+        {
+          "title": "What is Elastic Load Balancing?",
+          "url": "https://docs.aws.amazon.com/elasticloadbalancing/latest/userguide/what-is-load-balancing.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-035",
+    "domain": "technology",
+    "topic": "Scaling & Load Balancing",
+    "tags": [
+      "auto-scaling"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company wants EC2 capacity to increase automatically when CPU usage is high and decrease when it is low.",
+    "prompt": "Which service should it use?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Elastic Load Balancing",
+        "correct": false,
+        "why": "ELB distributes traffic; it doesn't add or remove instances."
+      },
+      {
+        "key": "B",
+        "text": "AWS Compute Optimizer",
+        "correct": false,
+        "why": "Compute Optimizer recommends sizes; it doesn't scale capacity automatically."
+      },
+      {
+        "key": "C",
+        "text": "AWS Elastic Beanstalk",
+        "correct": false,
+        "why": "Beanstalk can manage scaling for apps it deploys, but EC2 Auto Scaling is the service that scales EC2 capacity directly."
+      },
+      {
+        "key": "D",
+        "text": "Amazon EC2 Auto Scaling",
+        "correct": true,
+        "why": "Auto Scaling adds and removes instances based on demand."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon EC2 Auto Scaling maintains availability and scales capacity in and out based on policies, schedules or demand.",
+      "concept": "It also replaces unhealthy instances automatically.",
+      "examTip": "Add/remove instances automatically = EC2 Auto Scaling.",
+      "references": [
+        {
+          "title": "What is Amazon EC2 Auto Scaling?",
+          "url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-036",
+    "domain": "technology",
+    "topic": "Scaling & Load Balancing",
+    "tags": [
+      "alb-nlb"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company needs to route HTTP requests to different services based on the URL path, such as /api and /images.",
+    "prompt": "Which load balancer should it use?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Application Load Balancer",
+        "correct": true,
+        "why": "ALB routes HTTP/HTTPS requests based on content such as paths and host names."
+      },
+      {
+        "key": "B",
+        "text": "Gateway Load Balancer",
+        "correct": false,
+        "why": "GWLB is for third-party virtual appliances."
+      },
+      {
+        "key": "C",
+        "text": "Amazon Route 53",
+        "correct": false,
+        "why": "Route 53 is DNS, not path-based request routing."
+      },
+      {
+        "key": "D",
+        "text": "Network Load Balancer",
+        "correct": false,
+        "why": "NLB works at the transport layer and doesn't route by URL path."
+      }
+    ],
+    "explanation": {
+      "answer": "The Application Load Balancer operates at layer 7 and supports path-based and host-based routing.",
+      "concept": "Choose NLB for extreme performance, TCP/UDP and static IPs.",
+      "examTip": "Route by URL path = Application Load Balancer.",
+      "references": [
+        {
+          "title": "What is an Application Load Balancer?",
+          "url": "https://docs.aws.amazon.com/elasticloadbalancing/latest/application/introduction.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-037",
+    "domain": "technology",
+    "topic": "Serverless",
+    "tags": [
+      "lightsail"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A small business wants a simple virtual server with a predictable monthly price to host a WordPress site.",
+    "prompt": "Which service fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Outposts",
+        "correct": false,
+        "why": "Outposts runs AWS on premises, which isn't what this scenario needs."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Lightsail",
+        "correct": true,
+        "why": "Lightsail offers simple virtual servers and bundles with predictable pricing."
+      },
+      {
+        "key": "C",
+        "text": "AWS Batch",
+        "correct": false,
+        "why": "Batch runs batch jobs, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "D",
+        "text": "Amazon EKS",
+        "correct": false,
+        "why": "EKS is managed Kubernetes, more complex than needed."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Lightsail provides easy-to-use virtual private servers, storage and networking for a low, predictable monthly price.",
+      "concept": "It's designed for simple workloads, websites and small apps.",
+      "examTip": "Simple site, fixed monthly price = Lightsail.",
+      "references": [
+        {
+          "title": "Amazon Lightsail",
+          "url": "https://aws.amazon.com/lightsail/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-038",
+    "domain": "technology",
+    "topic": "Serverless",
+    "tags": [
+      "batch"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A research lab needs to run thousands of batch computing jobs and wants AWS to provision the right compute capacity automatically.",
+    "prompt": "Which service fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Lightsail",
+        "correct": false,
+        "why": "Lightsail is for simple servers, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "B",
+        "text": "Amazon SQS with EC2 workers",
+        "correct": false,
+        "why": "This can work but requires building and managing the scheduling yourself."
+      },
+      {
+        "key": "C",
+        "text": "AWS Batch",
+        "correct": true,
+        "why": "Batch plans, schedules and runs batch jobs, provisioning compute automatically."
+      },
+      {
+        "key": "D",
+        "text": "AWS Step Functions",
+        "correct": false,
+        "why": "Step Functions orchestrates workflows but doesn't provision and schedule compute for thousands of batch jobs."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Batch dynamically provisions compute resources based on the volume and requirements of batch jobs.",
+      "concept": "Batch can use EC2 (including Spot) or Fargate.",
+      "examTip": "Many batch jobs, managed scheduling = AWS Batch.",
+      "references": [
+        {
+          "title": "What is AWS Batch?",
+          "url": "https://docs.aws.amazon.com/batch/latest/userguide/what-is-batch.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-039",
+    "domain": "technology",
+    "topic": "Containers",
+    "tags": [
+      "container-choice"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A team must choose a container platform. It doesn't use Kubernetes today and wants the simplest AWS-native option with no servers to manage.",
+    "prompt": "Which combination fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Kubernetes installed manually on EC2",
+        "correct": false,
+        "why": "This requires the most management, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "B",
+        "text": "Amazon EKS on self-managed EC2 nodes",
+        "correct": false,
+        "why": "This adds Kubernetes complexity and server management."
+      },
+      {
+        "key": "C",
+        "text": "AWS Lambda for long-running containers",
+        "correct": false,
+        "why": "Lambda has a 15-minute limit and isn't a general container platform."
+      },
+      {
+        "key": "D",
+        "text": "Amazon ECS with AWS Fargate",
+        "correct": true,
+        "why": "ECS is AWS-native and Fargate removes server management."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon ECS on AWS Fargate is a simple, serverless way to run containers without Kubernetes or server management.",
+      "concept": "Choose EKS when you need Kubernetes compatibility.",
+      "examTip": "Simple + no servers + no Kubernetes = ECS on Fargate.",
+      "references": [
+        {
+          "title": "AWS Fargate",
+          "url": "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/AWS_Fargate.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-040",
+    "domain": "technology",
+    "topic": "EC2",
+    "tags": [
+      "ami"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company wants every new EC2 instance to start with the same hardened operating system and preinstalled agents.",
+    "prompt": "What should it use?",
+    "options": [
+      {
+        "key": "A",
+        "text": "A custom Amazon Machine Image (AMI)",
+        "correct": true,
+        "why": "An AMI contains the OS and software needed to launch identical instances."
+      },
+      {
+        "key": "B",
+        "text": "AWS Artifact",
+        "correct": false,
+        "why": "Artifact provides compliance reports, so it doesn't meet this requirement."
+      },
+      {
+        "key": "C",
+        "text": "An S3 lifecycle rule",
+        "correct": false,
+        "why": "Lifecycle rules manage objects, which isn't what this scenario needs."
+      },
+      {
+        "key": "D",
+        "text": "An EBS snapshot attached manually after launch",
+        "correct": false,
+        "why": "Attaching snapshots manually is slow and doesn't define the boot image."
+      }
+    ],
+    "explanation": {
+      "answer": "An Amazon Machine Image (AMI) provides the information required to launch an instance, including the OS and software.",
+      "concept": "Golden AMIs help standardize and secure fleets.",
+      "examTip": "Same starting image every time = custom AMI.",
+      "references": [
+        {
+          "title": "Amazon Machine Images",
+          "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AMIs.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-041",
+    "domain": "technology",
+    "topic": "Scaling & Load Balancing",
+    "tags": [
+      "health-checks"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "One EC2 instance behind a load balancer stops responding.",
+    "prompt": "What does Elastic Load Balancing do?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Deletes the instance permanently",
+        "correct": false,
+        "why": "ELB doesn't delete instances; Auto Scaling may replace them."
+      },
+      {
+        "key": "B",
+        "text": "Stops routing traffic to the unhealthy instance",
+        "correct": true,
+        "why": "Health checks remove failing targets from rotation."
+      },
+      {
+        "key": "C",
+        "text": "Shuts down the whole application",
+        "correct": false,
+        "why": "ELB keeps routing to healthy targets, so it doesn't meet this requirement."
+      },
+      {
+        "key": "D",
+        "text": "Sends more traffic to the failed instance to restart it",
+        "correct": false,
+        "why": "ELB doesn't restart instances, which isn't what this scenario needs."
+      }
+    ],
+    "explanation": {
+      "answer": "Elastic Load Balancing performs health checks and routes traffic only to healthy targets.",
+      "concept": "With Auto Scaling, unhealthy instances can also be replaced automatically.",
+      "examTip": "ELB health checks = traffic only to healthy targets.",
+      "references": [
+        {
+          "title": "What is Elastic Load Balancing?",
+          "url": "https://docs.aws.amazon.com/elasticloadbalancing/latest/userguide/what-is-load-balancing.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-042",
+    "domain": "technology",
+    "topic": "Serverless",
+    "tags": [
+      "lambda-limits"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A team wants to move a nightly job that runs for three hours to AWS Lambda.",
+    "prompt": "What is the main problem?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Lambda can't be triggered on a schedule",
+        "correct": false,
+        "why": "Lambda can run on schedules through EventBridge."
+      },
+      {
+        "key": "B",
+        "text": "Lambda can't access S3",
+        "correct": false,
+        "why": "Lambda can access S3 with the right permissions."
+      },
+      {
+        "key": "C",
+        "text": "Lambda functions can run for at most 15 minutes",
+        "correct": true,
+        "why": "A three-hour job exceeds Lambda's maximum duration."
+      },
+      {
+        "key": "D",
+        "text": "Lambda only supports Python",
+        "correct": false,
+        "why": "Lambda supports many languages, so it doesn't meet this requirement."
+      }
+    ],
+    "explanation": {
+      "answer": "Lambda functions have a maximum timeout of 15 minutes. Long jobs suit AWS Batch, ECS on Fargate or Step Functions orchestration.",
+      "concept": "Know service limits that drive architecture choices.",
+      "examTip": "Over 15 minutes = not a single Lambda invocation.",
+      "references": [
+        {
+          "title": "Lambda quotas",
+          "url": "https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-limits.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-043",
+    "domain": "technology",
+    "topic": "EC2",
+    "tags": [
+      "instance-store"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company asks what happens to data on an EC2 instance store volume when the instance is stopped.",
+    "prompt": "Which statement is correct?",
+    "options": [
+      {
+        "key": "A",
+        "text": "The data is moved to Amazon S3 automatically",
+        "correct": false,
+        "why": "Instance store data isn't moved anywhere."
+      },
+      {
+        "key": "B",
+        "text": "The data is kept for 30 days",
+        "correct": false,
+        "why": "There's no retention after stop, which isn't what this scenario needs."
+      },
+      {
+        "key": "C",
+        "text": "The data is converted into an EBS snapshot",
+        "correct": false,
+        "why": "No automatic snapshot is created, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "D",
+        "text": "The data is lost",
+        "correct": true,
+        "why": "Instance store is temporary storage tied to the host's lifetime."
+      }
+    ],
+    "explanation": {
+      "answer": "Instance store provides temporary block storage on the host. Data is lost when the instance stops, terminates or the host fails.",
+      "concept": "Use Amazon EBS for data that must persist.",
+      "examTip": "Instance store = temporary. EBS = persistent.",
+      "references": [
+        {
+          "title": "Instance store temporary block storage",
+          "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/InstanceStorage.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-044",
+    "domain": "technology",
+    "topic": "Serverless",
+    "tags": [
+      "multi-select"
+    ],
+    "difficulty": "medium",
+    "type": "multi",
+    "stem": "A company is choosing compute services.",
+    "prompt": "Which TWO are serverless compute options? (Select TWO.)",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon EC2 On-Demand Instances",
+        "correct": false,
+        "why": "EC2 instances are servers you manage, which isn't what this scenario needs."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Lightsail instances",
+        "correct": false,
+        "why": "Lightsail provides virtual servers you manage."
+      },
+      {
+        "key": "C",
+        "text": "AWS Lambda",
+        "correct": true,
+        "why": "Lambda runs code without servers to manage."
+      },
+      {
+        "key": "D",
+        "text": "AWS Fargate",
+        "correct": true,
+        "why": "Fargate runs containers without managing servers."
+      },
+      {
+        "key": "E",
+        "text": "EC2 Dedicated Hosts",
+        "correct": false,
+        "why": "Dedicated Hosts are physical servers, which isn't what this scenario needs."
+      }
+    ],
+    "explanation": {
+      "answer": "Serverless compute options include AWS Lambda (functions) and AWS Fargate (containers).",
+      "concept": "Serverless means no servers to provision or manage, automatic scaling and pay-per-use.",
+      "examTip": "Serverless compute = Lambda + Fargate.",
+      "references": [
+        {
+          "title": "What is AWS Lambda?",
+          "url": "https://docs.aws.amazon.com/lambda/latest/dg/welcome.html"
+        }
+      ]
+    },
+    "selectCount": 2
+  },
+  {
+    "id": "clf-tec-045",
+    "domain": "technology",
+    "topic": "EC2",
+    "tags": [
+      "general-purpose"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A company runs a mix of small web servers and development environments with balanced CPU and memory needs.",
+    "prompt": "Which instance family is the BEST default choice?",
+    "options": [
+      {
+        "key": "A",
+        "text": "General purpose (M or T family)",
+        "correct": true,
+        "why": "General purpose instances balance compute, memory and networking."
+      },
+      {
+        "key": "B",
+        "text": "Accelerated computing",
+        "correct": false,
+        "why": "These add GPUs, which aren't needed, so it doesn't meet this requirement."
+      },
+      {
+        "key": "C",
+        "text": "Memory optimized",
+        "correct": false,
+        "why": "These are for memory-heavy workloads, which isn't what this scenario needs."
+      },
+      {
+        "key": "D",
+        "text": "Storage optimized",
+        "correct": false,
+        "why": "These are for heavy local disk I/O, so it doesn't solve the problem described here."
+      }
+    ],
+    "explanation": {
+      "answer": "General purpose instances provide a balance of compute, memory and networking and suit web servers and dev environments.",
+      "concept": "Burstable T instances are cost-effective for low average CPU with occasional spikes.",
+      "examTip": "Balanced / don't know yet = general purpose.",
+      "references": [
+        {
+          "title": "Amazon EC2 instance types",
+          "url": "https://aws.amazon.com/ec2/instance-types/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-046",
+    "domain": "technology",
+    "topic": "Containers",
+    "tags": [
+      "ecr"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A team needs a private place to store and version its Docker container images on AWS.",
+    "prompt": "Which service should it use?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS CodePipeline",
+        "correct": false,
+        "why": "CodePipeline orchestrates release pipelines."
+      },
+      {
+        "key": "B",
+        "text": "Amazon ECR",
+        "correct": true,
+        "why": "ECR is a managed container image registry."
+      },
+      {
+        "key": "C",
+        "text": "Amazon S3 Glacier",
+        "correct": false,
+        "why": "Glacier is archival storage, not a container registry."
+      },
+      {
+        "key": "D",
+        "text": "Amazon EFS",
+        "correct": false,
+        "why": "EFS is a file system, which isn't what this scenario needs."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon ECR is a fully managed container registry for storing, sharing and deploying container images.",
+      "concept": "ECR integrates with ECS, EKS and Amazon Inspector image scanning.",
+      "examTip": "Store container images = ECR.",
+      "references": [
+        {
+          "title": "What is Amazon ECR?",
+          "url": "https://docs.aws.amazon.com/AmazonECR/latest/userguide/what-is-ecr.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-047",
+    "domain": "technology",
+    "topic": "Scaling & Load Balancing",
+    "tags": [
+      "scaling-types"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "An architect explains vertical and horizontal scaling.",
+    "prompt": "Which statement is correct?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Vertical scaling adds instances; horizontal scaling resizes one",
+        "correct": false,
+        "why": "These are reversed, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "B",
+        "text": "Both mean moving to a different Region",
+        "correct": false,
+        "why": "Neither is about changing Regions, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "C",
+        "text": "Vertical scaling uses a bigger instance; horizontal scaling adds more instances",
+        "correct": true,
+        "why": "Vertical changes size; horizontal changes count."
+      },
+      {
+        "key": "D",
+        "text": "Horizontal scaling is only for databases",
+        "correct": false,
+        "why": "Horizontal scaling applies to many tiers."
+      }
+    ],
+    "explanation": {
+      "answer": "Vertical scaling (scaling up) increases the size of a resource. Horizontal scaling (scaling out) adds more resources.",
+      "concept": "Horizontal scaling improves fault tolerance and is usually preferred in the cloud.",
+      "examTip": "Up = bigger. Out = more.",
+      "references": [
+        {
+          "title": "Reliability pillar design principles",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/design-principles.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-048",
+    "domain": "technology",
+    "topic": "Serverless",
+    "tags": [
+      "api-gateway"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company wants to create a secure, scalable HTTPS API front end for its Lambda functions.",
+    "prompt": "Which service should it use?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Route 53",
+        "correct": false,
+        "why": "Route 53 is DNS, which isn't what this scenario needs."
+      },
+      {
+        "key": "B",
+        "text": "Elastic Load Balancing",
+        "correct": false,
+        "why": "A load balancer can front Lambda, but API Gateway adds API features like authorization and throttling."
+      },
+      {
+        "key": "C",
+        "text": "AWS Direct Connect",
+        "correct": false,
+        "why": "Direct Connect is private network connectivity."
+      },
+      {
+        "key": "D",
+        "text": "Amazon API Gateway",
+        "correct": true,
+        "why": "API Gateway creates, publishes and secures APIs at any scale."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon API Gateway lets you create REST, HTTP and WebSocket APIs that front Lambda functions and other back ends.",
+      "concept": "It handles authorization, throttling and monitoring.",
+      "examTip": "API front end for Lambda = API Gateway.",
+      "references": [
+        {
+          "title": "What is Amazon API Gateway?",
+          "url": "https://docs.aws.amazon.com/apigateway/latest/developerguide/welcome.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-049",
+    "domain": "technology",
+    "topic": "EC2",
+    "tags": [
+      "elastic-ip"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company needs a public IPv4 address that stays the same even when its EC2 instance is stopped and started.",
+    "prompt": "What should it use?",
+    "options": [
+      {
+        "key": "A",
+        "text": "An Elastic IP address",
+        "correct": true,
+        "why": "An Elastic IP is a static public IPv4 address you can attach to instances."
+      },
+      {
+        "key": "B",
+        "text": "An Amazon Route 53 health check",
+        "correct": false,
+        "why": "Health checks monitor endpoints, so it doesn't meet this requirement."
+      },
+      {
+        "key": "C",
+        "text": "A private IP only",
+        "correct": false,
+        "why": "Private IPs aren't reachable from the internet."
+      },
+      {
+        "key": "D",
+        "text": "The automatically assigned public IP",
+        "correct": false,
+        "why": "Automatic public IPs change after stop and start."
+      }
+    ],
+    "explanation": {
+      "answer": "An Elastic IP address is a static public IPv4 address allocated to your account that you can associate with an instance.",
+      "concept": "Public IPv4 addresses, including Elastic IPs, are billed hourly.",
+      "examTip": "Static public IPv4 = Elastic IP.",
+      "references": [
+        {
+          "title": "Elastic IP addresses",
+          "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-050",
+    "domain": "technology",
+    "topic": "Scaling & Load Balancing",
+    "tags": [
+      "scheduled-scaling"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A company's internal reporting app is busy every weekday from 8 a.m. to 6 p.m. and almost unused at night and on weekends.",
+    "prompt": "Which Auto Scaling approach fits this predictable pattern BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Keep peak capacity running 24/7",
+        "correct": false,
+        "why": "Running peak capacity all the time wastes money at night and on weekends."
+      },
+      {
+        "key": "B",
+        "text": "Scheduled scaling actions for business hours",
+        "correct": true,
+        "why": "Scheduled actions change capacity at known times, matching the predictable pattern."
+      },
+      {
+        "key": "C",
+        "text": "Move the app to a larger instance type",
+        "correct": false,
+        "why": "A bigger instance doesn't reduce capacity during quiet hours."
+      },
+      {
+        "key": "D",
+        "text": "Scale manually each morning and evening",
+        "correct": false,
+        "why": "Manual scaling is error-prone and easy to forget."
+      }
+    ],
+    "explanation": {
+      "answer": "EC2 Auto Scaling supports scheduled actions that set capacity at specific times, ideal for predictable daily or weekly patterns.",
+      "concept": "Combine scheduled scaling with dynamic scaling to handle unexpected spikes.",
+      "examTip": "Predictable busy hours = scheduled scaling.",
+      "references": [
+        {
+          "title": "Scheduled scaling for Amazon EC2 Auto Scaling",
+          "url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-scheduled-scaling.html"
+        }
+      ]
+    }
+  }
+]

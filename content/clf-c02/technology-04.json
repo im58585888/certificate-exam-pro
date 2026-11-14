@@ -1,0 +1,1241 @@
+[
+  {
+    "id": "clf-tec-076",
+    "domain": "technology",
+    "topic": "Databases",
+    "tags": [
+      "rds"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A company needs a managed relational database for its order system that runs MySQL.",
+    "prompt": "Which service fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon DynamoDB",
+        "correct": false,
+        "why": "DynamoDB is a NoSQL key-value and document database."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Neptune",
+        "correct": false,
+        "why": "Neptune is a graph database, so it doesn't meet this requirement."
+      },
+      {
+        "key": "C",
+        "text": "Amazon RDS for MySQL",
+        "correct": true,
+        "why": "RDS provides managed relational databases, including MySQL."
+      },
+      {
+        "key": "D",
+        "text": "Amazon ElastiCache",
+        "correct": false,
+        "why": "ElastiCache is an in-memory cache, which isn't what this scenario needs."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon RDS makes it easy to set up, operate and scale relational databases such as MySQL, PostgreSQL, MariaDB, Oracle, SQL Server and Db2.",
+      "concept": "RDS automates backups, patching and Multi-AZ failover.",
+      "examTip": "Managed relational (SQL) database = RDS.",
+      "references": [
+        {
+          "title": "What is Amazon RDS?",
+          "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Welcome.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-077",
+    "domain": "technology",
+    "topic": "Databases",
+    "tags": [
+      "aurora"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company wants a MySQL- and PostgreSQL-compatible database with higher performance and storage that grows automatically across three AZs.",
+    "prompt": "Which service fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon DynamoDB",
+        "correct": false,
+        "why": "DynamoDB is NoSQL, which isn't what this scenario needs."
+      },
+      {
+        "key": "B",
+        "text": "Amazon DocumentDB",
+        "correct": false,
+        "why": "DocumentDB is a document database compatible with MongoDB."
+      },
+      {
+        "key": "C",
+        "text": "Amazon Redshift",
+        "correct": false,
+        "why": "Redshift is a data warehouse for analytics."
+      },
+      {
+        "key": "D",
+        "text": "Amazon Aurora",
+        "correct": true,
+        "why": "Aurora is MySQL- and PostgreSQL-compatible, with high performance and storage replicated across three AZs."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Aurora is a relational database engine compatible with MySQL and PostgreSQL, with storage that automatically grows and is replicated six ways across three AZs.",
+      "concept": "Aurora Serverless scales capacity automatically.",
+      "examTip": "MySQL/PostgreSQL-compatible + high performance = Aurora.",
+      "references": [
+        {
+          "title": "What is Amazon Aurora?",
+          "url": "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-078",
+    "domain": "technology",
+    "topic": "Databases",
+    "tags": [
+      "dynamodb"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A gaming company needs a NoSQL database with single-digit millisecond performance at any scale and no servers to manage.",
+    "prompt": "Which service fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon DynamoDB",
+        "correct": true,
+        "why": "DynamoDB is a serverless NoSQL key-value and document database with consistent low latency."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Neptune",
+        "correct": false,
+        "why": "Neptune is a graph database, so it doesn't meet this requirement."
+      },
+      {
+        "key": "C",
+        "text": "Amazon Redshift",
+        "correct": false,
+        "why": "Redshift is for analytics, so it doesn't meet this requirement."
+      },
+      {
+        "key": "D",
+        "text": "Amazon RDS for PostgreSQL",
+        "correct": false,
+        "why": "RDS is relational and requires instance sizing."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon DynamoDB is a fully managed, serverless NoSQL database that delivers single-digit millisecond performance at any scale.",
+      "concept": "DynamoDB offers on-demand and provisioned capacity modes.",
+      "examTip": "Serverless NoSQL, ms latency, any scale = DynamoDB.",
+      "references": [
+        {
+          "title": "What is Amazon DynamoDB?",
+          "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-079",
+    "domain": "technology",
+    "topic": "Databases",
+    "tags": [
+      "redshift"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company wants to run complex SQL analytics queries over petabytes of historical sales data.",
+    "prompt": "Which service fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon ElastiCache",
+        "correct": false,
+        "why": "ElastiCache is an in-memory cache, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Redshift",
+        "correct": true,
+        "why": "Redshift is a petabyte-scale data warehouse for SQL analytics."
+      },
+      {
+        "key": "C",
+        "text": "Amazon DynamoDB",
+        "correct": false,
+        "why": "DynamoDB is optimized for key-value access, not complex analytics."
+      },
+      {
+        "key": "D",
+        "text": "Amazon RDS for MySQL",
+        "correct": false,
+        "why": "RDS is designed for transactional workloads, not petabyte analytics."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Redshift is a fully managed data warehouse that uses columnar storage and parallel processing for fast analytics on large datasets.",
+      "concept": "OLTP (transactions) → RDS/Aurora/DynamoDB. OLAP (analytics) → Redshift.",
+      "examTip": "Data warehouse / analytics at scale = Redshift.",
+      "references": [
+        {
+          "title": "What is Amazon Redshift?",
+          "url": "https://docs.aws.amazon.com/redshift/latest/mgmt/welcome.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-080",
+    "domain": "technology",
+    "topic": "Databases",
+    "tags": [
+      "elasticache"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "An application repeatedly reads the same data from its database and wants microsecond response times.",
+    "prompt": "Which service should it add?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Redshift",
+        "correct": false,
+        "why": "Redshift is for analytics, which isn't what this scenario needs."
+      },
+      {
+        "key": "B",
+        "text": "Amazon DynamoDB Streams",
+        "correct": false,
+        "why": "Streams capture item changes; they don't cache reads."
+      },
+      {
+        "key": "C",
+        "text": "Amazon ElastiCache",
+        "correct": true,
+        "why": "ElastiCache provides in-memory caching with Redis OSS, Valkey or Memcached."
+      },
+      {
+        "key": "D",
+        "text": "Amazon RDS read replicas",
+        "correct": false,
+        "why": "Replicas offload reads but are still disk-based databases, not microsecond caches."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon ElastiCache is a managed in-memory data store that speeds up applications by caching frequently accessed data.",
+      "concept": "Caching reduces database load and latency.",
+      "examTip": "In-memory cache = ElastiCache.",
+      "references": [
+        {
+          "title": "What is Amazon ElastiCache?",
+          "url": "https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/WhatIs.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-081",
+    "domain": "technology",
+    "topic": "Databases",
+    "tags": [
+      "neptune"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A social network wants to store and query relationships between users, such as friends of friends.",
+    "prompt": "Which database fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Redshift",
+        "correct": false,
+        "why": "Redshift is a data warehouse, which isn't what this scenario needs."
+      },
+      {
+        "key": "B",
+        "text": "Amazon RDS for SQL Server",
+        "correct": false,
+        "why": "Relational databases handle deep relationship traversals less efficiently."
+      },
+      {
+        "key": "C",
+        "text": "Amazon Timestream",
+        "correct": false,
+        "why": "Timestream is a time series database, which isn't what this scenario needs."
+      },
+      {
+        "key": "D",
+        "text": "Amazon Neptune",
+        "correct": true,
+        "why": "Neptune is a graph database for highly connected data."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Neptune is a managed graph database for applications that work with highly connected datasets, such as social networks and fraud detection.",
+      "concept": "Graph databases store relationships as first-class data.",
+      "examTip": "Relationships / friends-of-friends = Neptune (graph).",
+      "references": [
+        {
+          "title": "What is Amazon Neptune?",
+          "url": "https://docs.aws.amazon.com/neptune/latest/userguide/intro.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-082",
+    "domain": "technology",
+    "topic": "Databases",
+    "tags": [
+      "documentdb"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company runs MongoDB workloads and wants a managed, MongoDB-compatible document database on AWS.",
+    "prompt": "Which service fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon DocumentDB",
+        "correct": true,
+        "why": "DocumentDB is a managed document database compatible with MongoDB APIs."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Keyspaces",
+        "correct": false,
+        "why": "Keyspaces is compatible with Apache Cassandra."
+      },
+      {
+        "key": "C",
+        "text": "Amazon Aurora",
+        "correct": false,
+        "why": "Aurora is relational, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "D",
+        "text": "Amazon Neptune",
+        "correct": false,
+        "why": "Neptune is a graph database, which isn't what this scenario needs."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon DocumentDB is a fully managed document database that supports MongoDB workloads.",
+      "concept": "Match the database to the data model and existing tools.",
+      "examTip": "MongoDB-compatible = DocumentDB.",
+      "references": [
+        {
+          "title": "What is Amazon DocumentDB?",
+          "url": "https://docs.aws.amazon.com/documentdb/latest/developerguide/what-is.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-083",
+    "domain": "technology",
+    "topic": "Databases",
+    "tags": [
+      "multi-az"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company needs its Amazon RDS database to fail over automatically if the primary database's AZ goes down.",
+    "prompt": "What should it enable?",
+    "options": [
+      {
+        "key": "A",
+        "text": "S3 Cross-Region Replication",
+        "correct": false,
+        "why": "That replicates S3 objects, not RDS databases."
+      },
+      {
+        "key": "B",
+        "text": "RDS Multi-AZ deployment",
+        "correct": true,
+        "why": "Multi-AZ keeps a standby in another AZ and fails over automatically."
+      },
+      {
+        "key": "C",
+        "text": "Larger instance class",
+        "correct": false,
+        "why": "Size doesn't add AZ redundancy, so it doesn't meet this requirement."
+      },
+      {
+        "key": "D",
+        "text": "Read replicas in the same AZ",
+        "correct": false,
+        "why": "Replicas in the same AZ fail with it, and read replicas don't fail over automatically by default."
+      }
+    ],
+    "explanation": {
+      "answer": "RDS Multi-AZ deployments maintain a synchronous standby in a different AZ with automatic failover.",
+      "concept": "Read replicas are mainly for scaling reads.",
+      "examTip": "Automatic DB failover across AZs = Multi-AZ. Read scaling = read replicas.",
+      "references": [
+        {
+          "title": "Multi-AZ deployments for Amazon RDS",
+          "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZ.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-084",
+    "domain": "technology",
+    "topic": "Databases",
+    "tags": [
+      "read-replicas"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "An RDS database is overloaded by reporting queries that only read data.",
+    "prompt": "Which feature helps offload the read traffic?",
+    "options": [
+      {
+        "key": "A",
+        "text": "An S3 lifecycle rule",
+        "correct": false,
+        "why": "Lifecycle rules manage S3 objects, which isn't what this scenario needs."
+      },
+      {
+        "key": "B",
+        "text": "Multi-AZ standby",
+        "correct": false,
+        "why": "The Multi-AZ standby isn't used to serve reads in a standard Multi-AZ instance deployment."
+      },
+      {
+        "key": "C",
+        "text": "RDS read replicas",
+        "correct": true,
+        "why": "Read replicas serve read-only traffic, reducing load on the primary."
+      },
+      {
+        "key": "D",
+        "text": "RDS automated backups",
+        "correct": false,
+        "why": "Backups protect data; they don't serve reads."
+      }
+    ],
+    "explanation": {
+      "answer": "Read replicas let you scale read-heavy workloads by directing read queries to one or more copies of the database.",
+      "concept": "Replicas use asynchronous replication.",
+      "examTip": "Offload reads = read replicas.",
+      "references": [
+        {
+          "title": "Working with DB instance read replicas",
+          "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ReadRepl.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-085",
+    "domain": "technology",
+    "topic": "Databases",
+    "tags": [
+      "choosing"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A company is choosing databases for three needs: customer orders with strict transactions, a product catalog with flexible attributes at huge scale, and session caching.",
+    "prompt": "Which mapping fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "ElastiCache for orders, Aurora for the catalog, DynamoDB for sessions",
+        "correct": false,
+        "why": "A cache isn't a durable system of record for orders."
+      },
+      {
+        "key": "B",
+        "text": "Neptune for all three",
+        "correct": false,
+        "why": "Neptune is designed for graph data, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "C",
+        "text": "DynamoDB for orders, Redshift for the catalog, S3 for sessions",
+        "correct": false,
+        "why": "Redshift isn't a catalog store and S3 isn't a session cache."
+      },
+      {
+        "key": "D",
+        "text": "Aurora for orders, DynamoDB for the catalog, ElastiCache for sessions",
+        "correct": true,
+        "why": "Each service matches its data access pattern."
+      }
+    ],
+    "explanation": {
+      "answer": "Relational databases (Aurora, RDS) suit transactional data. DynamoDB suits flexible, massive-scale key-value data. ElastiCache suits caching.",
+      "concept": "Purpose-built databases: pick the engine that fits each workload.",
+      "examTip": "Transactions=relational, flexible scale=DynamoDB, cache=ElastiCache.",
+      "references": [
+        {
+          "title": "AWS cloud databases",
+          "url": "https://aws.amazon.com/products/databases/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-086",
+    "domain": "technology",
+    "topic": "Databases",
+    "tags": [
+      "dynamodb-capacity"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A startup's DynamoDB traffic is unpredictable, with long quiet periods and sudden spikes.",
+    "prompt": "Which capacity mode fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "On-demand capacity mode",
+        "correct": true,
+        "why": "On-demand charges per request and handles spikes without capacity planning."
+      },
+      {
+        "key": "B",
+        "text": "Move to Amazon RDS",
+        "correct": false,
+        "why": "Changing databases isn't needed for this."
+      },
+      {
+        "key": "C",
+        "text": "Provisioned capacity set for the peak",
+        "correct": false,
+        "why": "This pays for peak capacity even when idle."
+      },
+      {
+        "key": "D",
+        "text": "Reserved capacity for three years",
+        "correct": false,
+        "why": "Reservations suit steady, predictable usage."
+      }
+    ],
+    "explanation": {
+      "answer": "DynamoDB on-demand capacity serves requests without capacity planning and charges per read and write request.",
+      "concept": "Provisioned mode with auto scaling can be cheaper for steady, predictable traffic.",
+      "examTip": "Unpredictable DynamoDB traffic = on-demand mode.",
+      "references": [
+        {
+          "title": "DynamoDB throughput capacity",
+          "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/capacity-mode.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-087",
+    "domain": "technology",
+    "topic": "Databases",
+    "tags": [
+      "managed-vs-ec2"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A company wants a relational database but doesn't want to manage OS patching, backups or replication.",
+    "prompt": "Which option fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Install MySQL on an EC2 instance",
+        "correct": false,
+        "why": "This keeps OS and database management with the company."
+      },
+      {
+        "key": "B",
+        "text": "Use Amazon RDS",
+        "correct": true,
+        "why": "RDS automates patching, backups and replication."
+      },
+      {
+        "key": "C",
+        "text": "Use Amazon EBS directly",
+        "correct": false,
+        "why": "EBS is storage, not a database, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "D",
+        "text": "Use AWS Lambda to store data",
+        "correct": false,
+        "why": "Lambda runs code; it isn't a database, which isn't what this scenario needs."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon RDS handles routine database tasks so teams can focus on applications.",
+      "concept": "Self-managed databases on EC2 offer more control but more work.",
+      "examTip": "Relational without admin chores = RDS.",
+      "references": [
+        {
+          "title": "What is Amazon RDS?",
+          "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Welcome.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-088",
+    "domain": "technology",
+    "topic": "Databases",
+    "tags": [
+      "keyspaces"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A company runs Apache Cassandra on premises and wants a serverless, Cassandra-compatible database on AWS without managing clusters.",
+    "prompt": "Which service fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Redshift",
+        "correct": false,
+        "why": "Redshift is a data warehouse, so it doesn't meet this requirement."
+      },
+      {
+        "key": "B",
+        "text": "Amazon DocumentDB",
+        "correct": false,
+        "why": "DocumentDB is compatible with MongoDB, not Cassandra."
+      },
+      {
+        "key": "C",
+        "text": "Amazon Keyspaces (for Apache Cassandra)",
+        "correct": true,
+        "why": "Keyspaces is a serverless, Cassandra-compatible database service."
+      },
+      {
+        "key": "D",
+        "text": "Amazon Neptune",
+        "correct": false,
+        "why": "Neptune is a graph database, which isn't what this scenario needs."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Keyspaces is a scalable, serverless, managed database compatible with Apache Cassandra, so existing Cassandra code and tools keep working.",
+      "concept": "Pick the managed service that's compatible with the engine you already use.",
+      "examTip": "Cassandra-compatible = Keyspaces. MongoDB-compatible = DocumentDB.",
+      "references": [
+        {
+          "title": "What is Amazon Keyspaces?",
+          "url": "https://docs.aws.amazon.com/keyspaces/latest/devguide/what-is-keyspaces.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-089",
+    "domain": "technology",
+    "topic": "Databases",
+    "tags": [
+      "aurora-serverless"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company's internal app uses a relational database only a few hours per week and wants to avoid paying for idle database capacity.",
+    "prompt": "Which option fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "A large provisioned RDS instance running 24/7",
+        "correct": false,
+        "why": "Capacity running 24/7 costs money when idle."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Redshift",
+        "correct": false,
+        "why": "Redshift is a data warehouse, which isn't what this scenario needs."
+      },
+      {
+        "key": "C",
+        "text": "Amazon ElastiCache",
+        "correct": false,
+        "why": "ElastiCache is a cache, not a relational database."
+      },
+      {
+        "key": "D",
+        "text": "Amazon Aurora Serverless",
+        "correct": true,
+        "why": "Aurora Serverless scales capacity with demand, reducing cost when usage is low."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Aurora Serverless automatically scales database capacity based on application demand.",
+      "concept": "It suits intermittent, unpredictable or variable workloads.",
+      "examTip": "Relational + intermittent use = Aurora Serverless.",
+      "references": [
+        {
+          "title": "Using Aurora Serverless v2",
+          "url": "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-serverless-v2.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-090",
+    "domain": "technology",
+    "topic": "Databases",
+    "tags": [
+      "multi-select"
+    ],
+    "difficulty": "medium",
+    "type": "multi",
+    "stem": "A team is learning AWS database services.",
+    "prompt": "Which TWO statements are correct? (Select TWO.)",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Neptune is a data warehouse",
+        "correct": false,
+        "why": "Neptune is a graph database, which isn't what this scenario needs."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Aurora is a relational database",
+        "correct": true,
+        "why": "Aurora is MySQL- and PostgreSQL-compatible relational."
+      },
+      {
+        "key": "C",
+        "text": "Amazon DynamoDB is a NoSQL database",
+        "correct": true,
+        "why": "DynamoDB is a key-value and document NoSQL database."
+      },
+      {
+        "key": "D",
+        "text": "Amazon Redshift is an in-memory cache",
+        "correct": false,
+        "why": "Redshift is a data warehouse, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "E",
+        "text": "Amazon ElastiCache is a graph database",
+        "correct": false,
+        "why": "ElastiCache is an in-memory store, which isn't what this scenario needs."
+      }
+    ],
+    "explanation": {
+      "answer": "DynamoDB = NoSQL. Aurora/RDS = relational. Redshift = data warehouse. ElastiCache = cache. Neptune = graph.",
+      "concept": "Purpose-built databases match data models.",
+      "examTip": "Memorize one word per database service.",
+      "references": [
+        {
+          "title": "AWS cloud databases",
+          "url": "https://aws.amazon.com/products/databases/"
+        }
+      ]
+    },
+    "selectCount": 2
+  },
+  {
+    "id": "clf-tec-091",
+    "domain": "technology",
+    "topic": "Databases",
+    "tags": [
+      "rds-backups"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company wants to restore its RDS database to how it looked five minutes before a bad data change.",
+    "prompt": "Which feature allows this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "RDS point-in-time recovery",
+        "correct": true,
+        "why": "Automated backups allow restoring to any second within the retention period."
+      },
+      {
+        "key": "B",
+        "text": "RDS Multi-AZ standby failover",
+        "correct": false,
+        "why": "The standby is synchronous, so it contains the bad change too."
+      },
+      {
+        "key": "C",
+        "text": "RDS read replicas promoted after the change",
+        "correct": false,
+        "why": "Replicas copy the bad change too, so it doesn't fit this scenario."
+      },
+      {
+        "key": "D",
+        "text": "CloudWatch alarms",
+        "correct": false,
+        "why": "Alarms notify; they don't restore data, which isn't what this scenario needs."
+      }
+    ],
+    "explanation": {
+      "answer": "RDS automated backups enable point-in-time recovery to any second during the retention period, typically up to the last five minutes.",
+      "concept": "Manual snapshots can also be kept as long as needed.",
+      "examTip": "Restore to a specific moment = point-in-time recovery.",
+      "references": [
+        {
+          "title": "Introduction to backups",
+          "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_WorkingWithAutomatedBackups.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-092",
+    "domain": "technology",
+    "topic": "Databases",
+    "tags": [
+      "dynamodb-global"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A global app needs a DynamoDB table that users in Europe and Asia can read and write locally with low latency.",
+    "prompt": "Which feature fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "DynamoDB Accelerator (DAX) only",
+        "correct": false,
+        "why": "DAX caches reads in one Region; it doesn't replicate writes globally."
+      },
+      {
+        "key": "B",
+        "text": "DynamoDB global tables",
+        "correct": true,
+        "why": "Global tables replicate data across Regions with local reads and writes."
+      },
+      {
+        "key": "C",
+        "text": "RDS read replicas",
+        "correct": false,
+        "why": "Those are for RDS, not DynamoDB, so it doesn't meet this requirement."
+      },
+      {
+        "key": "D",
+        "text": "S3 Cross-Region Replication",
+        "correct": false,
+        "why": "That replicates S3 objects, which isn't what this scenario needs."
+      }
+    ],
+    "explanation": {
+      "answer": "DynamoDB global tables provide fully managed, multi-Region, multi-active replication.",
+      "concept": "Each Region can serve reads and writes locally.",
+      "examTip": "Multi-Region active-active DynamoDB = global tables.",
+      "references": [
+        {
+          "title": "Global tables",
+          "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/GlobalTables.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-093",
+    "domain": "technology",
+    "topic": "Databases",
+    "tags": [
+      "dax"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A DynamoDB-based shopping site needs microsecond read latency for its most popular items.",
+    "prompt": "Which service should it add?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Redshift",
+        "correct": false,
+        "why": "Redshift is for analytics, which isn't what this scenario needs."
+      },
+      {
+        "key": "B",
+        "text": "Amazon RDS read replicas",
+        "correct": false,
+        "why": "These apply to RDS, which isn't what this scenario needs."
+      },
+      {
+        "key": "C",
+        "text": "DynamoDB Accelerator (DAX)",
+        "correct": true,
+        "why": "DAX is an in-memory cache for DynamoDB that delivers microsecond reads."
+      },
+      {
+        "key": "D",
+        "text": "AWS Glue",
+        "correct": false,
+        "why": "Glue is for ETL, so it doesn't meet this requirement."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon DynamoDB Accelerator (DAX) is a fully managed in-memory cache for DynamoDB that improves read performance up to 10x.",
+      "concept": "DAX is API-compatible with DynamoDB.",
+      "examTip": "Microsecond DynamoDB reads = DAX.",
+      "references": [
+        {
+          "title": "In-memory acceleration with DAX",
+          "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DAX.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-094",
+    "domain": "technology",
+    "topic": "Databases",
+    "tags": [
+      "oltp-olap"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "An analyst asks which type of database suits running a few complex queries over years of data, rather than many small transactions.",
+    "prompt": "Which type is BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "An in-memory cache",
+        "correct": false,
+        "why": "Caches speed up repeated reads, so it doesn't meet this requirement."
+      },
+      {
+        "key": "B",
+        "text": "An online transaction processing (OLTP) database",
+        "correct": false,
+        "why": "OLTP handles many small, fast transactions."
+      },
+      {
+        "key": "C",
+        "text": "A graph database",
+        "correct": false,
+        "why": "Graph databases handle relationships, so it doesn't meet this requirement."
+      },
+      {
+        "key": "D",
+        "text": "A data warehouse (OLAP)",
+        "correct": true,
+        "why": "Data warehouses are built for complex analytical queries over large datasets."
+      }
+    ],
+    "explanation": {
+      "answer": "Online analytical processing (OLAP) systems like Amazon Redshift are designed for complex queries across large historical datasets.",
+      "concept": "OLTP systems like Amazon RDS handle day-to-day transactions.",
+      "examTip": "Analytics over history = OLAP / Redshift.",
+      "references": [
+        {
+          "title": "What is Amazon Redshift?",
+          "url": "https://docs.aws.amazon.com/redshift/latest/mgmt/welcome.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-095",
+    "domain": "technology",
+    "topic": "Databases",
+    "tags": [
+      "memorydb"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company needs a Redis-compatible in-memory database that is durable enough to be the primary database, not just a cache.",
+    "prompt": "Which service fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon MemoryDB",
+        "correct": true,
+        "why": "MemoryDB is a durable, Redis OSS- and Valkey-compatible in-memory database."
+      },
+      {
+        "key": "B",
+        "text": "Amazon DynamoDB with DAX",
+        "correct": false,
+        "why": "DAX is a cache in front of DynamoDB, not a Redis-compatible in-memory database."
+      },
+      {
+        "key": "C",
+        "text": "Amazon ElastiCache for Memcached",
+        "correct": false,
+        "why": "Memcached is a cache without durability."
+      },
+      {
+        "key": "D",
+        "text": "Amazon Redshift",
+        "correct": false,
+        "why": "Redshift is a data warehouse, so it doesn't meet this requirement."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon MemoryDB is a durable in-memory database with Multi-AZ durability, suitable as a primary database.",
+      "concept": "ElastiCache is primarily a cache; MemoryDB is a durable primary store.",
+      "examTip": "Durable in-memory primary database = MemoryDB.",
+      "references": [
+        {
+          "title": "What is MemoryDB?",
+          "url": "https://docs.aws.amazon.com/memorydb/latest/devguide/what-is-memorydb.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-096",
+    "domain": "technology",
+    "topic": "Databases",
+    "tags": [
+      "rds-engines"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company runs Microsoft SQL Server and wants to move it to a managed service on AWS without changing database engines.",
+    "prompt": "Which service should it use?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon DynamoDB",
+        "correct": false,
+        "why": "DynamoDB is NoSQL and would require a redesign."
+      },
+      {
+        "key": "B",
+        "text": "Amazon RDS for SQL Server",
+        "correct": true,
+        "why": "RDS supports SQL Server as a managed engine."
+      },
+      {
+        "key": "C",
+        "text": "Amazon Timestream",
+        "correct": false,
+        "why": "Timestream is for time series data, which isn't what this scenario needs."
+      },
+      {
+        "key": "D",
+        "text": "Amazon Neptune",
+        "correct": false,
+        "why": "Neptune is a graph database, so it doesn't solve the problem described here."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon RDS supports Microsoft SQL Server, Oracle, MySQL, PostgreSQL, MariaDB and Db2 as managed engines.",
+      "concept": "Same-engine moves are simpler than engine changes.",
+      "examTip": "Managed SQL Server/Oracle = RDS.",
+      "references": [
+        {
+          "title": "What is Amazon RDS?",
+          "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Welcome.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-097",
+    "domain": "technology",
+    "topic": "Databases",
+    "tags": [
+      "dynamodb-backup"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A company wants continuous backups of a DynamoDB table so it can restore to any second in the last 35 days.",
+    "prompt": "Which feature should it enable?",
+    "options": [
+      {
+        "key": "A",
+        "text": "DAX",
+        "correct": false,
+        "why": "DAX is a cache, which isn't what this scenario needs."
+      },
+      {
+        "key": "B",
+        "text": "DynamoDB Streams",
+        "correct": false,
+        "why": "Streams capture item changes but aren't a backup feature."
+      },
+      {
+        "key": "C",
+        "text": "Point-in-time recovery (PITR)",
+        "correct": true,
+        "why": "PITR provides continuous backups with restore to any second in up to 35 days."
+      },
+      {
+        "key": "D",
+        "text": "Global tables",
+        "correct": false,
+        "why": "Global tables replicate data across Regions, including mistakes."
+      }
+    ],
+    "explanation": {
+      "answer": "DynamoDB point-in-time recovery provides continuous backups, letting you restore to any second within the recovery window.",
+      "concept": "On-demand backups and AWS Backup can also protect tables.",
+      "examTip": "Restore DynamoDB to any second = PITR.",
+      "references": [
+        {
+          "title": "Point-in-time recovery for DynamoDB",
+          "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/PointInTimeRecovery.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-098",
+    "domain": "technology",
+    "topic": "Databases",
+    "tags": [
+      "redshift-serverless"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "An analytics team runs warehouse queries a few times a week and doesn't want to manage clusters.",
+    "prompt": "Which option fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon RDS for MySQL",
+        "correct": false,
+        "why": "RDS is for transactional workloads, which isn't what this scenario needs."
+      },
+      {
+        "key": "B",
+        "text": "A provisioned Redshift cluster running 24/7",
+        "correct": false,
+        "why": "This charges for capacity when idle, which isn't what this scenario needs."
+      },
+      {
+        "key": "C",
+        "text": "Amazon ElastiCache",
+        "correct": false,
+        "why": "ElastiCache is a cache, so it doesn't meet this requirement."
+      },
+      {
+        "key": "D",
+        "text": "Amazon Redshift Serverless",
+        "correct": true,
+        "why": "Redshift Serverless runs analytics without managing clusters and charges for usage."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Redshift Serverless automatically provisions and scales warehouse capacity and charges only when queries run.",
+      "concept": "Serverless options exist across databases and analytics.",
+      "examTip": "Occasional warehouse queries, no clusters = Redshift Serverless.",
+      "references": [
+        {
+          "title": "What is Amazon Redshift Serverless?",
+          "url": "https://docs.aws.amazon.com/redshift/latest/mgmt/serverless-whatis.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-099",
+    "domain": "technology",
+    "topic": "Databases",
+    "tags": [
+      "rds-storage"
+    ],
+    "difficulty": "medium",
+    "type": "multi",
+    "stem": "A team wants to know which databases AWS fully manages so they don't need to choose instance sizes at all.",
+    "prompt": "Which TWO services are serverless databases? (Select TWO.)",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Aurora Serverless",
+        "correct": true,
+        "why": "Aurora Serverless scales capacity automatically without instance sizing."
+      },
+      {
+        "key": "B",
+        "text": "Amazon DynamoDB",
+        "correct": true,
+        "why": "DynamoDB is serverless with no instances to size."
+      },
+      {
+        "key": "C",
+        "text": "Amazon RDS for Oracle with a fixed instance class",
+        "correct": false,
+        "why": "This requires choosing instance sizes, which isn't what this scenario needs."
+      },
+      {
+        "key": "D",
+        "text": "Amazon ElastiCache on fixed nodes",
+        "correct": false,
+        "why": "Node-based clusters require sizing, which isn't what this scenario needs."
+      },
+      {
+        "key": "E",
+        "text": "MySQL installed on EC2",
+        "correct": false,
+        "why": "This requires managing servers, which isn't what this scenario needs."
+      }
+    ],
+    "explanation": {
+      "answer": "DynamoDB and Aurora Serverless remove the need to provision database instances.",
+      "concept": "ElastiCache and Redshift also offer serverless options.",
+      "examTip": "Serverless databases: DynamoDB, Aurora Serverless (and more).",
+      "references": [
+        {
+          "title": "What is Amazon DynamoDB?",
+          "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html"
+        }
+      ]
+    },
+    "selectCount": 2
+  },
+  {
+    "id": "clf-tec-100",
+    "domain": "technology",
+    "topic": "Databases",
+    "tags": [
+      "dms-tech"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A company wants to continuously replicate data from an on-premises PostgreSQL database to Amazon RDS for PostgreSQL.",
+    "prompt": "Which service fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Database Migration Service",
+        "correct": true,
+        "why": "DMS supports full load and ongoing replication (change data capture)."
+      },
+      {
+        "key": "B",
+        "text": "AWS Snowball Edge",
+        "correct": false,
+        "why": "Snowball moves data offline, not continuous replication."
+      },
+      {
+        "key": "C",
+        "text": "Amazon Athena",
+        "correct": false,
+        "why": "Athena queries data in S3, so it doesn't meet this requirement."
+      },
+      {
+        "key": "D",
+        "text": "Amazon QuickSight",
+        "correct": false,
+        "why": "QuickSight builds dashboards, so it doesn't meet this requirement."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS DMS can perform a full load and then continuously replicate changes from the source database to the target.",
+      "concept": "This keeps downtime minimal during cutover.",
+      "examTip": "Ongoing DB replication to AWS = DMS.",
+      "references": [
+        {
+          "title": "What is AWS Database Migration Service?",
+          "url": "https://docs.aws.amazon.com/dms/latest/userguide/Welcome.html"
+        }
+      ]
+    }
+  }
+]

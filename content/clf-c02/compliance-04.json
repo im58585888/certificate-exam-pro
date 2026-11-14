@@ -1,0 +1,1241 @@
+[
+  {
+    "id": "clf-sec-076",
+    "domain": "compliance",
+    "topic": "Encryption",
+    "tags": [
+      "kms"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A company wants to create and control encryption keys used to protect data in Amazon S3, Amazon EBS and Amazon RDS.",
+    "prompt": "Which service should it use?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Certificate Manager",
+        "correct": false,
+        "why": "ACM manages TLS certificates for websites, not data encryption keys."
+      },
+      {
+        "key": "B",
+        "text": "AWS Secrets Manager",
+        "correct": false,
+        "why": "Secrets Manager stores credentials like passwords and API keys."
+      },
+      {
+        "key": "C",
+        "text": "AWS Key Management Service (AWS KMS)",
+        "correct": true,
+        "why": "KMS creates and manages keys and integrates with most AWS services for encryption."
+      },
+      {
+        "key": "D",
+        "text": "Amazon Macie",
+        "correct": false,
+        "why": "Macie finds sensitive data; it doesn't manage keys."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS KMS lets you create, manage and control cryptographic keys across AWS services and applications.",
+      "concept": "KMS keys never leave the service unencrypted, and their use is logged in AWS CloudTrail.",
+      "examTip": "Manage encryption keys for AWS services = KMS.",
+      "references": [
+        {
+          "title": "What is AWS Key Management Service?",
+          "url": "https://docs.aws.amazon.com/kms/latest/developerguide/overview.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-077",
+    "domain": "compliance",
+    "topic": "Encryption",
+    "tags": [
+      "cloudhsm"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A regulated company requires dedicated hardware security modules (HSMs) that only it controls, in a single-tenant environment.",
+    "prompt": "Which service meets this requirement?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS KMS with AWS managed keys",
+        "correct": false,
+        "why": "AWS managed keys run in AWS-managed multi-tenant HSMs."
+      },
+      {
+        "key": "B",
+        "text": "AWS Secrets Manager",
+        "correct": false,
+        "why": "Secrets Manager stores secrets, not dedicated HSMs."
+      },
+      {
+        "key": "C",
+        "text": "AWS Certificate Manager",
+        "correct": false,
+        "why": "ACM manages TLS certificates, which isn't what this scenario needs."
+      },
+      {
+        "key": "D",
+        "text": "AWS CloudHSM",
+        "correct": true,
+        "why": "CloudHSM provides dedicated, single-tenant HSMs that the customer controls."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS CloudHSM provides dedicated hardware security modules in the AWS Cloud. You manage the keys and users; AWS manages the hardware.",
+      "concept": "Choose CloudHSM when compliance requires single-tenant HSMs under your exclusive control.",
+      "examTip": "Dedicated single-tenant HSMs = CloudHSM.",
+      "references": [
+        {
+          "title": "What is AWS CloudHSM?",
+          "url": "https://docs.aws.amazon.com/cloudhsm/latest/userguide/introduction.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-078",
+    "domain": "compliance",
+    "topic": "Encryption",
+    "tags": [
+      "at-rest"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A company wants data stored on its EBS volumes to be unreadable if someone obtained the physical disks.",
+    "prompt": "What should it enable?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Encryption at rest",
+        "correct": true,
+        "why": "Encrypting data at rest protects stored data on disks and in storage services."
+      },
+      {
+        "key": "B",
+        "text": "Multi-factor authentication",
+        "correct": false,
+        "why": "MFA protects sign-in, not stored data, so it doesn't meet this requirement."
+      },
+      {
+        "key": "C",
+        "text": "A network ACL",
+        "correct": false,
+        "why": "NACLs filter network traffic, so it doesn't meet this requirement."
+      },
+      {
+        "key": "D",
+        "text": "Encryption in transit with TLS",
+        "correct": false,
+        "why": "TLS protects data moving over a network, not data stored on disk."
+      }
+    ],
+    "explanation": {
+      "answer": "Encryption at rest protects data stored on media. EBS encryption uses AWS KMS keys.",
+      "concept": "You can turn on EBS encryption by default for new volumes in a Region.",
+      "examTip": "Stored data protection = encryption at rest.",
+      "references": [
+        {
+          "title": "Amazon EBS encryption",
+          "url": "https://docs.aws.amazon.com/ebs/latest/userguide/ebs-encryption.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-079",
+    "domain": "compliance",
+    "topic": "Encryption",
+    "tags": [
+      "in-transit"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A company wants traffic between users' browsers and its website to be encrypted.",
+    "prompt": "What should it use?",
+    "options": [
+      {
+        "key": "A",
+        "text": "EBS encryption",
+        "correct": false,
+        "why": "This encrypts disks, not traffic, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "B",
+        "text": "HTTPS with a TLS certificate",
+        "correct": true,
+        "why": "HTTPS encrypts data in transit between browsers and the website."
+      },
+      {
+        "key": "C",
+        "text": "IAM password policies",
+        "correct": false,
+        "why": "These set password rules, which isn't what this scenario needs."
+      },
+      {
+        "key": "D",
+        "text": "Server-side encryption in Amazon S3",
+        "correct": false,
+        "why": "This encrypts stored objects, not traffic."
+      }
+    ],
+    "explanation": {
+      "answer": "Encryption in transit uses protocols like TLS (HTTPS) to protect data moving over networks.",
+      "concept": "AWS Certificate Manager provides free public TLS certificates for supported services.",
+      "examTip": "Data moving over the network = encryption in transit (TLS).",
+      "references": [
+        {
+          "title": "What is AWS Certificate Manager?",
+          "url": "https://docs.aws.amazon.com/acm/latest/userguide/acm-overview.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-080",
+    "domain": "compliance",
+    "topic": "Secrets & Certificates",
+    "tags": [
+      "acm"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company wants free public TLS certificates for its Application Load Balancer that renew automatically.",
+    "prompt": "Which service provides this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS KMS",
+        "correct": false,
+        "why": "KMS manages encryption keys, not TLS certificates."
+      },
+      {
+        "key": "B",
+        "text": "AWS CloudHSM",
+        "correct": false,
+        "why": "CloudHSM provides dedicated HSMs, which isn't what this scenario needs."
+      },
+      {
+        "key": "C",
+        "text": "AWS Certificate Manager (ACM)",
+        "correct": true,
+        "why": "ACM provisions public TLS certificates at no extra cost and renews them automatically."
+      },
+      {
+        "key": "D",
+        "text": "AWS Secrets Manager",
+        "correct": false,
+        "why": "Secrets Manager stores secrets like passwords."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Certificate Manager issues and manages public and private TLS certificates for AWS services such as Elastic Load Balancing and CloudFront.",
+      "concept": "Public certificates used with integrated services are free and auto-renewed.",
+      "examTip": "TLS certificates for AWS endpoints = ACM.",
+      "references": [
+        {
+          "title": "What is AWS Certificate Manager?",
+          "url": "https://docs.aws.amazon.com/acm/latest/userguide/acm-overview.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-081",
+    "domain": "compliance",
+    "topic": "Secrets & Certificates",
+    "tags": [
+      "secrets-manager"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "An application needs a database password. The company wants to stop storing it in code and rotate it automatically.",
+    "prompt": "Which service should it use?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS CloudTrail",
+        "correct": false,
+        "why": "CloudTrail logs API calls, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "B",
+        "text": "AWS Certificate Manager",
+        "correct": false,
+        "why": "ACM manages TLS certificates, not passwords."
+      },
+      {
+        "key": "C",
+        "text": "Amazon S3 with an encrypted object per secret",
+        "correct": false,
+        "why": "S3 can store data but doesn't rotate database credentials."
+      },
+      {
+        "key": "D",
+        "text": "AWS Secrets Manager",
+        "correct": true,
+        "why": "Secrets Manager stores secrets securely and can rotate database credentials automatically."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Secrets Manager helps you manage, retrieve and automatically rotate credentials, API keys and other secrets.",
+      "concept": "Applications fetch secrets at runtime, so secrets aren't hard-coded.",
+      "examTip": "Store + rotate passwords = Secrets Manager.",
+      "references": [
+        {
+          "title": "What is AWS Secrets Manager?",
+          "url": "https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-082",
+    "domain": "compliance",
+    "topic": "Secrets & Certificates",
+    "tags": [
+      "parameter-store"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A team needs a simple place to store configuration values, such as feature flags and some encrypted strings, with no requirement for automatic rotation.",
+    "prompt": "Which option is a good low-cost fit?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Systems Manager Parameter Store",
+        "correct": true,
+        "why": "Parameter Store stores configuration data and secrets, with standard parameters at no extra charge."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Macie",
+        "correct": false,
+        "why": "Macie discovers sensitive data in S3, so it doesn't meet this requirement."
+      },
+      {
+        "key": "C",
+        "text": "AWS Shield Advanced",
+        "correct": false,
+        "why": "Shield protects against DDoS attacks, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "D",
+        "text": "AWS CloudHSM",
+        "correct": false,
+        "why": "CloudHSM is for dedicated HSMs and is expensive for configuration storage."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Systems Manager Parameter Store provides hierarchical storage for configuration data and secrets, optionally encrypted with KMS.",
+      "concept": "Choose Secrets Manager when you need built-in automatic rotation.",
+      "examTip": "Config values, no rotation needed = Parameter Store. Rotation needed = Secrets Manager.",
+      "references": [
+        {
+          "title": "AWS Systems Manager Parameter Store",
+          "url": "https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-parameter-store.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-083",
+    "domain": "compliance",
+    "topic": "Encryption",
+    "tags": [
+      "kms-cloudtrail"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "An auditor asks how the company can prove who used its encryption keys and when.",
+    "prompt": "Which service records KMS key usage?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Inspector",
+        "correct": false,
+        "why": "Inspector scans for vulnerabilities, so it doesn't meet this requirement."
+      },
+      {
+        "key": "B",
+        "text": "AWS CloudTrail",
+        "correct": true,
+        "why": "CloudTrail logs API calls to KMS, including key usage."
+      },
+      {
+        "key": "C",
+        "text": "Amazon CloudWatch metrics",
+        "correct": false,
+        "why": "Metrics measure usage but don't record who made each KMS call."
+      },
+      {
+        "key": "D",
+        "text": "AWS Budgets",
+        "correct": false,
+        "why": "Budgets track cost, so it doesn't solve the problem described here."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS CloudTrail records API activity, including KMS operations such as Encrypt, Decrypt and GenerateDataKey.",
+      "concept": "CloudTrail logs help with auditing, security analysis and compliance.",
+      "examTip": "Who used which key, when = CloudTrail.",
+      "references": [
+        {
+          "title": "What is AWS CloudTrail?",
+          "url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-user-guide.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-084",
+    "domain": "compliance",
+    "topic": "Encryption",
+    "tags": [
+      "s3-default"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company asks whether new objects uploaded to Amazon S3 are encrypted if it does nothing.",
+    "prompt": "Which statement is correct?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Only when the bucket policy requires it",
+        "correct": false,
+        "why": "Public access has nothing to do with encryption."
+      },
+      {
+        "key": "B",
+        "text": "No; objects are stored unencrypted unless asked",
+        "correct": false,
+        "why": "S3 has applied default encryption to new objects since 2023."
+      },
+      {
+        "key": "C",
+        "text": "Yes; new objects use SSE-S3 by default",
+        "correct": true,
+        "why": "All new object uploads are encrypted with S3 managed keys by default."
+      },
+      {
+        "key": "D",
+        "text": "Only for buckets created with SSE-KMS keys",
+        "correct": false,
+        "why": "Support plans don't affect S3 encryption."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon S3 automatically applies server-side encryption with S3 managed keys (SSE-S3) to all new objects. You can choose SSE-KMS for more control.",
+      "concept": "Encryption with KMS keys adds audit trails and key policies.",
+      "examTip": "S3 encrypts new objects by default (SSE-S3); choose SSE-KMS for key control.",
+      "references": [
+        {
+          "title": "Protecting data with server-side encryption",
+          "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/serv-side-encryption.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-085",
+    "domain": "compliance",
+    "topic": "Encryption",
+    "tags": [
+      "key-types"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A company wants to control the key policy, rotation and deletion of the KMS keys that encrypt its data.",
+    "prompt": "Which type of KMS key should it use?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS managed keys",
+        "correct": false,
+        "why": "AWS managed keys are created for you by a service; you can't change their policies or delete them."
+      },
+      {
+        "key": "B",
+        "text": "Amazon S3 managed keys",
+        "correct": false,
+        "why": "S3 managed keys are fully handled by S3."
+      },
+      {
+        "key": "C",
+        "text": "AWS owned keys",
+        "correct": false,
+        "why": "AWS owned keys are used by AWS services and aren't visible or controllable in your account."
+      },
+      {
+        "key": "D",
+        "text": "Customer managed keys",
+        "correct": true,
+        "why": "Customer managed keys give you full control of policies, rotation and deletion."
+      }
+    ],
+    "explanation": {
+      "answer": "Customer managed keys are created and managed by you, with control over key policies, enabling and disabling, rotation and deletion.",
+      "concept": "AWS managed keys are convenient but give less control.",
+      "examTip": "Full control over the key = customer managed key.",
+      "references": [
+        {
+          "title": "AWS KMS keys",
+          "url": "https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-086",
+    "domain": "compliance",
+    "topic": "Encryption",
+    "tags": [
+      "multi-select"
+    ],
+    "difficulty": "medium",
+    "type": "multi",
+    "stem": "A security architect is designing data protection for a web application.",
+    "prompt": "Which TWO practices protect data? (Select TWO.)",
+    "options": [
+      {
+        "key": "A",
+        "text": "Grant every account kms:Decrypt for convenience",
+        "correct": false,
+        "why": "Broad decrypt access defeats the purpose of encryption."
+      },
+      {
+        "key": "B",
+        "text": "Use HTTPS between clients and the load balancer",
+        "correct": true,
+        "why": "HTTPS encrypts data in transit, which is exactly what this scenario needs."
+      },
+      {
+        "key": "C",
+        "text": "Encrypt data at rest with AWS KMS keys",
+        "correct": true,
+        "why": "Encryption at rest protects stored data."
+      },
+      {
+        "key": "D",
+        "text": "Disable TLS to improve performance",
+        "correct": false,
+        "why": "Disabling TLS exposes data in transit, so it doesn't meet this requirement."
+      },
+      {
+        "key": "E",
+        "text": "Store plain-text passwords in environment files",
+        "correct": false,
+        "why": "Plain-text secrets can leak, so it doesn't meet this requirement."
+      }
+    ],
+    "explanation": {
+      "answer": "Protect data both at rest (KMS, S3 and EBS encryption) and in transit (TLS/HTTPS).",
+      "concept": "Use Secrets Manager for credentials instead of plain-text files.",
+      "examTip": "Encrypt at rest + in transit; keep secrets in a secrets service.",
+      "references": [
+        {
+          "title": "Data protection in AWS KMS",
+          "url": "https://docs.aws.amazon.com/kms/latest/developerguide/data-protection.html"
+        }
+      ]
+    },
+    "selectCount": 2
+  },
+  {
+    "id": "clf-sec-087",
+    "domain": "compliance",
+    "topic": "Secrets & Certificates",
+    "tags": [
+      "hardcoded"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A developer committed an AWS access key to a public code repository.",
+    "prompt": "What should the company do FIRST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Deactivate and rotate the exposed access key",
+        "correct": true,
+        "why": "Leaked keys should be deactivated immediately and replaced."
+      },
+      {
+        "key": "B",
+        "text": "Email AWS Support to hide the repository",
+        "correct": false,
+        "why": "AWS doesn't control your repository's visibility."
+      },
+      {
+        "key": "C",
+        "text": "Wait to see if any charges appear",
+        "correct": false,
+        "why": "Waiting gives attackers time to misuse the key."
+      },
+      {
+        "key": "D",
+        "text": "Delete the repository and keep using the key",
+        "correct": false,
+        "why": "The key may already be copied; it must be deactivated."
+      }
+    ],
+    "explanation": {
+      "answer": "Exposed credentials should be deactivated immediately, then replaced, and activity reviewed with CloudTrail.",
+      "concept": "Prevent this by using IAM roles and temporary credentials instead of long-term keys.",
+      "examTip": "Leaked key = deactivate now, then investigate.",
+      "references": [
+        {
+          "title": "Managing access keys for IAM users",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-088",
+    "domain": "compliance",
+    "topic": "Encryption",
+    "tags": [
+      "rds-encryption"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company wants its Amazon RDS database and its automated backups and snapshots encrypted.",
+    "prompt": "What should it do?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Encrypt only the backups manually each night",
+        "correct": false,
+        "why": "Manual steps are error-prone and leave the database unencrypted."
+      },
+      {
+        "key": "B",
+        "text": "Enable encryption when creating the RDS instance",
+        "correct": true,
+        "why": "RDS encryption at rest covers the database storage, backups, snapshots and read replicas."
+      },
+      {
+        "key": "C",
+        "text": "Use a network ACL on the database subnet",
+        "correct": false,
+        "why": "NACLs filter traffic; they don't encrypt storage."
+      },
+      {
+        "key": "D",
+        "text": "Store the database in Amazon S3 Glacier",
+        "correct": false,
+        "why": "Glacier is archival storage, not a running database."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon RDS encryption at rest uses AWS KMS keys and covers the instance's storage, automated backups, read replicas and snapshots.",
+      "concept": "Encryption is enabled when the instance is created.",
+      "examTip": "RDS encryption covers DB + backups + snapshots (set at creation).",
+      "references": [
+        {
+          "title": "Encrypting Amazon RDS resources",
+          "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Overview.Encryption.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-089",
+    "domain": "compliance",
+    "topic": "Encryption",
+    "tags": [
+      "kms-rotation"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A compliance rule requires the company's encryption keys to be rotated every year.",
+    "prompt": "How can it meet this requirement with AWS KMS?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Ask AWS Support to rotate the keys",
+        "correct": false,
+        "why": "Rotation is configured by the customer, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "B",
+        "text": "KMS keys can't be rotated",
+        "correct": false,
+        "why": "KMS supports automatic rotation for customer managed symmetric keys."
+      },
+      {
+        "key": "C",
+        "text": "Enable automatic rotation on customer managed keys",
+        "correct": true,
+        "why": "KMS can rotate the key material automatically on a schedule."
+      },
+      {
+        "key": "D",
+        "text": "Manually create new keys and re-encrypt all data every day",
+        "correct": false,
+        "why": "Daily manual rotation is unnecessary and error-prone."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS KMS supports automatic key rotation for customer managed symmetric keys, with a configurable rotation period.",
+      "concept": "Old key material is kept so previously encrypted data can still be decrypted.",
+      "examTip": "Yearly key rotation = enable KMS automatic rotation.",
+      "references": [
+        {
+          "title": "Rotating AWS KMS keys",
+          "url": "https://docs.aws.amazon.com/kms/latest/developerguide/rotate-keys.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-090",
+    "domain": "compliance",
+    "topic": "Encryption",
+    "tags": [
+      "kms-vs-cloudhsm"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A team must choose between AWS KMS and AWS CloudHSM.",
+    "prompt": "Which statement is correct?",
+    "options": [
+      {
+        "key": "A",
+        "text": "KMS requires dedicated hardware that you manage yourself",
+        "correct": false,
+        "why": "KMS is fully managed and multi-tenant, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "B",
+        "text": "They are the same service sold under two different names",
+        "correct": false,
+        "why": "They are different services with different control models."
+      },
+      {
+        "key": "C",
+        "text": "CloudHSM integrates natively with more services than KMS",
+        "correct": false,
+        "why": "KMS integrates natively with far more services."
+      },
+      {
+        "key": "D",
+        "text": "KMS is managed and integrated; CloudHSM gives dedicated HSMs",
+        "correct": true,
+        "why": "KMS is the default choice; CloudHSM is for single-tenant, customer-controlled HSM needs."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS KMS is fully managed and integrated across AWS services. CloudHSM provides dedicated FIPS-validated HSMs where you control the keys and users.",
+      "concept": "KMS can use a CloudHSM cluster as a custom key store if needed.",
+      "examTip": "Default = KMS. Dedicated single-tenant HSM requirement = CloudHSM.",
+      "references": [
+        {
+          "title": "What is AWS CloudHSM?",
+          "url": "https://docs.aws.amazon.com/cloudhsm/latest/userguide/introduction.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-091",
+    "domain": "compliance",
+    "topic": "Encryption",
+    "tags": [
+      "ebs-default"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company wants every new EBS volume in a Region encrypted without relying on each engineer to remember.",
+    "prompt": "What should it configure?",
+    "options": [
+      {
+        "key": "A",
+        "text": "EBS encryption by default for the Region",
+        "correct": true,
+        "why": "This setting encrypts all new EBS volumes automatically."
+      },
+      {
+        "key": "B",
+        "text": "An SCP that requires public IPs",
+        "correct": false,
+        "why": "Public IPs are unrelated to EBS encryption."
+      },
+      {
+        "key": "C",
+        "text": "An IAM password policy",
+        "correct": false,
+        "why": "Password policies don't affect volumes, so it doesn't meet this requirement."
+      },
+      {
+        "key": "D",
+        "text": "A CloudWatch alarm on CPU usage",
+        "correct": false,
+        "why": "CPU alarms don't encrypt volumes, which isn't what this scenario needs."
+      }
+    ],
+    "explanation": {
+      "answer": "EBS encryption by default ensures all new volumes and snapshot copies in that Region are encrypted.",
+      "concept": "It's an account-level, per-Region setting.",
+      "examTip": "Always encrypt new volumes = EBS encryption by default.",
+      "references": [
+        {
+          "title": "Amazon EBS encryption",
+          "url": "https://docs.aws.amazon.com/ebs/latest/userguide/ebs-encryption.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-092",
+    "domain": "compliance",
+    "topic": "Secrets & Certificates",
+    "tags": [
+      "secrets-vs-acm"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A developer is confused about AWS Secrets Manager and AWS Certificate Manager.",
+    "prompt": "Which pairing is correct?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Both scan for vulnerabilities",
+        "correct": false,
+        "why": "Amazon Inspector scans for vulnerabilities."
+      },
+      {
+        "key": "B",
+        "text": "Secrets Manager: passwords and API keys; ACM: TLS certificates",
+        "correct": true,
+        "why": "Secrets Manager stores secrets; ACM manages certificates."
+      },
+      {
+        "key": "C",
+        "text": "Both manage KMS keys",
+        "correct": false,
+        "why": "KMS manages encryption keys, so it doesn't meet this requirement."
+      },
+      {
+        "key": "D",
+        "text": "Secrets Manager: TLS certificates; ACM: database passwords",
+        "correct": false,
+        "why": "These are swapped, so it doesn't solve the problem described here."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Secrets Manager stores and rotates secrets such as database credentials and API keys. AWS Certificate Manager provisions and renews TLS certificates.",
+      "concept": "Names can sound similar; focus on what each stores.",
+      "examTip": "Secrets = passwords/API keys. Certificates = TLS/HTTPS.",
+      "references": [
+        {
+          "title": "What is AWS Secrets Manager?",
+          "url": "https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-093",
+    "domain": "compliance",
+    "topic": "Encryption",
+    "tags": [
+      "client-vs-server"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company wants AWS to encrypt data automatically when it is written to storage and decrypt it when read.",
+    "prompt": "Which encryption approach is this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "No encryption is needed",
+        "correct": false,
+        "why": "Many compliance requirements call for encryption at rest."
+      },
+      {
+        "key": "B",
+        "text": "Encryption in transit only",
+        "correct": false,
+        "why": "That protects data while moving, not at rest."
+      },
+      {
+        "key": "C",
+        "text": "Server-side encryption",
+        "correct": true,
+        "why": "With server-side encryption, the AWS service encrypts data at rest for you."
+      },
+      {
+        "key": "D",
+        "text": "Client-side encryption",
+        "correct": false,
+        "why": "With client-side encryption, the customer encrypts data before sending it."
+      }
+    ],
+    "explanation": {
+      "answer": "Server-side encryption means the service encrypts data at rest after receiving it and decrypts it when you access it.",
+      "concept": "Client-side encryption gives you full control but requires managing keys and encryption yourself.",
+      "examTip": "AWS encrypts on write = server-side encryption.",
+      "references": [
+        {
+          "title": "Protecting data with server-side encryption",
+          "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/serv-side-encryption.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-094",
+    "domain": "compliance",
+    "topic": "Secrets & Certificates",
+    "tags": [
+      "private-ca"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A company needs to issue private certificates for internal services and devices that aren't exposed to the internet.",
+    "prompt": "Which AWS offering supports this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Cognito",
+        "correct": false,
+        "why": "Cognito handles app user identities, so it doesn't meet this requirement."
+      },
+      {
+        "key": "B",
+        "text": "Public ACM certificates",
+        "correct": false,
+        "why": "Public certificates are for publicly trusted domains."
+      },
+      {
+        "key": "C",
+        "text": "AWS Secrets Manager",
+        "correct": false,
+        "why": "Secrets Manager stores secrets but doesn't issue certificates."
+      },
+      {
+        "key": "D",
+        "text": "AWS Private Certificate Authority",
+        "correct": true,
+        "why": "AWS Private CA lets you create a private certificate hierarchy for internal use."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Private Certificate Authority creates and manages private certificate authorities and issues private certificates for internal resources.",
+      "concept": "ACM can manage private certificates issued by AWS Private CA.",
+      "examTip": "Internal-only certificates = AWS Private CA.",
+      "references": [
+        {
+          "title": "What is AWS Private CA?",
+          "url": "https://docs.aws.amazon.com/privateca/latest/userguide/PcaWelcome.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-095",
+    "domain": "compliance",
+    "topic": "Encryption",
+    "tags": [
+      "kms-policy"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company wants only its payment application's role to be able to decrypt data with a specific KMS key.",
+    "prompt": "What controls this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "The KMS key policy (and IAM policies)",
+        "correct": true,
+        "why": "Key policies define who can use and manage each KMS key."
+      },
+      {
+        "key": "B",
+        "text": "An S3 lifecycle rule",
+        "correct": false,
+        "why": "Lifecycle rules manage object storage classes and expiry."
+      },
+      {
+        "key": "C",
+        "text": "AWS Budgets",
+        "correct": false,
+        "why": "Budgets track cost, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "D",
+        "text": "Security groups on the KMS service",
+        "correct": false,
+        "why": "KMS access isn't controlled with security groups."
+      }
+    ],
+    "explanation": {
+      "answer": "Every KMS key has a key policy, the primary way to control access to the key, often combined with IAM policies and grants.",
+      "concept": "Restricting decrypt permissions protects data even if storage access is misconfigured.",
+      "examTip": "Who can use a KMS key = key policy.",
+      "references": [
+        {
+          "title": "Key policies in AWS KMS",
+          "url": "https://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-096",
+    "domain": "compliance",
+    "topic": "Encryption",
+    "tags": [
+      "why-encrypt"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A manager asks why the company should encrypt data in AWS when AWS already secures its data centers.",
+    "prompt": "Which reason is BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Encryption makes data load faster from storage",
+        "correct": false,
+        "why": "Encryption doesn't speed up data access."
+      },
+      {
+        "key": "B",
+        "text": "It protects your data even if access settings are wrong",
+        "correct": true,
+        "why": "Encryption with well-controlled keys adds a layer that limits who can read data."
+      },
+      {
+        "key": "C",
+        "text": "AWS requires encryption for every service you use",
+        "correct": false,
+        "why": "Some encryption is default, but the main reason is protecting data under your control."
+      },
+      {
+        "key": "D",
+        "text": "Encryption reduces the storage cost of the data",
+        "correct": false,
+        "why": "Encryption doesn't reduce storage cost, so it doesn't solve the problem described here."
+      }
+    ],
+    "explanation": {
+      "answer": "Data protection is the customer's responsibility. Encryption with controlled keys is a layer of defense in depth.",
+      "concept": "Combine encryption with least-privilege access and logging.",
+      "examTip": "Encryption = defense in depth for your data (your responsibility).",
+      "references": [
+        {
+          "title": "Shared responsibility model",
+          "url": "https://aws.amazon.com/compliance/shared-responsibility-model/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-097",
+    "domain": "compliance",
+    "topic": "Secrets & Certificates",
+    "tags": [
+      "rotation-benefit"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company rotates database passwords automatically every 30 days with AWS Secrets Manager.",
+    "prompt": "What is the main security benefit?",
+    "options": [
+      {
+        "key": "A",
+        "text": "It reduces database storage costs",
+        "correct": false,
+        "why": "Rotation doesn't affect storage costs, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "B",
+        "text": "It makes database queries faster",
+        "correct": false,
+        "why": "Rotation doesn't affect query performance."
+      },
+      {
+        "key": "C",
+        "text": "It shortens how long a leaked password works",
+        "correct": true,
+        "why": "Regular rotation shortens the window in which a stolen credential works."
+      },
+      {
+        "key": "D",
+        "text": "It removes the need for IAM permissions",
+        "correct": false,
+        "why": "IAM still controls who can read the secret."
+      }
+    ],
+    "explanation": {
+      "answer": "Rotating secrets regularly reduces the risk from leaked or stolen credentials.",
+      "concept": "Secrets Manager can rotate credentials for Amazon RDS and other databases automatically.",
+      "examTip": "Rotation = shorter life for stolen secrets.",
+      "references": [
+        {
+          "title": "Rotate AWS Secrets Manager secrets",
+          "url": "https://docs.aws.amazon.com/secretsmanager/latest/userguide/rotating-secrets.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-098",
+    "domain": "compliance",
+    "topic": "Encryption",
+    "tags": [
+      "multi-select"
+    ],
+    "difficulty": "hard",
+    "type": "multi",
+    "stem": "A company is choosing AWS services for key and secret management.",
+    "prompt": "Which TWO statements are correct? (Select TWO.)",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Certificate Manager stores database passwords",
+        "correct": false,
+        "why": "ACM manages TLS certificates, so it doesn't meet this requirement."
+      },
+      {
+        "key": "B",
+        "text": "AWS KMS can encrypt EBS volumes and S3 objects",
+        "correct": true,
+        "why": "KMS integrates with EBS, S3 and many other services."
+      },
+      {
+        "key": "C",
+        "text": "AWS Shield rotates secrets automatically",
+        "correct": false,
+        "why": "Shield protects against DDoS attacks, so it doesn't meet this requirement."
+      },
+      {
+        "key": "D",
+        "text": "AWS CloudHSM provides single-tenant HSMs",
+        "correct": true,
+        "why": "CloudHSM provides dedicated HSMs you control."
+      },
+      {
+        "key": "E",
+        "text": "Amazon Inspector manages encryption keys",
+        "correct": false,
+        "why": "Inspector scans for vulnerabilities, so it doesn't meet this requirement."
+      }
+    ],
+    "explanation": {
+      "answer": "KMS manages keys integrated with AWS services; CloudHSM provides dedicated HSMs; Secrets Manager rotates secrets; ACM manages certificates.",
+      "concept": "Know the one-line purpose of each security service.",
+      "examTip": "KMS=keys, CloudHSM=dedicated HSM, Secrets Manager=secrets, ACM=certificates.",
+      "references": [
+        {
+          "title": "What is AWS Key Management Service?",
+          "url": "https://docs.aws.amazon.com/kms/latest/developerguide/overview.html"
+        }
+      ]
+    },
+    "selectCount": 2
+  },
+  {
+    "id": "clf-sec-099",
+    "domain": "compliance",
+    "topic": "Encryption",
+    "tags": [
+      "dynamodb-encryption"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company asks whether data in Amazon DynamoDB is encrypted at rest.",
+    "prompt": "Which statement is correct?",
+    "options": [
+      {
+        "key": "A",
+        "text": "DynamoDB can't be encrypted",
+        "correct": false,
+        "why": "DynamoDB supports encryption at rest, which isn't what this scenario needs."
+      },
+      {
+        "key": "B",
+        "text": "Only for tables smaller than 10 GB",
+        "correct": false,
+        "why": "Encryption doesn't depend on table size."
+      },
+      {
+        "key": "C",
+        "text": "Only if the company writes its own encryption code",
+        "correct": false,
+        "why": "DynamoDB encrypts all data at rest by default."
+      },
+      {
+        "key": "D",
+        "text": "All DynamoDB data is encrypted at rest by default",
+        "correct": true,
+        "why": "DynamoDB encrypts all user data at rest, with a choice of key types."
+      }
+    ],
+    "explanation": {
+      "answer": "DynamoDB encrypts all data at rest by default, using AWS owned, AWS managed or customer managed KMS keys.",
+      "concept": "Many AWS services now encrypt data at rest by default.",
+      "examTip": "DynamoDB = encrypted at rest by default (choose key type).",
+      "references": [
+        {
+          "title": "DynamoDB encryption at rest",
+          "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/EncryptionAtRest.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-100",
+    "domain": "compliance",
+    "topic": "Encryption",
+    "tags": [
+      "delete-key-risk"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "An administrator schedules deletion of a KMS key that still encrypts important S3 data.",
+    "prompt": "What is the risk if the deletion completes?",
+    "options": [
+      {
+        "key": "A",
+        "text": "The encrypted data can no longer be decrypted",
+        "correct": true,
+        "why": "Without the key, data encrypted under it is unrecoverable."
+      },
+      {
+        "key": "B",
+        "text": "The data moves to another Region",
+        "correct": false,
+        "why": "Key deletion doesn't move data, so it doesn't meet this requirement."
+      },
+      {
+        "key": "C",
+        "text": "S3 falls back to its own copy of the key",
+        "correct": false,
+        "why": "S3 doesn't keep a usable copy of a deleted KMS key."
+      },
+      {
+        "key": "D",
+        "text": "The data becomes public",
+        "correct": false,
+        "why": "Deleting a key doesn't change access settings."
+      }
+    ],
+    "explanation": {
+      "answer": "Deleting a KMS key is irreversible. Data encrypted with it can't be decrypted afterwards. KMS enforces a waiting period of 7 to 30 days.",
+      "concept": "Disable a key first to check for dependencies before scheduling deletion.",
+      "examTip": "Deleted KMS key = data lost. Disable first, delete carefully.",
+      "references": [
+        {
+          "title": "Deleting AWS KMS keys",
+          "url": "https://docs.aws.amazon.com/kms/latest/developerguide/deleting-keys.html"
+        }
+      ]
+    }
+  }
+]

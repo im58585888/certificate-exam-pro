@@ -1,0 +1,989 @@
+[
+  {
+    "id": "clf-con-101",
+    "domain": "concepts",
+    "topic": "Cloud Benefits",
+    "tags": [
+      "durability"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company wants its stored files to survive the loss of an entire data center without any extra configuration.",
+    "prompt": "Which AWS storage choice provides this by default?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon S3 Standard",
+        "correct": true,
+        "why": "S3 Standard stores data redundantly across at least three Availability Zones by default."
+      },
+      {
+        "key": "B",
+        "text": "A local disk on an on-premises server",
+        "correct": false,
+        "why": "Local disks offer no protection against a data center loss."
+      },
+      {
+        "key": "C",
+        "text": "An EC2 instance store volume",
+        "correct": false,
+        "why": "Instance store data is lost when the instance stops or fails."
+      },
+      {
+        "key": "D",
+        "text": "An Amazon EBS volume in one Availability Zone",
+        "correct": false,
+        "why": "EBS volumes are replicated within a single AZ, not across AZs."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon S3 Standard is designed for 99.999999999% (11 nines) durability by storing objects across multiple AZs.",
+      "concept": "Different storage services have different durability and availability designs.",
+      "examTip": "Survive an AZ loss by default = Amazon S3 (multi-AZ storage classes).",
+      "references": [
+        {
+          "title": "Amazon S3 storage classes",
+          "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-102",
+    "domain": "concepts",
+    "topic": "Cloud Benefits",
+    "tags": [
+      "managed-definition"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A colleague asks what \"managed service\" means on AWS.",
+    "prompt": "Which description is BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS staff monitor your users' activity for you",
+        "correct": false,
+        "why": "AWS does not monitor your users on your behalf."
+      },
+      {
+        "key": "B",
+        "text": "AWS operates the underlying infrastructure and routine tasks for you",
+        "correct": true,
+        "why": "With managed services, AWS handles tasks such as provisioning, patching and backups."
+      },
+      {
+        "key": "C",
+        "text": "AWS manages your application code and business logic",
+        "correct": false,
+        "why": "Customers remain responsible for their code and data."
+      },
+      {
+        "key": "D",
+        "text": "A service that only runs inside your own data center",
+        "correct": false,
+        "why": "Managed services run on AWS infrastructure."
+      }
+    ],
+    "explanation": {
+      "answer": "A managed service is one where AWS takes on operational tasks such as provisioning, patching, scaling and backups, so you focus on using it.",
+      "concept": "Examples include Amazon RDS, Amazon DynamoDB and Amazon S3.",
+      "examTip": "Managed = AWS runs the plumbing; you own your data and configuration.",
+      "references": [
+        {
+          "title": "What is Amazon RDS?",
+          "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Welcome.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-103",
+    "domain": "concepts",
+    "topic": "Migration Strategies",
+    "tags": [
+      "portfolio"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "Before migrating, a company inventories its 300 applications and assigns each one a migration strategy.",
+    "prompt": "What is the main benefit of this step?",
+    "options": [
+      {
+        "key": "A",
+        "text": "It lets AWS migrate the applications automatically",
+        "correct": false,
+        "why": "AWS provides tools, but the customer plans and runs the migration."
+      },
+      {
+        "key": "B",
+        "text": "It removes the need to test applications after migration",
+        "correct": false,
+        "why": "Testing is still required after migration."
+      },
+      {
+        "key": "C",
+        "text": "It matches effort to value for each application",
+        "correct": true,
+        "why": "Choosing a strategy per application balances effort, cost and benefit."
+      },
+      {
+        "key": "D",
+        "text": "It ensures every application cuts over without downtime",
+        "correct": false,
+        "why": "Planning reduces risk but can't ensure zero downtime."
+      }
+    ],
+    "explanation": {
+      "answer": "Portfolio assessment assigns each application to one of the 7 Rs based on business value, complexity and constraints.",
+      "concept": "Not every application deserves the same effort: some are retired, some rehosted, some refactored.",
+      "examTip": "Assign a strategy per app = portfolio assessment.",
+      "references": [
+        {
+          "title": "Migration strategies",
+          "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/large-migration-guide/migration-strategies.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-104",
+    "domain": "concepts",
+    "topic": "Cloud Economics",
+    "tags": [
+      "commitment-flexibility"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A company is unsure whether it will move from EC2 to AWS Fargate and Lambda next year but still wants a discount for its steady compute use.",
+    "prompt": "Which option keeps the MOST flexibility?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Standard Reserved Instances for specific instance types",
+        "correct": false,
+        "why": "Standard RIs are tied to instance attributes and don't cover Fargate or Lambda."
+      },
+      {
+        "key": "B",
+        "text": "Spot Instances for all steady workloads",
+        "correct": false,
+        "why": "Spot can be interrupted and is not a commitment discount."
+      },
+      {
+        "key": "C",
+        "text": "Dedicated Hosts with a three-year reservation",
+        "correct": false,
+        "why": "Host reservations lock in physical servers."
+      },
+      {
+        "key": "D",
+        "text": "Compute Savings Plans",
+        "correct": true,
+        "why": "Compute Savings Plans apply across EC2, Fargate and Lambda, regardless of instance family or Region."
+      }
+    ],
+    "explanation": {
+      "answer": "Compute Savings Plans offer discounts in exchange for a dollar-per-hour commitment that applies across EC2, AWS Fargate and AWS Lambda.",
+      "concept": "EC2 Instance Savings Plans give deeper discounts but are tied to an instance family in a Region.",
+      "examTip": "Discount + flexibility across EC2, Fargate, Lambda = Compute Savings Plans.",
+      "references": [
+        {
+          "title": "What are Savings Plans?",
+          "url": "https://docs.aws.amazon.com/savingsplans/latest/userguide/what-is-savings-plans.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-105",
+    "domain": "concepts",
+    "topic": "Design Principles",
+    "tags": [
+      "stateless"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A web application stores user session data on each web server. When a server is replaced, users get logged out.",
+    "prompt": "Which change BEST follows cloud design principles?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Store session state outside the servers",
+        "correct": true,
+        "why": "Stateless servers can be added or replaced without affecting users."
+      },
+      {
+        "key": "B",
+        "text": "Use one web server so sessions stay on it",
+        "correct": false,
+        "why": "A single server is a single point of failure."
+      },
+      {
+        "key": "C",
+        "text": "Keep the same web servers running permanently",
+        "correct": false,
+        "why": "Servers must be replaceable for scaling and recovery."
+      },
+      {
+        "key": "D",
+        "text": "Copy session files to each server by hand",
+        "correct": false,
+        "why": "Manual copying is error-prone and doesn't scale."
+      }
+    ],
+    "explanation": {
+      "answer": "Making servers stateless, by moving session state to a shared store, lets you scale and replace servers freely.",
+      "concept": "Stateless design supports horizontal scaling and disposable resources.",
+      "examTip": "Users logged out when servers change = move state off the servers.",
+      "references": [
+        {
+          "title": "What is Amazon ElastiCache?",
+          "url": "https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/WhatIs.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-106",
+    "domain": "concepts",
+    "topic": "Cloud Benefits",
+    "tags": [
+      "speed-global"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A company wants to test demand for its product in Australia before committing to a long-term presence.",
+    "prompt": "Which AWS characteristic makes this low-risk?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Long-term hardware contracts in each country",
+        "correct": false,
+        "why": "Long-term contracts increase risk for a test."
+      },
+      {
+        "key": "B",
+        "text": "Deploying to a nearby Region on demand and shutting it down anytime",
+        "correct": true,
+        "why": "The company can launch in a nearby Region, test, and stop paying if demand is low."
+      },
+      {
+        "key": "C",
+        "text": "Shipping servers to Australia with AWS Snowball",
+        "correct": false,
+        "why": "Snowball moves data; it doesn't host production applications."
+      },
+      {
+        "key": "D",
+        "text": "Mandatory one-year commitments per Region",
+        "correct": false,
+        "why": "There are no mandatory commitments to use a Region."
+      }
+    ],
+    "explanation": {
+      "answer": "With on-demand Regions, companies can expand globally to test markets without long-term investment.",
+      "concept": "Going global in minutes reduces the risk of entering new markets.",
+      "examTip": "Test a new market cheaply = deploy in a nearby Region on demand.",
+      "references": [
+        {
+          "title": "AWS global infrastructure",
+          "url": "https://aws.amazon.com/about-aws/global-infrastructure/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-107",
+    "domain": "concepts",
+    "topic": "Cloud Adoption Framework",
+    "tags": [
+      "stages"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "AWS CAF describes a cloud transformation journey in phases.",
+    "prompt": "Which sequence lists these phases in order?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Discover, Design, Deploy, Decommission",
+        "correct": false,
+        "why": "These are not the AWS CAF phases, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "B",
+        "text": "Migrate, Assess, Optimize, Retire",
+        "correct": false,
+        "why": "These are not the AWS CAF phases, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "C",
+        "text": "Envision, Align, Launch, Scale",
+        "correct": true,
+        "why": "AWS CAF describes the transformation journey as Envision, Align, Launch and Scale."
+      },
+      {
+        "key": "D",
+        "text": "Plan, Build, Run, Retire",
+        "correct": false,
+        "why": "These are generic project phases, which isn't what this scenario needs."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS CAF's transformation journey has four iterative phases: Envision, Align, Launch and Scale.",
+      "concept": "Envision opportunities, align stakeholders, launch pilots and scale them to production.",
+      "examTip": "CAF phases: Envision → Align → Launch → Scale.",
+      "references": [
+        {
+          "title": "Overview of the AWS Cloud Adoption Framework",
+          "url": "https://docs.aws.amazon.com/whitepapers/latest/overview-aws-cloud-adoption-framework/welcome.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-108",
+    "domain": "concepts",
+    "topic": "Migration Services",
+    "tags": [
+      "mgn-vs-dms"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A company is migrating a three-tier application: web servers on VMs and an Oracle database that will become Amazon RDS for Oracle.",
+    "prompt": "Which combination of services fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS DataSync for the servers and AWS Backup for the database",
+        "correct": false,
+        "why": "DataSync moves files, and AWS Backup does not migrate databases."
+      },
+      {
+        "key": "B",
+        "text": "Amazon S3 for the VMs and Amazon Athena for the database",
+        "correct": false,
+        "why": "S3 and Athena are not migration services."
+      },
+      {
+        "key": "C",
+        "text": "AWS Snowball Edge for both tiers",
+        "correct": false,
+        "why": "Snowball moves data offline but does not rehost servers or replicate database changes."
+      },
+      {
+        "key": "D",
+        "text": "Application Migration Service for the VMs and AWS DMS for the database",
+        "correct": true,
+        "why": "MGN rehosts the servers, and DMS moves the data into the managed database."
+      }
+    ],
+    "explanation": {
+      "answer": "Rehosting servers with AWS Application Migration Service and migrating the database with AWS DMS is a common pattern.",
+      "concept": "Use the right tool per layer: servers, databases and files have different migration services.",
+      "examTip": "Servers → MGN. Databases → DMS. Files → DataSync. Offline bulk → Snowball.",
+      "references": [
+        {
+          "title": "What is AWS Application Migration Service?",
+          "url": "https://docs.aws.amazon.com/mgn/latest/ug/what-is-application-migration-service.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-109",
+    "domain": "concepts",
+    "topic": "Cloud Benefits",
+    "tags": [
+      "cost-visibility"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A finance team complains that on premises it was hard to know what each application cost.",
+    "prompt": "How does AWS improve this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Usage-based billing with tags and detailed cost reports",
+        "correct": true,
+        "why": "Costs are recorded per resource and usage, and tags let teams attribute them."
+      },
+      {
+        "key": "B",
+        "text": "AWS charges a single flat fee per account",
+        "correct": false,
+        "why": "AWS charges by usage, not a flat fee, so it doesn't meet this requirement."
+      },
+      {
+        "key": "C",
+        "text": "AWS assigns a cost to each employee automatically",
+        "correct": false,
+        "why": "AWS does not attribute costs to employees."
+      },
+      {
+        "key": "D",
+        "text": "AWS hides costs until the end of the year",
+        "correct": false,
+        "why": "AWS provides near-real-time cost data, which isn't what this scenario needs."
+      }
+    ],
+    "explanation": {
+      "answer": "On AWS, every resource's usage is metered. Cost allocation tags and tools like AWS Cost Explorer show costs by application, team or project.",
+      "concept": "Cost visibility supports accountability and optimization.",
+      "examTip": "Who spends what = metered billing + tags + Cost Explorer.",
+      "references": [
+        {
+          "title": "What is AWS Cost Explorer?",
+          "url": "https://docs.aws.amazon.com/cost-management/latest/userguide/ce-what-is.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-110",
+    "domain": "concepts",
+    "topic": "Design Principles",
+    "tags": [
+      "design-for-failure"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "An architect says: \"Everything fails all the time, so design for it.\"",
+    "prompt": "Which practice reflects this mindset?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Avoiding monitoring to reduce noise",
+        "correct": false,
+        "why": "Monitoring is needed to detect failures."
+      },
+      {
+        "key": "B",
+        "text": "Building redundancy and automatic recovery into the workload",
+        "correct": true,
+        "why": "Assuming failure leads to redundancy across AZs and automated recovery."
+      },
+      {
+        "key": "C",
+        "text": "Running everything in one data center for simplicity",
+        "correct": false,
+        "why": "One location is a single point of failure."
+      },
+      {
+        "key": "D",
+        "text": "Buying the most expensive hardware available",
+        "correct": false,
+        "why": "Even expensive hardware fails, so it doesn't solve the problem described here."
+      }
+    ],
+    "explanation": {
+      "answer": "Designing for failure means expecting components to fail and building in redundancy, health checks and automated recovery.",
+      "concept": "Multiple AZs, load balancers and Auto Scaling are common tools for this.",
+      "examTip": "Assume failure: redundancy + automatic recovery.",
+      "references": [
+        {
+          "title": "Reliability pillar design principles",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/design-principles.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-111",
+    "domain": "concepts",
+    "topic": "Cloud Economics",
+    "tags": [
+      "burst-vs-buy"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company needs extra compute for a two-week marketing campaign each year.",
+    "prompt": "What is the MOST cost-effective approach on AWS?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Buy servers sized for the campaign and keep them all year",
+        "correct": false,
+        "why": "Owning idle servers for 50 weeks wastes money."
+      },
+      {
+        "key": "B",
+        "text": "Purchase a Dedicated Host for the campaign",
+        "correct": false,
+        "why": "Dedicated Hosts add cost and aren't needed here."
+      },
+      {
+        "key": "C",
+        "text": "Launch On-Demand capacity for the two weeks only",
+        "correct": true,
+        "why": "On-Demand lets the company pay for the campaign weeks and nothing afterwards."
+      },
+      {
+        "key": "D",
+        "text": "Sign a one-year Reserved Instance for campaign capacity",
+        "correct": false,
+        "why": "A one-year commitment charges for capacity used only two weeks."
+      }
+    ],
+    "explanation": {
+      "answer": "On-Demand pricing suits short, unpredictable or temporary workloads with no long-term commitment.",
+      "concept": "Commitments save money only when usage is steady over the term.",
+      "examTip": "Short-term spike = On-Demand (or Spot if interruptible).",
+      "references": [
+        {
+          "title": "Amazon EC2 pricing",
+          "url": "https://aws.amazon.com/ec2/pricing/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-112",
+    "domain": "concepts",
+    "topic": "Cloud Adoption Framework",
+    "tags": [
+      "perspective-mapping"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A CAF workshop lists these concerns: data architecture, platform engineering and CI/CD.",
+    "prompt": "Which perspective owns these capabilities?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Business",
+        "correct": false,
+        "why": "Business covers strategy and outcomes, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "B",
+        "text": "Operations",
+        "correct": false,
+        "why": "Operations covers running services, such as observability and incident management."
+      },
+      {
+        "key": "C",
+        "text": "Governance",
+        "correct": false,
+        "why": "Governance covers risk, benefits and financial management."
+      },
+      {
+        "key": "D",
+        "text": "Platform",
+        "correct": true,
+        "why": "Platform includes platform architecture, data architecture, platform engineering, provisioning and modern app development."
+      }
+    ],
+    "explanation": {
+      "answer": "The Platform perspective helps build an enterprise-grade cloud platform, including CI/CD and data architecture.",
+      "concept": "Technical perspectives: Platform (build), Security (protect), Operations (run).",
+      "examTip": "Build the platform = Platform. Protect = Security. Run = Operations.",
+      "references": [
+        {
+          "title": "AWS Cloud Adoption Framework",
+          "url": "https://aws.amazon.com/cloud-adoption-framework/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-113",
+    "domain": "concepts",
+    "topic": "Cloud Benefits",
+    "tags": [
+      "iac-benefit"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company wants to recreate its entire production environment in another Region quickly and exactly.",
+    "prompt": "Which practice makes this MOST achievable?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Define infrastructure as code templates",
+        "correct": true,
+        "why": "Templates can deploy the same environment in any Region repeatedly."
+      },
+      {
+        "key": "B",
+        "text": "Document each console click in a wiki",
+        "correct": false,
+        "why": "Manual steps from a wiki are slow and error-prone."
+      },
+      {
+        "key": "C",
+        "text": "Take screenshots of current settings",
+        "correct": false,
+        "why": "Screenshots can't recreate resources, which isn't what this scenario needs."
+      },
+      {
+        "key": "D",
+        "text": "Ask AWS Support to copy the environment",
+        "correct": false,
+        "why": "AWS Support doesn't copy customer environments."
+      }
+    ],
+    "explanation": {
+      "answer": "Infrastructure as code (for example AWS CloudFormation) lets you provision identical environments quickly in any Region.",
+      "concept": "IaC supports disaster recovery, consistency and auditability.",
+      "examTip": "Recreate exactly, anywhere = infrastructure as code.",
+      "references": [
+        {
+          "title": "What is AWS CloudFormation?",
+          "url": "https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/Welcome.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-114",
+    "domain": "concepts",
+    "topic": "Cloud Economics",
+    "tags": [
+      "graviton-cost"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company wants better price performance for its Linux web servers without changing its architecture much.",
+    "prompt": "Which option should it evaluate?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Moving the servers back on premises",
+        "correct": false,
+        "why": "Going back on premises adds hardware costs."
+      },
+      {
+        "key": "B",
+        "text": "AWS Graviton-based EC2 instances",
+        "correct": true,
+        "why": "Graviton instances can deliver better price performance for many Linux workloads."
+      },
+      {
+        "key": "C",
+        "text": "Dedicated Hosts for every web server",
+        "correct": false,
+        "why": "Dedicated Hosts add cost and are for licensing or compliance."
+      },
+      {
+        "key": "D",
+        "text": "Switching to the largest x86 instance type",
+        "correct": false,
+        "why": "Larger instances raise cost; they don't improve price performance by themselves."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Graviton processors are designed by AWS to deliver strong price performance and energy efficiency for many workloads.",
+      "concept": "Many Linux applications run on Graviton with little or no change.",
+      "examTip": "Better price performance for Linux = try Graviton.",
+      "references": [
+        {
+          "title": "AWS Graviton processors",
+          "url": "https://aws.amazon.com/ec2/graviton/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-115",
+    "domain": "concepts",
+    "topic": "Cloud Benefits",
+    "tags": [
+      "no-upfront"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A small business wants to start using cloud servers today without signing contracts or paying anything upfront.",
+    "prompt": "Which statement is TRUE about AWS?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS requires an upfront deposit for new accounts",
+        "correct": false,
+        "why": "Most services have no upfront payment, so it doesn't meet this requirement."
+      },
+      {
+        "key": "B",
+        "text": "AWS requires a one-year minimum contract",
+        "correct": false,
+        "why": "There is no minimum contract for most services."
+      },
+      {
+        "key": "C",
+        "text": "Most services can be used with no upfront commitment",
+        "correct": true,
+        "why": "On-Demand use is pay-as-you-go with no long-term contract."
+      },
+      {
+        "key": "D",
+        "text": "AWS only sells capacity in yearly blocks",
+        "correct": false,
+        "why": "Capacity is available on demand by the second or hour."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS offers pay-as-you-go pricing with no upfront commitment for most services. Commitments are optional and give discounts.",
+      "concept": "Optional commitments include Savings Plans and Reserved Instances.",
+      "examTip": "No contracts required; commitments are optional discounts.",
+      "references": [
+        {
+          "title": "How AWS pricing works",
+          "url": "https://docs.aws.amazon.com/whitepapers/latest/how-aws-pricing-works/welcome.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-116",
+    "domain": "concepts",
+    "topic": "Well-Architected Framework",
+    "tags": [
+      "review-frequency"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company completed a Well-Architected review a year ago and has since added many new features.",
+    "prompt": "What does AWS recommend?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Treat the first review as final for the workload",
+        "correct": false,
+        "why": "Reviews should be repeated as workloads change."
+      },
+      {
+        "key": "B",
+        "text": "Wait until a major outage before reviewing again",
+        "correct": false,
+        "why": "Reviews should prevent incidents, not follow them."
+      },
+      {
+        "key": "C",
+        "text": "Replace the workload with a new one",
+        "correct": false,
+        "why": "Reviews improve workloads; they don't require replacing them."
+      },
+      {
+        "key": "D",
+        "text": "Review again regularly and at key milestones",
+        "correct": true,
+        "why": "Regular reviews catch new risks as the architecture evolves."
+      }
+    ],
+    "explanation": {
+      "answer": "Well-Architected reviews should happen regularly and at important milestones, because architectures change over time.",
+      "concept": "The review is a conversation, not an audit, and results feed an improvement plan.",
+      "examTip": "Architecture changed = review again.",
+      "references": [
+        {
+          "title": "What is the AWS Well-Architected Tool?",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/userguide/intro.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-117",
+    "domain": "concepts",
+    "topic": "Migration Strategies",
+    "tags": [
+      "refactor-why"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A company is considering refactoring an application during migration.",
+    "prompt": "Which situation BEST justifies the extra effort of refactoring?",
+    "options": [
+      {
+        "key": "A",
+        "text": "The business needs features the current design can't support",
+        "correct": true,
+        "why": "A strong need for agility or scale is the main reason to re-architect."
+      },
+      {
+        "key": "B",
+        "text": "The application is no longer used by anyone",
+        "correct": false,
+        "why": "Unused applications should be retired, which isn't what this scenario needs."
+      },
+      {
+        "key": "C",
+        "text": "The application must stay on premises for compliance",
+        "correct": false,
+        "why": "That situation calls for retaining it, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "D",
+        "text": "The data center lease ends next month",
+        "correct": false,
+        "why": "A short deadline favors rehosting, not refactoring."
+      }
+    ],
+    "explanation": {
+      "answer": "Refactoring is justified when the business needs capabilities that are hard to achieve in the existing architecture, such as scaling or faster feature delivery.",
+      "concept": "Refactoring is the most expensive strategy upfront but can deliver the largest long-term benefit.",
+      "examTip": "Refactor when business needs demand it, not when time is short.",
+      "references": [
+        {
+          "title": "Migration strategies",
+          "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/large-migration-guide/migration-strategies.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-118",
+    "domain": "concepts",
+    "topic": "Cloud Economics",
+    "tags": [
+      "economies-multi"
+    ],
+    "difficulty": "medium",
+    "type": "multi",
+    "stem": "A company is explaining to its board why moving to AWS can lower costs over time.",
+    "prompt": "Which TWO reasons are valid? (Select TWO.)",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS caps each customer's bill at last year's level",
+        "correct": false,
+        "why": "AWS doesn't cap bills; costs depend on usage."
+      },
+      {
+        "key": "B",
+        "text": "Data transfer out of AWS has no charge",
+        "correct": false,
+        "why": "Data transfer out is generally charged, so it doesn't fit this scenario."
+      },
+      {
+        "key": "C",
+        "text": "AWS passes on savings from its economies of scale",
+        "correct": true,
+        "why": "AWS has lowered prices many times as its scale grew."
+      },
+      {
+        "key": "D",
+        "text": "AWS covers the cost of the company's IT staff",
+        "correct": false,
+        "why": "AWS does not pay customer staff, which isn't what this scenario needs."
+      },
+      {
+        "key": "E",
+        "text": "The company pays only for what it uses",
+        "correct": true,
+        "why": "Pay-as-you-go eliminates paying for idle capacity."
+      }
+    ],
+    "explanation": {
+      "answer": "Economies of scale and pay-as-you-go pricing are two main reasons the cloud can reduce costs.",
+      "concept": "Total savings depend on rightsizing, choosing pricing models and removing waste.",
+      "examTip": "Lower costs: scale + pay-as-you-go. Watch for \"always free\" or \"guaranteed\" distractors.",
+      "references": [
+        {
+          "title": "Six advantages of cloud computing",
+          "url": "https://docs.aws.amazon.com/whitepapers/latest/aws-overview/six-advantages-of-cloud-computing.html"
+        }
+      ]
+    },
+    "selectCount": 2
+  },
+  {
+    "id": "clf-con-119",
+    "domain": "concepts",
+    "topic": "Cloud Benefits",
+    "tags": [
+      "microservices"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company splits a large application into small services that teams can deploy independently.",
+    "prompt": "Which benefit does this MOST directly provide?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Lower data transfer costs between all components",
+        "correct": false,
+        "why": "Microservices often add network calls; data transfer isn't the main benefit."
+      },
+      {
+        "key": "B",
+        "text": "Faster, independent releases with smaller blast radius",
+        "correct": true,
+        "why": "Small services can be changed and deployed independently, and a failure in one affects less."
+      },
+      {
+        "key": "C",
+        "text": "No need for monitoring or logging",
+        "correct": false,
+        "why": "Distributed services need more monitoring, not less."
+      },
+      {
+        "key": "D",
+        "text": "Automatic compliance certification",
+        "correct": false,
+        "why": "Architecture style doesn't certify compliance."
+      }
+    ],
+    "explanation": {
+      "answer": "Microservices let teams release independently and isolate failures, which improves agility and reliability.",
+      "concept": "They pair well with containers, serverless and loose coupling.",
+      "examTip": "Independent deploys + smaller blast radius = microservices.",
+      "references": [
+        {
+          "title": "What are microservices?",
+          "url": "https://aws.amazon.com/microservices/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-120",
+    "domain": "concepts",
+    "topic": "Deployment Models",
+    "tags": [
+      "hybrid-reason"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A hospital must keep certain patient systems on premises but wants to use AWS for analytics.",
+    "prompt": "Which deployment model allows this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "On-premises only",
+        "correct": false,
+        "why": "On-premises only wouldn't use AWS for analytics."
+      },
+      {
+        "key": "B",
+        "text": "Single-tenant SaaS",
+        "correct": false,
+        "why": "This is a software delivery model, not a way to combine on-premises and AWS."
+      },
+      {
+        "key": "C",
+        "text": "Hybrid",
+        "correct": true,
+        "why": "Hybrid connects on-premises systems with cloud services."
+      },
+      {
+        "key": "D",
+        "text": "Cloud-only",
+        "correct": false,
+        "why": "Cloud-only would require moving the on-premises systems."
+      }
+    ],
+    "explanation": {
+      "answer": "A hybrid deployment model connects on-premises infrastructure with AWS, so some systems stay local while others use the cloud.",
+      "concept": "Connectivity options include AWS Site-to-Site VPN and AWS Direct Connect.",
+      "examTip": "Must keep some things on premises + use AWS = hybrid.",
+      "references": [
+        {
+          "title": "Types of cloud computing",
+          "url": "https://docs.aws.amazon.com/whitepapers/latest/aws-overview/types-of-cloud-computing.html"
+        }
+      ]
+    }
+  }
+]

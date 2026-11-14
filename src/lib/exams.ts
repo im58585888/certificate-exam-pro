@@ -18,6 +18,24 @@ export interface ExamInfo {
 }
 
 export const EXAMS: Record<string, ExamInfo> = {
+  "clf-c02": {
+    slug: "clf-c02",
+    code: "CLF-C02",
+    name: "AWS Certified Cloud Practitioner",
+    shortName: "Cloud Practitioner",
+    vendor: "AWS",
+    level: "Foundational",
+    blurb: "Cloud concepts, security and compliance, core AWS services, and billing, pricing and support.",
+    examQuestions: 65,
+    examMinutes: 90,
+    passingScaled: 700,
+    domains: [
+      { id: "concepts", name: "Cloud Concepts", short: "Cloud Concepts", weight: 0.24 },
+      { id: "compliance", name: "Security and Compliance", short: "Security & Compliance", weight: 0.3 },
+      { id: "technology", name: "Cloud Technology and Services", short: "Technology & Services", weight: 0.34 },
+      { id: "billing", name: "Billing, Pricing, and Support", short: "Billing & Support", weight: 0.12 },
+    ],
+  },
   "saa-c03": {
     slug: "saa-c03",
     code: "SAA-C03",
@@ -58,7 +76,7 @@ export const EXAMS: Record<string, ExamInfo> = {
 };
 
 /** Display order on the site. */
-export const EXAM_LIST: ExamInfo[] = [EXAMS["aif-c01"], EXAMS["saa-c03"]];
+export const EXAM_LIST: ExamInfo[] = [EXAMS["clf-c02"], EXAMS["aif-c01"], EXAMS["saa-c03"]];
 export const DEFAULT_EXAM = "saa-c03";
 
 export const FREE_TRIAL_QUESTIONS = 10;

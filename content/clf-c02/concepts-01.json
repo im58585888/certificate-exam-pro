@@ -1,0 +1,1241 @@
+[
+  {
+    "id": "clf-con-001",
+    "domain": "concepts",
+    "topic": "Cloud Benefits",
+    "tags": [
+      "elasticity",
+      "scaling"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "An online retailer's traffic triples during holiday sales and drops back to normal in January. On premises, it bought enough servers for the peak, and most of them sit idle for ten months a year.",
+    "prompt": "Which benefit of the AWS Cloud addresses this problem MOST directly?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Lower latency through a content delivery network",
+        "correct": false,
+        "why": "A CDN speeds up content delivery, but it does not change how much server capacity the retailer owns."
+      },
+      {
+        "key": "B",
+        "text": "Built-in compliance with every industry standard",
+        "correct": false,
+        "why": "AWS supports many compliance programs, but compliance has nothing to do with idle capacity."
+      },
+      {
+        "key": "C",
+        "text": "Elasticity to add and remove capacity with demand",
+        "correct": true,
+        "why": "Elasticity lets the retailer scale out for the holiday peak and scale back in afterwards, paying only for what it uses."
+      },
+      {
+        "key": "D",
+        "text": "Global reach through Regions around the world",
+        "correct": false,
+        "why": "More locations help with latency for distant users, but they do not stop capacity from sitting idle after the peak."
+      }
+    ],
+    "explanation": {
+      "answer": "Elasticity means capacity grows and shrinks automatically or on demand. Instead of buying for the peak, the retailer runs what it needs each day.",
+      "concept": "The six advantages of cloud computing include trading fixed expense for variable expense and no longer guessing capacity. Elasticity is how you stop guessing.",
+      "examTip": "Spiky or seasonal demand + idle hardware = elasticity (stop guessing capacity).",
+      "references": [
+        {
+          "title": "Six advantages of cloud computing",
+          "url": "https://docs.aws.amazon.com/whitepapers/latest/aws-overview/six-advantages-of-cloud-computing.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-002",
+    "domain": "concepts",
+    "topic": "Cloud Benefits",
+    "tags": [
+      "agility",
+      "speed"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A product team used to wait six weeks for new servers to be ordered, racked and configured. On AWS, the team can launch test environments in minutes and delete them when the experiment ends.",
+    "prompt": "Which cloud benefit does this describe?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Data sovereignty",
+        "correct": false,
+        "why": "Data sovereignty is about where data is stored and which laws apply, not provisioning speed."
+      },
+      {
+        "key": "B",
+        "text": "High availability",
+        "correct": false,
+        "why": "High availability keeps workloads running through failures; it does not describe faster provisioning."
+      },
+      {
+        "key": "C",
+        "text": "Economies of scale",
+        "correct": false,
+        "why": "Economies of scale lower prices because AWS buys at huge volume; they are not about how quickly a team can experiment."
+      },
+      {
+        "key": "D",
+        "text": "Increased speed and agility",
+        "correct": true,
+        "why": "Getting resources in minutes instead of weeks lets teams experiment more often at lower cost, which is agility."
+      }
+    ],
+    "explanation": {
+      "answer": "Agility is the ability to get resources quickly, try ideas and throw them away cheaply. It shortens the time from idea to result.",
+      "concept": "Speed and agility come from on-demand, self-service provisioning. When experiments are cheap, teams can innovate faster.",
+      "examTip": "Minutes instead of weeks to get resources = speed and agility.",
+      "references": [
+        {
+          "title": "Six advantages of cloud computing",
+          "url": "https://docs.aws.amazon.com/whitepapers/latest/aws-overview/six-advantages-of-cloud-computing.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-003",
+    "domain": "concepts",
+    "topic": "Cloud Economics",
+    "tags": [
+      "capex",
+      "opex"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A startup's finance lead wants to avoid large upfront hardware purchases and instead pay monthly for the IT resources the company actually consumes.",
+    "prompt": "Which statement BEST describes this change?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Moving from capital expense to variable expense",
+        "correct": true,
+        "why": "Paying as you go replaces large upfront capital purchases with ongoing variable costs tied to usage."
+      },
+      {
+        "key": "B",
+        "text": "Moving from operational to capital expenditure",
+        "correct": false,
+        "why": "Cloud spending is generally operational; the startup is moving away from capital expenditure, not toward it."
+      },
+      {
+        "key": "C",
+        "text": "Moving from usage pricing to fixed contracts",
+        "correct": false,
+        "why": "Fixed contracts are the opposite of paying for actual consumption."
+      },
+      {
+        "key": "D",
+        "text": "Moving from variable expense to capital expense",
+        "correct": false,
+        "why": "This is the reverse: buying hardware upfront is a capital expense, which the startup wants to avoid."
+      }
+    ],
+    "explanation": {
+      "answer": "With the cloud, you trade capital expense (data centers, servers bought upfront) for variable expense, paying only for what you consume.",
+      "concept": "Capital expenditure (CapEx) is money spent upfront on assets. Operational or variable expenditure (OpEx) is paid as you use resources.",
+      "examTip": "Avoid upfront hardware purchases = trade CapEx for variable OpEx.",
+      "references": [
+        {
+          "title": "Six advantages of cloud computing",
+          "url": "https://docs.aws.amazon.com/whitepapers/latest/aws-overview/six-advantages-of-cloud-computing.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-004",
+    "domain": "concepts",
+    "topic": "Cloud Benefits",
+    "tags": [
+      "economies-of-scale"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A company notices that AWS has lowered prices for several services many times over the years, even though the company's own data center costs keep rising.",
+    "prompt": "Which cloud advantage explains why AWS can keep lowering prices?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Go global in minutes",
+        "correct": false,
+        "why": "Global reach is about deploying in many locations quickly, not about price reductions."
+      },
+      {
+        "key": "B",
+        "text": "Benefit from massive economies of scale",
+        "correct": true,
+        "why": "Because AWS aggregates usage from hundreds of thousands of customers, it achieves lower costs and passes savings on."
+      },
+      {
+        "key": "C",
+        "text": "Stop guessing capacity",
+        "correct": false,
+        "why": "Not guessing capacity avoids idle resources for the customer, but it does not explain AWS price cuts."
+      },
+      {
+        "key": "D",
+        "text": "Stop spending money on data centers",
+        "correct": false,
+        "why": "This helps the customer avoid facility costs, but it does not explain why AWS prices fall over time."
+      }
+    ],
+    "explanation": {
+      "answer": "Economies of scale let AWS buy and operate infrastructure more cheaply than any single company could, which results in lower pay-as-you-go prices.",
+      "concept": "Aggregated demand across many customers lowers the per-unit cost of compute, storage and networking.",
+      "examTip": "Lower prices because AWS is huge = economies of scale.",
+      "references": [
+        {
+          "title": "Six advantages of cloud computing",
+          "url": "https://docs.aws.amazon.com/whitepapers/latest/aws-overview/six-advantages-of-cloud-computing.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-005",
+    "domain": "concepts",
+    "topic": "Cloud Benefits",
+    "tags": [
+      "global-reach"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A gaming company based in Canada wants to launch servers close to new players in Japan and Brazil next month without building any data centers there.",
+    "prompt": "Which benefit of the AWS Cloud makes this possible?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Automatic compliance certification",
+        "correct": false,
+        "why": "Compliance programs do not place servers near players."
+      },
+      {
+        "key": "B",
+        "text": "Unlimited free data transfer",
+        "correct": false,
+        "why": "Data transfer out of AWS is generally charged, and it has nothing to do with server location."
+      },
+      {
+        "key": "C",
+        "text": "Going global in minutes with AWS Regions",
+        "correct": true,
+        "why": "The company can deploy in Regions near Japan and Brazil in minutes, giving players lower latency."
+      },
+      {
+        "key": "D",
+        "text": "Pay-as-you-go pricing",
+        "correct": false,
+        "why": "Pricing affects cost, but it does not provide infrastructure in distant countries."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Regions around the world let you deploy applications close to users with a few clicks, reducing latency without building facilities.",
+      "concept": "Going global in minutes is one of the six advantages of cloud computing.",
+      "examTip": "Reach new countries fast without building data centers = global infrastructure (go global in minutes).",
+      "references": [
+        {
+          "title": "AWS global infrastructure",
+          "url": "https://aws.amazon.com/about-aws/global-infrastructure/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-006",
+    "domain": "concepts",
+    "topic": "Cloud Economics",
+    "tags": [
+      "tco"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company is comparing the cost of staying in its own data center with moving to AWS. The CFO asks which costs should be included to make a fair comparison.",
+    "prompt": "Which cost is MOST often overlooked when calculating the on-premises side?",
+    "options": [
+      {
+        "key": "A",
+        "text": "The cost of AWS Support plans",
+        "correct": false,
+        "why": "Support plans are an AWS cost, not an on-premises one."
+      },
+      {
+        "key": "B",
+        "text": "The hourly price of Amazon EC2 instances",
+        "correct": false,
+        "why": "EC2 pricing belongs on the AWS side of the comparison, not the on-premises side."
+      },
+      {
+        "key": "C",
+        "text": "The license fee for the AWS Management Console",
+        "correct": false,
+        "why": "The AWS Management Console has no license fee."
+      },
+      {
+        "key": "D",
+        "text": "Power, cooling, space and staff to run the hardware",
+        "correct": true,
+        "why": "A fair total cost of ownership includes facilities, power, cooling and labor, not only server prices."
+      }
+    ],
+    "explanation": {
+      "answer": "Total cost of ownership (TCO) compares the full cost of each option. On premises, that includes facilities, power, cooling, hardware refreshes and the people who run them.",
+      "concept": "TCO analysis looks beyond the purchase price to every direct and indirect cost of running IT.",
+      "examTip": "TCO = include facilities, power, cooling, staff and refresh cycles, not just hardware.",
+      "references": [
+        {
+          "title": "How AWS pricing works",
+          "url": "https://docs.aws.amazon.com/whitepapers/latest/how-aws-pricing-works/welcome.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-007",
+    "domain": "concepts",
+    "topic": "Deployment Models",
+    "tags": [
+      "hybrid"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A bank keeps its core banking system in its own data center for regulatory reasons but runs its mobile app back end on AWS. The two environments are connected.",
+    "prompt": "Which cloud deployment model is the bank using?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Hybrid",
+        "correct": true,
+        "why": "Hybrid deployments connect on-premises infrastructure with cloud resources, as the bank does."
+      },
+      {
+        "key": "B",
+        "text": "Multi-Region",
+        "correct": false,
+        "why": "Multi-Region describes using several AWS Regions, not combining a data center with the cloud."
+      },
+      {
+        "key": "C",
+        "text": "On-premises (private cloud)",
+        "correct": false,
+        "why": "A purely on-premises model would not run the mobile back end on AWS."
+      },
+      {
+        "key": "D",
+        "text": "Cloud (all-in)",
+        "correct": false,
+        "why": "An all-in cloud deployment runs every part of the application in the cloud, which is not the case here."
+      }
+    ],
+    "explanation": {
+      "answer": "A hybrid deployment links cloud resources with existing on-premises infrastructure, often because some systems must stay on premises.",
+      "concept": "The three common deployment models are cloud (cloud-native), hybrid and on-premises (private cloud).",
+      "examTip": "Some in the data center + some on AWS, connected = hybrid.",
+      "references": [
+        {
+          "title": "Types of cloud computing",
+          "url": "https://docs.aws.amazon.com/whitepapers/latest/aws-overview/types-of-cloud-computing.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-008",
+    "domain": "concepts",
+    "topic": "Deployment Models",
+    "tags": [
+      "cloud-native"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A new startup builds its entire application on AWS from day one, using managed databases, serverless functions and object storage. It owns no servers.",
+    "prompt": "Which deployment model does this describe?",
+    "options": [
+      {
+        "key": "A",
+        "text": "On-premises",
+        "correct": false,
+        "why": "On-premises means running the application in your own data center."
+      },
+      {
+        "key": "B",
+        "text": "Cloud (cloud-native)",
+        "correct": true,
+        "why": "Running every part of the application in the cloud from the start is the cloud, or cloud-native, deployment model."
+      },
+      {
+        "key": "C",
+        "text": "Hybrid",
+        "correct": false,
+        "why": "Hybrid requires some on-premises infrastructure connected to the cloud; the startup has none."
+      },
+      {
+        "key": "D",
+        "text": "Private cloud",
+        "correct": false,
+        "why": "A private cloud uses virtualization in your own data center, not AWS."
+      }
+    ],
+    "explanation": {
+      "answer": "A cloud-based (all-in) deployment runs all parts of the application in the cloud, either built natively or migrated.",
+      "concept": "Cloud-native applications are designed to use managed services from the start.",
+      "examTip": "Everything on AWS, nothing on premises = cloud deployment model.",
+      "references": [
+        {
+          "title": "Types of cloud computing",
+          "url": "https://docs.aws.amazon.com/whitepapers/latest/aws-overview/types-of-cloud-computing.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-009",
+    "domain": "concepts",
+    "topic": "Cloud Economics",
+    "tags": [
+      "managed-services"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company runs its own database servers and spends many engineering hours each month on patching, backups and hardware failures. Leadership wants engineers to spend that time on new features.",
+    "prompt": "Which cloud advantage BEST addresses this goal?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Trade variable expense for capital expense",
+        "correct": false,
+        "why": "This reverses the real advantage, and it does not free engineers from database chores."
+      },
+      {
+        "key": "B",
+        "text": "Increase the number of Availability Zones used",
+        "correct": false,
+        "why": "More AZs improve resilience, but engineers would still be doing the same maintenance work."
+      },
+      {
+        "key": "C",
+        "text": "Stop spending money running and maintaining data centers",
+        "correct": true,
+        "why": "Managed services let AWS handle undifferentiated heavy lifting so teams focus on customers."
+      },
+      {
+        "key": "D",
+        "text": "Buy larger servers to reduce the number to patch",
+        "correct": false,
+        "why": "Fewer, larger servers still need patching and backups by the company."
+      }
+    ],
+    "explanation": {
+      "answer": "Managed services such as Amazon RDS take over patching, backups and hardware management. This removes undifferentiated heavy lifting.",
+      "concept": "Focusing on projects that differentiate the business, not racking and maintaining infrastructure, is a core cloud advantage.",
+      "examTip": "Engineers stuck on patching and hardware = move to managed services (stop running data centers).",
+      "references": [
+        {
+          "title": "Six advantages of cloud computing",
+          "url": "https://docs.aws.amazon.com/whitepapers/latest/aws-overview/six-advantages-of-cloud-computing.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-010",
+    "domain": "concepts",
+    "topic": "Cloud Benefits",
+    "tags": [
+      "high-availability"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company's web application must keep running even if an entire data center loses power.",
+    "prompt": "Which approach on AWS BEST meets this requirement?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Store backups in the same Availability Zone",
+        "correct": false,
+        "why": "Backups in the same location are lost with it and do not keep the app running."
+      },
+      {
+        "key": "B",
+        "text": "Use a larger Amazon EBS volume",
+        "correct": false,
+        "why": "Volume size does not protect against a data center outage."
+      },
+      {
+        "key": "C",
+        "text": "Run the application on one large EC2 instance",
+        "correct": false,
+        "why": "A single instance in one location fails if that location fails."
+      },
+      {
+        "key": "D",
+        "text": "Deploy across multiple Availability Zones",
+        "correct": true,
+        "why": "AZs are separate data centers with independent power, so the app keeps running if one fails."
+      }
+    ],
+    "explanation": {
+      "answer": "Availability Zones are physically separate groups of data centers in a Region. Spreading an application across AZs keeps it available when one AZ fails.",
+      "concept": "High availability on AWS starts with removing single points of failure, such as running in only one AZ.",
+      "examTip": "Survive a data center failure = multiple Availability Zones.",
+      "references": [
+        {
+          "title": "Regions and Availability Zones",
+          "url": "https://aws.amazon.com/about-aws/global-infrastructure/regions_az/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-011",
+    "domain": "concepts",
+    "topic": "Cloud Benefits",
+    "tags": [
+      "pay-as-you-go"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A research lab needs 500 servers for a three-day simulation once a quarter and nothing in between.",
+    "prompt": "Which AWS pricing characteristic makes the cloud a good fit?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Pay only for the resources used, when used",
+        "correct": true,
+        "why": "Pay-as-you-go pricing charges for the three days of use and nothing in between."
+      },
+      {
+        "key": "B",
+        "text": "Long-term hardware leases",
+        "correct": false,
+        "why": "Leases still charge for servers when the lab is not using them."
+      },
+      {
+        "key": "C",
+        "text": "Fixed monthly fees for each AWS account",
+        "correct": false,
+        "why": "AWS accounts do not have a fixed monthly fee for compute capacity."
+      },
+      {
+        "key": "D",
+        "text": "Discounts for buying hardware upfront",
+        "correct": false,
+        "why": "AWS customers do not buy hardware upfront; that is the on-premises model."
+      }
+    ],
+    "explanation": {
+      "answer": "Pay-as-you-go pricing lets the lab run 500 servers for three days and stop paying when the simulation ends.",
+      "concept": "On AWS you pay for what you use, without long-term contracts unless you choose them for a discount.",
+      "examTip": "Short bursts of heavy use = pay-as-you-go.",
+      "references": [
+        {
+          "title": "How AWS pricing works",
+          "url": "https://docs.aws.amazon.com/whitepapers/latest/how-aws-pricing-works/welcome.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-012",
+    "domain": "concepts",
+    "topic": "Cloud Economics",
+    "tags": [
+      "rightsizing"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "After moving to AWS, a company finds that many EC2 instances run at under 10% CPU all month.",
+    "prompt": "Which practice would reduce cost while keeping the same performance?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Add more instances behind a load balancer",
+        "correct": false,
+        "why": "Adding instances increases cost when existing ones are already underused."
+      },
+      {
+        "key": "B",
+        "text": "Rightsize to smaller instance types",
+        "correct": true,
+        "why": "Matching instance size to actual usage cuts cost without hurting performance."
+      },
+      {
+        "key": "C",
+        "text": "Buy Reserved Instances for the current sizes",
+        "correct": false,
+        "why": "Committing to oversized instances locks in waste for one or three years."
+      },
+      {
+        "key": "D",
+        "text": "Move the instances to a different Region",
+        "correct": false,
+        "why": "Changing Region does not fix oversized instances and can add data transfer costs."
+      }
+    ],
+    "explanation": {
+      "answer": "Rightsizing matches instance types and sizes to workload needs. Very low utilization is a sign that a smaller instance would do.",
+      "concept": "Rightsizing is a continuous process; tools such as AWS Compute Optimizer recommend better-fitting sizes.",
+      "examTip": "Low utilization = rightsize first, then commit to discounts.",
+      "references": [
+        {
+          "title": "What is AWS Compute Optimizer?",
+          "url": "https://docs.aws.amazon.com/compute-optimizer/latest/ug/what-is-compute-optimizer.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-013",
+    "domain": "concepts",
+    "topic": "Cloud Economics",
+    "tags": [
+      "licensing"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company already owns Microsoft Windows Server licenses and wants to use them on AWS instead of paying for license-included instances.",
+    "prompt": "What is this licensing approach called?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Pay-per-request licensing",
+        "correct": false,
+        "why": "Pay-per-request is a pricing model for some serverless services, not a way to reuse licenses."
+      },
+      {
+        "key": "B",
+        "text": "License-included pricing",
+        "correct": false,
+        "why": "License-included pricing bundles the license cost into the instance price, the opposite of what the company wants."
+      },
+      {
+        "key": "C",
+        "text": "Bring your own license (BYOL)",
+        "correct": true,
+        "why": "BYOL lets the company apply licenses it already owns, subject to the vendor's terms."
+      },
+      {
+        "key": "D",
+        "text": "Savings Plans licensing",
+        "correct": false,
+        "why": "Savings Plans are compute discounts for a usage commitment; they are not a licensing approach."
+      }
+    ],
+    "explanation": {
+      "answer": "Bring your own license (BYOL) lets customers use existing software licenses on AWS. Some licenses require Dedicated Hosts to comply with vendor rules.",
+      "concept": "Licensing is part of cloud economics: compare license-included options with BYOL when estimating cost.",
+      "examTip": "Reuse licenses you already own = BYOL (sometimes needs Dedicated Hosts).",
+      "references": [
+        {
+          "title": "AWS License Manager",
+          "url": "https://docs.aws.amazon.com/license-manager/latest/userguide/license-manager.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-014",
+    "domain": "concepts",
+    "topic": "Cloud Economics",
+    "tags": [
+      "tco",
+      "staff"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A company moves its applications to AWS. Its operations team no longer replaces failed disks or schedules hardware refreshes.",
+    "prompt": "How does this change MOST affect the company's costs?",
+    "options": [
+      {
+        "key": "A",
+        "text": "It has little effect, because hardware work was cheap",
+        "correct": false,
+        "why": "Staff time on hardware is a real cost that goes away after migration."
+      },
+      {
+        "key": "B",
+        "text": "It increases costs because AWS charges for hardware replacement",
+        "correct": false,
+        "why": "AWS does not bill customers separately for replacing failed hardware."
+      },
+      {
+        "key": "C",
+        "text": "It removes all operations staff costs permanently",
+        "correct": false,
+        "why": "Staff are still needed to run, secure and optimize workloads on AWS; their focus changes."
+      },
+      {
+        "key": "D",
+        "text": "It shifts staff time from hardware tasks to higher-value work",
+        "correct": true,
+        "why": "AWS handles physical infrastructure, so people can work on automation, security and new features."
+      }
+    ],
+    "explanation": {
+      "answer": "Moving to AWS removes hardware tasks from the customer's workload. The savings show up as staff time that can go to work that differentiates the business.",
+      "concept": "Cloud economics includes labor costs. Operational savings come from not managing physical infrastructure.",
+      "examTip": "Fewer hardware chores = staff move to higher-value work (not zero staff).",
+      "references": [
+        {
+          "title": "How AWS pricing works",
+          "url": "https://docs.aws.amazon.com/whitepapers/latest/how-aws-pricing-works/welcome.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-015",
+    "domain": "concepts",
+    "topic": "Cloud Benefits",
+    "tags": [
+      "definition"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A manager asks for a one-sentence definition of cloud computing.",
+    "prompt": "Which definition is MOST accurate?",
+    "options": [
+      {
+        "key": "A",
+        "text": "On-demand IT resources over the internet with pay-as-you-go pricing",
+        "correct": true,
+        "why": "This is how AWS defines cloud computing: on-demand delivery of IT resources with pay-as-you-go pricing."
+      },
+      {
+        "key": "B",
+        "text": "Buying software licenses that run without servers",
+        "correct": false,
+        "why": "Software licensing is not the same as delivering compute, storage and other IT resources."
+      },
+      {
+        "key": "C",
+        "text": "Running virtual machines in your own data center",
+        "correct": false,
+        "why": "That is virtualization on premises, sometimes called a private cloud, not cloud computing from a provider."
+      },
+      {
+        "key": "D",
+        "text": "Renting physical servers in a shared colocation facility",
+        "correct": false,
+        "why": "Colocation still means buying and managing your own hardware in someone else's building."
+      }
+    ],
+    "explanation": {
+      "answer": "Cloud computing is the on-demand delivery of compute, storage, databases and other IT resources over the internet with pay-as-you-go pricing.",
+      "concept": "You access technology services as needed from a provider instead of buying and maintaining data centers.",
+      "examTip": "Cloud computing = on-demand + over the internet + pay-as-you-go.",
+      "references": [
+        {
+          "title": "What is cloud computing?",
+          "url": "https://aws.amazon.com/what-is-cloud-computing/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-016",
+    "domain": "concepts",
+    "topic": "Cloud Benefits",
+    "tags": [
+      "scalability",
+      "elasticity"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "An architect explains that one application can handle growth by adding more servers over time, while another automatically shrinks to two servers every night.",
+    "prompt": "Which statement correctly distinguishes scalability from elasticity?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Scalability only shrinks resources; elasticity only grows them",
+        "correct": false,
+        "why": "Neither term is limited to one direction in that way."
+      },
+      {
+        "key": "B",
+        "text": "Scalability handles growth; elasticity matches capacity to demand both ways",
+        "correct": true,
+        "why": "Scalability is the ability to grow, and elasticity automatically adds and removes capacity as demand changes."
+      },
+      {
+        "key": "C",
+        "text": "They mean the same thing and can be used interchangeably",
+        "correct": false,
+        "why": "They are related but not identical; elasticity adds automatic scaling in both directions."
+      },
+      {
+        "key": "D",
+        "text": "Scalability is for storage; elasticity is only for compute",
+        "correct": false,
+        "why": "Both ideas apply across compute, storage and databases."
+      }
+    ],
+    "explanation": {
+      "answer": "Scalability means a system can grow to handle more load. Elasticity means capacity automatically scales out and back in as demand rises and falls.",
+      "concept": "Elastic systems avoid paying for idle resources during quiet periods.",
+      "examTip": "Grows with load = scalable. Grows and shrinks automatically = elastic.",
+      "references": [
+        {
+          "title": "What is Amazon EC2 Auto Scaling?",
+          "url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-017",
+    "domain": "concepts",
+    "topic": "Deployment Models",
+    "tags": [
+      "on-premises"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company virtualizes servers in its own data center and gives internal teams a self-service portal to request virtual machines. No public cloud is involved.",
+    "prompt": "Which deployment model does this describe?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Multi-account AWS deployment",
+        "correct": false,
+        "why": "Multi-account setups organize AWS accounts and require AWS."
+      },
+      {
+        "key": "B",
+        "text": "Hybrid cloud",
+        "correct": false,
+        "why": "Hybrid requires a connection between on-premises resources and a cloud provider."
+      },
+      {
+        "key": "C",
+        "text": "On-premises (private cloud)",
+        "correct": true,
+        "why": "Self-service virtualization inside your own data center is an on-premises, or private cloud, deployment."
+      },
+      {
+        "key": "D",
+        "text": "Cloud-native deployment",
+        "correct": false,
+        "why": "Cloud-native applications run on a cloud provider such as AWS, not in a company data center."
+      }
+    ],
+    "explanation": {
+      "answer": "Deploying resources on premises with virtualization and resource management tools is sometimes called a private cloud.",
+      "concept": "Private cloud gives some cloud-like self-service, but the company still buys and runs all the hardware.",
+      "examTip": "Own data center + virtualization + no provider = on-premises (private cloud).",
+      "references": [
+        {
+          "title": "Types of cloud computing",
+          "url": "https://docs.aws.amazon.com/whitepapers/latest/aws-overview/types-of-cloud-computing.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-018",
+    "domain": "concepts",
+    "topic": "Cloud Economics",
+    "tags": [
+      "variable-cost"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A media company's video processing costs on AWS rise in months with many new uploads and fall in quiet months.",
+    "prompt": "Which statement BEST explains this cost pattern?",
+    "options": [
+      {
+        "key": "A",
+        "text": "The company is paying for peak capacity all year",
+        "correct": false,
+        "why": "Paying for peak all year would produce flat costs, not costs that follow usage."
+      },
+      {
+        "key": "B",
+        "text": "The company signed a three-year Reserved Instance term",
+        "correct": false,
+        "why": "Reserved Instances produce steady committed costs, not costs that move with uploads."
+      },
+      {
+        "key": "C",
+        "text": "AWS changes its prices every month based on demand",
+        "correct": false,
+        "why": "AWS does not reprice services monthly based on a single customer's demand."
+      },
+      {
+        "key": "D",
+        "text": "Costs are variable and follow actual usage",
+        "correct": true,
+        "why": "With pay-as-you-go pricing, more processing in busy months means higher costs, and less in quiet months means lower costs."
+      }
+    ],
+    "explanation": {
+      "answer": "Variable expense means the bill tracks consumption. Busy months cost more and quiet months cost less.",
+      "concept": "Variable costs remove the need to pay for capacity that sits idle in slow periods.",
+      "examTip": "Bill rises and falls with usage = variable expense.",
+      "references": [
+        {
+          "title": "How AWS pricing works",
+          "url": "https://docs.aws.amazon.com/whitepapers/latest/how-aws-pricing-works/welcome.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-019",
+    "domain": "concepts",
+    "topic": "Cloud Economics",
+    "tags": [
+      "tco",
+      "migration-evaluator"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "Before migrating 400 servers, a company wants a data-driven business case that estimates its AWS costs from the actual utilization of its on-premises servers.",
+    "prompt": "Which AWS offering is designed for this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Migration Evaluator",
+        "correct": true,
+        "why": "Migration Evaluator collects on-premises utilization data and produces a business case with projected AWS costs."
+      },
+      {
+        "key": "B",
+        "text": "AWS Application Migration Service",
+        "correct": false,
+        "why": "This service performs the actual rehost migration; it does not build the business case."
+      },
+      {
+        "key": "C",
+        "text": "AWS Trusted Advisor",
+        "correct": false,
+        "why": "Trusted Advisor checks resources already running on AWS, not on-premises servers."
+      },
+      {
+        "key": "D",
+        "text": "Amazon Inspector",
+        "correct": false,
+        "why": "Inspector scans workloads for vulnerabilities; it does not estimate migration costs."
+      }
+    ],
+    "explanation": {
+      "answer": "Migration Evaluator builds a data-driven business case for migrating to AWS by analyzing on-premises resource usage.",
+      "concept": "Business cases for migration compare current costs with projected AWS costs based on real utilization, not guesses.",
+      "examTip": "Business case before migrating = Migration Evaluator. Actually move servers = Application Migration Service.",
+      "references": [
+        {
+          "title": "Migration Evaluator",
+          "url": "https://aws.amazon.com/migration-evaluator/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-020",
+    "domain": "concepts",
+    "topic": "Cloud Benefits",
+    "tags": [
+      "capacity"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "Before moving to AWS, a company often bought too many servers for a new product, or too few and had outages at launch.",
+    "prompt": "Which cloud advantage helps the MOST with this problem?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Go global in minutes",
+        "correct": false,
+        "why": "Global reach helps with latency for distant users, not with estimating capacity."
+      },
+      {
+        "key": "B",
+        "text": "Stop guessing capacity",
+        "correct": true,
+        "why": "You can start small and scale up or down as real demand appears, so you don't need to guess in advance."
+      },
+      {
+        "key": "C",
+        "text": "Benefit from economies of scale",
+        "correct": false,
+        "why": "Economies of scale lower prices but do not solve over- or under-buying."
+      },
+      {
+        "key": "D",
+        "text": "Trade variable expense for capital expense",
+        "correct": false,
+        "why": "This reverses the real advantage, which trades capital expense for variable expense."
+      }
+    ],
+    "explanation": {
+      "answer": "With the cloud you can access as much or as little capacity as you need and adjust within minutes, so capacity guessing goes away.",
+      "concept": "Over-provisioning wastes money; under-provisioning hurts customers. The cloud removes the need to choose in advance.",
+      "examTip": "Bought too many or too few servers = stop guessing capacity.",
+      "references": [
+        {
+          "title": "Six advantages of cloud computing",
+          "url": "https://docs.aws.amazon.com/whitepapers/latest/aws-overview/six-advantages-of-cloud-computing.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-021",
+    "domain": "concepts",
+    "topic": "Cloud Benefits",
+    "tags": [
+      "reliability"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company wants backups and replicas of its data stored far apart so a natural disaster in one city cannot destroy every copy.",
+    "prompt": "Which feature of AWS global infrastructure supports this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Larger instance types with more memory",
+        "correct": false,
+        "why": "Instance size has nothing to do with protecting data from disasters."
+      },
+      {
+        "key": "B",
+        "text": "A single Availability Zone with extra volumes",
+        "correct": false,
+        "why": "Everything in one AZ can be lost in the same event."
+      },
+      {
+        "key": "C",
+        "text": "Multiple AWS Regions in separate geographies",
+        "correct": true,
+        "why": "Regions are geographically separate, so copies in two Regions survive a regional disaster."
+      },
+      {
+        "key": "D",
+        "text": "Edge locations that cache content",
+        "correct": false,
+        "why": "Edge locations cache content for delivery; they are not where you keep disaster recovery copies."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Regions are separate geographic areas. Replicating data to a second Region protects against disasters that affect a whole area.",
+      "concept": "Use multiple AZs for high availability, and multiple Regions for disaster recovery against large-scale events.",
+      "examTip": "Protect against a city-wide disaster = copies in another Region.",
+      "references": [
+        {
+          "title": "Regions and Availability Zones",
+          "url": "https://aws.amazon.com/about-aws/global-infrastructure/regions_az/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-022",
+    "domain": "concepts",
+    "topic": "Cloud Economics",
+    "tags": [
+      "fixed-vs-variable"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A CFO asks which cost would go away after moving every workload from the company's own data center to AWS.",
+    "prompt": "Which cost is eliminated?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Paying for data transfer to the internet",
+        "correct": false,
+        "why": "Data transfer out to the internet is still charged on AWS."
+      },
+      {
+        "key": "B",
+        "text": "Paying staff to manage applications",
+        "correct": false,
+        "why": "Staff still manage applications, data and security configurations on AWS."
+      },
+      {
+        "key": "C",
+        "text": "Paying for compute capacity",
+        "correct": false,
+        "why": "The company still pays for compute on AWS, though on a usage basis."
+      },
+      {
+        "key": "D",
+        "text": "Buying and refreshing physical servers",
+        "correct": true,
+        "why": "AWS owns and refreshes the physical hardware, so the company no longer buys servers."
+      }
+    ],
+    "explanation": {
+      "answer": "After migrating, the company stops buying, maintaining and refreshing physical hardware, because AWS owns the infrastructure.",
+      "concept": "Moving to AWS changes costs from hardware ownership to usage-based service charges.",
+      "examTip": "Gone after migration: hardware purchases and refreshes. Still there: usage charges and your team's work.",
+      "references": [
+        {
+          "title": "How AWS pricing works",
+          "url": "https://docs.aws.amazon.com/whitepapers/latest/how-aws-pricing-works/welcome.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-023",
+    "domain": "concepts",
+    "topic": "Cloud Benefits",
+    "tags": [
+      "innovation"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A company wants to try a machine learning idea. If the idea fails, it wants to stop paying immediately.",
+    "prompt": "Which characteristic of the cloud supports this kind of experimentation?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Low cost of failure with on-demand resources",
+        "correct": true,
+        "why": "Resources can be shut down at any time, so failed experiments stop costing money right away."
+      },
+      {
+        "key": "B",
+        "text": "Fixed annual capacity reservations",
+        "correct": false,
+        "why": "Reservations charge for capacity whether or not the experiment continues."
+      },
+      {
+        "key": "C",
+        "text": "Owning hardware that can be resold",
+        "correct": false,
+        "why": "Reselling hardware is slow and recovers only part of the cost."
+      },
+      {
+        "key": "D",
+        "text": "Long-term commitments with discounts",
+        "correct": false,
+        "why": "Commitments reduce prices but keep you paying after an experiment ends."
+      }
+    ],
+    "explanation": {
+      "answer": "On-demand resources make failure cheap: you launch what you need, test the idea and shut it down if it doesn't work.",
+      "concept": "Agility includes a lower cost of experimentation, which encourages innovation.",
+      "examTip": "Try fast, fail cheap, stop paying = on-demand agility.",
+      "references": [
+        {
+          "title": "What is cloud computing?",
+          "url": "https://aws.amazon.com/what-is-cloud-computing/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-024",
+    "domain": "concepts",
+    "topic": "Cloud Economics",
+    "tags": [
+      "economies-of-scale",
+      "distractors"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A student says: \"AWS is cheaper only because customers share physical servers with no isolation.\"",
+    "prompt": "Which response is MOST accurate?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Correct; that is why AWS cannot be used for regulated data",
+        "correct": false,
+        "why": "AWS supports many regulated workloads under compliance programs such as PCI DSS and HIPAA."
+      },
+      {
+        "key": "B",
+        "text": "Incorrect; lower costs come mainly from economies of scale",
+        "correct": true,
+        "why": "AWS's scale lowers per-unit costs, and customer workloads stay isolated from each other."
+      },
+      {
+        "key": "C",
+        "text": "Incorrect; AWS is cheaper only because it has no staff costs",
+        "correct": false,
+        "why": "AWS has large staff costs; scale spreads them across many customers."
+      },
+      {
+        "key": "D",
+        "text": "Correct; all AWS resources run on shared hardware with no isolation",
+        "correct": false,
+        "why": "AWS isolates customers through virtualization and offers dedicated options when needed."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS lowers prices through economies of scale. Customer workloads are logically isolated, and Dedicated Instances or Dedicated Hosts provide physical isolation when required.",
+      "concept": "Shared infrastructure with strong isolation is how cloud providers achieve scale securely.",
+      "examTip": "Cheaper because of scale, not because of weak isolation.",
+      "references": [
+        {
+          "title": "Six advantages of cloud computing",
+          "url": "https://docs.aws.amazon.com/whitepapers/latest/aws-overview/six-advantages-of-cloud-computing.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-025",
+    "domain": "concepts",
+    "topic": "Cloud Benefits",
+    "tags": [
+      "multi-select"
+    ],
+    "difficulty": "medium",
+    "type": "multi",
+    "stem": "A company is building the business case for moving to AWS.",
+    "prompt": "Which TWO are benefits of the AWS Cloud? (Select TWO.)",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS manages your data classification for you",
+        "correct": false,
+        "why": "Classifying and protecting your data is your responsibility under the shared responsibility model."
+      },
+      {
+        "key": "B",
+        "text": "Deploy worldwide in minutes",
+        "correct": true,
+        "why": "AWS Regions around the world let you reach new markets quickly."
+      },
+      {
+        "key": "C",
+        "text": "No need to secure your applications",
+        "correct": false,
+        "why": "Customers remain responsible for securing their applications and data."
+      },
+      {
+        "key": "D",
+        "text": "Software licenses are included at no extra cost",
+        "correct": false,
+        "why": "Many licenses cost extra or require bring your own license."
+      },
+      {
+        "key": "E",
+        "text": "Trade fixed upfront costs for variable costs",
+        "correct": true,
+        "why": "Paying for what you use instead of buying hardware upfront is a core cloud benefit."
+      }
+    ],
+    "explanation": {
+      "answer": "Two of the six advantages of cloud computing are trading capital expense for variable expense, and going global in minutes.",
+      "concept": "The six advantages: variable expense, economies of scale, stop guessing capacity, speed and agility, stop running data centers, go global in minutes.",
+      "examTip": "Memorize the six advantages; watch for distractors that shift your security duties to AWS.",
+      "references": [
+        {
+          "title": "Six advantages of cloud computing",
+          "url": "https://docs.aws.amazon.com/whitepapers/latest/aws-overview/six-advantages-of-cloud-computing.html"
+        }
+      ]
+    },
+    "selectCount": 2
+  }
+]

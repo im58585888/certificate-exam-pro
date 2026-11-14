@@ -1,0 +1,1234 @@
+[
+  {
+    "id": "clf-sec-051",
+    "domain": "compliance",
+    "topic": "Threat Detection",
+    "tags": [
+      "guardduty"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A company wants a managed service that continuously monitors its AWS accounts for malicious activity, such as unusual API calls or communication with known bad IP addresses.",
+    "prompt": "Which service should it enable?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Macie",
+        "correct": false,
+        "why": "Macie discovers sensitive data in Amazon S3."
+      },
+      {
+        "key": "B",
+        "text": "AWS Config",
+        "correct": false,
+        "why": "Config tracks resource configuration changes."
+      },
+      {
+        "key": "C",
+        "text": "Amazon GuardDuty",
+        "correct": true,
+        "why": "GuardDuty is a threat detection service that analyzes logs and activity for malicious behavior."
+      },
+      {
+        "key": "D",
+        "text": "Amazon Inspector",
+        "correct": false,
+        "why": "Inspector scans workloads for software vulnerabilities and network exposure."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon GuardDuty continuously monitors accounts and workloads using sources such as CloudTrail events, VPC Flow Logs and DNS logs.",
+      "concept": "It uses threat intelligence and machine learning, with no agents to deploy for core monitoring.",
+      "examTip": "Malicious activity / threat detection = GuardDuty.",
+      "references": [
+        {
+          "title": "What is Amazon GuardDuty?",
+          "url": "https://docs.aws.amazon.com/guardduty/latest/ug/what-is-guardduty.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-052",
+    "domain": "compliance",
+    "topic": "Threat Detection",
+    "tags": [
+      "inspector"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A security team wants to automatically scan its EC2 instances, container images and Lambda functions for known software vulnerabilities.",
+    "prompt": "Which service should it use?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Shield",
+        "correct": false,
+        "why": "Shield protects against DDoS attacks, so it doesn't meet this requirement."
+      },
+      {
+        "key": "B",
+        "text": "AWS Artifact",
+        "correct": false,
+        "why": "Artifact provides compliance reports, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "C",
+        "text": "Amazon GuardDuty",
+        "correct": false,
+        "why": "GuardDuty detects threats from activity, not software vulnerabilities in packages."
+      },
+      {
+        "key": "D",
+        "text": "Amazon Inspector",
+        "correct": true,
+        "why": "Inspector automatically scans workloads for software vulnerabilities and unintended network exposure."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Inspector continuously scans EC2 instances, container images in Amazon ECR and Lambda functions for vulnerabilities (CVEs).",
+      "concept": "Findings include a risk score to help prioritize fixes.",
+      "examTip": "Vulnerability scanning (CVEs) = Inspector.",
+      "references": [
+        {
+          "title": "What is Amazon Inspector?",
+          "url": "https://docs.aws.amazon.com/inspector/latest/user/what-is-inspector.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-053",
+    "domain": "compliance",
+    "topic": "Threat Detection",
+    "tags": [
+      "macie"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A company needs to find which of its S3 buckets contain personally identifiable information (PII) such as passport numbers.",
+    "prompt": "Which service is designed for this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Macie",
+        "correct": true,
+        "why": "Macie uses machine learning and pattern matching to discover sensitive data in Amazon S3."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Inspector",
+        "correct": false,
+        "why": "Inspector looks for software vulnerabilities, not PII."
+      },
+      {
+        "key": "C",
+        "text": "Amazon Detective",
+        "correct": false,
+        "why": "Detective investigates security findings."
+      },
+      {
+        "key": "D",
+        "text": "AWS Shield Advanced",
+        "correct": false,
+        "why": "Shield protects against DDoS attacks, so it doesn't solve the problem described here."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Macie discovers and protects sensitive data, such as PII, in Amazon S3.",
+      "concept": "Macie also evaluates bucket security, such as public access and encryption.",
+      "examTip": "Find sensitive data in S3 = Macie.",
+      "references": [
+        {
+          "title": "What is Amazon Macie?",
+          "url": "https://docs.aws.amazon.com/macie/latest/user/what-is-macie.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-054",
+    "domain": "compliance",
+    "topic": "Threat Detection",
+    "tags": [
+      "security-hub"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company uses GuardDuty, Inspector and Macie across many accounts and wants one place to see and prioritize all security findings and check against best-practice standards.",
+    "prompt": "Which service should it use?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon CloudWatch Logs",
+        "correct": false,
+        "why": "CloudWatch Logs stores logs; it doesn't prioritize security findings."
+      },
+      {
+        "key": "B",
+        "text": "AWS Security Hub",
+        "correct": true,
+        "why": "Security Hub aggregates findings and runs automated checks against security standards."
+      },
+      {
+        "key": "C",
+        "text": "AWS Trusted Advisor",
+        "correct": false,
+        "why": "Trusted Advisor gives recommendations but doesn't aggregate findings from these services."
+      },
+      {
+        "key": "D",
+        "text": "AWS Organizations",
+        "correct": false,
+        "why": "Organizations manages accounts, not findings."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Security Hub provides a comprehensive view of security alerts and posture, aggregating findings from AWS and partner services.",
+      "concept": "It runs checks against standards such as the AWS Foundational Security Best Practices and CIS benchmarks.",
+      "examTip": "Single pane for security findings + compliance checks = Security Hub.",
+      "references": [
+        {
+          "title": "What is AWS Security Hub?",
+          "url": "https://docs.aws.amazon.com/securityhub/latest/userguide/what-is-securityhub.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-055",
+    "domain": "compliance",
+    "topic": "Threat Detection",
+    "tags": [
+      "detective"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "After GuardDuty reports suspicious activity, an analyst wants to investigate the root cause by viewing related activity and resource behavior over time.",
+    "prompt": "Which service helps with this investigation?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Firewall Manager",
+        "correct": false,
+        "why": "Firewall Manager centrally manages firewall rules."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Macie",
+        "correct": false,
+        "why": "Macie finds sensitive data in S3, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "C",
+        "text": "Amazon Detective",
+        "correct": true,
+        "why": "Detective analyzes and visualizes security data to investigate the root cause of findings."
+      },
+      {
+        "key": "D",
+        "text": "AWS Shield",
+        "correct": false,
+        "why": "Shield protects against DDoS attacks, which isn't what this scenario needs."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Detective collects log data and uses graph analysis to help you investigate security findings and identify root causes.",
+      "concept": "GuardDuty detects; Detective investigates.",
+      "examTip": "Investigate root cause of findings = Detective.",
+      "references": [
+        {
+          "title": "What is Amazon Detective?",
+          "url": "https://docs.aws.amazon.com/detective/latest/userguide/what-is-detective.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-056",
+    "domain": "compliance",
+    "topic": "Network Security",
+    "tags": [
+      "shield"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A company's website was hit by a distributed denial of service (DDoS) attack.",
+    "prompt": "Which AWS service is designed to protect against DDoS attacks?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Inspector",
+        "correct": false,
+        "why": "Inspector scans for vulnerabilities, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Macie",
+        "correct": false,
+        "why": "Macie discovers sensitive data, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "C",
+        "text": "AWS Secrets Manager",
+        "correct": false,
+        "why": "Secrets Manager stores credentials, which isn't what this scenario needs."
+      },
+      {
+        "key": "D",
+        "text": "AWS Shield",
+        "correct": true,
+        "why": "Shield is a managed DDoS protection service."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Shield Standard is automatically included at no extra cost. Shield Advanced adds enhanced protections, response team access and cost protection.",
+      "concept": "Shield works with Amazon CloudFront, Route 53 and Elastic Load Balancing.",
+      "examTip": "DDoS = Shield (Standard free, Advanced paid).",
+      "references": [
+        {
+          "title": "AWS Shield",
+          "url": "https://docs.aws.amazon.com/waf/latest/developerguide/shield-chapter.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-057",
+    "domain": "compliance",
+    "topic": "Network Security",
+    "tags": [
+      "waf"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company wants to block SQL injection and cross-site scripting attempts against its web application behind an Application Load Balancer.",
+    "prompt": "Which service should it use?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS WAF",
+        "correct": true,
+        "why": "AWS WAF inspects HTTP(S) requests and blocks common web exploits like SQL injection."
+      },
+      {
+        "key": "B",
+        "text": "Network ACLs",
+        "correct": false,
+        "why": "Network ACLs filter by IP and port at the subnet level."
+      },
+      {
+        "key": "C",
+        "text": "Security groups",
+        "correct": false,
+        "why": "Security groups filter by IP, port and protocol, not web request content."
+      },
+      {
+        "key": "D",
+        "text": "AWS Shield Standard",
+        "correct": false,
+        "why": "Shield Standard protects against network-layer DDoS, not application exploits like SQL injection."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS WAF is a web application firewall that filters HTTP(S) requests based on rules, including managed rules for common attacks.",
+      "concept": "WAF can be attached to CloudFront, Application Load Balancer, API Gateway and other resources.",
+      "examTip": "Block SQL injection / XSS / bad bots = AWS WAF.",
+      "references": [
+        {
+          "title": "What is AWS WAF?",
+          "url": "https://docs.aws.amazon.com/waf/latest/developerguide/what-is-aws-waf.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-058",
+    "domain": "compliance",
+    "topic": "Network Security",
+    "tags": [
+      "sg-vs-nacl"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A solutions architect explains the difference between security groups and network ACLs.",
+    "prompt": "Which statement is correct?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Security groups apply to subnets; network ACLs apply to instances",
+        "correct": false,
+        "why": "It's the reverse: security groups apply to instances, NACLs to subnets."
+      },
+      {
+        "key": "B",
+        "text": "Security groups are stateful; network ACLs are stateless",
+        "correct": true,
+        "why": "Return traffic is automatically allowed by security groups, but NACLs need explicit rules both ways."
+      },
+      {
+        "key": "C",
+        "text": "Network ACLs are attached to IAM users",
+        "correct": false,
+        "why": "NACLs attach to subnets, not IAM users, so it doesn't meet this requirement."
+      },
+      {
+        "key": "D",
+        "text": "Both support only allow rules",
+        "correct": false,
+        "why": "Network ACLs support allow and deny rules."
+      }
+    ],
+    "explanation": {
+      "answer": "Security groups act at the instance (ENI) level, are stateful and support allow rules only. Network ACLs act at the subnet level, are stateless and support allow and deny rules.",
+      "concept": "Use both for defense in depth.",
+      "examTip": "SG = instance, stateful, allow-only. NACL = subnet, stateless, allow + deny.",
+      "references": [
+        {
+          "title": "Control subnet traffic with network ACLs",
+          "url": "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-network-acls.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-059",
+    "domain": "compliance",
+    "topic": "Network Security",
+    "tags": [
+      "nacl-deny"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company needs to block all traffic from one specific IP address range to every instance in a subnet.",
+    "prompt": "Which feature can do this directly?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Budgets",
+        "correct": false,
+        "why": "Budgets track costs, which isn't what this scenario needs."
+      },
+      {
+        "key": "B",
+        "text": "An IAM policy",
+        "correct": false,
+        "why": "IAM controls API access, not network traffic."
+      },
+      {
+        "key": "C",
+        "text": "A network ACL deny rule",
+        "correct": true,
+        "why": "Network ACLs support explicit deny rules at the subnet level."
+      },
+      {
+        "key": "D",
+        "text": "A security group deny rule",
+        "correct": false,
+        "why": "Security groups support only allow rules."
+      }
+    ],
+    "explanation": {
+      "answer": "Network ACLs can explicitly deny traffic from specific IP ranges for an entire subnet.",
+      "concept": "AWS WAF can also block IPs for web traffic at CloudFront or load balancers.",
+      "examTip": "Explicitly block an IP range at subnet level = NACL deny rule.",
+      "references": [
+        {
+          "title": "Control subnet traffic with network ACLs",
+          "url": "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-network-acls.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-060",
+    "domain": "compliance",
+    "topic": "Network Security",
+    "tags": [
+      "firewall-manager"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A company with 40 accounts wants to centrally configure AWS WAF rules and security group policies across all of them and automatically apply them to new accounts.",
+    "prompt": "Which service should it use?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Control Tower alone",
+        "correct": false,
+        "why": "Control Tower governs accounts, but Firewall Manager manages firewall policies."
+      },
+      {
+        "key": "B",
+        "text": "AWS Network Firewall",
+        "correct": false,
+        "why": "Network Firewall filters VPC traffic, but it doesn't manage WAF rules across accounts."
+      },
+      {
+        "key": "C",
+        "text": "Amazon GuardDuty",
+        "correct": false,
+        "why": "GuardDuty detects threats; it doesn't manage firewall rules."
+      },
+      {
+        "key": "D",
+        "text": "AWS Firewall Manager",
+        "correct": true,
+        "why": "Firewall Manager centrally configures and manages firewall rules across accounts in AWS Organizations."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Firewall Manager simplifies administration of AWS WAF, Shield Advanced, security groups and Network Firewall across accounts.",
+      "concept": "It requires AWS Organizations and applies policies to new resources automatically.",
+      "examTip": "Central firewall rules across many accounts = Firewall Manager.",
+      "references": [
+        {
+          "title": "AWS Firewall Manager",
+          "url": "https://docs.aws.amazon.com/waf/latest/developerguide/fms-chapter.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-061",
+    "domain": "compliance",
+    "topic": "Network Security",
+    "tags": [
+      "network-firewall"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A company wants stateful inspection and intrusion prevention for all traffic entering and leaving its VPCs, including domain-name filtering.",
+    "prompt": "Which service fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Network Firewall",
+        "correct": true,
+        "why": "Network Firewall provides stateful filtering and intrusion prevention for VPC traffic."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Inspector",
+        "correct": false,
+        "why": "Inspector scans for vulnerabilities, not live traffic."
+      },
+      {
+        "key": "C",
+        "text": "AWS WAF",
+        "correct": false,
+        "why": "WAF filters HTTP(S) requests for web apps, not all VPC traffic."
+      },
+      {
+        "key": "D",
+        "text": "Security groups",
+        "correct": false,
+        "why": "Security groups filter by port and IP; they don't do intrusion prevention or domain filtering."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Network Firewall is a managed firewall for VPCs with stateful rules, intrusion prevention and domain filtering.",
+      "concept": "Use it for network-level protection; use WAF for application-level web protection.",
+      "examTip": "VPC-wide traffic inspection / IPS = Network Firewall.",
+      "references": [
+        {
+          "title": "What is AWS Network Firewall?",
+          "url": "https://docs.aws.amazon.com/network-firewall/latest/developerguide/what-is-aws-network-firewall.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-062",
+    "domain": "compliance",
+    "topic": "Network Security",
+    "tags": [
+      "shield-standard-cost"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A small company asks whether it must pay extra for basic DDoS protection on AWS.",
+    "prompt": "Which statement is correct?",
+    "options": [
+      {
+        "key": "A",
+        "text": "DDoS protection is not available on AWS",
+        "correct": false,
+        "why": "AWS provides Shield Standard and Shield Advanced."
+      },
+      {
+        "key": "B",
+        "text": "AWS Shield Standard is included automatically at no extra charge",
+        "correct": true,
+        "why": "Every AWS customer gets Shield Standard by default."
+      },
+      {
+        "key": "C",
+        "text": "Basic DDoS protection requires Business Support",
+        "correct": false,
+        "why": "Shield Standard doesn't depend on a support plan."
+      },
+      {
+        "key": "D",
+        "text": "All DDoS protection requires Shield Advanced",
+        "correct": false,
+        "why": "Shield Advanced is optional and adds more protection."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Shield Standard defends against common network and transport layer DDoS attacks for all customers at no extra cost.",
+      "concept": "Shield Advanced adds 24/7 access to the Shield Response Team, enhanced detection and DDoS cost protection.",
+      "examTip": "Shield Standard = free, automatic. Shield Advanced = paid extras.",
+      "references": [
+        {
+          "title": "AWS Shield",
+          "url": "https://docs.aws.amazon.com/waf/latest/developerguide/shield-chapter.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-063",
+    "domain": "compliance",
+    "topic": "Network Security",
+    "tags": [
+      "shield-advanced"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A large e-commerce company wants 24/7 access to AWS DDoS experts and protection from scaling charges caused by DDoS attacks.",
+    "prompt": "Which offering provides this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Shield Standard",
+        "correct": false,
+        "why": "Shield Standard doesn't include a response team or cost protection."
+      },
+      {
+        "key": "B",
+        "text": "Amazon GuardDuty",
+        "correct": false,
+        "why": "GuardDuty detects threats but isn't a DDoS service."
+      },
+      {
+        "key": "C",
+        "text": "AWS Shield Advanced",
+        "correct": true,
+        "why": "Shield Advanced includes access to the Shield Response Team and DDoS cost protection."
+      },
+      {
+        "key": "D",
+        "text": "AWS WAF alone",
+        "correct": false,
+        "why": "WAF filters web requests but doesn't include a response team or cost protection."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Shield Advanced provides enhanced DDoS protections, 24/7 access to the Shield Response Team (SRT), and cost protection for scaling during attacks.",
+      "concept": "It also includes AWS WAF at no extra cost for protected resources.",
+      "examTip": "DDoS experts + cost protection = Shield Advanced.",
+      "references": [
+        {
+          "title": "AWS Shield Advanced",
+          "url": "https://docs.aws.amazon.com/waf/latest/developerguide/ddos-advanced-summary.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-064",
+    "domain": "compliance",
+    "topic": "Threat Detection",
+    "tags": [
+      "config-vs-guardduty"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A team wants to know whether any S3 bucket in its account is configured without encryption, and to be alerted if that changes.",
+    "prompt": "Which service is the BEST fit?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Shield",
+        "correct": false,
+        "why": "Shield protects against DDoS attacks, so it doesn't meet this requirement."
+      },
+      {
+        "key": "B",
+        "text": "Amazon GuardDuty",
+        "correct": false,
+        "why": "GuardDuty detects malicious activity, not configuration compliance."
+      },
+      {
+        "key": "C",
+        "text": "Amazon Detective",
+        "correct": false,
+        "why": "Detective investigates findings, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "D",
+        "text": "AWS Config",
+        "correct": true,
+        "why": "Config evaluates resource configurations against rules and tracks changes over time."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Config records resource configurations and evaluates them against rules, such as requiring encryption on S3 buckets.",
+      "concept": "Config rules can be managed (prebuilt) or custom, and can trigger remediation.",
+      "examTip": "Is my configuration compliant? = AWS Config.",
+      "references": [
+        {
+          "title": "What is AWS Config?",
+          "url": "https://docs.aws.amazon.com/config/latest/developerguide/WhatIsConfig.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-065",
+    "domain": "compliance",
+    "topic": "Threat Detection",
+    "tags": [
+      "multi-select"
+    ],
+    "difficulty": "hard",
+    "type": "multi",
+    "stem": "A security lead is mapping AWS services to their purpose.",
+    "prompt": "Which TWO pairings are correct? (Select TWO.)",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon GuardDuty – detecting malicious account activity",
+        "correct": true,
+        "why": "GuardDuty is a threat detection service."
+      },
+      {
+        "key": "B",
+        "text": "AWS Shield – discovering PII in S3",
+        "correct": false,
+        "why": "Shield protects against DDoS; Macie discovers PII."
+      },
+      {
+        "key": "C",
+        "text": "Amazon Inspector – finding software vulnerabilities",
+        "correct": true,
+        "why": "Inspector scans workloads for vulnerabilities."
+      },
+      {
+        "key": "D",
+        "text": "Amazon Detective – managing firewall rules",
+        "correct": false,
+        "why": "Detective investigates findings; Firewall Manager manages rules."
+      },
+      {
+        "key": "E",
+        "text": "Amazon Macie – blocking DDoS attacks",
+        "correct": false,
+        "why": "Macie discovers sensitive data; Shield handles DDoS."
+      }
+    ],
+    "explanation": {
+      "answer": "Inspector = vulnerabilities. GuardDuty = threat detection. Macie = sensitive data. Shield = DDoS. Detective = investigation.",
+      "concept": "These security services are often confused on the exam, so learn one keyword each.",
+      "examTip": "Inspector=CVEs, GuardDuty=threats, Macie=PII, Shield=DDoS, Detective=investigate.",
+      "references": [
+        {
+          "title": "What is Amazon GuardDuty?",
+          "url": "https://docs.aws.amazon.com/guardduty/latest/ug/what-is-guardduty.html"
+        }
+      ]
+    },
+    "selectCount": 2
+  },
+  {
+    "id": "clf-sec-066",
+    "domain": "compliance",
+    "topic": "Network Security",
+    "tags": [
+      "private-subnet"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company wants its database servers to have no direct route from the internet.",
+    "prompt": "Where should the databases run?",
+    "options": [
+      {
+        "key": "A",
+        "text": "In a private subnet without an internet gateway route",
+        "correct": true,
+        "why": "Private subnets have no direct route from the internet."
+      },
+      {
+        "key": "B",
+        "text": "In an edge location",
+        "correct": false,
+        "why": "Edge locations host CloudFront caches, not databases."
+      },
+      {
+        "key": "C",
+        "text": "In a public subnet with a public IP address",
+        "correct": false,
+        "why": "Public subnets with public IPs can be reached from the internet if rules allow."
+      },
+      {
+        "key": "D",
+        "text": "On the same instance as the web server, in a public subnet",
+        "correct": false,
+        "why": "This exposes the database to more risk, which isn't what this scenario needs."
+      }
+    ],
+    "explanation": {
+      "answer": "Private subnets don't have a route to an internet gateway, so resources in them aren't directly reachable from the internet.",
+      "concept": "Typical design: web tier in public subnets (or behind a load balancer), databases in private subnets.",
+      "examTip": "No direct internet access = private subnet.",
+      "references": [
+        {
+          "title": "Subnets for your VPC",
+          "url": "https://docs.aws.amazon.com/vpc/latest/userguide/configure-subnets.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-067",
+    "domain": "compliance",
+    "topic": "Threat Detection",
+    "tags": [
+      "trusted-advisor-security"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A company wants quick recommendations that flag open security groups, missing MFA on the root user and public S3 buckets.",
+    "prompt": "Which service provides these checks?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Inspector",
+        "correct": false,
+        "why": "Inspector scans for software vulnerabilities, not account-level best-practice checks like root MFA."
+      },
+      {
+        "key": "B",
+        "text": "AWS Trusted Advisor",
+        "correct": true,
+        "why": "Trusted Advisor includes security checks for common risks like open ports and root MFA."
+      },
+      {
+        "key": "C",
+        "text": "AWS Pricing Calculator",
+        "correct": false,
+        "why": "The Pricing Calculator estimates costs, so it doesn't meet this requirement."
+      },
+      {
+        "key": "D",
+        "text": "AWS Config managed rules",
+        "correct": false,
+        "why": "Config can check settings with rules, but these specific best-practice checks are a Trusted Advisor feature."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Trusted Advisor inspects your environment and recommends improvements across cost, performance, security, fault tolerance, service limits and operational excellence.",
+      "concept": "All customers get core security checks; Business Support and higher unlock the full set.",
+      "examTip": "Quick best-practice checks (incl. security) = Trusted Advisor.",
+      "references": [
+        {
+          "title": "AWS Trusted Advisor",
+          "url": "https://docs.aws.amazon.com/awssupport/latest/user/trusted-advisor.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-068",
+    "domain": "compliance",
+    "topic": "Network Security",
+    "tags": [
+      "vpn-encryption"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company connects its office to its VPC and must encrypt traffic over the internet.",
+    "prompt": "Which option provides an encrypted connection quickly?",
+    "options": [
+      {
+        "key": "A",
+        "text": "An internet gateway with open security groups",
+        "correct": false,
+        "why": "This exposes resources rather than creating a private encrypted link."
+      },
+      {
+        "key": "B",
+        "text": "Amazon CloudFront",
+        "correct": false,
+        "why": "CloudFront delivers content to users; it doesn't connect offices to VPCs."
+      },
+      {
+        "key": "C",
+        "text": "AWS Site-to-Site VPN",
+        "correct": true,
+        "why": "Site-to-Site VPN creates encrypted IPsec tunnels over the internet."
+      },
+      {
+        "key": "D",
+        "text": "AWS Direct Connect without additional encryption",
+        "correct": false,
+        "why": "Direct Connect is private but not encrypted by default."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Site-to-Site VPN creates encrypted IPsec connections between your network and your VPC over the internet.",
+      "concept": "VPNs are quick to set up; Direct Connect provides dedicated bandwidth and can be combined with VPN for encryption.",
+      "examTip": "Encrypted office-to-VPC over internet = Site-to-Site VPN.",
+      "references": [
+        {
+          "title": "What is AWS Site-to-Site VPN?",
+          "url": "https://docs.aws.amazon.com/vpn/latest/s2svpn/VPC_VPN.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-069",
+    "domain": "compliance",
+    "topic": "Threat Detection",
+    "tags": [
+      "guardduty-sources"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A manager asks what data Amazon GuardDuty analyzes to find threats.",
+    "prompt": "Which answer is MOST accurate?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Only email traffic to the company",
+        "correct": false,
+        "why": "GuardDuty doesn't analyze email traffic."
+      },
+      {
+        "key": "B",
+        "text": "Only the contents of customer databases",
+        "correct": false,
+        "why": "GuardDuty doesn't read database contents for its core detection."
+      },
+      {
+        "key": "C",
+        "text": "Only antivirus logs that customers upload",
+        "correct": false,
+        "why": "Customers don't need to upload antivirus logs."
+      },
+      {
+        "key": "D",
+        "text": "Sources such as CloudTrail events, VPC Flow Logs and DNS logs",
+        "correct": true,
+        "why": "GuardDuty analyzes these sources, plus optional protections for S3, EKS, RDS and more."
+      }
+    ],
+    "explanation": {
+      "answer": "GuardDuty analyzes AWS CloudTrail management events, VPC Flow Logs and DNS query logs, with optional protection plans for other data sources.",
+      "concept": "You don't need to enable these logs separately for GuardDuty's foundational detection.",
+      "examTip": "GuardDuty reads CloudTrail + VPC Flow Logs + DNS logs.",
+      "references": [
+        {
+          "title": "What is Amazon GuardDuty?",
+          "url": "https://docs.aws.amazon.com/guardduty/latest/ug/what-is-guardduty.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-070",
+    "domain": "compliance",
+    "topic": "Network Security",
+    "tags": [
+      "security-group-default"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A new security group is created with no inbound rules.",
+    "prompt": "What inbound traffic is allowed to instances using it?",
+    "options": [
+      {
+        "key": "A",
+        "text": "No inbound traffic",
+        "correct": true,
+        "why": "Security groups deny inbound traffic unless a rule allows it."
+      },
+      {
+        "key": "B",
+        "text": "Only HTTP and HTTPS traffic",
+        "correct": false,
+        "why": "No ports are opened automatically, which isn't what this scenario needs."
+      },
+      {
+        "key": "C",
+        "text": "All traffic from the same VPC",
+        "correct": false,
+        "why": "A new custom security group has no inbound rules, so it allows no inbound traffic."
+      },
+      {
+        "key": "D",
+        "text": "All traffic from the internet",
+        "correct": false,
+        "why": "Nothing is allowed until you add rules, so it doesn't meet this requirement."
+      }
+    ],
+    "explanation": {
+      "answer": "Security groups deny all inbound traffic by default. You add allow rules for specific sources, ports and protocols.",
+      "concept": "Outbound traffic is allowed by default in new security groups.",
+      "examTip": "New SG: inbound all blocked, outbound all allowed.",
+      "references": [
+        {
+          "title": "Security groups",
+          "url": "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-security-groups.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-071",
+    "domain": "compliance",
+    "topic": "Security Resources",
+    "tags": [
+      "security-center"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A company wants AWS security bulletins, best-practice whitepapers and information about AWS security features.",
+    "prompt": "Where should it look?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Marketplace security product listings",
+        "correct": false,
+        "why": "Marketplace sells software, though it lists security products."
+      },
+      {
+        "key": "B",
+        "text": "The AWS Security Center and security documentation",
+        "correct": true,
+        "why": "AWS publishes security bulletins, blogs and best practices there."
+      },
+      {
+        "key": "C",
+        "text": "The AWS Health Dashboard events page",
+        "correct": false,
+        "why": "The Health Dashboard shows service events affecting your account."
+      },
+      {
+        "key": "D",
+        "text": "The AWS Trusted Advisor security checks page",
+        "correct": false,
+        "why": "Trusted Advisor checks your account settings; it doesn't publish security bulletins or whitepapers."
+      }
+    ],
+    "explanation": {
+      "answer": "The AWS Security Center (aws.amazon.com/security) provides security bulletins, best practices, blogs and documentation.",
+      "concept": "Other resources include AWS Knowledge Center, AWS re:Post and the AWS Security Blog.",
+      "examTip": "Security bulletins and guidance = AWS Security Center.",
+      "references": [
+        {
+          "title": "AWS Cloud Security",
+          "url": "https://aws.amazon.com/security/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-072",
+    "domain": "compliance",
+    "topic": "Security Resources",
+    "tags": [
+      "abuse"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company notices that an AWS IP address is sending spam and port scans to its network.",
+    "prompt": "What should it do?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Open a ticket with Amazon Inspector",
+        "correct": false,
+        "why": "Inspector scans your own workloads, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "B",
+        "text": "Contact AWS Support to shut down its own account",
+        "correct": false,
+        "why": "The problem is someone else's resource, not the company's account."
+      },
+      {
+        "key": "C",
+        "text": "Report it to the AWS Trust & Safety team",
+        "correct": true,
+        "why": "AWS Trust & Safety investigates reports of abuse from AWS resources."
+      },
+      {
+        "key": "D",
+        "text": "Block the IP locally and take no further action",
+        "correct": false,
+        "why": "Blocking helps locally, but the abuse should also be reported so AWS can investigate."
+      }
+    ],
+    "explanation": {
+      "answer": "Suspected abuse from AWS resources, such as spam, port scanning or DDoS, should be reported to AWS Trust & Safety (abuse reporting).",
+      "concept": "AWS acts on reports according to its Acceptable Use Policy.",
+      "examTip": "Abuse coming from AWS IPs = report to AWS Trust & Safety.",
+      "references": [
+        {
+          "title": "How do I report abuse of AWS resources?",
+          "url": "https://repost.aws/knowledge-center/report-aws-abuse"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-073",
+    "domain": "compliance",
+    "topic": "Security Resources",
+    "tags": [
+      "marketplace-security"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company wants to buy a third-party firewall appliance that runs on AWS and is billed through its AWS account.",
+    "prompt": "Where can it find this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Inspector",
+        "correct": false,
+        "why": "Inspector scans for vulnerabilities, so it doesn't meet this requirement."
+      },
+      {
+        "key": "B",
+        "text": "AWS Trusted Advisor",
+        "correct": false,
+        "why": "Trusted Advisor gives recommendations, not software purchases."
+      },
+      {
+        "key": "C",
+        "text": "AWS Artifact",
+        "correct": false,
+        "why": "Artifact provides compliance reports and agreements."
+      },
+      {
+        "key": "D",
+        "text": "AWS Marketplace",
+        "correct": true,
+        "why": "Marketplace offers third-party software, including security products, billed through AWS."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Marketplace is a curated catalog of third-party software, including security tools, that you can buy and deploy on AWS.",
+      "concept": "Charges appear on your AWS bill.",
+      "examTip": "Third-party security software for AWS = AWS Marketplace.",
+      "references": [
+        {
+          "title": "What is AWS Marketplace?",
+          "url": "https://docs.aws.amazon.com/marketplace/latest/buyerguide/what-is-marketplace.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-074",
+    "domain": "compliance",
+    "topic": "Network Security",
+    "tags": [
+      "waf-rate"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A company's login page is receiving thousands of requests per minute from a few IP addresses trying to guess passwords.",
+    "prompt": "Which AWS WAF feature helps the MOST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "A rate-based rule",
+        "correct": true,
+        "why": "Rate-based rules block IPs that exceed a request threshold."
+      },
+      {
+        "key": "B",
+        "text": "Increasing the instance size",
+        "correct": false,
+        "why": "More capacity doesn't stop password guessing."
+      },
+      {
+        "key": "C",
+        "text": "Geo-blocking all countries",
+        "correct": false,
+        "why": "Blocking all countries would block legitimate users too."
+      },
+      {
+        "key": "D",
+        "text": "A larger security group",
+        "correct": false,
+        "why": "Security groups can't count request rates."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS WAF rate-based rules track requests from each IP and block those that exceed a set rate.",
+      "concept": "WAF also offers managed rule groups for bots and account takeover prevention.",
+      "examTip": "Too many requests from few IPs = WAF rate-based rule.",
+      "references": [
+        {
+          "title": "Rate-based rule statement",
+          "url": "https://docs.aws.amazon.com/waf/latest/developerguide/waf-rule-statement-type-rate-based.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-075",
+    "domain": "compliance",
+    "topic": "Threat Detection",
+    "tags": [
+      "security-hub-standards"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company wants to automatically check its accounts against the CIS AWS Foundations Benchmark.",
+    "prompt": "Which service provides this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Detective",
+        "correct": false,
+        "why": "Detective investigates findings, which isn't what this scenario needs."
+      },
+      {
+        "key": "B",
+        "text": "AWS Security Hub",
+        "correct": true,
+        "why": "Security Hub runs automated checks against standards such as CIS benchmarks."
+      },
+      {
+        "key": "C",
+        "text": "AWS Pricing Calculator",
+        "correct": false,
+        "why": "The Pricing Calculator estimates costs, so it doesn't meet this requirement."
+      },
+      {
+        "key": "D",
+        "text": "AWS Config conformance packs",
+        "correct": false,
+        "why": "Config can check rules, but Security Hub runs the CIS benchmark as a managed standard with aggregated findings."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Security Hub runs continuous automated security checks against standards including CIS AWS Foundations Benchmark, PCI DSS and AWS Foundational Security Best Practices.",
+      "concept": "Results appear as a security score with findings to fix.",
+      "examTip": "Check against CIS / best-practice standards = Security Hub.",
+      "references": [
+        {
+          "title": "What is AWS Security Hub?",
+          "url": "https://docs.aws.amazon.com/securityhub/latest/userguide/what-is-securityhub.html"
+        }
+      ]
+    }
+  }
+]

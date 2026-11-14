@@ -1,0 +1,1248 @@
+[
+  {
+    "id": "clf-sec-126",
+    "domain": "compliance",
+    "topic": "Network Security",
+    "tags": [
+      "session-manager"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company wants administrators to access EC2 instances without opening SSH port 22 or managing SSH keys.",
+    "prompt": "Which feature should it use?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Systems Manager Session Manager",
+        "correct": true,
+        "why": "Session Manager provides browser or CLI shell access without open inbound ports or SSH keys."
+      },
+      {
+        "key": "B",
+        "text": "A bastion host with port 22 open to the internet",
+        "correct": false,
+        "why": "This still requires open SSH ports and keys."
+      },
+      {
+        "key": "C",
+        "text": "An IAM user with SSH access keys",
+        "correct": false,
+        "why": "IAM access keys sign AWS API calls; they don't replace SSH or close port 22."
+      },
+      {
+        "key": "D",
+        "text": "EC2 Instance Connect with port 22 open",
+        "correct": false,
+        "why": "Instance Connect still uses SSH over port 22."
+      }
+    ],
+    "explanation": {
+      "answer": "Session Manager provides secure, auditable instance access with IAM-based permissions and no inbound ports.",
+      "concept": "Session activity can be logged to CloudWatch Logs or Amazon S3.",
+      "examTip": "Shell access without SSH ports or keys = Session Manager.",
+      "references": [
+        {
+          "title": "AWS Systems Manager Session Manager",
+          "url": "https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-127",
+    "domain": "compliance",
+    "topic": "Security Resources",
+    "tags": [
+      "knowledge-center"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "An administrator wants answers to common AWS questions, such as how to fix a specific error, written by AWS.",
+    "prompt": "Which resource should they use?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Pricing Calculator",
+        "correct": false,
+        "why": "The Pricing Calculator estimates costs, so it doesn't meet this requirement."
+      },
+      {
+        "key": "B",
+        "text": "AWS Knowledge Center (on AWS re:Post)",
+        "correct": true,
+        "why": "The Knowledge Center has articles answering frequently asked questions."
+      },
+      {
+        "key": "C",
+        "text": "AWS Artifact",
+        "correct": false,
+        "why": "Artifact provides compliance reports, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "D",
+        "text": "AWS Marketplace",
+        "correct": false,
+        "why": "Marketplace sells third-party software, so it doesn't meet this requirement."
+      }
+    ],
+    "explanation": {
+      "answer": "The AWS Knowledge Center, part of AWS re:Post, contains articles and videos covering the most frequent questions and requests.",
+      "concept": "AWS re:Post is the community Q&A site; the Knowledge Center has AWS-authored articles.",
+      "examTip": "AWS-written answers to common questions = Knowledge Center.",
+      "references": [
+        {
+          "title": "AWS re:Post Knowledge Center",
+          "url": "https://repost.aws/knowledge-center"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-128",
+    "domain": "compliance",
+    "topic": "IAM",
+    "tags": [
+      "iam-roles-for-services"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A Lambda function needs to read items from a DynamoDB table.",
+    "prompt": "How should the function receive permissions?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Store an IAM user's access keys in an environment variable",
+        "correct": false,
+        "why": "Long-term keys in environment variables can leak."
+      },
+      {
+        "key": "B",
+        "text": "Use the root user's credentials",
+        "correct": false,
+        "why": "Root credentials must not be used by applications."
+      },
+      {
+        "key": "C",
+        "text": "Assign the function an execution role with DynamoDB read permissions",
+        "correct": true,
+        "why": "Lambda assumes its execution role and gets temporary credentials."
+      },
+      {
+        "key": "D",
+        "text": "A DynamoDB resource policy allowing all principals",
+        "correct": false,
+        "why": "Allowing all principals is far too broad."
+      }
+    ],
+    "explanation": {
+      "answer": "Every Lambda function has an execution role that grants it permissions to AWS services through temporary credentials.",
+      "concept": "Grant only the actions the function needs, such as dynamodb:GetItem on that table.",
+      "examTip": "Lambda permissions = execution role.",
+      "references": [
+        {
+          "title": "Lambda execution role",
+          "url": "https://docs.aws.amazon.com/lambda/latest/dg/lambda-intro-execution-role.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-129",
+    "domain": "compliance",
+    "topic": "Identity Center & Federation",
+    "tags": [
+      "permission-sets"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "In IAM Identity Center, an administrator wants to give the Finance group read-only billing access in three accounts.",
+    "prompt": "What should the administrator create and assign?",
+    "options": [
+      {
+        "key": "A",
+        "text": "An IAM user in each account for each person",
+        "correct": false,
+        "why": "This is hard to manage and doesn't use Identity Center."
+      },
+      {
+        "key": "B",
+        "text": "A security group allowing billing traffic",
+        "correct": false,
+        "why": "Security groups filter network traffic, so it doesn't meet this requirement."
+      },
+      {
+        "key": "C",
+        "text": "A service control policy granting billing access",
+        "correct": false,
+        "why": "SCPs don't grant permissions, which isn't what this scenario needs."
+      },
+      {
+        "key": "D",
+        "text": "A permission set assigned to the group for those accounts",
+        "correct": true,
+        "why": "Permission sets define access levels that Identity Center provisions as roles in each account."
+      }
+    ],
+    "explanation": {
+      "answer": "IAM Identity Center permission sets define a collection of policies. Assigning them to users or groups in accounts creates the corresponding roles.",
+      "concept": "This centralizes workforce permissions across accounts.",
+      "examTip": "Identity Center access = permission set + group + account assignment.",
+      "references": [
+        {
+          "title": "Permission sets",
+          "url": "https://docs.aws.amazon.com/singlesignon/latest/userguide/permissionsetsconcept.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-130",
+    "domain": "compliance",
+    "topic": "Network Security",
+    "tags": [
+      "defense-in-depth"
+    ],
+    "difficulty": "medium",
+    "type": "multi",
+    "stem": "A company protects a web application with several layers.",
+    "prompt": "Which TWO controls operate at different layers to provide defense in depth? (Select TWO.)",
+    "options": [
+      {
+        "key": "A",
+        "text": "Using the root user for deployments",
+        "correct": false,
+        "why": "This weakens security, which isn't what this scenario needs."
+      },
+      {
+        "key": "B",
+        "text": "Security groups on the instances",
+        "correct": true,
+        "why": "Security groups filter network traffic at the instance level."
+      },
+      {
+        "key": "C",
+        "text": "AWS WAF on the load balancer",
+        "correct": true,
+        "why": "WAF filters malicious web requests at the application layer."
+      },
+      {
+        "key": "D",
+        "text": "Disabling CloudTrail",
+        "correct": false,
+        "why": "This removes audit visibility, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "E",
+        "text": "Sharing one IAM user among the team",
+        "correct": false,
+        "why": "Shared users remove accountability, so it doesn't solve the problem described here."
+      }
+    ],
+    "explanation": {
+      "answer": "Defense in depth combines controls at multiple layers, such as AWS WAF (application), security groups (instance) and network ACLs (subnet).",
+      "concept": "If one control fails, others still protect the workload.",
+      "examTip": "Defense in depth = several independent layers of controls.",
+      "references": [
+        {
+          "title": "Security pillar design principles",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/design-principles.html"
+        }
+      ]
+    },
+    "selectCount": 2
+  },
+  {
+    "id": "clf-sec-131",
+    "domain": "compliance",
+    "topic": "Threat Detection",
+    "tags": [
+      "inspector-vs-guardduty"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A team asks whether Amazon Inspector or Amazon GuardDuty would tell them that an EC2 instance has an outdated, vulnerable version of OpenSSL.",
+    "prompt": "Which service is correct?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Inspector",
+        "correct": true,
+        "why": "Inspector identifies known software vulnerabilities in packages."
+      },
+      {
+        "key": "B",
+        "text": "AWS Artifact",
+        "correct": false,
+        "why": "Artifact provides compliance reports, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "C",
+        "text": "AWS Shield",
+        "correct": false,
+        "why": "Shield protects against DDoS attacks, so it doesn't meet this requirement."
+      },
+      {
+        "key": "D",
+        "text": "Amazon GuardDuty",
+        "correct": false,
+        "why": "GuardDuty detects suspicious activity, not outdated software packages."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Inspector scans for known vulnerabilities (CVEs) in software installed on EC2 instances, container images and Lambda functions.",
+      "concept": "GuardDuty looks at behavior; Inspector looks at software.",
+      "examTip": "Vulnerable package = Inspector. Suspicious behavior = GuardDuty.",
+      "references": [
+        {
+          "title": "What is Amazon Inspector?",
+          "url": "https://docs.aws.amazon.com/inspector/latest/user/what-is-inspector.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-132",
+    "domain": "compliance",
+    "topic": "Security Resources",
+    "tags": [
+      "security-blog-repost"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A developer wants to ask the AWS community a question about configuring IAM policies and get answers from experts.",
+    "prompt": "Which resource fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Budgets",
+        "correct": false,
+        "why": "Budgets track cost, so it doesn't meet this requirement."
+      },
+      {
+        "key": "B",
+        "text": "AWS re:Post",
+        "correct": true,
+        "why": "re:Post is a community Q&A service with answers from AWS experts and community members."
+      },
+      {
+        "key": "C",
+        "text": "AWS Health Dashboard",
+        "correct": false,
+        "why": "The Health Dashboard reports service events."
+      },
+      {
+        "key": "D",
+        "text": "AWS Artifact",
+        "correct": false,
+        "why": "Artifact provides compliance reports, which isn't what this scenario needs."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS re:Post is a community-driven Q&A service where you can ask questions and get answers from the community and AWS experts.",
+      "concept": "re:Post is available to all customers at no cost.",
+      "examTip": "Ask the community = AWS re:Post.",
+      "references": [
+        {
+          "title": "AWS re:Post",
+          "url": "https://repost.aws/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-133",
+    "domain": "compliance",
+    "topic": "Network Security",
+    "tags": [
+      "private-access-s3"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A company's EC2 instances in private subnets need to access Amazon S3 without traffic going through the internet.",
+    "prompt": "What should it use?",
+    "options": [
+      {
+        "key": "A",
+        "text": "An interface endpoint plus a NAT gateway",
+        "correct": false,
+        "why": "A NAT gateway sends traffic toward the internet, which the requirement forbids."
+      },
+      {
+        "key": "B",
+        "text": "An internet gateway",
+        "correct": false,
+        "why": "An internet gateway routes traffic to the internet."
+      },
+      {
+        "key": "C",
+        "text": "A VPC gateway endpoint for Amazon S3",
+        "correct": true,
+        "why": "Gateway endpoints route S3 traffic privately within the AWS network."
+      },
+      {
+        "key": "D",
+        "text": "A public IP on each instance",
+        "correct": false,
+        "why": "Public IPs expose instances and use the internet."
+      }
+    ],
+    "explanation": {
+      "answer": "VPC endpoints let resources in a VPC reach supported AWS services privately. S3 and DynamoDB support gateway endpoints.",
+      "concept": "Interface endpoints (AWS PrivateLink) support many other services.",
+      "examTip": "Private access to S3/DynamoDB = gateway VPC endpoint.",
+      "references": [
+        {
+          "title": "Gateway endpoints",
+          "url": "https://docs.aws.amazon.com/vpc/latest/privatelink/gateway-endpoints.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-134",
+    "domain": "compliance",
+    "topic": "IAM",
+    "tags": [
+      "mfa-types"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company wants the strongest phishing-resistant MFA for its administrators.",
+    "prompt": "Which option should it choose?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Email codes",
+        "correct": false,
+        "why": "Email codes are not an IAM MFA option and are easier to phish."
+      },
+      {
+        "key": "B",
+        "text": "SMS text message codes",
+        "correct": false,
+        "why": "AWS doesn't support SMS for IAM user MFA, and SMS is weaker."
+      },
+      {
+        "key": "C",
+        "text": "A shared password written on a card",
+        "correct": false,
+        "why": "This isn't MFA and is insecure, which isn't what this scenario needs."
+      },
+      {
+        "key": "D",
+        "text": "FIDO2 security keys or passkeys",
+        "correct": true,
+        "why": "Passkeys and security keys are phishing-resistant MFA options supported by AWS."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS supports passkeys and security keys (FIDO2), virtual authenticator apps and hardware TOTP tokens for MFA.",
+      "concept": "FIDO2 security keys and passkeys resist phishing because they're bound to the website.",
+      "examTip": "Strongest MFA = passkeys / FIDO2 security keys.",
+      "references": [
+        {
+          "title": "AWS multi-factor authentication in IAM",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_mfa.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-135",
+    "domain": "compliance",
+    "topic": "AWS Organizations",
+    "tags": [
+      "management-account"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company sets up AWS Organizations. It wants to know the role of the management account.",
+    "prompt": "Which statement is correct?",
+    "options": [
+      {
+        "key": "A",
+        "text": "It creates the org, manages accounts and pays the bill",
+        "correct": true,
+        "why": "The management account administers the organization and is responsible for billing."
+      },
+      {
+        "key": "B",
+        "text": "It cannot invite or create other accounts",
+        "correct": false,
+        "why": "The management account invites and creates member accounts."
+      },
+      {
+        "key": "C",
+        "text": "It hosts all production workloads for the organization",
+        "correct": false,
+        "why": "Best practice keeps workloads out of the management account."
+      },
+      {
+        "key": "D",
+        "text": "It is restricted by SCPs like every member account",
+        "correct": false,
+        "why": "SCPs don't restrict the management account."
+      }
+    ],
+    "explanation": {
+      "answer": "The management account creates the organization, invites or creates member accounts, applies policies and pays for all accounts.",
+      "concept": "Limit access to the management account and run workloads in member accounts.",
+      "examTip": "Management account = admin + billing payer; keep workloads out.",
+      "references": [
+        {
+          "title": "AWS Organizations terminology and concepts",
+          "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_getting-started_concepts.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-136",
+    "domain": "compliance",
+    "topic": "Encryption",
+    "tags": [
+      "ssl-tls-free"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A startup asks whether it must pay for a public TLS certificate to use HTTPS on its CloudFront distribution.",
+    "prompt": "Which statement is correct?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Only Enterprise Support customers get free certificates",
+        "correct": false,
+        "why": "Support plans don't affect ACM pricing, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "B",
+        "text": "No, ACM public certificates used with CloudFront are free",
+        "correct": true,
+        "why": "You pay only for the AWS resources that use the certificate."
+      },
+      {
+        "key": "C",
+        "text": "Yes, ACM public certificates cost per month",
+        "correct": false,
+        "why": "Public certificates used with integrated services are free."
+      },
+      {
+        "key": "D",
+        "text": "HTTPS isn't supported by CloudFront",
+        "correct": false,
+        "why": "CloudFront fully supports HTTPS, so it doesn't solve the problem described here."
+      }
+    ],
+    "explanation": {
+      "answer": "Public SSL/TLS certificates provisioned through ACM are free for use with integrated services like CloudFront and Elastic Load Balancing.",
+      "concept": "ACM handles renewal automatically.",
+      "examTip": "ACM public certs with AWS services = free + auto-renew.",
+      "references": [
+        {
+          "title": "What is AWS Certificate Manager?",
+          "url": "https://docs.aws.amazon.com/acm/latest/userguide/acm-overview.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-137",
+    "domain": "compliance",
+    "topic": "Threat Detection",
+    "tags": [
+      "eventbridge-response"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A company wants to automatically isolate an EC2 instance when GuardDuty reports a high-severity finding about it.",
+    "prompt": "Which approach supports this automation?",
+    "options": [
+      {
+        "key": "A",
+        "text": "A weekly manual review of GuardDuty findings",
+        "correct": false,
+        "why": "Manual weekly reviews are too slow for high-severity findings."
+      },
+      {
+        "key": "B",
+        "text": "Turn off GuardDuty to stop the alerts",
+        "correct": false,
+        "why": "This removes detection, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "C",
+        "text": "Route findings via Amazon EventBridge to Lambda",
+        "correct": true,
+        "why": "EventBridge can trigger automated responses when findings arrive."
+      },
+      {
+        "key": "D",
+        "text": "Email the findings to AWS Support for action",
+        "correct": false,
+        "why": "Support doesn't remediate your instances."
+      }
+    ],
+    "explanation": {
+      "answer": "GuardDuty findings are published to Amazon EventBridge, where rules can trigger Lambda functions or Systems Manager automation to respond.",
+      "concept": "Automating responses is part of the security pillar (\"prepare for security events\").",
+      "examTip": "Auto-respond to findings = EventBridge rule → Lambda/automation.",
+      "references": [
+        {
+          "title": "Processing GuardDuty findings with Amazon EventBridge",
+          "url": "https://docs.aws.amazon.com/guardduty/latest/ug/guardduty_findings_cloudwatch.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-138",
+    "domain": "compliance",
+    "topic": "Shared Responsibility",
+    "tags": [
+      "patch-rds"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company uses Amazon RDS. A database engine security patch is released.",
+    "prompt": "How is the patch applied?",
+    "options": [
+      {
+        "key": "A",
+        "text": "The customer must rebuild the database on EC2",
+        "correct": false,
+        "why": "That would remove the managed service benefits."
+      },
+      {
+        "key": "B",
+        "text": "Patches are applied only when RDS is recreated",
+        "correct": false,
+        "why": "RDS applies patches during maintenance windows, not only on recreation."
+      },
+      {
+        "key": "C",
+        "text": "The customer must SSH into the database host",
+        "correct": false,
+        "why": "RDS doesn't provide host OS access, so it doesn't meet this requirement."
+      },
+      {
+        "key": "D",
+        "text": "AWS applies it during a maintenance window the customer can choose",
+        "correct": true,
+        "why": "RDS applies engine and OS patches during configured maintenance windows."
+      }
+    ],
+    "explanation": {
+      "answer": "With Amazon RDS, AWS handles patching. Customers choose a maintenance window and can schedule or apply updates.",
+      "concept": "This shows shared responsibility: AWS patches, customers choose timing and test applications.",
+      "examTip": "RDS patches = AWS applies in your maintenance window.",
+      "references": [
+        {
+          "title": "Maintaining a DB instance",
+          "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_UpgradeDBInstance.Maintenance.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-139",
+    "domain": "compliance",
+    "topic": "IAM",
+    "tags": [
+      "policy-simulator"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A developer wants to test whether a new IAM policy allows a specific action before attaching it to production users.",
+    "prompt": "Which tool helps?",
+    "options": [
+      {
+        "key": "A",
+        "text": "The IAM policy simulator",
+        "correct": true,
+        "why": "The simulator tests and troubleshoots policies against specific actions and resources."
+      },
+      {
+        "key": "B",
+        "text": "AWS CloudTrail Lake queries",
+        "correct": false,
+        "why": "CloudTrail shows past activity; it doesn't test a policy before it's attached."
+      },
+      {
+        "key": "C",
+        "text": "Amazon Inspector",
+        "correct": false,
+        "why": "Inspector scans workloads for vulnerabilities."
+      },
+      {
+        "key": "D",
+        "text": "AWS Pricing Calculator",
+        "correct": false,
+        "why": "The Pricing Calculator estimates costs, which isn't what this scenario needs."
+      }
+    ],
+    "explanation": {
+      "answer": "The IAM policy simulator lets you test the effects of identity-based policies, resource policies and SCPs before deploying them.",
+      "concept": "Testing policies reduces the risk of over-granting or breaking access.",
+      "examTip": "Test what a policy allows = IAM policy simulator.",
+      "references": [
+        {
+          "title": "Testing IAM policies with the IAM policy simulator",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_testing-policies.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-140",
+    "domain": "compliance",
+    "topic": "Root User",
+    "tags": [
+      "root-access-keys"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A new engineer suggests creating access keys for the root user to run automation scripts.",
+    "prompt": "What does AWS recommend?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Create root access keys only for CI/CD pipelines",
+        "correct": false,
+        "why": "Pipelines should use roles, not root credentials."
+      },
+      {
+        "key": "B",
+        "text": "Don't create root access keys; use IAM roles or users with limited permissions",
+        "correct": true,
+        "why": "Root access keys have unrestricted access and are a major risk."
+      },
+      {
+        "key": "C",
+        "text": "Create root access keys but store them in source code",
+        "correct": false,
+        "why": "Storing keys in code makes leaks more likely."
+      },
+      {
+        "key": "D",
+        "text": "Create root access keys and rotate them yearly",
+        "correct": false,
+        "why": "Even rotated, root keys give unrestricted access."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS recommends not creating access keys for the root user. Automation should use roles with least-privilege permissions.",
+      "concept": "If root access keys exist, delete them.",
+      "examTip": "Root access keys = don't.",
+      "references": [
+        {
+          "title": "AWS account root user",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_root-user.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-141",
+    "domain": "compliance",
+    "topic": "Network Security",
+    "tags": [
+      "waf-geo"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company's licensing terms only allow its video service to be viewed in Canada.",
+    "prompt": "Which AWS feature can block requests from other countries?",
+    "options": [
+      {
+        "key": "A",
+        "text": "S3 Object Lock in compliance mode",
+        "correct": false,
+        "why": "Object Lock prevents deletion, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "B",
+        "text": "Security groups with country-based rules",
+        "correct": false,
+        "why": "Security groups don't filter by country."
+      },
+      {
+        "key": "C",
+        "text": "Geo match in AWS WAF or CloudFront geo restriction",
+        "correct": true,
+        "why": "Both can allow or block requests by country."
+      },
+      {
+        "key": "D",
+        "text": "Network ACLs with country-based rules",
+        "correct": false,
+        "why": "NACLs filter by IP range and port, not by country."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS WAF geo match statements and CloudFront geographic restrictions can allow or block viewers based on their country.",
+      "concept": "Geo-blocking supports licensing and compliance requirements.",
+      "examTip": "Block by country = WAF geo match / CloudFront geo restriction.",
+      "references": [
+        {
+          "title": "Restricting the geographic distribution of your content",
+          "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/georestrictions.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-142",
+    "domain": "compliance",
+    "topic": "Compliance",
+    "tags": [
+      "config-aggregator"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A company with 50 accounts wants a single view of AWS Config compliance across all accounts and Regions.",
+    "prompt": "Which feature should it use?",
+    "options": [
+      {
+        "key": "A",
+        "text": "A CloudFront distribution",
+        "correct": false,
+        "why": "CloudFront delivers content, so it doesn't meet this requirement."
+      },
+      {
+        "key": "B",
+        "text": "One AWS Budgets report",
+        "correct": false,
+        "why": "Budgets track costs, so it doesn't meet this requirement."
+      },
+      {
+        "key": "C",
+        "text": "AWS Trusted Advisor organizational view",
+        "correct": false,
+        "why": "Trusted Advisor's organizational view summarizes its own checks, not Config rule compliance."
+      },
+      {
+        "key": "D",
+        "text": "An AWS Config aggregator",
+        "correct": true,
+        "why": "Aggregators collect Config data from multiple accounts and Regions into one view."
+      }
+    ],
+    "explanation": {
+      "answer": "An AWS Config aggregator collects configuration and compliance data from multiple accounts and Regions, including across an organization.",
+      "concept": "Combine with conformance packs for organization-wide compliance.",
+      "examTip": "Multi-account Config view = aggregator.",
+      "references": [
+        {
+          "title": "Multi-account multi-Region data aggregation",
+          "url": "https://docs.aws.amazon.com/config/latest/developerguide/aggregate-data.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-143",
+    "domain": "compliance",
+    "topic": "Identity Center & Federation",
+    "tags": [
+      "cognito-vs-iam"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A team building a shopping app asks whether customers should sign in as IAM users.",
+    "prompt": "What is the BEST answer?",
+    "options": [
+      {
+        "key": "A",
+        "text": "No, use Amazon Cognito for customer sign-in",
+        "correct": true,
+        "why": "Cognito is designed for app user identities at scale."
+      },
+      {
+        "key": "B",
+        "text": "No, give customers the root user",
+        "correct": false,
+        "why": "Root credentials must never be shared, which isn't what this scenario needs."
+      },
+      {
+        "key": "C",
+        "text": "Yes, share one IAM user among all customers",
+        "correct": false,
+        "why": "Shared credentials are insecure, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "D",
+        "text": "Yes, create one IAM user per customer",
+        "correct": false,
+        "why": "IAM users are for access to your AWS account, not app customers."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Cognito manages app users, sign-up, sign-in and federation with social and enterprise identity providers.",
+      "concept": "IAM is for people and services that manage AWS resources.",
+      "examTip": "App customers = Cognito. AWS administrators = IAM / Identity Center.",
+      "references": [
+        {
+          "title": "What is Amazon Cognito?",
+          "url": "https://docs.aws.amazon.com/cognito/latest/developerguide/what-is-amazon-cognito.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-144",
+    "domain": "compliance",
+    "topic": "Threat Detection",
+    "tags": [
+      "macie-scope"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company asks which data stores Amazon Macie analyzes for sensitive data.",
+    "prompt": "Which answer is correct?",
+    "options": [
+      {
+        "key": "A",
+        "text": "EC2 instance memory",
+        "correct": false,
+        "why": "Macie doesn't scan instance memory, so it doesn't meet this requirement."
+      },
+      {
+        "key": "B",
+        "text": "Amazon S3 buckets",
+        "correct": true,
+        "why": "Macie discovers sensitive data in Amazon S3."
+      },
+      {
+        "key": "C",
+        "text": "Amazon EBS volumes",
+        "correct": false,
+        "why": "Macie doesn't scan EBS volumes, which isn't what this scenario needs."
+      },
+      {
+        "key": "D",
+        "text": "Amazon DynamoDB tables",
+        "correct": false,
+        "why": "Macie analyzes S3; it doesn't scan DynamoDB tables."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Macie automates sensitive data discovery in Amazon S3 and reports findings such as PII or financial data.",
+      "concept": "Macie also assesses S3 bucket security and access controls.",
+      "examTip": "Macie = S3 only.",
+      "references": [
+        {
+          "title": "What is Amazon Macie?",
+          "url": "https://docs.aws.amazon.com/macie/latest/user/what-is-macie.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-145",
+    "domain": "compliance",
+    "topic": "Shared Responsibility",
+    "tags": [
+      "multi-select-config"
+    ],
+    "difficulty": "hard",
+    "type": "multi",
+    "stem": "A company uses Amazon S3 to host files.",
+    "prompt": "Which TWO are the company's responsibility? (Select TWO.)",
+    "options": [
+      {
+        "key": "A",
+        "text": "Maintaining the storage servers behind S3",
+        "correct": false,
+        "why": "Hardware is AWS's responsibility, which isn't what this scenario needs."
+      },
+      {
+        "key": "B",
+        "text": "Replicating data within the S3 infrastructure for durability",
+        "correct": false,
+        "why": "AWS designs S3's internal redundancy, which isn't what this scenario needs."
+      },
+      {
+        "key": "C",
+        "text": "Deciding whether to use SSE-KMS and who can use the key",
+        "correct": true,
+        "why": "Encryption choices and key access are customer decisions."
+      },
+      {
+        "key": "D",
+        "text": "Securing the facility that houses S3",
+        "correct": false,
+        "why": "Physical security is AWS's responsibility."
+      },
+      {
+        "key": "E",
+        "text": "Setting bucket policies and access permissions",
+        "correct": true,
+        "why": "Access configuration is the customer's responsibility."
+      }
+    ],
+    "explanation": {
+      "answer": "For S3, customers manage access, encryption choices, data classification and versioning settings. AWS manages the infrastructure.",
+      "concept": "Abstracted services still leave data and access decisions with the customer.",
+      "examTip": "S3: you own access + encryption choices; AWS owns infrastructure + durability design.",
+      "references": [
+        {
+          "title": "Security in Amazon S3",
+          "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/security.html"
+        }
+      ]
+    },
+    "selectCount": 2
+  },
+  {
+    "id": "clf-sec-146",
+    "domain": "compliance",
+    "topic": "IAM",
+    "tags": [
+      "users-vs-roles"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A manager asks the difference between an IAM user and an IAM role.",
+    "prompt": "Which statement is correct?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Users are for AWS services; roles are only for people",
+        "correct": false,
+        "why": "Roles are commonly used by services and people."
+      },
+      {
+        "key": "B",
+        "text": "They are identical, with different names in the console",
+        "correct": false,
+        "why": "They differ in how credentials work, which isn't what this scenario needs."
+      },
+      {
+        "key": "C",
+        "text": "A user has long-term credentials; a role gives temporary ones",
+        "correct": true,
+        "why": "Roles provide temporary credentials to whoever is allowed to assume them."
+      },
+      {
+        "key": "D",
+        "text": "A role has a permanent password; a user doesn't",
+        "correct": false,
+        "why": "Roles have no permanent password or access keys."
+      }
+    ],
+    "explanation": {
+      "answer": "IAM users are identities with long-term credentials. IAM roles have no long-term credentials; trusted entities assume them to get temporary credentials.",
+      "concept": "AWS recommends roles and temporary credentials wherever possible.",
+      "examTip": "User = long-term credentials. Role = temporary, assumed.",
+      "references": [
+        {
+          "title": "IAM roles",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-147",
+    "domain": "compliance",
+    "topic": "Network Security",
+    "tags": [
+      "nat-gateway"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "Instances in a private subnet need to download software updates from the internet, but must not accept inbound connections from the internet.",
+    "prompt": "What should be added?",
+    "options": [
+      {
+        "key": "A",
+        "text": "An Elastic IP on each private instance",
+        "correct": false,
+        "why": "Public IPs would expose the instances, so it doesn't meet this requirement."
+      },
+      {
+        "key": "B",
+        "text": "AWS Direct Connect",
+        "correct": false,
+        "why": "Direct Connect connects to on-premises networks, not the internet."
+      },
+      {
+        "key": "C",
+        "text": "An internet gateway route in the private subnet",
+        "correct": false,
+        "why": "This would make the subnet public, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "D",
+        "text": "A NAT gateway in a public subnet",
+        "correct": true,
+        "why": "A NAT gateway allows outbound internet access while blocking inbound connections."
+      }
+    ],
+    "explanation": {
+      "answer": "A NAT gateway lets instances in private subnets connect out to the internet while preventing the internet from initiating connections to them.",
+      "concept": "NAT gateways are placed in public subnets and referenced in private route tables.",
+      "examTip": "Private subnet needs outbound internet only = NAT gateway.",
+      "references": [
+        {
+          "title": "NAT gateways",
+          "url": "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-gateway.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-148",
+    "domain": "compliance",
+    "topic": "Compliance",
+    "tags": [
+      "security-hub-vs-trusted-advisor"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A company already uses Trusted Advisor. Its security team now wants continuous checks against PCI DSS controls and aggregated findings from GuardDuty and Inspector.",
+    "prompt": "What should it add?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Security Hub",
+        "correct": true,
+        "why": "Security Hub runs standards like PCI DSS and aggregates findings from security services."
+      },
+      {
+        "key": "B",
+        "text": "More Trusted Advisor checks",
+        "correct": false,
+        "why": "Trusted Advisor doesn't aggregate GuardDuty and Inspector findings or run PCI DSS standards."
+      },
+      {
+        "key": "C",
+        "text": "AWS Budgets",
+        "correct": false,
+        "why": "Budgets track cost, which isn't what this scenario needs."
+      },
+      {
+        "key": "D",
+        "text": "AWS Artifact",
+        "correct": false,
+        "why": "Artifact provides AWS's reports, not checks on your resources."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Security Hub provides continuous checks against standards and centralizes findings from AWS security services and partners.",
+      "concept": "Trusted Advisor gives broad best-practice recommendations; Security Hub is focused on security posture.",
+      "examTip": "Security standards + aggregated findings = Security Hub.",
+      "references": [
+        {
+          "title": "What is AWS Security Hub?",
+          "url": "https://docs.aws.amazon.com/securityhub/latest/userguide/what-is-securityhub.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-149",
+    "domain": "compliance",
+    "topic": "Security Resources",
+    "tags": [
+      "security-whitepapers"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A security architect wants official AWS guidance on security best practices for designing workloads.",
+    "prompt": "Which resource is MOST appropriate?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Marketplace security product listings",
+        "correct": false,
+        "why": "Marketplace sells third-party software, so it doesn't meet this requirement."
+      },
+      {
+        "key": "B",
+        "text": "The Well-Architected Framework Security pillar",
+        "correct": true,
+        "why": "It provides AWS's security best practices for workloads."
+      },
+      {
+        "key": "C",
+        "text": "AWS Trusted Advisor security check results",
+        "correct": false,
+        "why": "Trusted Advisor flags specific risks in your account, but it isn't AWS's design guidance for building secure workloads."
+      },
+      {
+        "key": "D",
+        "text": "The AWS Artifact SOC 2 report for AWS",
+        "correct": false,
+        "why": "Artifact reports describe AWS's controls, not how to design your workloads securely."
+      }
+    ],
+    "explanation": {
+      "answer": "The Well-Architected Security pillar describes security design principles and best practices, from identity to incident response.",
+      "concept": "AWS also publishes security whitepapers, blogs and the Security Reference Architecture.",
+      "examTip": "Official security design guidance = Well-Architected Security pillar.",
+      "references": [
+        {
+          "title": "Security pillar",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/welcome.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-150",
+    "domain": "compliance",
+    "topic": "Audit & Logging",
+    "tags": [
+      "multi-select"
+    ],
+    "difficulty": "medium",
+    "type": "multi",
+    "stem": "An operations lead is choosing services for monitoring and auditing.",
+    "prompt": "Which TWO statements are correct? (Select TWO.)",
+    "options": [
+      {
+        "key": "A",
+        "text": "CloudWatch can alarm on metrics like CPU usage",
+        "correct": true,
+        "why": "CloudWatch alarms watch metrics and trigger actions."
+      },
+      {
+        "key": "B",
+        "text": "CloudTrail records who made API calls",
+        "correct": true,
+        "why": "CloudTrail logs API activity with the caller's identity."
+      },
+      {
+        "key": "C",
+        "text": "CloudWatch encrypts S3 objects",
+        "correct": false,
+        "why": "CloudWatch is for monitoring, not encryption."
+      },
+      {
+        "key": "D",
+        "text": "Config blocks DDoS attacks",
+        "correct": false,
+        "why": "Shield handles DDoS protection, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "E",
+        "text": "Artifact scans EC2 instances",
+        "correct": false,
+        "why": "Inspector scans instances, so it doesn't solve the problem described here."
+      }
+    ],
+    "explanation": {
+      "answer": "CloudTrail = API auditing. CloudWatch = metrics, logs and alarms. Config = configuration history and compliance.",
+      "concept": "These three services cover most monitoring and auditing questions.",
+      "examTip": "CloudTrail (who), CloudWatch (how it's running), Config (what it looks like).",
+      "references": [
+        {
+          "title": "What is AWS CloudTrail?",
+          "url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-user-guide.html"
+        }
+      ]
+    },
+    "selectCount": 2
+  }
+]

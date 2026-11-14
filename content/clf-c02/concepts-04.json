@@ -1,0 +1,1243 @@
+[
+  {
+    "id": "clf-con-076",
+    "domain": "concepts",
+    "topic": "Cloud Economics",
+    "tags": [
+      "automation"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company uses scripts to stop development instances every evening and start them each morning.",
+    "prompt": "Which cloud economics benefit does this demonstrate?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Data transfer becomes free for stopped instances",
+        "correct": false,
+        "why": "Data transfer pricing has nothing to do with stopping instances."
+      },
+      {
+        "key": "B",
+        "text": "Automation reduces cost by running resources only when needed",
+        "correct": true,
+        "why": "Stopping idle instances outside working hours cuts compute charges."
+      },
+      {
+        "key": "C",
+        "text": "Reserved capacity lowers the cost of idle instances",
+        "correct": false,
+        "why": "Reserved capacity charges whether instances run or not."
+      },
+      {
+        "key": "D",
+        "text": "Economies of scale reduce the hourly rate",
+        "correct": false,
+        "why": "The hourly rate stays the same; savings come from running fewer hours."
+      }
+    ],
+    "explanation": {
+      "answer": "On-demand resources are billed while running, so automatically stopping them when unused saves money.",
+      "concept": "Automation is a cost lever: schedule, scale and clean up resources without manual effort.",
+      "examTip": "Turn off what you don't use (automatically) = lower bill.",
+      "references": [
+        {
+          "title": "AWS Instance Scheduler",
+          "url": "https://aws.amazon.com/solutions/implementations/instance-scheduler-on-aws/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-077",
+    "domain": "concepts",
+    "topic": "Cloud Economics",
+    "tags": [
+      "managed-services",
+      "tco"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A company compares running PostgreSQL on Amazon EC2 with using Amazon RDS. The EC2 instance price is lower than the RDS price for the same size.",
+    "prompt": "Why might Amazon RDS still have a lower total cost?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon RDS includes unlimited free storage",
+        "correct": false,
+        "why": "RDS storage is billed separately; it is not unlimited or free."
+      },
+      {
+        "key": "B",
+        "text": "EC2 instances are billed per request instead of per hour",
+        "correct": false,
+        "why": "EC2 is billed by time, not per request, so it doesn't meet this requirement."
+      },
+      {
+        "key": "C",
+        "text": "RDS removes staff time for patching, backups and failover",
+        "correct": true,
+        "why": "The managed service takes over tasks that would cost engineering time on EC2."
+      },
+      {
+        "key": "D",
+        "text": "Amazon RDS backups are included without any limit",
+        "correct": false,
+        "why": "Backup storage beyond the free allocation is billed."
+      }
+    ],
+    "explanation": {
+      "answer": "Total cost includes labor. Amazon RDS automates patching, backups and Multi-AZ failover, which reduces operational effort.",
+      "concept": "Compare total cost of ownership, not only the hourly price of the resource.",
+      "examTip": "Hourly price isn't everything: managed services save staff time.",
+      "references": [
+        {
+          "title": "What is Amazon RDS?",
+          "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Welcome.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-078",
+    "domain": "concepts",
+    "topic": "Cloud Benefits",
+    "tags": [
+      "security-benefit"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A small company worries it cannot afford the physical security, such as guards and biometric access, that large data centers have.",
+    "prompt": "How does moving to AWS help with this concern?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Physical security is unnecessary in the cloud",
+        "correct": false,
+        "why": "Physical security is essential; AWS provides it."
+      },
+      {
+        "key": "B",
+        "text": "Customers must hire their own guards for AWS data centers",
+        "correct": false,
+        "why": "AWS is responsible for physical security of its data centers."
+      },
+      {
+        "key": "C",
+        "text": "AWS lets customers visit data centers to check security",
+        "correct": false,
+        "why": "AWS does not allow customer tours; it shares third-party audit reports instead."
+      },
+      {
+        "key": "D",
+        "text": "AWS secures the physical data centers for all customers",
+        "correct": true,
+        "why": "Physical security is AWS's responsibility under the shared responsibility model."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS is responsible for the physical security of its facilities, so every customer benefits from enterprise-grade protection.",
+      "concept": "Under the shared responsibility model, AWS secures the cloud (facilities, hardware, network); customers secure what they put in it.",
+      "examTip": "Physical data center security = AWS's job.",
+      "references": [
+        {
+          "title": "Shared responsibility model",
+          "url": "https://aws.amazon.com/compliance/shared-responsibility-model/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-079",
+    "domain": "concepts",
+    "topic": "Cloud Economics",
+    "tags": [
+      "spot-concept"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company runs fault-tolerant batch jobs that can stop and restart at any time without harm.",
+    "prompt": "Which cloud economics idea lets it run these jobs at the lowest compute cost?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use spare capacity at steep discounts (Spot Instances)",
+        "correct": true,
+        "why": "Spot Instances use spare EC2 capacity at large discounts and suit interruptible work."
+      },
+      {
+        "key": "B",
+        "text": "Use the largest On-Demand instances available",
+        "correct": false,
+        "why": "On-Demand pricing is the most expensive per hour of these options."
+      },
+      {
+        "key": "C",
+        "text": "Commit to three years of fixed capacity",
+        "correct": false,
+        "why": "Long commitments discount steady workloads but lock in spending."
+      },
+      {
+        "key": "D",
+        "text": "Buy dedicated hardware for exclusive use",
+        "correct": false,
+        "why": "Dedicated hardware costs more, not less."
+      }
+    ],
+    "explanation": {
+      "answer": "Spot Instances offer spare EC2 capacity at discounts of up to 90% compared with On-Demand. They can be interrupted, so they fit flexible, fault-tolerant work.",
+      "concept": "Matching pricing models to workload characteristics is a key cloud economics skill.",
+      "examTip": "Interruptible + flexible = Spot.",
+      "references": [
+        {
+          "title": "Spot Instances",
+          "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-spot-instances.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-080",
+    "domain": "concepts",
+    "topic": "Cloud Benefits",
+    "tags": [
+      "reliability-global"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company's on-premises disaster recovery site sits idle most of the year but still costs as much as the primary site.",
+    "prompt": "How can AWS reduce this cost?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use larger EC2 instances in a single Availability Zone",
+        "correct": false,
+        "why": "This does not provide disaster recovery and adds cost."
+      },
+      {
+        "key": "B",
+        "text": "Keep a minimal copy in AWS and scale it up only during a disaster",
+        "correct": true,
+        "why": "Pay-as-you-go lets the company pay little until it actually needs to recover."
+      },
+      {
+        "key": "C",
+        "text": "Run a full copy of production in a second Region at all times",
+        "correct": false,
+        "why": "A fully running copy costs about the same as the idle DR site."
+      },
+      {
+        "key": "D",
+        "text": "Store disaster recovery backups only on the primary site",
+        "correct": false,
+        "why": "Backups on the primary site would be lost in the same disaster."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS lets you run only the minimum for disaster recovery (for example pilot light) and scale up on demand, instead of paying for an idle duplicate site.",
+      "concept": "Disaster recovery strategies trade cost against recovery time.",
+      "examTip": "Idle DR site = keep a small copy on AWS and scale when needed.",
+      "references": [
+        {
+          "title": "Disaster recovery options in the cloud",
+          "url": "https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/disaster-recovery-options-in-the-cloud.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-081",
+    "domain": "concepts",
+    "topic": "Cloud Economics",
+    "tags": [
+      "free-tier-concept"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A student wants to learn AWS without spending money and asks if anything can be tried for free.",
+    "prompt": "Which AWS offering helps?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Dedicated Hosts",
+        "correct": false,
+        "why": "Dedicated Hosts are paid physical servers."
+      },
+      {
+        "key": "B",
+        "text": "Savings Plans",
+        "correct": false,
+        "why": "Savings Plans lower prices for a usage commitment; they are not free."
+      },
+      {
+        "key": "C",
+        "text": "AWS Free Tier",
+        "correct": true,
+        "why": "The AWS Free Tier lets new customers try many services at no charge within set limits."
+      },
+      {
+        "key": "D",
+        "text": "AWS Enterprise Support",
+        "correct": false,
+        "why": "Enterprise Support is a paid support plan."
+      }
+    ],
+    "explanation": {
+      "answer": "The AWS Free Tier provides free use of many services within limits, so learners can explore without cost.",
+      "concept": "Free Tier usage beyond limits is billed, so set up AWS Budgets alerts.",
+      "examTip": "Try AWS at no charge = Free Tier (watch the limits).",
+      "references": [
+        {
+          "title": "AWS Free Tier",
+          "url": "https://aws.amazon.com/free/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-082",
+    "domain": "concepts",
+    "topic": "Cloud Economics",
+    "tags": [
+      "data-center-exit"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A company signs a five-year data center lease, then moves everything to AWS after two years.",
+    "prompt": "Which statement BEST describes the financial effect?",
+    "options": [
+      {
+        "key": "A",
+        "text": "The company immediately saves the full cost of the lease",
+        "correct": false,
+        "why": "The lease is a fixed commitment that the company may still have to pay."
+      },
+      {
+        "key": "B",
+        "text": "AWS costs replace lease costs one for one, so the bill stays flat",
+        "correct": false,
+        "why": "The company may pay both for a time, which is a change."
+      },
+      {
+        "key": "C",
+        "text": "AWS reimburses data center lease costs for migrations",
+        "correct": false,
+        "why": "AWS does not reimburse customers' lease costs."
+      },
+      {
+        "key": "D",
+        "text": "The lease is a sunk fixed cost that may overlap with AWS costs",
+        "correct": true,
+        "why": "Fixed commitments made earlier can overlap with new variable costs during the transition."
+      }
+    ],
+    "explanation": {
+      "answer": "Fixed costs such as leases continue regardless of usage. Migration plans often account for overlapping costs until commitments end.",
+      "concept": "This is why the cloud's shift to variable costs is valuable: fewer long-term fixed commitments.",
+      "examTip": "Existing leases and contracts are sunk costs; factor them into migration timing.",
+      "references": [
+        {
+          "title": "How AWS pricing works",
+          "url": "https://docs.aws.amazon.com/whitepapers/latest/how-aws-pricing-works/welcome.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-083",
+    "domain": "concepts",
+    "topic": "Cloud Benefits",
+    "tags": [
+      "serverless-benefit"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A developer wants to run code in response to events without provisioning or managing any servers and without paying for idle time.",
+    "prompt": "Which approach fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use AWS Lambda functions",
+        "correct": true,
+        "why": "Lambda runs code on demand, manages the servers and bills only for the compute time used."
+      },
+      {
+        "key": "B",
+        "text": "Use a Dedicated Host",
+        "correct": false,
+        "why": "Dedicated Hosts are physical servers you pay for continuously."
+      },
+      {
+        "key": "C",
+        "text": "Run code in an on-premises virtual machine",
+        "correct": false,
+        "why": "On-premises VMs require managing hardware and are paid for even when idle."
+      },
+      {
+        "key": "D",
+        "text": "Run code on a long-lived EC2 instance",
+        "correct": false,
+        "why": "An EC2 instance must be managed and is billed while idle."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Lambda is serverless compute: AWS manages the infrastructure and you pay for requests and compute duration.",
+      "concept": "Serverless removes server management and idle costs for event-driven workloads.",
+      "examTip": "Code without servers, pay per use = Lambda.",
+      "references": [
+        {
+          "title": "What is AWS Lambda?",
+          "url": "https://docs.aws.amazon.com/lambda/latest/dg/welcome.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-084",
+    "domain": "concepts",
+    "topic": "Design Principles",
+    "tags": [
+      "caching"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A website's database is overloaded because the same product pages are requested millions of times a day.",
+    "prompt": "Which design approach reduces the database load the MOST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Add more columns to the product table",
+        "correct": false,
+        "why": "Schema changes do not reduce the number of reads."
+      },
+      {
+        "key": "B",
+        "text": "Cache frequently read data close to the application",
+        "correct": true,
+        "why": "A cache such as Amazon ElastiCache serves repeated reads without hitting the database."
+      },
+      {
+        "key": "C",
+        "text": "Move the database to a larger instance every week",
+        "correct": false,
+        "why": "Ever-larger instances raise costs without addressing repeated reads."
+      },
+      {
+        "key": "D",
+        "text": "Delete old product records more often",
+        "correct": false,
+        "why": "Deleting records doesn't reduce repeated reads of popular pages."
+      }
+    ],
+    "explanation": {
+      "answer": "Caching stores frequently accessed data in memory, reducing load on the database and improving response time.",
+      "concept": "Caching layers include Amazon ElastiCache for application data and Amazon CloudFront for web content.",
+      "examTip": "Same data read again and again = cache it.",
+      "references": [
+        {
+          "title": "What is Amazon ElastiCache?",
+          "url": "https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/WhatIs.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-085",
+    "domain": "concepts",
+    "topic": "Cloud Benefits",
+    "tags": [
+      "multi-az-meaning"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A manager asks what an Availability Zone is.",
+    "prompt": "Which description is correct?",
+    "options": [
+      {
+        "key": "A",
+        "text": "A content cache location used by CloudFront",
+        "correct": false,
+        "why": "That describes an edge location, so it doesn't meet this requirement."
+      },
+      {
+        "key": "B",
+        "text": "A country where AWS stores customer data",
+        "correct": false,
+        "why": "Countries can contain Regions, but an AZ is a set of data centers within a Region."
+      },
+      {
+        "key": "C",
+        "text": "Isolated data centers with redundant power in a Region",
+        "correct": true,
+        "why": "Each AZ is isolated from failures in other AZs and connected with low-latency links."
+      },
+      {
+        "key": "D",
+        "text": "A single server rack inside one data center",
+        "correct": false,
+        "why": "An AZ is much larger than a rack, so it doesn't meet this requirement."
+      }
+    ],
+    "explanation": {
+      "answer": "An Availability Zone is one or more discrete data centers with redundant power, networking and connectivity in an AWS Region.",
+      "concept": "AZs in a Region are physically separated but connected with low-latency networking.",
+      "examTip": "AZ = isolated data center(s) within a Region.",
+      "references": [
+        {
+          "title": "Regions and Availability Zones",
+          "url": "https://aws.amazon.com/about-aws/global-infrastructure/regions_az/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-086",
+    "domain": "concepts",
+    "topic": "Cloud Economics",
+    "tags": [
+      "licensing",
+      "dedicated"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A company wants to bring software licenses that are tied to physical CPU sockets and cores, and its vendor requires visibility into the physical server.",
+    "prompt": "Which EC2 option meets this requirement?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Spot Instances",
+        "correct": false,
+        "why": "Spot Instances run on shared capacity and can be interrupted; they do not expose physical cores."
+      },
+      {
+        "key": "B",
+        "text": "Default shared tenancy On-Demand Instances",
+        "correct": false,
+        "why": "Shared tenancy does not give physical server visibility."
+      },
+      {
+        "key": "C",
+        "text": "AWS Lambda",
+        "correct": false,
+        "why": "Lambda abstracts servers entirely, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "D",
+        "text": "Dedicated Hosts",
+        "correct": true,
+        "why": "Dedicated Hosts give visibility into sockets and physical cores, supporting per-socket or per-core licenses."
+      }
+    ],
+    "explanation": {
+      "answer": "Dedicated Hosts are physical servers dedicated to you, with visibility of sockets and cores for bring-your-own-license compliance.",
+      "concept": "Dedicated Instances run on dedicated hardware too but do not give the same host-level visibility and control.",
+      "examTip": "Licenses bound to sockets/cores = Dedicated Hosts.",
+      "references": [
+        {
+          "title": "Amazon EC2 Dedicated Hosts",
+          "url": "https://aws.amazon.com/ec2/dedicated-hosts/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-087",
+    "domain": "concepts",
+    "topic": "Cloud Benefits",
+    "tags": [
+      "agility-multi"
+    ],
+    "difficulty": "medium",
+    "type": "multi",
+    "stem": "A company is comparing on-premises IT with AWS.",
+    "prompt": "Which TWO are typical advantages of AWS? (Select TWO.)",
+    "options": [
+      {
+        "key": "A",
+        "text": "Customers manage the physical security of data centers",
+        "correct": false,
+        "why": "Physical security is AWS's responsibility."
+      },
+      {
+        "key": "B",
+        "text": "Hardware must be purchased three years in advance",
+        "correct": false,
+        "why": "That describes on-premises planning, not AWS."
+      },
+      {
+        "key": "C",
+        "text": "Capacity can scale with demand",
+        "correct": true,
+        "why": "Elasticity lets capacity follow demand, so it meets the requirement described here."
+      },
+      {
+        "key": "D",
+        "text": "Prices are fixed regardless of usage",
+        "correct": false,
+        "why": "AWS pricing is generally usage-based, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "E",
+        "text": "Resources can be provisioned in minutes",
+        "correct": true,
+        "why": "Self-service, on-demand provisioning gives speed and agility."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS offers on-demand provisioning in minutes and elastic capacity that follows demand.",
+      "concept": "These benefits come from self-service, API-driven infrastructure.",
+      "examTip": "Fast provisioning + elastic scaling = classic AWS advantages.",
+      "references": [
+        {
+          "title": "What is cloud computing?",
+          "url": "https://aws.amazon.com/what-is-cloud-computing/"
+        }
+      ]
+    },
+    "selectCount": 2
+  },
+  {
+    "id": "clf-con-088",
+    "domain": "concepts",
+    "topic": "Design Principles",
+    "tags": [
+      "global-latency"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A news website based in Europe has many readers in Asia who complain about slow page loads.",
+    "prompt": "Which approach BEST reduces latency for those readers?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Serve content through Amazon CloudFront edge locations",
+        "correct": true,
+        "why": "CloudFront caches content at edge locations near readers, lowering latency."
+      },
+      {
+        "key": "B",
+        "text": "Increase the size of the web servers in Europe",
+        "correct": false,
+        "why": "Larger servers don't shorten the network distance to Asia."
+      },
+      {
+        "key": "C",
+        "text": "Compress the database backups",
+        "correct": false,
+        "why": "Backup compression has no effect on page load times."
+      },
+      {
+        "key": "D",
+        "text": "Add a second Availability Zone in the European Region",
+        "correct": false,
+        "why": "Another AZ in the same Region doesn't move content closer to Asia."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon CloudFront is a content delivery network that caches content at edge locations worldwide.",
+      "concept": "Global reach on AWS includes Regions for applications and edge locations for content delivery.",
+      "examTip": "Distant users + slow pages = CloudFront.",
+      "references": [
+        {
+          "title": "What is Amazon CloudFront?",
+          "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-089",
+    "domain": "concepts",
+    "topic": "Cloud Economics",
+    "tags": [
+      "storage-tiering"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company keeps 200 TB of compliance records that are rarely read but must be retained for seven years.",
+    "prompt": "Which approach lowers storage cost the MOST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Keep everything in Amazon S3 Standard",
+        "correct": false,
+        "why": "S3 Standard is designed for frequently accessed data and costs more for archives."
+      },
+      {
+        "key": "B",
+        "text": "Move the records to an Amazon S3 Glacier storage class",
+        "correct": true,
+        "why": "Glacier storage classes are designed for low-cost, long-term archival storage."
+      },
+      {
+        "key": "C",
+        "text": "Keep the records on premises on new hardware",
+        "correct": false,
+        "why": "Buying hardware adds capital cost and maintenance."
+      },
+      {
+        "key": "D",
+        "text": "Store the records on EBS volumes attached to EC2",
+        "correct": false,
+        "why": "EBS is block storage priced for active use and costs more for archives."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon S3 Glacier storage classes provide very low-cost storage for data that is rarely accessed.",
+      "concept": "Matching storage classes to access patterns is a key cost optimization practice.",
+      "examTip": "Rarely accessed, keep for years = S3 Glacier storage classes.",
+      "references": [
+        {
+          "title": "Amazon S3 storage classes",
+          "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-090",
+    "domain": "concepts",
+    "topic": "Cloud Benefits",
+    "tags": [
+      "aws-scale-security"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A company's security team asks how AWS can respond to new threats faster than most individual companies.",
+    "prompt": "Which reason is MOST accurate?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS disables customer applications during threats",
+        "correct": false,
+        "why": "AWS does not disable customer applications to respond to threats."
+      },
+      {
+        "key": "B",
+        "text": "AWS requires customers to install AWS antivirus software",
+        "correct": false,
+        "why": "There is no mandatory AWS antivirus for customers."
+      },
+      {
+        "key": "C",
+        "text": "AWS sees signals across a global infrastructure at massive scale",
+        "correct": true,
+        "why": "Operating at scale gives AWS broad visibility and dedicated security teams."
+      },
+      {
+        "key": "D",
+        "text": "AWS shares customers' private data to learn about threats",
+        "correct": false,
+        "why": "AWS does not use customers' private data this way."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS operates at massive scale with dedicated security teams, which helps it detect and respond to threats across its infrastructure.",
+      "concept": "Customers inherit the security controls AWS builds for the underlying infrastructure.",
+      "examTip": "Scale = better visibility and specialized security teams for the infrastructure.",
+      "references": [
+        {
+          "title": "Security in the AWS Cloud",
+          "url": "https://aws.amazon.com/security/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-091",
+    "domain": "concepts",
+    "topic": "Migration Strategies",
+    "tags": [
+      "replatform-example"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "During migration, a company moves its Java application from its own application servers to AWS Elastic Beanstalk with almost no code changes.",
+    "prompt": "Which migration strategy is this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Repurchase",
+        "correct": false,
+        "why": "Repurchasing replaces the application with a new product."
+      },
+      {
+        "key": "B",
+        "text": "Retain",
+        "correct": false,
+        "why": "Retaining keeps the application on premises."
+      },
+      {
+        "key": "C",
+        "text": "Refactor",
+        "correct": false,
+        "why": "Refactoring redesigns the application, which is not happening here."
+      },
+      {
+        "key": "D",
+        "text": "Replatform",
+        "correct": true,
+        "why": "Moving to a managed platform with minimal changes is replatforming."
+      }
+    ],
+    "explanation": {
+      "answer": "Moving to a managed platform like Elastic Beanstalk, with few code changes, is a replatform migration.",
+      "concept": "Replatforming gains some cloud benefits, such as less server management, without a rewrite.",
+      "examTip": "Same app, new managed platform, minimal changes = replatform.",
+      "references": [
+        {
+          "title": "Migration strategies",
+          "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/large-migration-guide/migration-strategies.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-092",
+    "domain": "concepts",
+    "topic": "Deployment Models",
+    "tags": [
+      "definitions"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A company's leadership is discussing cloud computing models.",
+    "prompt": "Which model gives the customer the MOST control over the operating system and network settings?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Infrastructure as a service (IaaS)",
+        "correct": true,
+        "why": "IaaS, like Amazon EC2, provides servers, storage and networking that the customer configures."
+      },
+      {
+        "key": "B",
+        "text": "Software as a service (SaaS)",
+        "correct": false,
+        "why": "SaaS delivers a finished application with very little infrastructure control."
+      },
+      {
+        "key": "C",
+        "text": "Function as a service",
+        "correct": false,
+        "why": "Functions run on infrastructure fully managed by the provider."
+      },
+      {
+        "key": "D",
+        "text": "Platform as a service (PaaS)",
+        "correct": false,
+        "why": "PaaS manages the operating system and platform for you."
+      }
+    ],
+    "explanation": {
+      "answer": "IaaS gives the highest level of flexibility and control over IT resources. PaaS and SaaS hand more management to the provider.",
+      "concept": "Types of cloud computing: IaaS, PaaS and SaaS.",
+      "examTip": "Most control = IaaS. Least management = SaaS.",
+      "references": [
+        {
+          "title": "Types of cloud computing",
+          "url": "https://docs.aws.amazon.com/whitepapers/latest/aws-overview/types-of-cloud-computing.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-093",
+    "domain": "concepts",
+    "topic": "Deployment Models",
+    "tags": [
+      "paas"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A development team wants to deploy web applications without managing the underlying operating systems, patches or capacity planning.",
+    "prompt": "Which cloud computing model fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Colocation",
+        "correct": false,
+        "why": "Colocation means managing your own hardware in a rented facility."
+      },
+      {
+        "key": "B",
+        "text": "Platform as a service (PaaS)",
+        "correct": true,
+        "why": "PaaS removes the need to manage the underlying infrastructure so teams can focus on deploying applications."
+      },
+      {
+        "key": "C",
+        "text": "On-premises virtualization",
+        "correct": false,
+        "why": "On premises, the team manages everything."
+      },
+      {
+        "key": "D",
+        "text": "Infrastructure as a service (IaaS)",
+        "correct": false,
+        "why": "IaaS leaves operating system management to the customer."
+      }
+    ],
+    "explanation": {
+      "answer": "PaaS removes the need to manage underlying infrastructure (hardware and operating systems). AWS Elastic Beanstalk is an example.",
+      "concept": "PaaS is a middle ground between IaaS control and SaaS simplicity.",
+      "examTip": "Deploy code, don't manage OS = PaaS (e.g., Elastic Beanstalk).",
+      "references": [
+        {
+          "title": "Types of cloud computing",
+          "url": "https://docs.aws.amazon.com/whitepapers/latest/aws-overview/types-of-cloud-computing.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-094",
+    "domain": "concepts",
+    "topic": "Deployment Models",
+    "tags": [
+      "saas"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A company uses a web-based email service that the provider fully runs and maintains. Employees only use the application.",
+    "prompt": "Which cloud computing model is this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Hybrid cloud",
+        "correct": false,
+        "why": "Hybrid describes a deployment model, not a service model."
+      },
+      {
+        "key": "B",
+        "text": "Platform as a service",
+        "correct": false,
+        "why": "PaaS would require deploying and managing your own application."
+      },
+      {
+        "key": "C",
+        "text": "Software as a service (SaaS)",
+        "correct": true,
+        "why": "SaaS provides a complete product that is run and managed by the provider."
+      },
+      {
+        "key": "D",
+        "text": "Infrastructure as a service",
+        "correct": false,
+        "why": "IaaS would require managing servers and operating systems."
+      }
+    ],
+    "explanation": {
+      "answer": "With SaaS, the provider runs and manages the whole application; customers just use it.",
+      "concept": "Examples include web email and many business applications.",
+      "examTip": "Just use the app = SaaS.",
+      "references": [
+        {
+          "title": "Types of cloud computing",
+          "url": "https://docs.aws.amazon.com/whitepapers/latest/aws-overview/types-of-cloud-computing.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-095",
+    "domain": "concepts",
+    "topic": "Cloud Economics",
+    "tags": [
+      "right-pricing-model"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A company has a steady baseline workload that runs 24/7 for the next three years, plus unpredictable short spikes.",
+    "prompt": "Which pricing approach is MOST cost-effective?",
+    "options": [
+      {
+        "key": "A",
+        "text": "On-Demand for everything to stay flexible",
+        "correct": false,
+        "why": "On-Demand is flexible but costs the most for steady 24/7 usage."
+      },
+      {
+        "key": "B",
+        "text": "Dedicated Hosts for everything",
+        "correct": false,
+        "why": "Dedicated Hosts are for licensing or compliance needs and cost more."
+      },
+      {
+        "key": "C",
+        "text": "Spot Instances for the baseline and spikes",
+        "correct": false,
+        "why": "Spot can be interrupted, which is risky for a steady baseline that must run."
+      },
+      {
+        "key": "D",
+        "text": "Savings Plans for the baseline and On-Demand for spikes",
+        "correct": true,
+        "why": "Committing on the steady baseline earns a discount, while spikes stay flexible."
+      }
+    ],
+    "explanation": {
+      "answer": "Combining pricing models matches each part of a workload to the right price: commitments for steady use, On-Demand for unpredictable spikes.",
+      "concept": "Common pattern: commit for the baseline, On-Demand or Spot above it.",
+      "examTip": "Steady baseline + spikes = Savings Plan/RI for base + On-Demand for peaks.",
+      "references": [
+        {
+          "title": "What are Savings Plans?",
+          "url": "https://docs.aws.amazon.com/savingsplans/latest/userguide/what-is-savings-plans.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-096",
+    "domain": "concepts",
+    "topic": "Cloud Benefits",
+    "tags": [
+      "experimentation-cost"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A team wants to compare three instance types under real load before choosing one for production.",
+    "prompt": "Why is this easier on AWS than on premises?",
+    "options": [
+      {
+        "key": "A",
+        "text": "You can launch each type briefly and pay only for the hours used",
+        "correct": true,
+        "why": "On-demand access makes short benchmarks cheap and fast."
+      },
+      {
+        "key": "B",
+        "text": "AWS requires customers to test every instance type",
+        "correct": false,
+        "why": "There is no such requirement, which isn't what this scenario needs."
+      },
+      {
+        "key": "C",
+        "text": "On-premises servers can't run benchmarks",
+        "correct": false,
+        "why": "On-premises servers can, but buying three hardware types just to test is costly."
+      },
+      {
+        "key": "D",
+        "text": "AWS discounts instances that are used for tests",
+        "correct": false,
+        "why": "Test instances are billed like any others."
+      }
+    ],
+    "explanation": {
+      "answer": "On AWS you can benchmark different instance types for a few hours each and keep only the best one.",
+      "concept": "Experimenting more often is a performance efficiency design principle.",
+      "examTip": "Cheap, quick experiments = on-demand access to many resource types.",
+      "references": [
+        {
+          "title": "Amazon EC2 instance types",
+          "url": "https://aws.amazon.com/ec2/instance-types/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-097",
+    "domain": "concepts",
+    "topic": "Cloud Economics",
+    "tags": [
+      "idle-resources"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "An AWS bill shows charges for unattached EBS volumes and Elastic IP addresses that nobody uses.",
+    "prompt": "Which practice would prevent this waste?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Increase the size of the EBS volumes",
+        "correct": false,
+        "why": "Larger volumes cost more, which isn't what this scenario needs."
+      },
+      {
+        "key": "B",
+        "text": "Regularly identify and delete unused resources",
+        "correct": true,
+        "why": "Cleaning up idle resources removes charges that bring no value."
+      },
+      {
+        "key": "C",
+        "text": "Buy Reserved Instances for the unused resources",
+        "correct": false,
+        "why": "Reservations discount resources you use; they don't remove waste."
+      },
+      {
+        "key": "D",
+        "text": "Move the resources to another Region",
+        "correct": false,
+        "why": "Moving unused resources still incurs charges."
+      }
+    ],
+    "explanation": {
+      "answer": "Unused resources still cost money. Regular cleanup, often using AWS Trusted Advisor or Cost Explorer insights, keeps costs down.",
+      "concept": "Cost optimization is ongoing: find and remove idle and underused resources.",
+      "examTip": "Paying for things nobody uses = find and delete idle resources.",
+      "references": [
+        {
+          "title": "AWS Trusted Advisor",
+          "url": "https://docs.aws.amazon.com/awssupport/latest/user/trusted-advisor.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-098",
+    "domain": "concepts",
+    "topic": "Well-Architected Framework",
+    "tags": [
+      "reliability-meaning"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A manager asks what the reliability pillar is about.",
+    "prompt": "Which answer is BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Protecting data from unauthorized access",
+        "correct": false,
+        "why": "That describes security, which isn't what this scenario needs."
+      },
+      {
+        "key": "B",
+        "text": "Making the workload as cheap as possible",
+        "correct": false,
+        "why": "That describes cost optimization, so it doesn't meet this requirement."
+      },
+      {
+        "key": "C",
+        "text": "Performing the intended function correctly and consistently",
+        "correct": true,
+        "why": "Reliability covers a workload doing what it should, when it should, and recovering from failures."
+      },
+      {
+        "key": "D",
+        "text": "Reducing the carbon footprint of workloads",
+        "correct": false,
+        "why": "That describes sustainability, which isn't what this scenario needs."
+      }
+    ],
+    "explanation": {
+      "answer": "The reliability pillar covers the ability of a workload to perform its intended function correctly and consistently, including recovery from failure.",
+      "concept": "Key areas include foundations, workload architecture, change management and failure management.",
+      "examTip": "Correct, consistent, recovers = reliability.",
+      "references": [
+        {
+          "title": "Reliability pillar",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/welcome.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-099",
+    "domain": "concepts",
+    "topic": "Cloud Economics",
+    "tags": [
+      "network-cost-awareness"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A company plans to move a large data warehouse to AWS while its reporting tools stay on premises and download huge result sets every day.",
+    "prompt": "Which cost should the company review carefully before migrating?",
+    "options": [
+      {
+        "key": "A",
+        "text": "The cost of using the AWS Management Console",
+        "correct": false,
+        "why": "The console is free to use, so it doesn't meet this requirement."
+      },
+      {
+        "key": "B",
+        "text": "The cost of creating IAM users",
+        "correct": false,
+        "why": "IAM is offered at no additional charge, which isn't what this scenario needs."
+      },
+      {
+        "key": "C",
+        "text": "Data transfer into AWS from the internet",
+        "correct": false,
+        "why": "Data transfer into AWS from the internet is generally free."
+      },
+      {
+        "key": "D",
+        "text": "Data transfer out of AWS to the on-premises tools",
+        "correct": true,
+        "why": "Data transfer out to the internet or on premises is charged and can add up for large daily downloads."
+      }
+    ],
+    "explanation": {
+      "answer": "Data transfer out of AWS is billed per GB, so architectures that move large volumes out every day should be reviewed.",
+      "concept": "Keeping consumers close to data, or using AWS Direct Connect, can reduce data transfer costs.",
+      "examTip": "Inbound is usually free; outbound is charged.",
+      "references": [
+        {
+          "title": "Amazon EC2 On-Demand pricing (data transfer)",
+          "url": "https://aws.amazon.com/ec2/pricing/on-demand/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-100",
+    "domain": "concepts",
+    "topic": "Design Principles",
+    "tags": [
+      "multi-select"
+    ],
+    "difficulty": "medium",
+    "type": "multi",
+    "stem": "An architect is reviewing a workload against cloud design principles.",
+    "prompt": "Which TWO changes follow AWS design best practices? (Select TWO.)",
+    "options": [
+      {
+        "key": "A",
+        "text": "Hard-code server IP addresses into the application",
+        "correct": false,
+        "why": "Hard-coded IPs make components tightly coupled and hard to replace."
+      },
+      {
+        "key": "B",
+        "text": "Turn off monitoring to reduce costs",
+        "correct": false,
+        "why": "Monitoring is essential for reliability and operations."
+      },
+      {
+        "key": "C",
+        "text": "Replace a single large server with an Auto Scaling group across AZs",
+        "correct": true,
+        "why": "This removes a single point of failure and adds elasticity."
+      },
+      {
+        "key": "D",
+        "text": "Configure each server by hand through SSH",
+        "correct": false,
+        "why": "Manual configuration causes drift and slow recovery."
+      },
+      {
+        "key": "E",
+        "text": "Use a queue between the web tier and the processing tier",
+        "correct": true,
+        "why": "A queue decouples tiers so they scale and fail independently."
+      }
+    ],
+    "explanation": {
+      "answer": "Scaling horizontally across AZs and decoupling with queues are core design principles for reliable, scalable workloads.",
+      "concept": "Other principles: automate, treat resources as disposable, and design for failure.",
+      "examTip": "Good: horizontal scaling, multi-AZ, decoupling, automation. Bad: hard-coding, manual changes.",
+      "references": [
+        {
+          "title": "Reliability pillar design principles",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/design-principles.html"
+        }
+      ]
+    },
+    "selectCount": 2
+  }
+]

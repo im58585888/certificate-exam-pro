@@ -1,0 +1,1241 @@
+[
+  {
+    "id": "clf-tec-101",
+    "domain": "technology",
+    "topic": "Networking",
+    "tags": [
+      "vpc"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A company wants a logically isolated section of AWS where it controls IP ranges, subnets and route tables.",
+    "prompt": "Which service provides this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Direct Connect",
+        "correct": false,
+        "why": "Direct Connect is a dedicated connection to AWS."
+      },
+      {
+        "key": "B",
+        "text": "Amazon VPC",
+        "correct": true,
+        "why": "A VPC is a logically isolated virtual network you define."
+      },
+      {
+        "key": "C",
+        "text": "Amazon CloudFront",
+        "correct": false,
+        "why": "CloudFront is a CDN, so it doesn't meet this requirement."
+      },
+      {
+        "key": "D",
+        "text": "Amazon Route 53",
+        "correct": false,
+        "why": "Route 53 is DNS, so it doesn't solve the problem described here."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Virtual Private Cloud (Amazon VPC) lets you launch resources in a logically isolated virtual network that you define.",
+      "concept": "You control IP addressing, subnets, route tables and gateways.",
+      "examTip": "Your own private network in AWS = VPC.",
+      "references": [
+        {
+          "title": "What is Amazon VPC?",
+          "url": "https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-102",
+    "domain": "technology",
+    "topic": "Networking",
+    "tags": [
+      "subnets"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A VPC architect places web servers in subnets that route to an internet gateway, and databases in subnets that don't.",
+    "prompt": "What are these two subnet types called?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Primary and secondary subnets",
+        "correct": false,
+        "why": "These aren't AWS subnet types, so it doesn't meet this requirement."
+      },
+      {
+        "key": "B",
+        "text": "Regional subnets and global subnets",
+        "correct": false,
+        "why": "Subnets live in one AZ, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "C",
+        "text": "Public subnets and private subnets",
+        "correct": true,
+        "why": "Public subnets have a route to an internet gateway; private subnets don't."
+      },
+      {
+        "key": "D",
+        "text": "Edge subnets and core subnets",
+        "correct": false,
+        "why": "These aren't AWS terms, which isn't what this scenario needs."
+      }
+    ],
+    "explanation": {
+      "answer": "A public subnet has a route to an internet gateway. A private subnet doesn't.",
+      "concept": "Each subnet lives in a single Availability Zone.",
+      "examTip": "Route to IGW = public subnet.",
+      "references": [
+        {
+          "title": "Subnets for your VPC",
+          "url": "https://docs.aws.amazon.com/vpc/latest/userguide/configure-subnets.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-103",
+    "domain": "technology",
+    "topic": "Networking",
+    "tags": [
+      "igw"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "Instances in a VPC need to communicate with the internet.",
+    "prompt": "Which component must be attached to the VPC?",
+    "options": [
+      {
+        "key": "A",
+        "text": "A NAT gateway only",
+        "correct": false,
+        "why": "A NAT gateway itself needs an internet gateway to reach the internet."
+      },
+      {
+        "key": "B",
+        "text": "A virtual private gateway",
+        "correct": false,
+        "why": "This is for VPN connections to on-premises networks."
+      },
+      {
+        "key": "C",
+        "text": "A transit gateway",
+        "correct": false,
+        "why": "Transit gateways connect VPCs and on-premises networks."
+      },
+      {
+        "key": "D",
+        "text": "An internet gateway",
+        "correct": true,
+        "why": "An internet gateway enables communication between the VPC and the internet."
+      }
+    ],
+    "explanation": {
+      "answer": "An internet gateway is a horizontally scaled, redundant VPC component that allows communication with the internet.",
+      "concept": "Public subnets route 0.0.0.0/0 to the internet gateway.",
+      "examTip": "VPC ↔ internet = internet gateway.",
+      "references": [
+        {
+          "title": "Enable VPC internet access using internet gateways",
+          "url": "https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Internet_Gateway.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-104",
+    "domain": "technology",
+    "topic": "Content Delivery & DNS",
+    "tags": [
+      "route53"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A company wants to register a domain name and route users to its application with DNS.",
+    "prompt": "Which service should it use?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Route 53",
+        "correct": true,
+        "why": "Route 53 is a DNS web service with domain registration."
+      },
+      {
+        "key": "B",
+        "text": "Amazon VPC",
+        "correct": false,
+        "why": "VPC is a private network, so it doesn't meet this requirement."
+      },
+      {
+        "key": "C",
+        "text": "Amazon CloudFront",
+        "correct": false,
+        "why": "CloudFront delivers content but isn't a domain registrar or DNS service."
+      },
+      {
+        "key": "D",
+        "text": "AWS Global Accelerator",
+        "correct": false,
+        "why": "Global Accelerator improves network paths."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Route 53 is a highly available DNS service that provides domain registration, DNS routing and health checking.",
+      "concept": "Routing policies include simple, weighted, latency, failover and geolocation.",
+      "examTip": "DNS + domains = Route 53.",
+      "references": [
+        {
+          "title": "What is Amazon Route 53?",
+          "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/Welcome.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-105",
+    "domain": "technology",
+    "topic": "Content Delivery & DNS",
+    "tags": [
+      "route53-routing"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company runs its app in two Regions and wants users sent to the Region that gives them the lowest latency.",
+    "prompt": "Which Route 53 routing policy should it use?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Simple routing",
+        "correct": false,
+        "why": "Simple routing returns the same record without considering latency."
+      },
+      {
+        "key": "B",
+        "text": "Latency-based routing",
+        "correct": true,
+        "why": "Latency routing sends users to the Region with the lowest latency for them."
+      },
+      {
+        "key": "C",
+        "text": "Weighted routing",
+        "correct": false,
+        "why": "Weighted routing splits traffic by percentage."
+      },
+      {
+        "key": "D",
+        "text": "Multivalue answer routing",
+        "correct": false,
+        "why": "This returns multiple healthy records randomly."
+      }
+    ],
+    "explanation": {
+      "answer": "Route 53 latency-based routing directs users to the AWS Region that provides the lowest network latency.",
+      "concept": "Failover routing sends traffic to a backup when the primary is unhealthy.",
+      "examTip": "Lowest latency Region = latency-based routing.",
+      "references": [
+        {
+          "title": "Choosing a routing policy",
+          "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-106",
+    "domain": "technology",
+    "topic": "Content Delivery & DNS",
+    "tags": [
+      "cloudfront"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company serves videos and images to users worldwide and wants faster delivery and lower load on its origin servers.",
+    "prompt": "Which service fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Route 53",
+        "correct": false,
+        "why": "Route 53 handles DNS, not caching, so it doesn't meet this requirement."
+      },
+      {
+        "key": "B",
+        "text": "AWS Direct Connect",
+        "correct": false,
+        "why": "Direct Connect links on-premises networks to AWS."
+      },
+      {
+        "key": "C",
+        "text": "Amazon CloudFront",
+        "correct": true,
+        "why": "CloudFront caches content at edge locations close to viewers."
+      },
+      {
+        "key": "D",
+        "text": "AWS Global Accelerator",
+        "correct": false,
+        "why": "Global Accelerator speeds up network paths but doesn't cache content to reduce origin load."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon CloudFront is a content delivery network that caches content at edge locations to reduce latency and origin load.",
+      "concept": "Origins can be S3 buckets, load balancers or custom servers.",
+      "examTip": "Faster global content delivery = CloudFront.",
+      "references": [
+        {
+          "title": "What is Amazon CloudFront?",
+          "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-107",
+    "domain": "technology",
+    "topic": "Content Delivery & DNS",
+    "tags": [
+      "global-accelerator"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A multiplayer game uses UDP and needs static anycast IP addresses and fast failover between Regions.",
+    "prompt": "Which service fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Route 53 weighted routing",
+        "correct": false,
+        "why": "DNS-based routing depends on client caching and doesn't give static anycast IPs."
+      },
+      {
+        "key": "B",
+        "text": "Amazon CloudFront",
+        "correct": false,
+        "why": "CloudFront is mainly for HTTP(S) content caching."
+      },
+      {
+        "key": "C",
+        "text": "AWS Site-to-Site VPN",
+        "correct": false,
+        "why": "VPN connects networks, not players to game servers."
+      },
+      {
+        "key": "D",
+        "text": "AWS Global Accelerator",
+        "correct": true,
+        "why": "Global Accelerator provides static anycast IPs and routes TCP/UDP traffic over the AWS network."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Global Accelerator uses the AWS global network and anycast static IPs to improve availability and performance for TCP and UDP applications.",
+      "concept": "It fails over between endpoints in seconds.",
+      "examTip": "Static IPs + TCP/UDP + global performance = Global Accelerator.",
+      "references": [
+        {
+          "title": "What is AWS Global Accelerator?",
+          "url": "https://docs.aws.amazon.com/global-accelerator/latest/dg/what-is-global-accelerator.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-108",
+    "domain": "technology",
+    "topic": "Hybrid Connectivity",
+    "tags": [
+      "direct-connect"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company needs a dedicated, private network connection from its data center to AWS with consistent bandwidth and latency.",
+    "prompt": "Which service fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Direct Connect",
+        "correct": true,
+        "why": "Direct Connect provides a dedicated private connection to AWS."
+      },
+      {
+        "key": "B",
+        "text": "Amazon CloudFront",
+        "correct": false,
+        "why": "CloudFront delivers content to users, so it doesn't meet this requirement."
+      },
+      {
+        "key": "C",
+        "text": "AWS Site-to-Site VPN",
+        "correct": false,
+        "why": "VPN runs over the public internet, so performance varies."
+      },
+      {
+        "key": "D",
+        "text": "Internet gateway",
+        "correct": false,
+        "why": "Internet gateways connect to the public internet."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Direct Connect establishes a dedicated network connection between your premises and AWS, bypassing the public internet.",
+      "concept": "It can reduce data transfer costs and provide consistent performance.",
+      "examTip": "Dedicated private link to AWS = Direct Connect.",
+      "references": [
+        {
+          "title": "What is AWS Direct Connect?",
+          "url": "https://docs.aws.amazon.com/directconnect/latest/UserGuide/Welcome.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-109",
+    "domain": "technology",
+    "topic": "Hybrid Connectivity",
+    "tags": [
+      "vpn-vs-dx"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company needs connectivity to AWS this week and plans a dedicated link later.",
+    "prompt": "What should it use NOW?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Route 53",
+        "correct": false,
+        "why": "Route 53 is DNS, which isn't what this scenario needs."
+      },
+      {
+        "key": "B",
+        "text": "AWS Site-to-Site VPN",
+        "correct": true,
+        "why": "A VPN can be set up quickly over the existing internet connection."
+      },
+      {
+        "key": "C",
+        "text": "AWS Transit Gateway",
+        "correct": false,
+        "why": "Transit Gateway is a hub for connections; it still needs a VPN or Direct Connect attachment."
+      },
+      {
+        "key": "D",
+        "text": "AWS Direct Connect",
+        "correct": false,
+        "why": "Direct Connect can take weeks to provision."
+      }
+    ],
+    "explanation": {
+      "answer": "Site-to-Site VPN is fast to set up and encrypted. Direct Connect provides dedicated bandwidth but takes longer to provision.",
+      "concept": "VPN is often used as a backup for Direct Connect.",
+      "examTip": "Fast to set up = VPN. Dedicated and consistent = Direct Connect.",
+      "references": [
+        {
+          "title": "What is AWS Site-to-Site VPN?",
+          "url": "https://docs.aws.amazon.com/vpn/latest/s2svpn/VPC_VPN.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-110",
+    "domain": "technology",
+    "topic": "Networking",
+    "tags": [
+      "transit-gateway"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A company has 50 VPCs and several on-premises sites and wants to connect them all without managing many individual peering connections.",
+    "prompt": "Which service fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "VPC peering between every pair",
+        "correct": false,
+        "why": "Full-mesh peering becomes complex as VPCs grow."
+      },
+      {
+        "key": "B",
+        "text": "Amazon CloudFront",
+        "correct": false,
+        "why": "CloudFront is a CDN, so it doesn't meet this requirement."
+      },
+      {
+        "key": "C",
+        "text": "AWS Transit Gateway",
+        "correct": true,
+        "why": "Transit Gateway acts as a central hub connecting VPCs and on-premises networks."
+      },
+      {
+        "key": "D",
+        "text": "Internet gateways in each VPC",
+        "correct": false,
+        "why": "Internet gateways connect to the internet, not to each other privately."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Transit Gateway connects VPCs and on-premises networks through a central hub, simplifying network topology.",
+      "concept": "It replaces complex peering meshes.",
+      "examTip": "Many VPCs + on-prem, hub-and-spoke = Transit Gateway.",
+      "references": [
+        {
+          "title": "What is a transit gateway?",
+          "url": "https://docs.aws.amazon.com/vpc/latest/tgw/what-is-transit-gateway.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-111",
+    "domain": "technology",
+    "topic": "Networking",
+    "tags": [
+      "vpc-peering"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company wants two of its VPCs to communicate privately using private IP addresses.",
+    "prompt": "Which simple option connects them?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Route 53",
+        "correct": false,
+        "why": "Route 53 is DNS, which isn't what this scenario needs."
+      },
+      {
+        "key": "B",
+        "text": "An internet gateway in each VPC",
+        "correct": false,
+        "why": "This routes over the internet, not privately."
+      },
+      {
+        "key": "C",
+        "text": "AWS Transit Gateway",
+        "correct": false,
+        "why": "Transit Gateway works but is more than needed to connect just two VPCs."
+      },
+      {
+        "key": "D",
+        "text": "VPC peering",
+        "correct": true,
+        "why": "VPC peering connects two VPCs privately."
+      }
+    ],
+    "explanation": {
+      "answer": "A VPC peering connection routes traffic between two VPCs using private IP addresses.",
+      "concept": "Peering isn't transitive; for many VPCs, use Transit Gateway.",
+      "examTip": "Connect two VPCs privately = VPC peering.",
+      "references": [
+        {
+          "title": "What is VPC peering?",
+          "url": "https://docs.aws.amazon.com/vpc/latest/peering/what-is-vpc-peering.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-112",
+    "domain": "technology",
+    "topic": "Networking",
+    "tags": [
+      "privatelink"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A SaaS provider wants to offer its service to customers' VPCs privately, without exposing it to the internet or requiring VPC peering.",
+    "prompt": "Which feature fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS PrivateLink",
+        "correct": true,
+        "why": "PrivateLink exposes services privately to other VPCs through endpoints."
+      },
+      {
+        "key": "B",
+        "text": "AWS Global Accelerator",
+        "correct": false,
+        "why": "Global Accelerator improves public internet performance."
+      },
+      {
+        "key": "C",
+        "text": "Internet gateways",
+        "correct": false,
+        "why": "These expose traffic to the internet, which isn't what this scenario needs."
+      },
+      {
+        "key": "D",
+        "text": "NAT gateways",
+        "correct": false,
+        "why": "NAT provides outbound internet access, so it doesn't solve the problem described here."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS PrivateLink provides private connectivity between VPCs and services without exposing traffic to the public internet.",
+      "concept": "Consumers create interface endpoints; providers create endpoint services.",
+      "examTip": "Private access to a service across VPCs = PrivateLink.",
+      "references": [
+        {
+          "title": "What is AWS PrivateLink?",
+          "url": "https://docs.aws.amazon.com/vpc/latest/privatelink/what-is-privatelink.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-113",
+    "domain": "technology",
+    "topic": "Networking",
+    "tags": [
+      "route-tables"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A subnet's traffic isn't reaching the internet even though the VPC has an internet gateway.",
+    "prompt": "What should be checked FIRST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "The S3 bucket policy",
+        "correct": false,
+        "why": "Bucket policies don't affect subnet routing."
+      },
+      {
+        "key": "B",
+        "text": "The subnet's route table",
+        "correct": true,
+        "why": "The route table must have a route to the internet gateway."
+      },
+      {
+        "key": "C",
+        "text": "The IAM password policy",
+        "correct": false,
+        "why": "Password policies don't affect networking."
+      },
+      {
+        "key": "D",
+        "text": "The CloudFront distribution",
+        "correct": false,
+        "why": "CloudFront isn't involved in subnet routing."
+      }
+    ],
+    "explanation": {
+      "answer": "Route tables determine where network traffic from subnets is directed. A public subnet needs a 0.0.0.0/0 route to the internet gateway.",
+      "concept": "Security groups and NACLs must also allow the traffic.",
+      "examTip": "Traffic not leaving the subnet? Check the route table.",
+      "references": [
+        {
+          "title": "Route tables for your VPC",
+          "url": "https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Route_Tables.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-114",
+    "domain": "technology",
+    "topic": "Content Delivery & DNS",
+    "tags": [
+      "route53-health"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company wants DNS to stop sending users to a server that fails health checks and send them to a backup site instead.",
+    "prompt": "Which Route 53 feature fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Weighted routing without health checks",
+        "correct": false,
+        "why": "This splits traffic by weight but doesn't fail over."
+      },
+      {
+        "key": "B",
+        "text": "Simple routing",
+        "correct": false,
+        "why": "Simple routing doesn't use health checks for failover."
+      },
+      {
+        "key": "C",
+        "text": "Failover routing with health checks",
+        "correct": true,
+        "why": "Failover routing switches to a secondary resource when the primary is unhealthy."
+      },
+      {
+        "key": "D",
+        "text": "Geolocation routing",
+        "correct": false,
+        "why": "Geolocation routes by user location, so it doesn't meet this requirement."
+      }
+    ],
+    "explanation": {
+      "answer": "Route 53 health checks monitor endpoints. With failover routing, traffic moves to the secondary when the primary fails.",
+      "concept": "This supports active-passive disaster recovery.",
+      "examTip": "DNS failover = Route 53 failover routing + health checks.",
+      "references": [
+        {
+          "title": "Choosing a routing policy",
+          "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-115",
+    "domain": "technology",
+    "topic": "Content Delivery & DNS",
+    "tags": [
+      "cloudfront-security"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company wants HTTPS, DDoS protection and web filtering in front of its global website.",
+    "prompt": "Which combination fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "An Application Load Balancer with security groups only",
+        "correct": false,
+        "why": "This lacks edge delivery and web filtering for a global audience."
+      },
+      {
+        "key": "B",
+        "text": "AWS Global Accelerator with network ACLs",
+        "correct": false,
+        "why": "NACLs don't filter web requests, and Global Accelerator doesn't cache content."
+      },
+      {
+        "key": "C",
+        "text": "Amazon Route 53 with AWS WAF and AWS Shield",
+        "correct": false,
+        "why": "Route 53 is DNS; WAF must be attached to a supported resource like CloudFront to filter web requests."
+      },
+      {
+        "key": "D",
+        "text": "Amazon CloudFront with AWS WAF and AWS Shield",
+        "correct": true,
+        "why": "CloudFront delivers content at the edge with integrated WAF and Shield protection."
+      }
+    ],
+    "explanation": {
+      "answer": "CloudFront integrates with AWS WAF for web filtering and AWS Shield for DDoS protection, and supports HTTPS with ACM certificates.",
+      "concept": "Filtering at the edge stops bad traffic before it reaches your origin.",
+      "examTip": "Edge security = CloudFront + WAF + Shield.",
+      "references": [
+        {
+          "title": "What is Amazon CloudFront?",
+          "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-116",
+    "domain": "technology",
+    "topic": "Networking",
+    "tags": [
+      "multi-select"
+    ],
+    "difficulty": "easy",
+    "type": "multi",
+    "stem": "A team is learning VPC components.",
+    "prompt": "Which TWO statements are correct? (Select TWO.)",
+    "options": [
+      {
+        "key": "A",
+        "text": "A subnet belongs to one Availability Zone",
+        "correct": true,
+        "why": "Each subnet lives in exactly one AZ, which is exactly what this scenario needs."
+      },
+      {
+        "key": "B",
+        "text": "Security groups attach to subnets",
+        "correct": false,
+        "why": "Security groups attach to network interfaces."
+      },
+      {
+        "key": "C",
+        "text": "A VPC spans multiple Regions",
+        "correct": false,
+        "why": "A VPC exists in one Region, which isn't what this scenario needs."
+      },
+      {
+        "key": "D",
+        "text": "An internet gateway is required for VPC peering",
+        "correct": false,
+        "why": "Peering doesn't need an internet gateway."
+      },
+      {
+        "key": "E",
+        "text": "A NAT gateway allows outbound internet access from private subnets",
+        "correct": true,
+        "why": "NAT gateways enable outbound-only internet access."
+      }
+    ],
+    "explanation": {
+      "answer": "A VPC is regional and spans AZs; each subnet is in one AZ. NAT gateways give private subnets outbound internet access.",
+      "concept": "These are core VPC facts.",
+      "examTip": "VPC = Region. Subnet = AZ.",
+      "references": [
+        {
+          "title": "What is Amazon VPC?",
+          "url": "https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html"
+        }
+      ]
+    },
+    "selectCount": 2
+  },
+  {
+    "id": "clf-tec-117",
+    "domain": "technology",
+    "topic": "Hybrid Connectivity",
+    "tags": [
+      "dx-plus-vpn"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A bank uses AWS Direct Connect but must also encrypt all traffic between its data center and AWS.",
+    "prompt": "Which approach meets both needs?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Run a Site-to-Site VPN over the Direct Connect connection",
+        "correct": true,
+        "why": "An IPsec VPN over Direct Connect adds encryption with consistent performance."
+      },
+      {
+        "key": "B",
+        "text": "Use Direct Connect alone, because it is encrypted by default",
+        "correct": false,
+        "why": "Direct Connect isn't encrypted by default."
+      },
+      {
+        "key": "C",
+        "text": "Use an internet gateway with public IPs",
+        "correct": false,
+        "why": "This exposes traffic to the internet, which isn't what this scenario needs."
+      },
+      {
+        "key": "D",
+        "text": "Replace Direct Connect with CloudFront",
+        "correct": false,
+        "why": "CloudFront isn't for data center connectivity."
+      }
+    ],
+    "explanation": {
+      "answer": "Combining Site-to-Site VPN with Direct Connect provides an encrypted connection over a private, consistent network path.",
+      "concept": "Some Direct Connect locations also support MACsec encryption.",
+      "examTip": "Direct Connect + encryption = VPN over DX (or MACsec).",
+      "references": [
+        {
+          "title": "What is AWS Direct Connect?",
+          "url": "https://docs.aws.amazon.com/directconnect/latest/UserGuide/Welcome.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-118",
+    "domain": "technology",
+    "topic": "Content Delivery & DNS",
+    "tags": [
+      "cloudfront-dynamic"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A team believes Amazon CloudFront can only cache static images.",
+    "prompt": "Which statement is correct?",
+    "options": [
+      {
+        "key": "A",
+        "text": "CloudFront only works inside one Region",
+        "correct": false,
+        "why": "CloudFront uses a global edge network, so it doesn't meet this requirement."
+      },
+      {
+        "key": "B",
+        "text": "CloudFront accelerates static and dynamic content",
+        "correct": true,
+        "why": "It caches static content and speeds up dynamic requests over the AWS network."
+      },
+      {
+        "key": "C",
+        "text": "CloudFront replaces the need for an origin",
+        "correct": false,
+        "why": "An origin is still required, which isn't what this scenario needs."
+      },
+      {
+        "key": "D",
+        "text": "CloudFront only works with S3 buckets",
+        "correct": false,
+        "why": "CloudFront supports many origin types, which isn't what this scenario needs."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon CloudFront delivers static and dynamic content, APIs and video, using edge locations and the AWS backbone.",
+      "concept": "Origins can be S3, Application Load Balancers, EC2 or any HTTP server.",
+      "examTip": "CloudFront = static + dynamic + APIs, global edge.",
+      "references": [
+        {
+          "title": "What is Amazon CloudFront?",
+          "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-119",
+    "domain": "technology",
+    "topic": "Networking",
+    "tags": [
+      "elastic-network"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "An architect asks what Elastic Load Balancing, Route 53 and CloudFront have in common.",
+    "prompt": "Which statement is correct?",
+    "options": [
+      {
+        "key": "A",
+        "text": "They all run application code",
+        "correct": false,
+        "why": "None of them run your application code; they route and deliver traffic."
+      },
+      {
+        "key": "B",
+        "text": "They all store application data",
+        "correct": false,
+        "why": "None are databases, which isn't what this scenario needs."
+      },
+      {
+        "key": "C",
+        "text": "They all route or deliver network traffic",
+        "correct": true,
+        "why": "They are networking and content delivery services."
+      },
+      {
+        "key": "D",
+        "text": "They all manage costs and billing",
+        "correct": false,
+        "why": "None are billing tools, which isn't what this scenario needs."
+      }
+    ],
+    "explanation": {
+      "answer": "ELB distributes traffic, Route 53 resolves DNS names and routes users, and CloudFront delivers content from edge locations.",
+      "concept": "AWS groups these under networking and content delivery.",
+      "examTip": "ELB, Route 53, CloudFront = networking & content delivery.",
+      "references": [
+        {
+          "title": "What is Elastic Load Balancing?",
+          "url": "https://docs.aws.amazon.com/elasticloadbalancing/latest/userguide/what-is-load-balancing.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-120",
+    "domain": "technology",
+    "topic": "Networking",
+    "tags": [
+      "gateway-vs-interface"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A company wants private access from its VPC to Amazon S3 at no additional endpoint cost.",
+    "prompt": "Which option fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "An interface VPC endpoint for S3",
+        "correct": false,
+        "why": "Interface endpoints work but are billed per hour and per GB."
+      },
+      {
+        "key": "B",
+        "text": "A NAT gateway",
+        "correct": false,
+        "why": "NAT gateways send traffic out through the internet and are billed."
+      },
+      {
+        "key": "C",
+        "text": "An internet gateway with public IPs",
+        "correct": false,
+        "why": "This uses the public internet, which isn't what this scenario needs."
+      },
+      {
+        "key": "D",
+        "text": "A gateway VPC endpoint for S3",
+        "correct": true,
+        "why": "Gateway endpoints for S3 and DynamoDB have no additional charge."
+      }
+    ],
+    "explanation": {
+      "answer": "Gateway endpoints for Amazon S3 and DynamoDB provide private access through route tables at no additional charge.",
+      "concept": "Interface endpoints (PrivateLink) support many more services but have hourly and data charges.",
+      "examTip": "Free private S3/DynamoDB access = gateway endpoint.",
+      "references": [
+        {
+          "title": "Gateway endpoints",
+          "url": "https://docs.aws.amazon.com/vpc/latest/privatelink/gateway-endpoints.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-121",
+    "domain": "technology",
+    "topic": "Content Delivery & DNS",
+    "tags": [
+      "dns-meaning"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A manager asks what DNS does.",
+    "prompt": "Which answer is correct?",
+    "options": [
+      {
+        "key": "A",
+        "text": "It translates domain names into IP addresses",
+        "correct": true,
+        "why": "DNS resolves names like example.com to IP addresses."
+      },
+      {
+        "key": "B",
+        "text": "It balances CPU load on servers",
+        "correct": false,
+        "why": "Load balancers distribute traffic, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "C",
+        "text": "It stores database backups",
+        "correct": false,
+        "why": "DNS doesn't store backups, so it doesn't meet this requirement."
+      },
+      {
+        "key": "D",
+        "text": "It encrypts web traffic",
+        "correct": false,
+        "why": "TLS encrypts traffic, so it doesn't meet this requirement."
+      }
+    ],
+    "explanation": {
+      "answer": "The Domain Name System translates human-readable domain names into the IP addresses computers use to connect.",
+      "concept": "Amazon Route 53 is AWS's DNS service.",
+      "examTip": "DNS = names → IP addresses.",
+      "references": [
+        {
+          "title": "What is Amazon Route 53?",
+          "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/Welcome.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-122",
+    "domain": "technology",
+    "topic": "Hybrid Connectivity",
+    "tags": [
+      "client-vpn"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "Remote employees need secure access from their laptops to private resources in a VPC.",
+    "prompt": "Which service fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon CloudFront",
+        "correct": false,
+        "why": "CloudFront delivers content publicly, which isn't what this scenario needs."
+      },
+      {
+        "key": "B",
+        "text": "AWS Client VPN",
+        "correct": true,
+        "why": "Client VPN provides managed VPN access for individual users."
+      },
+      {
+        "key": "C",
+        "text": "AWS Site-to-Site VPN",
+        "correct": false,
+        "why": "Site-to-Site VPN connects networks, not individual devices."
+      },
+      {
+        "key": "D",
+        "text": "AWS Direct Connect",
+        "correct": false,
+        "why": "Direct Connect connects data centers, not individual laptops."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Client VPN is a managed client-based VPN service for securely accessing AWS and on-premises resources.",
+      "concept": "Site-to-Site VPN connects networks; Client VPN connects users.",
+      "examTip": "Individual users' laptops = Client VPN.",
+      "references": [
+        {
+          "title": "What is AWS Client VPN?",
+          "url": "https://docs.aws.amazon.com/vpn/latest/clientvpn-admin/what-is.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-123",
+    "domain": "technology",
+    "topic": "Networking",
+    "tags": [
+      "vpc-flow-tech"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A network engineer suspects that a security group is blocking traffic to an instance.",
+    "prompt": "Which feature shows whether traffic was accepted or rejected?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS CloudTrail",
+        "correct": false,
+        "why": "CloudTrail records API calls, not network traffic."
+      },
+      {
+        "key": "B",
+        "text": "S3 Lifecycle rules",
+        "correct": false,
+        "why": "Lifecycle rules manage objects, so it doesn't meet this requirement."
+      },
+      {
+        "key": "C",
+        "text": "VPC Flow Logs",
+        "correct": true,
+        "why": "Flow Logs record accepted and rejected traffic for network interfaces."
+      },
+      {
+        "key": "D",
+        "text": "Amazon CloudWatch metrics",
+        "correct": false,
+        "why": "Metrics show totals, not individual accepted or rejected connections."
+      }
+    ],
+    "explanation": {
+      "answer": "VPC Flow Logs capture IP traffic information, including whether traffic was accepted or rejected.",
+      "concept": "Reachability Analyzer can also check network paths.",
+      "examTip": "Accepted vs rejected traffic = VPC Flow Logs.",
+      "references": [
+        {
+          "title": "Logging IP traffic using VPC Flow Logs",
+          "url": "https://docs.aws.amazon.com/vpc/latest/userguide/flow-logs.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-124",
+    "domain": "technology",
+    "topic": "Content Delivery & DNS",
+    "tags": [
+      "geolocation"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A company must show users in France a French version of its site and users in Japan a Japanese version, based on where the DNS query comes from.",
+    "prompt": "Which Route 53 routing policy fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Simple routing",
+        "correct": false,
+        "why": "Simple routing returns one record for everyone."
+      },
+      {
+        "key": "B",
+        "text": "Latency-based routing",
+        "correct": false,
+        "why": "Latency routing optimizes speed, not location-specific content."
+      },
+      {
+        "key": "C",
+        "text": "Weighted routing",
+        "correct": false,
+        "why": "Weighted routing splits traffic by percentage."
+      },
+      {
+        "key": "D",
+        "text": "Geolocation routing",
+        "correct": true,
+        "why": "Geolocation routes users based on their geographic location."
+      }
+    ],
+    "explanation": {
+      "answer": "Route 53 geolocation routing chooses resources based on the geographic location of users.",
+      "concept": "Use it for localized content or regional restrictions.",
+      "examTip": "Route by user's country = geolocation routing.",
+      "references": [
+        {
+          "title": "Choosing a routing policy",
+          "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-125",
+    "domain": "technology",
+    "topic": "Hybrid Connectivity",
+    "tags": [
+      "multi-select"
+    ],
+    "difficulty": "medium",
+    "type": "multi",
+    "stem": "A company is planning hybrid connectivity.",
+    "prompt": "Which TWO services connect on-premises networks to AWS? (Select TWO.)",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Site-to-Site VPN",
+        "correct": true,
+        "why": "Site-to-Site VPN creates encrypted tunnels over the internet."
+      },
+      {
+        "key": "B",
+        "text": "AWS Transit Gateway alone",
+        "correct": false,
+        "why": "Transit Gateway is a hub; on-premises networks still connect to it through VPN or Direct Connect."
+      },
+      {
+        "key": "C",
+        "text": "AWS Direct Connect",
+        "correct": true,
+        "why": "Direct Connect provides dedicated connections."
+      },
+      {
+        "key": "D",
+        "text": "Amazon Route 53 Resolver only",
+        "correct": false,
+        "why": "Resolver handles DNS, not the network connection itself."
+      },
+      {
+        "key": "E",
+        "text": "Amazon CloudFront",
+        "correct": false,
+        "why": "CloudFront delivers content to users, so it doesn't solve the problem described here."
+      }
+    ],
+    "explanation": {
+      "answer": "Direct Connect and Site-to-Site VPN are the main ways to connect on-premises networks to VPCs.",
+      "concept": "Transit Gateway can serve as a hub for both.",
+      "examTip": "Hybrid connectivity = Direct Connect and/or Site-to-Site VPN.",
+      "references": [
+        {
+          "title": "What is AWS Site-to-Site VPN?",
+          "url": "https://docs.aws.amazon.com/vpn/latest/s2svpn/VPC_VPN.html"
+        }
+      ]
+    },
+    "selectCount": 2
+  }
+]

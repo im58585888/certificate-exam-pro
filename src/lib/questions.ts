@@ -1,5 +1,6 @@
 import "server-only";
 import aifC01 from "../../content/aif-c01";
+import clfC02 from "../../content/clf-c02";
 import saaC03 from "../../content/saa-c03";
 import { query } from "./db";
 import type { DomainId } from "./exams";
@@ -55,6 +56,7 @@ export interface Feedback {
 const BANK: Record<string, Question[]> = {
   "saa-c03": saaC03 as Question[],
   "aif-c01": aifC01 as Question[],
+  "clf-c02": clfC02 as Question[],
 };
 const BY_ID = new Map(Object.values(BANK).flat().map((q) => [q.id, q]));
 const EXAM_OF = new Map(Object.entries(BANK).flatMap(([exam, qs]) => qs.map((q) => [q.id, exam] as const)));

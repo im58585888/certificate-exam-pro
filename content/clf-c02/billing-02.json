@@ -1,0 +1,989 @@
+[
+  {
+    "id": "clf-bil-021",
+    "domain": "billing",
+    "topic": "Support Plans",
+    "tags": [
+      "basic"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A new customer hasn't purchased a support plan.",
+    "prompt": "What support does it still receive?",
+    "options": [
+      {
+        "key": "A",
+        "text": "The full set of Trusted Advisor checks in every category",
+        "correct": false,
+        "why": "Basic includes only core checks, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "B",
+        "text": "24/7 phone access to Cloud Support Engineers for technical issues",
+        "correct": false,
+        "why": "Phone access requires a paid plan such as Business."
+      },
+      {
+        "key": "C",
+        "text": "Billing help, documentation, re:Post and the Health Dashboard",
+        "correct": true,
+        "why": "Basic Support includes these for all customers."
+      },
+      {
+        "key": "D",
+        "text": "A designated Technical Account Manager for proactive guidance",
+        "correct": false,
+        "why": "TAMs come with Enterprise-level plans, so it doesn't solve the problem described here."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Basic Support is included for all customers: account and billing help, documentation, whitepapers, re:Post, AWS Health Dashboard and core Trusted Advisor checks.",
+      "concept": "Paid plans add technical support from engineers.",
+      "examTip": "No plan = Basic: billing help, docs, re:Post, Health Dashboard, core Trusted Advisor.",
+      "references": [
+        {
+          "title": "Compare AWS Support plans",
+          "url": "https://aws.amazon.com/premiumsupport/plans/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-bil-022",
+    "domain": "billing",
+    "topic": "Support Plans",
+    "tags": [
+      "developer"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A startup is experimenting on AWS and wants business-hours email access to technical support at the lowest cost.",
+    "prompt": "Which support plan fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Enterprise",
+        "correct": false,
+        "why": "Enterprise is designed for business-critical workloads and costs much more."
+      },
+      {
+        "key": "B",
+        "text": "Business",
+        "correct": false,
+        "why": "Business adds 24/7 phone and chat, at higher cost."
+      },
+      {
+        "key": "C",
+        "text": "Basic",
+        "correct": false,
+        "why": "Basic doesn't include technical support cases."
+      },
+      {
+        "key": "D",
+        "text": "Developer",
+        "correct": true,
+        "why": "Developer Support offers business-hours email access to Cloud Support Associates."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Developer Support suits experimenting or testing on AWS, with business-hours web/email access to technical support.",
+      "concept": "Business and higher add 24/7 access and faster response times.",
+      "examTip": "Testing/experimenting + cheapest technical support = Developer.",
+      "references": [
+        {
+          "title": "Compare AWS Support plans",
+          "url": "https://aws.amazon.com/premiumsupport/plans/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-bil-023",
+    "domain": "billing",
+    "topic": "Support Plans",
+    "tags": [
+      "business"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company runs production workloads and needs 24/7 phone, email and chat access to Cloud Support Engineers plus the full set of Trusted Advisor checks.",
+    "prompt": "Which is the LOWEST-cost plan that meets this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Business",
+        "correct": true,
+        "why": "Business Support includes 24/7 access to engineers and full Trusted Advisor checks."
+      },
+      {
+        "key": "B",
+        "text": "Basic",
+        "correct": false,
+        "why": "Basic doesn't include technical support access."
+      },
+      {
+        "key": "C",
+        "text": "Enterprise",
+        "correct": false,
+        "why": "Enterprise meets the needs but costs more than required."
+      },
+      {
+        "key": "D",
+        "text": "Developer",
+        "correct": false,
+        "why": "Developer offers business-hours email only."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Business Support is recommended for production workloads and includes 24/7 technical support and the full set of Trusted Advisor checks.",
+      "concept": "It also includes AWS Health API access.",
+      "examTip": "Production + 24/7 phone + full Trusted Advisor (lowest cost) = Business.",
+      "references": [
+        {
+          "title": "Compare AWS Support plans",
+          "url": "https://aws.amazon.com/premiumsupport/plans/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-bil-024",
+    "domain": "billing",
+    "topic": "Support Plans",
+    "tags": [
+      "enterprise-tam"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A large company runs mission-critical workloads and wants a designated Technical Account Manager (TAM) who knows its environment.",
+    "prompt": "Which support plan includes a designated TAM?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Developer",
+        "correct": false,
+        "why": "Developer doesn't include a TAM, so it doesn't meet this requirement."
+      },
+      {
+        "key": "B",
+        "text": "Enterprise",
+        "correct": true,
+        "why": "Enterprise Support includes a designated TAM."
+      },
+      {
+        "key": "C",
+        "text": "Business",
+        "correct": false,
+        "why": "Business doesn't include a TAM, so it doesn't meet this requirement."
+      },
+      {
+        "key": "D",
+        "text": "Enterprise On-Ramp",
+        "correct": false,
+        "why": "On-Ramp provides access to a pool of TAMs, not a designated one."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Enterprise Support includes a designated Technical Account Manager who provides proactive guidance and advocacy.",
+      "concept": "Enterprise On-Ramp includes a pool of TAMs.",
+      "examTip": "Designated TAM = Enterprise. Pool of TAMs = Enterprise On-Ramp.",
+      "references": [
+        {
+          "title": "Compare AWS Support plans",
+          "url": "https://aws.amazon.com/premiumsupport/plans/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-bil-025",
+    "domain": "billing",
+    "topic": "Support Plans",
+    "tags": [
+      "concierge"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A company wants a dedicated team to help with billing and account questions, such as invoices and account best practices, as part of its support plan.",
+    "prompt": "Which feature provides this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Trusted Advisor",
+        "correct": false,
+        "why": "Trusted Advisor gives automated recommendations."
+      },
+      {
+        "key": "B",
+        "text": "AWS Professional Services",
+        "correct": false,
+        "why": "Professional Services delivers consulting engagements."
+      },
+      {
+        "key": "C",
+        "text": "The AWS Concierge Support Team",
+        "correct": true,
+        "why": "The Concierge team helps with billing and account questions for Enterprise On-Ramp and Enterprise customers."
+      },
+      {
+        "key": "D",
+        "text": "AWS re:Post",
+        "correct": false,
+        "why": "re:Post is community Q&A, so it doesn't meet this requirement."
+      }
+    ],
+    "explanation": {
+      "answer": "The Concierge Support Team, included with Enterprise On-Ramp and Enterprise Support, specializes in billing and account inquiries.",
+      "concept": "TAMs focus on technical guidance; Concierge focuses on billing and account.",
+      "examTip": "Billing and account experts = Concierge (Enterprise-level plans).",
+      "references": [
+        {
+          "title": "Compare AWS Support plans",
+          "url": "https://aws.amazon.com/premiumsupport/plans/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-bil-026",
+    "domain": "billing",
+    "topic": "Support Plans",
+    "tags": [
+      "trusted-advisor-levels"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company on Developer Support wants all Trusted Advisor checks, including cost optimization checks.",
+    "prompt": "What must it do?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Enable AWS Config",
+        "correct": false,
+        "why": "Config doesn't unlock Trusted Advisor checks."
+      },
+      {
+        "key": "B",
+        "text": "Buy Reserved Instances",
+        "correct": false,
+        "why": "Purchases don't change Trusted Advisor access."
+      },
+      {
+        "key": "C",
+        "text": "Stay on Developer, which already includes every check",
+        "correct": false,
+        "why": "Developer Support includes only the core Trusted Advisor checks."
+      },
+      {
+        "key": "D",
+        "text": "Upgrade to Business Support or higher",
+        "correct": true,
+        "why": "Full Trusted Advisor checks come with Business, Enterprise On-Ramp and Enterprise."
+      }
+    ],
+    "explanation": {
+      "answer": "Basic and Developer include core Trusted Advisor checks. Business Support and higher include the full set of checks.",
+      "concept": "Trusted Advisor categories: cost optimization, performance, security, fault tolerance, service limits and operational excellence.",
+      "examTip": "Full Trusted Advisor = Business or higher.",
+      "references": [
+        {
+          "title": "AWS Trusted Advisor",
+          "url": "https://docs.aws.amazon.com/awssupport/latest/user/trusted-advisor.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-bil-027",
+    "domain": "billing",
+    "topic": "Support Resources",
+    "tags": [
+      "trusted-advisor"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A company wants automated recommendations on cost savings, security, fault tolerance, performance and service quotas.",
+    "prompt": "Which service provides these?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Trusted Advisor",
+        "correct": true,
+        "why": "Trusted Advisor checks accounts against AWS best practices across these categories."
+      },
+      {
+        "key": "B",
+        "text": "AWS Artifact",
+        "correct": false,
+        "why": "Artifact provides compliance reports, which isn't what this scenario needs."
+      },
+      {
+        "key": "C",
+        "text": "AWS CloudTrail",
+        "correct": false,
+        "why": "CloudTrail logs API calls, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "D",
+        "text": "Amazon Inspector",
+        "correct": false,
+        "why": "Inspector focuses on vulnerabilities, so it doesn't meet this requirement."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Trusted Advisor evaluates your account and recommends improvements for cost, performance, security, fault tolerance, service limits and operational excellence.",
+      "concept": "Check results show red, yellow or green status.",
+      "examTip": "Best-practice checks across categories = Trusted Advisor.",
+      "references": [
+        {
+          "title": "AWS Trusted Advisor",
+          "url": "https://docs.aws.amazon.com/awssupport/latest/user/trusted-advisor.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-bil-028",
+    "domain": "billing",
+    "topic": "Support Resources",
+    "tags": [
+      "health-dashboard-billing"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "An administrator wants to know about upcoming AWS maintenance that will affect specific EC2 instances.",
+    "prompt": "Where should they look?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Budgets",
+        "correct": false,
+        "why": "Budgets track spending, which isn't what this scenario needs."
+      },
+      {
+        "key": "B",
+        "text": "AWS Health Dashboard",
+        "correct": true,
+        "why": "The Health Dashboard shows events and scheduled changes affecting your resources."
+      },
+      {
+        "key": "C",
+        "text": "AWS Marketplace",
+        "correct": false,
+        "why": "Marketplace sells software, which isn't what this scenario needs."
+      },
+      {
+        "key": "D",
+        "text": "AWS Pricing Calculator",
+        "correct": false,
+        "why": "This estimates costs, so it doesn't meet this requirement."
+      }
+    ],
+    "explanation": {
+      "answer": "The AWS Health Dashboard provides personalized information about events that affect your AWS resources, including scheduled maintenance.",
+      "concept": "It's available to all customers.",
+      "examTip": "Events affecting my resources = AWS Health Dashboard.",
+      "references": [
+        {
+          "title": "What is AWS Health?",
+          "url": "https://docs.aws.amazon.com/health/latest/ug/what-is-aws-health.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-bil-029",
+    "domain": "billing",
+    "topic": "Support Resources",
+    "tags": [
+      "repost"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A developer has a technical question and wants answers from the AWS community and experts without opening a support case.",
+    "prompt": "Which resource fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Artifact",
+        "correct": false,
+        "why": "Artifact provides compliance reports, which isn't what this scenario needs."
+      },
+      {
+        "key": "B",
+        "text": "AWS Budgets",
+        "correct": false,
+        "why": "Budgets track cost, so it doesn't meet this requirement."
+      },
+      {
+        "key": "C",
+        "text": "AWS re:Post",
+        "correct": true,
+        "why": "re:Post is a community Q&A site with AWS experts."
+      },
+      {
+        "key": "D",
+        "text": "AWS Organizations",
+        "correct": false,
+        "why": "Organizations manages accounts, so it doesn't solve the problem described here."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS re:Post is a free, community-driven Q&A service for AWS questions.",
+      "concept": "Questions may be answered by community members, AWS employees and AWS experts.",
+      "examTip": "Free community answers = re:Post.",
+      "references": [
+        {
+          "title": "AWS re:Post",
+          "url": "https://repost.aws/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-bil-030",
+    "domain": "billing",
+    "topic": "Marketplace & Partners",
+    "tags": [
+      "professional-services"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company wants AWS experts to work alongside its team to deliver a large migration project.",
+    "prompt": "Which AWS offering fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS re:Post",
+        "correct": false,
+        "why": "re:Post is community Q&A, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "B",
+        "text": "AWS Free Tier",
+        "correct": false,
+        "why": "The Free Tier offers free usage, so it doesn't meet this requirement."
+      },
+      {
+        "key": "C",
+        "text": "AWS Trusted Advisor",
+        "correct": false,
+        "why": "Trusted Advisor gives automated checks, which isn't what this scenario needs."
+      },
+      {
+        "key": "D",
+        "text": "AWS Professional Services",
+        "correct": true,
+        "why": "Professional Services is a team of experts that helps customers achieve business outcomes on AWS."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Professional Services provides experts who work with customers and partners on migrations, modernization and other projects.",
+      "concept": "AWS Partners also provide consulting and implementation services.",
+      "examTip": "AWS experts on your project = Professional Services (or AWS Partners).",
+      "references": [
+        {
+          "title": "AWS Professional Services",
+          "url": "https://aws.amazon.com/professional-services/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-bil-031",
+    "domain": "billing",
+    "topic": "Marketplace & Partners",
+    "tags": [
+      "partner-network"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company wants to find a certified consulting firm to help build its AWS environment.",
+    "prompt": "Where should it look?",
+    "options": [
+      {
+        "key": "A",
+        "text": "The AWS Partner Network (Partner Solutions Finder)",
+        "correct": true,
+        "why": "The AWS Partner Network lists validated consulting and technology partners."
+      },
+      {
+        "key": "B",
+        "text": "AWS Marketplace, under the AMI and SaaS listings",
+        "correct": false,
+        "why": "Marketplace sells software and some services, but the Partner Network is where you find validated consulting partners."
+      },
+      {
+        "key": "C",
+        "text": "AWS re:Post, by asking for consultant referrals",
+        "correct": false,
+        "why": "re:Post is community Q&A, not a directory of validated partners."
+      },
+      {
+        "key": "D",
+        "text": "AWS Artifact, under the third-party reports section",
+        "correct": false,
+        "why": "Artifact provides compliance reports, which isn't what this scenario needs."
+      }
+    ],
+    "explanation": {
+      "answer": "The AWS Partner Network (APN) is a global community of partners that offer consulting services and software solutions on AWS.",
+      "concept": "Partners can earn competencies that validate expertise in specific areas.",
+      "examTip": "Find consulting/technology partners = AWS Partner Network.",
+      "references": [
+        {
+          "title": "AWS Partner Network",
+          "url": "https://aws.amazon.com/partners/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-bil-032",
+    "domain": "billing",
+    "topic": "Marketplace & Partners",
+    "tags": [
+      "marketplace"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company wants to buy a third-party monitoring tool that runs on AWS, with charges on its AWS bill.",
+    "prompt": "Where can it find this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Pricing Calculator",
+        "correct": false,
+        "why": "This estimates AWS costs, which isn't what this scenario needs."
+      },
+      {
+        "key": "B",
+        "text": "AWS Marketplace",
+        "correct": true,
+        "why": "Marketplace offers third-party software billed through AWS."
+      },
+      {
+        "key": "C",
+        "text": "AWS Trusted Advisor",
+        "correct": false,
+        "why": "Trusted Advisor gives recommendations, which isn't what this scenario needs."
+      },
+      {
+        "key": "D",
+        "text": "AWS Service Catalog",
+        "correct": false,
+        "why": "Service Catalog lists your organization's approved products."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Marketplace is a digital catalog of third-party software, data and services that run on AWS, with flexible pricing and AWS billing.",
+      "concept": "Products include SaaS, AMIs, containers and professional services.",
+      "examTip": "Buy third-party software through AWS = Marketplace.",
+      "references": [
+        {
+          "title": "What is AWS Marketplace?",
+          "url": "https://docs.aws.amazon.com/marketplace/latest/buyerguide/what-is-marketplace.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-bil-033",
+    "domain": "billing",
+    "topic": "Support Plans",
+    "tags": [
+      "response-focus"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A company's business-critical system is down. It wants the fastest AWS Support response time available.",
+    "prompt": "Which plan offers the fastest response for this case?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Basic",
+        "correct": false,
+        "why": "Basic doesn't include technical support cases."
+      },
+      {
+        "key": "B",
+        "text": "Developer",
+        "correct": false,
+        "why": "Developer response times are measured in hours and business hours only."
+      },
+      {
+        "key": "C",
+        "text": "Enterprise",
+        "correct": true,
+        "why": "Enterprise Support offers the fastest response for business-critical system down cases."
+      },
+      {
+        "key": "D",
+        "text": "Business",
+        "correct": false,
+        "why": "Business offers fast responses for production outages but not the fastest."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Enterprise Support offers the fastest response times for business-critical system outages, along with a designated TAM.",
+      "concept": "Response times improve at each higher support tier.",
+      "examTip": "Fastest response for critical outages = Enterprise.",
+      "references": [
+        {
+          "title": "Compare AWS Support plans",
+          "url": "https://aws.amazon.com/premiumsupport/plans/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-bil-034",
+    "domain": "billing",
+    "topic": "Support Plans",
+    "tags": [
+      "iem"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A retailer is preparing for Black Friday and wants AWS experts to help plan and monitor its infrastructure during the event.",
+    "prompt": "Which offering supports this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "A Savings Plan sized for the expected peak",
+        "correct": false,
+        "why": "Savings Plans lower prices; they don't provide expert event planning."
+      },
+      {
+        "key": "B",
+        "text": "AWS Trusted Advisor service limit checks",
+        "correct": false,
+        "why": "Trusted Advisor flags quota issues but doesn't plan or monitor an event with you."
+      },
+      {
+        "key": "C",
+        "text": "An AWS Well-Architected review in the console",
+        "correct": false,
+        "why": "A Well-Architected review assesses a workload but doesn't provide event-day planning and monitoring support."
+      },
+      {
+        "key": "D",
+        "text": "Infrastructure Event Management (Enterprise support)",
+        "correct": true,
+        "why": "Infrastructure Event Management helps plan and run large events."
+      }
+    ],
+    "explanation": {
+      "answer": "Infrastructure Event Management provides architecture and scaling guidance and operational support during planned events like launches and sales.",
+      "concept": "It's included with Enterprise Support and available with other plans for a fee.",
+      "examTip": "Big planned event + AWS help = Infrastructure Event Management.",
+      "references": [
+        {
+          "title": "Compare AWS Support plans",
+          "url": "https://aws.amazon.com/premiumsupport/plans/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-bil-035",
+    "domain": "billing",
+    "topic": "Support Resources",
+    "tags": [
+      "documentation"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A new user wants official step-by-step guides and API references for AWS services.",
+    "prompt": "Where should they look?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS documentation",
+        "correct": true,
+        "why": "AWS documentation provides user guides, tutorials and API references."
+      },
+      {
+        "key": "B",
+        "text": "AWS Marketplace",
+        "correct": false,
+        "why": "Marketplace sells third-party products, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "C",
+        "text": "AWS Budgets",
+        "correct": false,
+        "why": "Budgets track cost, so it doesn't meet this requirement."
+      },
+      {
+        "key": "D",
+        "text": "AWS Health Dashboard",
+        "correct": false,
+        "why": "The Health Dashboard shows service events."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS documentation includes user guides, developer guides, API references and tutorials for every service.",
+      "concept": "Whitepapers and the Well-Architected Framework provide broader guidance.",
+      "examTip": "How to use a service = AWS documentation.",
+      "references": [
+        {
+          "title": "AWS documentation",
+          "url": "https://docs.aws.amazon.com/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-bil-036",
+    "domain": "billing",
+    "topic": "Support Plans",
+    "tags": [
+      "multi-select"
+    ],
+    "difficulty": "hard",
+    "type": "multi",
+    "stem": "A company is comparing AWS Support plans.",
+    "prompt": "Which TWO statements are correct? (Select TWO.)",
+    "options": [
+      {
+        "key": "A",
+        "text": "All plans include the AWS Health Dashboard",
+        "correct": true,
+        "why": "Health Dashboard access is included with Basic and above."
+      },
+      {
+        "key": "B",
+        "text": "Basic includes 24/7 technical support by phone",
+        "correct": false,
+        "why": "Basic doesn't include technical support."
+      },
+      {
+        "key": "C",
+        "text": "Business Support includes 24/7 phone access to engineers",
+        "correct": true,
+        "why": "Business provides 24/7 phone, email and chat."
+      },
+      {
+        "key": "D",
+        "text": "Developer includes a designated Technical Account Manager",
+        "correct": false,
+        "why": "TAMs come with Enterprise-level plans, which isn't what this scenario needs."
+      },
+      {
+        "key": "E",
+        "text": "Enterprise On-Ramp includes a designated TAM",
+        "correct": false,
+        "why": "On-Ramp includes a pool of TAMs, not a designated one."
+      }
+    ],
+    "explanation": {
+      "answer": "Basic includes the Health Dashboard and core checks. Business adds 24/7 engineer access. Enterprise adds a designated TAM.",
+      "concept": "Know which features first appear at which plan level.",
+      "examTip": "24/7 engineers start at Business; designated TAM only at Enterprise.",
+      "references": [
+        {
+          "title": "Compare AWS Support plans",
+          "url": "https://aws.amazon.com/premiumsupport/plans/"
+        }
+      ]
+    },
+    "selectCount": 2
+  },
+  {
+    "id": "clf-bil-037",
+    "domain": "billing",
+    "topic": "Support Resources",
+    "tags": [
+      "solutions-architects"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company wants architectural guidance from AWS for a new workload but isn't ready for a paid consulting engagement.",
+    "prompt": "Which resource could help?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Trusted Advisor architecture checks",
+        "correct": false,
+        "why": "Trusted Advisor gives automated checks, not personalized architecture guidance."
+      },
+      {
+        "key": "B",
+        "text": "AWS Solutions Architects via the account team",
+        "correct": true,
+        "why": "AWS Solutions Architects provide architectural guidance to customers."
+      },
+      {
+        "key": "C",
+        "text": "AWS Health Dashboard design recommendations",
+        "correct": false,
+        "why": "The Health Dashboard reports service events, not design advice."
+      },
+      {
+        "key": "D",
+        "text": "The AWS Shield Response Team (SRT)",
+        "correct": false,
+        "why": "The SRT helps with DDoS events, not general architecture guidance."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Solutions Architects work with customers to provide technical guidance and best practices for designing workloads.",
+      "concept": "Other resources include AWS Prescriptive Guidance, the Well-Architected Framework and AWS Partners.",
+      "examTip": "Architecture advice from AWS = Solutions Architects (account team).",
+      "references": [
+        {
+          "title": "AWS Prescriptive Guidance",
+          "url": "https://aws.amazon.com/prescriptive-guidance/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-bil-038",
+    "domain": "billing",
+    "topic": "Support Resources",
+    "tags": [
+      "support-case"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company on Business Support has a production issue with an EC2 instance.",
+    "prompt": "How should it get help from AWS?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Post the issue on AWS re:Post and wait for answers",
+        "correct": false,
+        "why": "re:Post is community help; with Business Support, the company should open a case for a production issue."
+      },
+      {
+        "key": "B",
+        "text": "Wait for the AWS Health Dashboard to resolve it",
+        "correct": false,
+        "why": "The Health Dashboard reports events; it doesn't fix customer issues."
+      },
+      {
+        "key": "C",
+        "text": "Open a technical case in the AWS Support Center",
+        "correct": true,
+        "why": "Paid plans can open technical cases by web, phone or chat."
+      },
+      {
+        "key": "D",
+        "text": "Ask the Concierge team, which handles technical issues",
+        "correct": false,
+        "why": "Concierge focuses on billing and account questions, and comes with Enterprise-level plans."
+      }
+    ],
+    "explanation": {
+      "answer": "Customers with paid plans can open technical support cases in the AWS Support Center console, choosing severity and contact method.",
+      "concept": "Basic Support covers account and billing cases only.",
+      "examTip": "Technical help = open a support case (paid plans).",
+      "references": [
+        {
+          "title": "Creating support cases",
+          "url": "https://docs.aws.amazon.com/awssupport/latest/user/case-management.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-bil-039",
+    "domain": "billing",
+    "topic": "Support Resources",
+    "tags": [
+      "prescriptive-guidance"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A team wants AWS-vetted strategies, guides and patterns for migrating and modernizing workloads.",
+    "prompt": "Which resource fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Budgets",
+        "correct": false,
+        "why": "Budgets track cost, which isn't what this scenario needs."
+      },
+      {
+        "key": "B",
+        "text": "AWS Trusted Advisor",
+        "correct": false,
+        "why": "Trusted Advisor gives automated checks, which isn't what this scenario needs."
+      },
+      {
+        "key": "C",
+        "text": "AWS Artifact",
+        "correct": false,
+        "why": "Artifact provides compliance reports, so it doesn't meet this requirement."
+      },
+      {
+        "key": "D",
+        "text": "AWS Prescriptive Guidance",
+        "correct": true,
+        "why": "Prescriptive Guidance provides vetted strategies, guides and patterns."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Prescriptive Guidance offers time-tested strategies, guides and patterns from AWS and partners to accelerate cloud projects.",
+      "concept": "It includes migration strategy guidance like the 7 Rs.",
+      "examTip": "Vetted migration/modernization patterns = Prescriptive Guidance.",
+      "references": [
+        {
+          "title": "AWS Prescriptive Guidance",
+          "url": "https://aws.amazon.com/prescriptive-guidance/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-bil-040",
+    "domain": "billing",
+    "topic": "Support Plans",
+    "tags": [
+      "change-plan"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company wants to change its AWS Support plan.",
+    "prompt": "Which statement is correct?",
+    "options": [
+      {
+        "key": "A",
+        "text": "The support plan can be changed in the AWS Support Center console",
+        "correct": true,
+        "why": "Customers can upgrade or change plans in the console."
+      },
+      {
+        "key": "B",
+        "text": "Support plans are fixed for the first three years of an account",
+        "correct": false,
+        "why": "There's no such lock-in; plans can be changed."
+      },
+      {
+        "key": "C",
+        "text": "Only AWS Professional Services can change plans",
+        "correct": false,
+        "why": "Customers change plans themselves, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "D",
+        "text": "The plan is chosen automatically based on spend",
+        "correct": false,
+        "why": "Customers choose their plan, so it doesn't meet this requirement."
+      }
+    ],
+    "explanation": {
+      "answer": "You can change your AWS Support plan in the console. Changing the support plan requires root user or appropriate IAM permissions.",
+      "concept": "Paid plan fees are typically a percentage of monthly AWS usage, with a minimum.",
+      "examTip": "Change support plan = Support Center console.",
+      "references": [
+        {
+          "title": "Changing AWS Support plans",
+          "url": "https://docs.aws.amazon.com/awssupport/latest/user/changing-support-plans.html"
+        }
+      ]
+    }
+  }
+]

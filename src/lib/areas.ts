@@ -122,10 +122,54 @@ const AIF_TOPIC_AREA: Record<string, string> = {
   "Governance Frameworks": "governance", "Governance Processes": "governance",
 };
 
+const CLF_AREAS: Area[] = [
+  { id: "cloud-value", name: "Cloud Value & Economics" },
+  { id: "design", name: "Well-Architected & Design" },
+  { id: "migration", name: "Migration & Adoption" },
+  { id: "shared", name: "Shared Responsibility" },
+  { id: "identity", name: "Identity & Access" },
+  { id: "security-services", name: "Security Services & Encryption" },
+  { id: "compliance", name: "Compliance & Auditing" },
+  { id: "global", name: "Global Infrastructure" },
+  { id: "compute", name: "Compute" },
+  { id: "storage", name: "Storage" },
+  { id: "databases", name: "Databases" },
+  { id: "networking", name: "Networking & Content Delivery" },
+  { id: "ai-analytics", name: "AI, ML & Analytics" },
+  { id: "app-services", name: "Application & Developer Services" },
+  { id: "operations", name: "Management & Operations" },
+  { id: "pricing", name: "Pricing Models" },
+  { id: "cost-tools", name: "Billing & Cost Tools" },
+  { id: "support", name: "Support & Resources" },
+];
+
+const CLF_TOPIC_AREA: Record<string, string> = {
+  "Cloud Benefits": "cloud-value", "Cloud Economics": "cloud-value", "Deployment Models": "cloud-value",
+  "Well-Architected Framework": "design", "Design Principles": "design",
+  "Migration Strategies": "migration", "Cloud Adoption Framework": "migration", "Migration Services": "migration",
+  "Shared Responsibility": "shared",
+  "IAM": "identity", "Root User": "identity", "Identity Center & Federation": "identity", "AWS Organizations": "identity",
+  "Threat Detection": "security-services", "Network Security": "security-services", "Encryption": "security-services",
+  "Secrets & Certificates": "security-services", "Security Resources": "security-services",
+  "Compliance": "compliance", "Audit & Logging": "compliance",
+  "Global Infrastructure": "global", "Edge & Hybrid": "global",
+  "EC2": "compute", "Containers": "compute", "Serverless": "compute", "Scaling & Load Balancing": "compute",
+  "Object Storage": "storage", "Block & File Storage": "storage", "Backup & Data Transfer": "storage",
+  "Databases": "databases",
+  "Networking": "networking", "Content Delivery & DNS": "networking", "Hybrid Connectivity": "networking",
+  "AI & ML Services": "ai-analytics", "Analytics": "ai-analytics",
+  "Application Integration": "app-services", "Developer Tools": "app-services", "End-User & Frontend": "app-services", "IoT": "app-services",
+  "Infrastructure as Code": "operations", "Monitoring & Operations": "operations", "Accessing AWS": "operations",
+  "EC2 Pricing Models": "pricing", "Service Pricing": "pricing",
+  "Cost Management Tools": "cost-tools", "Consolidated Billing": "cost-tools",
+  "Support Plans": "support", "Support Resources": "support", "Marketplace & Partners": "support",
+};
+
 // Topics added later through the admin editor fall back to a general area for their exam.
 const AREA_SETS: Record<string, { areas: Area[]; topics: Record<string, string>; fallback: string }> = {
   "saa-c03": { areas: SAA_AREAS, topics: SAA_TOPIC_AREA, fallback: "governance" },
   "aif-c01": { areas: AIF_AREAS, topics: AIF_TOPIC_AREA, fallback: "ml-concepts" },
+  "clf-c02": { areas: CLF_AREAS, topics: CLF_TOPIC_AREA, fallback: "cloud-value" },
 };
 
 export function areasFor(exam: string): Area[] {

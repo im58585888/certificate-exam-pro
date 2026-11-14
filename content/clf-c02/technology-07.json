@@ -1,0 +1,989 @@
+[
+  {
+    "id": "clf-tec-151",
+    "domain": "technology",
+    "topic": "Application Integration",
+    "tags": [
+      "sqs"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "An order system must hold incoming orders in a queue until the processing service is ready to handle them.",
+    "prompt": "Which service fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Kinesis Data Streams",
+        "correct": false,
+        "why": "Kinesis is for streaming analytics, not a simple work queue."
+      },
+      {
+        "key": "B",
+        "text": "Amazon SNS",
+        "correct": false,
+        "why": "SNS pushes messages to subscribers but doesn't hold them in a queue for later pickup."
+      },
+      {
+        "key": "C",
+        "text": "Amazon EventBridge",
+        "correct": false,
+        "why": "EventBridge routes events to targets but doesn't hold messages for consumers to pull later."
+      },
+      {
+        "key": "D",
+        "text": "Amazon SQS",
+        "correct": true,
+        "why": "SQS is a fully managed message queue that decouples producers and consumers."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Simple Queue Service (SQS) stores messages until consumers process them, decoupling application components.",
+      "concept": "Standard queues offer high throughput; FIFO queues preserve order.",
+      "examTip": "Queue messages for later processing = SQS.",
+      "references": [
+        {
+          "title": "What is Amazon SQS?",
+          "url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/welcome.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-152",
+    "domain": "technology",
+    "topic": "Application Integration",
+    "tags": [
+      "sns"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A company wants to send one notification to many subscribers at once, including email, SMS and Lambda functions.",
+    "prompt": "Which service fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon SNS",
+        "correct": true,
+        "why": "SNS is a pub/sub service that pushes messages to many subscribers."
+      },
+      {
+        "key": "B",
+        "text": "Amazon SQS",
+        "correct": false,
+        "why": "SQS queues messages for consumers to pull."
+      },
+      {
+        "key": "C",
+        "text": "Amazon EventBridge",
+        "correct": false,
+        "why": "EventBridge routes events to targets but doesn't deliver email and SMS to subscribers."
+      },
+      {
+        "key": "D",
+        "text": "AWS Step Functions",
+        "correct": false,
+        "why": "Step Functions orchestrates workflows, which isn't what this scenario needs."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Simple Notification Service (SNS) is a publish/subscribe service that fans out messages to multiple endpoints.",
+      "concept": "SNS + SQS together create a fan-out pattern.",
+      "examTip": "One message → many subscribers = SNS.",
+      "references": [
+        {
+          "title": "What is Amazon SNS?",
+          "url": "https://docs.aws.amazon.com/sns/latest/dg/welcome.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-153",
+    "domain": "technology",
+    "topic": "Application Integration",
+    "tags": [
+      "eventbridge"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company wants to react automatically to events from AWS services and SaaS applications, routing them to targets based on rules.",
+    "prompt": "Which service fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon SNS",
+        "correct": false,
+        "why": "SNS fans out messages but doesn't route events from AWS services and SaaS apps with content-based rules."
+      },
+      {
+        "key": "B",
+        "text": "Amazon EventBridge",
+        "correct": true,
+        "why": "EventBridge is a serverless event bus that routes events using rules."
+      },
+      {
+        "key": "C",
+        "text": "Amazon SQS",
+        "correct": false,
+        "why": "SQS queues messages; it doesn't route events using rules."
+      },
+      {
+        "key": "D",
+        "text": "AWS Step Functions",
+        "correct": false,
+        "why": "Step Functions orchestrates workflows; it isn't an event bus."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon EventBridge connects applications using events from AWS services, your apps and SaaS partners, routing them with rules.",
+      "concept": "EventBridge Scheduler can also run tasks on a schedule.",
+      "examTip": "Event-driven routing between services = EventBridge.",
+      "references": [
+        {
+          "title": "What is Amazon EventBridge?",
+          "url": "https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-what-is.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-154",
+    "domain": "technology",
+    "topic": "Application Integration",
+    "tags": [
+      "step-functions"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company wants to coordinate several Lambda functions in order, with retries and error handling, and see the workflow visually.",
+    "prompt": "Which service fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon SNS",
+        "correct": false,
+        "why": "SNS broadcasts messages, so it doesn't meet this requirement."
+      },
+      {
+        "key": "B",
+        "text": "Amazon EventBridge",
+        "correct": false,
+        "why": "EventBridge routes events but doesn't run multi-step workflows with retries and visual state."
+      },
+      {
+        "key": "C",
+        "text": "AWS Step Functions",
+        "correct": true,
+        "why": "Step Functions orchestrates workflows with state, retries and visual monitoring."
+      },
+      {
+        "key": "D",
+        "text": "Amazon SQS",
+        "correct": false,
+        "why": "SQS queues messages but doesn't orchestrate multi-step workflows."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Step Functions is a serverless orchestration service that coordinates AWS services into workflows with built-in error handling.",
+      "concept": "Workflows are defined as state machines.",
+      "examTip": "Orchestrate multi-step workflows = Step Functions.",
+      "references": [
+        {
+          "title": "What is AWS Step Functions?",
+          "url": "https://docs.aws.amazon.com/step-functions/latest/dg/welcome.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-155",
+    "domain": "technology",
+    "topic": "Developer Tools",
+    "tags": [
+      "codepipeline"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A team wants to automate building, testing and deploying its application each time code changes.",
+    "prompt": "Which service orchestrates this release process?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Artifact",
+        "correct": false,
+        "why": "Artifact provides compliance reports, which isn't what this scenario needs."
+      },
+      {
+        "key": "B",
+        "text": "AWS CloudTrail",
+        "correct": false,
+        "why": "CloudTrail logs API calls, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "C",
+        "text": "Amazon Inspector",
+        "correct": false,
+        "why": "Inspector scans for vulnerabilities, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "D",
+        "text": "AWS CodePipeline",
+        "correct": true,
+        "why": "CodePipeline automates release pipelines across build, test and deploy stages."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS CodePipeline is a continuous delivery service that automates release pipelines.",
+      "concept": "It integrates with CodeBuild (build/test), CodeDeploy (deploy) and source repositories like GitHub.",
+      "examTip": "CI/CD pipeline orchestration = CodePipeline.",
+      "references": [
+        {
+          "title": "What is AWS CodePipeline?",
+          "url": "https://docs.aws.amazon.com/codepipeline/latest/userguide/welcome.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-156",
+    "domain": "technology",
+    "topic": "Developer Tools",
+    "tags": [
+      "codebuild"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A team needs a managed service that compiles code, runs tests and produces build artifacts without managing build servers.",
+    "prompt": "Which service fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS CodeBuild",
+        "correct": true,
+        "why": "CodeBuild is a fully managed build service."
+      },
+      {
+        "key": "B",
+        "text": "AWS CodeDeploy",
+        "correct": false,
+        "why": "CodeDeploy deploys applications, which isn't what this scenario needs."
+      },
+      {
+        "key": "C",
+        "text": "Amazon ECR",
+        "correct": false,
+        "why": "ECR stores container images, so it doesn't meet this requirement."
+      },
+      {
+        "key": "D",
+        "text": "AWS CodePipeline",
+        "correct": false,
+        "why": "CodePipeline orchestrates stages; CodeBuild does the building."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS CodeBuild compiles source code, runs tests and produces packages, scaling automatically with no build servers.",
+      "concept": "You pay for build minutes used.",
+      "examTip": "Build and test = CodeBuild.",
+      "references": [
+        {
+          "title": "What is AWS CodeBuild?",
+          "url": "https://docs.aws.amazon.com/codebuild/latest/userguide/welcome.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-157",
+    "domain": "technology",
+    "topic": "Developer Tools",
+    "tags": [
+      "codedeploy"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company wants to automate application deployments to EC2 instances, on-premises servers and Lambda, with rollbacks.",
+    "prompt": "Which service fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS CloudShell",
+        "correct": false,
+        "why": "CloudShell is a browser shell, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "B",
+        "text": "AWS CodeDeploy",
+        "correct": true,
+        "why": "CodeDeploy automates deployments to EC2, on premises, Lambda and ECS."
+      },
+      {
+        "key": "C",
+        "text": "AWS Backup",
+        "correct": false,
+        "why": "AWS Backup protects data, so it doesn't meet this requirement."
+      },
+      {
+        "key": "D",
+        "text": "AWS CodeBuild",
+        "correct": false,
+        "why": "CodeBuild builds and tests code, so it doesn't meet this requirement."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS CodeDeploy automates code deployments and supports strategies such as in-place and blue/green, with automatic rollback.",
+      "concept": "CodePipeline often calls CodeDeploy in the deploy stage.",
+      "examTip": "Automated deployments = CodeDeploy.",
+      "references": [
+        {
+          "title": "What is CodeDeploy?",
+          "url": "https://docs.aws.amazon.com/codedeploy/latest/userguide/welcome.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-158",
+    "domain": "technology",
+    "topic": "Developer Tools",
+    "tags": [
+      "xray"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "Developers want to trace requests through a distributed application to find which microservice is causing slow responses.",
+    "prompt": "Which service fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Config",
+        "correct": false,
+        "why": "Config tracks configurations, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Inspector",
+        "correct": false,
+        "why": "Inspector scans for vulnerabilities, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "C",
+        "text": "AWS X-Ray",
+        "correct": true,
+        "why": "X-Ray traces requests across services to find bottlenecks and errors."
+      },
+      {
+        "key": "D",
+        "text": "AWS CloudTrail",
+        "correct": false,
+        "why": "CloudTrail records API calls to AWS, not application request traces."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS X-Ray helps developers analyze and debug distributed applications by tracing requests end to end.",
+      "concept": "X-Ray is part of CloudWatch's application observability features.",
+      "examTip": "Trace requests across microservices = X-Ray.",
+      "references": [
+        {
+          "title": "What is AWS X-Ray?",
+          "url": "https://docs.aws.amazon.com/xray/latest/devguide/aws-xray.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-159",
+    "domain": "technology",
+    "topic": "End-User & Frontend",
+    "tags": [
+      "workspaces"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A company wants to give remote employees secure cloud-based Windows desktops they can access from any device.",
+    "prompt": "Which service fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Lightsail",
+        "correct": false,
+        "why": "Lightsail hosts simple servers, so it doesn't meet this requirement."
+      },
+      {
+        "key": "B",
+        "text": "AWS Outposts",
+        "correct": false,
+        "why": "Outposts runs AWS on premises, so it doesn't meet this requirement."
+      },
+      {
+        "key": "C",
+        "text": "Amazon EC2 Dedicated Hosts",
+        "correct": false,
+        "why": "Dedicated Hosts are physical servers, not managed desktops."
+      },
+      {
+        "key": "D",
+        "text": "Amazon WorkSpaces",
+        "correct": true,
+        "why": "WorkSpaces provides managed virtual desktops."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon WorkSpaces is a managed desktop-as-a-service offering Windows and Linux desktops.",
+      "concept": "Data stays in AWS, not on the user's device.",
+      "examTip": "Virtual desktops = WorkSpaces.",
+      "references": [
+        {
+          "title": "What is Amazon WorkSpaces?",
+          "url": "https://docs.aws.amazon.com/workspaces/latest/adminguide/amazon-workspaces.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-160",
+    "domain": "technology",
+    "topic": "End-User & Frontend",
+    "tags": [
+      "appstream"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A software company wants to stream its desktop application to users' browsers without users installing it.",
+    "prompt": "Which service fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon AppStream 2.0",
+        "correct": true,
+        "why": "AppStream 2.0 streams desktop applications to a browser."
+      },
+      {
+        "key": "B",
+        "text": "Amazon CloudFront",
+        "correct": false,
+        "why": "CloudFront delivers web content, not interactive desktop apps."
+      },
+      {
+        "key": "C",
+        "text": "AWS Amplify",
+        "correct": false,
+        "why": "Amplify builds web and mobile apps, so it doesn't meet this requirement."
+      },
+      {
+        "key": "D",
+        "text": "Amazon WorkDocs",
+        "correct": false,
+        "why": "WorkDocs was a document collaboration service, not app streaming."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon AppStream 2.0 is a fully managed application streaming service.",
+      "concept": "WorkSpaces streams full desktops; AppStream streams individual applications.",
+      "examTip": "Stream an application to a browser = AppStream 2.0.",
+      "references": [
+        {
+          "title": "What is Amazon AppStream 2.0?",
+          "url": "https://docs.aws.amazon.com/appstream2/latest/developerguide/what-is-appstream.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-161",
+    "domain": "technology",
+    "topic": "End-User & Frontend",
+    "tags": [
+      "amplify"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "Frontend developers want to build and host a full-stack web app with authentication and a backend, using simple tools.",
+    "prompt": "Which service fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Batch",
+        "correct": false,
+        "why": "Batch runs batch jobs, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "B",
+        "text": "AWS Amplify",
+        "correct": true,
+        "why": "Amplify provides tools and hosting for full-stack web and mobile apps."
+      },
+      {
+        "key": "C",
+        "text": "AWS Direct Connect",
+        "correct": false,
+        "why": "Direct Connect connects networks, so it doesn't meet this requirement."
+      },
+      {
+        "key": "D",
+        "text": "Amazon EMR",
+        "correct": false,
+        "why": "EMR runs big data frameworks, which isn't what this scenario needs."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Amplify helps frontend developers build, deploy and host full-stack applications with features like authentication and data.",
+      "concept": "Amplify Hosting supports Git-based CI/CD for web apps.",
+      "examTip": "Frontend/full-stack apps fast = Amplify.",
+      "references": [
+        {
+          "title": "What is AWS Amplify Hosting?",
+          "url": "https://docs.aws.amazon.com/amplify/latest/userguide/welcome.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-162",
+    "domain": "technology",
+    "topic": "End-User & Frontend",
+    "tags": [
+      "appsync"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A mobile app needs a managed GraphQL API that combines data from several sources and supports real-time updates.",
+    "prompt": "Which service fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon API Gateway REST APIs",
+        "correct": false,
+        "why": "REST APIs don't provide GraphQL, so it doesn't meet this requirement."
+      },
+      {
+        "key": "B",
+        "text": "Amazon SNS",
+        "correct": false,
+        "why": "SNS sends notifications, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "C",
+        "text": "AWS AppSync",
+        "correct": true,
+        "why": "AppSync provides managed GraphQL APIs with real-time subscriptions."
+      },
+      {
+        "key": "D",
+        "text": "Amazon EventBridge",
+        "correct": false,
+        "why": "EventBridge routes events; it doesn't provide GraphQL APIs."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS AppSync creates serverless GraphQL and Pub/Sub APIs that connect to data sources and push real-time updates.",
+      "concept": "GraphQL lets clients request exactly the data they need.",
+      "examTip": "Managed GraphQL = AppSync.",
+      "references": [
+        {
+          "title": "What is AWS AppSync?",
+          "url": "https://docs.aws.amazon.com/appsync/latest/devguide/what-is-appsync.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-163",
+    "domain": "technology",
+    "topic": "IoT",
+    "tags": [
+      "iot-core"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company wants millions of devices to connect securely to AWS and send sensor data.",
+    "prompt": "Which service fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Lightsail",
+        "correct": false,
+        "why": "Lightsail hosts simple servers, which isn't what this scenario needs."
+      },
+      {
+        "key": "B",
+        "text": "AWS Artifact",
+        "correct": false,
+        "why": "Artifact provides compliance reports, so it doesn't meet this requirement."
+      },
+      {
+        "key": "C",
+        "text": "Amazon WorkSpaces",
+        "correct": false,
+        "why": "WorkSpaces provides desktops, so it doesn't meet this requirement."
+      },
+      {
+        "key": "D",
+        "text": "AWS IoT Core",
+        "correct": true,
+        "why": "IoT Core connects devices to the cloud securely at scale."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS IoT Core lets connected devices interact securely with cloud applications and other devices, supporting protocols like MQTT.",
+      "concept": "IoT rules can route data to other AWS services.",
+      "examTip": "Connect devices to AWS = IoT Core.",
+      "references": [
+        {
+          "title": "What is AWS IoT?",
+          "url": "https://docs.aws.amazon.com/iot/latest/developerguide/what-is-aws-iot.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-164",
+    "domain": "technology",
+    "topic": "IoT",
+    "tags": [
+      "greengrass"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A factory wants its devices to process data locally and keep working when the internet connection drops, then sync with AWS later.",
+    "prompt": "Which service fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS IoT Greengrass",
+        "correct": true,
+        "why": "Greengrass runs local compute, messaging and ML on edge devices."
+      },
+      {
+        "key": "B",
+        "text": "AWS IoT Core only",
+        "correct": false,
+        "why": "IoT Core runs in the cloud and needs connectivity."
+      },
+      {
+        "key": "C",
+        "text": "Amazon CloudFront",
+        "correct": false,
+        "why": "CloudFront is a CDN, so it doesn't meet this requirement."
+      },
+      {
+        "key": "D",
+        "text": "AWS Direct Connect",
+        "correct": false,
+        "why": "Direct Connect doesn't run code on devices."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS IoT Greengrass is an edge runtime that lets devices act locally on data, even offline, and sync with the cloud.",
+      "concept": "It can run Lambda functions and ML inference at the edge.",
+      "examTip": "Edge processing on devices, works offline = IoT Greengrass.",
+      "references": [
+        {
+          "title": "What is AWS IoT Greengrass?",
+          "url": "https://docs.aws.amazon.com/greengrass/v2/developerguide/what-is-iot-greengrass.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-165",
+    "domain": "technology",
+    "topic": "Monitoring & Operations",
+    "tags": [
+      "systems-manager"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "An operations team wants to patch, configure and run commands across hundreds of EC2 instances and on-premises servers from one place.",
+    "prompt": "Which service fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Artifact",
+        "correct": false,
+        "why": "Artifact provides compliance reports, so it doesn't meet this requirement."
+      },
+      {
+        "key": "B",
+        "text": "AWS Systems Manager",
+        "correct": true,
+        "why": "Systems Manager provides fleet management, patching, run command and automation."
+      },
+      {
+        "key": "C",
+        "text": "Amazon Inspector",
+        "correct": false,
+        "why": "Inspector finds vulnerabilities but doesn't run fleet operations."
+      },
+      {
+        "key": "D",
+        "text": "AWS Config",
+        "correct": false,
+        "why": "Config tracks configurations; it doesn't patch servers or run commands."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Systems Manager is the operations hub for managing nodes at scale, with Patch Manager, Run Command, Session Manager and Automation.",
+      "concept": "It works across EC2, on-premises and other cloud servers.",
+      "examTip": "Fleet operations and patching = Systems Manager.",
+      "references": [
+        {
+          "title": "What is AWS Systems Manager?",
+          "url": "https://docs.aws.amazon.com/systems-manager/latest/userguide/what-is-systems-manager.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-166",
+    "domain": "technology",
+    "topic": "Monitoring & Operations",
+    "tags": [
+      "service-catalog"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company wants teams to launch only pre-approved, compliant product templates, such as a standard web stack.",
+    "prompt": "Which service fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Marketplace",
+        "correct": false,
+        "why": "Marketplace sells third-party software, so it doesn't meet this requirement."
+      },
+      {
+        "key": "B",
+        "text": "AWS Control Tower",
+        "correct": false,
+        "why": "Control Tower governs accounts, but Service Catalog lets teams launch approved product templates."
+      },
+      {
+        "key": "C",
+        "text": "AWS Service Catalog",
+        "correct": true,
+        "why": "Service Catalog lets admins create portfolios of approved products for users to launch."
+      },
+      {
+        "key": "D",
+        "text": "AWS Budgets",
+        "correct": false,
+        "why": "Budgets track cost, so it doesn't solve the problem described here."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Service Catalog lets organizations create and manage catalogs of approved IT services, often defined with CloudFormation.",
+      "concept": "It supports governance while giving teams self-service.",
+      "examTip": "Approved self-service templates = Service Catalog.",
+      "references": [
+        {
+          "title": "What is AWS Service Catalog?",
+          "url": "https://docs.aws.amazon.com/servicecatalog/latest/adminguide/introduction.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-167",
+    "domain": "technology",
+    "topic": "Monitoring & Operations",
+    "tags": [
+      "compute-optimizer"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company wants ML-based recommendations for rightsizing its EC2 instances, EBS volumes and Lambda functions.",
+    "prompt": "Which service fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Artifact",
+        "correct": false,
+        "why": "Artifact provides compliance reports, which isn't what this scenario needs."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Detective",
+        "correct": false,
+        "why": "Detective investigates security findings."
+      },
+      {
+        "key": "C",
+        "text": "AWS Config",
+        "correct": false,
+        "why": "Config tracks configurations, so it doesn't meet this requirement."
+      },
+      {
+        "key": "D",
+        "text": "AWS Compute Optimizer",
+        "correct": true,
+        "why": "Compute Optimizer recommends optimal resources based on utilization."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Compute Optimizer analyzes utilization metrics and recommends better-fitting resource configurations to reduce cost and improve performance.",
+      "concept": "It covers EC2, Auto Scaling groups, EBS, Lambda, ECS on Fargate and more.",
+      "examTip": "Rightsizing recommendations = Compute Optimizer.",
+      "references": [
+        {
+          "title": "What is AWS Compute Optimizer?",
+          "url": "https://docs.aws.amazon.com/compute-optimizer/latest/ug/what-is-compute-optimizer.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-168",
+    "domain": "technology",
+    "topic": "Application Integration",
+    "tags": [
+      "sqs-vs-sns"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "An architect needs one order event to be processed independently by three services, each at its own pace, without losing messages.",
+    "prompt": "Which pattern fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "An SNS topic fanning out to three SQS queues",
+        "correct": true,
+        "why": "SNS delivers a copy to each queue, and each service processes at its own pace."
+      },
+      {
+        "key": "B",
+        "text": "One SQS queue shared by all three services",
+        "correct": false,
+        "why": "With one queue, each message is processed by only one consumer."
+      },
+      {
+        "key": "C",
+        "text": "Three Lambda functions calling each other in a chain",
+        "correct": false,
+        "why": "Chaining tightly couples the services, so it doesn't meet this requirement."
+      },
+      {
+        "key": "D",
+        "text": "A single EC2 instance polling a database table",
+        "correct": false,
+        "why": "This is tightly coupled and harder to scale."
+      }
+    ],
+    "explanation": {
+      "answer": "The SNS-to-SQS fan-out pattern sends a copy of each message to multiple queues so services process independently.",
+      "concept": "This is a classic decoupling pattern.",
+      "examTip": "Same message to several independent consumers = SNS → multiple SQS queues.",
+      "references": [
+        {
+          "title": "Fanout to Amazon SQS queues",
+          "url": "https://docs.aws.amazon.com/sns/latest/dg/sns-sqs-as-subscriber.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-169",
+    "domain": "technology",
+    "topic": "Monitoring & Operations",
+    "tags": [
+      "multi-select"
+    ],
+    "difficulty": "medium",
+    "type": "multi",
+    "stem": "An operations lead is matching services to tasks.",
+    "prompt": "Which TWO pairings are correct? (Select TWO.)",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon CloudWatch – set alarms on metrics",
+        "correct": true,
+        "why": "CloudWatch alarms watch metrics, which is exactly what this scenario needs."
+      },
+      {
+        "key": "B",
+        "text": "AWS X-Ray – store container images",
+        "correct": false,
+        "why": "ECR stores images; X-Ray traces requests."
+      },
+      {
+        "key": "C",
+        "text": "AWS CodeBuild – send SMS notifications",
+        "correct": false,
+        "why": "SNS sends notifications; CodeBuild builds code."
+      },
+      {
+        "key": "D",
+        "text": "AWS Systems Manager – patch a fleet of servers",
+        "correct": true,
+        "why": "Systems Manager Patch Manager automates patching."
+      },
+      {
+        "key": "E",
+        "text": "AWS Amplify – detect malware in S3",
+        "correct": false,
+        "why": "GuardDuty Malware Protection handles that; Amplify builds apps."
+      }
+    ],
+    "explanation": {
+      "answer": "Systems Manager handles operations tasks like patching. CloudWatch handles metrics, logs and alarms.",
+      "concept": "Know each operations service's primary job.",
+      "examTip": "Patch/run commands = Systems Manager. Metrics/alarms = CloudWatch.",
+      "references": [
+        {
+          "title": "What is AWS Systems Manager?",
+          "url": "https://docs.aws.amazon.com/systems-manager/latest/userguide/what-is-systems-manager.html"
+        }
+      ]
+    },
+    "selectCount": 2
+  },
+  {
+    "id": "clf-tec-170",
+    "domain": "technology",
+    "topic": "End-User & Frontend",
+    "tags": [
+      "connect"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A company wants a cloud contact center with phone and chat support for its customers, without buying telephony hardware.",
+    "prompt": "Which service fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon SNS",
+        "correct": false,
+        "why": "SNS sends notifications, not full contact center features."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Connect",
+        "correct": true,
+        "why": "Connect is a cloud contact center service."
+      },
+      {
+        "key": "C",
+        "text": "Amazon Lightsail",
+        "correct": false,
+        "why": "Lightsail hosts simple servers, so it doesn't meet this requirement."
+      },
+      {
+        "key": "D",
+        "text": "Amazon WorkSpaces",
+        "correct": false,
+        "why": "WorkSpaces provides virtual desktops, so it doesn't meet this requirement."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Connect is an omnichannel cloud contact center for voice, chat and tasks, with pay-as-you-go pricing.",
+      "concept": "It integrates with Amazon Lex for chatbots and Contact Lens for analytics.",
+      "examTip": "Cloud call center = Amazon Connect.",
+      "references": [
+        {
+          "title": "What is Amazon Connect?",
+          "url": "https://docs.aws.amazon.com/connect/latest/adminguide/what-is-amazon-connect.html"
+        }
+      ]
+    }
+  }
+]

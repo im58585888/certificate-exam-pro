@@ -1,0 +1,1241 @@
+[
+  {
+    "id": "clf-tec-126",
+    "domain": "technology",
+    "topic": "AI & ML Services",
+    "tags": [
+      "rekognition"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A company wants to detect objects, faces and inappropriate content in images uploaded by users.",
+    "prompt": "Which service fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Rekognition",
+        "correct": true,
+        "why": "Rekognition analyzes images and videos for objects, faces and unsafe content."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Polly",
+        "correct": false,
+        "why": "Polly converts text to speech, which isn't what this scenario needs."
+      },
+      {
+        "key": "C",
+        "text": "Amazon Transcribe",
+        "correct": false,
+        "why": "Transcribe converts speech to text, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "D",
+        "text": "Amazon Comprehend",
+        "correct": false,
+        "why": "Comprehend analyzes text, so it doesn't solve the problem described here."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Rekognition provides pre-trained image and video analysis, including object detection, face analysis and content moderation.",
+      "concept": "No ML expertise is required to use it.",
+      "examTip": "Images/video analysis = Rekognition.",
+      "references": [
+        {
+          "title": "What is Amazon Rekognition?",
+          "url": "https://docs.aws.amazon.com/rekognition/latest/dg/what-is.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-127",
+    "domain": "technology",
+    "topic": "AI & ML Services",
+    "tags": [
+      "polly"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "An e-learning company wants to turn written lessons into natural-sounding audio.",
+    "prompt": "Which service fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Translate",
+        "correct": false,
+        "why": "Translate converts text between languages."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Polly",
+        "correct": true,
+        "why": "Polly converts text into lifelike speech."
+      },
+      {
+        "key": "C",
+        "text": "Amazon Transcribe",
+        "correct": false,
+        "why": "Transcribe does the opposite: speech to text."
+      },
+      {
+        "key": "D",
+        "text": "Amazon Lex",
+        "correct": false,
+        "why": "Lex builds chatbots, so it doesn't meet this requirement."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Polly turns text into lifelike speech in many voices and languages.",
+      "concept": "Polly and Transcribe are opposites.",
+      "examTip": "Text → speech = Polly.",
+      "references": [
+        {
+          "title": "What is Amazon Polly?",
+          "url": "https://docs.aws.amazon.com/polly/latest/dg/what-is.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-128",
+    "domain": "technology",
+    "topic": "AI & ML Services",
+    "tags": [
+      "transcribe"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A call center wants to convert recorded customer calls into text for analysis.",
+    "prompt": "Which service fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Rekognition",
+        "correct": false,
+        "why": "Rekognition analyzes images and video, which isn't what this scenario needs."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Polly",
+        "correct": false,
+        "why": "Polly converts text to speech, which isn't what this scenario needs."
+      },
+      {
+        "key": "C",
+        "text": "Amazon Transcribe",
+        "correct": true,
+        "why": "Transcribe converts speech to text, which matches what the question asks for."
+      },
+      {
+        "key": "D",
+        "text": "Amazon Kendra",
+        "correct": false,
+        "why": "Kendra is intelligent search, so it doesn't meet this requirement."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Transcribe automatically converts speech to text, with features for call analytics.",
+      "concept": "Combine with Comprehend to analyze sentiment in the transcripts.",
+      "examTip": "Speech → text = Transcribe.",
+      "references": [
+        {
+          "title": "What is Amazon Transcribe?",
+          "url": "https://docs.aws.amazon.com/transcribe/latest/dg/what-is.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-129",
+    "domain": "technology",
+    "topic": "AI & ML Services",
+    "tags": [
+      "comprehend"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company wants to find the sentiment and key phrases in thousands of customer reviews.",
+    "prompt": "Which service fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Textract",
+        "correct": false,
+        "why": "Textract extracts text from documents, so it doesn't meet this requirement."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Polly",
+        "correct": false,
+        "why": "Polly converts text to speech, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "C",
+        "text": "Amazon Translate",
+        "correct": false,
+        "why": "Translate converts languages, so it doesn't meet this requirement."
+      },
+      {
+        "key": "D",
+        "text": "Amazon Comprehend",
+        "correct": true,
+        "why": "Comprehend uses NLP to find sentiment, entities and key phrases in text."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Comprehend is a natural language processing service that finds insights such as sentiment, entities and key phrases in text.",
+      "concept": "It doesn't require ML training for common tasks.",
+      "examTip": "Sentiment / meaning of text = Comprehend.",
+      "references": [
+        {
+          "title": "What is Amazon Comprehend?",
+          "url": "https://docs.aws.amazon.com/comprehend/latest/dg/what-is.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-130",
+    "domain": "technology",
+    "topic": "AI & ML Services",
+    "tags": [
+      "textract"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "An insurance company wants to extract text, tables and form fields from scanned claim documents.",
+    "prompt": "Which service fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Textract",
+        "correct": true,
+        "why": "Textract extracts printed and handwritten text, tables and forms from documents."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Lex",
+        "correct": false,
+        "why": "Lex builds conversational bots, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "C",
+        "text": "Amazon Rekognition",
+        "correct": false,
+        "why": "Rekognition analyzes images but isn't specialized for forms and tables."
+      },
+      {
+        "key": "D",
+        "text": "Amazon Comprehend",
+        "correct": false,
+        "why": "Comprehend analyzes text but doesn't read scanned documents."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Textract automatically extracts text, handwriting, tables and form data from scanned documents.",
+      "concept": "Textract goes beyond simple OCR by understanding document structure.",
+      "examTip": "Extract data from scanned forms = Textract.",
+      "references": [
+        {
+          "title": "What is Amazon Textract?",
+          "url": "https://docs.aws.amazon.com/textract/latest/dg/what-is.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-131",
+    "domain": "technology",
+    "topic": "AI & ML Services",
+    "tags": [
+      "lex"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A bank wants to build a chatbot that understands customer questions by voice and text.",
+    "prompt": "Which service fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Translate",
+        "correct": false,
+        "why": "Translate converts languages, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Lex",
+        "correct": true,
+        "why": "Lex builds conversational interfaces with speech recognition and language understanding."
+      },
+      {
+        "key": "C",
+        "text": "Amazon Polly",
+        "correct": false,
+        "why": "Polly speaks text but doesn't understand conversations."
+      },
+      {
+        "key": "D",
+        "text": "Amazon Textract",
+        "correct": false,
+        "why": "Textract extracts text from documents, so it doesn't solve the problem described here."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Lex lets you build chatbots and voice bots with automatic speech recognition and natural language understanding.",
+      "concept": "Lex integrates with Amazon Connect for contact centers.",
+      "examTip": "Chatbot / voice bot = Lex.",
+      "references": [
+        {
+          "title": "What is Amazon Lex V2?",
+          "url": "https://docs.aws.amazon.com/lexv2/latest/dg/what-is.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-132",
+    "domain": "technology",
+    "topic": "AI & ML Services",
+    "tags": [
+      "translate"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A retailer wants to automatically translate product descriptions into ten languages.",
+    "prompt": "Which service fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Polly",
+        "correct": false,
+        "why": "Polly converts text to speech, so it doesn't meet this requirement."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Transcribe",
+        "correct": false,
+        "why": "Transcribe converts speech to text, so it doesn't meet this requirement."
+      },
+      {
+        "key": "C",
+        "text": "Amazon Translate",
+        "correct": true,
+        "why": "Translate provides neural machine translation between languages."
+      },
+      {
+        "key": "D",
+        "text": "Amazon Comprehend",
+        "correct": false,
+        "why": "Comprehend analyzes text, so it doesn't meet this requirement."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Translate delivers fast, high-quality language translation.",
+      "concept": "It supports many languages and custom terminology.",
+      "examTip": "Change language = Translate.",
+      "references": [
+        {
+          "title": "What is Amazon Translate?",
+          "url": "https://docs.aws.amazon.com/translate/latest/dg/what-is.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-133",
+    "domain": "technology",
+    "topic": "AI & ML Services",
+    "tags": [
+      "sagemaker"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A data science team wants to build, train and deploy its own custom machine learning models on AWS.",
+    "prompt": "Which service fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Rekognition",
+        "correct": false,
+        "why": "Rekognition offers pre-trained vision models, not custom model building in general."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Comprehend",
+        "correct": false,
+        "why": "Comprehend offers pre-trained NLP; it isn't for building custom models in general."
+      },
+      {
+        "key": "C",
+        "text": "Amazon Polly",
+        "correct": false,
+        "why": "Polly converts text to speech, so it doesn't meet this requirement."
+      },
+      {
+        "key": "D",
+        "text": "Amazon SageMaker AI",
+        "correct": true,
+        "why": "SageMaker AI provides tools to build, train and deploy custom ML models."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon SageMaker AI is a fully managed service for building, training and deploying machine learning models at scale.",
+      "concept": "Use AI services for common tasks; use SageMaker AI for custom models.",
+      "examTip": "Build your own ML models = SageMaker AI.",
+      "references": [
+        {
+          "title": "What is Amazon SageMaker AI?",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/whatis.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-134",
+    "domain": "technology",
+    "topic": "AI & ML Services",
+    "tags": [
+      "bedrock"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company wants to build a generative AI application using foundation models from several providers through one API, without managing infrastructure.",
+    "prompt": "Which service fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Bedrock",
+        "correct": true,
+        "why": "Bedrock provides access to foundation models from leading providers through a single API."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Rekognition",
+        "correct": false,
+        "why": "Rekognition analyzes images, which isn't what this scenario needs."
+      },
+      {
+        "key": "C",
+        "text": "Amazon Comprehend",
+        "correct": false,
+        "why": "Comprehend analyzes text with NLP, which isn't what this scenario needs."
+      },
+      {
+        "key": "D",
+        "text": "Amazon Lex",
+        "correct": false,
+        "why": "Lex builds chatbots; it doesn't offer foundation models from several providers."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Bedrock is a fully managed service offering foundation models from Amazon and other AI companies through a single API.",
+      "concept": "It includes features for customization, knowledge bases and guardrails.",
+      "examTip": "Generative AI with foundation models = Bedrock.",
+      "references": [
+        {
+          "title": "What is Amazon Bedrock?",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/what-is-bedrock.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-135",
+    "domain": "technology",
+    "topic": "AI & ML Services",
+    "tags": [
+      "kendra"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company wants employees to search across internal documents and get precise answers to natural-language questions.",
+    "prompt": "Which service fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Lex",
+        "correct": false,
+        "why": "Lex builds chatbots, so it doesn't meet this requirement."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Kendra",
+        "correct": true,
+        "why": "Kendra is an intelligent enterprise search service."
+      },
+      {
+        "key": "C",
+        "text": "Amazon OpenSearch Service",
+        "correct": false,
+        "why": "OpenSearch provides keyword and log search, but Kendra is built for natural-language answers over enterprise content."
+      },
+      {
+        "key": "D",
+        "text": "Amazon Textract",
+        "correct": false,
+        "why": "Textract extracts text from scanned documents."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Kendra uses machine learning to provide intelligent search across enterprise content.",
+      "concept": "Kendra connects to many repositories, such as SharePoint and S3.",
+      "examTip": "Smart enterprise search = Kendra.",
+      "references": [
+        {
+          "title": "What is Amazon Kendra?",
+          "url": "https://docs.aws.amazon.com/kendra/latest/dg/what-is-kendra.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-136",
+    "domain": "technology",
+    "topic": "AI & ML Services",
+    "tags": [
+      "q"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "Developers want an AI assistant that helps write code, explain code and answer questions about AWS inside their IDE.",
+    "prompt": "Which AWS offering fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Polly",
+        "correct": false,
+        "why": "Polly converts text to speech, which isn't what this scenario needs."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Transcribe",
+        "correct": false,
+        "why": "Transcribe converts speech to text, so it doesn't meet this requirement."
+      },
+      {
+        "key": "C",
+        "text": "Amazon Q Developer",
+        "correct": true,
+        "why": "Q Developer is a generative AI assistant for software development and AWS."
+      },
+      {
+        "key": "D",
+        "text": "Amazon Comprehend",
+        "correct": false,
+        "why": "Comprehend analyzes text; it isn't a coding assistant."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Q Developer assists with coding, debugging and AWS questions in IDEs, the console and the command line.",
+      "concept": "Amazon Q Business answers questions over company data.",
+      "examTip": "AI coding assistant on AWS = Amazon Q Developer.",
+      "references": [
+        {
+          "title": "What is Amazon Q Developer?",
+          "url": "https://docs.aws.amazon.com/amazonq/latest/qdeveloper-ug/what-is.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-137",
+    "domain": "technology",
+    "topic": "Analytics",
+    "tags": [
+      "athena"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company wants to run SQL queries directly on log files stored in Amazon S3 without loading them into a database.",
+    "prompt": "Which service fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Redshift",
+        "correct": false,
+        "why": "Redshift can query S3 with Spectrum but needs a warehouse; Athena is serverless SQL directly on S3."
+      },
+      {
+        "key": "B",
+        "text": "Amazon RDS",
+        "correct": false,
+        "why": "RDS requires loading data into a database."
+      },
+      {
+        "key": "C",
+        "text": "Amazon DynamoDB",
+        "correct": false,
+        "why": "DynamoDB isn't for SQL queries over S3 files."
+      },
+      {
+        "key": "D",
+        "text": "Amazon Athena",
+        "correct": true,
+        "why": "Athena is a serverless query service that runs SQL directly on data in S3."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Athena is an interactive, serverless query service that analyzes data in S3 using standard SQL. You pay per query.",
+      "concept": "Athena often uses the AWS Glue Data Catalog for table definitions.",
+      "examTip": "SQL on files in S3 = Athena.",
+      "references": [
+        {
+          "title": "What is Amazon Athena?",
+          "url": "https://docs.aws.amazon.com/athena/latest/ug/what-is.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-138",
+    "domain": "technology",
+    "topic": "Analytics",
+    "tags": [
+      "glue"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A data team needs to discover, prepare and transform data from many sources into a data lake, without managing servers.",
+    "prompt": "Which service fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Glue",
+        "correct": true,
+        "why": "Glue is a serverless data integration (ETL) service with a data catalog."
+      },
+      {
+        "key": "B",
+        "text": "Amazon QuickSight",
+        "correct": false,
+        "why": "QuickSight visualizes data, so it doesn't meet this requirement."
+      },
+      {
+        "key": "C",
+        "text": "Amazon Kinesis Video Streams",
+        "correct": false,
+        "why": "This streams video, so it doesn't meet this requirement."
+      },
+      {
+        "key": "D",
+        "text": "Amazon Athena",
+        "correct": false,
+        "why": "Athena queries data but doesn't discover and transform data from many sources into a data lake."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Glue discovers, prepares, moves and integrates data from multiple sources for analytics, ML and application development.",
+      "concept": "The Glue Data Catalog stores table metadata for Athena, EMR and Redshift Spectrum.",
+      "examTip": "Serverless ETL + catalog = Glue.",
+      "references": [
+        {
+          "title": "What is AWS Glue?",
+          "url": "https://docs.aws.amazon.com/glue/latest/dg/what-is-glue.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-139",
+    "domain": "technology",
+    "topic": "Analytics",
+    "tags": [
+      "kinesis"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company wants to collect and process clickstream data from its website in real time.",
+    "prompt": "Which service fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Glue",
+        "correct": false,
+        "why": "Glue runs ETL jobs, not real-time clickstream ingestion."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Kinesis Data Streams",
+        "correct": true,
+        "why": "Kinesis collects and processes streaming data in real time."
+      },
+      {
+        "key": "C",
+        "text": "Amazon SQS",
+        "correct": false,
+        "why": "SQS queues messages but isn't designed for real-time stream analytics."
+      },
+      {
+        "key": "D",
+        "text": "Amazon Redshift alone",
+        "correct": false,
+        "why": "Redshift analyzes stored data but doesn't ingest real-time streams by itself."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Kinesis Data Streams captures and processes large streams of data records in real time.",
+      "concept": "Amazon Data Firehose loads streaming data into destinations like S3 and Redshift.",
+      "examTip": "Real-time streaming data = Kinesis.",
+      "references": [
+        {
+          "title": "What is Amazon Kinesis Data Streams?",
+          "url": "https://docs.aws.amazon.com/streams/latest/dev/introduction.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-140",
+    "domain": "technology",
+    "topic": "Analytics",
+    "tags": [
+      "quicksight"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "Business users want interactive dashboards and charts built from company data without writing code.",
+    "prompt": "Which service fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon EMR",
+        "correct": false,
+        "why": "EMR runs big data frameworks, which isn't what this scenario needs."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Athena",
+        "correct": false,
+        "why": "Athena runs SQL queries but doesn't build dashboards."
+      },
+      {
+        "key": "C",
+        "text": "Amazon QuickSight",
+        "correct": true,
+        "why": "QuickSight is a business intelligence service for dashboards and visualizations."
+      },
+      {
+        "key": "D",
+        "text": "AWS Glue",
+        "correct": false,
+        "why": "Glue prepares data, so it doesn't solve the problem described here."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon QuickSight provides interactive dashboards, visualizations and natural-language queries for business intelligence.",
+      "concept": "It connects to many data sources, including Athena, Redshift and S3.",
+      "examTip": "Dashboards / BI = QuickSight.",
+      "references": [
+        {
+          "title": "What is Amazon QuickSight?",
+          "url": "https://docs.aws.amazon.com/quicksight/latest/user/welcome.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-141",
+    "domain": "technology",
+    "topic": "Analytics",
+    "tags": [
+      "emr"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company runs large Apache Spark and Hadoop jobs and wants a managed platform for them.",
+    "prompt": "Which service fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Glue DataBrew",
+        "correct": false,
+        "why": "DataBrew is for visual data preparation."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Athena",
+        "correct": false,
+        "why": "Athena runs SQL on S3, not Spark and Hadoop jobs."
+      },
+      {
+        "key": "C",
+        "text": "AWS Batch",
+        "correct": false,
+        "why": "Batch schedules jobs but isn't a managed Spark and Hadoop platform."
+      },
+      {
+        "key": "D",
+        "text": "Amazon EMR",
+        "correct": true,
+        "why": "EMR is a managed platform for big data frameworks like Spark and Hadoop."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon EMR runs big data frameworks such as Apache Spark, Hadoop, Hive and Presto on AWS.",
+      "concept": "EMR is available on EC2, EKS and as EMR Serverless.",
+      "examTip": "Managed Spark/Hadoop = EMR.",
+      "references": [
+        {
+          "title": "What is Amazon EMR?",
+          "url": "https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-what-is-emr.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-142",
+    "domain": "technology",
+    "topic": "Analytics",
+    "tags": [
+      "opensearch"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company wants to search and analyze application logs in near real time, with full-text search and dashboards.",
+    "prompt": "Which service fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon OpenSearch Service",
+        "correct": true,
+        "why": "OpenSearch Service provides search, log analytics and dashboards."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Athena",
+        "correct": false,
+        "why": "Athena queries logs in S3 but doesn't provide near-real-time full-text search and dashboards."
+      },
+      {
+        "key": "C",
+        "text": "Amazon Redshift",
+        "correct": false,
+        "why": "Redshift is a SQL data warehouse, not full-text log search."
+      },
+      {
+        "key": "D",
+        "text": "Amazon DynamoDB",
+        "correct": false,
+        "why": "DynamoDB is a key-value database, so it doesn't meet this requirement."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon OpenSearch Service makes it easy to run search and log analytics with OpenSearch and OpenSearch Dashboards.",
+      "concept": "Common uses include log analytics, application search and observability.",
+      "examTip": "Full-text search / log analytics = OpenSearch Service.",
+      "references": [
+        {
+          "title": "What is Amazon OpenSearch Service?",
+          "url": "https://docs.aws.amazon.com/opensearch-service/latest/developerguide/what-is.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-143",
+    "domain": "technology",
+    "topic": "Analytics",
+    "tags": [
+      "firehose"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A company wants to load streaming data into Amazon S3 automatically, with buffering and format conversion, without writing consumer applications.",
+    "prompt": "Which service fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Kinesis Data Streams alone",
+        "correct": false,
+        "why": "Data Streams needs consumer applications to process and deliver data."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Data Firehose",
+        "correct": true,
+        "why": "Firehose captures, transforms and loads streaming data into destinations without consumers to manage."
+      },
+      {
+        "key": "C",
+        "text": "AWS Batch",
+        "correct": false,
+        "why": "Batch processes batch jobs, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "D",
+        "text": "Amazon SQS",
+        "correct": false,
+        "why": "SQS is a message queue, not a streaming delivery service."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Data Firehose reliably delivers streaming data to destinations such as S3, Redshift and OpenSearch Service.",
+      "concept": "It's fully managed and scales automatically.",
+      "examTip": "Stream → S3/Redshift with no code = Data Firehose.",
+      "references": [
+        {
+          "title": "What is Amazon Data Firehose?",
+          "url": "https://docs.aws.amazon.com/firehose/latest/dev/what-is-this-service.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-144",
+    "domain": "technology",
+    "topic": "AI & ML Services",
+    "tags": [
+      "personalize"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "An online store wants product recommendations tailored to each customer, without building ML models from scratch.",
+    "prompt": "Which service fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Polly",
+        "correct": false,
+        "why": "Polly converts text to speech, which isn't what this scenario needs."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Comprehend",
+        "correct": false,
+        "why": "Comprehend analyzes text, so it doesn't meet this requirement."
+      },
+      {
+        "key": "C",
+        "text": "Amazon Personalize",
+        "correct": true,
+        "why": "Personalize creates real-time personalized recommendations."
+      },
+      {
+        "key": "D",
+        "text": "Amazon Rekognition",
+        "correct": false,
+        "why": "Rekognition analyzes images, which isn't what this scenario needs."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Personalize uses ML to generate real-time recommendations, such as products, content or rankings.",
+      "concept": "It's based on the same technology used at Amazon.com.",
+      "examTip": "Recommendations = Personalize.",
+      "references": [
+        {
+          "title": "What is Amazon Personalize?",
+          "url": "https://docs.aws.amazon.com/personalize/latest/dg/what-is-personalize.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-145",
+    "domain": "technology",
+    "topic": "AI & ML Services",
+    "tags": [
+      "multi-select"
+    ],
+    "difficulty": "hard",
+    "type": "multi",
+    "stem": "A product team is matching AI services to use cases.",
+    "prompt": "Which TWO pairings are correct? (Select TWO.)",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Lex – translate documents",
+        "correct": false,
+        "why": "Translate translates; Lex builds chatbots."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Comprehend – generate speech",
+        "correct": false,
+        "why": "Polly generates speech; Comprehend analyzes text."
+      },
+      {
+        "key": "C",
+        "text": "Amazon Textract – extract fields from scanned forms",
+        "correct": true,
+        "why": "Textract reads text, tables and forms, which is exactly what this scenario needs."
+      },
+      {
+        "key": "D",
+        "text": "Amazon Polly – detect faces in photos",
+        "correct": false,
+        "why": "Rekognition detects faces; Polly speaks text."
+      },
+      {
+        "key": "E",
+        "text": "Amazon Transcribe – create meeting transcripts",
+        "correct": true,
+        "why": "Transcribe converts speech to text, which is exactly what this scenario needs."
+      }
+    ],
+    "explanation": {
+      "answer": "Textract = documents. Transcribe = speech to text. Polly = text to speech. Rekognition = images. Lex = chatbots. Comprehend = text insights. Translate = languages.",
+      "concept": "Learn one verb per AI service.",
+      "examTip": "Read docs=Textract, hear=Transcribe, speak=Polly, see=Rekognition, chat=Lex.",
+      "references": [
+        {
+          "title": "What is Amazon Textract?",
+          "url": "https://docs.aws.amazon.com/textract/latest/dg/what-is.html"
+        }
+      ]
+    },
+    "selectCount": 2
+  },
+  {
+    "id": "clf-tec-146",
+    "domain": "technology",
+    "topic": "Analytics",
+    "tags": [
+      "lake-formation"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company wants to set up a secure data lake quickly and manage fine-grained access to tables and columns centrally.",
+    "prompt": "Which service fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Athena",
+        "correct": false,
+        "why": "Athena queries data lakes but doesn't manage fine-grained table and column permissions."
+      },
+      {
+        "key": "B",
+        "text": "AWS Glue DataBrew",
+        "correct": false,
+        "why": "DataBrew prepares data visually; it doesn't govern data lake access."
+      },
+      {
+        "key": "C",
+        "text": "Amazon EMR",
+        "correct": false,
+        "why": "EMR processes data but doesn't centrally manage data lake permissions."
+      },
+      {
+        "key": "D",
+        "text": "AWS Lake Formation",
+        "correct": true,
+        "why": "Lake Formation helps build data lakes and manage fine-grained access."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Lake Formation makes it easier to set up, secure and manage data lakes, with column- and row-level permissions.",
+      "concept": "It works with the Glue Data Catalog, Athena, Redshift and EMR.",
+      "examTip": "Data lake + fine-grained permissions = Lake Formation.",
+      "references": [
+        {
+          "title": "What is AWS Lake Formation?",
+          "url": "https://docs.aws.amazon.com/lake-formation/latest/dg/what-is-lake-formation.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-147",
+    "domain": "technology",
+    "topic": "AI & ML Services",
+    "tags": [
+      "ai-vs-sagemaker"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A startup with no ML experts wants to add image moderation to its app quickly.",
+    "prompt": "Which approach is MOST appropriate?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use Amazon Rekognition's pre-trained moderation API",
+        "correct": true,
+        "why": "A pre-trained AI service adds the feature without building models."
+      },
+      {
+        "key": "B",
+        "text": "Train a custom model from scratch in SageMaker AI",
+        "correct": false,
+        "why": "This needs ML expertise and time, which isn't what this scenario needs."
+      },
+      {
+        "key": "C",
+        "text": "Use Amazon Athena on the images",
+        "correct": false,
+        "why": "Athena queries structured data, not images."
+      },
+      {
+        "key": "D",
+        "text": "Write custom image analysis on EC2",
+        "correct": false,
+        "why": "This needs significant effort and expertise."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS AI services like Rekognition provide pre-trained models via APIs, so you can add intelligence without ML expertise.",
+      "concept": "Choose SageMaker AI when you need custom models.",
+      "examTip": "No ML experts + common task = pre-built AI service.",
+      "references": [
+        {
+          "title": "What is Amazon Rekognition?",
+          "url": "https://docs.aws.amazon.com/rekognition/latest/dg/what-is.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-148",
+    "domain": "technology",
+    "topic": "Analytics",
+    "tags": [
+      "redshift-vs-athena"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A team occasionally queries small CSV files in S3 and doesn't want to manage any infrastructure.",
+    "prompt": "Which service is the MOST cost-effective fit?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon RDS",
+        "correct": false,
+        "why": "RDS requires loading data and running an instance."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Athena",
+        "correct": true,
+        "why": "Athena is serverless and charges per query on data in S3."
+      },
+      {
+        "key": "C",
+        "text": "A provisioned Amazon Redshift cluster",
+        "correct": false,
+        "why": "A cluster costs money even when idle, which isn't what this scenario needs."
+      },
+      {
+        "key": "D",
+        "text": "Amazon EMR Serverless with Spark",
+        "correct": false,
+        "why": "EMR Serverless works but is heavier than needed for occasional SQL on small files."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Athena is serverless and charges for the data scanned by each query, ideal for occasional queries over S3.",
+      "concept": "Use Redshift for frequent, complex warehouse workloads.",
+      "examTip": "Occasional SQL on S3 = Athena.",
+      "references": [
+        {
+          "title": "What is Amazon Athena?",
+          "url": "https://docs.aws.amazon.com/athena/latest/ug/what-is.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-149",
+    "domain": "technology",
+    "topic": "AI & ML Services",
+    "tags": [
+      "fraud"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A financial company needs to detect potentially fraudulent online transactions using machine learning, without deep ML expertise.",
+    "prompt": "Which approach fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Textract on transaction tables",
+        "correct": false,
+        "why": "Textract extracts text from documents, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Rekognition custom labels",
+        "correct": false,
+        "why": "Rekognition custom labels classify images, not transaction patterns."
+      },
+      {
+        "key": "C",
+        "text": "Custom models trained in Amazon SageMaker AI",
+        "correct": true,
+        "why": "SageMaker AI provides built-in algorithms and tools that simplify building fraud detection models."
+      },
+      {
+        "key": "D",
+        "text": "Amazon Comprehend sentiment on descriptions",
+        "correct": false,
+        "why": "Sentiment analysis doesn't predict fraud from transaction patterns."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon SageMaker AI offers built-in algorithms, AutoML (SageMaker Autopilot) and managed training for use cases like fraud detection.",
+      "concept": "Pre-built AI services cover common tasks; SageMaker AI covers custom predictions.",
+      "examTip": "Custom predictions like fraud scoring = SageMaker AI.",
+      "references": [
+        {
+          "title": "What is Amazon SageMaker AI?",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/whatis.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-150",
+    "domain": "technology",
+    "topic": "Analytics",
+    "tags": [
+      "multi-select"
+    ],
+    "difficulty": "medium",
+    "type": "multi",
+    "stem": "A data team is choosing analytics services.",
+    "prompt": "Which TWO statements are correct? (Select TWO.)",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon EMR is a DNS service",
+        "correct": false,
+        "why": "EMR runs big data frameworks, so it doesn't meet this requirement."
+      },
+      {
+        "key": "B",
+        "text": "AWS Glue is a graph database",
+        "correct": false,
+        "why": "Glue is a data integration service, which isn't what this scenario needs."
+      },
+      {
+        "key": "C",
+        "text": "Amazon Athena runs SQL directly on S3 data",
+        "correct": true,
+        "why": "Athena queries data in S3 with SQL, so it meets the requirement described here."
+      },
+      {
+        "key": "D",
+        "text": "Amazon Kinesis ingests real-time streaming data",
+        "correct": true,
+        "why": "Kinesis handles real-time streams, which matches what the question asks for."
+      },
+      {
+        "key": "E",
+        "text": "Amazon QuickSight stores raw data as a database",
+        "correct": false,
+        "why": "QuickSight visualizes data; it isn't a database."
+      }
+    ],
+    "explanation": {
+      "answer": "Athena = SQL on S3. Kinesis = streaming. QuickSight = dashboards. Glue = ETL. EMR = Spark/Hadoop. Redshift = warehouse.",
+      "concept": "Analytics services form a pipeline: ingest, store, catalog, process, visualize.",
+      "examTip": "Ingest=Kinesis, ETL=Glue, query=Athena, warehouse=Redshift, BI=QuickSight.",
+      "references": [
+        {
+          "title": "What is Amazon Athena?",
+          "url": "https://docs.aws.amazon.com/athena/latest/ug/what-is.html"
+        }
+      ]
+    },
+    "selectCount": 2
+  }
+]

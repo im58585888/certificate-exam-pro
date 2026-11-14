@@ -1,0 +1,1241 @@
+[
+  {
+    "id": "clf-con-051",
+    "domain": "concepts",
+    "topic": "Migration Strategies",
+    "tags": [
+      "rehost"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A company must leave its data center in three months. It plans to move its virtual machines to Amazon EC2 without changing the applications.",
+    "prompt": "Which migration strategy is this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Refactor (re-architect)",
+        "correct": false,
+        "why": "Refactoring changes the application's architecture, which the company is not doing."
+      },
+      {
+        "key": "B",
+        "text": "Repurchase (drop and shop)",
+        "correct": false,
+        "why": "Repurchasing replaces the application with a different product, often SaaS."
+      },
+      {
+        "key": "C",
+        "text": "Rehost (lift and shift)",
+        "correct": true,
+        "why": "Moving applications as they are onto EC2, without code changes, is rehosting."
+      },
+      {
+        "key": "D",
+        "text": "Retire (turn it off)",
+        "correct": false,
+        "why": "Retiring decommissions the application instead of moving it."
+      }
+    ],
+    "explanation": {
+      "answer": "Rehosting, or lift and shift, moves applications to the cloud without changes. It is often the fastest way to migrate.",
+      "concept": "The common migration strategies are rehost, replatform, repurchase, refactor, retire, retain and relocate (the 7 Rs).",
+      "examTip": "No code changes, move fast = rehost.",
+      "references": [
+        {
+          "title": "Migration strategies",
+          "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/large-migration-guide/migration-strategies.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-052",
+    "domain": "concepts",
+    "topic": "Migration Strategies",
+    "tags": [
+      "replatform"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company moves its self-managed MySQL database to Amazon RDS for MySQL during migration. The application code stays the same.",
+    "prompt": "Which migration strategy does this describe?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Refactor",
+        "correct": false,
+        "why": "Refactoring would redesign the application, for example to use DynamoDB or microservices."
+      },
+      {
+        "key": "B",
+        "text": "Retain",
+        "correct": false,
+        "why": "Retaining keeps the database where it is."
+      },
+      {
+        "key": "C",
+        "text": "Rehost",
+        "correct": false,
+        "why": "Rehosting would move the database server to EC2 as is, not to a managed service."
+      },
+      {
+        "key": "D",
+        "text": "Replatform (lift, tinker and shift)",
+        "correct": true,
+        "why": "Moving to a managed platform with a few optimizations, without changing core architecture, is replatforming."
+      }
+    ],
+    "explanation": {
+      "answer": "Replatforming makes a few cloud optimizations, like moving to a managed database, without changing the core application.",
+      "concept": "Replatforming gains managed-service benefits with limited effort.",
+      "examTip": "Small tweak like self-managed DB → Amazon RDS = replatform.",
+      "references": [
+        {
+          "title": "Migration strategies",
+          "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/large-migration-guide/migration-strategies.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-053",
+    "domain": "concepts",
+    "topic": "Migration Strategies",
+    "tags": [
+      "repurchase"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A company replaces its self-hosted customer relationship management (CRM) software with a software-as-a-service (SaaS) CRM product.",
+    "prompt": "Which migration strategy is this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Repurchase",
+        "correct": true,
+        "why": "Repurchasing, or drop and shop, replaces the application with a different product, often SaaS."
+      },
+      {
+        "key": "B",
+        "text": "Rehost",
+        "correct": false,
+        "why": "Rehosting moves the same application as is."
+      },
+      {
+        "key": "C",
+        "text": "Replatform",
+        "correct": false,
+        "why": "Replatforming keeps the same application on a managed platform."
+      },
+      {
+        "key": "D",
+        "text": "Relocate",
+        "correct": false,
+        "why": "Relocating moves infrastructure, such as VMware workloads, to the cloud without changes."
+      }
+    ],
+    "explanation": {
+      "answer": "Repurchasing moves to a different product, typically a SaaS offering, instead of migrating the existing application.",
+      "concept": "Licensing models often change with repurchase, for example from perpetual licenses to subscriptions.",
+      "examTip": "Switch to SaaS = repurchase.",
+      "references": [
+        {
+          "title": "Migration strategies",
+          "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/large-migration-guide/migration-strategies.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-054",
+    "domain": "concepts",
+    "topic": "Migration Strategies",
+    "tags": [
+      "refactor"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company rewrites its monolithic application into microservices that use AWS Lambda and Amazon DynamoDB to improve agility and scale.",
+    "prompt": "Which migration strategy is this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Rehost",
+        "correct": false,
+        "why": "Rehosting moves the application without changes."
+      },
+      {
+        "key": "B",
+        "text": "Refactor (re-architect)",
+        "correct": true,
+        "why": "Re-imagining the application with cloud-native features is refactoring."
+      },
+      {
+        "key": "C",
+        "text": "Replatform",
+        "correct": false,
+        "why": "Replatforming involves small optimizations, not a full redesign."
+      },
+      {
+        "key": "D",
+        "text": "Retain",
+        "correct": false,
+        "why": "Retaining keeps the application where it is."
+      }
+    ],
+    "explanation": {
+      "answer": "Refactoring changes how the application is architected, often to use cloud-native services. It takes the most effort but can deliver the most benefit.",
+      "concept": "Refactoring is usually driven by a strong business need for features, scale or performance.",
+      "examTip": "Rewrite to cloud-native (serverless, microservices) = refactor.",
+      "references": [
+        {
+          "title": "Migration strategies",
+          "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/large-migration-guide/migration-strategies.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-055",
+    "domain": "concepts",
+    "topic": "Migration Strategies",
+    "tags": [
+      "retire"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "During migration planning, a company finds an old reporting application that nobody has used in a year.",
+    "prompt": "Which migration strategy should the company apply?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Refactor",
+        "correct": false,
+        "why": "Rewriting an unused application wastes effort."
+      },
+      {
+        "key": "B",
+        "text": "Retain",
+        "correct": false,
+        "why": "Retaining keeps an application running on premises, which wastes resources here."
+      },
+      {
+        "key": "C",
+        "text": "Retire",
+        "correct": true,
+        "why": "Applications that are no longer needed should be decommissioned rather than migrated."
+      },
+      {
+        "key": "D",
+        "text": "Rehost",
+        "correct": false,
+        "why": "Moving an unused application to AWS adds cost with no benefit."
+      }
+    ],
+    "explanation": {
+      "answer": "Retiring removes applications that are no longer useful, which reduces migration effort and cost.",
+      "concept": "Discovery during migration planning often finds applications that can be turned off.",
+      "examTip": "Nobody uses it = retire.",
+      "references": [
+        {
+          "title": "Migration strategies",
+          "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/large-migration-guide/migration-strategies.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-056",
+    "domain": "concepts",
+    "topic": "Migration Strategies",
+    "tags": [
+      "retain"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company has a mainframe application that it cannot migrate yet because of a recent major upgrade and a pending regulatory review.",
+    "prompt": "Which migration strategy applies for now?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Repurchase",
+        "correct": false,
+        "why": "Buying a replacement product is a different strategy and not planned here."
+      },
+      {
+        "key": "B",
+        "text": "Retire",
+        "correct": false,
+        "why": "The application is still needed, so it cannot be retired."
+      },
+      {
+        "key": "C",
+        "text": "Relocate",
+        "correct": false,
+        "why": "Relocating moves infrastructure without changes, which the company cannot do yet."
+      },
+      {
+        "key": "D",
+        "text": "Retain (revisit)",
+        "correct": true,
+        "why": "Keeping the application in its current environment for now, and revisiting later, is the retain strategy."
+      }
+    ],
+    "explanation": {
+      "answer": "Retaining keeps applications in the source environment, often because of recent upgrades, compliance constraints or dependencies.",
+      "concept": "Retained applications can be reviewed again in a later migration wave.",
+      "examTip": "Keep it where it is for now = retain.",
+      "references": [
+        {
+          "title": "Migration strategies",
+          "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/large-migration-guide/migration-strategies.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-057",
+    "domain": "concepts",
+    "topic": "Migration Strategies",
+    "tags": [
+      "relocate"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A company runs hundreds of VMware virtual machines on premises and wants to move them to a VMware environment on AWS without converting or re-architecting them.",
+    "prompt": "Which migration strategy BEST describes this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Relocate",
+        "correct": true,
+        "why": "Relocating moves infrastructure, such as VMware workloads, to the cloud at the hypervisor level without changes."
+      },
+      {
+        "key": "B",
+        "text": "Repurchase",
+        "correct": false,
+        "why": "Repurchasing replaces applications with new products."
+      },
+      {
+        "key": "C",
+        "text": "Refactor",
+        "correct": false,
+        "why": "Refactoring would redesign the applications."
+      },
+      {
+        "key": "D",
+        "text": "Replatform",
+        "correct": false,
+        "why": "Replatforming adds optimizations such as managed databases, which are not planned."
+      }
+    ],
+    "explanation": {
+      "answer": "The relocate strategy moves large numbers of servers from an on-premises platform to a cloud version of the same platform, without new hardware or rewriting.",
+      "concept": "Relocate is the seventh R, added for platform-level moves.",
+      "examTip": "Same hypervisor platform moved to the cloud = relocate.",
+      "references": [
+        {
+          "title": "Migration strategies",
+          "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/large-migration-guide/migration-strategies.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-058",
+    "domain": "concepts",
+    "topic": "Cloud Adoption Framework",
+    "tags": [
+      "caf-purpose"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "An enterprise wants guidance on how to organize its people, processes and technology for a successful move to AWS.",
+    "prompt": "Which AWS resource provides this guidance?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Well-Architected Framework",
+        "correct": false,
+        "why": "Well-Architected focuses on workload architecture, not organizational readiness for adoption."
+      },
+      {
+        "key": "B",
+        "text": "AWS Cloud Adoption Framework (AWS CAF)",
+        "correct": true,
+        "why": "AWS CAF organizes guidance into perspectives to help organizations plan and accelerate cloud adoption."
+      },
+      {
+        "key": "C",
+        "text": "AWS Trusted Advisor",
+        "correct": false,
+        "why": "Trusted Advisor checks resources already running in an account."
+      },
+      {
+        "key": "D",
+        "text": "AWS Pricing Calculator",
+        "correct": false,
+        "why": "The Pricing Calculator estimates costs; it does not guide organizational change."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS CAF uses AWS experience and best practices to help organizations digitally transform and accelerate business outcomes with the cloud.",
+      "concept": "AWS CAF has six perspectives: Business, People, Governance, Platform, Security and Operations.",
+      "examTip": "Organizational readiness for cloud adoption = AWS CAF.",
+      "references": [
+        {
+          "title": "AWS Cloud Adoption Framework",
+          "url": "https://aws.amazon.com/cloud-adoption-framework/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-059",
+    "domain": "concepts",
+    "topic": "Cloud Adoption Framework",
+    "tags": [
+      "perspectives"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company is planning its cloud adoption using AWS CAF.",
+    "prompt": "Which list contains ONLY AWS CAF perspectives?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Business, Reliability, Security, Cost Optimization, Operations",
+        "correct": false,
+        "why": "Reliability and Cost are Well-Architected pillars, not CAF perspectives."
+      },
+      {
+        "key": "B",
+        "text": "People, Process, Product, Partners, Platform, Security",
+        "correct": false,
+        "why": "These are not the AWS CAF perspectives, so it doesn't meet this requirement."
+      },
+      {
+        "key": "C",
+        "text": "Business, People, Governance, Platform, Security, Operations",
+        "correct": true,
+        "why": "These are the six AWS CAF perspectives, which is exactly what this scenario needs."
+      },
+      {
+        "key": "D",
+        "text": "Strategy, Design, Build, Run, Operate, Govern",
+        "correct": false,
+        "why": "These are general project phases, not CAF perspectives."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS CAF groups its capabilities into six perspectives: Business, People, Governance, Platform, Security and Operations.",
+      "concept": "Business, People and Governance are business-focused. Platform, Security and Operations are technical.",
+      "examTip": "CAF perspectives: Business, People, Governance (business side) + Platform, Security, Operations (technical side).",
+      "references": [
+        {
+          "title": "AWS Cloud Adoption Framework",
+          "url": "https://aws.amazon.com/cloud-adoption-framework/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-060",
+    "domain": "concepts",
+    "topic": "Cloud Adoption Framework",
+    "tags": [
+      "people"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "As part of cloud adoption, a company plans training, new roles and changes to its culture so employees are ready for the cloud.",
+    "prompt": "Which AWS CAF perspective covers this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Business",
+        "correct": false,
+        "why": "Business covers making sure cloud investments accelerate business outcomes."
+      },
+      {
+        "key": "B",
+        "text": "Governance",
+        "correct": false,
+        "why": "Governance covers managing and optimizing cloud investments and risks."
+      },
+      {
+        "key": "C",
+        "text": "Operations",
+        "correct": false,
+        "why": "Operations covers running cloud services day to day."
+      },
+      {
+        "key": "D",
+        "text": "People",
+        "correct": true,
+        "why": "The People perspective bridges technology and business, covering culture, organizational structure, leadership and workforce skills."
+      }
+    ],
+    "explanation": {
+      "answer": "The People perspective focuses on culture, organizational design, leadership and transforming the workforce.",
+      "concept": "Training and change management are central to successful adoption.",
+      "examTip": "Skills, culture, roles = People perspective.",
+      "references": [
+        {
+          "title": "AWS Cloud Adoption Framework",
+          "url": "https://aws.amazon.com/cloud-adoption-framework/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-061",
+    "domain": "concepts",
+    "topic": "Cloud Adoption Framework",
+    "tags": [
+      "governance"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company's CFO wants to make sure cloud spending is controlled and risks are managed as adoption grows.",
+    "prompt": "Which AWS CAF perspective addresses this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Governance",
+        "correct": true,
+        "why": "The Governance perspective helps orchestrate cloud initiatives while maximizing benefits and minimizing risks, including cloud financial management."
+      },
+      {
+        "key": "B",
+        "text": "Platform",
+        "correct": false,
+        "why": "Platform covers building an enterprise-grade cloud platform."
+      },
+      {
+        "key": "C",
+        "text": "People",
+        "correct": false,
+        "why": "People covers culture and skills, so it doesn't meet this requirement."
+      },
+      {
+        "key": "D",
+        "text": "Security",
+        "correct": false,
+        "why": "Security covers confidentiality, integrity and availability of data and workloads."
+      }
+    ],
+    "explanation": {
+      "answer": "The Governance perspective includes program and project management, benefits management, risk management and cloud financial management.",
+      "concept": "CFO-type concerns such as spending and risk map to Governance.",
+      "examTip": "Spending control and risk = Governance perspective.",
+      "references": [
+        {
+          "title": "AWS Cloud Adoption Framework",
+          "url": "https://aws.amazon.com/cloud-adoption-framework/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-062",
+    "domain": "concepts",
+    "topic": "Cloud Adoption Framework",
+    "tags": [
+      "platform"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A cloud team designs the landing zone, network architecture and provisioning pipelines for the company's new AWS environment.",
+    "prompt": "Which AWS CAF perspective does this belong to?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Business",
+        "correct": false,
+        "why": "Business focuses on business outcomes and strategy."
+      },
+      {
+        "key": "B",
+        "text": "Platform",
+        "correct": true,
+        "why": "The Platform perspective covers building an enterprise-grade, scalable hybrid cloud platform."
+      },
+      {
+        "key": "C",
+        "text": "Operations",
+        "correct": false,
+        "why": "Operations is about running and supporting workloads, not designing the platform."
+      },
+      {
+        "key": "D",
+        "text": "Governance",
+        "correct": false,
+        "why": "Governance focuses on risk, benefits and financial management."
+      }
+    ],
+    "explanation": {
+      "answer": "The Platform perspective includes platform architecture, data architecture, platform engineering and provisioning.",
+      "concept": "Platform is one of the three technical perspectives, with Security and Operations.",
+      "examTip": "Landing zone, architecture, provisioning = Platform perspective.",
+      "references": [
+        {
+          "title": "AWS Cloud Adoption Framework",
+          "url": "https://aws.amazon.com/cloud-adoption-framework/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-063",
+    "domain": "concepts",
+    "topic": "Cloud Adoption Framework",
+    "tags": [
+      "operations"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "After migration, a team sets up monitoring, incident management and capacity planning to keep services running at agreed levels.",
+    "prompt": "Which AWS CAF perspective covers this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "People",
+        "correct": false,
+        "why": "People is about culture and skills, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "B",
+        "text": "Platform",
+        "correct": false,
+        "why": "Platform is about designing and building the cloud platform."
+      },
+      {
+        "key": "C",
+        "text": "Operations",
+        "correct": true,
+        "why": "The Operations perspective ensures cloud services are delivered at the level agreed with the business."
+      },
+      {
+        "key": "D",
+        "text": "Security",
+        "correct": false,
+        "why": "Security is about protecting data and workloads."
+      }
+    ],
+    "explanation": {
+      "answer": "The Operations perspective includes observability, event management, incident and problem management, and capacity management.",
+      "concept": "Operations is a technical perspective focused on running workloads well.",
+      "examTip": "Monitoring, incidents, capacity = Operations perspective.",
+      "references": [
+        {
+          "title": "AWS Cloud Adoption Framework",
+          "url": "https://aws.amazon.com/cloud-adoption-framework/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-064",
+    "domain": "concepts",
+    "topic": "Cloud Adoption Framework",
+    "tags": [
+      "benefits"
+    ],
+    "difficulty": "hard",
+    "type": "multi",
+    "stem": "An executive asks what business outcomes AWS CAF says cloud adoption can improve.",
+    "prompt": "Which TWO are benefits that AWS CAF describes? (Select TWO.)",
+    "options": [
+      {
+        "key": "A",
+        "text": "Reduced business risk",
+        "correct": true,
+        "why": "AWS CAF lists reduced business risk among the outcomes of cloud transformation."
+      },
+      {
+        "key": "B",
+        "text": "Automatic compliance with every law",
+        "correct": false,
+        "why": "Customers remain responsible for meeting their own compliance obligations."
+      },
+      {
+        "key": "C",
+        "text": "A complete end to security incidents",
+        "correct": false,
+        "why": "No framework can end all security incidents."
+      },
+      {
+        "key": "D",
+        "text": "Increased revenue",
+        "correct": true,
+        "why": "AWS CAF lists increased revenue among the outcomes of cloud transformation."
+      },
+      {
+        "key": "E",
+        "text": "No need for staff training",
+        "correct": false,
+        "why": "AWS CAF emphasizes training and skills, through the People perspective."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS CAF describes business outcomes including reduced business risk, improved ESG performance, increased revenue and increased operational efficiency.",
+      "concept": "These outcomes come from transforming technology, processes, organization and products.",
+      "examTip": "CAF benefits: less risk, better ESG, more revenue, more efficiency.",
+      "references": [
+        {
+          "title": "Overview of the AWS Cloud Adoption Framework",
+          "url": "https://docs.aws.amazon.com/whitepapers/latest/overview-aws-cloud-adoption-framework/welcome.html"
+        }
+      ]
+    },
+    "selectCount": 2
+  },
+  {
+    "id": "clf-con-065",
+    "domain": "concepts",
+    "topic": "Migration Services",
+    "tags": [
+      "application-migration-service"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company wants to rehost hundreds of physical and virtual servers to Amazon EC2 with minimal downtime by continuously replicating them.",
+    "prompt": "Which AWS service should it use?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Snowball Edge",
+        "correct": false,
+        "why": "Snowball Edge moves large amounts of data offline; it does not continuously replicate running servers."
+      },
+      {
+        "key": "B",
+        "text": "AWS Database Migration Service",
+        "correct": false,
+        "why": "DMS migrates databases, not whole servers."
+      },
+      {
+        "key": "C",
+        "text": "AWS DataSync",
+        "correct": false,
+        "why": "DataSync moves files and objects, not running servers."
+      },
+      {
+        "key": "D",
+        "text": "AWS Application Migration Service",
+        "correct": true,
+        "why": "Application Migration Service continuously replicates servers and launches them on EC2 for rehosting."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Application Migration Service (AWS MGN) is the primary service for lift-and-shift migrations to AWS, with continuous block-level replication.",
+      "concept": "It minimizes cutover time because the replicated servers stay up to date until launch.",
+      "examTip": "Lift-and-shift whole servers = AWS Application Migration Service.",
+      "references": [
+        {
+          "title": "What is AWS Application Migration Service?",
+          "url": "https://docs.aws.amazon.com/mgn/latest/ug/what-is-application-migration-service.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-066",
+    "domain": "concepts",
+    "topic": "Migration Services",
+    "tags": [
+      "dms"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company wants to move its on-premises Oracle database to Amazon Aurora while the source database stays available to applications during the migration.",
+    "prompt": "Which AWS service should it use?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Database Migration Service (AWS DMS)",
+        "correct": true,
+        "why": "AWS DMS migrates databases with the source remaining operational, including between different engines."
+      },
+      {
+        "key": "B",
+        "text": "AWS Backup",
+        "correct": false,
+        "why": "AWS Backup protects data; it does not migrate databases between engines."
+      },
+      {
+        "key": "C",
+        "text": "Amazon S3 Transfer Acceleration",
+        "correct": false,
+        "why": "Transfer Acceleration speeds up uploads to S3, not database migrations."
+      },
+      {
+        "key": "D",
+        "text": "AWS Application Migration Service",
+        "correct": false,
+        "why": "Application Migration Service rehosts servers; it does not convert between database engines."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS DMS migrates databases quickly and securely. The source database remains fully operational during the migration.",
+      "concept": "For engine changes, the AWS Schema Conversion Tool or DMS Schema Conversion converts the schema.",
+      "examTip": "Database migration with minimal downtime = AWS DMS (+ schema conversion for different engines).",
+      "references": [
+        {
+          "title": "What is AWS Database Migration Service?",
+          "url": "https://docs.aws.amazon.com/dms/latest/userguide/Welcome.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-067",
+    "domain": "concepts",
+    "topic": "Migration Services",
+    "tags": [
+      "snowball"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company needs to move 80 TB of archive data to Amazon S3. Its internet connection would take months to transfer it.",
+    "prompt": "Which option is MOST suitable?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Direct Connect set up for a one-time transfer",
+        "correct": false,
+        "why": "Direct Connect takes time to provision and is meant for ongoing private connectivity."
+      },
+      {
+        "key": "B",
+        "text": "An AWS Snowball Edge device",
+        "correct": true,
+        "why": "Snowball Edge devices are shipped to you, loaded with data and shipped back to AWS for import."
+      },
+      {
+        "key": "C",
+        "text": "Amazon S3 Transfer Acceleration over the current link",
+        "correct": false,
+        "why": "Transfer Acceleration still depends on the slow internet connection."
+      },
+      {
+        "key": "D",
+        "text": "AWS Site-to-Site VPN over the existing link",
+        "correct": false,
+        "why": "A VPN uses the same internet link and would still take months."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Snowball Edge is a physical device for moving large amounts of data into and out of AWS when network transfer is impractical.",
+      "concept": "Offline data transfer is used when bandwidth or time makes online transfer too slow.",
+      "examTip": "Tens of TB + slow network = Snowball (ship the data).",
+      "references": [
+        {
+          "title": "AWS Snow Family",
+          "url": "https://aws.amazon.com/snow/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-068",
+    "domain": "concepts",
+    "topic": "Migration Services",
+    "tags": [
+      "datasync"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company wants to copy millions of files from its on-premises NFS file servers to Amazon EFS and keep them in sync during a migration, over the network.",
+    "prompt": "Which AWS service is designed for this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Database Migration Service",
+        "correct": false,
+        "why": "DMS migrates databases, not file shares."
+      },
+      {
+        "key": "B",
+        "text": "AWS Storage Gateway File Gateway",
+        "correct": false,
+        "why": "File Gateway gives on-premises apps access to cloud storage; DataSync is built for migrating and syncing file systems to EFS."
+      },
+      {
+        "key": "C",
+        "text": "AWS DataSync",
+        "correct": true,
+        "why": "DataSync automates and accelerates online data transfer between on-premises storage and AWS storage services."
+      },
+      {
+        "key": "D",
+        "text": "AWS Snowball Edge",
+        "correct": false,
+        "why": "Snowball Edge is for offline transfer, not ongoing online synchronization."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS DataSync moves data online between on-premises storage (NFS, SMB, HDFS, object storage) and services such as Amazon S3, Amazon EFS and Amazon FSx.",
+      "concept": "DataSync handles scheduling, integrity checks and encryption in transit.",
+      "examTip": "Online file migration to S3, EFS or FSx = DataSync.",
+      "references": [
+        {
+          "title": "What is AWS DataSync?",
+          "url": "https://docs.aws.amazon.com/datasync/latest/userguide/what-is-datasync.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-069",
+    "domain": "concepts",
+    "topic": "Migration Services",
+    "tags": [
+      "migration-hub"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company is migrating many applications using several tools and wants one place to track the progress of each application's migration.",
+    "prompt": "Which AWS service provides this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Config",
+        "correct": false,
+        "why": "Config tracks resource configuration changes."
+      },
+      {
+        "key": "B",
+        "text": "AWS Systems Manager",
+        "correct": false,
+        "why": "Systems Manager manages operations on running resources, not migration tracking."
+      },
+      {
+        "key": "C",
+        "text": "AWS Control Tower",
+        "correct": false,
+        "why": "Control Tower sets up and governs a multi-account environment."
+      },
+      {
+        "key": "D",
+        "text": "AWS Migration Hub",
+        "correct": true,
+        "why": "Migration Hub provides a single location to track migrations across multiple AWS and partner tools."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Migration Hub provides one place to discover servers, plan migrations and track the status of each application.",
+      "concept": "It integrates with services such as Application Migration Service and AWS DMS.",
+      "examTip": "One dashboard to track all migrations = AWS Migration Hub.",
+      "references": [
+        {
+          "title": "What is AWS Migration Hub?",
+          "url": "https://docs.aws.amazon.com/migrationhub/latest/ug/whatishub.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-070",
+    "domain": "concepts",
+    "topic": "Migration Strategies",
+    "tags": [
+      "choosing"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A company has a short deadline to exit its data center. After migrating, it plans to optimize applications gradually.",
+    "prompt": "Which approach is MOST appropriate?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Rehost first, then optimize applications on AWS",
+        "correct": true,
+        "why": "Rehosting quickly meets the deadline, and teams can replatform or refactor once in the cloud."
+      },
+      {
+        "key": "B",
+        "text": "Repurchase SaaS products for every application",
+        "correct": false,
+        "why": "Not every application has a suitable SaaS replacement, and switching takes time."
+      },
+      {
+        "key": "C",
+        "text": "Refactor every application before moving any of them",
+        "correct": false,
+        "why": "Refactoring everything first is slow and risks missing the deadline."
+      },
+      {
+        "key": "D",
+        "text": "Retain all applications until the deadline passes",
+        "correct": false,
+        "why": "Retaining everything does not exit the data center."
+      }
+    ],
+    "explanation": {
+      "answer": "Rehosting is often used for speed. Once applications run on AWS, teams can optimize them more easily.",
+      "concept": "Many large migrations rehost first and modernize later.",
+      "examTip": "Hard deadline = rehost now, modernize later.",
+      "references": [
+        {
+          "title": "Migration strategies",
+          "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/large-migration-guide/migration-strategies.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-071",
+    "domain": "concepts",
+    "topic": "Migration Services",
+    "tags": [
+      "schema-conversion"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company is moving from Microsoft SQL Server to Amazon Aurora PostgreSQL and needs its tables, views and stored procedures converted to the new engine.",
+    "prompt": "What should it use alongside AWS DMS?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Athena federated queries",
+        "correct": false,
+        "why": "Athena queries data in S3; it does not convert schemas."
+      },
+      {
+        "key": "B",
+        "text": "AWS Schema Conversion Tool or DMS Schema Conversion",
+        "correct": true,
+        "why": "These tools convert the source schema and code objects to the target engine."
+      },
+      {
+        "key": "C",
+        "text": "AWS CloudFormation database templates",
+        "correct": false,
+        "why": "CloudFormation provisions infrastructure, not database schemas."
+      },
+      {
+        "key": "D",
+        "text": "AWS Glue DataBrew recipes",
+        "correct": false,
+        "why": "DataBrew prepares data for analytics; it does not convert database schemas."
+      }
+    ],
+    "explanation": {
+      "answer": "For heterogeneous migrations, AWS SCT or DMS Schema Conversion converts schemas, and AWS DMS then migrates the data.",
+      "concept": "Homogeneous migrations (same engine) usually don't need schema conversion.",
+      "examTip": "Different database engine = convert the schema (SCT / DMS Schema Conversion), then move data with DMS.",
+      "references": [
+        {
+          "title": "What is AWS Database Migration Service?",
+          "url": "https://docs.aws.amazon.com/dms/latest/userguide/Welcome.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-072",
+    "domain": "concepts",
+    "topic": "Migration Strategies",
+    "tags": [
+      "multi-select"
+    ],
+    "difficulty": "easy",
+    "type": "multi",
+    "stem": "A company is categorizing its applications for migration.",
+    "prompt": "Which TWO are among the 7 Rs of migration? (Select TWO.)",
+    "options": [
+      {
+        "key": "A",
+        "text": "Rewind",
+        "correct": false,
+        "why": "Rewind is not one of the migration strategies."
+      },
+      {
+        "key": "B",
+        "text": "Reinstall",
+        "correct": false,
+        "why": "Reinstall is not one of the migration strategies."
+      },
+      {
+        "key": "C",
+        "text": "Recompile",
+        "correct": false,
+        "why": "Recompile is not one of the migration strategies."
+      },
+      {
+        "key": "D",
+        "text": "Retain",
+        "correct": true,
+        "why": "Retain is one of the 7 Rs, which is exactly what this scenario needs."
+      },
+      {
+        "key": "E",
+        "text": "Replatform",
+        "correct": true,
+        "why": "Replatform is one of the 7 Rs, so it meets the requirement described here."
+      }
+    ],
+    "explanation": {
+      "answer": "The 7 Rs are rehost, replatform, repurchase, refactor, retire, retain and relocate.",
+      "concept": "Each strategy balances migration effort against the benefits gained.",
+      "examTip": "7 Rs: Rehost, Replatform, Repurchase, Refactor, Retire, Retain, Relocate.",
+      "references": [
+        {
+          "title": "Migration strategies",
+          "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/large-migration-guide/migration-strategies.html"
+        }
+      ]
+    },
+    "selectCount": 2
+  },
+  {
+    "id": "clf-con-073",
+    "domain": "concepts",
+    "topic": "Cloud Adoption Framework",
+    "tags": [
+      "business"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company wants its cloud investments to support its digital transformation goals and accelerate business outcomes.",
+    "prompt": "Which AWS CAF perspective focuses on this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Operations",
+        "correct": false,
+        "why": "Operations focuses on running services, so it doesn't meet this requirement."
+      },
+      {
+        "key": "B",
+        "text": "Security",
+        "correct": false,
+        "why": "Security focuses on protecting data and workloads."
+      },
+      {
+        "key": "C",
+        "text": "Business",
+        "correct": true,
+        "why": "The Business perspective ensures cloud investments accelerate digital transformation ambitions and business outcomes."
+      },
+      {
+        "key": "D",
+        "text": "Platform",
+        "correct": false,
+        "why": "Platform focuses on the technical platform."
+      }
+    ],
+    "explanation": {
+      "answer": "The Business perspective includes strategy management, portfolio management, innovation management and data monetization.",
+      "concept": "Business-side perspectives connect cloud investments to measurable outcomes.",
+      "examTip": "Cloud investments aligned to business goals = Business perspective.",
+      "references": [
+        {
+          "title": "AWS Cloud Adoption Framework",
+          "url": "https://aws.amazon.com/cloud-adoption-framework/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-074",
+    "domain": "concepts",
+    "topic": "Cloud Adoption Framework",
+    "tags": [
+      "security"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company wants to ensure the confidentiality, integrity and availability of its data and workloads as it adopts the cloud.",
+    "prompt": "Which AWS CAF perspective covers this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Platform",
+        "correct": false,
+        "why": "Platform covers architecture and engineering."
+      },
+      {
+        "key": "B",
+        "text": "Governance",
+        "correct": false,
+        "why": "Governance covers risk and financial management broadly, but this goal maps to another perspective."
+      },
+      {
+        "key": "C",
+        "text": "People",
+        "correct": false,
+        "why": "People covers culture and skills, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "D",
+        "text": "Security",
+        "correct": true,
+        "why": "The Security perspective helps achieve confidentiality, integrity and availability of data and cloud workloads."
+      }
+    ],
+    "explanation": {
+      "answer": "The Security perspective includes identity and access management, threat detection, infrastructure protection, data protection and incident response.",
+      "concept": "Security is one of the three technical CAF perspectives.",
+      "examTip": "Confidentiality, integrity, availability = Security perspective.",
+      "references": [
+        {
+          "title": "AWS Cloud Adoption Framework",
+          "url": "https://aws.amazon.com/cloud-adoption-framework/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-075",
+    "domain": "concepts",
+    "topic": "Migration Services",
+    "tags": [
+      "snowball-vs-direct-connect"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A company has a 1 Gbps internet link and needs to move 10 TB once, within a week, with no long-term connectivity needs.",
+    "prompt": "Which approach is MOST appropriate?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Transfer over the internet with AWS DataSync",
+        "correct": true,
+        "why": "About 10 TB over a 1 Gbps link takes roughly one to two days, so online transfer fits the deadline."
+      },
+      {
+        "key": "B",
+        "text": "Order a dedicated AWS Direct Connect circuit",
+        "correct": false,
+        "why": "Direct Connect takes weeks to provision and is meant for ongoing connectivity."
+      },
+      {
+        "key": "C",
+        "text": "Use Amazon CloudFront to upload the data",
+        "correct": false,
+        "why": "CloudFront is for content delivery, not bulk migration."
+      },
+      {
+        "key": "D",
+        "text": "Order several Snowball Edge devices for faster delivery",
+        "correct": false,
+        "why": "Shipping devices takes days each way and is unnecessary for 10 TB on this link."
+      }
+    ],
+    "explanation": {
+      "answer": "With enough bandwidth, online transfer is simpler and faster than shipping devices. DataSync automates and verifies the transfer.",
+      "concept": "Choose offline transfer (Snowball) when the data volume and bandwidth would make online transfer too slow.",
+      "examTip": "Do the math: data size ÷ bandwidth. If it fits the deadline, transfer online.",
+      "references": [
+        {
+          "title": "What is AWS DataSync?",
+          "url": "https://docs.aws.amazon.com/datasync/latest/userguide/what-is-datasync.html"
+        }
+      ]
+    }
+  }
+]

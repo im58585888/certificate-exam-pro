@@ -1,0 +1,1234 @@
+[
+  {
+    "id": "clf-tec-051",
+    "domain": "technology",
+    "topic": "Object Storage",
+    "tags": [
+      "s3"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A company needs to store millions of images and videos and serve them over the internet with high durability.",
+    "prompt": "Which service fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "EC2 instance store",
+        "correct": false,
+        "why": "Instance store is temporary, which isn't what this scenario needs."
+      },
+      {
+        "key": "B",
+        "text": "Amazon EFS",
+        "correct": false,
+        "why": "EFS is a shared file system for compute instances."
+      },
+      {
+        "key": "C",
+        "text": "Amazon S3",
+        "correct": true,
+        "why": "S3 is object storage designed for virtually unlimited data with 11 nines of durability."
+      },
+      {
+        "key": "D",
+        "text": "Amazon EBS",
+        "correct": false,
+        "why": "EBS is block storage attached to EC2 instances."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon S3 stores data as objects in buckets, scales virtually without limit and is designed for 99.999999999% durability.",
+      "concept": "S3 is commonly used for media, backups, data lakes and static websites.",
+      "examTip": "Store lots of files/media durably = S3.",
+      "references": [
+        {
+          "title": "What is Amazon S3?",
+          "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/Welcome.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-052",
+    "domain": "technology",
+    "topic": "Block & File Storage",
+    "tags": [
+      "ebs"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "An EC2 instance needs a persistent disk for its database files that survives instance stops.",
+    "prompt": "Which storage should it use?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon EFS",
+        "correct": false,
+        "why": "EFS is a shared file system; the simplest persistent disk for one instance's database files is EBS."
+      },
+      {
+        "key": "B",
+        "text": "EC2 instance store",
+        "correct": false,
+        "why": "Instance store data is lost when the instance stops."
+      },
+      {
+        "key": "C",
+        "text": "Amazon S3 Glacier Deep Archive",
+        "correct": false,
+        "why": "Glacier is archival object storage, not a mounted disk."
+      },
+      {
+        "key": "D",
+        "text": "Amazon EBS",
+        "correct": true,
+        "why": "EBS provides persistent block storage volumes for EC2."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon EBS provides persistent block-level storage volumes for EC2 instances, independent of the instance's lifecycle.",
+      "concept": "EBS volumes live in one AZ; snapshots are stored in S3 for backup.",
+      "examTip": "Persistent disk for EC2 = EBS.",
+      "references": [
+        {
+          "title": "What is Amazon EBS?",
+          "url": "https://docs.aws.amazon.com/ebs/latest/userguide/what-is-ebs.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-053",
+    "domain": "technology",
+    "topic": "Block & File Storage",
+    "tags": [
+      "efs"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "Several Linux EC2 instances across multiple AZs need to read and write the same files at the same time.",
+    "prompt": "Which storage service fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon EFS",
+        "correct": true,
+        "why": "EFS is a shared, elastic NFS file system accessible from many instances across AZs."
+      },
+      {
+        "key": "B",
+        "text": "EC2 instance store",
+        "correct": false,
+        "why": "Instance store is local and temporary, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "C",
+        "text": "Amazon S3 Glacier",
+        "correct": false,
+        "why": "Glacier is archival storage, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "D",
+        "text": "Amazon EBS gp3 volume",
+        "correct": false,
+        "why": "A standard EBS volume attaches to instances in one AZ, not shared across AZs."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon EFS is a serverless, elastic file system that many Linux instances can mount at the same time across AZs.",
+      "concept": "EFS grows and shrinks automatically as files are added and removed.",
+      "examTip": "Shared Linux file system across instances = EFS.",
+      "references": [
+        {
+          "title": "What is Amazon EFS?",
+          "url": "https://docs.aws.amazon.com/efs/latest/ug/whatisefs.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-054",
+    "domain": "technology",
+    "topic": "Block & File Storage",
+    "tags": [
+      "fsx-windows"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company runs Windows applications that need a shared file system with SMB and Active Directory integration.",
+    "prompt": "Which service fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon S3 Standard",
+        "correct": false,
+        "why": "S3 is object storage, not an SMB file share."
+      },
+      {
+        "key": "B",
+        "text": "Amazon FSx for Windows File Server",
+        "correct": true,
+        "why": "FSx for Windows File Server provides fully managed Windows file shares with SMB and AD."
+      },
+      {
+        "key": "C",
+        "text": "Amazon EBS",
+        "correct": false,
+        "why": "EBS is block storage for one instance at a time (in general)."
+      },
+      {
+        "key": "D",
+        "text": "Amazon EFS",
+        "correct": false,
+        "why": "EFS uses NFS for Linux workloads, which isn't what this scenario needs."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon FSx for Windows File Server provides fully managed shared storage built on Windows Server, with SMB and Active Directory support.",
+      "concept": "The FSx family also includes Lustre, NetApp ONTAP and OpenZFS.",
+      "examTip": "Windows SMB file shares = FSx for Windows File Server.",
+      "references": [
+        {
+          "title": "What is FSx for Windows File Server?",
+          "url": "https://docs.aws.amazon.com/fsx/latest/WindowsGuide/what-is.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-055",
+    "domain": "technology",
+    "topic": "Object Storage",
+    "tags": [
+      "storage-classes"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company stores log files that are accessed often for 30 days, then rarely, and must be deleted after one year.",
+    "prompt": "What is the MOST cost-effective approach?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Delete the logs manually every week with a script",
+        "correct": false,
+        "why": "Manual or ad hoc deletion is error-prone and doesn't transition storage classes."
+      },
+      {
+        "key": "B",
+        "text": "Keep all logs in S3 Standard indefinitely",
+        "correct": false,
+        "why": "This costs more and doesn't remove logs after a year."
+      },
+      {
+        "key": "C",
+        "text": "Use S3 Lifecycle rules to transition and expire them",
+        "correct": true,
+        "why": "Lifecycle rules move objects to cheaper classes and delete them on schedule."
+      },
+      {
+        "key": "D",
+        "text": "Store the logs on large EBS volumes instead",
+        "correct": false,
+        "why": "EBS is more expensive for logs and lacks lifecycle rules."
+      }
+    ],
+    "explanation": {
+      "answer": "S3 Lifecycle rules automatically transition objects to lower-cost storage classes and expire them after a set time.",
+      "concept": "Common pattern: Standard → Standard-IA → Glacier → expire.",
+      "examTip": "Move then delete on a schedule = S3 Lifecycle rules.",
+      "references": [
+        {
+          "title": "Managing the lifecycle of objects",
+          "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lifecycle-mgmt.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-056",
+    "domain": "technology",
+    "topic": "Object Storage",
+    "tags": [
+      "intelligent-tiering"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company has data with unknown and changing access patterns and wants storage costs optimized automatically.",
+    "prompt": "Which S3 storage class fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "S3 Glacier Deep Archive",
+        "correct": false,
+        "why": "Deep Archive has long retrieval times and suits rarely accessed archives."
+      },
+      {
+        "key": "B",
+        "text": "S3 One Zone-IA",
+        "correct": false,
+        "why": "One Zone-IA stores data in one AZ and suits re-creatable, infrequently accessed data."
+      },
+      {
+        "key": "C",
+        "text": "S3 Standard",
+        "correct": false,
+        "why": "Standard doesn't optimize cost for infrequent access."
+      },
+      {
+        "key": "D",
+        "text": "S3 Intelligent-Tiering",
+        "correct": true,
+        "why": "Intelligent-Tiering moves objects between access tiers automatically based on usage."
+      }
+    ],
+    "explanation": {
+      "answer": "S3 Intelligent-Tiering automatically moves data to the most cost-effective access tier without performance impact or retrieval fees.",
+      "concept": "It's ideal when access patterns are unknown or change over time.",
+      "examTip": "Unknown access pattern = Intelligent-Tiering.",
+      "references": [
+        {
+          "title": "Amazon S3 storage classes",
+          "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-057",
+    "domain": "technology",
+    "topic": "Object Storage",
+    "tags": [
+      "glacier-deep"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company must keep tax records for ten years and rarely, if ever, retrieve them. A 12-hour retrieval time is acceptable.",
+    "prompt": "Which storage class is the LOWEST cost?",
+    "options": [
+      {
+        "key": "A",
+        "text": "S3 Glacier Deep Archive",
+        "correct": true,
+        "why": "Deep Archive is the lowest-cost S3 storage class, with retrieval within hours."
+      },
+      {
+        "key": "B",
+        "text": "S3 Standard-IA",
+        "correct": false,
+        "why": "Standard-IA costs more than archive classes."
+      },
+      {
+        "key": "C",
+        "text": "S3 Glacier Instant Retrieval",
+        "correct": false,
+        "why": "Instant Retrieval gives millisecond access at a higher price than Deep Archive."
+      },
+      {
+        "key": "D",
+        "text": "S3 Intelligent-Tiering",
+        "correct": false,
+        "why": "Intelligent-Tiering adds monitoring and costs more than Deep Archive for known cold data."
+      }
+    ],
+    "explanation": {
+      "answer": "S3 Glacier Deep Archive is the lowest-cost storage class for long-term retention, with retrieval typically within 12 hours.",
+      "concept": "Pick archive classes based on how fast you'd need the data back.",
+      "examTip": "Cheapest, rarely retrieved, hours OK = Glacier Deep Archive.",
+      "references": [
+        {
+          "title": "Amazon S3 storage classes",
+          "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-058",
+    "domain": "technology",
+    "topic": "Object Storage",
+    "tags": [
+      "static-website"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A company wants to host a simple static marketing website (HTML, CSS, images) at low cost.",
+    "prompt": "Which option is the SIMPLEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Amplify Hosting with a build pipeline",
+        "correct": false,
+        "why": "Amplify can host static sites too, but S3 website hosting is the simplest option with no build setup."
+      },
+      {
+        "key": "B",
+        "text": "Amazon S3 static website hosting",
+        "correct": true,
+        "why": "S3 can serve static websites directly, often with CloudFront in front."
+      },
+      {
+        "key": "C",
+        "text": "Amazon EBS",
+        "correct": false,
+        "why": "EBS is block storage for instances, which isn't what this scenario needs."
+      },
+      {
+        "key": "D",
+        "text": "A fleet of EC2 instances behind a load balancer",
+        "correct": false,
+        "why": "This works but adds cost and management for static content."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon S3 can host static websites. Adding Amazon CloudFront provides HTTPS, caching and lower latency.",
+      "concept": "No servers to manage for static content.",
+      "examTip": "Static website = S3 (+ CloudFront).",
+      "references": [
+        {
+          "title": "Hosting a static website using Amazon S3",
+          "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/WebsiteHosting.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-059",
+    "domain": "technology",
+    "topic": "Block & File Storage",
+    "tags": [
+      "ebs-snapshots"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company wants point-in-time backups of its EBS volumes that can be used to create new volumes in another AZ.",
+    "prompt": "What should it use?",
+    "options": [
+      {
+        "key": "A",
+        "text": "EC2 instance store copies",
+        "correct": false,
+        "why": "Instance store is temporary and can't be snapshotted this way."
+      },
+      {
+        "key": "B",
+        "text": "AWS Backup cross-Region copies only",
+        "correct": false,
+        "why": "AWS Backup can manage EBS backups, but the underlying point-in-time copies are EBS snapshots."
+      },
+      {
+        "key": "C",
+        "text": "EBS snapshots",
+        "correct": true,
+        "why": "EBS snapshots are stored durably and can restore volumes in any AZ in the Region."
+      },
+      {
+        "key": "D",
+        "text": "S3 Transfer Acceleration",
+        "correct": false,
+        "why": "This speeds uploads, which isn't what this scenario needs."
+      }
+    ],
+    "explanation": {
+      "answer": "EBS snapshots are incremental, point-in-time backups stored in Amazon S3. They can create new volumes in any AZ or be copied to other Regions.",
+      "concept": "Use Amazon Data Lifecycle Manager or AWS Backup to automate snapshots.",
+      "examTip": "Back up EBS = snapshots.",
+      "references": [
+        {
+          "title": "Amazon EBS snapshots",
+          "url": "https://docs.aws.amazon.com/ebs/latest/userguide/ebs-snapshots.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-060",
+    "domain": "technology",
+    "topic": "Backup & Data Transfer",
+    "tags": [
+      "aws-backup"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company wants one place to manage backup policies for EBS, RDS, DynamoDB, EFS and more, across accounts.",
+    "prompt": "Which service fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Storage Gateway",
+        "correct": false,
+        "why": "Storage Gateway connects on-premises apps to cloud storage; it doesn't manage backup policies across services."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Data Lifecycle Manager",
+        "correct": false,
+        "why": "Data Lifecycle Manager automates EBS snapshots and AMIs only, not RDS, DynamoDB and EFS."
+      },
+      {
+        "key": "C",
+        "text": "AWS DataSync",
+        "correct": false,
+        "why": "DataSync transfers data; it isn't a backup policy manager."
+      },
+      {
+        "key": "D",
+        "text": "AWS Backup",
+        "correct": true,
+        "why": "AWS Backup centralizes and automates backups across AWS services."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Backup is a fully managed service to centralize and automate data protection across AWS services and hybrid workloads.",
+      "concept": "Backup plans define frequency and retention; policies can be applied organization-wide.",
+      "examTip": "Centralized backups across services = AWS Backup.",
+      "references": [
+        {
+          "title": "What is AWS Backup?",
+          "url": "https://docs.aws.amazon.com/aws-backup/latest/devguide/whatisbackup.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-061",
+    "domain": "technology",
+    "topic": "Backup & Data Transfer",
+    "tags": [
+      "storage-gateway"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company wants on-premises applications to keep using file shares while the data is stored in Amazon S3.",
+    "prompt": "Which service fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Storage Gateway (S3 File Gateway)",
+        "correct": true,
+        "why": "Storage Gateway provides on-premises access to cloud storage, such as file shares backed by S3."
+      },
+      {
+        "key": "B",
+        "text": "AWS Snowball Edge",
+        "correct": false,
+        "why": "Snowball moves data offline in bulk, so it doesn't meet this requirement."
+      },
+      {
+        "key": "C",
+        "text": "Amazon EFS",
+        "correct": false,
+        "why": "EFS is a file system for AWS compute, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "D",
+        "text": "Amazon FSx for Windows File Server",
+        "correct": false,
+        "why": "FSx provides file shares in AWS, but on-premises apps would need a network path; Storage Gateway caches locally and stores data in S3."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Storage Gateway is a hybrid cloud storage service that gives on-premises applications access to virtually unlimited cloud storage.",
+      "concept": "Gateway types include S3 File Gateway, FSx File Gateway, Volume Gateway and Tape Gateway.",
+      "examTip": "On-prem apps + cloud-backed storage = Storage Gateway.",
+      "references": [
+        {
+          "title": "What is AWS Storage Gateway?",
+          "url": "https://docs.aws.amazon.com/storagegateway/latest/userguide/WhatIsStorageGateway.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-062",
+    "domain": "technology",
+    "topic": "Backup & Data Transfer",
+    "tags": [
+      "tape-gateway"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A company wants to replace its physical backup tapes but keep its existing backup software, which writes to tape.",
+    "prompt": "Which option fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS DataSync",
+        "correct": false,
+        "why": "DataSync transfers files; it doesn't emulate tape libraries."
+      },
+      {
+        "key": "B",
+        "text": "Storage Gateway Tape Gateway",
+        "correct": true,
+        "why": "Tape Gateway presents virtual tapes to backup software and stores them in S3 and Glacier."
+      },
+      {
+        "key": "C",
+        "text": "Amazon EBS snapshots",
+        "correct": false,
+        "why": "Snapshots back up EBS, not on-premises tape workflows."
+      },
+      {
+        "key": "D",
+        "text": "Amazon EFS",
+        "correct": false,
+        "why": "EFS is a file system, not a tape interface."
+      }
+    ],
+    "explanation": {
+      "answer": "Tape Gateway provides a virtual tape library that existing backup applications can use, with tapes archived to S3 Glacier classes.",
+      "concept": "This removes physical tape handling without changing backup software.",
+      "examTip": "Replace physical tapes, keep backup software = Tape Gateway.",
+      "references": [
+        {
+          "title": "What is AWS Storage Gateway?",
+          "url": "https://docs.aws.amazon.com/storagegateway/latest/userguide/WhatIsStorageGateway.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-063",
+    "domain": "technology",
+    "topic": "Object Storage",
+    "tags": [
+      "s3-versioning"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A team accidentally overwrote important files in an S3 bucket and wants to prevent permanent loss in the future.",
+    "prompt": "Which feature should it enable?",
+    "options": [
+      {
+        "key": "A",
+        "text": "S3 Event Notifications",
+        "correct": false,
+        "why": "Notifications report events but don't keep copies."
+      },
+      {
+        "key": "B",
+        "text": "S3 Intelligent-Tiering",
+        "correct": false,
+        "why": "This optimizes cost, so it doesn't meet this requirement."
+      },
+      {
+        "key": "C",
+        "text": "S3 Versioning",
+        "correct": true,
+        "why": "Versioning keeps previous versions of objects so overwrites and deletes can be recovered."
+      },
+      {
+        "key": "D",
+        "text": "S3 Transfer Acceleration",
+        "correct": false,
+        "why": "This speeds uploads, which isn't what this scenario needs."
+      }
+    ],
+    "explanation": {
+      "answer": "S3 Versioning keeps multiple versions of an object, allowing recovery from accidental overwrites and deletions.",
+      "concept": "Combine with lifecycle rules to expire old versions and control cost.",
+      "examTip": "Recover overwritten/deleted objects = S3 Versioning.",
+      "references": [
+        {
+          "title": "Retaining multiple versions of objects with S3 Versioning",
+          "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/Versioning.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-064",
+    "domain": "technology",
+    "topic": "Object Storage",
+    "tags": [
+      "s3-replication"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company wants objects copied automatically from a bucket in one Region to a bucket in another Region for disaster recovery.",
+    "prompt": "Which feature should it use?",
+    "options": [
+      {
+        "key": "A",
+        "text": "S3 Select",
+        "correct": false,
+        "why": "S3 Select queries data within objects, which isn't what this scenario needs."
+      },
+      {
+        "key": "B",
+        "text": "S3 Lifecycle rules",
+        "correct": false,
+        "why": "Lifecycle rules change storage classes or delete objects."
+      },
+      {
+        "key": "C",
+        "text": "S3 Object Lambda",
+        "correct": false,
+        "why": "Object Lambda transforms data on retrieval."
+      },
+      {
+        "key": "D",
+        "text": "S3 Cross-Region Replication",
+        "correct": true,
+        "why": "CRR automatically copies objects to a bucket in another Region."
+      }
+    ],
+    "explanation": {
+      "answer": "S3 Cross-Region Replication automatically and asynchronously copies new objects to a destination bucket in another Region.",
+      "concept": "Versioning must be enabled on both buckets.",
+      "examTip": "Copy objects to another Region automatically = Cross-Region Replication.",
+      "references": [
+        {
+          "title": "Replicating objects",
+          "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/replication.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-065",
+    "domain": "technology",
+    "topic": "Object Storage",
+    "tags": [
+      "durability"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A company asks how durable Amazon S3 Standard is designed to be.",
+    "prompt": "Which answer is correct?",
+    "options": [
+      {
+        "key": "A",
+        "text": "99.999999999% (11 nines)",
+        "correct": true,
+        "why": "S3 is designed for 11 nines of durability."
+      },
+      {
+        "key": "B",
+        "text": "100%, with no possibility of loss",
+        "correct": false,
+        "why": "No storage system can rule out every possible loss."
+      },
+      {
+        "key": "C",
+        "text": "99.99%",
+        "correct": false,
+        "why": "This is far lower than S3's durability design."
+      },
+      {
+        "key": "D",
+        "text": "99.9%",
+        "correct": false,
+        "why": "That's closer to availability targets, not durability."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon S3 is designed for 99.999999999% (11 nines) durability by storing data redundantly across devices and facilities.",
+      "concept": "Durability is about not losing data; availability is about being able to access it.",
+      "examTip": "S3 durability = 11 nines.",
+      "references": [
+        {
+          "title": "Amazon S3 storage classes",
+          "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-066",
+    "domain": "technology",
+    "topic": "Block & File Storage",
+    "tags": [
+      "ebs-az"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company wants to attach an existing EBS volume to an instance in a different Availability Zone.",
+    "prompt": "What must it do?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Convert the volume to instance store",
+        "correct": false,
+        "why": "Instance store can't be created from EBS."
+      },
+      {
+        "key": "B",
+        "text": "Create a snapshot and restore a new volume in the other AZ",
+        "correct": true,
+        "why": "Snapshots can create volumes in any AZ in the Region."
+      },
+      {
+        "key": "C",
+        "text": "Move the volume with AWS DataSync",
+        "correct": false,
+        "why": "DataSync doesn't move EBS volumes between AZs."
+      },
+      {
+        "key": "D",
+        "text": "Attach it directly; EBS works across AZs",
+        "correct": false,
+        "why": "A volume can only attach to instances in its own AZ."
+      }
+    ],
+    "explanation": {
+      "answer": "EBS volumes are tied to one AZ. To use the data in another AZ, snapshot the volume and create a new volume from the snapshot there.",
+      "concept": "Snapshots can also be copied to other Regions.",
+      "examTip": "EBS is AZ-scoped; move via snapshots.",
+      "references": [
+        {
+          "title": "Amazon EBS snapshots",
+          "url": "https://docs.aws.amazon.com/ebs/latest/userguide/ebs-snapshots.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-067",
+    "domain": "technology",
+    "topic": "Object Storage",
+    "tags": [
+      "one-zone-ia"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A company stores thumbnail images that can be regenerated from originals and are accessed infrequently. It wants the lowest-cost option with millisecond access.",
+    "prompt": "Which S3 storage class fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "S3 Standard",
+        "correct": false,
+        "why": "Standard costs more for infrequently accessed data."
+      },
+      {
+        "key": "B",
+        "text": "S3 Express One Zone",
+        "correct": false,
+        "why": "Express One Zone is for very high performance, not low-cost infrequent access."
+      },
+      {
+        "key": "C",
+        "text": "S3 One Zone-Infrequent Access",
+        "correct": true,
+        "why": "One Zone-IA costs less by storing data in one AZ, fine for re-creatable data."
+      },
+      {
+        "key": "D",
+        "text": "S3 Glacier Deep Archive",
+        "correct": false,
+        "why": "Deep Archive retrieval takes hours, so it doesn't meet this requirement."
+      }
+    ],
+    "explanation": {
+      "answer": "S3 One Zone-IA stores data in a single AZ at lower cost than Standard-IA. It suits infrequently accessed, re-creatable data.",
+      "concept": "Data in One Zone classes can be lost if that AZ is destroyed.",
+      "examTip": "Infrequent + re-creatable + cheap = One Zone-IA.",
+      "references": [
+        {
+          "title": "Amazon S3 storage classes",
+          "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-068",
+    "domain": "technology",
+    "topic": "Backup & Data Transfer",
+    "tags": [
+      "transfer-acceleration"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "Users around the world upload large files to one S3 bucket and complain that uploads are slow.",
+    "prompt": "Which feature can speed up long-distance uploads?",
+    "options": [
+      {
+        "key": "A",
+        "text": "S3 Object Lock",
+        "correct": false,
+        "why": "Object Lock prevents deletion, which isn't what this scenario needs."
+      },
+      {
+        "key": "B",
+        "text": "S3 Versioning",
+        "correct": false,
+        "why": "Versioning keeps object versions, so it doesn't meet this requirement."
+      },
+      {
+        "key": "C",
+        "text": "S3 Lifecycle rules",
+        "correct": false,
+        "why": "Lifecycle rules manage storage classes, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "D",
+        "text": "S3 Transfer Acceleration",
+        "correct": true,
+        "why": "Transfer Acceleration routes uploads through CloudFront edge locations over the AWS network."
+      }
+    ],
+    "explanation": {
+      "answer": "S3 Transfer Acceleration uses edge locations to speed up transfers over long distances to an S3 bucket.",
+      "concept": "Multipart upload also helps with large files.",
+      "examTip": "Faster long-distance uploads to S3 = Transfer Acceleration.",
+      "references": [
+        {
+          "title": "Configuring fast transfers using S3 Transfer Acceleration",
+          "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/transfer-acceleration.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-069",
+    "domain": "technology",
+    "topic": "Block & File Storage",
+    "tags": [
+      "storage-types"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company is choosing storage for three needs: a boot disk for EC2, a shared Linux file system and a data lake of files.",
+    "prompt": "Which mapping is correct?",
+    "options": [
+      {
+        "key": "A",
+        "text": "EBS for the boot disk, EFS for the shared file system, S3 for the data lake",
+        "correct": true,
+        "why": "Each service matches its storage type: block, file and object."
+      },
+      {
+        "key": "B",
+        "text": "Instance store for all three",
+        "correct": false,
+        "why": "Instance store is temporary and not shared."
+      },
+      {
+        "key": "C",
+        "text": "EFS for the boot disk, S3 for the shared file system, EBS for the data lake",
+        "correct": false,
+        "why": "These mappings don't fit how the services work."
+      },
+      {
+        "key": "D",
+        "text": "S3 for the boot disk, EBS for the shared file system, EFS for the data lake",
+        "correct": false,
+        "why": "These mappings don't fit how the services work."
+      }
+    ],
+    "explanation": {
+      "answer": "EBS = block storage for instances. EFS = shared file storage. S3 = object storage for data lakes and files at scale.",
+      "concept": "Block, file and object storage serve different access patterns.",
+      "examTip": "Block=EBS, File=EFS/FSx, Object=S3.",
+      "references": [
+        {
+          "title": "What is Amazon EFS?",
+          "url": "https://docs.aws.amazon.com/efs/latest/ug/whatisefs.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-070",
+    "domain": "technology",
+    "topic": "Backup & Data Transfer",
+    "tags": [
+      "snowball-edge-compute"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A remote mining site with poor connectivity needs to collect sensor data, process it locally and later ship it to AWS.",
+    "prompt": "Which option fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Outposts",
+        "correct": false,
+        "why": "Outposts needs a reliable connection to its AWS Region, which the site doesn't have."
+      },
+      {
+        "key": "B",
+        "text": "AWS Snowball Edge",
+        "correct": true,
+        "why": "Snowball Edge provides local storage and compute at disconnected sites and can be shipped to AWS."
+      },
+      {
+        "key": "C",
+        "text": "AWS Storage Gateway",
+        "correct": false,
+        "why": "Storage Gateway needs a network connection to AWS and doesn't provide local compute for a disconnected site."
+      },
+      {
+        "key": "D",
+        "text": "Amazon EFS",
+        "correct": false,
+        "why": "EFS requires network access to AWS, so it doesn't meet this requirement."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Snowball Edge devices offer storage and compute for edge locations with limited connectivity, then ship data to AWS.",
+      "concept": "Snowball Edge is used for offline transfer and edge processing.",
+      "examTip": "Disconnected site + local compute + ship data later = Snowball Edge.",
+      "references": [
+        {
+          "title": "AWS Snow Family",
+          "url": "https://aws.amazon.com/snow/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-071",
+    "domain": "technology",
+    "topic": "Object Storage",
+    "tags": [
+      "glacier-instant"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A hospital stores medical images that are rarely accessed but must be available within milliseconds when a doctor requests them.",
+    "prompt": "Which storage class is MOST cost-effective?",
+    "options": [
+      {
+        "key": "A",
+        "text": "S3 Standard",
+        "correct": false,
+        "why": "Standard costs more for rarely accessed data."
+      },
+      {
+        "key": "B",
+        "text": "S3 Glacier Deep Archive",
+        "correct": false,
+        "why": "Deep Archive retrieval takes hours, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "C",
+        "text": "S3 Glacier Instant Retrieval",
+        "correct": true,
+        "why": "Instant Retrieval offers archive pricing with millisecond access."
+      },
+      {
+        "key": "D",
+        "text": "S3 Glacier Flexible Retrieval",
+        "correct": false,
+        "why": "Flexible Retrieval takes minutes to hours."
+      }
+    ],
+    "explanation": {
+      "answer": "S3 Glacier Instant Retrieval is for long-lived, rarely accessed data that still needs millisecond retrieval.",
+      "concept": "Compare Glacier classes by retrieval speed: Instant (ms), Flexible (minutes–hours), Deep Archive (hours).",
+      "examTip": "Rarely accessed but needed instantly = Glacier Instant Retrieval.",
+      "references": [
+        {
+          "title": "Amazon S3 storage classes",
+          "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-072",
+    "domain": "technology",
+    "topic": "Backup & Data Transfer",
+    "tags": [
+      "multi-select"
+    ],
+    "difficulty": "medium",
+    "type": "multi",
+    "stem": "A company is choosing services to move data into AWS.",
+    "prompt": "Which TWO services are designed for data transfer? (Select TWO.)",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon S3 Glacier",
+        "correct": false,
+        "why": "Glacier is a storage class, not a transfer service."
+      },
+      {
+        "key": "B",
+        "text": "Amazon EFS",
+        "correct": false,
+        "why": "EFS is a file system destination, not a data transfer service."
+      },
+      {
+        "key": "C",
+        "text": "AWS Snowball Edge",
+        "correct": true,
+        "why": "Snowball Edge transfers data offline with physical devices."
+      },
+      {
+        "key": "D",
+        "text": "AWS Backup",
+        "correct": false,
+        "why": "AWS Backup protects data already in AWS; it isn't a tool for moving data into AWS."
+      },
+      {
+        "key": "E",
+        "text": "AWS DataSync",
+        "correct": true,
+        "why": "DataSync transfers data online between storage systems and AWS."
+      }
+    ],
+    "explanation": {
+      "answer": "DataSync (online) and Snowball Edge (offline) are AWS data transfer services. Storage Gateway and Transfer Family also move data.",
+      "concept": "Choose online transfer when bandwidth allows; offline for very large volumes.",
+      "examTip": "Online = DataSync. Offline = Snowball.",
+      "references": [
+        {
+          "title": "What is AWS DataSync?",
+          "url": "https://docs.aws.amazon.com/datasync/latest/userguide/what-is-datasync.html"
+        }
+      ]
+    },
+    "selectCount": 2
+  },
+  {
+    "id": "clf-tec-073",
+    "domain": "technology",
+    "topic": "Backup & Data Transfer",
+    "tags": [
+      "transfer-family"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company's partners send files using SFTP. It wants those files to land directly in Amazon S3 without running its own SFTP servers.",
+    "prompt": "Which service fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon EFS only",
+        "correct": false,
+        "why": "EFS is a file system, not an SFTP endpoint."
+      },
+      {
+        "key": "B",
+        "text": "Amazon SNS",
+        "correct": false,
+        "why": "SNS sends notifications, which isn't what this scenario needs."
+      },
+      {
+        "key": "C",
+        "text": "Amazon CloudFront",
+        "correct": false,
+        "why": "CloudFront delivers content, which isn't what this scenario needs."
+      },
+      {
+        "key": "D",
+        "text": "AWS Transfer Family",
+        "correct": true,
+        "why": "Transfer Family provides managed SFTP, FTPS and FTP endpoints backed by S3 or EFS."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Transfer Family provides fully managed file transfer endpoints (SFTP, FTPS, FTP, AS2) that store data in Amazon S3 or Amazon EFS.",
+      "concept": "Partners keep their existing tools while you avoid managing servers.",
+      "examTip": "Managed SFTP into S3 = Transfer Family.",
+      "references": [
+        {
+          "title": "What is AWS Transfer Family?",
+          "url": "https://docs.aws.amazon.com/transfer/latest/userguide/what-is-aws-transfer-family.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-074",
+    "domain": "technology",
+    "topic": "Block & File Storage",
+    "tags": [
+      "fsx-lustre"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A research team runs high-performance computing jobs that need a very fast parallel file system linked to data in Amazon S3.",
+    "prompt": "Which service fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon FSx for Lustre",
+        "correct": true,
+        "why": "FSx for Lustre is a high-performance parallel file system that can link to S3."
+      },
+      {
+        "key": "B",
+        "text": "Amazon FSx for Windows File Server",
+        "correct": false,
+        "why": "This is for Windows SMB workloads, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "C",
+        "text": "S3 Glacier Deep Archive",
+        "correct": false,
+        "why": "Deep Archive is for cold archives, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "D",
+        "text": "Amazon EBS cold HDD",
+        "correct": false,
+        "why": "Cold HDD is low-cost, low-performance block storage."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon FSx for Lustre provides a high-performance file system for HPC, ML and media processing, with S3 integration.",
+      "concept": "It delivers very high throughput and low latency.",
+      "examTip": "HPC parallel file system = FSx for Lustre.",
+      "references": [
+        {
+          "title": "What is Amazon FSx for Lustre?",
+          "url": "https://docs.aws.amazon.com/fsx/latest/LustreGuide/what-is.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-075",
+    "domain": "technology",
+    "topic": "Object Storage",
+    "tags": [
+      "s3-buckets"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A new user asks how data is organized in Amazon S3.",
+    "prompt": "Which statement is correct?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Data is stored in folders on a shared NFS mount",
+        "correct": false,
+        "why": "That describes EFS, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "B",
+        "text": "Data is stored as objects in buckets, each identified by a key",
+        "correct": true,
+        "why": "S3 stores objects in buckets, which matches what the question asks for."
+      },
+      {
+        "key": "C",
+        "text": "Data is stored in tables with rows and columns",
+        "correct": false,
+        "why": "That describes relational databases, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "D",
+        "text": "Data is stored as blocks on volumes attached to instances",
+        "correct": false,
+        "why": "That describes EBS, which isn't what this scenario needs."
+      }
+    ],
+    "explanation": {
+      "answer": "S3 stores data as objects inside buckets. Each object has a key (name), data and metadata.",
+      "concept": "Bucket names are globally unique; buckets are created in a Region.",
+      "examTip": "S3 = buckets + objects + keys.",
+      "references": [
+        {
+          "title": "What is Amazon S3?",
+          "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/Welcome.html"
+        }
+      ]
+    }
+  }
+]

@@ -90,7 +90,7 @@ export default async function PricingPage({ searchParams }: PageProps<"/pricing"
       {waitlist ? (
         <div className="card mx-auto mt-8 max-w-xl p-7">
           <h2 className="text-lg font-extrabold">Get notified when passes launch</h2>
-          <p className="mt-1 text-sm text-soft">The free trials are open now on both exams.</p>
+          <p className="mt-1 text-sm text-soft">The free trials are open now on every exam.</p>
           <div className="mt-4"><WaitlistForm signedInEmail={user?.email} /></div>
         </div>
       ) : (

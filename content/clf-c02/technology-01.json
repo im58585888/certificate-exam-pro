@@ -1,0 +1,1241 @@
+[
+  {
+    "id": "clf-tec-001",
+    "domain": "technology",
+    "topic": "Accessing AWS",
+    "tags": [
+      "console-cli-sdk"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A developer wants to automate creating S3 buckets from a shell script on a laptop.",
+    "prompt": "Which tool is the BEST fit?",
+    "options": [
+      {
+        "key": "A",
+        "text": "The AWS Management Console",
+        "correct": false,
+        "why": "The console is a web interface for interactive use, not scripting."
+      },
+      {
+        "key": "B",
+        "text": "AWS Artifact",
+        "correct": false,
+        "why": "Artifact provides compliance reports, so it doesn't meet this requirement."
+      },
+      {
+        "key": "C",
+        "text": "Amazon QuickSight",
+        "correct": false,
+        "why": "QuickSight is a business intelligence service."
+      },
+      {
+        "key": "D",
+        "text": "The AWS Command Line Interface (AWS CLI)",
+        "correct": true,
+        "why": "The CLI runs AWS commands from a terminal and is ideal for scripts."
+      }
+    ],
+    "explanation": {
+      "answer": "The AWS CLI lets you control AWS services from the command line and automate them through scripts.",
+      "concept": "Ways to access AWS: Management Console (web), CLI (terminal), SDKs (code) and infrastructure as code.",
+      "examTip": "Shell scripts = AWS CLI.",
+      "references": [
+        {
+          "title": "What is the AWS CLI?",
+          "url": "https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-welcome.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-002",
+    "domain": "technology",
+    "topic": "Accessing AWS",
+    "tags": [
+      "sdk"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A Python application needs to upload files to Amazon S3 directly from its code.",
+    "prompt": "What should the developers use?",
+    "options": [
+      {
+        "key": "A",
+        "text": "An AWS SDK for Python (Boto3)",
+        "correct": true,
+        "why": "SDKs provide language-specific libraries to call AWS services from code."
+      },
+      {
+        "key": "B",
+        "text": "The AWS Management Console",
+        "correct": false,
+        "why": "The console is for people clicking in a browser, not application code."
+      },
+      {
+        "key": "C",
+        "text": "AWS Snowball Edge",
+        "correct": false,
+        "why": "Snowball moves large data offline, so it doesn't meet this requirement."
+      },
+      {
+        "key": "D",
+        "text": "AWS CloudShell only",
+        "correct": false,
+        "why": "CloudShell is a browser-based shell, not a library for application code."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS SDKs let applications call AWS services in languages like Python, Java, JavaScript, .NET and Go.",
+      "concept": "The SDK handles request signing, retries and pagination.",
+      "examTip": "Calling AWS from application code = SDK.",
+      "references": [
+        {
+          "title": "Tools to build on AWS",
+          "url": "https://aws.amazon.com/developer/tools/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-003",
+    "domain": "technology",
+    "topic": "Accessing AWS",
+    "tags": [
+      "console"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A new user wants to explore AWS services visually and launch a first EC2 instance with a guided wizard.",
+    "prompt": "Which access method fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "The AWS CLI",
+        "correct": false,
+        "why": "The CLI requires typing commands, which is less guided for beginners."
+      },
+      {
+        "key": "B",
+        "text": "The AWS Management Console",
+        "correct": true,
+        "why": "The console is a web interface with guided workflows."
+      },
+      {
+        "key": "C",
+        "text": "AWS CloudFormation templates",
+        "correct": false,
+        "why": "Templates are best for repeatable infrastructure, not exploring."
+      },
+      {
+        "key": "D",
+        "text": "AWS SDK for Java",
+        "correct": false,
+        "why": "SDKs are for application code, which isn't what this scenario needs."
+      }
+    ],
+    "explanation": {
+      "answer": "The AWS Management Console is a browser-based interface for accessing and managing AWS services.",
+      "concept": "The console's mobile app also lets you view resources and alarms on the go.",
+      "examTip": "Point-and-click = Management Console.",
+      "references": [
+        {
+          "title": "AWS Management Console",
+          "url": "https://docs.aws.amazon.com/awsconsolehelpdocs/latest/gsg/what-is.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-004",
+    "domain": "technology",
+    "topic": "Infrastructure as Code",
+    "tags": [
+      "cloudformation"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company wants to create the same VPC, subnets, EC2 instances and databases in three environments from one template.",
+    "prompt": "Which service should it use?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon CloudWatch",
+        "correct": false,
+        "why": "CloudWatch monitors resources, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "B",
+        "text": "AWS Config",
+        "correct": false,
+        "why": "Config records configurations; it doesn't create resources from templates."
+      },
+      {
+        "key": "C",
+        "text": "AWS CloudFormation",
+        "correct": true,
+        "why": "CloudFormation provisions resources from templates in a repeatable way."
+      },
+      {
+        "key": "D",
+        "text": "AWS Trusted Advisor",
+        "correct": false,
+        "why": "Trusted Advisor gives recommendations, so it doesn't solve the problem described here."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS CloudFormation lets you model and provision AWS resources using templates written in JSON or YAML.",
+      "concept": "Stacks can be created, updated and deleted as a unit, keeping environments consistent.",
+      "examTip": "Repeatable infrastructure from templates = CloudFormation.",
+      "references": [
+        {
+          "title": "What is AWS CloudFormation?",
+          "url": "https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/Welcome.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-005",
+    "domain": "technology",
+    "topic": "Infrastructure as Code",
+    "tags": [
+      "cdk"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "Developers want to define infrastructure in TypeScript using loops and classes instead of writing long YAML templates.",
+    "prompt": "Which AWS tool supports this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS CLI",
+        "correct": false,
+        "why": "The CLI runs commands; it doesn't model infrastructure in code constructs."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Lightsail",
+        "correct": false,
+        "why": "Lightsail is a simple hosting service, which isn't what this scenario needs."
+      },
+      {
+        "key": "C",
+        "text": "AWS Systems Manager",
+        "correct": false,
+        "why": "Systems Manager manages operations on resources."
+      },
+      {
+        "key": "D",
+        "text": "AWS Cloud Development Kit (AWS CDK)",
+        "correct": true,
+        "why": "The CDK defines infrastructure in programming languages and synthesizes CloudFormation."
+      }
+    ],
+    "explanation": {
+      "answer": "The AWS CDK lets you define cloud infrastructure using languages like TypeScript, Python and Java, then deploys it through CloudFormation.",
+      "concept": "CDK constructs bundle best-practice defaults.",
+      "examTip": "Infrastructure in a programming language = CDK.",
+      "references": [
+        {
+          "title": "What is the AWS CDK?",
+          "url": "https://docs.aws.amazon.com/cdk/v2/guide/home.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-006",
+    "domain": "technology",
+    "topic": "Global Infrastructure",
+    "tags": [
+      "regions"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A company is choosing where to deploy a new application.",
+    "prompt": "Which factors should it consider when choosing an AWS Region?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Compliance, latency to users, service availability and pricing",
+        "correct": true,
+        "why": "These four factors drive Region selection."
+      },
+      {
+        "key": "B",
+        "text": "Only the Region with the lowest price",
+        "correct": false,
+        "why": "Price matters, but compliance, latency and service availability do too."
+      },
+      {
+        "key": "C",
+        "text": "The Region with the most Availability Zones only",
+        "correct": false,
+        "why": "AZ count is one factor, not the only one."
+      },
+      {
+        "key": "D",
+        "text": "Only the Region closest to AWS headquarters",
+        "correct": false,
+        "why": "AWS headquarters location doesn't matter."
+      }
+    ],
+    "explanation": {
+      "answer": "Choose a Region based on data governance and legal requirements, proximity to customers, available services and features, and pricing.",
+      "concept": "Not all services and features are available in every Region, and prices vary.",
+      "examTip": "Region choice = compliance + latency + services + price.",
+      "references": [
+        {
+          "title": "Regions and Availability Zones",
+          "url": "https://aws.amazon.com/about-aws/global-infrastructure/regions_az/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-007",
+    "domain": "technology",
+    "topic": "Global Infrastructure",
+    "tags": [
+      "region-definition"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A manager asks what an AWS Region is.",
+    "prompt": "Which definition is correct?",
+    "options": [
+      {
+        "key": "A",
+        "text": "A single data center in a large city",
+        "correct": false,
+        "why": "A Region contains multiple Availability Zones, each with one or more data centers."
+      },
+      {
+        "key": "B",
+        "text": "A geographic area with multiple isolated AZs",
+        "correct": true,
+        "why": "Each Region has multiple, physically separate AZs."
+      },
+      {
+        "key": "C",
+        "text": "A CloudFront cache location near users",
+        "correct": false,
+        "why": "That describes an edge location, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "D",
+        "text": "A group of AWS accounts in an organization",
+        "correct": false,
+        "why": "Accounts are organized with AWS Organizations, not Regions."
+      }
+    ],
+    "explanation": {
+      "answer": "An AWS Region is a physical geographic location with multiple Availability Zones, each made up of one or more data centers.",
+      "concept": "Regions are isolated from each other for fault tolerance and data sovereignty.",
+      "examTip": "Region = geographic area with multiple AZs.",
+      "references": [
+        {
+          "title": "Regions and Availability Zones",
+          "url": "https://aws.amazon.com/about-aws/global-infrastructure/regions_az/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-008",
+    "domain": "technology",
+    "topic": "Edge & Hybrid",
+    "tags": [
+      "edge-locations"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company asks what AWS edge locations are used for.",
+    "prompt": "Which services use edge locations?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Direct Connect and AWS Site-to-Site VPN",
+        "correct": false,
+        "why": "These connect networks to AWS; they don't serve users from edge locations."
+      },
+      {
+        "key": "B",
+        "text": "AWS Outposts and AWS Local Zones",
+        "correct": false,
+        "why": "These extend Regions to other locations, but CloudFront and Route 53 are the services served from edge locations."
+      },
+      {
+        "key": "C",
+        "text": "Amazon CloudFront and Amazon Route 53",
+        "correct": true,
+        "why": "Edge locations serve CloudFront caches and Route 53 DNS responses close to users."
+      },
+      {
+        "key": "D",
+        "text": "Amazon EC2 and Amazon RDS",
+        "correct": false,
+        "why": "EC2 and RDS run in Regions and AZs, not at edge locations."
+      }
+    ],
+    "explanation": {
+      "answer": "Edge locations are sites used by services like CloudFront, Route 53, AWS WAF and Shield to serve users with low latency.",
+      "concept": "There are many more edge locations than Regions.",
+      "examTip": "Edge locations = CloudFront, Route 53, WAF/Shield at the edge.",
+      "references": [
+        {
+          "title": "AWS global infrastructure",
+          "url": "https://aws.amazon.com/about-aws/global-infrastructure/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-009",
+    "domain": "technology",
+    "topic": "Edge & Hybrid",
+    "tags": [
+      "local-zones"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A media company in Los Angeles needs single-digit millisecond latency for video editing workstations, but the nearest Region is farther away.",
+    "prompt": "Which AWS infrastructure option fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Snowball Edge",
+        "correct": false,
+        "why": "Snowball moves data; it isn't a low-latency compute location."
+      },
+      {
+        "key": "B",
+        "text": "A larger instance in the nearest Region",
+        "correct": false,
+        "why": "Instance size doesn't reduce network distance."
+      },
+      {
+        "key": "C",
+        "text": "Amazon CloudFront only",
+        "correct": false,
+        "why": "CloudFront caches content; it doesn't run editing workstations."
+      },
+      {
+        "key": "D",
+        "text": "AWS Local Zones",
+        "correct": true,
+        "why": "Local Zones place compute and storage close to large population centers."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Local Zones extend a Region to place compute, storage and other services closer to end users for low-latency applications.",
+      "concept": "Local Zones are useful for media, gaming and real-time applications.",
+      "examTip": "Low latency near a metro area = Local Zones.",
+      "references": [
+        {
+          "title": "AWS Local Zones",
+          "url": "https://aws.amazon.com/about-aws/global-infrastructure/localzones/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-010",
+    "domain": "technology",
+    "topic": "Edge & Hybrid",
+    "tags": [
+      "outposts"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A factory must run AWS services on premises because its data can't leave the site, but it wants the same AWS APIs and tools.",
+    "prompt": "Which option fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Outposts",
+        "correct": true,
+        "why": "Outposts bring AWS infrastructure and services into the customer's own facility."
+      },
+      {
+        "key": "B",
+        "text": "AWS Wavelength",
+        "correct": false,
+        "why": "Wavelength places compute in 5G networks, not on customer premises."
+      },
+      {
+        "key": "C",
+        "text": "AWS Snowball Edge",
+        "correct": false,
+        "why": "Snowball Edge provides local storage and compute, but not the full AWS infrastructure and APIs that Outposts brings on premises."
+      },
+      {
+        "key": "D",
+        "text": "AWS Local Zones",
+        "correct": false,
+        "why": "Local Zones are AWS-operated locations, not on customer premises."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Outposts is fully managed AWS infrastructure installed on premises, using the same APIs, tools and services as AWS Regions.",
+      "concept": "Outposts supports data residency and low-latency local processing.",
+      "examTip": "AWS in your own data center = Outposts.",
+      "references": [
+        {
+          "title": "AWS Outposts",
+          "url": "https://aws.amazon.com/outposts/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-011",
+    "domain": "technology",
+    "topic": "Edge & Hybrid",
+    "tags": [
+      "wavelength"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A company builds an augmented reality app that needs ultra-low latency for mobile users on 5G networks.",
+    "prompt": "Which AWS offering is designed for this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Route 53",
+        "correct": false,
+        "why": "Route 53 is DNS, so it doesn't meet this requirement."
+      },
+      {
+        "key": "B",
+        "text": "AWS Wavelength",
+        "correct": true,
+        "why": "Wavelength embeds AWS compute and storage within telecom providers' 5G networks."
+      },
+      {
+        "key": "C",
+        "text": "AWS Outposts",
+        "correct": false,
+        "why": "Outposts runs in customer facilities, not inside telecom 5G networks."
+      },
+      {
+        "key": "D",
+        "text": "AWS Direct Connect",
+        "correct": false,
+        "why": "Direct Connect links on-premises networks to AWS."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Wavelength Zones place AWS infrastructure at the edge of 5G networks so mobile apps avoid extra network hops.",
+      "concept": "Use cases include AR/VR, game streaming and connected vehicles.",
+      "examTip": "5G ultra-low latency = Wavelength.",
+      "references": [
+        {
+          "title": "AWS Wavelength",
+          "url": "https://aws.amazon.com/wavelength/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-012",
+    "domain": "technology",
+    "topic": "Global Infrastructure",
+    "tags": [
+      "ha-design"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company wants its application to stay available if one Availability Zone fails, at the lowest added complexity.",
+    "prompt": "Which design fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use a single larger instance in one AZ",
+        "correct": false,
+        "why": "A single AZ is a single point of failure."
+      },
+      {
+        "key": "B",
+        "text": "Use edge locations to run the application",
+        "correct": false,
+        "why": "Edge locations don't host general application servers."
+      },
+      {
+        "key": "C",
+        "text": "Deploy across at least two AZs in one Region",
+        "correct": true,
+        "why": "Multi-AZ design protects against an AZ failure with less complexity than multi-Region."
+      },
+      {
+        "key": "D",
+        "text": "Deploy in two Regions with active-active traffic",
+        "correct": false,
+        "why": "Multi-Region works but adds much more complexity than needed."
+      }
+    ],
+    "explanation": {
+      "answer": "Deploying across multiple Availability Zones in a Region provides high availability against an AZ failure.",
+      "concept": "Use multiple Regions when you need protection against Region-wide events or global latency.",
+      "examTip": "AZ failure protection = multi-AZ. Region failure protection = multi-Region.",
+      "references": [
+        {
+          "title": "Regions and Availability Zones",
+          "url": "https://aws.amazon.com/about-aws/global-infrastructure/regions_az/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-013",
+    "domain": "technology",
+    "topic": "Global Infrastructure",
+    "tags": [
+      "az-count"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A company asks how many Availability Zones a standard AWS Region has.",
+    "prompt": "Which statement is correct?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Exactly two",
+        "correct": false,
+        "why": "New Regions have at least three AZs, so it doesn't meet this requirement."
+      },
+      {
+        "key": "B",
+        "text": "Exactly one",
+        "correct": false,
+        "why": "Regions have multiple AZs, which isn't what this scenario needs."
+      },
+      {
+        "key": "C",
+        "text": "Unlimited, chosen by the customer",
+        "correct": false,
+        "why": "Customers don't create AZs, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "D",
+        "text": "At least three in new Regions, typically",
+        "correct": true,
+        "why": "AWS builds new Regions with at least three AZs."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Regions consist of multiple Availability Zones, and AWS's standard is at least three AZs for new Regions.",
+      "concept": "Multiple AZs let you design highly available applications within a Region.",
+      "examTip": "Region = multiple AZs (3+ for new Regions).",
+      "references": [
+        {
+          "title": "Regions and Availability Zones",
+          "url": "https://aws.amazon.com/about-aws/global-infrastructure/regions_az/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-014",
+    "domain": "technology",
+    "topic": "Accessing AWS",
+    "tags": [
+      "cloudshell"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "An administrator wants to run AWS CLI commands from the browser without installing anything locally.",
+    "prompt": "Which option fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS CloudShell",
+        "correct": true,
+        "why": "CloudShell is a browser-based shell with the AWS CLI preinstalled and pre-authenticated."
+      },
+      {
+        "key": "B",
+        "text": "AWS Artifact",
+        "correct": false,
+        "why": "Artifact provides compliance reports, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "C",
+        "text": "AWS Snowball Edge",
+        "correct": false,
+        "why": "Snowball moves data, which isn't what this scenario needs."
+      },
+      {
+        "key": "D",
+        "text": "Amazon WorkSpaces",
+        "correct": false,
+        "why": "WorkSpaces provides virtual desktops, more than needed here."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS CloudShell provides a browser-based shell launched from the console, with the AWS CLI and common tools installed.",
+      "concept": "CloudShell uses your console credentials and is available at no extra charge.",
+      "examTip": "CLI in the browser, no setup = CloudShell.",
+      "references": [
+        {
+          "title": "What is AWS CloudShell?",
+          "url": "https://docs.aws.amazon.com/cloudshell/latest/userguide/welcome.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-015",
+    "domain": "technology",
+    "topic": "Infrastructure as Code",
+    "tags": [
+      "benefits"
+    ],
+    "difficulty": "medium",
+    "type": "multi",
+    "stem": "A company is deciding whether to adopt infrastructure as code.",
+    "prompt": "Which TWO are benefits of infrastructure as code? (Select TWO.)",
+    "options": [
+      {
+        "key": "A",
+        "text": "It removes the need for any security controls",
+        "correct": false,
+        "why": "Security controls are still needed, so it doesn't meet this requirement."
+      },
+      {
+        "key": "B",
+        "text": "Resources created from templates cost less to run",
+        "correct": false,
+        "why": "Resources cost the same no matter how they're created."
+      },
+      {
+        "key": "C",
+        "text": "Infrastructure changes can be reviewed and versioned like code",
+        "correct": true,
+        "why": "Templates can be stored in version control and reviewed."
+      },
+      {
+        "key": "D",
+        "text": "Environments can be recreated consistently",
+        "correct": true,
+        "why": "Templates deploy the same resources every time."
+      },
+      {
+        "key": "E",
+        "text": "It works only in a single Region",
+        "correct": false,
+        "why": "Templates can deploy to any Region, which isn't what this scenario needs."
+      }
+    ],
+    "explanation": {
+      "answer": "Infrastructure as code improves consistency, repeatability, review and version control of infrastructure changes.",
+      "concept": "It also speeds up disaster recovery and environment creation.",
+      "examTip": "IaC = repeatable + reviewable + versioned.",
+      "references": [
+        {
+          "title": "What is AWS CloudFormation?",
+          "url": "https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/Welcome.html"
+        }
+      ]
+    },
+    "selectCount": 2
+  },
+  {
+    "id": "clf-tec-016",
+    "domain": "technology",
+    "topic": "Global Infrastructure",
+    "tags": [
+      "service-availability"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A company plans to launch in a newly opened Region and needs a specific managed AI service.",
+    "prompt": "What should it check FIRST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Whether AWS Support approves the Region",
+        "correct": false,
+        "why": "Support doesn't approve Region usage, so it doesn't meet this requirement."
+      },
+      {
+        "key": "B",
+        "text": "Whether the service is available in that Region",
+        "correct": true,
+        "why": "Not every service is offered in every Region, especially new ones."
+      },
+      {
+        "key": "C",
+        "text": "Whether the Region has edge locations",
+        "correct": false,
+        "why": "Edge locations don't determine service availability in a Region."
+      },
+      {
+        "key": "D",
+        "text": "Whether the Region has at least ten AZs",
+        "correct": false,
+        "why": "No Region needs ten AZs for services to be offered."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS service availability varies by Region. Check the regional services list before choosing a Region.",
+      "concept": "New Regions often launch with core services first.",
+      "examTip": "Needed service in that Region? Check the regional services list.",
+      "references": [
+        {
+          "title": "AWS services by Region",
+          "url": "https://aws.amazon.com/about-aws/global-infrastructure/regional-product-services/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-017",
+    "domain": "technology",
+    "topic": "Edge & Hybrid",
+    "tags": [
+      "edge-vs-region"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A student confuses edge locations with Availability Zones.",
+    "prompt": "Which statement is correct?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Edge locations run your full EC2 applications",
+        "correct": false,
+        "why": "Edge locations mainly cache content and serve DNS."
+      },
+      {
+        "key": "B",
+        "text": "Availability Zones cache CloudFront content",
+        "correct": false,
+        "why": "CloudFront caches at edge locations, so it doesn't meet this requirement."
+      },
+      {
+        "key": "C",
+        "text": "Edge locations serve content; AZs run your workloads",
+        "correct": true,
+        "why": "They serve different purposes, which is exactly what this scenario needs."
+      },
+      {
+        "key": "D",
+        "text": "They are two names for the same thing",
+        "correct": false,
+        "why": "They are different parts of the global infrastructure."
+      }
+    ],
+    "explanation": {
+      "answer": "Availability Zones host workloads inside Regions. Edge locations serve content and DNS close to end users.",
+      "concept": "There are hundreds of edge locations worldwide.",
+      "examTip": "Workloads in AZs; content caching at the edge.",
+      "references": [
+        {
+          "title": "AWS global infrastructure",
+          "url": "https://aws.amazon.com/about-aws/global-infrastructure/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-018",
+    "domain": "technology",
+    "topic": "Accessing AWS",
+    "tags": [
+      "api"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A team asks how the console, CLI and SDKs actually talk to AWS services.",
+    "prompt": "What do they all use underneath?",
+    "options": [
+      {
+        "key": "A",
+        "text": "SSH connections into AWS data centers",
+        "correct": false,
+        "why": "Customers don't SSH into AWS infrastructure."
+      },
+      {
+        "key": "B",
+        "text": "Direct database queries to AWS",
+        "correct": false,
+        "why": "Customers don't query AWS's internal databases."
+      },
+      {
+        "key": "C",
+        "text": "Email messages to AWS",
+        "correct": false,
+        "why": "AWS services aren't controlled by email."
+      },
+      {
+        "key": "D",
+        "text": "AWS service APIs over HTTPS",
+        "correct": true,
+        "why": "All tools make signed API calls to AWS service endpoints."
+      }
+    ],
+    "explanation": {
+      "answer": "Every AWS action, whether from the console, CLI or SDKs, is an API call to a service endpoint.",
+      "concept": "This is why CloudTrail can record all actions: they're all API calls.",
+      "examTip": "Console, CLI, SDK = different front ends to the same APIs.",
+      "references": [
+        {
+          "title": "What is AWS CloudTrail?",
+          "url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-user-guide.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-019",
+    "domain": "technology",
+    "topic": "Global Infrastructure",
+    "tags": [
+      "data-sovereignty"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company must keep customer data within Australia.",
+    "prompt": "Which approach supports this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Store and process data in an Australian AWS Region",
+        "correct": true,
+        "why": "Data stays in the Region the customer chooses."
+      },
+      {
+        "key": "B",
+        "text": "Use any Region and enable encryption",
+        "correct": false,
+        "why": "Encryption doesn't control where data is stored."
+      },
+      {
+        "key": "C",
+        "text": "Use AWS Global Accelerator",
+        "correct": false,
+        "why": "Global Accelerator improves network performance, not data residency."
+      },
+      {
+        "key": "D",
+        "text": "Use edge locations in Australia for storage",
+        "correct": false,
+        "why": "Edge locations cache content temporarily; they're not primary storage."
+      }
+    ],
+    "explanation": {
+      "answer": "Choosing an AWS Region in Australia keeps data within that geography; AWS doesn't move content out of the Region without customer action.",
+      "concept": "SCPs can prevent use of other Regions.",
+      "examTip": "Data must stay in a country = choose a Region there.",
+      "references": [
+        {
+          "title": "Data privacy FAQ",
+          "url": "https://aws.amazon.com/compliance/data-privacy-faq/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-020",
+    "domain": "technology",
+    "topic": "Infrastructure as Code",
+    "tags": [
+      "drift"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A CloudFormation stack's resources were manually changed in the console, and the team wants to know what differs from the template.",
+    "prompt": "Which CloudFormation feature helps?",
+    "options": [
+      {
+        "key": "A",
+        "text": "StackSets",
+        "correct": false,
+        "why": "StackSets deploy stacks across accounts and Regions."
+      },
+      {
+        "key": "B",
+        "text": "Drift detection",
+        "correct": true,
+        "why": "Drift detection compares actual resource configurations with the template."
+      },
+      {
+        "key": "C",
+        "text": "Change sets",
+        "correct": false,
+        "why": "Change sets preview template changes before applying them."
+      },
+      {
+        "key": "D",
+        "text": "Stack policies",
+        "correct": false,
+        "why": "Stack policies protect resources from updates; they don't detect manual changes."
+      }
+    ],
+    "explanation": {
+      "answer": "CloudFormation drift detection identifies resources whose configuration differs from what the stack template expects.",
+      "concept": "Avoid manual changes to IaC-managed resources to prevent drift.",
+      "examTip": "Manual changes vs template = drift detection.",
+      "references": [
+        {
+          "title": "Detect unmanaged configuration changes",
+          "url": "https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-stack-drift.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-021",
+    "domain": "technology",
+    "topic": "Global Infrastructure",
+    "tags": [
+      "latency"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "Most of a company's users are in Germany.",
+    "prompt": "Which Region choice would MOST likely give users the lowest latency?",
+    "options": [
+      {
+        "key": "A",
+        "text": "The Region with the most services",
+        "correct": false,
+        "why": "Service count doesn't affect latency, which isn't what this scenario needs."
+      },
+      {
+        "key": "B",
+        "text": "Any Region, because latency is the same everywhere",
+        "correct": false,
+        "why": "Latency depends on distance and network paths."
+      },
+      {
+        "key": "C",
+        "text": "A Region in or near Germany",
+        "correct": true,
+        "why": "Proximity to users reduces latency, so it meets the requirement described here."
+      },
+      {
+        "key": "D",
+        "text": "A Region in South America",
+        "correct": false,
+        "why": "Distance to Germany adds latency, so it doesn't meet this requirement."
+      }
+    ],
+    "explanation": {
+      "answer": "Choosing a Region close to your users reduces network latency.",
+      "concept": "CloudFront can further reduce latency for static and dynamic content.",
+      "examTip": "Lowest latency = Region nearest your users.",
+      "references": [
+        {
+          "title": "Regions and Availability Zones",
+          "url": "https://aws.amazon.com/about-aws/global-infrastructure/regions_az/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-022",
+    "domain": "technology",
+    "topic": "Edge & Hybrid",
+    "tags": [
+      "multi-select"
+    ],
+    "difficulty": "medium",
+    "type": "multi",
+    "stem": "A company is matching infrastructure to requirements.",
+    "prompt": "Which TWO pairings are correct? (Select TWO.)",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Local Zones – low latency near large cities",
+        "correct": true,
+        "why": "Local Zones place services close to population centers."
+      },
+      {
+        "key": "B",
+        "text": "AWS Outposts – run AWS services on premises",
+        "correct": true,
+        "why": "Outposts brings AWS infrastructure to customer sites."
+      },
+      {
+        "key": "C",
+        "text": "Availability Zones – deliver DNS responses globally",
+        "correct": false,
+        "why": "Route 53 uses edge locations for DNS, which isn't what this scenario needs."
+      },
+      {
+        "key": "D",
+        "text": "AWS Wavelength – archive data cheaply",
+        "correct": false,
+        "why": "Wavelength is for 5G edge compute, which isn't what this scenario needs."
+      },
+      {
+        "key": "E",
+        "text": "Edge locations – host relational databases",
+        "correct": false,
+        "why": "Edge locations serve CDN and DNS, not databases."
+      }
+    ],
+    "explanation": {
+      "answer": "Outposts = on premises. Local Zones = metro low latency. Wavelength = 5G. Edge locations = CDN and DNS.",
+      "concept": "Know which infrastructure option matches which latency or location need.",
+      "examTip": "On-prem=Outposts, metro=Local Zones, 5G=Wavelength, CDN=edge.",
+      "references": [
+        {
+          "title": "AWS global infrastructure",
+          "url": "https://aws.amazon.com/about-aws/global-infrastructure/"
+        }
+      ]
+    },
+    "selectCount": 2
+  },
+  {
+    "id": "clf-tec-023",
+    "domain": "technology",
+    "topic": "Infrastructure as Code",
+    "tags": [
+      "stacksets"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company wants to deploy the same security baseline template to 30 accounts and 4 Regions at once.",
+    "prompt": "Which CloudFormation feature fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Nested stacks",
+        "correct": false,
+        "why": "Nested stacks reuse templates within one stack, not across accounts."
+      },
+      {
+        "key": "B",
+        "text": "Drift detection",
+        "correct": false,
+        "why": "Drift detection finds manual changes, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "C",
+        "text": "Stack outputs",
+        "correct": false,
+        "why": "Outputs share values from a stack, which isn't what this scenario needs."
+      },
+      {
+        "key": "D",
+        "text": "CloudFormation StackSets",
+        "correct": true,
+        "why": "StackSets deploy stacks across multiple accounts and Regions from one template."
+      }
+    ],
+    "explanation": {
+      "answer": "CloudFormation StackSets let you create, update or delete stacks across multiple accounts and Regions with a single operation.",
+      "concept": "StackSets integrate with AWS Organizations for automatic deployment to new accounts.",
+      "examTip": "One template, many accounts and Regions = StackSets.",
+      "references": [
+        {
+          "title": "Working with StackSets",
+          "url": "https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/what-is-cfnstacksets.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-024",
+    "domain": "technology",
+    "topic": "Accessing AWS",
+    "tags": [
+      "console-mobile"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "An on-call engineer wants to check CloudWatch alarms and service health from a phone.",
+    "prompt": "Which option fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "The AWS Console Mobile Application",
+        "correct": true,
+        "why": "The mobile app lets you view resources, alarms and the Health Dashboard."
+      },
+      {
+        "key": "B",
+        "text": "AWS CloudFormation",
+        "correct": false,
+        "why": "CloudFormation provisions infrastructure."
+      },
+      {
+        "key": "C",
+        "text": "AWS Snowball Edge",
+        "correct": false,
+        "why": "Snowball moves data, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "D",
+        "text": "Amazon Polly",
+        "correct": false,
+        "why": "Polly converts text to speech, so it doesn't solve the problem described here."
+      }
+    ],
+    "explanation": {
+      "answer": "The AWS Console Mobile Application provides access to a subset of the console, including CloudWatch alarms and AWS Health events.",
+      "concept": "Useful for on-call monitoring away from a desk.",
+      "examTip": "Check AWS on a phone = Console Mobile App.",
+      "references": [
+        {
+          "title": "AWS Console Mobile Application",
+          "url": "https://aws.amazon.com/console/mobile/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-tec-025",
+    "domain": "technology",
+    "topic": "Infrastructure as Code",
+    "tags": [
+      "beanstalk-vs-cfn"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A small team wants to deploy a web app by uploading code and letting AWS handle capacity, load balancing and scaling, without writing templates.",
+    "prompt": "Which service fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Lambda",
+        "correct": false,
+        "why": "Lambda runs functions, but Beanstalk is the service that deploys a whole web app from uploaded code with load balancing and scaling."
+      },
+      {
+        "key": "B",
+        "text": "AWS Elastic Beanstalk",
+        "correct": true,
+        "why": "Beanstalk deploys code and handles provisioning, load balancing and scaling."
+      },
+      {
+        "key": "C",
+        "text": "AWS CloudFormation",
+        "correct": false,
+        "why": "CloudFormation requires defining resources in templates."
+      },
+      {
+        "key": "D",
+        "text": "AWS Outposts",
+        "correct": false,
+        "why": "Outposts runs AWS on premises, which isn't what this scenario needs."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Elastic Beanstalk lets you upload application code; it automatically handles capacity, load balancing, scaling and health monitoring.",
+      "concept": "You keep control of the underlying resources if you need it.",
+      "examTip": "Upload code, AWS runs it = Elastic Beanstalk.",
+      "references": [
+        {
+          "title": "What is AWS Elastic Beanstalk?",
+          "url": "https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/Welcome.html"
+        }
+      ]
+    }
+  }
+]

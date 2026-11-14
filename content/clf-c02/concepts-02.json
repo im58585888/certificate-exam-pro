@@ -1,0 +1,1238 @@
+[
+  {
+    "id": "clf-con-026",
+    "domain": "concepts",
+    "topic": "Well-Architected Framework",
+    "tags": [
+      "pillars"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A team is reviewing its workload against the AWS Well-Architected Framework for the first time.",
+    "prompt": "How many pillars does the framework have?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Seven, including compliance as its own pillar",
+        "correct": false,
+        "why": "Compliance is covered within security, not a separate pillar."
+      },
+      {
+        "key": "B",
+        "text": "Five, without sustainability",
+        "correct": false,
+        "why": "Sustainability was added as the sixth pillar in 2021."
+      },
+      {
+        "key": "C",
+        "text": "Six pillars",
+        "correct": true,
+        "why": "The pillars are operational excellence, security, reliability, performance efficiency, cost optimization and sustainability."
+      },
+      {
+        "key": "D",
+        "text": "Four: security, reliability, performance and cost",
+        "correct": false,
+        "why": "This list leaves out operational excellence and sustainability."
+      }
+    ],
+    "explanation": {
+      "answer": "The AWS Well-Architected Framework has six pillars: operational excellence, security, reliability, performance efficiency, cost optimization and sustainability.",
+      "concept": "Each pillar has design principles and best practices that help you evaluate architectures.",
+      "examTip": "Six pillars. Mnemonic: OS RPCS (Ops, Security, Reliability, Performance, Cost, Sustainability).",
+      "references": [
+        {
+          "title": "The pillars of the framework",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/the-pillars-of-the-framework.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-027",
+    "domain": "concepts",
+    "topic": "Well-Architected Framework",
+    "tags": [
+      "reliability"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A workload must recover automatically from failures and meet demand without manual intervention.",
+    "prompt": "Which Well-Architected pillar focuses on this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Performance efficiency",
+        "correct": false,
+        "why": "Performance efficiency is about using resources efficiently as demand changes, not recovering from failures."
+      },
+      {
+        "key": "B",
+        "text": "Security",
+        "correct": false,
+        "why": "Security covers protecting information and systems, not failure recovery."
+      },
+      {
+        "key": "C",
+        "text": "Operational excellence",
+        "correct": false,
+        "why": "Operational excellence covers running and monitoring systems and improving processes."
+      },
+      {
+        "key": "D",
+        "text": "Reliability",
+        "correct": true,
+        "why": "Reliability covers a workload's ability to perform its function correctly and recover from failures."
+      }
+    ],
+    "explanation": {
+      "answer": "The reliability pillar focuses on workloads performing their intended functions and recovering quickly from failure.",
+      "concept": "Reliability design principles include automatically recovering from failure, testing recovery procedures and scaling horizontally.",
+      "examTip": "Recover from failure, scale to meet demand = reliability.",
+      "references": [
+        {
+          "title": "Reliability pillar",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/welcome.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-028",
+    "domain": "concepts",
+    "topic": "Well-Architected Framework",
+    "tags": [
+      "cost-optimization"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A company wants to avoid unnecessary costs, understand where its money goes, and pick the most cost-effective resource types.",
+    "prompt": "Which Well-Architected pillar does this describe?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Cost optimization",
+        "correct": true,
+        "why": "Cost optimization is about delivering business value at the lowest price point."
+      },
+      {
+        "key": "B",
+        "text": "Performance efficiency",
+        "correct": false,
+        "why": "Performance efficiency is about meeting requirements efficiently, not mainly about spending."
+      },
+      {
+        "key": "C",
+        "text": "Reliability",
+        "correct": false,
+        "why": "Reliability is about recovering from failures and meeting demand."
+      },
+      {
+        "key": "D",
+        "text": "Sustainability",
+        "correct": false,
+        "why": "Sustainability focuses on reducing environmental impact, though it can also reduce cost."
+      }
+    ],
+    "explanation": {
+      "answer": "The cost optimization pillar focuses on avoiding unnecessary costs, analyzing spending and selecting the right resources.",
+      "concept": "Design principles include adopting a consumption model and measuring overall efficiency.",
+      "examTip": "Understand spend and cut waste = cost optimization.",
+      "references": [
+        {
+          "title": "Cost optimization pillar",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/cost-optimization-pillar/welcome.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-029",
+    "domain": "concepts",
+    "topic": "Well-Architected Framework",
+    "tags": [
+      "operational-excellence"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A team wants to perform operations as code, make frequent small reversible changes, and learn from every operational failure.",
+    "prompt": "Which pillar's design principles are these?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Reliability",
+        "correct": false,
+        "why": "Reliability principles focus on recovery from failure and scaling horizontally, not on how operations are run."
+      },
+      {
+        "key": "B",
+        "text": "Operational excellence",
+        "correct": true,
+        "why": "Operations as code, small reversible changes and learning from failures are operational excellence design principles."
+      },
+      {
+        "key": "C",
+        "text": "Security",
+        "correct": false,
+        "why": "Security principles include traceability and least privilege, not frequent small changes."
+      },
+      {
+        "key": "D",
+        "text": "Cost optimization",
+        "correct": false,
+        "why": "Cost principles include adopting a consumption model, not operations as code."
+      }
+    ],
+    "explanation": {
+      "answer": "Operational excellence covers running and monitoring systems and continually improving processes and procedures.",
+      "concept": "Its design principles include performing operations as code, making frequent small reversible changes and learning from operational events.",
+      "examTip": "Operations as code + small changes + learn from failure = operational excellence.",
+      "references": [
+        {
+          "title": "Operational excellence pillar",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/welcome.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-030",
+    "domain": "concepts",
+    "topic": "Well-Architected Framework",
+    "tags": [
+      "sustainability"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A company wants to minimize the environmental impact of its cloud workloads, for example by maximizing utilization and choosing efficient hardware.",
+    "prompt": "Which pillar does this goal belong to?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Performance efficiency",
+        "correct": false,
+        "why": "Performance efficiency is about meeting performance needs efficiently, not environmental impact."
+      },
+      {
+        "key": "B",
+        "text": "Cost optimization",
+        "correct": false,
+        "why": "Lower cost can be a side effect, but environmental impact is the focus of a different pillar."
+      },
+      {
+        "key": "C",
+        "text": "Sustainability",
+        "correct": true,
+        "why": "The sustainability pillar focuses on minimizing the environmental impacts of running cloud workloads."
+      },
+      {
+        "key": "D",
+        "text": "Operational excellence",
+        "correct": false,
+        "why": "Operational excellence is about operations processes."
+      }
+    ],
+    "explanation": {
+      "answer": "The sustainability pillar helps you reduce energy consumption and improve efficiency across your workload.",
+      "concept": "Practices include maximizing utilization, using managed services and choosing efficient instance types such as AWS Graviton.",
+      "examTip": "Environmental impact = sustainability (the sixth pillar).",
+      "references": [
+        {
+          "title": "Sustainability pillar",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/sustainability-pillar/sustainability-pillar.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-031",
+    "domain": "concepts",
+    "topic": "Well-Architected Framework",
+    "tags": [
+      "performance-efficiency"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "An architect wants to use serverless services, try new instance types easily and deploy globally in minutes to serve users with low latency.",
+    "prompt": "Which pillar's design principles does this follow?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Security",
+        "correct": false,
+        "why": "Security principles focus on protecting data and systems."
+      },
+      {
+        "key": "B",
+        "text": "Cost optimization",
+        "correct": false,
+        "why": "Cost principles focus on spending, not on choosing technology for performance."
+      },
+      {
+        "key": "C",
+        "text": "Reliability",
+        "correct": false,
+        "why": "Reliability principles focus on failure recovery and testing, not on experimenting with technology."
+      },
+      {
+        "key": "D",
+        "text": "Performance efficiency",
+        "correct": true,
+        "why": "Going global in minutes, using serverless and experimenting more often are performance efficiency design principles."
+      }
+    ],
+    "explanation": {
+      "answer": "Performance efficiency is about using computing resources efficiently to meet requirements and keeping that efficiency as demand and technology change.",
+      "concept": "Its principles include democratizing advanced technologies, going global in minutes, using serverless and experimenting more often.",
+      "examTip": "Use the right resource types and experiment to stay fast = performance efficiency.",
+      "references": [
+        {
+          "title": "Performance efficiency pillar",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/performance-efficiency-pillar/welcome.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-032",
+    "domain": "concepts",
+    "topic": "Well-Architected Framework",
+    "tags": [
+      "security"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "An architect applies least privilege, enables traceability with logging, and encrypts data in transit and at rest.",
+    "prompt": "Which Well-Architected pillar is being applied?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Security",
+        "correct": true,
+        "why": "Least privilege, traceability and protecting data in transit and at rest are security design principles."
+      },
+      {
+        "key": "B",
+        "text": "Operational excellence",
+        "correct": false,
+        "why": "Operational excellence is about running and improving operations."
+      },
+      {
+        "key": "C",
+        "text": "Performance efficiency",
+        "correct": false,
+        "why": "Performance efficiency covers resource selection and scaling."
+      },
+      {
+        "key": "D",
+        "text": "Reliability",
+        "correct": false,
+        "why": "Reliability is about recovery and meeting demand, not access control and encryption."
+      }
+    ],
+    "explanation": {
+      "answer": "The security pillar describes how to protect data, systems and assets using cloud technologies.",
+      "concept": "Security design principles include a strong identity foundation, traceability, security at all layers and protecting data in transit and at rest.",
+      "examTip": "Least privilege, logging, encryption = security pillar.",
+      "references": [
+        {
+          "title": "Security pillar",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/welcome.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-033",
+    "domain": "concepts",
+    "topic": "Well-Architected Framework",
+    "tags": [
+      "tool"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company wants to review its workloads against AWS best practices, track improvement plans and get a list of high-risk issues, all from the AWS console at no extra charge.",
+    "prompt": "Which service should it use?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Trusted Advisor",
+        "correct": false,
+        "why": "Trusted Advisor runs automated checks on your account, but it is not a guided review against the framework's pillars."
+      },
+      {
+        "key": "B",
+        "text": "AWS Well-Architected Tool",
+        "correct": true,
+        "why": "The Well-Architected Tool guides you through questions for each pillar and records risks and improvement plans."
+      },
+      {
+        "key": "C",
+        "text": "AWS Config",
+        "correct": false,
+        "why": "Config records resource configurations and checks rules; it does not run framework reviews."
+      },
+      {
+        "key": "D",
+        "text": "AWS Audit Manager",
+        "correct": false,
+        "why": "Audit Manager collects evidence for audits against compliance frameworks."
+      }
+    ],
+    "explanation": {
+      "answer": "The AWS Well-Architected Tool is a free console service that reviews workloads against the framework and highlights high and medium risks.",
+      "concept": "Reviews are question-based. Results include an improvement plan you can track over time.",
+      "examTip": "Review a workload against the six pillars = AWS Well-Architected Tool.",
+      "references": [
+        {
+          "title": "What is the AWS Well-Architected Tool?",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/userguide/intro.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-034",
+    "domain": "concepts",
+    "topic": "Design Principles",
+    "tags": [
+      "horizontal-scaling"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "An application runs on a single very large server. When the server fails, the whole application goes down.",
+    "prompt": "Which design principle would improve reliability the MOST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Move the server to a Region nearer to users",
+        "correct": false,
+        "why": "Location affects latency, not whether one failure takes the app down."
+      },
+      {
+        "key": "B",
+        "text": "Scale vertically to an even larger server type",
+        "correct": false,
+        "why": "A larger single server is still a single point of failure."
+      },
+      {
+        "key": "C",
+        "text": "Scale horizontally with several smaller resources",
+        "correct": true,
+        "why": "Spreading load over several smaller resources removes the single point of failure."
+      },
+      {
+        "key": "D",
+        "text": "Schedule weekly manual restarts of the server",
+        "correct": false,
+        "why": "Restarts do not protect against the server failing."
+      }
+    ],
+    "explanation": {
+      "answer": "Scaling horizontally replaces one large resource with multiple smaller ones, so the failure of one does not bring down the workload.",
+      "concept": "This is a reliability design principle: \"scale horizontally to increase aggregate workload availability.\"",
+      "examTip": "Single big server keeps failing = scale horizontally.",
+      "references": [
+        {
+          "title": "Reliability pillar design principles",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/design-principles.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-035",
+    "domain": "concepts",
+    "topic": "Design Principles",
+    "tags": [
+      "loose-coupling"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "An order service calls a shipping service directly. When the shipping service is slow, orders back up and fail.",
+    "prompt": "Which design principle would help the MOST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Run both services in a single Availability Zone",
+        "correct": false,
+        "why": "Placing services together does not decouple them and reduces resilience."
+      },
+      {
+        "key": "B",
+        "text": "Increase the instance size of the order service",
+        "correct": false,
+        "why": "A bigger order service still waits on the slow shipping service."
+      },
+      {
+        "key": "C",
+        "text": "Tightly couple the services into one application",
+        "correct": false,
+        "why": "Combining the services makes failures spread further, not less."
+      },
+      {
+        "key": "D",
+        "text": "Loosely couple the services with a queue",
+        "correct": true,
+        "why": "A queue such as Amazon SQS buffers orders so the shipping service can catch up without failing orders."
+      }
+    ],
+    "explanation": {
+      "answer": "Loose coupling means components interact through queues, events or APIs, so a problem in one does not cascade into others.",
+      "concept": "Decoupling with services like Amazon SQS and Amazon SNS improves reliability and scalability.",
+      "examTip": "One slow component breaks another = decouple with a queue.",
+      "references": [
+        {
+          "title": "What is Amazon SQS?",
+          "url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/welcome.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-036",
+    "domain": "concepts",
+    "topic": "Design Principles",
+    "tags": [
+      "disposable-resources"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A team treats its servers like pets: each is hand-configured and patched in place, and nobody wants to replace them.",
+    "prompt": "Which cloud design principle should the team adopt instead?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Treat servers as disposable and replace them from code",
+        "correct": true,
+        "why": "Disposable resources built from templates can be replaced quickly and consistently."
+      },
+      {
+        "key": "B",
+        "text": "Keep servers running as long as possible to avoid change",
+        "correct": false,
+        "why": "Long-lived, hand-configured servers drift and are hard to replace."
+      },
+      {
+        "key": "C",
+        "text": "Use larger servers so fewer of them need attention",
+        "correct": false,
+        "why": "Fewer servers still need hand configuration."
+      },
+      {
+        "key": "D",
+        "text": "Configure each new server by hand to match the old one",
+        "correct": false,
+        "why": "Manual configuration is slow and error-prone."
+      }
+    ],
+    "explanation": {
+      "answer": "In the cloud, resources should be disposable: create them from code or images and replace rather than repair them.",
+      "concept": "Infrastructure as code and immutable infrastructure make environments repeatable.",
+      "examTip": "Pets vs cattle: replace from templates, don't hand-patch.",
+      "references": [
+        {
+          "title": "What is AWS CloudFormation?",
+          "url": "https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/Welcome.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-037",
+    "domain": "concepts",
+    "topic": "Well-Architected Framework",
+    "tags": [
+      "tradeoffs"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A startup chooses a single Availability Zone for its test environment to keep costs low, accepting that an AZ outage would interrupt testing.",
+    "prompt": "How does the Well-Architected Framework view this decision?",
+    "options": [
+      {
+        "key": "A",
+        "text": "It is required because test environments cannot span AZs",
+        "correct": false,
+        "why": "Test environments can span AZs; the startup chose not to."
+      },
+      {
+        "key": "B",
+        "text": "It is an acceptable trade-off between pillars based on business needs",
+        "correct": true,
+        "why": "The framework expects you to balance pillars, such as cost against reliability, for each workload."
+      },
+      {
+        "key": "C",
+        "text": "It violates the security pillar and must be reported",
+        "correct": false,
+        "why": "Using one AZ is a reliability and cost decision, not a security violation."
+      },
+      {
+        "key": "D",
+        "text": "It is wrong; every environment must use multiple Regions",
+        "correct": false,
+        "why": "The framework recognizes trade-offs; not every environment needs maximum resilience."
+      }
+    ],
+    "explanation": {
+      "answer": "The framework helps you make informed trade-offs. Lower reliability for a test environment can be acceptable when cost matters more.",
+      "concept": "Pillar trade-offs depend on business context, such as a dev environment versus production.",
+      "examTip": "Well-Architected = informed trade-offs, not maximum everything.",
+      "references": [
+        {
+          "title": "AWS Well-Architected Framework",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/welcome.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-038",
+    "domain": "concepts",
+    "topic": "Design Principles",
+    "tags": [
+      "automation"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A team still creates environments by clicking through the console. Each environment ends up slightly different and errors are common.",
+    "prompt": "Which practice would MOST improve consistency?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Create environments only on weekends",
+        "correct": false,
+        "why": "Timing does not change the manual process that causes drift."
+      },
+      {
+        "key": "B",
+        "text": "Give every engineer administrator permissions",
+        "correct": false,
+        "why": "Broad permissions increase risk and do not improve consistency."
+      },
+      {
+        "key": "C",
+        "text": "Define environments as code and deploy them automatically",
+        "correct": true,
+        "why": "Infrastructure as code creates identical environments every time."
+      },
+      {
+        "key": "D",
+        "text": "Write a detailed checklist for console clicks",
+        "correct": false,
+        "why": "Manual steps from a checklist are still error-prone and slow."
+      }
+    ],
+    "explanation": {
+      "answer": "Automating deployments with infrastructure as code removes manual steps and keeps environments consistent.",
+      "concept": "AWS CloudFormation and the AWS CDK let you define infrastructure in templates or code.",
+      "examTip": "Inconsistent manual environments = infrastructure as code.",
+      "references": [
+        {
+          "title": "What is AWS CloudFormation?",
+          "url": "https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/Welcome.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-039",
+    "domain": "concepts",
+    "topic": "Well-Architected Framework",
+    "tags": [
+      "lenses"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company runs serverless and machine learning workloads and wants Well-Architected guidance specific to those technologies.",
+    "prompt": "What does the Well-Architected Framework offer for this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "A different framework with its own six pillars",
+        "correct": false,
+        "why": "Lenses build on the same pillars rather than replacing them."
+      },
+      {
+        "key": "B",
+        "text": "Separate certification exams for each technology",
+        "correct": false,
+        "why": "Certifications are separate from the framework and do not review workloads."
+      },
+      {
+        "key": "C",
+        "text": "The framework covers only EC2 workloads, so none",
+        "correct": false,
+        "why": "The framework applies to all workloads and offers technology-specific lenses."
+      },
+      {
+        "key": "D",
+        "text": "Lenses that extend the framework for specific domains",
+        "correct": true,
+        "why": "Lenses add industry and technology guidance, such as the Serverless Applications Lens."
+      }
+    ],
+    "explanation": {
+      "answer": "Well-Architected lenses extend the framework's guidance to particular industries and technology areas, such as serverless, SaaS and machine learning.",
+      "concept": "Lenses can be applied in the AWS Well-Architected Tool alongside the core framework.",
+      "examTip": "Technology-specific Well-Architected guidance = lenses.",
+      "references": [
+        {
+          "title": "AWS Well-Architected lenses",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/userguide/lenses.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-040",
+    "domain": "concepts",
+    "topic": "Well-Architected Framework",
+    "tags": [
+      "purpose"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A new architect asks what the AWS Well-Architected Framework is for.",
+    "prompt": "Which description is MOST accurate?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Best practices for designing secure, reliable and efficient workloads",
+        "correct": true,
+        "why": "The framework describes concepts and best practices for building and evaluating cloud architectures."
+      },
+      {
+        "key": "B",
+        "text": "A service that automatically fixes misconfigured resources",
+        "correct": false,
+        "why": "The framework is guidance; it does not fix resources."
+      },
+      {
+        "key": "C",
+        "text": "A pricing model that discounts well-designed workloads",
+        "correct": false,
+        "why": "The framework has no effect on pricing, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "D",
+        "text": "A compliance certification that AWS awards to customers",
+        "correct": false,
+        "why": "AWS does not certify customer workloads through the framework."
+      }
+    ],
+    "explanation": {
+      "answer": "The AWS Well-Architected Framework provides a consistent approach to evaluate architectures and implement designs that scale over time.",
+      "concept": "It is organized into six pillars with design principles and best-practice questions.",
+      "examTip": "Well-Architected = guidance and reviews, not certification or automation.",
+      "references": [
+        {
+          "title": "AWS Well-Architected Framework",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/welcome.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-041",
+    "domain": "concepts",
+    "topic": "Design Principles",
+    "tags": [
+      "managed-services"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company wants to spend less time patching databases and message brokers so engineers can focus on product features.",
+    "prompt": "Which design approach aligns with AWS best practices?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Delay patches until the next hardware refresh",
+        "correct": false,
+        "why": "Delaying patches increases security risk."
+      },
+      {
+        "key": "B",
+        "text": "Use managed services such as Amazon RDS and Amazon MQ",
+        "correct": true,
+        "why": "Managed services handle routine operations like patching, letting teams focus on features."
+      },
+      {
+        "key": "C",
+        "text": "Run all software on self-managed EC2 instances",
+        "correct": false,
+        "why": "Self-managed instances keep the patching burden on the company."
+      },
+      {
+        "key": "D",
+        "text": "Move databases back on premises",
+        "correct": false,
+        "why": "Moving on premises increases the operational burden."
+      }
+    ],
+    "explanation": {
+      "answer": "Managed services shift routine operational tasks to AWS, reducing undifferentiated heavy lifting.",
+      "concept": "Using managed and serverless services appears in several pillars, including operational excellence and sustainability.",
+      "examTip": "Less patching and maintenance = managed services.",
+      "references": [
+        {
+          "title": "What is Amazon RDS?",
+          "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Welcome.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-042",
+    "domain": "concepts",
+    "topic": "Well-Architected Framework",
+    "tags": [
+      "reliability",
+      "testing"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A company documented how to recover its application but has never actually tried the recovery steps.",
+    "prompt": "Which reliability design principle is the company missing?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Stop guessing capacity",
+        "correct": false,
+        "why": "This principle is about scaling, not about recovery procedures."
+      },
+      {
+        "key": "B",
+        "text": "Scale horizontally",
+        "correct": false,
+        "why": "Horizontal scaling helps availability but does not test recovery."
+      },
+      {
+        "key": "C",
+        "text": "Test recovery procedures",
+        "correct": true,
+        "why": "The reliability pillar recommends testing how the workload fails and validating recovery procedures."
+      },
+      {
+        "key": "D",
+        "text": "Manage change through automation",
+        "correct": false,
+        "why": "Automation is good practice, but the gap here is untested recovery."
+      }
+    ],
+    "explanation": {
+      "answer": "Testing recovery procedures, for example by simulating failures, confirms that recovery actually works before a real incident.",
+      "concept": "In the cloud you can test failure scenarios in realistic environments, which is hard to do on premises.",
+      "examTip": "Recovery plan never tried = test recovery procedures.",
+      "references": [
+        {
+          "title": "Reliability pillar design principles",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/design-principles.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-043",
+    "domain": "concepts",
+    "topic": "Design Principles",
+    "tags": [
+      "security-all-layers"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company relies only on a perimeter firewall to protect its applications.",
+    "prompt": "Which security design principle recommends a different approach?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Prepare for security events",
+        "correct": false,
+        "why": "Incident preparation matters, but it does not address relying on a single layer of protection."
+      },
+      {
+        "key": "B",
+        "text": "Automate security best practices",
+        "correct": false,
+        "why": "Automation helps, but the main gap is having only one protective layer."
+      },
+      {
+        "key": "C",
+        "text": "Keep people away from data",
+        "correct": false,
+        "why": "This principle reduces direct human access to data, which is valuable but not the main gap here."
+      },
+      {
+        "key": "D",
+        "text": "Apply security at all layers",
+        "correct": true,
+        "why": "Defense in depth applies controls at the network edge, VPC, subnet, instance, application and data layers."
+      }
+    ],
+    "explanation": {
+      "answer": "Applying security at all layers (defense in depth) means one failed control does not expose the whole application.",
+      "concept": "Combine controls such as AWS WAF, security groups, network ACLs, IAM and encryption.",
+      "examTip": "Only a perimeter firewall = add security at all layers (defense in depth).",
+      "references": [
+        {
+          "title": "Security pillar design principles",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/design-principles.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-044",
+    "domain": "concepts",
+    "topic": "Well-Architected Framework",
+    "tags": [
+      "operational-excellence"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A team wants to monitor its systems, respond to events with runbooks and continually improve how it runs the workload.",
+    "prompt": "Which pillar covers these activities?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Operational excellence",
+        "correct": true,
+        "why": "Operational excellence covers running and monitoring systems and improving processes."
+      },
+      {
+        "key": "B",
+        "text": "Sustainability",
+        "correct": false,
+        "why": "Sustainability covers environmental impact."
+      },
+      {
+        "key": "C",
+        "text": "Performance efficiency",
+        "correct": false,
+        "why": "Performance efficiency covers resource selection and efficient use."
+      },
+      {
+        "key": "D",
+        "text": "Reliability",
+        "correct": false,
+        "why": "Reliability covers recovering from failures and meeting demand."
+      }
+    ],
+    "explanation": {
+      "answer": "The operational excellence pillar focuses on supporting development, running workloads effectively and continuously improving operations.",
+      "concept": "Practices include runbooks, observability and learning from operational events.",
+      "examTip": "Run, monitor, improve operations = operational excellence.",
+      "references": [
+        {
+          "title": "Operational excellence pillar",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/welcome.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-045",
+    "domain": "concepts",
+    "topic": "Well-Architected Framework",
+    "tags": [
+      "sustainability",
+      "graviton"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A company wants to reduce both cost and energy use for its compute workloads without changing its application logic.",
+    "prompt": "Which action supports the sustainability pillar MOST directly?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Copy all data to every Region for safety",
+        "correct": false,
+        "why": "Unnecessary copies increase storage and energy use."
+      },
+      {
+        "key": "B",
+        "text": "Use energy-efficient instance types such as AWS Graviton",
+        "correct": true,
+        "why": "Graviton-based instances use less energy for the same performance."
+      },
+      {
+        "key": "C",
+        "text": "Choose the largest instance type for headroom",
+        "correct": false,
+        "why": "Oversized instances waste energy and money."
+      },
+      {
+        "key": "D",
+        "text": "Run instances 24/7 to avoid start-up energy",
+        "correct": false,
+        "why": "Idle instances waste energy; turning them off when not needed is better."
+      }
+    ],
+    "explanation": {
+      "answer": "The sustainability pillar recommends using the most efficient hardware and maximizing utilization. AWS Graviton processors are designed for energy efficiency.",
+      "concept": "Rightsizing, turning off idle resources and efficient hardware all reduce environmental impact.",
+      "examTip": "Less energy for the same work = efficient hardware (Graviton) and high utilization.",
+      "references": [
+        {
+          "title": "Sustainability pillar",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/sustainability-pillar/sustainability-pillar.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-046",
+    "domain": "concepts",
+    "topic": "Design Principles",
+    "tags": [
+      "think-parallel"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A data team processes 10,000 files one at a time on one server, and the job takes two days.",
+    "prompt": "Which cloud design idea could shorten the job the MOST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Process the files during off-peak hours only",
+        "correct": false,
+        "why": "Timing does not change how long serial processing takes."
+      },
+      {
+        "key": "B",
+        "text": "Compress the files before processing them",
+        "correct": false,
+        "why": "Compression saves storage but does not parallelize the work."
+      },
+      {
+        "key": "C",
+        "text": "Process files in parallel across many resources",
+        "correct": true,
+        "why": "The cloud makes it easy to run many workers at once, then shut them down."
+      },
+      {
+        "key": "D",
+        "text": "Buy a faster disk for the single server",
+        "correct": false,
+        "why": "A faster disk helps a little but keeps the work serial."
+      }
+    ],
+    "explanation": {
+      "answer": "In the cloud, using 100 servers for one hour costs about the same as one server for 100 hours, so parallel processing can finish much faster.",
+      "concept": "Think parallel: distribute work across many resources when the workload allows it.",
+      "examTip": "Long serial job = parallelize across many resources.",
+      "references": [
+        {
+          "title": "What is AWS Batch?",
+          "url": "https://docs.aws.amazon.com/batch/latest/userguide/what-is-batch.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-047",
+    "domain": "concepts",
+    "topic": "Well-Architected Framework",
+    "tags": [
+      "cost",
+      "measure"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company wants to know which teams and projects drive its AWS spending so it can hold owners accountable.",
+    "prompt": "Which cost optimization practice supports this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Move all workloads to one AWS account",
+        "correct": false,
+        "why": "A single account makes attribution harder, not easier."
+      },
+      {
+        "key": "B",
+        "text": "Turn off CloudTrail logging to save money",
+        "correct": false,
+        "why": "CloudTrail records API activity; turning it off does not explain spending."
+      },
+      {
+        "key": "C",
+        "text": "Buy Reserved Instances for every workload",
+        "correct": false,
+        "why": "Reservations lower prices but do not show who is spending."
+      },
+      {
+        "key": "D",
+        "text": "Attribute expenditure using tags and cost reports",
+        "correct": true,
+        "why": "Tagging resources and reviewing cost reports shows which teams and projects drive spending."
+      }
+    ],
+    "explanation": {
+      "answer": "Expenditure awareness means understanding costs and their drivers. Cost allocation tags and AWS Cost Explorer help attribute spending.",
+      "concept": "The cost optimization pillar includes practicing cloud financial management and analyzing expenditure.",
+      "examTip": "Who is spending what = cost allocation tags + Cost Explorer.",
+      "references": [
+        {
+          "title": "Using cost allocation tags",
+          "url": "https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-048",
+    "domain": "concepts",
+    "topic": "Design Principles",
+    "tags": [
+      "stop-guessing",
+      "reliability"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A team sizes its fleet for an estimated peak that it often gets wrong, causing either wasted spend or overloaded servers.",
+    "prompt": "Which approach addresses this from a reliability and cost perspective?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Monitor demand and scale capacity automatically",
+        "correct": true,
+        "why": "Automatic scaling based on demand removes the need to guess and keeps capacity matched."
+      },
+      {
+        "key": "B",
+        "text": "Order hardware months ahead of each launch",
+        "correct": false,
+        "why": "Ordering hardware is the on-premises model the cloud replaces."
+      },
+      {
+        "key": "C",
+        "text": "Size for twice the estimated peak permanently",
+        "correct": false,
+        "why": "Doubling capacity wastes money most of the time."
+      },
+      {
+        "key": "D",
+        "text": "Accept overloaded servers during peaks",
+        "correct": false,
+        "why": "Overload causes failures and poor customer experience."
+      }
+    ],
+    "explanation": {
+      "answer": "Monitoring demand and using automatic scaling means you neither over-provision nor run out of capacity.",
+      "concept": "\"Stop guessing capacity\" is a reliability design principle and a cloud advantage.",
+      "examTip": "Guessing peaks wrong = monitor + Auto Scaling.",
+      "references": [
+        {
+          "title": "What is Amazon EC2 Auto Scaling?",
+          "url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-con-049",
+    "domain": "concepts",
+    "topic": "Well-Architected Framework",
+    "tags": [
+      "multi-select"
+    ],
+    "difficulty": "medium",
+    "type": "multi",
+    "stem": "A team is preparing a Well-Architected review.",
+    "prompt": "Which TWO are pillars of the AWS Well-Architected Framework? (Select TWO.)",
+    "options": [
+      {
+        "key": "A",
+        "text": "Availability",
+        "correct": false,
+        "why": "Availability is part of the reliability pillar, not a pillar on its own."
+      },
+      {
+        "key": "B",
+        "text": "Operational excellence",
+        "correct": true,
+        "why": "Operational excellence is one of the six pillars."
+      },
+      {
+        "key": "C",
+        "text": "Cost optimization",
+        "correct": true,
+        "why": "Cost optimization is one of the six pillars."
+      },
+      {
+        "key": "D",
+        "text": "Scalability",
+        "correct": false,
+        "why": "Scalability is a design characteristic discussed within pillars, but it is not a pillar itself."
+      },
+      {
+        "key": "E",
+        "text": "Compliance",
+        "correct": false,
+        "why": "Compliance is covered within the security pillar; it is not a separate pillar."
+      }
+    ],
+    "explanation": {
+      "answer": "The six pillars are operational excellence, security, reliability, performance efficiency, cost optimization and sustainability.",
+      "concept": "Watch for distractors that are qualities (scalability, availability) rather than pillar names.",
+      "examTip": "Pillar names: OS RPCS. Availability and scalability are not pillar names.",
+      "references": [
+        {
+          "title": "The pillars of the framework",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/the-pillars-of-the-framework.html"
+        }
+      ]
+    },
+    "selectCount": 2
+  },
+  {
+    "id": "clf-con-050",
+    "domain": "concepts",
+    "topic": "Design Principles",
+    "tags": [
+      "managed-vs-self"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A company wants a relational database with automatic backups and Multi-AZ failover, and it does not want to manage the operating system.",
+    "prompt": "Which option BEST follows AWS design guidance?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Run the database on premises and copy backups to Amazon S3",
+        "correct": false,
+        "why": "This keeps most of the operational burden on premises."
+      },
+      {
+        "key": "B",
+        "text": "Use Amazon RDS with Multi-AZ enabled",
+        "correct": true,
+        "why": "Amazon RDS manages the operating system, backups and failover, matching every requirement."
+      },
+      {
+        "key": "C",
+        "text": "Install the database on an EC2 instance and script the backups",
+        "correct": false,
+        "why": "This works but keeps operating system and database management with the company."
+      },
+      {
+        "key": "D",
+        "text": "Store relational tables as files in Amazon S3",
+        "correct": false,
+        "why": "S3 is object storage, not a relational database with failover."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon RDS is a managed relational database service with automated backups and Multi-AZ deployments for high availability.",
+      "concept": "Prefer managed services when they meet requirements, to reduce undifferentiated work.",
+      "examTip": "Relational + managed backups + failover = Amazon RDS Multi-AZ.",
+      "references": [
+        {
+          "title": "Multi-AZ deployments for Amazon RDS",
+          "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZ.html"
+        }
+      ]
+    }
+  }
+]

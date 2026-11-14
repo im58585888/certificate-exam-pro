@@ -1,0 +1,1234 @@
+[
+  {
+    "id": "clf-sec-026",
+    "domain": "compliance",
+    "topic": "Root User",
+    "tags": [
+      "protect-root"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A company just created its AWS account using a company email address. The root user has full access to everything.",
+    "prompt": "What should the company do FIRST to protect the root user?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Share the root password with all administrators",
+        "correct": false,
+        "why": "Sharing root credentials increases risk."
+      },
+      {
+        "key": "B",
+        "text": "Use the root user for daily tasks",
+        "correct": false,
+        "why": "Daily work should use less privileged identities."
+      },
+      {
+        "key": "C",
+        "text": "Enable multi-factor authentication (MFA) on the root user",
+        "correct": true,
+        "why": "MFA adds a second factor so a stolen password alone can't be used."
+      },
+      {
+        "key": "D",
+        "text": "Create root user access keys for automation",
+        "correct": false,
+        "why": "Root access keys are risky and should not be created."
+      }
+    ],
+    "explanation": {
+      "answer": "Enable MFA on the root user, avoid using it for everyday tasks, and don't create root access keys.",
+      "concept": "Use IAM Identity Center or IAM users and roles for daily administration.",
+      "examTip": "Root user: MFA on, no access keys, lock it away.",
+      "references": [
+        {
+          "title": "AWS account root user",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_root-user.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-027",
+    "domain": "compliance",
+    "topic": "Root User",
+    "tags": [
+      "root-only-tasks"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "An administrator with full AdministratorAccess permissions cannot complete one task and is told it requires the root user.",
+    "prompt": "Which task requires the root user?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Creating an S3 bucket",
+        "correct": false,
+        "why": "IAM identities with S3 permissions can create buckets."
+      },
+      {
+        "key": "B",
+        "text": "Launching an EC2 instance",
+        "correct": false,
+        "why": "IAM identities with EC2 permissions can launch instances."
+      },
+      {
+        "key": "C",
+        "text": "Creating a new IAM user",
+        "correct": false,
+        "why": "Administrators with IAM permissions can create users."
+      },
+      {
+        "key": "D",
+        "text": "Closing the AWS account",
+        "correct": true,
+        "why": "Closing the account is one of the tasks that require root user credentials."
+      }
+    ],
+    "explanation": {
+      "answer": "Some tasks require the root user, such as closing the account, changing account settings like the root email, and restoring IAM administrator permissions.",
+      "concept": "Keep root credentials safe and use them only for these tasks.",
+      "examTip": "Close account, change root email, change support plan = root user tasks.",
+      "references": [
+        {
+          "title": "Tasks that require root user credentials",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/root-user-tasks.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-028",
+    "domain": "compliance",
+    "topic": "IAM",
+    "tags": [
+      "least-privilege"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A developer only needs to read objects from one S3 bucket.",
+    "prompt": "Which permission approach follows AWS best practice?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Grant read access to that bucket only",
+        "correct": true,
+        "why": "Least privilege grants only the permissions required."
+      },
+      {
+        "key": "B",
+        "text": "Attach AmazonS3FullAccess for convenience",
+        "correct": false,
+        "why": "Full S3 access exceeds what the developer needs."
+      },
+      {
+        "key": "C",
+        "text": "Attach the AdministratorAccess policy",
+        "correct": false,
+        "why": "This grants far more access than needed."
+      },
+      {
+        "key": "D",
+        "text": "Give the developer the root user password",
+        "correct": false,
+        "why": "Root credentials should never be shared."
+      }
+    ],
+    "explanation": {
+      "answer": "Least privilege means granting only the permissions needed to perform a task.",
+      "concept": "Start with narrow permissions and expand only when necessary.",
+      "examTip": "Only what's needed = least privilege.",
+      "references": [
+        {
+          "title": "Security best practices in IAM",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-029",
+    "domain": "compliance",
+    "topic": "IAM",
+    "tags": [
+      "groups"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A company has 30 developers who all need the same permissions.",
+    "prompt": "What is the EASIEST way to manage their permissions with IAM users?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use the root user for all developers",
+        "correct": false,
+        "why": "Root credentials should never be shared."
+      },
+      {
+        "key": "B",
+        "text": "Put the users in an IAM group and attach the policy to the group",
+        "correct": true,
+        "why": "Group policies apply to every member, so changes happen in one place."
+      },
+      {
+        "key": "C",
+        "text": "Create one shared IAM user for all developers",
+        "correct": false,
+        "why": "Shared users remove individual accountability."
+      },
+      {
+        "key": "D",
+        "text": "Attach the same policy to each user one by one",
+        "correct": false,
+        "why": "This works but is hard to maintain, so it doesn't meet this requirement."
+      }
+    ],
+    "explanation": {
+      "answer": "IAM groups are collections of IAM users. Policies attached to a group apply to all its members.",
+      "concept": "Groups simplify permission management; users can belong to multiple groups.",
+      "examTip": "Same permissions for many users = IAM group.",
+      "references": [
+        {
+          "title": "IAM user groups",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_groups.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-030",
+    "domain": "compliance",
+    "topic": "IAM",
+    "tags": [
+      "roles-ec2"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "An application on an EC2 instance needs to write to an Amazon S3 bucket.",
+    "prompt": "What is the MOST secure way to give it access?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Add a bucket policy allowing any principal to write",
+        "correct": false,
+        "why": "Allowing any principal exposes the bucket to everyone."
+      },
+      {
+        "key": "B",
+        "text": "Store root user access keys on the instance",
+        "correct": false,
+        "why": "Root keys should never be created or used this way."
+      },
+      {
+        "key": "C",
+        "text": "Attach an IAM role to the instance",
+        "correct": true,
+        "why": "Roles provide temporary credentials that rotate automatically."
+      },
+      {
+        "key": "D",
+        "text": "Store an IAM user's access keys in the application's code",
+        "correct": false,
+        "why": "Hard-coded keys can leak and are hard to rotate."
+      }
+    ],
+    "explanation": {
+      "answer": "IAM roles give AWS services temporary credentials. An instance profile lets applications on EC2 use the role without stored keys.",
+      "concept": "Prefer temporary credentials over long-term access keys.",
+      "examTip": "AWS service needs permissions = IAM role (not access keys).",
+      "references": [
+        {
+          "title": "IAM roles",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-031",
+    "domain": "compliance",
+    "topic": "IAM",
+    "tags": [
+      "mfa"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A company wants to make sure a stolen password alone is not enough to sign in to its AWS accounts.",
+    "prompt": "Which control should it enable?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Password reuse across accounts",
+        "correct": false,
+        "why": "Reusing passwords increases risk, which isn't what this scenario needs."
+      },
+      {
+        "key": "B",
+        "text": "Longer session timeouts",
+        "correct": false,
+        "why": "Longer sessions don't add a second factor."
+      },
+      {
+        "key": "C",
+        "text": "Public access to S3 buckets",
+        "correct": false,
+        "why": "This is unrelated and reduces security, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "D",
+        "text": "Multi-factor authentication (MFA)",
+        "correct": true,
+        "why": "MFA requires a second factor, such as a code or security key, in addition to the password."
+      }
+    ],
+    "explanation": {
+      "answer": "MFA adds an extra layer of protection by requiring something you have, like a security key, in addition to something you know.",
+      "concept": "AWS supports passkeys and security keys, virtual authenticator apps and hardware TOTP tokens.",
+      "examTip": "Stolen password protection = MFA.",
+      "references": [
+        {
+          "title": "AWS multi-factor authentication in IAM",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_mfa.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-032",
+    "domain": "compliance",
+    "topic": "IAM",
+    "tags": [
+      "policies-json"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A security engineer reviews an IAM policy written in JSON with Effect, Action and Resource elements.",
+    "prompt": "What does this policy define?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Which actions are allowed or denied on which resources",
+        "correct": true,
+        "why": "IAM policies define permissions using Effect, Action and Resource."
+      },
+      {
+        "key": "B",
+        "text": "Which Availability Zone hosts an instance",
+        "correct": false,
+        "why": "AZ placement isn't defined by IAM policies."
+      },
+      {
+        "key": "C",
+        "text": "How much a service will cost",
+        "correct": false,
+        "why": "Policies define permissions, not pricing."
+      },
+      {
+        "key": "D",
+        "text": "Which Region a resource is created in",
+        "correct": false,
+        "why": "Region placement is chosen when creating a resource, not in this way."
+      }
+    ],
+    "explanation": {
+      "answer": "IAM policies are JSON documents that define permissions: whether actions are allowed or denied on specific resources, optionally with conditions.",
+      "concept": "Policies can be attached to users, groups and roles, or to resources (resource-based policies).",
+      "examTip": "IAM policy = Effect + Action + Resource (+ Condition).",
+      "references": [
+        {
+          "title": "Policies and permissions in IAM",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-033",
+    "domain": "compliance",
+    "topic": "IAM",
+    "tags": [
+      "access-keys"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A developer uses the AWS CLI from a laptop.",
+    "prompt": "Which credential type does the CLI typically use for an IAM user?",
+    "options": [
+      {
+        "key": "A",
+        "text": "An SSH key pair created for EC2",
+        "correct": false,
+        "why": "SSH keys are for logging in to instances, not for AWS API calls."
+      },
+      {
+        "key": "B",
+        "text": "Access keys (key ID and secret access key)",
+        "correct": true,
+        "why": "Programmatic access uses access keys, ideally short-term ones."
+      },
+      {
+        "key": "C",
+        "text": "A TLS certificate issued by AWS Certificate Manager",
+        "correct": false,
+        "why": "ACM certificates secure websites, not CLI sign-in."
+      },
+      {
+        "key": "D",
+        "text": "The console password with an MFA code",
+        "correct": false,
+        "why": "The CLI doesn't sign requests with the console password."
+      }
+    ],
+    "explanation": {
+      "answer": "Access keys are used to sign programmatic requests from the AWS CLI or SDKs. AWS recommends temporary credentials, for example through IAM Identity Center.",
+      "concept": "Rotate long-term keys regularly and never commit them to code repositories.",
+      "examTip": "CLI/SDK = access keys (prefer temporary credentials).",
+      "references": [
+        {
+          "title": "Managing access keys for IAM users",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-034",
+    "domain": "compliance",
+    "topic": "Identity Center & Federation",
+    "tags": [
+      "identity-center"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company with 15 AWS accounts wants employees to sign in once with their corporate identities and access the accounts they need.",
+    "prompt": "Which service should it use?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Cognito user pools for employees",
+        "correct": false,
+        "why": "Cognito is mainly for customer-facing application users."
+      },
+      {
+        "key": "B",
+        "text": "Separate IAM users in each account",
+        "correct": false,
+        "why": "Managing users in 15 accounts is hard and lacks single sign-on."
+      },
+      {
+        "key": "C",
+        "text": "AWS IAM Identity Center",
+        "correct": true,
+        "why": "Identity Center provides single sign-on to multiple accounts and can connect to a corporate identity provider."
+      },
+      {
+        "key": "D",
+        "text": "AWS Directory Service only",
+        "correct": false,
+        "why": "A directory alone doesn't provide multi-account access management."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS IAM Identity Center centrally manages workforce access to multiple AWS accounts and applications, with single sign-on.",
+      "concept": "It can use its own directory or connect to providers like Microsoft Entra ID or Okta.",
+      "examTip": "Employees + many accounts + single sign-on = IAM Identity Center.",
+      "references": [
+        {
+          "title": "What is IAM Identity Center?",
+          "url": "https://docs.aws.amazon.com/singlesignon/latest/userguide/what-is.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-035",
+    "domain": "compliance",
+    "topic": "Identity Center & Federation",
+    "tags": [
+      "cognito"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A mobile app needs sign-up and sign-in for millions of customers, including sign-in with social providers.",
+    "prompt": "Which AWS service is designed for this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "IAM users for each customer",
+        "correct": false,
+        "why": "IAM users are for access to your AWS account, not app customers."
+      },
+      {
+        "key": "B",
+        "text": "AWS IAM Identity Center",
+        "correct": false,
+        "why": "Identity Center manages workforce access to AWS accounts, not customer sign-in for apps."
+      },
+      {
+        "key": "C",
+        "text": "AWS Organizations",
+        "correct": false,
+        "why": "Organizations manages AWS accounts, not app users."
+      },
+      {
+        "key": "D",
+        "text": "Amazon Cognito",
+        "correct": true,
+        "why": "Cognito provides user sign-up, sign-in and access control for web and mobile apps."
+      }
+    ],
+    "explanation": {
+      "answer": "Amazon Cognito adds user sign-up, sign-in and social or enterprise federation to applications, scaling to millions of users.",
+      "concept": "Identity Center = workforce. Cognito = customers of your app.",
+      "examTip": "App customers signing in = Cognito.",
+      "references": [
+        {
+          "title": "What is Amazon Cognito?",
+          "url": "https://docs.aws.amazon.com/cognito/latest/developerguide/what-is-amazon-cognito.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-036",
+    "domain": "compliance",
+    "topic": "AWS Organizations",
+    "tags": [
+      "consolidated"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A company has many AWS accounts and wants to manage them centrally and apply policies across them.",
+    "prompt": "Which service should it use?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Organizations",
+        "correct": true,
+        "why": "Organizations lets you centrally manage accounts, group them into OUs and apply policies."
+      },
+      {
+        "key": "B",
+        "text": "AWS Config",
+        "correct": false,
+        "why": "Config tracks resource configurations, not account management."
+      },
+      {
+        "key": "C",
+        "text": "AWS Artifact",
+        "correct": false,
+        "why": "Artifact provides compliance reports, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "D",
+        "text": "Amazon Inspector",
+        "correct": false,
+        "why": "Inspector scans for vulnerabilities, which isn't what this scenario needs."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Organizations helps you centrally govern multiple accounts with organizational units (OUs), policies and consolidated billing.",
+      "concept": "Service control policies (SCPs) set permission guardrails across accounts.",
+      "examTip": "Manage many accounts centrally = AWS Organizations.",
+      "references": [
+        {
+          "title": "What is AWS Organizations?",
+          "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_introduction.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-037",
+    "domain": "compliance",
+    "topic": "AWS Organizations",
+    "tags": [
+      "scp"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company wants to prevent any user in its development accounts, including administrators, from using AWS Regions outside Europe.",
+    "prompt": "Which feature enforces this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Security groups that block European traffic",
+        "correct": false,
+        "why": "Security groups filter network traffic, not API calls to Regions."
+      },
+      {
+        "key": "B",
+        "text": "Service control policies (SCPs)",
+        "correct": true,
+        "why": "SCPs set maximum permissions for accounts in an OU, even for administrators."
+      },
+      {
+        "key": "C",
+        "text": "An IAM group with a deny policy in each account",
+        "correct": false,
+        "why": "Account administrators could change or bypass this."
+      },
+      {
+        "key": "D",
+        "text": "AWS Budgets actions in each account",
+        "correct": false,
+        "why": "Budget actions react to cost thresholds; they don't enforce Region restrictions."
+      }
+    ],
+    "explanation": {
+      "answer": "SCPs define the maximum available permissions for member accounts. They can deny actions outside approved Regions.",
+      "concept": "SCPs don't grant permissions; they only limit what IAM policies can allow.",
+      "examTip": "Guardrails across accounts (even admins) = SCPs.",
+      "references": [
+        {
+          "title": "Service control policies",
+          "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-038",
+    "domain": "compliance",
+    "topic": "AWS Organizations",
+    "tags": [
+      "scp-no-grant"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "An SCP attached to an OU allows only Amazon S3 actions. A user in a member account has an IAM policy that allows EC2 actions.",
+    "prompt": "What can the user do?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Use all AWS services, because SCPs grant permissions",
+        "correct": false,
+        "why": "SCPs never grant permissions, so it doesn't meet this requirement."
+      },
+      {
+        "key": "B",
+        "text": "Use EC2 and S3, because the IAM policy grants EC2",
+        "correct": false,
+        "why": "The SCP limits the account to S3 actions, so EC2 is blocked."
+      },
+      {
+        "key": "C",
+        "text": "Nothing in EC2; S3 only if an IAM policy also allows it",
+        "correct": true,
+        "why": "Effective permissions require both the SCP and IAM policies to allow an action."
+      },
+      {
+        "key": "D",
+        "text": "Use S3 automatically without any IAM policy",
+        "correct": false,
+        "why": "SCPs don't grant permissions; IAM must still allow S3."
+      }
+    ],
+    "explanation": {
+      "answer": "Effective permissions are the intersection of what the SCP allows and what IAM policies grant.",
+      "concept": "SCPs are guardrails; IAM policies grant permissions within those guardrails.",
+      "examTip": "Permission must be allowed by both the SCP and IAM.",
+      "references": [
+        {
+          "title": "Service control policies",
+          "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-039",
+    "domain": "compliance",
+    "topic": "IAM",
+    "tags": [
+      "password-policy"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company wants all IAM users to use passwords of at least 14 characters that include symbols.",
+    "prompt": "How can it enforce this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Turn on Amazon GuardDuty",
+        "correct": false,
+        "why": "GuardDuty detects threats; it doesn't set password rules."
+      },
+      {
+        "key": "B",
+        "text": "Enable AWS Shield",
+        "correct": false,
+        "why": "Shield protects against DDoS attacks, so it doesn't meet this requirement."
+      },
+      {
+        "key": "C",
+        "text": "Ask users to choose strong passwords voluntarily",
+        "correct": false,
+        "why": "Voluntary rules aren't enforced, which isn't what this scenario needs."
+      },
+      {
+        "key": "D",
+        "text": "Set an IAM account password policy",
+        "correct": true,
+        "why": "An account password policy enforces length and complexity for IAM users."
+      }
+    ],
+    "explanation": {
+      "answer": "An IAM password policy sets requirements such as minimum length, character types and password expiration for IAM users.",
+      "concept": "For workforce sign-in, many companies use IAM Identity Center with their identity provider's policies.",
+      "examTip": "Enforce password rules for IAM users = account password policy.",
+      "references": [
+        {
+          "title": "Setting an account password policy for IAM users",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_passwords_account-policy.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-040",
+    "domain": "compliance",
+    "topic": "IAM",
+    "tags": [
+      "access-analyzer"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A security team wants to find S3 buckets, KMS keys and IAM roles that are shared with external accounts.",
+    "prompt": "Which feature helps the MOST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "IAM Access Analyzer",
+        "correct": true,
+        "why": "Access Analyzer identifies resources shared with external principals."
+      },
+      {
+        "key": "B",
+        "text": "AWS Health Dashboard",
+        "correct": false,
+        "why": "The Health Dashboard reports AWS service events."
+      },
+      {
+        "key": "C",
+        "text": "Amazon Inspector",
+        "correct": false,
+        "why": "Inspector scans for software vulnerabilities and network exposure."
+      },
+      {
+        "key": "D",
+        "text": "AWS Cost Explorer",
+        "correct": false,
+        "why": "Cost Explorer analyzes spending, which isn't what this scenario needs."
+      }
+    ],
+    "explanation": {
+      "answer": "IAM Access Analyzer uses logic-based reasoning to find resources that are accessible from outside your account or organization.",
+      "concept": "It also helps validate policies and generate least-privilege policies from activity.",
+      "examTip": "Who outside can reach my resources = IAM Access Analyzer.",
+      "references": [
+        {
+          "title": "Using IAM Access Analyzer",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/what-is-access-analyzer.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-041",
+    "domain": "compliance",
+    "topic": "IAM",
+    "tags": [
+      "credential-report"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "An auditor wants a list of all IAM users with the status of their passwords, access keys and MFA devices.",
+    "prompt": "Which IAM feature provides this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS CloudTrail Lake",
+        "correct": false,
+        "why": "CloudTrail records API activity, not a credential inventory."
+      },
+      {
+        "key": "B",
+        "text": "The IAM credential report",
+        "correct": true,
+        "why": "The credential report lists users and the status of their credentials, including MFA."
+      },
+      {
+        "key": "C",
+        "text": "The AWS Pricing Calculator",
+        "correct": false,
+        "why": "The Pricing Calculator estimates costs, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "D",
+        "text": "AWS Trusted Advisor cost checks",
+        "correct": false,
+        "why": "Cost checks are about spending, so it doesn't solve the problem described here."
+      }
+    ],
+    "explanation": {
+      "answer": "The IAM credential report is a downloadable file listing all users and the status of passwords, access keys and MFA devices.",
+      "concept": "Use it to find unused credentials and users without MFA.",
+      "examTip": "Audit all users' credentials = IAM credential report.",
+      "references": [
+        {
+          "title": "Generate credential reports",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_getting-report.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-042",
+    "domain": "compliance",
+    "topic": "IAM",
+    "tags": [
+      "iam-cost"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A startup asks how much IAM costs.",
+    "prompt": "Which statement is correct?",
+    "options": [
+      {
+        "key": "A",
+        "text": "IAM costs a fee per user per month",
+        "correct": false,
+        "why": "IAM has no per-user fee, which isn't what this scenario needs."
+      },
+      {
+        "key": "B",
+        "text": "IAM charges per policy evaluated",
+        "correct": false,
+        "why": "Policy evaluations aren't billed, so it doesn't meet this requirement."
+      },
+      {
+        "key": "C",
+        "text": "IAM is offered at no additional charge",
+        "correct": true,
+        "why": "You pay only for other AWS services your users access."
+      },
+      {
+        "key": "D",
+        "text": "IAM is included only with paid support plans",
+        "correct": false,
+        "why": "IAM is available in every account, so it doesn't meet this requirement."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS IAM is a feature of your AWS account offered at no additional charge.",
+      "concept": "Some related features, like certain IAM Access Analyzer checks, may have charges, but core IAM is free.",
+      "examTip": "IAM = no additional charge.",
+      "references": [
+        {
+          "title": "What is IAM?",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-043",
+    "domain": "compliance",
+    "topic": "Identity Center & Federation",
+    "tags": [
+      "federation"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company wants employees to use their existing corporate credentials to access the AWS console, without creating IAM users.",
+    "prompt": "What is this approach called?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Resource tagging",
+        "correct": false,
+        "why": "Tags organize resources; they don't provide sign-in."
+      },
+      {
+        "key": "B",
+        "text": "Root user sharing",
+        "correct": false,
+        "why": "Sharing the root user is insecure and not federation."
+      },
+      {
+        "key": "C",
+        "text": "Access key rotation",
+        "correct": false,
+        "why": "Rotating keys doesn't remove the need for IAM users."
+      },
+      {
+        "key": "D",
+        "text": "Identity federation",
+        "correct": true,
+        "why": "Federation lets users from an external identity provider access AWS with temporary credentials."
+      }
+    ],
+    "explanation": {
+      "answer": "Identity federation lets users sign in with an existing identity provider (for example using SAML 2.0) and assume roles in AWS.",
+      "concept": "IAM Identity Center is the recommended way to set up workforce federation.",
+      "examTip": "Use corporate logins for AWS = federation.",
+      "references": [
+        {
+          "title": "Identity providers and federation",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-044",
+    "domain": "compliance",
+    "topic": "AWS Organizations",
+    "tags": [
+      "control-tower"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company wants to set up a secure multi-account environment quickly, with pre-configured guardrails and a landing zone.",
+    "prompt": "Which service should it use?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Control Tower",
+        "correct": true,
+        "why": "Control Tower sets up and governs a multi-account landing zone with guardrails."
+      },
+      {
+        "key": "B",
+        "text": "Amazon Detective",
+        "correct": false,
+        "why": "Detective investigates security findings."
+      },
+      {
+        "key": "C",
+        "text": "AWS Trusted Advisor",
+        "correct": false,
+        "why": "Trusted Advisor gives recommendations, not a landing zone."
+      },
+      {
+        "key": "D",
+        "text": "AWS CloudShell",
+        "correct": false,
+        "why": "CloudShell is a browser-based shell, which isn't what this scenario needs."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Control Tower automates setting up a well-architected multi-account environment, using AWS Organizations and preventive and detective controls.",
+      "concept": "Control Tower builds on Organizations, IAM Identity Center and AWS Config.",
+      "examTip": "Quick secure multi-account setup = Control Tower.",
+      "references": [
+        {
+          "title": "What is AWS Control Tower?",
+          "url": "https://docs.aws.amazon.com/controltower/latest/userguide/what-is-control-tower.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-045",
+    "domain": "compliance",
+    "topic": "IAM",
+    "tags": [
+      "roles-cross-account"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "An auditor from a partner company needs temporary read-only access to resources in your AWS account.",
+    "prompt": "What is the MOST secure approach?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Copy the data to a bucket the auditor can read publicly",
+        "correct": false,
+        "why": "Public access exposes data to everyone, so it doesn't fit this scenario."
+      },
+      {
+        "key": "B",
+        "text": "Create a cross-account role with read-only permissions",
+        "correct": true,
+        "why": "Cross-account roles give temporary credentials without sharing long-term secrets."
+      },
+      {
+        "key": "C",
+        "text": "Create an IAM user and send its access keys by chat",
+        "correct": false,
+        "why": "Long-term keys shared in chat are risky and hard to revoke."
+      },
+      {
+        "key": "D",
+        "text": "Create an IAM user and email the password",
+        "correct": false,
+        "why": "Long-term credentials shared by email are risky."
+      }
+    ],
+    "explanation": {
+      "answer": "Cross-account IAM roles allow principals in another account to assume a role and get temporary credentials with limited permissions.",
+      "concept": "Roles are preferred over long-term credentials for any temporary or third-party access.",
+      "examTip": "Third-party temporary access = cross-account IAM role.",
+      "references": [
+        {
+          "title": "IAM roles",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-046",
+    "domain": "compliance",
+    "topic": "IAM",
+    "tags": [
+      "multi-select"
+    ],
+    "difficulty": "medium",
+    "type": "multi",
+    "stem": "A security team is writing IAM best practices for the company.",
+    "prompt": "Which TWO practices should it include? (Select TWO.)",
+    "options": [
+      {
+        "key": "A",
+        "text": "Require MFA for human users",
+        "correct": true,
+        "why": "MFA reduces the risk of compromised passwords."
+      },
+      {
+        "key": "B",
+        "text": "Embed access keys in application source code",
+        "correct": false,
+        "why": "Hard-coded keys can leak through repositories."
+      },
+      {
+        "key": "C",
+        "text": "Use the root user for daily administration",
+        "correct": false,
+        "why": "The root user should be used only for root-only tasks."
+      },
+      {
+        "key": "D",
+        "text": "Grant broad permissions to avoid support tickets",
+        "correct": false,
+        "why": "Broad permissions violate least privilege."
+      },
+      {
+        "key": "E",
+        "text": "Use temporary credentials through roles wherever possible",
+        "correct": true,
+        "why": "Temporary credentials expire automatically and reduce key exposure."
+      }
+    ],
+    "explanation": {
+      "answer": "IAM best practices include requiring MFA, using temporary credentials, applying least privilege and protecting the root user.",
+      "concept": "Regularly review and remove unused users, roles and permissions.",
+      "examTip": "Good: MFA, roles, least privilege. Bad: root use, hard-coded keys, broad access.",
+      "references": [
+        {
+          "title": "Security best practices in IAM",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html"
+        }
+      ]
+    },
+    "selectCount": 2
+  },
+  {
+    "id": "clf-sec-047",
+    "domain": "compliance",
+    "topic": "Root User",
+    "tags": [
+      "root-email"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "An administrator wants to change the email address used to sign in as the root user.",
+    "prompt": "Who can do this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Any IAM user in the Developers group",
+        "correct": false,
+        "why": "Group membership doesn't grant root-only abilities."
+      },
+      {
+        "key": "B",
+        "text": "Any IAM user with S3 permissions",
+        "correct": false,
+        "why": "S3 permissions are unrelated to account settings."
+      },
+      {
+        "key": "C",
+        "text": "The root user",
+        "correct": true,
+        "why": "Changing the root user email address is a root user task."
+      },
+      {
+        "key": "D",
+        "text": "AWS Support, without verification",
+        "correct": false,
+        "why": "Support doesn't change root email addresses for you."
+      }
+    ],
+    "explanation": {
+      "answer": "Changing account settings such as the root user email and password requires root user credentials.",
+      "concept": "Root-only tasks are a short list; everything else should use IAM identities.",
+      "examTip": "Account email/name/root password = root user.",
+      "references": [
+        {
+          "title": "Tasks that require root user credentials",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/root-user-tasks.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-048",
+    "domain": "compliance",
+    "topic": "IAM",
+    "tags": [
+      "resource-policy"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company wants to allow another AWS account to upload objects to one of its S3 buckets.",
+    "prompt": "Which type of policy is attached directly to the bucket for this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "An identity-based policy on the company's IAM users",
+        "correct": false,
+        "why": "Identity-based policies on your users don't grant access to another account."
+      },
+      {
+        "key": "B",
+        "text": "A password policy",
+        "correct": false,
+        "why": "Password policies set password rules, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "C",
+        "text": "A service control policy",
+        "correct": false,
+        "why": "SCPs limit permissions; they don't grant access."
+      },
+      {
+        "key": "D",
+        "text": "A resource-based policy (bucket policy)",
+        "correct": true,
+        "why": "Bucket policies are resource-based and can grant access to other accounts."
+      }
+    ],
+    "explanation": {
+      "answer": "Resource-based policies, such as S3 bucket policies, are attached to the resource and specify which principals can access it.",
+      "concept": "Identity-based policies attach to users, groups or roles; resource-based policies attach to resources.",
+      "examTip": "Policy on the bucket itself = resource-based (bucket) policy.",
+      "references": [
+        {
+          "title": "Identity-based and resource-based policies",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_identity-vs-resource.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-049",
+    "domain": "compliance",
+    "topic": "IAM",
+    "tags": [
+      "explicit-deny"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A user's group policy allows s3:DeleteObject. Another policy attached to the same user explicitly denies s3:DeleteObject.",
+    "prompt": "What happens when the user tries to delete an object?",
+    "options": [
+      {
+        "key": "A",
+        "text": "The action is denied",
+        "correct": true,
+        "why": "An explicit deny always overrides an allow."
+      },
+      {
+        "key": "B",
+        "text": "AWS asks the user which policy to apply",
+        "correct": false,
+        "why": "AWS evaluates policies automatically, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "C",
+        "text": "The newest policy wins",
+        "correct": false,
+        "why": "Policy age doesn't affect evaluation, which isn't what this scenario needs."
+      },
+      {
+        "key": "D",
+        "text": "The action succeeds because the group allow is checked first",
+        "correct": false,
+        "why": "Explicit denies override any allows, so it doesn't meet this requirement."
+      }
+    ],
+    "explanation": {
+      "answer": "In IAM policy evaluation, an explicit deny overrides any allow. Without any allow, actions are denied by default.",
+      "concept": "Order: explicit deny > explicit allow > implicit deny.",
+      "examTip": "Explicit deny always wins.",
+      "references": [
+        {
+          "title": "Policy evaluation logic",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-sec-050",
+    "domain": "compliance",
+    "topic": "AWS Organizations",
+    "tags": [
+      "ou"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company wants to apply stricter rules to its production accounts than to its sandbox accounts.",
+    "prompt": "How should it structure AWS Organizations?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Create a separate organization for each account",
+        "correct": false,
+        "why": "Separate organizations lose central management."
+      },
+      {
+        "key": "B",
+        "text": "Group accounts into organizational units (OUs) and attach policies per OU",
+        "correct": true,
+        "why": "OUs let you apply different policies to groups of accounts."
+      },
+      {
+        "key": "C",
+        "text": "Use resource tags instead of accounts",
+        "correct": false,
+        "why": "Tags don't replace account-level guardrails."
+      },
+      {
+        "key": "D",
+        "text": "Put all accounts in the root with one SCP",
+        "correct": false,
+        "why": "A single SCP can't apply different rules to different account groups."
+      }
+    ],
+    "explanation": {
+      "answer": "Organizational units group accounts so you can apply policies, like SCPs, to each group.",
+      "concept": "Common OUs include Security, Infrastructure, Sandbox, and Workloads (Prod/Dev).",
+      "examTip": "Different rules for groups of accounts = OUs + SCPs.",
+      "references": [
+        {
+          "title": "Managing organizational units",
+          "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_ous.html"
+        }
+      ]
+    }
+  }
+]

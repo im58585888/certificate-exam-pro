@@ -1,0 +1,996 @@
+[
+  {
+    "id": "clf-bil-041",
+    "domain": "billing",
+    "topic": "Consolidated Billing",
+    "tags": [
+      "ri-sharing"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company buys Reserved Instances in one account of its organization, but the matching instances run in another member account.",
+    "prompt": "Can the discount apply?",
+    "options": [
+      {
+        "key": "A",
+        "text": "No; discounts only apply in the purchasing account",
+        "correct": false,
+        "why": "With consolidated billing, discounts can be shared across accounts."
+      },
+      {
+        "key": "B",
+        "text": "Yes; RI and Savings Plans discounts can be shared across the organization",
+        "correct": true,
+        "why": "Discount sharing applies benefits across accounts by default."
+      },
+      {
+        "key": "C",
+        "text": "Only if the accounts use the same root email",
+        "correct": false,
+        "why": "Root email has nothing to do with sharing."
+      },
+      {
+        "key": "D",
+        "text": "Only with Enterprise Support",
+        "correct": false,
+        "why": "Support plans don't affect discount sharing."
+      }
+    ],
+    "explanation": {
+      "answer": "Under consolidated billing, Reserved Instance and Savings Plans discounts can apply to matching usage in any account in the organization.",
+      "concept": "The management account can turn sharing off for specific accounts.",
+      "examTip": "Discounts are shared across accounts in an organization.",
+      "references": [
+        {
+          "title": "Reserved Instances and Savings Plans discount sharing",
+          "url": "https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/ri-turn-off.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-bil-042",
+    "domain": "billing",
+    "topic": "Consolidated Billing",
+    "tags": [
+      "volume-tiers"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company has three accounts, each storing 40 TB in S3, and they're in the same organization.",
+    "prompt": "How does consolidated billing affect S3 pricing?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Each account is priced separately at its own 40 TB",
+        "correct": false,
+        "why": "With consolidated billing, usage is combined."
+      },
+      {
+        "key": "B",
+        "text": "Each account pays a small surcharge for being a member",
+        "correct": false,
+        "why": "Consolidated billing doesn't add a surcharge."
+      },
+      {
+        "key": "C",
+        "text": "Usage combines to 120 TB, which may reach lower tiers",
+        "correct": true,
+        "why": "Aggregated usage can qualify for volume discounts."
+      },
+      {
+        "key": "D",
+        "text": "Organizations get S3 storage at a flat discounted rate",
+        "correct": false,
+        "why": "There's no flat organization rate; usage is combined for tiered pricing."
+      }
+    ],
+    "explanation": {
+      "answer": "Consolidated billing treats all accounts as one for volume pricing, so combined usage may qualify for lower tiered prices.",
+      "concept": "This is one financial benefit of AWS Organizations.",
+      "examTip": "Combined usage = better volume tiers.",
+      "references": [
+        {
+          "title": "Consolidated billing for AWS Organizations",
+          "url": "https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/consolidated-billing.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-bil-043",
+    "domain": "billing",
+    "topic": "Cost Management Tools",
+    "tags": [
+      "billing-conductor"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A company resells AWS to internal business units and wants to show each unit a customized bill with its own pricing rates.",
+    "prompt": "Which service fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Artifact",
+        "correct": false,
+        "why": "Artifact provides compliance reports, which isn't what this scenario needs."
+      },
+      {
+        "key": "B",
+        "text": "AWS Pricing Calculator",
+        "correct": false,
+        "why": "This estimates costs for planned workloads."
+      },
+      {
+        "key": "C",
+        "text": "AWS Budgets",
+        "correct": false,
+        "why": "Budgets track spending against limits, which isn't what this scenario needs."
+      },
+      {
+        "key": "D",
+        "text": "AWS Billing Conductor",
+        "correct": true,
+        "why": "Billing Conductor creates customized pro forma billing data with custom rates."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Billing Conductor lets you customize billing data for showback and chargeback, with custom pricing rules and groups of accounts.",
+      "concept": "It doesn't change what you pay AWS; it changes how costs are presented.",
+      "examTip": "Custom showback/chargeback bills = Billing Conductor.",
+      "references": [
+        {
+          "title": "What is AWS Billing Conductor?",
+          "url": "https://docs.aws.amazon.com/billingconductor/latest/userguide/what-is-billingconductor.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-bil-044",
+    "domain": "billing",
+    "topic": "Cost Management Tools",
+    "tags": [
+      "cost-categories"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A finance team wants to group costs into business-level categories, such as \"Marketing\" or \"Platform\", using rules based on accounts and tags.",
+    "prompt": "Which feature fits BEST?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Cost Categories",
+        "correct": true,
+        "why": "Cost Categories map costs into custom groups using rules."
+      },
+      {
+        "key": "B",
+        "text": "Security groups",
+        "correct": false,
+        "why": "Security groups filter traffic, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "C",
+        "text": "Amazon Route 53",
+        "correct": false,
+        "why": "Route 53 is DNS, which isn't what this scenario needs."
+      },
+      {
+        "key": "D",
+        "text": "AWS Snowball Edge",
+        "correct": false,
+        "why": "Snowball moves data, so it doesn't meet this requirement."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Cost Categories let you create rules that group costs by accounts, tags, services and more, for reports and budgets.",
+      "concept": "They appear in Cost Explorer, Budgets and the Cost and Usage Report.",
+      "examTip": "Business-level cost groups = Cost Categories.",
+      "references": [
+        {
+          "title": "Organizing costs using AWS Cost Categories",
+          "url": "https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/manage-cost-categories.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-bil-045",
+    "domain": "billing",
+    "topic": "Service Pricing",
+    "tags": [
+      "ebs-pricing"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company deleted its EC2 instances but keeps paying for storage.",
+    "prompt": "What is the MOST likely cause?",
+    "options": [
+      {
+        "key": "A",
+        "text": "The Management Console charges for logins",
+        "correct": false,
+        "why": "The console is free, which isn't what this scenario needs."
+      },
+      {
+        "key": "B",
+        "text": "Unattached EBS volumes or old snapshots still exist",
+        "correct": true,
+        "why": "EBS volumes and snapshots are billed until deleted."
+      },
+      {
+        "key": "C",
+        "text": "IAM users are billed monthly",
+        "correct": false,
+        "why": "IAM has no charge, which isn't what this scenario needs."
+      },
+      {
+        "key": "D",
+        "text": "Terminated instances are billed for 30 days",
+        "correct": false,
+        "why": "Terminated instances stop billing, so it doesn't meet this requirement."
+      }
+    ],
+    "explanation": {
+      "answer": "EBS volumes are billed for provisioned storage whether or not they're attached. Snapshots are billed for stored data.",
+      "concept": "Check for unattached volumes and old snapshots regularly.",
+      "examTip": "Paying for storage after deleting instances = leftover EBS volumes/snapshots.",
+      "references": [
+        {
+          "title": "Amazon EBS pricing",
+          "url": "https://aws.amazon.com/ebs/pricing/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-bil-046",
+    "domain": "billing",
+    "topic": "Service Pricing",
+    "tags": [
+      "ipv4"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A company notices a charge for public IPv4 addresses on its bill.",
+    "prompt": "Which statement is correct?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Only unused Elastic IPs are charged, and only in us-east-1",
+        "correct": false,
+        "why": "Charges apply across Regions and to in-use addresses too."
+      },
+      {
+        "key": "B",
+        "text": "Public IPv4 addresses are free while attached to an instance",
+        "correct": false,
+        "why": "AWS charges for public IPv4 addresses whether they're attached or idle."
+      },
+      {
+        "key": "C",
+        "text": "AWS charges hourly for public IPv4 addresses, whether in use or not",
+        "correct": true,
+        "why": "Public IPv4 addresses, including Elastic IPs, are billed per hour."
+      },
+      {
+        "key": "D",
+        "text": "IPv6 addresses are charged more than IPv4",
+        "correct": false,
+        "why": "IPv6 addresses aren't charged this way, so it doesn't solve the problem described here."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS charges for all public IPv4 addresses, in use or idle, on an hourly basis.",
+      "concept": "Using IPv6 or private addressing can reduce these charges.",
+      "examTip": "Public IPv4 = hourly charge.",
+      "references": [
+        {
+          "title": "Amazon VPC pricing",
+          "url": "https://aws.amazon.com/vpc/pricing/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-bil-047",
+    "domain": "billing",
+    "topic": "Cost Management Tools",
+    "tags": [
+      "budgets-actions"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company wants to automatically stop new EC2 launches in a sandbox account when its monthly budget is exceeded.",
+    "prompt": "Which feature can do this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Artifact",
+        "correct": false,
+        "why": "Artifact provides compliance reports, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "B",
+        "text": "AWS Cost Anomaly Detection",
+        "correct": false,
+        "why": "Cost Anomaly Detection alerts on unusual spend but doesn't restrict launches."
+      },
+      {
+        "key": "C",
+        "text": "AWS Pricing Calculator",
+        "correct": false,
+        "why": "This estimates planned costs, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "D",
+        "text": "AWS Budgets actions",
+        "correct": true,
+        "why": "Budget actions can apply IAM policies or SCPs, or stop instances, when thresholds are crossed."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Budgets actions run automatically when a budget threshold is exceeded, such as applying an IAM policy or SCP to restrict usage.",
+      "concept": "This adds enforcement on top of alerts.",
+      "examTip": "Auto-restrict when over budget = Budgets actions.",
+      "references": [
+        {
+          "title": "Configuring budget actions",
+          "url": "https://docs.aws.amazon.com/cost-management/latest/userguide/budgets-controls.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-bil-048",
+    "domain": "billing",
+    "topic": "Service Pricing",
+    "tags": [
+      "free-services"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A company asks which of these AWS features has no additional charge.",
+    "prompt": "Which is offered at no additional charge?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Identity and Access Management (IAM)",
+        "correct": true,
+        "why": "IAM is offered at no additional charge, which matches what the question asks for."
+      },
+      {
+        "key": "B",
+        "text": "Amazon EC2 Dedicated Hosts",
+        "correct": false,
+        "why": "Dedicated Hosts are physical servers billed by the hour."
+      },
+      {
+        "key": "C",
+        "text": "AWS Shield Advanced",
+        "correct": false,
+        "why": "Shield Advanced is a paid subscription, which isn't what this scenario needs."
+      },
+      {
+        "key": "D",
+        "text": "Amazon S3 storage beyond the Free Tier",
+        "correct": false,
+        "why": "S3 storage is billed per GB, so it doesn't solve the problem described here."
+      }
+    ],
+    "explanation": {
+      "answer": "IAM, AWS Organizations, consolidated billing and the Management Console are offered at no additional charge.",
+      "concept": "Resources you create with these tools are billed normally.",
+      "examTip": "Free features: IAM, Organizations, consolidated billing, console.",
+      "references": [
+        {
+          "title": "What is IAM?",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-bil-049",
+    "domain": "billing",
+    "topic": "Cost Management Tools",
+    "tags": [
+      "savings-recommendations"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company wants AWS to recommend how much to commit to Savings Plans based on its past usage.",
+    "prompt": "Which tool provides this?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Amazon Inspector",
+        "correct": false,
+        "why": "Inspector scans for vulnerabilities, so it doesn't meet this requirement."
+      },
+      {
+        "key": "B",
+        "text": "AWS Cost Explorer",
+        "correct": true,
+        "why": "Cost Explorer provides Savings Plans and RI purchase recommendations."
+      },
+      {
+        "key": "C",
+        "text": "AWS Artifact",
+        "correct": false,
+        "why": "Artifact provides compliance reports, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "D",
+        "text": "AWS Pricing Calculator",
+        "correct": false,
+        "why": "This estimates planned costs, so it doesn't meet this requirement."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Cost Explorer analyzes your usage and recommends Savings Plans and Reserved Instance purchases, with estimated savings.",
+      "concept": "It also shows utilization and coverage of existing commitments.",
+      "examTip": "Commitment recommendations = Cost Explorer.",
+      "references": [
+        {
+          "title": "What is AWS Cost Explorer?",
+          "url": "https://docs.aws.amazon.com/cost-management/latest/userguide/ce-what-is.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-bil-050",
+    "domain": "billing",
+    "topic": "Service Pricing",
+    "tags": [
+      "cross-az"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A company's application constantly sends large amounts of data between instances in different Availability Zones.",
+    "prompt": "What should it know about the cost?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Only data transfer within one AZ is charged",
+        "correct": false,
+        "why": "Same-AZ traffic over private IPs is generally free."
+      },
+      {
+        "key": "B",
+        "text": "Inter-AZ data transfer is charged only with Enterprise Support",
+        "correct": false,
+        "why": "Support plans don't affect data transfer pricing."
+      },
+      {
+        "key": "C",
+        "text": "Data transfer between AZs is charged per GB in each direction",
+        "correct": true,
+        "why": "Inter-AZ traffic is billed, so chatty cross-AZ designs can add cost."
+      },
+      {
+        "key": "D",
+        "text": "Data transfer between AZs in one Region is free",
+        "correct": false,
+        "why": "Data transfer between AZs is generally charged per GB."
+      }
+    ],
+    "explanation": {
+      "answer": "Data transferred between Availability Zones in the same Region is charged per GB. Data within the same AZ over private IP is generally free.",
+      "concept": "Balance resilience (multi-AZ) with data transfer costs.",
+      "examTip": "Cross-AZ traffic costs money; same-AZ private traffic usually doesn't.",
+      "references": [
+        {
+          "title": "Amazon EC2 On-Demand pricing (data transfer)",
+          "url": "https://aws.amazon.com/ec2/pricing/on-demand/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-bil-051",
+    "domain": "billing",
+    "topic": "Consolidated Billing",
+    "tags": [
+      "multi-select"
+    ],
+    "difficulty": "medium",
+    "type": "multi",
+    "stem": "A company is setting up AWS Organizations for billing.",
+    "prompt": "Which TWO are benefits of consolidated billing? (Select TWO.)",
+    "options": [
+      {
+        "key": "A",
+        "text": "Free EC2 instances in member accounts",
+        "correct": false,
+        "why": "Consolidated billing doesn't make resources free."
+      },
+      {
+        "key": "B",
+        "text": "Automatic removal of unused resources",
+        "correct": false,
+        "why": "Billing features don't delete resources."
+      },
+      {
+        "key": "C",
+        "text": "Combined usage for volume pricing tiers",
+        "correct": true,
+        "why": "Aggregated usage can reach lower price tiers."
+      },
+      {
+        "key": "D",
+        "text": "One bill for multiple accounts",
+        "correct": true,
+        "why": "Consolidated billing produces a single bill."
+      },
+      {
+        "key": "E",
+        "text": "Unlimited AWS Support at no charge",
+        "correct": false,
+        "why": "Support plans are billed separately, so it doesn't solve the problem described here."
+      }
+    ],
+    "explanation": {
+      "answer": "Consolidated billing gives one bill, combined usage for volume discounts, and sharing of RI and Savings Plans discounts.",
+      "concept": "It's included with AWS Organizations at no additional charge.",
+      "examTip": "Consolidated billing = one bill + volume tiers + shared discounts.",
+      "references": [
+        {
+          "title": "Consolidated billing for AWS Organizations",
+          "url": "https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/consolidated-billing.html"
+        }
+      ]
+    },
+    "selectCount": 2
+  },
+  {
+    "id": "clf-bil-052",
+    "domain": "billing",
+    "topic": "Service Pricing",
+    "tags": [
+      "dynamodb-pricing"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company asks what it pays for with Amazon DynamoDB on-demand mode.",
+    "prompt": "Which answer is correct?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Only data transfer into DynamoDB",
+        "correct": false,
+        "why": "Data in is not the main driver, so it doesn't meet this requirement."
+      },
+      {
+        "key": "B",
+        "text": "Only the number of tables",
+        "correct": false,
+        "why": "Table count isn't the main cost driver, which isn't what this scenario needs."
+      },
+      {
+        "key": "C",
+        "text": "A fixed hourly fee per table",
+        "correct": false,
+        "why": "On-demand isn't billed as a fixed fee per table."
+      },
+      {
+        "key": "D",
+        "text": "Read and write requests plus data stored",
+        "correct": true,
+        "why": "On-demand charges per request and for storage."
+      }
+    ],
+    "explanation": {
+      "answer": "DynamoDB on-demand charges for read and write request units used and for data storage, plus optional features.",
+      "concept": "Provisioned mode charges for capacity units per hour.",
+      "examTip": "DynamoDB on-demand = per request + storage.",
+      "references": [
+        {
+          "title": "DynamoDB throughput capacity",
+          "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/capacity-mode.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-bil-053",
+    "domain": "billing",
+    "topic": "EC2 Pricing Models",
+    "tags": [
+      "spot-interruption"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A company runs a production web server that must stay up but tries to save money with Spot Instances.",
+    "prompt": "What is the main risk?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS can reclaim Spot capacity with a two-minute warning",
+        "correct": true,
+        "why": "Interruptions can take the web server down if it isn't designed for them."
+      },
+      {
+        "key": "B",
+        "text": "Spot Instances can't run Linux",
+        "correct": false,
+        "why": "Spot supports Linux and Windows, so it doesn't meet this requirement."
+      },
+      {
+        "key": "C",
+        "text": "Spot Instances can't use EBS volumes",
+        "correct": false,
+        "why": "Spot instances can use EBS, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "D",
+        "text": "Spot Instances cost more than On-Demand",
+        "correct": false,
+        "why": "Spot is cheaper, so it doesn't meet this requirement."
+      }
+    ],
+    "explanation": {
+      "answer": "Spot Instances can be interrupted when AWS needs the capacity back, with a two-minute notice.",
+      "concept": "Use Spot for fault-tolerant parts of workloads, or mix it with On-Demand in Auto Scaling groups.",
+      "examTip": "Spot = cheap but can be interrupted.",
+      "references": [
+        {
+          "title": "Spot Instance interruptions",
+          "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-interruptions.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-bil-054",
+    "domain": "billing",
+    "topic": "Service Pricing",
+    "tags": [
+      "pricing-page"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A developer wants the official price per hour for a specific RDS instance type in a specific Region.",
+    "prompt": "Where should they look?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Trusted Advisor cost optimization checks",
+        "correct": false,
+        "why": "Trusted Advisor gives recommendations, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "B",
+        "text": "The service's pricing page or the AWS Price List API",
+        "correct": true,
+        "why": "Pricing pages and the Price List API publish current prices by Region."
+      },
+      {
+        "key": "C",
+        "text": "The AWS Cost and Usage Report for last month",
+        "correct": false,
+        "why": "The CUR shows what you were billed, not list prices for instance types you haven't used."
+      },
+      {
+        "key": "D",
+        "text": "AWS Artifact pricing reports for each service",
+        "correct": false,
+        "why": "Artifact provides compliance reports, so it doesn't meet this requirement."
+      }
+    ],
+    "explanation": {
+      "answer": "Each AWS service has a pricing page with prices by Region. The AWS Price List API provides prices programmatically.",
+      "concept": "Prices can differ between Regions.",
+      "examTip": "Exact price = service pricing page / Price List API.",
+      "references": [
+        {
+          "title": "Amazon RDS pricing",
+          "url": "https://aws.amazon.com/rds/pricing/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-bil-055",
+    "domain": "billing",
+    "topic": "Cost Management Tools",
+    "tags": [
+      "tags-enforce"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company wants every new resource to carry a \"CostCenter\" tag so costs can be attributed.",
+    "prompt": "Which feature helps enforce consistent tags across accounts?",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Pricing Calculator",
+        "correct": false,
+        "why": "This estimates costs, which isn't what this scenario needs."
+      },
+      {
+        "key": "B",
+        "text": "AWS Config conformance packs",
+        "correct": false,
+        "why": "Config can check for tags, but tag policies standardize tag keys and values across accounts."
+      },
+      {
+        "key": "C",
+        "text": "Tag policies in AWS Organizations",
+        "correct": true,
+        "why": "Tag policies standardize tag keys and values across accounts."
+      },
+      {
+        "key": "D",
+        "text": "S3 Lifecycle rules",
+        "correct": false,
+        "why": "Lifecycle rules manage objects, so it doesn't meet this requirement."
+      }
+    ],
+    "explanation": {
+      "answer": "Tag policies in AWS Organizations help standardize tags across accounts. SCPs can deny resource creation without required tags.",
+      "concept": "Consistent tagging is the foundation of cost allocation.",
+      "examTip": "Standardize tags across accounts = Organizations tag policies.",
+      "references": [
+        {
+          "title": "Tag policies",
+          "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_tag-policies.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-bil-056",
+    "domain": "billing",
+    "topic": "Marketplace & Partners",
+    "tags": [
+      "marketplace-benefits"
+    ],
+    "difficulty": "easy",
+    "type": "single",
+    "stem": "A company asks why it might buy software through AWS Marketplace instead of directly from vendors.",
+    "prompt": "Which benefit is correct?",
+    "options": [
+      {
+        "key": "A",
+        "text": "All Marketplace software is free",
+        "correct": false,
+        "why": "Many products are paid, so it doesn't meet this requirement."
+      },
+      {
+        "key": "B",
+        "text": "Marketplace replaces the need for security controls",
+        "correct": false,
+        "why": "Customers still secure their deployments."
+      },
+      {
+        "key": "C",
+        "text": "Marketplace products are maintained by AWS",
+        "correct": false,
+        "why": "Third-party sellers maintain their products."
+      },
+      {
+        "key": "D",
+        "text": "Charges appear on the AWS bill and products deploy quickly to AWS",
+        "correct": true,
+        "why": "Marketplace simplifies procurement and deployment."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS Marketplace simplifies buying, deploying and paying for third-party software, with billing through your AWS account.",
+      "concept": "Private offers allow negotiated pricing.",
+      "examTip": "Marketplace = buy third-party software, pay on AWS bill.",
+      "references": [
+        {
+          "title": "What is AWS Marketplace?",
+          "url": "https://docs.aws.amazon.com/marketplace/latest/buyerguide/what-is-marketplace.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-bil-057",
+    "domain": "billing",
+    "topic": "Service Pricing",
+    "tags": [
+      "savings-plan-coverage"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A company has a Compute Savings Plan and starts running AWS Fargate tasks and Lambda functions.",
+    "prompt": "How is the new usage billed?",
+    "options": [
+      {
+        "key": "A",
+        "text": "The discount can apply to Fargate and Lambda usage too",
+        "correct": true,
+        "why": "Compute Savings Plans apply across EC2, Fargate and Lambda."
+      },
+      {
+        "key": "B",
+        "text": "At a separate Fargate and Lambda Savings Plan rate",
+        "correct": false,
+        "why": "No separate plan is needed; Compute Savings Plans already apply."
+      },
+      {
+        "key": "C",
+        "text": "The plan is paused until the next billing month",
+        "correct": false,
+        "why": "Plans aren't paused by using other services."
+      },
+      {
+        "key": "D",
+        "text": "At On-Demand rates, because Savings Plans cover EC2 only",
+        "correct": false,
+        "why": "Compute Savings Plans also cover Fargate and Lambda."
+      }
+    ],
+    "explanation": {
+      "answer": "Compute Savings Plans apply automatically to eligible usage across EC2, AWS Fargate and AWS Lambda, up to the hourly commitment.",
+      "concept": "Usage above the commitment is billed at On-Demand rates.",
+      "examTip": "Compute Savings Plans cover EC2 + Fargate + Lambda.",
+      "references": [
+        {
+          "title": "What are Savings Plans?",
+          "url": "https://docs.aws.amazon.com/savingsplans/latest/userguide/what-is-savings-plans.html"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-bil-058",
+    "domain": "billing",
+    "topic": "Support Plans",
+    "tags": [
+      "basic-limits"
+    ],
+    "difficulty": "medium",
+    "type": "single",
+    "stem": "A company on Basic Support has a question about why its EC2 application is slow.",
+    "prompt": "What can it do?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Request a review from a designated TAM this week",
+        "correct": false,
+        "why": "TAMs require Enterprise Support, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "B",
+        "text": "Use documentation, re:Post and core checks, or upgrade",
+        "correct": true,
+        "why": "Basic covers self-service resources; technical cases need a paid plan."
+      },
+      {
+        "key": "C",
+        "text": "Open a technical support case by phone with an engineer",
+        "correct": false,
+        "why": "Basic doesn't include technical support cases."
+      },
+      {
+        "key": "D",
+        "text": "Ask the Concierge Support Team to troubleshoot it",
+        "correct": false,
+        "why": "Concierge comes with Enterprise-level plans."
+      }
+    ],
+    "explanation": {
+      "answer": "Basic Support provides account and billing help and self-service resources. Technical support cases require Developer or higher.",
+      "concept": "Upgrading can be done anytime in the console.",
+      "examTip": "Technical question on Basic = self-service or upgrade.",
+      "references": [
+        {
+          "title": "Compare AWS Support plans",
+          "url": "https://aws.amazon.com/premiumsupport/plans/"
+        }
+      ]
+    }
+  },
+  {
+    "id": "clf-bil-059",
+    "domain": "billing",
+    "topic": "Cost Management Tools",
+    "tags": [
+      "multi-select"
+    ],
+    "difficulty": "medium",
+    "type": "multi",
+    "stem": "A finance team is choosing cost tools.",
+    "prompt": "Which TWO pairings are correct? (Select TWO.)",
+    "options": [
+      {
+        "key": "A",
+        "text": "AWS Trusted Advisor – pay invoices",
+        "correct": false,
+        "why": "Invoices are paid in the Billing console."
+      },
+      {
+        "key": "B",
+        "text": "AWS Cost Explorer – estimate costs before creating an account",
+        "correct": false,
+        "why": "Cost Explorer analyzes actual usage in an account."
+      },
+      {
+        "key": "C",
+        "text": "AWS Pricing Calculator – estimate a planned architecture",
+        "correct": true,
+        "why": "The calculator estimates future costs, so it meets the requirement described here."
+      },
+      {
+        "key": "D",
+        "text": "AWS Budgets – alert when spending exceeds a threshold",
+        "correct": true,
+        "why": "Budgets sends alerts on thresholds, so it meets the requirement described here."
+      },
+      {
+        "key": "E",
+        "text": "AWS Artifact – show spend by service",
+        "correct": false,
+        "why": "Artifact provides compliance reports, which isn't what this scenario needs."
+      }
+    ],
+    "explanation": {
+      "answer": "Pricing Calculator = estimate. Cost Explorer = analyze actual spend. Budgets = alert. CUR = detailed data.",
+      "concept": "These four tools appear often on the exam.",
+      "examTip": "Estimate=Calculator, analyze=Cost Explorer, alert=Budgets, details=CUR.",
+      "references": [
+        {
+          "title": "What is AWS Cost Explorer?",
+          "url": "https://docs.aws.amazon.com/cost-management/latest/userguide/ce-what-is.html"
+        }
+      ]
+    },
+    "selectCount": 2
+  },
+  {
+    "id": "clf-bil-060",
+    "domain": "billing",
+    "topic": "Service Pricing",
+    "tags": [
+      "cost-drivers"
+    ],
+    "difficulty": "hard",
+    "type": "single",
+    "stem": "A company is reviewing its AWS bill to understand the fundamental cost drivers.",
+    "prompt": "Which are the three fundamental drivers of AWS cost?",
+    "options": [
+      {
+        "key": "A",
+        "text": "Regions, Availability Zones and edge locations",
+        "correct": false,
+        "why": "These are infrastructure concepts, not cost drivers by themselves."
+      },
+      {
+        "key": "B",
+        "text": "Support cases, Trusted Advisor checks and tags",
+        "correct": false,
+        "why": "These aren't the fundamental drivers, so it doesn't solve the problem described here."
+      },
+      {
+        "key": "C",
+        "text": "Compute, storage and outbound data transfer",
+        "correct": true,
+        "why": "These are the three fundamental drivers of AWS costs."
+      },
+      {
+        "key": "D",
+        "text": "Users, passwords and policies",
+        "correct": false,
+        "why": "IAM is free and doesn't drive cost, so it doesn't solve the problem described here."
+      }
+    ],
+    "explanation": {
+      "answer": "AWS describes three fundamental cost drivers: compute, storage and outbound data transfer.",
+      "concept": "Most service pricing combines these drivers.",
+      "examTip": "Cost drivers = compute + storage + data out.",
+      "references": [
+        {
+          "title": "How AWS pricing works",
+          "url": "https://docs.aws.amazon.com/whitepapers/latest/how-aws-pricing-works/welcome.html"
+        }
+      ]
+    }
+  }
+]
