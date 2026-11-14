@@ -4,7 +4,7 @@ import { getAccess } from "@/lib/billing";
 import { one } from "@/lib/db";
 import { ensureBank, getQuestion, type Question } from "@/lib/questions";
 import { loadOwnedSession, type QuizSession } from "@/lib/quiz";
-import type { Owner } from "@/lib/auth";
+import { currentOwner, type Owner } from "@/lib/auth";
 
 export const fail = (status: number, error: string) => Response.json({ error }, { status });
 
@@ -27,8 +27,18 @@ export async function tutorContext(sessionId: unknown, questionId: unknown): Pro
   if (typeof sessionId !== "string" || typeof questionId !== "string") return fail(400, "Bad request.");
   await ensureBank();
   const loaded = await loadOwnedSession(sessionId);
-  if (!loaded || !loaded.session.question_ids.includes(questionId)) return fail(404, "Question not found.");
+  if (!loaded) {
+    // Say which check failed: a missing session and a missing sign-in cookie need different fixes.
+    const exists = /^[0-9a-f-]{36}$/i.test(sessionId) && !!(await one(`select 1 from quiz_sessions where id = $1`, [sessionId]));
+    const owner = await currentOwner();
+    console.warn(`[ai] session check failed: exists=${exists} owner=${owner ? (owner.userId ? "user" : "anon") : "none"}`);
+    if (!exists) return fail(404, "This practice session no longer exists. Start a new session from Practice.");
+    return fail(401, owner
+      ? "This session belongs to a different sign-in. Refresh the page, or sign in with the account that started it."
+      : "Your sign-in didn't reach the tutor (you may have been signed out, or a work network blocked the cookie). Refresh the page and try again.");
+  }
   const { session, owner } = loaded;
+  if (!session.question_ids.includes(questionId)) return fail(404, "That question isn't part of this session.");
   const q = getQuestion(questionId);
   if (!q) return fail(404, "Question not found.");
   if (session.mode === "exam" && !session.finished_at) return fail(403, "The tutor is off during timed mock exams, like the real test.");
