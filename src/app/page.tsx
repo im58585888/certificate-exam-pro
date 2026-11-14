@@ -73,7 +73,7 @@ export default async function Home() {
       </section>
 
       <section className={styles.faq} aria-labelledby="faq-title">
-        <div><p className={styles.eyebrow}>A little more clarity</p><h2 id="faq-title">Good questions.</h2><p>Everything else you might want to know before you begin.</p></div>
+        <div><p className={styles.eyebrow}>A little more clarity</p><h2 id="faq-title">Good questions.</h2><p>Everything else you might want to know before you begin. Still wondering about something? <Link href="/contact" className={styles.textLink}>Contact me</Link>.</p></div>
         <div>{FAQ.map(([question, answer]) => <details key={question}><summary>{question}<span aria-hidden="true">+</span></summary><p>{answer}</p></details>)}</div>
       </section>
 

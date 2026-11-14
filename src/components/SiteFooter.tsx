@@ -14,6 +14,7 @@ export function SiteFooter() {
         </div>
         <nav className="flex gap-4 font-semibold">
           <Link href="/pricing" className="hover:text-ink">Pricing</Link>
+          <Link href="/contact" className="hover:text-ink">Contact</Link>
           <Link href="/terms" className="hover:text-ink">Terms</Link>
           <Link href="/privacy" className="hover:text-ink">Privacy</Link>
         </nav>

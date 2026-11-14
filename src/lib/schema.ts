@@ -191,4 +191,18 @@ create index if not exists conversions_created_idx on conversions (created_at);
 alter table visits enable row level security;
 alter table page_views enable row level security;
 alter table conversions enable row level security;
+
+create table if not exists contact_messages (
+  id bigserial primary key,
+  user_id uuid references users(id) on delete set null,
+  name text,
+  email text not null,
+  topic text not null,
+  message text not null,
+  page text,
+  status text not null default 'open',
+  created_at timestamptz not null default now()
+);
+create index if not exists contact_messages_status_idx on contact_messages (status, created_at desc);
+alter table contact_messages enable row level security;
 `;

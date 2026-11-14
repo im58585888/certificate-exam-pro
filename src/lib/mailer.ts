@@ -6,6 +6,7 @@ export interface Mail {
   subject: string;
   text: string;
   html: string;
+  replyTo?: string;
 }
 
 export const mailConfigured = !!process.env.SMTP_URL;

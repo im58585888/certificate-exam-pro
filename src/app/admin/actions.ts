@@ -100,3 +100,11 @@ export async function deleteAddedQuestionAction(form: FormData) {
   revalidatePath("/admin/questions");
   redirect("/admin/questions");
 }
+
+export async function setMessageStatusAction(form: FormData) {
+  await requireAdmin();
+  const status = String(form.get("status"));
+  if (!["open", "answered", "archived"].includes(status)) return;
+  await query(`update contact_messages set status = $2 where id = $1`, [Number(form.get("id")), status]);
+  revalidatePath("/admin/messages");
+}

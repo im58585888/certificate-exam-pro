@@ -15,6 +15,7 @@ import { ensureBank, feedbackFor, getQuestion, grade, type Feedback } from "@/li
 import { isExpired, loadOwnedSession } from "@/lib/quiz";
 import { REPORT_REASONS } from "@/lib/reports";
 import { recordConversion } from "@/lib/traffic";
+import { CONTACT_TOPICS, isContactTopic } from "@/lib/contact";
 
 // ---------- Auth ----------
 
@@ -344,4 +345,53 @@ export async function joinWaitlistAction(_: WaitlistState, form: FormData): Prom
   );
   await recordConversion("waitlist");
   return { joined: true };
+}
+
+// ---------- Contact ----------
+
+export interface ContactState {
+  error?: string;
+  sent?: boolean;
+}
+
+const escapeHtml = (s: string) => s.replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
+
+/** Saves a contact-form message for the admin Messages tab and, when mail is set up, emails it to the owner with Reply-To set to the sender. */
+export async function sendContactAction(_: ContactState, form: FormData): Promise<ContactState> {
+  if (String(form.get("website") ?? "")) return { sent: true }; // honeypot field: only bots fill it in
+  const user = await getUser();
+  const email = (user?.email ?? String(form.get("email") ?? "")).trim().toLowerCase();
+  const name = String(form.get("name") ?? "").trim().slice(0, 80) || user?.name || null;
+  const topic = String(form.get("topic") ?? "");
+  const message = String(form.get("message") ?? "").trim();
+  if (!EMAIL_RE.test(email)) return { error: "Enter a valid email address so I can reply." };
+  if (!isContactTopic(topic)) return { error: "Choose what your message is about." };
+  if (message.length < 10) return { error: "Please write a little more so I can help." };
+  if (message.length > 5000) return { error: "Please keep your message under 5,000 characters." };
+  const ipKey = `contact:${await clientIpHash()}`;
+  if (!(await allowAttempt(ipKey, 5, 3600))) return { error: "Too many messages from this network. Please try again in an hour." };
+  await recordAttempt(ipKey);
+
+  const page = String(form.get("from") ?? "").startsWith("/") ? String(form.get("from")).slice(0, 200) : null;
+  await query(
+    `insert into contact_messages (user_id, name, email, topic, message, page) values ($1, $2, $3, $4, $5, $6)`,
+    [user?.id ?? null, name, email, topic, message, page],
+  );
+
+  const to = process.env.SUPPORT_EMAIL || (process.env.ADMIN_EMAILS ?? "").split(",")[0]?.trim();
+  if (to && (mailConfigured || process.env.NODE_ENV !== "production")) {
+    const who = name ? `${name} <${email}>` : email;
+    try {
+      await sendMail({
+        to,
+        replyTo: email,
+        subject: `[Contact] ${CONTACT_TOPICS[topic]}`,
+        text: `From: ${who}${user ? " (signed in)" : ""}\nTopic: ${CONTACT_TOPICS[topic]}${page ? `\nPage: ${page}` : ""}\n\n${message}\n\nReply to this email to answer. All messages: ${await appOrigin()}/admin/messages`,
+        html: `<p><b>From:</b> ${escapeHtml(who)}${user ? " (signed in)" : ""}<br><b>Topic:</b> ${CONTACT_TOPICS[topic]}${page ? `<br><b>Page:</b> ${escapeHtml(page)}` : ""}</p><p style="white-space:pre-wrap">${escapeHtml(message)}</p><p>Reply to this email to answer. <a href="${await appOrigin()}/admin/messages">All messages</a></p>`,
+      });
+    } catch (err) {
+      console.error("[contact] notification email failed (message is saved)", err);
+    }
+  }
+  return { sent: true };
 }
