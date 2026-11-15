@@ -89,12 +89,12 @@ export default async function ResultsPage({ params }: PageProps<"/results/[id]">
       {sheet.length > 0 && (
         <div className="card mt-8 flex flex-wrap items-center justify-between gap-4 p-5">
           <div>
-            <h2 className="font-extrabold">Added to your study sheet</h2>
+            <h2 className="font-extrabold">{access.active ? "Added to your study sheet" : "🔒 Ready for your study sheet"}</h2>
             <p className="mt-1 text-sm text-soft">
               {newTopics ? `${newTopics} new concept${newTopics === 1 ? "" : "s"}` : "No new concepts"}{sheet.length > newTopics ? `, ${sheet.length - newTopics} updated` : ""}: {sheet.slice(0, 5).map((t) => t.topic).join(", ")}{sheet.length > 5 ? "…" : ""}
             </p>
           </div>
-          <Link className="btn-primary" href={`/study/${session.exam}`}>Open study sheet</Link>
+          <Link className="btn-primary" href={`/study/${session.exam}`}>{access.active ? "Open study sheet" : "See your study sheet"}</Link>
         </div>
       )}
 
@@ -144,7 +144,7 @@ export default async function ResultsPage({ params }: PageProps<"/results/[id]">
                 {a || access.active ? (
                   <>
                     <div className="mt-4"><OptionList q={pub} picks={a?.picks ?? []} feedback={fb} /></div>
-                    {a && aiAvailable && <Tutor sessionId={id} questionId={q.id} answered />}
+                    {a && aiAvailable && <Tutor sessionId={id} questionId={q.id} answered sheetAccess={!owner.userId ? "signed-out" : access.active ? "ok" : "no-pass"} />}
                     <ExplanationPanel feedback={fb!} />
                     <ReportQuestion questionId={q.id} />
                   </>

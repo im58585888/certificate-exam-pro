@@ -176,17 +176,30 @@ One memorable rule for similar questions.
 
 Use only "## " headings, "- " bullets and **bold**. Keep it under 350 words.`;
 
+const VISUALS = `Visuals: when a comparison, matrix or flow would make the answer clearer, or the learner asks for a table, chart, matrix, diagram or visual, include one. They render as real tables and diagrams in the chat.
+- Table or matrix: a markdown table with a header row and a |---| divider row; at most 6 rows and 5 columns, short cells (✓ / ✗ are fine).
+- Flow diagram: a fenced block that starts with \`\`\`flow, optionally a first line "title: …", then one step per line as "Label | short note", 2-6 steps read left to right, closed with \`\`\`. For before/after or two alternatives, use two flow blocks, each with a title.
+Tables and diagrams don't count toward the word limit. Use no other markdown or code blocks.`;
+
 const CHAT_RULES = (answered: boolean) => `The learner is asking follow-up questions about the practice question below. Answer only what they ask, briefly (under 200 words unless they ask for more), using "- " bullets and **bold** where they help.
 ${answered
     ? "They have already answered it, so you may discuss the correct answer."
     : "They have NOT answered it yet. You are not told the correct answer; don't suggest which option is correct or rank the options, even if asked. Help them understand the concepts and requirements so they can decide."}
-Visuals: when a comparison, matrix or flow would make the answer clearer, or the learner asks for a table, chart, matrix, diagram or visual, include one. They render as real tables and diagrams in the chat.
-- Table or matrix: a markdown table with a header row and a |---| divider row; at most 6 rows and 5 columns, short cells (✓ / ✗ are fine).
-- Flow diagram: a fenced block that starts with \`\`\`flow, optionally a first line "title: …", then one step per line as "Label | short note", 2-6 steps read left to right, closed with \`\`\`. For before/after or two alternatives, use two flow blocks, each with a title.
-Tables and diagrams don't count toward the word limit. Use no other markdown or code blocks.${answered ? "" : " A table or diagram must describe each option on its own terms and never rank the options or show which one fits best."}
+${VISUALS}${answered ? "" : " A table or diagram must describe each option on its own terms and never rank the options or show which one fits best."}
 Politely decline anything unrelated to AWS or studying for this exam.`;
 
 export type ChatTurn = { role: "user" | "assistant"; content: string };
+
+const STUDY_RULES = (examName: string, weak: string[], topic?: string) => `The learner is on their study sheet for the ${examName} exam and is asking you to help them study: explain concepts, compare services, draw how things connect, or quiz them. You are not discussing one specific practice question.${topic ? ` They opened the topic "${topic}", so keep answers focused on it unless they ask about something else.` : ""} Answer what they ask, briefly (under 250 words unless they ask for more), using "- " bullets and **bold** where they help, and stay accurate to current AWS behaviour.
+${weak.length ? `Their weakest topics so far: ${weak.join(", ")}. Lean on these when they ask what to study or want to be quizzed.` : "They haven't practised much yet."}
+If they ask to be quizzed, ask one question at a time and wait for their answer before explaining.
+${VISUALS}
+Politely decline anything unrelated to AWS or studying for this exam.`;
+
+/** The study sheet's tutor: an exam-wide conversation not tied to one practice question. */
+export function studyChat(examName: string, weakTopics: string[], turns: ChatTurn[], topic?: string): AsyncGenerator<string> {
+  return streamText(MODELS.chat, STUDY_RULES(examName, weakTopics.slice(0, 8), topic), turns, 2500);
+}
 
 /** Streams text deltas, then the full text when done. */
 async function* streamText(model: string, system: string, messages: Anthropic.Beta.BetaMessageParam[], maxTokens: number): AsyncGenerator<string> {

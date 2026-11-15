@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = { title: "Privacy Policy" };
 
 const CONTACT = process.env.SUPPORT_EMAIL || "im58585888@gmail.com";
-const UPDATED = "November 14, 2026";
+const UPDATED = "November 15, 2026";
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
@@ -37,7 +37,7 @@ export default function Privacy() {
           <li><b>Practice history.</b> The questions you answer, the options you pick, whether they were correct, time spent, and your practice and exam sessions.</li>
           <li><b>Free-trial visitors.</b> A random identifier in a cookie so your trial progress is saved without an account. If you later sign up, this history moves into your account.</li>
           <li><b>Network information.</b> To limit abuse (for example repeated login attempts or free-trial resets) we store a one-way keyed hash of your IP address, never the IP address itself.</li>
-          <li><b>Things you send us.</b> Question reports you submit, questions you type to the AI tutor, messages you send through the contact form (with the name, email address and topic you give), and, if you join the waitlist, your email address.</li>
+          <li><b>Things you send us.</b> Question reports you submit, questions you type to the AI tutor, tutor content you save to your study sheet and notes you write there, messages you send through the contact form (with the name, email address and topic you give), and, if you join the waitlist, your email address.</li>
           <li><b>Payments.</b> When paid passes are available, payments are handled by Stripe. We receive a payment reference, the amount and the pass dates. We never see or store your card details.</li>
         </ul>
       </Section>
