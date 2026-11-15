@@ -210,39 +210,4 @@ create table if not exists contact_messages (
 );
 create index if not exists contact_messages_status_idx on contact_messages (status, created_at desc);
 alter table contact_messages enable row level security;
-
--- Study sheet notebook: things a learner saved from the tutor, their own notes, their own sections,
--- and auto concept cards they chose to hide. Signed-in users only.
-create table if not exists study_sections (
-  id bigserial primary key,
-  user_id uuid not null references users(id) on delete cascade,
-  exam text not null,
-  name text not null,
-  created_at timestamptz not null default now()
-);
-create index if not exists study_sections_owner_idx on study_sections (user_id, exam);
-create table if not exists study_items (
-  id bigserial primary key,
-  user_id uuid not null references users(id) on delete cascade,
-  exam text not null,
-  kind text not null,
-  topic text,
-  domain text,
-  section_id bigint references study_sections(id) on delete set null,
-  title text,
-  body text not null,
-  source_question text,
-  created_at timestamptz not null default now(),
-  deleted_at timestamptz
-);
-create index if not exists study_items_owner_idx on study_items (user_id, exam);
-create table if not exists study_hidden_cards (
-  user_id uuid not null references users(id) on delete cascade,
-  exam text not null,
-  topic text not null,
-  primary key (user_id, exam, topic)
-);
-alter table study_sections enable row level security;
-alter table study_items enable row level security;
-alter table study_hidden_cards enable row level security;
 `;

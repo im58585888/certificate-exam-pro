@@ -167,7 +167,7 @@ export function QuizPlayer({ sessionId, mode, questions, initialFlags, initial, 
           <FlagButton flagged={flags.has(q.id)} onChange={(on) => setFlag(q.id, on)} />
         </div>
         <QuestionText q={q} />
-        {tutor && !isExam && <Tutor key={`tutor-${q.id}`} sessionId={sessionId} questionId={q.id} answered={!!feedback} signedIn={signedIn} />}
+        {tutor && !isExam && <Tutor key={`tutor-${q.id}`} sessionId={sessionId} questionId={q.id} answered={!!feedback} />}
         {feedback && <div className="mt-4"><Verdict correct={feedback.correct} /></div>}
         <div className="mt-4"><OptionList q={q} picks={picks} feedback={feedback} onToggle={toggle} disabled={pending} /></div>
         {feedback && stillWeak === q.id && flags.has(q.id) && (
