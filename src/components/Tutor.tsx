@@ -3,6 +3,8 @@
 import { Fragment, useRef, useState, type ReactNode } from "react";
 import type { Breakdown, BreakdownLevel } from "@/lib/ai";
 import { ChatMarkdown } from "./ChatMarkdown";
+import { cluesMarkdown, optionsMarkdown, pictureMarkdown, SaveToSheet, tableMarkdown, termsMarkdown } from "./SaveToSheet";
+import type { SheetAccess } from "@/lib/sheetAccess";
 
 // ---------- Small helpers ----------
 
@@ -39,7 +41,7 @@ async function readError(res: Response): Promise<string> {
 }
 
 /** POSTs and streams the text response, calling onText with everything received so far. */
-async function streamPost(url: string, body: unknown, onText: (text: string) => void): Promise<string> {
+export async function streamPost(url: string, body: unknown, onText: (text: string) => void): Promise<string> {
   const res = await fetch(url, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) });
   if (!res.ok || !res.body) throw new Error(await readError(res));
   const reader = res.body.getReader();
@@ -54,12 +56,15 @@ async function streamPost(url: string, body: unknown, onText: (text: string) => 
   return text;
 }
 
-function Section({ n, title, children }: { n: number; title: string; children: ReactNode }) {
+function Section({ n, title, action, children }: { n: number; title: string; action?: ReactNode; children: ReactNode }) {
   return (
     <section className="mt-6">
-      <h3 className="flex items-center gap-2 text-base font-extrabold">
-        <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-brand text-xs text-on-brand">{n}</span>{title}
-      </h3>
+      <div className="flex flex-wrap items-center gap-2">
+        <h3 className="flex items-center gap-2 text-base font-extrabold">
+          <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-brand text-xs text-on-brand">{n}</span>{title}
+        </h3>
+        {action && <span className="ml-auto">{action}</span>}
+      </div>
       <div className="mt-2.5">{children}</div>
     </section>
   );
@@ -79,7 +84,7 @@ function TableView({ t }: { t: NonNullable<Breakdown["table"]> }) {
 
 // ---------- Breakdown ----------
 
-function BreakdownView({ b }: { b: Breakdown }) {
+function BreakdownView({ b, save }: { b: Breakdown; save: (title: string, body: string) => ReactNode }) {
   let n = 0;
   return (
     <div>
@@ -101,7 +106,7 @@ function BreakdownView({ b }: { b: Breakdown }) {
       </Section>
 
       {b.picture && b.picture.steps.length > 0 && (
-        <Section n={++n} title="Picture the scenario">
+        <Section n={++n} title="Picture the scenario" action={save(`${b.title}: picture`, pictureMarkdown(b.picture))}>
           <div className="flex flex-wrap items-stretch gap-2">
             {b.picture.steps.map((s, i) => (
               <Fragment key={i}>
@@ -118,7 +123,7 @@ function BreakdownView({ b }: { b: Breakdown }) {
       )}
 
       {b.clues.length > 0 && (
-        <Section n={++n} title="Key phrases to notice">
+        <Section n={++n} title="Key phrases to notice" action={save(`${b.title}: key phrases`, cluesMarkdown(b.clues))}>
           <ul className="space-y-2">
             {b.clues.map((c, i) => (
               <li key={i} className="rounded-xl bg-warn-soft px-3 py-2 text-sm">
@@ -130,7 +135,7 @@ function BreakdownView({ b }: { b: Breakdown }) {
       )}
 
       {b.terms.length > 0 && (
-        <Section n={++n} title="Terms you need">
+        <Section n={++n} title="Terms you need" action={save(`${b.title}: terms`, termsMarkdown(b.terms))}>
           <dl className="grid gap-2 sm:grid-cols-2">
             {b.terms.map((t) => (
               <div key={t.term} className="rounded-xl border border-line bg-bg p-3 text-sm">
@@ -143,7 +148,7 @@ function BreakdownView({ b }: { b: Breakdown }) {
         </Section>
       )}
 
-      <Section n={++n} title="The technologies in the options">
+      <Section n={++n} title="The technologies in the options" action={save(`${b.title}: the technologies`, optionsMarkdown(b.options))}>
         <div className="grid gap-2.5 sm:grid-cols-2">
           {b.options.map((o) => (
             <div key={o.name} className="rounded-xl border border-line bg-bg p-3.5 text-sm">
@@ -156,7 +161,12 @@ function BreakdownView({ b }: { b: Breakdown }) {
         </div>
       </Section>
 
-      {b.table && b.table.rows.length > 0 && <div className="mt-5"><TableView t={b.table} /></div>}
+      {b.table && b.table.rows.length > 0 && (
+        <div className="mt-5">
+          <TableView t={b.table} />
+          <div className="mt-1.5 text-right">{save(b.table.caption, tableMarkdown(b.table))}</div>
+        </div>
+      )}
 
       <div className="mt-6 rounded-xl border-[1.5px] border-dashed border-brand px-4 py-3">
         <b className="text-brand">Your move:</b> {b.yourMove}
@@ -167,16 +177,25 @@ function BreakdownView({ b }: { b: Breakdown }) {
 
 // ---------- Follow-up chat ----------
 
-type Turn = { role: "user" | "assistant"; content: string };
+export type Turn = { role: "user" | "assistant"; content: string };
 
-function Chat({ sessionId, questionId, answered }: { sessionId: string; questionId: string; answered: boolean }) {
+/** A tutor conversation: renders replies (tables and diagrams included) and lets each reply be saved to the study sheet. */
+export function ChatThread({ heading, suggestions, placeholder, send, saveTarget, saveLabel, access, emptyHint }: {
+  heading?: string;
+  suggestions: string[];
+  placeholder: string;
+  /** Streams the reply to `turns` (which end with the new user message), calling onText as text arrives. */
+  send: (turns: Turn[], onText: (text: string) => void) => Promise<string>;
+  /** Where saved replies go: a question (exam and topic come from it), or an exam plus a topic or a topic picker (study tutor). */
+  saveTarget: { questionId?: string; exam?: string; target?: { topic?: string; sectionId?: number }; destinations?: { value: string; label: string }[] };
+  saveLabel?: string;
+  access: SheetAccess;
+  emptyHint?: ReactNode;
+}) {
   const [turns, setTurns] = useState<Turn[]>([]);
   const [draft, setDraft] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const suggestions = answered
-    ? ["Why exactly is my choice wrong?", "Give me a real-world example", "How would the exam try to trick me here?", "Show it as a table or diagram"]
-    : ["Explain the scenario even more simply", "What should I look for in the options?", "Give me a real-world analogy", "Show it as a table or diagram"];
 
   const ask = async (text: string) => {
     const q = text.trim();
@@ -185,8 +204,7 @@ function Chat({ sessionId, questionId, answered }: { sessionId: string; question
     setTurns([...next, { role: "assistant", content: "" }]);
     setDraft(""); setBusy(true); setError(null);
     try {
-      await streamPost("/api/ai/chat", { sessionId, questionId, turns: next.slice(-13) }, (t) =>
-        setTurns([...next, { role: "assistant", content: t }]));
+      await send(next.slice(-13), (t) => setTurns([...next, { role: "assistant", content: t }]));
     } catch (e) {
       setTurns(turns);
       setDraft(q);
@@ -195,8 +213,9 @@ function Chat({ sessionId, questionId, answered }: { sessionId: string; question
   };
 
   return (
-    <div className="mt-6 border-t border-line pt-5">
-      <h3 className="font-extrabold">Still confused? Ask the tutor</h3>
+    <div>
+      {heading && <h3 className="font-extrabold">{heading}</h3>}
+      {turns.length === 0 && emptyHint}
       {turns.length > 0 && (
         <div className="mt-3 space-y-3">
           {turns.map((t, i) => t.role === "user" ? (
@@ -204,6 +223,11 @@ function Chat({ sessionId, questionId, answered }: { sessionId: string; question
           ) : (
             <div key={i} className="max-w-[95%] rounded-2xl rounded-bl-sm bg-surface-2 px-4 py-3">
               {t.content ? <ChatMarkdown text={t.content} /> : <span className="text-sm text-muted">Thinking…</span>}
+              {t.content && !(busy && i === turns.length - 1) && (
+                <div className="mt-2.5 border-t border-line pt-2">
+                  <SaveToSheet small body={t.content} title={turns[i - 1]?.content.slice(0, 120)} access={access} label={saveLabel} {...saveTarget} />
+                </div>
+              )}
             </div>
           ))}
         </div>
@@ -213,10 +237,23 @@ function Chat({ sessionId, questionId, answered }: { sessionId: string; question
       </div>
       <form className="mt-3 flex gap-2" onSubmit={(e) => { e.preventDefault(); ask(draft); }}>
         <input className="min-w-0 flex-1 rounded-xl border border-line bg-surface px-3 py-2 text-sm" maxLength={1500} value={draft}
-          onChange={(e) => setDraft(e.target.value)} placeholder={answered ? "Ask anything about this question…" : "Ask about a term or requirement (the tutor won't reveal the answer)"} />
+          onChange={(e) => setDraft(e.target.value)} placeholder={placeholder} />
         <button className="btn-primary !py-2" disabled={busy || !draft.trim()}>{busy ? "…" : "Ask"}</button>
       </form>
       {error && <p className="mt-2 text-sm font-semibold text-bad">{error}</p>}
+    </div>
+  );
+}
+
+function Chat({ sessionId, questionId, answered, access }: { sessionId: string; questionId: string; answered: boolean; access: SheetAccess }) {
+  const suggestions = answered
+    ? ["Why exactly is my choice wrong?", "Give me a real-world example", "How would the exam try to trick me here?", "Show it as a table or diagram"]
+    : ["Explain the scenario even more simply", "What should I look for in the options?", "Give me a real-world analogy", "Show it as a table or diagram"];
+  return (
+    <div className="mt-6 border-t border-line pt-5">
+      <ChatThread heading="Still confused? Ask the tutor" suggestions={suggestions} access={access} saveTarget={{ questionId }}
+        placeholder={answered ? "Ask anything about this question…" : "Ask about a term or requirement (the tutor won't reveal the answer)"}
+        send={(turns, onText) => streamPost("/api/ai/chat", { sessionId, questionId, turns }, onText)} />
     </div>
   );
 }
@@ -227,14 +264,17 @@ interface TutorProps {
   sessionId: string;
   questionId: string;
   answered: boolean;
+  /** Pass holders can save tutor content to their study sheet; others see the button as an upsell. */
+  sheetAccess: SheetAccess;
 }
 
 /** "Break it down" (before answering) and "Explain the answer" (after), with follow-up questions. */
-export function Tutor({ sessionId, questionId, answered }: TutorProps) {
+export function Tutor({ sessionId, questionId, answered, sheetAccess }: TutorProps) {
   const [view, setView] = useState<"none" | "breakdown" | "answer">("none");
   const [level, setLevel] = useState<BreakdownLevel>("standard");
   const [breakdowns, setBreakdowns] = useState<Partial<Record<BreakdownLevel, Breakdown>>>({});
   const [answer, setAnswer] = useState("");
+  const [answerDone, setAnswerDone] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const panelRef = useRef<HTMLDivElement>(null);
@@ -255,7 +295,7 @@ export function Tutor({ sessionId, questionId, answered }: TutorProps) {
     setView("answer"); setError(null);
     if (answer) return;
     setLoading(true);
-    try { await streamPost("/api/ai/explain", { sessionId, questionId }, (t) => { setAnswer(t); setLoading(false); }); }
+    try { await streamPost("/api/ai/explain", { sessionId, questionId }, (t) => { setAnswer(t); setLoading(false); }); setAnswerDone(true); }
     catch (e) { setError((e as Error).message); } finally { setLoading(false); }
   };
 
@@ -299,13 +339,16 @@ export function Tutor({ sessionId, questionId, answered }: TutorProps) {
             ) : error ? (
               <p className="rounded-xl bg-bad-soft px-4 py-2 text-sm font-semibold text-bad">{error}</p>
             ) : view === "breakdown" && current ? (
-              <BreakdownView b={current} />
+              <BreakdownView b={current} save={(title, body) => <SaveToSheet small title={title} body={body} questionId={questionId} access={sheetAccess} />} />
             ) : view === "answer" && answer ? (
-              <MiniMarkdown text={answer} />
+              <>
+                <MiniMarkdown text={answer} />
+                {answerDone && <div className="mt-3"><SaveToSheet title="Answer walk-through" body={answer} questionId={questionId} access={sheetAccess} /></div>}
+              </>
             ) : null}
           </div>
 
-          {(current || answer) && !error && <Chat sessionId={sessionId} questionId={questionId} answered={answered} />}
+          {(current || answer) && !error && <Chat sessionId={sessionId} questionId={questionId} answered={answered} access={sheetAccess} />}
           <p className="mt-4 text-xs text-muted">AI-written explanations can make mistakes. When in doubt, check the linked AWS documentation.</p>
         </div>
       )}

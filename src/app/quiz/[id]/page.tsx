@@ -31,6 +31,7 @@ export default async function QuizPage({ params }: PageProps<"/quiz/[id]">) {
     if (q) initial[q.id] = session.mode === "exam" ? { picks: a.picks } : { picks: a.picks, feedback: feedbackFor(q, a.picks) };
   }
 
+  const passActive = !!owner.userId && (await getAccess(owner.userId, session.exam)).active;
   const inSession = new Set(session.question_ids);
   const flagged = (await flagsFor(owner, session.exam)).map((f) => f.question_id).filter((qid) => inSession.has(qid));
 
@@ -42,7 +43,8 @@ export default async function QuizPage({ params }: PageProps<"/quiz/[id]">) {
       initialFlags={flagged}
       initial={initial}
       deadline={deadlineOf(session)}
-      canSave={!!owner.userId && session.mode !== "trial" && (await getAccess(owner.userId, session.exam)).active}
+      canSave={!!owner.userId && session.mode !== "trial" && passActive}
+      sheetAccess={!owner.userId ? "signed-out" : passActive ? "ok" : "no-pass"}
       signedIn={!!owner.userId}
       examCode={getExam(session.exam)?.code ?? session.exam.toUpperCase()}
       waitlist={paymentsMode === "waitlist"}
