@@ -10,6 +10,16 @@
 .hero h1 span { color: var(--brand); }
 .heroDescription { max-width: 490px; color: var(--soft); font-size: 17px; line-height: 1.85; }
 .trialPicker { margin: 30px 0 23px; }
+.miaIntro { display: inline-flex; align-items: center; gap: 9px; margin-top: 16px; padding: 4px 14px 4px 4px; border: 1px solid var(--line); border-radius: 999px; color: var(--soft); font-size: 13px; }
+.miaIntro b { color: var(--ink); }
+.meetMia { max-width: 860px; margin: 40px auto 0; padding: 28px 32px; display: flex; align-items: center; gap: 28px; border: 1px solid var(--line); border-radius: 24px; background: var(--surface); }
+.miaQuote { margin: 8px 0 4px; font-size: 20px; font-weight: 750; line-height: 1.45; letter-spacing: -.02em; text-wrap: balance; }
+.miaSign { color: var(--muted); font-size: 12px; font-weight: 700; }
+.miaPromises { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; list-style: none; padding: 0; }
+.miaPromises li { padding: 4px 11px; border: 1px solid var(--line); border-radius: 999px; color: var(--soft); font-size: 12px; font-weight: 650; }
+.ctaMia { display: flex; flex-direction: column; align-items: center; gap: 8px; margin-bottom: 18px; }
+.miaBubble { position: relative; padding: 7px 14px; border-radius: 14px; background: var(--brand-soft); color: var(--brand); font-size: 13px; font-weight: 750; }
+.miaBubble::after { content: ""; position: absolute; left: 50%; bottom: -5px; width: 10px; height: 10px; background: var(--brand-soft); transform: translateX(-50%) rotate(45deg); }
 .trialPicker label { display: block; margin-bottom: 9px; font-size: 12px; font-weight: 700; }
 .trialControls { display: flex; gap: 9px; flex-wrap: wrap; }
 .trialControls select { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; max-width: 100%; min-width: 0; padding: 14px 34px 14px 13px; color: var(--ink); font: inherit; font-size: 12px; flex: 1 1 245px; text-overflow: ellipsis; }
@@ -80,6 +90,8 @@
   .faq { gap: 45px; }
 }
 @media (max-width: 700px) {
+  .meetMia { flex-direction: column; text-align: center; margin: 24px 20px 0; padding: 24px 20px; }
+  .miaPromises { justify-content: center; }
   .visualSection { padding: 65px 20px 28px; }
   .visualSection h2 { margin-bottom: 40px; }
   .memorySection { padding-bottom: 55px; }

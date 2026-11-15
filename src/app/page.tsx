@@ -4,7 +4,7 @@ import { startQuizAction } from "./actions";
 import { EXAM_LIST, FREE_TRIAL_QUESTIONS, PASS_DAYS, PASS_PRICE_CENTS } from "@/lib/exams";
 import { ensureBank, questionsFor } from "@/lib/questions";
 import { TrialPicker } from "@/components/LandingDemos";
-import { HeroTutorAnimation, MemoryFlow, TutorFlow } from "@/components/TutorVisuals";
+import { HeroTutorAnimation, MemoryFlow, Mia, TutorFlow } from "@/components/TutorVisuals";
 import styles from "./landing.module.css";
 
 const PRICE = `$${(PASS_PRICE_CENTS / 100).toFixed(2)}`;
@@ -35,6 +35,7 @@ export default async function Home() {
             <p className={styles.eyebrow}>✨ An AI tutor on every question</p>
             <h1 id="hero-title">Stuck on an AWS question?<br /><span>Ask your AI tutor.</span></h1>
             <p className={styles.heroDescription}>Breaks it down. Explains the why. Answers your questions.</p>
+            <p className={styles.miaIntro}><Mia size={26} /><span>Meet <b>Mia</b>, your AI tutor</span></p>
             <TrialPicker exams={EXAM_LIST.map((exam) => ({ slug: exam.slug, name: exam.shortName, code: exam.code }))} count={FREE_TRIAL_QUESTIONS} />
             <a className={styles.textLink} href="#how-it-works">See what the tutor does <span aria-hidden="true">↓</span></a>
           </div>
@@ -47,6 +48,20 @@ export default async function Home() {
         <p className={styles.eyebrow}>How the tutor works</p>
         <h2 id="learning-title">From stuck to <span>“got it”</span><br />in four taps.</h2>
         <TutorFlow />
+      </section>
+
+      <section className={styles.meetMia} aria-labelledby="mia-title">
+        <Mia size={96} alt="Mia, your AI tutor" />
+        <div>
+          <p className={styles.eyebrow} id="mia-title">Meet your tutor</p>
+          <p className={styles.miaQuote}>&ldquo;Bring me the question that confused you. I&apos;ll show you what it&apos;s really asking.&rdquo;</p>
+          <p className={styles.miaSign}>Mia · AI tutor</p>
+          <ul className={styles.miaPromises}>
+            <li>Never gives the answer away first</li>
+            <li>Draws diagrams and tables</li>
+            <li>Answers your follow-up questions</li>
+          </ul>
+        </div>
       </section>
 
       <section className={`${styles.visualSection} ${styles.memorySection}`} aria-labelledby="library-title">
@@ -77,7 +92,7 @@ export default async function Home() {
         <div>{FAQ.map(([question, answer]) => <details key={question}><summary>{question}<span aria-hidden="true">+</span></summary><p>{answer}</p></details>)}</div>
       </section>
 
-      <section className={styles.finalCta} aria-labelledby="final-title"><p className={styles.eyebrow}>Your tutor is ready</p><h2 id="final-title">Bring it your hardest<br />AWS question.</h2><a href="#exams" className={styles.primaryButton}>Find your exam <span aria-hidden="true">↗</span></a><p>{FREE_TRIAL_QUESTIONS} free questions. Start without an account.</p></section>
+      <section className={styles.finalCta} aria-labelledby="final-title"><div className={styles.ctaMia}><span className={styles.miaBubble}>I&apos;m ready when you are.</span><Mia size={64} /></div><p className={styles.eyebrow}>Your tutor is ready</p><h2 id="final-title">Bring it your hardest<br />AWS question.</h2><a href="#exams" className={styles.primaryButton}>Find your exam <span aria-hidden="true">↗</span></a><p>{FREE_TRIAL_QUESTIONS} free questions. Start without an account.</p></section>
     </div>
   );
 }

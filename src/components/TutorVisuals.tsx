@@ -1,7 +1,13 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import styles from "./TutorVisuals.module.css";
+
+/** Mia, the AI tutor's persona: a small round portrait with a mint ring. Pass alt="" where her name is already next to it. */
+export function Mia({ size, alt = "", className = "" }: { size: number; alt?: string; className?: string }) {
+  return <Image src="/tutor-avatar.webp" alt={alt} width={size} height={size} className={`${styles.mia} ${className}`} style={{ width: size, height: size }} />;
+}
 
 // Animated, mostly wordless pictures of the AI tutor for the landing page. Static sample content:
 // nothing here calls the AI. People who prefer reduced motion get the final frames, no autoplay.
@@ -41,7 +47,10 @@ export function HeroTutorAnimation() {
   return (
     <div className={styles.hero} onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)} aria-label="Animated example of the AI tutor">
       <div className={styles.heroBar}>
-        <span className={styles.badge}><span className={styles.live} aria-hidden="true" />AI Tutor</span>
+        <span className={styles.badge}>
+          <span className={styles.miaWrap}><Mia size={24} /><span className={`${styles.live} ${styles.miaLive}`} aria-hidden="true" /></span>
+          Mia · AI tutor
+        </span>
         <span className={styles.heroStep}>{scene + 1} / {SCENES.length}</span>
       </div>
       <div className={styles.stage} key={`${scene}-${cycle}`} aria-live="polite">
@@ -117,10 +126,10 @@ function SceneChat() {
   return (
     <div className={styles.chat}>
       <p className={`${styles.user} ${styles.pop1}`}>Why not a NAT gateway?</p>
-      <p className={`${styles.typing} ${styles.typingShow}`} aria-hidden="true"><span /><span /><span /></p>
-      <p className={`${styles.bot} ${styles.botShow}`}>A NAT gateway still sends traffic <b>out to the internet</b>. That breaks the rule. ❌</p>
+      <p className={`${styles.typing} ${styles.typingShow} ${styles.typingMia}`} aria-hidden="true"><span /><span /><span /></p>
+      <div className={`${styles.botRow} ${styles.botShow}`}><Mia size={26} /><p className={styles.bot}>A NAT gateway still sends traffic <b>out to the internet</b>. That breaks the rule. ❌</p></div>
       <p className={`${styles.user} ${styles.pop4}`}>So what keeps it private?</p>
-      <p className={`${styles.bot} ${styles.pop5}`}>A <b>gateway endpoint</b>: a private road from your VPC to S3. ✅</p>
+      <div className={`${styles.botRow} ${styles.pop5}`}><Mia size={26} /><p className={styles.bot}>A <b>gateway endpoint</b>: a private road from your VPC to S3. ✅</p></div>
     </div>
   );
 }
