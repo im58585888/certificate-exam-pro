@@ -1,121 +1,84 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { upsellHref } from "@/lib/sheetAccess";
-import { StudySheet, type TopicView } from "@/components/StudySheet";
+import { CardLoader } from "@/components/CardLoader";
+import { ConceptCardBody } from "@/components/StudyCards";
 import { aiAvailable, cachedCards } from "@/lib/ai";
-import { currentOwner, getUser } from "@/lib/auth";
-import { getAccess, paymentsMode } from "@/lib/billing";
+import { currentOwner } from "@/lib/auth";
 import { DOMAIN_NAME, getExam } from "@/lib/exams";
-import { loadNotebook, type StudyItem } from "@/lib/notebook";
-import { ensureBank, questionsFor } from "@/lib/questions";
+import { ensureBank } from "@/lib/questions";
 import { studySheet } from "@/lib/studysheet";
 
 export const metadata: Metadata = { title: "Study sheet", robots: { index: false } };
-
-const toItem = (i: StudyItem) => ({
-  id: i.id, kind: i.kind, title: i.title, body: i.body, sourceQuestion: i.source_question,
-  savedOn: new Date(i.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric" }),
-});
 
 export default async function StudySheetPage({ params }: PageProps<"/study/[exam]">) {
   const { exam: slug } = await params;
   const exam = getExam(slug);
   if (!exam) notFound();
   await ensureBank();
-  const [owner, user] = await Promise.all([currentOwner(), getUser()]);
+  const owner = await currentOwner();
   const topics = owner ? await studySheet(owner, slug) : [];
-  const access = user ? await getAccess(user.id, slug) : null;
-
-  // The study sheet is part of the exam pass. Everyone else sees what it does and how to unlock it.
-  if (!access?.active) return <Locked exam={exam} practised={topics.length} access={user ? "no-pass" : "signed-out"} />;
-
-  const notebook = await loadNotebook(user!.id, slug);
-  const bank = questionsFor(slug);
-  const domainOf = new Map(bank.map((q) => [q.topic, q.domain]));
-  const practised = new Map(topics.map((t) => [t.topic, t]));
-  // Exam topics on the sheet: practised ones, ones the learner added, pinned or saved something to.
-  const names = new Set([
-    ...topics.map((t) => t.topic),
-    ...[...notebook.prefs.values()].filter((p) => p.added || p.pinned || p.hidden).map((p) => p.topic),
-    ...notebook.items.filter((i) => i.topic && !i.section_id).map((i) => i.topic!),
-  ].filter((t) => domainOf.has(t)));
-  const cards = await cachedCards(slug, [...names].map((topic) => ({ topic, questions: bank.filter((q) => q.topic === topic) })));
-
-  const examTopics: TopicView[] = [...names].map((topic) => {
-    const p = practised.get(topic);
-    const pref = notebook.prefs.get(topic);
-    return {
-      key: `t:${topic}`, name: cards.get(topic)?.title ?? topic, topic, domain: domainOf.get(topic),
-      practised: !!p, seen: p?.seen ?? 0, missed: p?.missed ?? 0, accuracy: p ? p.accuracy : null,
-      pinned: !!pref?.pinned, hidden: !!pref?.hidden, card: cards.get(topic) ?? null,
-      items: notebook.items.filter((i) => i.topic === topic && !i.section_id).map(toItem),
-      mistakes: p?.mistakes ?? [],
-    };
-  });
-  // Practised topics keep the weakest-first order from studySheet; added ones follow.
-  const order = new Map(topics.map((t, i) => [t.topic, i]));
-  examTopics.sort((a, b) => (order.get(a.topic!) ?? 1e6) - (order.get(b.topic!) ?? 1e6) || a.name.localeCompare(b.name));
-  const ownTopics: TopicView[] = notebook.sections.map((s) => ({
-    key: `s:${s.id}`, name: s.name, sectionId: s.id, practised: false, seen: 0, missed: 0, accuracy: null,
-    pinned: false, hidden: false, card: null, items: notebook.items.filter((i) => i.section_id === s.id).map(toItem), mistakes: [],
-  }));
-
-  const allBankTopics = [...new Set(bank.map((q) => q.topic))];
-  const addable = allBankTopics.filter((t) => !names.has(t)).sort()
-    .map((topic) => ({ topic, domainName: exam.domains.find((d) => d.id === domainOf.get(topic))?.name ?? "" }));
+  const cards = await cachedCards(slug, topics.map((t) => ({ topic: t.topic, questions: t.bank })));
   const missed = topics.reduce((s, t) => s + t.missed, 0);
-  const saved = notebook.items.length;
+  const domains = exam.domains.map((d) => ({ ...d, topics: topics.filter((t) => t.domain === d.id) })).filter((d) => d.topics.length);
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-10">
+    <div className="mx-auto max-w-5xl px-4 py-10">
       <p className="eyebrow">{exam.code} · Study sheet</p>
-      <h1 className="mt-2 text-3xl font-extrabold tracking-tight">Your study sheet</h1>
-      <p className="mt-2 max-w-2xl text-soft">
-        {names.size || ownTopics.length
-          ? `${names.size + ownTopics.length} topic${names.size + ownTopics.length === 1 ? "" : "s"}${missed ? `, ${missed} question${missed === 1 ? "" : "s"} to fix` : ""}${saved ? `, ${saved} saved note${saved === 1 ? "" : "s"}` : ""}. Open a topic to see its summary, your notes and mistakes, or ask the tutor about it.`
-          : "Empty for now. Practise some questions and their topics appear here, or add a topic yourself."}
-      </p>
-      {!names.size && !ownTopics.length && <Link className="btn-primary mt-4" href={`/practice/${slug}`}>Start practising</Link>}
-      <div className="mt-5">
-        <StudySheet exam={slug} examCode={exam.code} domains={exam.domains.map((d) => ({ id: d.id, name: DOMAIN_NAME[d.id] ?? d.name }))}
-          topics={[...examTopics, ...ownTopics]} addable={addable} tutorOn={aiAvailable} />
-      </div>
-    </div>
-  );
-}
-
-function Locked({ exam, practised, access }: { exam: NonNullable<ReturnType<typeof getExam>>; practised: number; access: "no-pass" | "signed-out" }) {
-  const features = [
-    ["🎯", "Study these next", "Your weakest topics, picked for you every time you open it."],
-    ["📌", "Save from the AI tutor", "Keep explanations, tables and diagrams from any practice question."],
-    ["📝", "Your own notes and topics", "Write notes in your own words, add topics, hide what you've mastered."],
-    ["✨", "Ask the tutor anything", "Compare services, draw how things connect, or get quizzed, then save the answer."],
-  ];
-  return (
-    <div className="mx-auto max-w-3xl px-4 py-12">
-      <p className="eyebrow">{exam.code} · Study sheet</p>
-      <h1 className="mt-2 text-3xl font-extrabold tracking-tight">Your personal study sheet <span className="pill ml-1 bg-brand-soft align-middle text-sm text-brand">Pass</span></h1>
-      <p className="mt-2 text-soft">
-        {practised
-          ? `You've already practised ${practised} topic${practised === 1 ? "" : "s"}. They're ready to go on your study sheet as soon as you unlock it.`
-          : "Everything you study, organised in one tidy place, built from your practice."}
-      </p>
-      <div className="mt-6 grid gap-3 sm:grid-cols-2">
-        {features.map(([icon, title, body]) => (
-          <div key={title} className="card p-4">
-            <p className="font-extrabold"><span aria-hidden className="mr-1.5">{icon}</span>{title}</p>
-            <p className="mt-1 text-sm text-soft">{body}</p>
+      <div className="mt-2 flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-extrabold tracking-tight">Everything you&apos;ve studied</h1>
+          <p className="mt-2 max-w-2xl text-soft">
+            {topics.length
+              ? `${topics.length} concept${topics.length === 1 ? "" : "s"} from your practice so far${missed ? `, ${missed} question${missed === 1 ? "" : "s"} still to fix` : ""}. Each session adds what it covered, weakest topics first.`
+              : "Your sheet is empty. Answer some practice questions and the concepts they cover will appear here."}
+          </p>
+        </div>
+        {topics.length > 0 && (
+          <div className="flex flex-wrap gap-2">
+            <Link className="btn-primary" href={`/study/${slug}/cheatsheet`}>One-page cheat sheet</Link>
+            {missed > 0 && <Link className="btn-ghost" href={`/study/${slug}/cheatsheet?only=weak`}>Cheat sheet: weak topics</Link>}
           </div>
-        ))}
+        )}
       </div>
-      <div className="mt-6 flex flex-wrap items-center gap-3">
-        <Link className="btn-primary !px-6 !py-3" href={upsellHref(access)}>
-          {access === "signed-out" ? "Create an account" : paymentsMode === "waitlist" ? "Get notified when passes launch" : `Get the ${exam.code} pass`}
-        </Link>
-        <Link className="btn-ghost" href={`/practice/${exam.slug}`}>Keep practising</Link>
-      </div>
-      <p className="mt-3 text-xs text-muted">The study sheet is part of the {exam.code} pass, along with unlimited practice and mock exams.</p>
+      {!topics.length && <Link className="btn-primary mt-6" href={`/practice/${slug}`}>Start practising</Link>}
+
+      {domains.map((d) => (
+        <section key={d.id} className="mt-10">
+          <h2 className="text-lg font-extrabold">{DOMAIN_NAME[d.id] ?? d.name}</h2>
+          <div className="mt-3 grid gap-4 md:grid-cols-2">
+            {d.topics.map((t) => {
+              const card = cards.get(t.topic);
+              return (
+                <article key={t.topic} className="card flex flex-col p-5">
+                  <div className="flex flex-wrap items-start justify-between gap-2">
+                    <h3 className="text-lg font-extrabold">{card?.title ?? t.topic}</h3>
+                    <span className={`pill ${t.missed ? "bg-bad-soft text-bad" : "bg-ok-soft text-ok"}`}>
+                      {t.seen} seen{t.missed ? ` · ${t.missed} to fix` : " · all correct"}
+                    </span>
+                  </div>
+                  <div className="mt-3">
+                    {card ? <ConceptCardBody card={card} /> : aiAvailable ? <CardLoader exam={slug} topic={t.topic} /> : <p className="text-sm text-muted">Concept notes appear here when the AI tutor is switched on.</p>}
+                  </div>
+                  {t.mistakes.length > 0 && (
+                    <div className="mt-4 border-t border-dashed border-line pt-3 text-sm">
+                      <b className="text-bad">Your mistakes</b>
+                      <ul className="mt-1.5 space-y-2">
+                        {t.mistakes.map((m) => (
+                          <li key={m.questionId}>
+                            <span className="text-soft">{m.prompt}</span>
+                            <span className="mt-0.5 block">You chose <b className="text-bad">{m.picked.join(" + ")}</b>; the answer was <b className="text-ok">{m.correct.join(" + ")}</b>.</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </article>
+              );
+            })}
+          </div>
+        </section>
+      ))}
     </div>
   );
 }

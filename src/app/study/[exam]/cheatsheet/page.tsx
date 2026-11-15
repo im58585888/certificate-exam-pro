@@ -1,13 +1,10 @@
 import Link from "next/link";
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { CardLoader, PrintButton } from "@/components/CardLoader";
 import { ConceptCardBody } from "@/components/StudyCards";
 import { aiAvailable, cachedCards } from "@/lib/ai";
-import { ChatMarkdown } from "@/components/ChatMarkdown";
-import { currentOwner, getUser } from "@/lib/auth";
-import { getAccess } from "@/lib/billing";
-import { loadNotebook } from "@/lib/notebook";
+import { currentOwner } from "@/lib/auth";
 import { DOMAIN_SHORT, getExam } from "@/lib/exams";
 import { ensureBank } from "@/lib/questions";
 import { studySheet } from "@/lib/studysheet";
@@ -22,17 +19,9 @@ export default async function CheatSheetPage({ params, searchParams }: PageProps
   const exam = getExam(slug);
   if (!exam) notFound();
   await ensureBank();
-  const user = await getUser();
-  // Part of the exam pass, like the study sheet; the sheet's page explains how to unlock it.
-  if (!user || !(await getAccess(user.id, slug)).active) redirect(`/study/${slug}`);
   const owner = await currentOwner();
   const all = owner ? await studySheet(owner, slug) : [];
-  const notebook = await loadNotebook(user.id, slug);
-  // Topics hidden on the study sheet stay off the cheat sheet too.
-  const topics = (weakOnly ? all.filter((t) => t.missed > 0) : all).filter((t) => !notebook.prefs.get(t.topic)?.hidden).slice(0, MAX_CARDS);
-  const weakTopics = new Set(all.filter((t) => t.missed > 0).map((t) => t.topic));
-  const sectionName = new Map(notebook.sections.map((s) => [s.id, s.name]));
-  const saved = notebook.items.filter((i) => (!i.topic || !notebook.prefs.get(i.topic)?.hidden) && (!weakOnly || (i.topic && weakTopics.has(i.topic))));
+  const topics = (weakOnly ? all.filter((t) => t.missed > 0) : all).slice(0, MAX_CARDS);
   const cards = await cachedCards(slug, topics.map((t) => ({ topic: t.topic, questions: t.bank })));
   const traps = topics.flatMap((t) => (cards.get(t.topic)?.traps.slice(0, 1) ?? []).map((trap) => ({ topic: t.topic, trap }))).slice(0, 6);
   const practised = all.reduce((s, t) => s + t.seen, 0);
@@ -54,7 +43,7 @@ export default async function CheatSheetPage({ params, searchParams }: PageProps
         <p className="mt-1 opacity-90">{weakOnly ? "Your weakest topics" : "Your core concepts"}, from {practised} question{practised === 1 ? "" : "s"} practised.</p>
       </header>
 
-      {!topics.length && !saved.length ? (
+      {!topics.length ? (
         <p className="mt-6 text-soft">Nothing here yet. {weakOnly ? "You have no open mistakes." : "Practise a few questions first."}</p>
       ) : (
         <div className="mt-5 grid gap-3 md:grid-cols-2 lg:grid-cols-3 print:grid-cols-3">
@@ -72,21 +61,6 @@ export default async function CheatSheetPage({ params, searchParams }: PageProps
             );
           })}
         </div>
-      )}
-
-      {saved.length > 0 && (
-        <section className="mt-4">
-          <h2 className="font-extrabold">Your notes and saved items</h2>
-          <div className="mt-2 grid gap-3 md:grid-cols-2 lg:grid-cols-3 print:grid-cols-3">
-            {saved.map((i) => (
-              <article key={i.id} className={`card break-inside-avoid p-4 text-sm ${i.kind === "note" ? "bg-warn-soft" : ""}`}>
-                <p className="text-xs font-bold text-muted">{i.kind === "note" ? "📝 Note" : "📌 Saved"} · {i.section_id ? sectionName.get(i.section_id) : i.topic}</p>
-                {i.kind === "clip" && i.title && <h3 className="mt-1 font-extrabold leading-tight">{i.title}</h3>}
-                <div className="mt-1.5">{i.kind === "note" ? <p className="whitespace-pre-wrap">{i.body}</p> : <ChatMarkdown text={i.body} />}</div>
-              </article>
-            ))}
-          </div>
-        </section>
       )}
 
       {traps.length > 0 && (
