@@ -1,5 +1,5 @@
 import "server-only";
-import { failureCode, spendAllowance } from "@/lib/ai";
+import { failureCode, spendAllowance, type ChatTurn } from "@/lib/ai";
 import { getAccess } from "@/lib/billing";
 import { one } from "@/lib/db";
 import { ensureBank, getQuestion, type Question } from "@/lib/questions";
@@ -71,3 +71,15 @@ export function textStream(gen: AsyncGenerator<string>): Response {
     cancel() { gen.return(undefined); },
   }), { headers: { "content-type": "text/plain; charset=utf-8", "cache-control": "no-store" } });
 }
+
+const MAX_TURNS = 13;
+const MAX_CHARS = 1500;
+
+/** Validates a chat history from the client: alternating turns, starting and ending with the learner. */
+export function validTurns(v: unknown): ChatTurn[] | null {
+  if (!Array.isArray(v) || v.length === 0 || v.length > MAX_TURNS) return null;
+  const turns = v.map((t, i) => ({ role: i % 2 === 0 ? "user" : "assistant", content: typeof t?.content === "string" ? t.content.trim().slice(0, i % 2 === 0 ? MAX_CHARS : 6000) : "" }) as ChatTurn);
+  if (turns.some((t, i) => !t.content || (v[i] as ChatTurn).role !== t.role) || turns.at(-1)!.role !== "user") return null;
+  return turns;
+}
+
