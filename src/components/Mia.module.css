@@ -1,0 +1,2 @@
+.avatar { flex: none; border-radius: 50%; object-fit: cover; background: var(--brand-soft); box-shadow: 0 0 0 2px var(--surface), 0 0 0 3.5px #3ddbb4; }
+.pose { flex: none; width: auto; object-fit: contain; }

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { upsellHref } from "@/lib/sheetAccess";
+import { MiaPose } from "@/components/Mia";
 import { StudySheet, type TopicView } from "@/components/StudySheet";
 import { aiAvailable, cachedCards } from "@/lib/ai";
 import { currentOwner, getUser } from "@/lib/auth";
@@ -90,10 +91,11 @@ function Locked({ exam, practised, access }: { exam: NonNullable<ReturnType<type
     ["🎯", "Study these next", "Your weakest topics, picked for you every time you open it."],
     ["📌", "Save from the AI tutor", "Keep explanations, tables and diagrams from any practice question."],
     ["📝", "Your own notes and topics", "Write notes in your own words, add topics, hide what you've mastered."],
-    ["✨", "Ask the tutor anything", "Compare services, draw how things connect, or get quizzed, then save the answer."],
+    ["✨", "Ask Mia anything", "Your AI tutor compares services, draws how things connect, or quizzes you, and you save the answers."],
   ];
   return (
     <div className="mx-auto max-w-3xl px-4 py-12">
+      <MiaPose pose="welcoming" height={150} alt="Mia, your AI tutor" className="float-right ml-4 hidden sm:block" />
       <p className="eyebrow">{exam.code} · Study sheet</p>
       <h1 className="mt-2 text-3xl font-extrabold tracking-tight">Your personal study sheet <span className="pill ml-1 bg-brand-soft align-middle text-sm text-brand">Pass</span></h1>
       <p className="mt-2 text-soft">
@@ -101,7 +103,7 @@ function Locked({ exam, practised, access }: { exam: NonNullable<ReturnType<type
           ? `You've already practised ${practised} topic${practised === 1 ? "" : "s"}. They're ready to go on your study sheet as soon as you unlock it.`
           : "Everything you study, organised in one tidy place, built from your practice."}
       </p>
-      <div className="mt-6 grid gap-3 sm:grid-cols-2">
+      <div className="clear-both mt-6 grid gap-3 sm:grid-cols-2">
         {features.map(([icon, title, body]) => (
           <div key={title} className="card p-4">
             <p className="font-extrabold"><span aria-hidden className="mr-1.5">{icon}</span>{title}</p>

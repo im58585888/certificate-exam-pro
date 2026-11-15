@@ -1,13 +1,10 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
+import { Mia } from "./Mia";
 import styles from "./TutorVisuals.module.css";
 
-/** Mia, the AI tutor's persona: a small round portrait with a mint ring. Pass alt="" where her name is already next to it. */
-export function Mia({ size, alt = "", className = "" }: { size: number; alt?: string; className?: string }) {
-  return <Image src="/tutor-avatar.webp" alt={alt} width={size} height={size} className={`${styles.mia} ${className}`} style={{ width: size, height: size }} />;
-}
+export { Mia };
 
 // Animated, mostly wordless pictures of the AI tutor for the landing page. Static sample content:
 // nothing here calls the AI. People who prefer reduced motion get the final frames, no autoplay.

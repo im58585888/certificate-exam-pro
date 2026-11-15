@@ -3,6 +3,7 @@ import { notFound, redirect } from "next/navigation";
 import type { Metadata } from "next";
 import { SessionFlagButton } from "@/components/FlagButton";
 import { ReportQuestion } from "@/components/ReportQuestion";
+import { MiaPose } from "@/components/Mia";
 import { Tutor } from "@/components/Tutor";
 import { DOMAIN_LABEL, ExplanationPanel, OptionList, QuestionMeta, QuestionText } from "@/components/QuestionParts";
 import { aiAvailable } from "@/lib/ai";
@@ -88,7 +89,9 @@ export default async function ResultsPage({ params }: PageProps<"/results/[id]">
 
       {sheet.length > 0 && (
         <div className="card mt-8 flex flex-wrap items-center justify-between gap-4 p-5">
-          <div>
+          <MiaPose pose="reviewing" height={72} />
+          <div className="min-w-0 flex-1">
+            <p className="text-xs font-bold text-brand">Mia reviewed your session</p>
             <h2 className="font-extrabold">{access.active ? "Added to your study sheet" : "🔒 Ready for your study sheet"}</h2>
             <p className="mt-1 text-sm text-soft">
               {newTopics ? `${newTopics} new concept${newTopics === 1 ? "" : "s"}` : "No new concepts"}{sheet.length > newTopics ? `, ${sheet.length - newTopics} updated` : ""}: {sheet.slice(0, 5).map((t) => t.topic).join(", ")}{sheet.length > 5 ? "…" : ""}

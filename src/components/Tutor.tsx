@@ -3,6 +3,7 @@
 import { Fragment, useRef, useState, type ReactNode } from "react";
 import type { Breakdown, BreakdownLevel } from "@/lib/ai";
 import { ChatMarkdown } from "./ChatMarkdown";
+import { Mia, MiaPose } from "./Mia";
 import { cluesMarkdown, optionsMarkdown, pictureMarkdown, SaveToSheet, tableMarkdown, termsMarkdown } from "./SaveToSheet";
 import type { SheetAccess } from "@/lib/sheetAccess";
 
@@ -221,13 +222,16 @@ export function ChatThread({ heading, suggestions, placeholder, send, saveTarget
           {turns.map((t, i) => t.role === "user" ? (
             <p key={i} className="ml-auto w-fit max-w-[85%] rounded-2xl rounded-br-sm bg-brand px-3.5 py-2 text-sm text-on-brand">{t.content}</p>
           ) : (
-            <div key={i} className="max-w-[95%] rounded-2xl rounded-bl-sm bg-surface-2 px-4 py-3">
-              {t.content ? <ChatMarkdown text={t.content} /> : <span className="text-sm text-muted">Thinking…</span>}
+            <div key={i} className="flex max-w-[95%] items-end gap-2">
+            <Mia size={26} />
+            <div className="min-w-0 flex-1 rounded-2xl rounded-bl-sm bg-surface-2 px-4 py-3">
+              {t.content ? <ChatMarkdown text={t.content} /> : <span className="text-sm text-muted">Mia is thinking…</span>}
               {t.content && !(busy && i === turns.length - 1) && (
                 <div className="mt-2.5 border-t border-line pt-2">
                   <SaveToSheet small body={t.content} title={turns[i - 1]?.content.slice(0, 120)} access={access} label={saveLabel} {...saveTarget} />
                 </div>
               )}
+            </div>
             </div>
           ))}
         </div>
@@ -251,7 +255,7 @@ function Chat({ sessionId, questionId, answered, access }: { sessionId: string; 
     : ["Explain the scenario even more simply", "What should I look for in the options?", "Give me a real-world analogy", "Show it as a table or diagram"];
   return (
     <div className="mt-6 border-t border-line pt-5">
-      <ChatThread heading="Still confused? Ask the tutor" suggestions={suggestions} access={access} saveTarget={{ questionId }}
+      <ChatThread heading="Still confused? Ask Mia" suggestions={suggestions} access={access} saveTarget={{ questionId }}
         placeholder={answered ? "Ask anything about this question…" : "Ask about a term or requirement (the tutor won't reveal the answer)"}
         send={(turns, onText) => streamPost("/api/ai/chat", { sessionId, questionId, turns }, onText)} />
     </div>
@@ -305,7 +309,7 @@ export function Tutor({ sessionId, questionId, answered, sheetAccess }: TutorPro
     <div ref={panelRef} className="mt-4">
       <div className="flex flex-wrap gap-2">
         <button type="button" className={view === "breakdown" ? "btn-primary !py-2" : "btn-ghost !py-2"} onClick={() => (view === "breakdown" ? setView("none") : openBreakdown(level))}>
-          <span aria-hidden>✨</span> {view === "breakdown" ? "Hide breakdown" : "Break it down for me"}
+          <Mia size={20} /> {view === "breakdown" ? "Hide breakdown" : "Break it down for me"}
         </button>
         {answered && (
           <button type="button" className={view === "answer" ? "btn-primary !py-2" : "btn-ghost !py-2"} onClick={() => (view === "answer" ? setView("none") : openAnswer())}>
@@ -317,7 +321,7 @@ export function Tutor({ sessionId, questionId, answered, sheetAccess }: TutorPro
       {view !== "none" && (
         <div className="mt-3 rounded-2xl border-[1.5px] border-brand/40 bg-surface p-4 shadow-sm md:p-6">
           <div className="flex flex-wrap items-center justify-between gap-2">
-            <p className="eyebrow text-brand">AI tutor{view === "breakdown" && !answered ? " · won't reveal the answer" : ""}</p>
+            <p className="eyebrow flex items-center gap-2 text-brand"><Mia size={22} />Mia · AI tutor{view === "breakdown" && !answered ? " · won't reveal the answer" : ""}</p>
             {view === "breakdown" && (
               <div className="flex rounded-full border border-line p-0.5 text-xs font-bold">
                 {(["standard", "simple"] as const).map((l) => (
@@ -332,9 +336,12 @@ export function Tutor({ sessionId, questionId, answered, sheetAccess }: TutorPro
 
           <div className="mt-3">
             {loading && !current && !answer ? (
-              <div className="space-y-3" aria-live="polite">
-                <p className="text-sm text-soft">Reading the question and writing your {view === "answer" ? "walk-through" : "breakdown"}… The first time anyone opens a question this takes up to half a minute; after that it&apos;s instant.</p>
-                {[80, 95, 60, 90].map((w, i) => <div key={i} className="h-3.5 animate-pulse rounded bg-line" style={{ width: `${w}%` }} />)}
+              <div className="flex items-start gap-4" aria-live="polite">
+                <MiaPose pose="thinking" height={96} className="-mb-2 hidden sm:block" />
+                <div className="min-w-0 flex-1 space-y-3">
+                  <p className="text-sm text-soft"><b className="text-ink">Mia is reading the question</b> and writing your {view === "answer" ? "walk-through" : "breakdown"}… The first time anyone opens a question this takes up to half a minute; after that it&apos;s instant.</p>
+                  {[80, 95, 60, 90].map((w, i) => <div key={i} className="h-3.5 animate-pulse rounded bg-line" style={{ width: `${w}%` }} />)}
+                </div>
               </div>
             ) : error ? (
               <p className="rounded-xl bg-bad-soft px-4 py-2 text-sm font-semibold text-bad">{error}</p>
@@ -342,6 +349,10 @@ export function Tutor({ sessionId, questionId, answered, sheetAccess }: TutorPro
               <BreakdownView b={current} save={(title, body) => <SaveToSheet small title={title} body={body} questionId={questionId} access={sheetAccess} />} />
             ) : view === "answer" && answer ? (
               <>
+                <div className="mb-3 flex items-center gap-3">
+                  <MiaPose pose="reviewing" height={64} />
+                  <p className="font-extrabold">Mia walks you through it</p>
+                </div>
                 <MiniMarkdown text={answer} />
                 {answerDone && <div className="mt-3"><SaveToSheet title="Answer walk-through" body={answer} questionId={questionId} access={sheetAccess} /></div>}
               </>

@@ -9,6 +9,7 @@ import {
 import type { ConceptCard } from "@/lib/ai";
 import { CardLoader } from "./CardLoader";
 import { ChatMarkdown } from "./ChatMarkdown";
+import { Mia, MiaPose } from "./Mia";
 import { ConceptCardBody } from "./StudyCards";
 import { ChatThread, streamPost } from "./Tutor";
 
@@ -248,8 +249,8 @@ function TopicDetail({ t, exam, tab, setTab, destinations, onAsk }: {
     <div className="rounded-2xl border-[1.5px] border-brand/40 bg-surface p-4">
       <div className="flex flex-wrap items-center gap-2">
         <h3 className="mr-auto font-extrabold">{t.name}</h3>
-        {onAsk && <button className="text-xs font-bold text-brand lg:hidden" onClick={onAsk}>✨ Ask the tutor about this</button>}
-        <span className="hidden text-xs text-muted lg:inline">✨ The tutor on the right is now focused on this topic</span>
+        {onAsk && <button className="text-xs font-bold text-brand lg:hidden" onClick={onAsk}>Ask Mia about this</button>}
+        <span className="hidden text-xs text-muted lg:inline">Mia, on the right, is now focused on this topic</span>
       </div>
       <div className="mt-2 flex flex-wrap gap-1" role="tablist">
         {tabs.map(([k, label]) => (
@@ -277,12 +278,12 @@ function TutorPanel({ exam, examCode, focus, destinations, open, setOpen, onClea
     : ["Quiz me on my weak topics", exam === "aif-c01" ? "Compare Bedrock, SageMaker and Amazon Q" : "Compare RDS, Aurora and DynamoDB", "Draw how a VPC connects to the internet"];
   return (
     <>
-      {!open && <button className="btn-primary fixed right-4 bottom-4 z-40 shadow-lg lg:hidden" onClick={() => setOpen(true)}>✨ Ask the tutor</button>}
+      {!open && <button className="btn-primary fixed right-4 bottom-4 z-40 shadow-lg lg:hidden" onClick={() => setOpen(true)}><Mia size={22} /> Ask Mia</button>}
       <aside aria-label="AI tutor"
         className={`${open ? "flex" : "hidden"} fixed inset-x-0 bottom-0 z-50 max-h-[80vh] flex-col overflow-y-auto rounded-t-2xl border-t border-line bg-surface p-5 shadow-2xl
           lg:sticky lg:top-4 lg:z-auto lg:flex lg:max-h-[calc(100vh-2rem)] lg:self-start lg:rounded-2xl lg:border lg:shadow-none`}>
         <div className="flex items-center justify-between gap-2">
-          <p className="font-extrabold">✨ AI tutor</p>
+          <p className="flex items-center gap-2.5 font-extrabold"><Mia size={32} /><span>Mia<span className="block text-xs font-semibold text-muted">AI tutor</span></span></p>
           <button className="text-xs font-bold text-soft lg:hidden" onClick={() => setOpen(false)}>Close</button>
         </div>
         <p className="mt-1 text-xs text-muted">
@@ -290,6 +291,14 @@ function TutorPanel({ exam, examCode, focus, destinations, open, setOpen, onClea
         </p>
         <div className="mt-2">
           <ChatThread access="ok" suggestions={suggestions}
+            emptyHint={
+              <div className="mt-2 flex items-end gap-2">
+                <MiaPose pose="welcoming" height={104} className="-ml-2" />
+                <p className="mb-3 rounded-2xl rounded-bl-sm bg-brand-soft px-3 py-2 text-sm text-ink">
+                  {focus ? <>Let&apos;s work on <b>{focus.name}</b>. Ask me anything, or tap a suggestion.</> : <>Hi! Open a topic and I&apos;ll focus on it, or ask me anything.</>}
+                </p>
+              </div>
+            }
             saveTarget={focus ? { exam, target: targetOf(focus) } : { exam, destinations }}
             saveLabel={focus ? `Add to ${focus.name.length > 24 ? "this topic" : focus.name} notes` : "Save to study sheet"}
             placeholder={focus ? `Ask about ${focus.name}…` : "Ask anything, or ask for a table or diagram…"}
@@ -359,7 +368,7 @@ function ItemCard({ item, destinations, current }: { item: SheetItem; destinatio
   return (
     <div className={`rounded-xl border px-3.5 py-3 ${isNote ? "border-warn/40 bg-warn-soft" : "border-line bg-bg"}`}>
       <div className="flex flex-wrap items-center gap-2 text-xs">
-        <span className={`font-bold ${isNote ? "text-warn" : "text-brand"}`}>{isNote ? "📝 My note" : "📌 Saved"}</span>
+        <span className={`font-bold ${isNote ? "text-warn" : "text-brand"}`}>{isNote ? "📝 My note" : <span className="inline-flex items-center gap-1.5"><Mia size={16} />Saved from Mia</span>}</span>
         <span className="flex-1" />
         <select aria-label="Move to another topic" className="max-w-40 rounded-md border border-line bg-surface px-1.5 py-0.5 text-xs text-soft" value={current} disabled={pending}
           onChange={(e) => { const v = e.target.value; run(() => moveItemAction(item.id, v.startsWith("s:") ? { sectionId: Number(v.slice(2)) } : { topic: v.slice(2) })); }}>
@@ -381,7 +390,7 @@ function ItemCard({ item, destinations, current }: { item: SheetItem; destinatio
           </form>
         ) : isNote ? <p className="whitespace-pre-wrap">{item.body}</p> : <ChatMarkdown text={item.body} />}
       </div>
-      {!isNote && <p className="mt-2 text-[11px] text-muted">{item.sourceQuestion ? `From practice question ${item.sourceQuestion}` : "From the study tutor"} · {item.savedOn}</p>}
+      {!isNote && <p className="mt-2 text-[11px] text-muted">{item.sourceQuestion ? `From practice question ${item.sourceQuestion}` : "From the study sheet"} · {item.savedOn}</p>}
       {error && <p className="mt-1 text-xs font-semibold text-bad">{error}</p>}
     </div>
   );

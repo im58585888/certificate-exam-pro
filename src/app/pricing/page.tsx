@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { checkoutAction, startQuizAction } from "../actions";
 import { getUser } from "@/lib/auth";
 import { getAccess, paymentsMode } from "@/lib/billing";
+import { MiaPose } from "@/components/Mia";
 import { WaitlistForm } from "@/components/WaitlistForm";
 import { EXAM_LIST, FREE_TRIAL_QUESTIONS, PASS_DAYS, PASS_PRICE_CENTS } from "@/lib/exams";
 
@@ -16,6 +17,7 @@ const PAID = [
   "Timed 65-question mock exams with an estimated score",
   "Save any session and finish later; a mock exam's clock pauses while you're away",
   "Analytics: domain mastery, readiness, accuracy trend, pace",
+  "Personal study sheet with your notes, and Mia, your AI tutor, beside it",
 ];
 
 const fmt = (d: Date) => d.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
@@ -86,6 +88,20 @@ export default async function PricingPage({ searchParams }: PageProps<"/pricing"
             </div>
           </div>
         ))}
+      </div>
+
+      <div className="card mx-auto mt-8 flex max-w-3xl items-end gap-6 overflow-hidden px-7 pt-6">
+        <MiaPose pose="confident" height={190} alt="Mia, your AI tutor" className="hidden sm:block" />
+        <div className="pb-6">
+          <p className="eyebrow">Included with every pass</p>
+          <h2 className="mt-1 text-xl font-extrabold">Mia, your AI tutor, on every question</h2>
+          <ul className="mt-3 space-y-1.5 text-sm text-soft">
+            <li>✓ Breaks down any question without giving the answer away</li>
+            <li>✓ Walks you through why the right answer works</li>
+            <li>✓ Answers follow-ups with tables and diagrams</li>
+            <li>✓ Helps you study any topic from your study sheet</li>
+          </ul>
+        </div>
       </div>
 
       {waitlist ? (
