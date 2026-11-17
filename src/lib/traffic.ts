@@ -1,6 +1,7 @@
 import "server-only";
 import { createHash } from "node:crypto";
 import { headers } from "next/headers";
+import { getUser, isAdmin } from "./auth";
 import { one, query } from "./db";
 
 // Cookie-free traffic analytics. A visitor is a hash of IP + browser + today's date, so the same person counts once a day,
@@ -130,6 +131,8 @@ export async function recordConversion(kind: ConversionKind): Promise<void> {
   try {
     const key = await visitorKey();
     if (!key) return;
+    // Like page views, the owner's own testing isn't counted.
+    if (isAdmin(await getUser())) return;
     if (await one(`select 1 from conversions where visitor = $1 and kind = $2`, [key.visitor, kind])) return;
     const visit = await one<{ id: number }>(`select id from visits where visitor = $1 order by (source <> 'direct') desc, last_at desc limit 1`, [key.visitor]);
     await query(`insert into conversions (visit_id, visitor, kind) values ($1, $2, $3)`, [visit?.id ?? null, key.visitor, kind]);

@@ -42,6 +42,8 @@ async function breakdown(group: keyof typeof GROUPS, days: number, where = "true
   );
 }
 
+/** Note for conversions we couldn't tie to a visit (the visitor blocks tracking, or the visit wasn't recorded). */
+const unlinked = (n: number) => (n ? ` · +${n} not linked to a visit` : "");
 const pct = (a: number, b: number) => (b ? `${Math.round((a / b) * 100)}%` : "–");
 const flag = (cc: string) => (/^[A-Z]{2}$/.test(cc) ? String.fromCodePoint(...[...cc].map((c) => 0x1f1a5 + c.charCodeAt(0))) : "🌐");
 const countryName = (cc: string) => { try { return new Intl.DisplayNames(["en"], { type: "region" }).of(cc) ?? cc; } catch { return cc; } };
@@ -102,7 +104,10 @@ export default async function TrafficPage({ searchParams }: PageProps<"/admin/tr
        (select count(distinct visit_id)::int from conversions c join visits w on w.id = c.visit_id where c.kind = 'trial' and w.started_at >= ${SINCE}) as trials,
        (select count(distinct visit_id)::int from conversions c join visits w on w.id = c.visit_id where c.kind = 'signup' and w.started_at >= ${SINCE}) as signups,
        (select count(distinct visit_id)::int from conversions c join visits w on w.id = c.visit_id where c.kind = 'waitlist' and w.started_at >= ${SINCE}) as waitlist,
-       (select count(distinct visitor)::int from conversions c where c.visit_id is null and c.created_at >= ${SINCE}) as untracked
+       -- Conversions with no tracked visit behind them (tracking blocked, or the visit wasn't recorded), counted per kind.
+       (select count(distinct visitor)::int from conversions c where c.kind = 'trial' and c.visit_id is null and c.created_at >= ${SINCE}) as trials_unlinked,
+       (select count(distinct visitor)::int from conversions c where c.kind = 'signup' and c.visit_id is null and c.created_at >= ${SINCE}) as signups_unlinked,
+       (select count(distinct visitor)::int from conversions c where c.kind = 'waitlist' and c.visit_id is null and c.created_at >= ${SINCE}) as waitlist_unlinked
      from visits v where v.started_at >= ${SINCE}`,
     [days, STATS_TZ],
   ))!;
@@ -155,9 +160,9 @@ export default async function TrafficPage({ searchParams }: PageProps<"/admin/tr
         <Stat label="Visits" value={t.visits.toLocaleString()} note={`${(t.visits ? t.pageviews / t.visits : 0).toFixed(1)} pages per visit`} />
         <Stat label="Bounce rate" value={pct(t.bounces, t.visits)} note="Visits that saw only one page" />
         <Stat label="Page views" value={t.pageviews.toLocaleString()} />
-        <Stat label="Free trials started" value={t.trials.toLocaleString()} note={`${pct(t.trials, t.visits)} of visits`} />
-        <Stat label="Sign-ups" value={t.signups.toLocaleString()} note={`${pct(t.signups, t.visits)} of visits`} />
-        <Stat label="Waitlist joins" value={t.waitlist.toLocaleString()} note={t.untracked ? `+${t.untracked} from people who block tracking` : undefined} />
+        <Stat label="Free trials started" value={t.trials.toLocaleString()} note={`${pct(t.trials, t.visits)} of visits${unlinked(t.trials_unlinked)}`} />
+        <Stat label="Sign-ups" value={t.signups.toLocaleString()} note={`${pct(t.signups, t.visits)} of visits${unlinked(t.signups_unlinked)}`} />
+        <Stat label="Waitlist joins" value={t.waitlist.toLocaleString()} note={t.waitlist_unlinked ? unlinked(t.waitlist_unlinked).slice(3) : "Full list: Admin → Overview"} />
         <Stat label="Top source" value={sources[0] ? `${SOURCE_ICON[sources[0].label] ?? "🔗"} ${sources[0].label}` : "–"} note={sources[0] ? `${sources[0].visits} visits` : undefined} />
       </section>
 
