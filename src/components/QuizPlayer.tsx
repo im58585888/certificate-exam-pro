@@ -10,7 +10,7 @@ import { Fireworks, useCelebrationSound } from "./Fireworks";
 import { FlagButton } from "./FlagButton";
 import { ReportQuestion } from "./ReportQuestion";
 import type { SheetAccess } from "@/lib/sheetAccess";
-import { MiaDock, Tutor } from "./Tutor";
+import { MiaPanel } from "./Tutor";
 
 export interface QuizPlayerProps {
   sessionId: string;
@@ -68,6 +68,7 @@ export function QuizPlayer({ sessionId, mode, questions, initialFlags, initial, 
   const answeredCount = Object.keys(answers).length;
   const complete = draft.length === q.selectCount;
   const isLast = index === questions.length - 1;
+  const mia = tutor && !isExam;
 
   const go = useCallback((i: number) => {
     setIndex(i);
@@ -157,9 +158,54 @@ export function QuizPlayer({ sessionId, mode, questions, initialFlags, initial, 
   const correctSoFar = Object.values(answers).filter((a) => a.feedback?.correct).length;
 
   return (
-    <div ref={topRef} className={`mx-auto grid max-w-6xl gap-5 px-4 py-6 lg:grid-cols-[minmax(0,1fr)_320px] ${tutor && !isExam ? "pb-24 lg:pb-6" : ""}`}>
+    <div ref={topRef} className={`mx-auto grid gap-5 px-4 py-6 ${mia ? "max-w-7xl pb-24 lg:grid-cols-[minmax(0,1fr)_400px] lg:pb-6" : "max-w-4xl"}`}>
       {!isExam && <Fireworks trigger={celebrate} sound={sound} />}
-      <section className="card p-5 md:p-7" aria-live="polite">
+      <section className="card min-w-0 p-5 md:p-7" aria-live="polite">
+        {/* Session controls in one slim bar above the progress bar, so Mia can have the whole right column. */}
+        <div className="mb-5 flex flex-wrap items-center gap-x-4 gap-y-2.5 border-b border-line pb-4">
+          <p className="text-sm whitespace-nowrap">
+            <span className="eyebrow mr-2">{MODE_LABEL[mode]}</span>
+            <b>{answeredCount}</b> <span className="text-soft">answered</span>
+            {!isExam && answeredCount > 0 && <> · <b>{Math.round((correctSoFar / answeredCount) * 100)}%</b> <span className="text-soft">right</span></>}
+          </p>
+          <div className="order-last flex w-full gap-1 overflow-x-auto py-1 [scrollbar-width:thin]" role="list" aria-label="Questions">
+            {questions.map((x, i) => {
+              const a = answers[x.id];
+              const tone = !a ? "bg-surface text-soft border-line" : isExam ? "bg-brand-soft text-brand border-transparent" : a.feedback?.correct ? "bg-ok-soft text-ok border-transparent" : "bg-bad-soft text-bad border-transparent";
+              return (
+                <button key={x.id} role="listitem" onClick={() => jump(i)} disabled={pending}
+                  aria-label={`Question ${i + 1}${flags.has(x.id) ? ", flagged" : ""}`} aria-current={i === index ? "step" : undefined}
+                  className={`relative h-7 min-w-7 flex-none rounded-md border px-1 text-xs font-bold ${tone} ${i === index ? "outline-2 outline-offset-1 outline-brand" : ""}`}>
+                  {i + 1}
+                  {flags.has(x.id) && <span className="absolute -top-1 -right-1 h-2 w-2 rounded-full bg-warn" />}
+                </button>
+              );
+            })}
+          </div>
+          <div className="ml-auto flex flex-wrap items-center gap-2">
+            {canSave && (
+              <button className="btn-ghost !px-3 !py-1.5 !text-xs" onClick={saveForLater} disabled={pending}
+                title={isExam ? "Your answers are kept and the clock pauses until you come back." : "Your answers are kept. Resume any time from your dashboard."}>
+                <span aria-hidden>💾</span> Save &amp; finish later
+              </button>
+            )}
+            {!isExam && answeredCount > 0 && <button className="btn-ghost !px-3 !py-1.5 !text-xs" onClick={finish} disabled={pending}>End session</button>}
+            {!isExam && (
+              <button type="button" onClick={toggleSound} aria-pressed={sound} aria-label={sound ? "Celebration sound on" : "Celebration sound off"}
+                title={sound ? "Celebration sound on" : "Celebration sound off"} className="grid h-8 w-8 place-items-center rounded-lg border border-line text-sm hover:border-brand">
+                {sound ? "🔊" : "🔇"}
+              </button>
+            )}
+            <button type="button" title="Keyboard: press 1–5 to choose, Enter to check, F to flag." aria-label="Keyboard tips: press 1 to 5 to choose, Enter to check, F to flag."
+              className="hidden h-8 w-8 place-items-center rounded-lg border border-line text-xs font-bold text-soft hover:border-brand sm:grid">?</button>
+          </div>
+          {flags.size > 0 && (
+            <p className="flex w-full items-center gap-2 text-xs text-muted">
+              <span className="h-2 w-2 rounded-full bg-warn" aria-hidden /> {flags.size} flagged{isExam ? ": jump back before submitting" : ""}
+            </p>
+          )}
+        </div>
+
         <div className="flex items-center gap-3">
           <span className="text-sm font-bold whitespace-nowrap text-soft">{index + 1}/{questions.length}</span>
           <div className="h-2 flex-1 overflow-hidden rounded-full bg-line">
@@ -175,7 +221,6 @@ export function QuizPlayer({ sessionId, mode, questions, initialFlags, initial, 
           <FlagButton flagged={flags.has(q.id)} onChange={(on) => setFlag(q.id, on)} />
         </div>
         <QuestionText q={q} />
-        {tutor && !isExam && <Tutor key={`tutor-${q.id}`} sessionId={sessionId} questionId={q.id} answered={!!feedback} sheetAccess={sheetAccess} backHref={`/quiz/${sessionId}?q=${encodeURIComponent(q.id)}`} sideChat />}
         {feedback && <div className="mt-4"><Verdict correct={feedback.correct} /></div>}
         <div className="mt-4"><OptionList q={q} picks={picks} feedback={feedback} onToggle={toggle} disabled={pending} /></div>
         {feedback && stillWeak === q.id && flags.has(q.id) && (
@@ -212,60 +257,11 @@ export function QuizPlayer({ sessionId, mode, questions, initialFlags, initial, 
         </div>
       </section>
 
-      {/* The right column (sticky on wide screens): question controls, then Mia's chat underneath so it never covers them. */}
-      <div className="h-fit space-y-4 lg:sticky lg:top-4 lg:max-h-[calc(100vh-2rem)] lg:overflow-y-auto">
-      <aside className="card p-5">
-        <p className="eyebrow">{MODE_LABEL[mode]}</p>
-        <div className="mt-3 grid grid-cols-2 gap-2">
-          <div className="rounded-xl border border-line p-3"><b className="block text-xl">{answeredCount}</b><span className="text-xs text-muted">Answered</span></div>
-          <div className="rounded-xl border border-line p-3">
-            <b className="block text-xl">{isExam ? "–" : answeredCount ? `${Math.round((correctSoFar / answeredCount) * 100)}%` : "–"}</b>
-            <span className="text-xs text-muted">{isExam ? "Scored at the end" : "Accuracy"}</span>
-          </div>
-        </div>
-        <p className="eyebrow mt-5">Questions</p>
-        <div className="mt-2 grid grid-cols-[repeat(auto-fill,minmax(34px,1fr))] gap-1.5">
-          {questions.map((x, i) => {
-            const a = answers[x.id];
-            const tone = !a ? "bg-surface text-soft border-line" : isExam ? "bg-brand-soft text-brand border-transparent" : a.feedback?.correct ? "bg-ok-soft text-ok border-transparent" : "bg-bad-soft text-bad border-transparent";
-            return (
-              <button key={x.id} onClick={() => jump(i)} disabled={pending}
-                aria-label={`Question ${i + 1}${flags.has(x.id) ? ", flagged" : ""}`}
-                className={`relative h-[34px] rounded-lg border text-xs font-bold ${tone} ${i === index ? "outline-2 outline-offset-1 outline-brand" : ""}`}>
-                {i + 1}
-                {flags.has(x.id) && <span className="absolute -top-1 -right-1 h-2.5 w-2.5 rounded-full bg-warn" />}
-              </button>
-            );
-          })}
-        </div>
-        {!isExam && answeredCount > 0 && (
-          <button className="btn-ghost mt-5 w-full" onClick={finish} disabled={pending}>End session &amp; see results</button>
-        )}
-        {canSave && (
-          <>
-            <button className={`btn-ghost w-full ${!isExam && answeredCount > 0 ? "mt-2" : "mt-5"}`} onClick={saveForLater} disabled={pending}>
-              <span aria-hidden>💾</span> Save &amp; finish later
-            </button>
-            <p className="mt-1.5 text-xs text-muted">{isExam ? "Your answers are kept and the clock pauses until you come back." : "Your answers are kept. Resume any time from your dashboard."}</p>
-          </>
-        )}
-        {flags.size > 0 && (
-          <p className="mt-4 flex items-center gap-2 text-xs text-muted">
-            <span className="h-2.5 w-2.5 rounded-full bg-warn" aria-hidden /> {flags.size} flagged{isExam ? ": jump back before submitting" : ""}
-          </p>
-        )}
-        <p className="mt-4 text-xs text-muted">Tip: press 1–5 to choose, Enter to check, F to flag.</p>
-        {!isExam && (
-          <button type="button" onClick={toggleSound} aria-pressed={sound} className="mt-3 text-xs font-semibold text-soft hover:text-brand">
-            {sound ? "🔊 Celebration sound on" : "🔇 Celebration sound off"}
-          </button>
-        )}
-      </aside>
-      {tutor && !isExam && (
-        <MiaDock sessionId={sessionId} questionId={q.id} questionNumber={index + 1} answered={!!feedback}
+      {/* Mia fills the right column (sticky on wide screens; a floating button and sheet on phones). Not in mock exams. */}
+      {mia && (
+        <MiaPanel key={q.id} sessionId={sessionId} questionId={q.id} questionNumber={index + 1} answered={!!feedback}
           sheetAccess={sheetAccess} backHref={`/quiz/${sessionId}?q=${encodeURIComponent(q.id)}`} />
       )}
-      </div>
 
       {paywall && (
         <div className="fixed inset-0 z-50 grid place-items-center bg-black/50 p-4" role="dialog" aria-modal="true" aria-labelledby="pw-title">

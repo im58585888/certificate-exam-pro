@@ -1,7 +1,7 @@
 "use client";
 
 import { Fragment, useEffect, useRef, useState, type ReactNode } from "react";
-import type { Breakdown, BreakdownLevel } from "@/lib/ai";
+import type { Breakdown } from "@/lib/ai";
 import { ChatMarkdown } from "./ChatMarkdown";
 import { Mia, MiaPose, MiaThinking } from "./Mia";
 import { cluesMarkdown, optionsMarkdown, pictureMarkdown, SaveToSheet, tableMarkdown, termsMarkdown } from "./SaveToSheet";
@@ -85,7 +85,8 @@ function TableView({ t }: { t: NonNullable<Breakdown["table"]> }) {
 
 // ---------- Breakdown ----------
 
-function BreakdownView({ b, save }: { b: Breakdown; save: (title: string, body: string) => ReactNode }) {
+function BreakdownView({ b, save, narrow }: { b: Breakdown; save: (title: string, body: string) => ReactNode; narrow?: boolean }) {
+  const two = narrow ? "" : "sm:grid-cols-2";
   let n = 0;
   return (
     <div>
@@ -95,7 +96,7 @@ function BreakdownView({ b, save }: { b: Breakdown; save: (title: string, body: 
       </div>
 
       <Section n={++n} title="What is the question really asking?">
-        <ol className="grid gap-2 sm:grid-cols-2">
+        <ol className={`grid gap-2 ${two}`}>
           {b.requirements.map((r, i) => (
             <li key={i} className="rounded-xl border border-line bg-bg p-3">
               <b className="text-ink">{i + 1}. {r.label}</b>
@@ -136,7 +137,7 @@ function BreakdownView({ b, save }: { b: Breakdown; save: (title: string, body: 
 
       {b.terms.length > 0 && (
         <Section n={++n} title="Terms you need" action={save(`${b.title}: terms`, termsMarkdown(b.terms))}>
-          <dl className="grid gap-2 sm:grid-cols-2">
+          <dl className={`grid gap-2 ${two}`}>
             {b.terms.map((t) => (
               <div key={t.term} className="rounded-xl border border-line bg-bg p-3 text-sm">
                 <dt className="font-extrabold text-ink">{t.term}</dt>
@@ -149,7 +150,7 @@ function BreakdownView({ b, save }: { b: Breakdown; save: (title: string, body: 
       )}
 
       <Section n={++n} title="The technologies in the options" action={save(`${b.title}: the technologies`, optionsMarkdown(b.options))}>
-        <div className="grid gap-2.5 sm:grid-cols-2">
+        <div className={`grid gap-2.5 ${two}`}>
           {b.options.map((o) => (
             <div key={o.name} className="rounded-xl border border-line bg-bg p-3.5 text-sm">
               <b className="block text-base text-ink">{o.name}</b>
@@ -178,6 +179,31 @@ function BreakdownView({ b, save }: { b: Breakdown; save: (title: string, body: 
 // ---------- Follow-up chat ----------
 
 export type Turn = { role: "user" | "assistant"; content: string };
+
+/**
+ * The message box: starts at three lines and grows with what's typed (up to about ten lines, then scrolls).
+ * Enter sends; Shift+Enter adds a new line.
+ */
+export function Composer({ value, onChange, onSend, busy, placeholder, className = "" }: {
+  value: string; onChange: (v: string) => void; onSend: () => void; busy: boolean; placeholder: string; className?: string;
+}) {
+  const ref = useRef<HTMLTextAreaElement>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    el.style.height = "auto";
+    el.style.height = `${Math.min(el.scrollHeight, 240)}px`;
+  }, [value]);
+  return (
+    <form className={`flex items-end gap-2 ${className}`} onSubmit={(e) => { e.preventDefault(); onSend(); }}>
+      <textarea ref={ref} rows={3} maxLength={1500} value={value} placeholder={placeholder} aria-label="Message Mia"
+        onChange={(e) => onChange(e.target.value)}
+        onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey && !e.nativeEvent.isComposing) { e.preventDefault(); if (!busy && value.trim()) onSend(); } }}
+        className="max-h-60 min-h-[4.5rem] min-w-0 flex-1 resize-none rounded-xl border border-line bg-surface px-3 py-2 text-sm leading-relaxed" />
+      <button className="btn-primary !py-2" disabled={busy || !value.trim()}>{busy ? "…" : "Ask"}</button>
+    </form>
+  );
+}
 
 /** A tutor conversation: renders replies (tables and diagrams included) and lets each reply be saved to the study sheet. */
 export function ChatThread({ heading, suggestions, placeholder, send, saveTarget, saveLabel, access, emptyHint }: {
@@ -238,11 +264,7 @@ export function ChatThread({ heading, suggestions, placeholder, send, saveTarget
       <div className="mt-3 flex flex-wrap gap-1.5">
         {suggestions.map((s) => <button key={s} type="button" className="pill border border-line bg-surface text-soft hover:border-brand" disabled={busy} onClick={() => ask(s)}>{s}</button>)}
       </div>
-      <form className="mt-3 flex gap-2" onSubmit={(e) => { e.preventDefault(); ask(draft); }}>
-        <input className="min-w-0 flex-1 rounded-xl border border-line bg-surface px-3 py-2 text-sm" maxLength={1500} value={draft}
-          onChange={(e) => setDraft(e.target.value)} placeholder={placeholder} />
-        <button className="btn-primary !py-2" disabled={busy || !draft.trim()}>{busy ? "…" : "Ask"}</button>
-      </form>
+      <Composer className="mt-3" value={draft} onChange={setDraft} onSend={() => ask(draft)} busy={busy} placeholder={placeholder} />
       {error && <p className="mt-2 text-sm font-semibold text-bad">{error}</p>}
     </div>
   );
@@ -250,7 +272,7 @@ export function ChatThread({ heading, suggestions, placeholder, send, saveTarget
 
 const chatSuggestions = (answered: boolean) => answered
   ? ["Why exactly is my choice wrong?", "Give me a real-world example", "How would the exam try to trick me here?", "Show it as a table or diagram"]
-  : ["Explain the scenario even more simply", "What should I look for in the options?", "Give me a real-world analogy", "Show it as a table or diagram"];
+  : ["What should I look for in the options?", "Give me a real-world analogy", "Show it as a table or diagram"];
 
 const chatPlaceholder = (answered: boolean) => (answered ? "Ask anything about this question…" : "Ask about a term or requirement (Mia won't reveal the answer)");
 
@@ -264,31 +286,56 @@ function Chat({ sessionId, questionId, answered, access, backHref }: { sessionId
   );
 }
 
-/** Asks the side chat (MiaDock) to open and focus its input, e.g. from "Still confused? Ask Mia" in the tutor panel. */
-const openDock = () => window.dispatchEvent(new Event("mia:open"));
+// ---------- Mia's panel (practice) ----------
+
+/** One thing in Mia's timeline for a question: a chat turn, or a breakdown / walk-through card. */
+type Entry =
+  | { kind: "user" | "assistant"; content: string }
+  | { kind: "breakdown"; breakdown: Breakdown }
+  | { kind: "walkthrough"; content: string; done: boolean };
+
+type Action = { id: string; title: string; note: string; prompt?: string };
+
+const ACTIONS_BEFORE: Action[] = [
+  { id: "breakdown", title: "Break it down", note: "What it's testing, step by step" },
+  { id: "look", title: "What to look for", note: "In the options", prompt: "What should I look for in the options?" },
+  { id: "analogy", title: "Real-world analogy", note: "Picture it simply", prompt: "Give me a real-world analogy" },
+  { id: "table", title: "Table or diagram", note: "See it visually", prompt: "Show it as a table or diagram" },
+];
+const ACTIONS_AFTER: Action[] = [
+  { id: "walkthrough", title: "Walk me through it", note: "Why the answer works" },
+  { id: "why", title: "Why was I wrong?", note: "About my choice", prompt: "Why exactly is my choice wrong?" },
+  { id: "trick", title: "Exam tricks", note: "How they'd catch me", prompt: "How would the exam try to trick me here?" },
+  { id: "breakdown", title: "Break it down", note: "What it was testing" },
+  { id: "table", title: "Table or diagram", note: "See it visually", prompt: "Show it as a table or diagram" },
+];
 
 /**
- * Mia's chat beside a practice question, ready without opening Break it down. On wide screens it's a card under the
- * question controls in the sticky right column (it can be collapsed); on phones it's a floating button that opens a
- * half-height sheet, so it never covers the question, the options or Check / Next.
+ * Mia beside a practice question. Everything about the question lives in one timeline: the breakdown, the answer
+ * walk-through and the chat. A carousel of action cards starts each of them, so there's no separate button under
+ * the question. Wide screens: it fills the sticky right column. Phones: a floating button that opens a sheet.
  */
-export function MiaDock({ sessionId, questionId, questionNumber, answered, sheetAccess, backHref }: {
+export function MiaPanel({ sessionId, questionId, questionNumber, answered, sheetAccess, backHref }: {
   sessionId: string; questionId: string; questionNumber: number; answered: boolean; sheetAccess: SheetAccess; backHref?: string;
 }) {
-  const [collapsed, setCollapsed] = useState(false); // wide screens
+  const [entries, setEntries] = useState<Entry[]>([]);
+  const [busy, setBusy] = useState<null | "breakdown" | "walkthrough" | "chat">(null);
+  const [error, setError] = useState<string | null>(null);
+  const [draft, setDraft] = useState("");
   const [open, setOpen] = useState(false); // phones
   const [lift, setLift] = useState(16); // phones: the floating button's distance from the bottom
-  const boxRef = useRef<HTMLDivElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  // The latest timeline for the async handlers below (they outlive the render that created them).
+  const entriesRef = useRef(entries);
+  useEffect(() => { entriesRef.current = entries; }, [entries]);
 
-  // Phones: when the Check / Next row scrolls near the bottom of the screen, the floating button moves up above it.
+  // Phones: when the Check / Next row is near the bottom of the screen, the floating button moves up above it.
   useEffect(() => {
-    // One cheap measurement per event; React skips the re-render when the value doesn't change.
     const place = () => {
       const row = document.querySelector("[data-quiz-actions]")?.getBoundingClientRect();
       const zone = window.innerHeight - 72;
       setLift(row && row.bottom > zone && row.top < window.innerHeight ? Math.round(window.innerHeight - row.top + 10) : 16);
     };
-    // Also re-check when the page changes size (fonts loading, a breakdown opening), not only on scroll.
     const resized = new ResizeObserver(place);
     resized.observe(document.body);
     place();
@@ -297,51 +344,159 @@ export function MiaDock({ sessionId, questionId, questionNumber, answered, sheet
     return () => { resized.disconnect(); window.removeEventListener("scroll", place); window.removeEventListener("resize", place); };
   }, []);
 
+  // Chat replies: follow the newest line as it streams in. A breakdown or walk-through: show it from its top so it can be
+  // read from the start (once, when it arrives, so streaming doesn't pull the reader back).
+  const anchored = useRef(-1);
   useEffect(() => {
-    const onOpen = () => {
-      setCollapsed(false);
-      setOpen(true);
-      requestAnimationFrame(() => {
-        boxRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
-        boxRef.current?.querySelector<HTMLInputElement>("input")?.focus();
-      });
-    };
-    window.addEventListener("mia:open", onOpen);
-    return () => window.removeEventListener("mia:open", onOpen);
-  }, []);
+    const el = scrollRef.current;
+    if (!el) return;
+    const last = entries.length - 1;
+    const kind = entries[last]?.kind;
+    if (kind === "breakdown" || kind === "walkthrough") {
+      if (anchored.current === last) return;
+      anchored.current = last;
+      const card = el.querySelector<HTMLElement>(`[data-entry="${last}"]`);
+      if (card) el.scrollTop = card.offsetTop - el.offsetTop - 8;
+    } else el.scrollTop = el.scrollHeight;
+  }, [entries, busy]);
+
+  const used = new Set(entries.flatMap((e) => (e.kind === "breakdown" ? ["breakdown"] : e.kind === "walkthrough" ? ["walkthrough"] : [])));
+  const actions = (answered ? ACTIONS_AFTER : ACTIONS_BEFORE).filter((a) => !used.has(a.id));
+  const replace = (i: number, e: Entry) => setEntries((list) => list.map((x, j) => (j === i ? e : x)));
+
+  const breakdown = async () => {
+    setBusy("breakdown"); setError(null);
+    try {
+      const res = await fetch("/api/ai/breakdown", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ sessionId, questionId }) });
+      if (!res.ok) throw new Error(await readError(res));
+      const { breakdown } = await res.json();
+      setEntries((list) => [...list, { kind: "breakdown", breakdown }]);
+    } catch (e) { setError((e as Error).message); } finally { setBusy(null); }
+  };
+
+  const walkthrough = async () => {
+    setBusy("walkthrough"); setError(null);
+    const i = entriesRef.current.length;
+    setEntries((list) => [...list, { kind: "walkthrough", content: "", done: false }]);
+    try {
+      const text = await streamPost("/api/ai/explain", { sessionId, questionId }, (t) => replace(i, { kind: "walkthrough", content: t, done: false }));
+      replace(i, { kind: "walkthrough", content: text, done: true });
+    } catch (e) {
+      setEntries((list) => list.filter((_, j) => j !== i));
+      setError((e as Error).message);
+    } finally { setBusy(null); }
+  };
+
+  const ask = async (text: string) => {
+    const q = text.trim();
+    if (!q || busy) return;
+    // Only the chat turns go to the model; the breakdown and walk-through cards are for the learner.
+    const turns: Turn[] = [...entriesRef.current.filter((e): e is Extract<Entry, { kind: "user" | "assistant" }> => e.kind === "user" || e.kind === "assistant")
+      .map((e) => ({ role: e.kind, content: e.content })), { role: "user", content: q }];
+    const i = entriesRef.current.length;
+    setEntries((list) => [...list, { kind: "user", content: q }, { kind: "assistant", content: "" }]);
+    setDraft(""); setBusy("chat"); setError(null);
+    try {
+      await streamPost("/api/ai/chat", { sessionId, questionId, turns: turns.slice(-13) }, (t) => replace(i + 1, { kind: "assistant", content: t }));
+    } catch (e) {
+      setEntries((list) => list.slice(0, i));
+      setDraft(q);
+      setError((e as Error).message);
+    } finally { setBusy(null); }
+  };
+
+  const run = (a: Action) => (a.id === "breakdown" ? breakdown() : a.id === "walkthrough" ? walkthrough() : a.prompt ? ask(a.prompt) : undefined);
+  const save = (title: string, body: string) => <SaveToSheet small title={title} body={body} questionId={questionId} access={sheetAccess} backHref={backHref} />;
 
   return (
     <>
       {!open && (
-        <button type="button" onClick={() => setOpen(true)} aria-label="Ask Mia about this question"
-          style={{ bottom: lift }}
+        <button type="button" onClick={() => setOpen(true)} aria-label="Ask Mia about this question" style={{ bottom: lift }}
           className="fixed right-4 z-40 flex items-center gap-2 rounded-full bg-brand py-1.5 pr-4 pl-1.5 text-sm font-bold text-on-brand shadow-lg transition-[bottom] duration-150 lg:hidden">
           <Mia size={34} /> Ask Mia
         </button>
       )}
-      <div ref={boxRef} role="complementary" aria-label="Chat with Mia"
-        className={`${open ? "flex" : "hidden"} fixed inset-x-0 bottom-0 z-50 h-[58vh] flex-col rounded-t-2xl border-t border-line bg-surface p-4 shadow-2xl
-          lg:static lg:z-auto lg:flex lg:h-auto lg:rounded-2xl lg:border lg:p-4 lg:shadow-none`}>
-        <div className="flex items-center gap-2">
-          <Mia size={26} />
-          <p className="flex-1 text-sm font-extrabold">Ask Mia about Q{questionNumber}</p>
+      <aside aria-label="Mia, your AI tutor"
+        className={`${open ? "flex" : "hidden"} fixed inset-x-0 bottom-0 z-50 h-[78vh] flex-col rounded-t-2xl border-t border-line bg-surface p-4 shadow-2xl
+          lg:sticky lg:top-4 lg:z-auto lg:flex lg:h-[calc(100dvh-6rem)] lg:min-h-[480px] lg:rounded-2xl lg:border lg:shadow-none`}>
+        <div className="flex items-center gap-2.5">
+          <Mia size={32} />
+          <div className="min-w-0 flex-1">
+            <p className="font-extrabold leading-tight">Ask Mia about Q{questionNumber}</p>
+            <p className="text-xs text-muted">{answered ? "AI tutor · ask anything about this question" : "AI tutor · won't give the answer away"}</p>
+          </div>
           <button type="button" className="text-xs font-bold text-soft hover:text-brand lg:hidden" onClick={() => setOpen(false)}>Minimise</button>
-          <button type="button" className="hidden h-6 w-6 place-items-center rounded-md text-soft hover:bg-surface-2 lg:grid" aria-expanded={!collapsed}
-            aria-label={collapsed ? "Show Mia's chat" : "Collapse Mia's chat"} onClick={() => setCollapsed(!collapsed)}>{collapsed ? "+" : "–"}</button>
         </div>
-        <div className={`${collapsed ? "lg:hidden" : ""} mt-2 min-h-0 flex-1 overflow-y-auto lg:max-h-[46vh] lg:flex-none`}>
-          {/* A fresh conversation for each question; the dock itself (collapsed or not) stays as it is. */}
-          <ChatThread key={questionId} suggestions={chatSuggestions(answered).slice(0, 3)} access={sheetAccess} saveTarget={{ questionId, backHref }}
-            placeholder={chatPlaceholder(answered)}
-            emptyHint={<p className="text-xs text-muted">{answered ? "Ask why an option is right or wrong, or for a table or diagram." : "Ask about any term or requirement. I won't give the answer away."}</p>}
-            send={(turns, onText) => streamPost("/api/ai/chat", { sessionId, questionId, turns }, onText)} />
+
+        {actions.length > 0 && (
+          <div className="-mx-1 mt-3 flex flex-none snap-x gap-2 overflow-x-auto px-1 pb-1 [scrollbar-width:thin]" role="list" aria-label="Things Mia can do">
+            {actions.map((a, i) => (
+              <button key={a.id} type="button" role="listitem" disabled={!!busy} onClick={() => run(a)}
+                className={`w-36 flex-none snap-start rounded-xl border p-2.5 text-left transition hover:border-brand disabled:opacity-60 ${i === 0 ? "border-brand/50 bg-brand-soft" : "border-line bg-bg"}`}>
+                <span className="block text-sm font-bold leading-tight">{a.title}</span>
+                <span className="mt-0.5 block text-[11px] text-muted">{a.note}</span>
+              </button>
+            ))}
+          </div>
+        )}
+
+        <div ref={scrollRef} className="mt-3 min-h-0 flex-1 space-y-3 overflow-y-auto pr-1">
+          {entries.length === 0 && !busy && (
+            <div className="flex items-end gap-2">
+              <MiaPose pose="welcoming" height={88} className="-ml-1" />
+              <p className="mb-2 rounded-2xl rounded-bl-sm bg-brand-soft px-3 py-2 text-sm">
+                {answered ? "Want me to walk you through it, or ask me anything about this question." : "Stuck? Tap Break it down, or ask me about any term or requirement."}
+              </p>
+            </div>
+          )}
+          {entries.map((e, i) => {
+            if (e.kind === "user") return <p key={i} className="ml-auto w-fit max-w-[85%] rounded-2xl rounded-br-sm bg-brand px-3.5 py-2 text-sm text-on-brand">{e.content}</p>;
+            if (e.kind === "breakdown") {
+              return (
+                <div key={i} data-entry={i} className="rounded-2xl border border-brand/30 bg-bg p-3">
+                  <p className="mb-1 flex items-center gap-2 text-xs font-bold text-brand"><Mia size={18} />Mia&apos;s breakdown</p>
+                  <BreakdownView b={e.breakdown} save={save} narrow />
+                </div>
+              );
+            }
+            if (e.kind === "walkthrough") {
+              return (
+                <div key={i} data-entry={i} className="rounded-2xl border border-brand/30 bg-bg p-3">
+                  <p className="mb-2 flex items-center gap-2 font-extrabold"><MiaPose pose="reviewing" height={44} />Mia walks you through it</p>
+                  {e.content ? <MiniMarkdown text={e.content} /> : null}
+                  {e.done && <div className="mt-3">{save("Answer walk-through", e.content)}</div>}
+                </div>
+              );
+            }
+            return (
+              <div key={i} className="flex max-w-[96%] items-end gap-2">
+                <Mia size={24} />
+                <div className="min-w-0 flex-1 rounded-2xl rounded-bl-sm bg-surface-2 px-3.5 py-2.5">
+                  {e.content ? <ChatMarkdown text={e.content} /> : <span className="text-sm text-muted">Mia is thinking…</span>}
+                  {e.content && !(busy === "chat" && i === entries.length - 1) && (
+                    <div className="mt-2 border-t border-line pt-2">{save(entries[i - 1]?.kind === "user" ? (entries[i - 1] as { content: string }).content.slice(0, 120) : "Mia's answer", e.content)}</div>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+          {(busy === "breakdown" || (busy === "walkthrough" && !(entries.at(-1) as { content?: string })?.content)) && (
+            <div className="flex items-center gap-3" aria-live="polite">
+              <MiaThinking height={72} />
+              <p className="text-sm text-soft"><b className="text-ink">Mia is reading the question</b>… the first time anyone asks this takes up to half a minute; after that it&apos;s instant.</p>
+            </div>
+          )}
+          {error && <p className="rounded-xl bg-bad-soft px-3 py-2 text-sm font-semibold text-bad">{error}</p>}
         </div>
-      </div>
+
+        <Composer className="mt-3" value={draft} onChange={setDraft} onSend={() => ask(draft)} busy={!!busy} placeholder={chatPlaceholder(answered)} />
+        <p className="mt-2 text-[11px] text-muted">AI-written explanations can make mistakes. When in doubt, check the linked AWS documentation.</p>
+      </aside>
     </>
   );
 }
 
-// ---------- Panel ----------
+// ---------- Panel (results page) ----------
 
 interface TutorProps {
   sessionId: string;
@@ -351,30 +506,25 @@ interface TutorProps {
   sheetAccess: SheetAccess;
   /** The page to come back to from the study sheet after saving (this question in its session, or the results). */
   backHref?: string;
-  /** A MiaDock is on the page, so the panel links to it instead of showing a second chat. */
-  sideChat?: boolean;
 }
 
-/** "Break it down" (before answering) and "Explain the answer" (after), with follow-up questions. */
-export function Tutor({ sessionId, questionId, answered, sheetAccess, backHref, sideChat }: TutorProps) {
+/** "Break it down" and "Explain the answer" with follow-up questions, inline under a question (results page). */
+export function Tutor({ sessionId, questionId, answered, sheetAccess, backHref }: TutorProps) {
   const [view, setView] = useState<"none" | "breakdown" | "answer">("none");
-  const [level, setLevel] = useState<BreakdownLevel>("standard");
-  const [breakdowns, setBreakdowns] = useState<Partial<Record<BreakdownLevel, Breakdown>>>({});
+  const [current, setCurrent] = useState<Breakdown | null>(null);
   const [answer, setAnswer] = useState("");
   const [answerDone, setAnswerDone] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const panelRef = useRef<HTMLDivElement>(null);
 
-  const openBreakdown = async (lvl: BreakdownLevel) => {
-    setView("breakdown"); setLevel(lvl); setError(null);
-    if (breakdowns[lvl]) return;
+  const openBreakdown = async () => {
+    setView("breakdown"); setError(null);
+    if (current) return;
     setLoading(true);
     try {
-      const res = await fetch("/api/ai/breakdown", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ sessionId, questionId, level: lvl }) });
+      const res = await fetch("/api/ai/breakdown", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ sessionId, questionId }) });
       if (!res.ok) throw new Error(await readError(res));
-      const { breakdown } = await res.json();
-      setBreakdowns((b) => ({ ...b, [lvl]: breakdown }));
+      setCurrent((await res.json()).breakdown);
     } catch (e) { setError((e as Error).message); } finally { setLoading(false); }
   };
 
@@ -386,12 +536,12 @@ export function Tutor({ sessionId, questionId, answered, sheetAccess, backHref, 
     catch (e) { setError((e as Error).message); } finally { setLoading(false); }
   };
 
-  const current = view === "breakdown" ? breakdowns[level] : undefined;
+  const shown = view === "breakdown" ? current : null;
 
   return (
-    <div ref={panelRef} className="mt-4">
+    <div className="mt-4">
       <div className="flex flex-wrap gap-2">
-        <button type="button" className={view === "breakdown" ? "btn-primary !py-2" : "btn-ghost !py-2"} onClick={() => (view === "breakdown" ? setView("none") : openBreakdown(level))}>
+        <button type="button" className={view === "breakdown" ? "btn-primary !py-2" : "btn-ghost !py-2"} onClick={() => (view === "breakdown" ? setView("none") : openBreakdown())}>
           <Mia size={20} /> {view === "breakdown" ? "Hide breakdown" : "Break it down for me"}
         </button>
         {answered && (
@@ -403,22 +553,9 @@ export function Tutor({ sessionId, questionId, answered, sheetAccess, backHref, 
 
       {view !== "none" && (
         <div className="mt-3 rounded-2xl border-[1.5px] border-brand/40 bg-surface p-4 shadow-sm md:p-6">
-          <div className="flex flex-wrap items-center justify-between gap-2">
-            <p className="eyebrow flex items-center gap-2 text-brand"><Mia size={22} />Mia · AI tutor{view === "breakdown" && !answered ? " · won't reveal the answer" : ""}</p>
-            {view === "breakdown" && (
-              <div className="flex rounded-full border border-line p-0.5 text-xs font-bold">
-                {(["standard", "simple"] as const).map((l) => (
-                  <button key={l} type="button" onClick={() => openBreakdown(l)} disabled={loading}
-                    className={`rounded-full px-3 py-1 ${level === l ? "bg-brand text-on-brand" : "text-soft"}`}>
-                    {l === "standard" ? "Standard" : "Simpler, please"}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-
+          <p className="eyebrow flex items-center gap-2 text-brand"><Mia size={22} />Mia · AI tutor{view === "breakdown" && !answered ? " · won't reveal the answer" : ""}</p>
           <div className="mt-3">
-            {loading && !current && !answer ? (
+            {loading && !shown && !answer ? (
               <div className="flex items-start gap-4" aria-live="polite">
                 <MiaThinking height={96} className="-mb-2 hidden sm:block" />
                 <div className="min-w-0 flex-1 space-y-3">
@@ -428,8 +565,8 @@ export function Tutor({ sessionId, questionId, answered, sheetAccess, backHref, 
               </div>
             ) : error ? (
               <p className="rounded-xl bg-bad-soft px-4 py-2 text-sm font-semibold text-bad">{error}</p>
-            ) : view === "breakdown" && current ? (
-              <BreakdownView b={current} save={(title, body) => <SaveToSheet small title={title} body={body} questionId={questionId} access={sheetAccess} backHref={backHref} />} />
+            ) : view === "breakdown" && shown ? (
+              <BreakdownView b={shown} save={(title, body) => <SaveToSheet small title={title} body={body} questionId={questionId} access={sheetAccess} backHref={backHref} />} />
             ) : view === "answer" && answer ? (
               <>
                 <div className="mb-3 flex items-center gap-3">
@@ -441,13 +578,7 @@ export function Tutor({ sessionId, questionId, answered, sheetAccess, backHref, 
               </>
             ) : null}
           </div>
-
-          {(current || answer) && !error && (sideChat ? (
-            <div className="mt-6 flex flex-wrap items-center gap-3 border-t border-line pt-4">
-              <p className="font-extrabold">Still confused?</p>
-              <button type="button" className="btn-ghost !py-1.5 !text-sm" onClick={openDock}><Mia size={20} /> Ask Mia</button>
-            </div>
-          ) : <Chat sessionId={sessionId} questionId={questionId} answered={answered} access={sheetAccess} backHref={backHref} />)}
+          {(shown || answer) && !error && <Chat sessionId={sessionId} questionId={questionId} answered={answered} access={sheetAccess} backHref={backHref} />}
           <p className="mt-4 text-xs text-muted">AI-written explanations can make mistakes. When in doubt, check the linked AWS documentation.</p>
         </div>
       )}

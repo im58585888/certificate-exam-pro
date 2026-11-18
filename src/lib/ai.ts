@@ -63,7 +63,6 @@ const CardSchema = z.object({
 });
 export type ConceptCard = z.infer<typeof CardSchema>;
 
-export type BreakdownLevel = "standard" | "simple";
 
 // ---------- Prompts (stable text first so it can be cached) ----------
 
@@ -79,10 +78,7 @@ You are not told the correct answer and must not suggest one: don't rank options
 
 Some options are claims rather than technologies (for example "Standard-IA has a 90-day minimum storage duration"). For those, explain the concept the claim is about and what the learner would need to know to judge it, but never state whether the claim is true or give the fact that settles it. Likewise, don't do the calculation or comparison that decides the question: set up the arithmetic or the comparison and leave the final step to the learner.`;
 
-const LEVEL_NOTE: Record<BreakdownLevel, string> = {
-  standard: "Pitch it at someone who knows basic IT but is new to this AWS topic.",
-  simple: "The learner found the normal explanation too hard. Pitch it at someone brand new to cloud computing: no jargon without a definition, an everyday analogy for every idea, and shorter sentences throughout.",
-};
+const BREAKDOWN_LEVEL = "Pitch it at someone who knows basic IT but is new to this AWS topic.";
 
 function questionText(q: Question, withAnswer: boolean): string {
   const exam = getExam(examOf(q.id) ?? "");
@@ -156,14 +152,13 @@ async function parse<T>(schema: z.ZodType<T>, system: string, user: string, maxT
 }
 
 /** Pre-answer breakdown. Never given the correct answer, so it can't leak it. */
-export async function cachedBreakdown(q: Question, level: BreakdownLevel): Promise<Breakdown | null> {
-  return cached<Breakdown>(q.id, level === "simple" ? "breakdown-simple" : "breakdown", hashQuestion(q));
+export async function cachedBreakdown(q: Question): Promise<Breakdown | null> {
+  return cached<Breakdown>(q.id, "breakdown", hashQuestion(q));
 }
 
-export async function writeBreakdown(q: Question, level: BreakdownLevel): Promise<Breakdown> {
-  const kind = level === "simple" ? "breakdown-simple" : "breakdown";
-  const content = mock ? mockBreakdown(q) : await parse(BreakdownSchema, `${BREAKDOWN_RULES}\n\n${LEVEL_NOTE[level]}`, questionText(q, false));
-  await store(q.id, kind, hashQuestion(q), content);
+export async function writeBreakdown(q: Question): Promise<Breakdown> {
+  const content = mock ? mockBreakdown(q) : await parse(BreakdownSchema, `${BREAKDOWN_RULES}\n\n${BREAKDOWN_LEVEL}`, questionText(q, false));
+  await store(q.id, "breakdown", hashQuestion(q), content);
   return content;
 }
 
