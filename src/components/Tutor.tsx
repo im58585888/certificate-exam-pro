@@ -386,30 +386,32 @@ export function MiaPanel({ sessionId, questionId, questionNumber, answered, shee
       <aside aria-label="Mia, your AI tutor"
         className={`${open ? "flex" : "hidden"} fixed inset-x-0 bottom-0 z-50 h-[78vh] flex-col rounded-t-2xl border-t border-line bg-surface p-4 shadow-2xl
           lg:sticky lg:top-4 lg:z-auto lg:flex lg:h-[calc(100dvh-6rem)] lg:min-h-[480px] lg:rounded-2xl lg:border lg:shadow-none`}>
-        <div className="flex items-center gap-2.5">
-          <Mia size={32} />
-          <div className="min-w-0 flex-1">
-            <p className="font-extrabold leading-tight">Ask Mia about Q{questionNumber}</p>
-            <p className="text-xs text-muted">{answered ? "AI tutor · ask anything about this question" : "AI tutor · won't give the answer away"}</p>
-          </div>
+        <div className="flex items-center gap-2">
+          <p className="flex-1 text-sm"><b>Ask Mia about Q{questionNumber}</b> <span className="text-xs text-muted">· AI tutor{answered ? "" : " · won't give the answer away"}</span></p>
           <button type="button" className="text-xs font-bold text-soft hover:text-brand lg:hidden" onClick={() => setOpen(false)}>Minimise</button>
         </div>
 
-        {!brokenDown && (
+        {/* Once the chat has started, the button moves up here; before that it sits under Mia's greeting. */}
+        {!brokenDown && entries.length > 0 && (
           <button type="button" disabled={!!busy} onClick={breakdown}
-            className="mt-3 flex flex-none items-center gap-2.5 rounded-xl border border-brand/50 bg-brand-soft px-3 py-2.5 text-left transition hover:border-brand disabled:opacity-60">
-            <Mia size={26} />
-            <span><span className="block text-sm font-bold leading-tight">Break it down for me</span><span className="block text-[11px] text-muted">What it&apos;s testing, step by step</span></span>
+            className="mt-3 flex-none rounded-xl border border-brand/50 bg-brand-soft px-3 py-2 text-left text-sm font-bold transition hover:border-brand disabled:opacity-60">
+            Break it down for me
           </button>
         )}
 
         <div ref={scrollRef} className="mt-3 min-h-0 flex-1 space-y-3 overflow-y-auto pr-1">
           {entries.length === 0 && !busy && (
             <div className="flex items-end gap-2">
-              <MiaPose pose="welcoming" height={88} className="-ml-1" />
-              <p className="mb-2 rounded-2xl rounded-bl-sm bg-brand-soft px-3 py-2 text-sm">
-                {answered ? "Ask me anything about this question, or tap Break it down for me." : "Stuck? Tap Break it down for me, or ask me about any term or requirement."}
-              </p>
+              <MiaPose pose="welcoming" height={104} className="-ml-1" />
+              <div className="mb-2 min-w-0 flex-1">
+                <p className="rounded-2xl rounded-bl-sm bg-brand-soft px-3 py-2 text-sm">
+                  {answered ? <>Want to understand Q{questionNumber} better? Tap below, or ask me anything.</> : <>Stuck on Q{questionNumber}? Tap below and I&apos;ll break it down, or ask me about any term.</>}
+                </p>
+                <button type="button" onClick={breakdown}
+                  className="mt-2 w-full rounded-xl border border-brand/50 bg-brand-soft px-3 py-2 text-left text-sm font-bold transition hover:border-brand">
+                  Break it down for me
+                </button>
+              </div>
             </div>
           )}
           {entries.map((e, i) => {
