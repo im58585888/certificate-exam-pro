@@ -288,6 +288,16 @@ function Chat({ sessionId, questionId, answered, access, backHref }: { sessionId
 
 // ---------- Mia's panel (practice) ----------
 
+/** A pulsing green dot that marks the call to action (still for people who prefer reduced motion). */
+function Blinker() {
+  return (
+    <span className="relative mr-2 inline-flex h-2.5 w-2.5 flex-none align-middle" aria-hidden="true">
+      <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-ok opacity-75 motion-reduce:animate-none" />
+      <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-ok" />
+    </span>
+  );
+}
+
 /** One thing in Mia's timeline for a question: a chat turn, or the breakdown card. */
 type Entry =
   | { kind: "user" | "assistant"; content: string }
@@ -395,7 +405,7 @@ export function MiaPanel({ sessionId, questionId, questionNumber, answered, shee
         {!brokenDown && entries.length > 0 && (
           <button type="button" disabled={!!busy} onClick={breakdown}
             className="mt-3 flex-none rounded-xl border border-brand/50 bg-brand-soft px-3 py-2 text-left text-sm font-bold transition hover:border-brand disabled:opacity-60">
-            Break it down for me
+            <Blinker />Break it down for me
           </button>
         )}
 
@@ -409,7 +419,7 @@ export function MiaPanel({ sessionId, questionId, questionNumber, answered, shee
                 </p>
                 <button type="button" onClick={breakdown}
                   className="mt-2 w-full rounded-xl border border-brand/50 bg-brand-soft px-3 py-2 text-left text-sm font-bold transition hover:border-brand">
-                  Break it down for me
+                  <Blinker />Break it down for me
                 </button>
               </div>
             </div>
