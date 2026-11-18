@@ -288,6 +288,20 @@ function Chat({ sessionId, questionId, answered, access, backHref }: { sessionId
 
 // ---------- Mia's panel (practice) ----------
 
+/** What Mia says while she writes. One per question (picked from its id), so it doesn't change mid-wait. */
+const WAIT_LINES = [
+  "is reading the question twice, like the exam wants you to. ☕ Fresh ones take up to 30 seconds; after that they're instant.",
+  "is sketching boxes and arrows on a napkin. ✏️ Give her up to 30 seconds; next time it's instant.",
+  "is cracking her knuckles. 💪 New questions take up to 30 seconds to break down, then they're saved for everyone.",
+  "is untangling the AWS jargon so you don't have to. 🧶 Up to 30 seconds the first time, instant after that.",
+  "is circling the sneaky words in the question. 🔍 First look takes up to 30 seconds; after that it's instant.",
+];
+function waitLine(id: string) {
+  let n = 0;
+  for (const c of id) n = (n + c.charCodeAt(0)) % WAIT_LINES.length;
+  return WAIT_LINES[n];
+}
+
 /** A pulsing green dot that marks the call to action (still for people who prefer reduced motion). */
 function Blinker() {
   return (
@@ -451,7 +465,7 @@ export function MiaPanel({ sessionId, questionId, questionNumber, answered, shee
           {busy === "breakdown" && (
             <div className="flex items-center gap-3" aria-live="polite">
               <MiaThinking height={72} />
-              <p className="text-sm text-soft"><b className="text-ink">Mia is reading the question</b>… the first time anyone asks this takes up to half a minute; after that it&apos;s instant.</p>
+              <p className="text-sm text-soft"><b className="text-ink">Mia</b> {waitLine(questionId)}</p>
             </div>
           )}
           {error && <p className="rounded-xl bg-bad-soft px-3 py-2 text-sm font-semibold text-bad">{error}</p>}
@@ -527,7 +541,7 @@ export function Tutor({ sessionId, questionId, answered, sheetAccess, backHref }
               <div className="flex items-start gap-4" aria-live="polite">
                 <MiaThinking height={96} className="-mb-2 hidden sm:block" />
                 <div className="min-w-0 flex-1 space-y-3">
-                  <p className="text-sm text-soft"><b className="text-ink">Mia is reading the question</b> and writing your {view === "answer" ? "walk-through" : "breakdown"}… The first time anyone opens a question this takes up to half a minute; after that it&apos;s instant.</p>
+                  <p className="text-sm text-soft"><b className="text-ink">Mia</b> {waitLine(questionId)}</p>
                   {[80, 95, 60, 90].map((w, i) => <div key={i} className="h-3.5 animate-pulse rounded bg-line" style={{ width: `${w}%` }} />)}
                 </div>
               </div>
