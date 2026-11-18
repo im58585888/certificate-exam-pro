@@ -4,13 +4,14 @@ import { startQuizAction } from "./actions";
 import { EXAM_LIST, FREE_TRIAL_QUESTIONS, PASS_DAYS, PASS_PRICE_CENTS } from "@/lib/exams";
 import { ensureBank, questionsFor } from "@/lib/questions";
 import { TrialPicker } from "@/components/LandingDemos";
-import { HeroTutorAnimation, MemoryFlow, Mia, MiaSpotlight, TutorFlow } from "@/components/TutorVisuals";
+import { HeroMiaDemo } from "@/components/HeroMiaDemo";
+import { MemoryFlow, Mia, MiaSpotlight, TutorFlow } from "@/components/TutorVisuals";
 import styles from "./landing.module.css";
 
 const PRICE = `$${(PASS_PRICE_CENTS / 100).toFixed(2)}`;
 
 export const metadata: Metadata = {
-  title: "AWS exam prep with an AI tutor · Certificate Exam Pro",
+  title: "Meet Mia, your AI tutor for AWS exams · Certificate Exam Pro",
   description: "An AI tutor on every practice question: it breaks the question down, shows what it's testing, walks you through how to answer, and answers your follow-up questions. Practice CLF-C02, AIF-C01 and SAA-C03.",
 };
 
@@ -27,21 +28,21 @@ const FAQ = [
 export default async function Home() {
   await ensureBank();
   const exams = EXAM_LIST.map((exam) => ({ exam, bank: questionsFor(exam.slug).length }));
+  const totalQuestions = exams.reduce((n, e) => n + e.bank, 0);
   return (
     <div className={styles.landing}>
       <section className={styles.hero} aria-labelledby="hero-title">
         <div className={styles.heroInner}>
           <div className={styles.heroCopy}>
-            <p className={styles.eyebrow}>✨ An AI tutor on every question</p>
-            <h1 id="hero-title">Stuck on an AWS question?<br /><span>Ask your AI tutor.</span></h1>
-            <p className={styles.heroDescription}>Breaks it down. Explains the why. Answers your questions.</p>
-            <p className={styles.miaIntro}><Mia size={26} /><span>Meet <b>Mia</b>, your AI tutor</span></p>
+            <p className={styles.eyebrow}>✨ Your AI tutor for AWS certification</p>
+            <h1 id="hero-title">Meet Mia.<br /><span>She&apos;ll get you through your AWS exam.</span></h1>
+            <p className={styles.heroDescription}>Stuck? Mia breaks it down. Curious? Ask her anything. Ready? Prove it on a timed mock exam.</p>
             <TrialPicker exams={EXAM_LIST.map((exam) => ({ slug: exam.slug, name: exam.shortName, code: exam.code }))} count={FREE_TRIAL_QUESTIONS} />
             <a className={styles.textLink} href="#how-it-works">See what the tutor does <span aria-hidden="true">↓</span></a>
           </div>
-          <HeroTutorAnimation />
+          <HeroMiaDemo />
         </div>
-        <div className={styles.heroFootnote}><span>Learn why the answer is right, not just which one.</span><span>CLF-C02 <i aria-hidden="true">/</i> AIF-C01 <i aria-hidden="true">/</i> SAA-C03</span></div>
+        <div className={styles.heroFootnote}><span>{totalQuestions.toLocaleString()} practice questions · {PRICE} per exam for {PASS_DAYS} days · no auto-renewal</span><span>CLF-C02 <i aria-hidden="true">/</i> AIF-C01 <i aria-hidden="true">/</i> SAA-C03</span></div>
       </section>
 
       <section id="how-it-works" className={styles.visualSection} aria-labelledby="learning-title">

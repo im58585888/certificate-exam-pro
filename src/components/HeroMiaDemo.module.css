@@ -1,0 +1,111 @@
+/* A browser-window frame around a miniature practice page. */
+.frame { position: relative; min-width: 0; background: var(--surface); border: 1px solid var(--line); border-radius: 18px; overflow: hidden; box-shadow: 0 30px 80px -40px color-mix(in srgb, var(--brand) 60%, transparent); animation: rise .7s .1s ease-out both; }
+.chrome { display: flex; align-items: center; gap: 6px; padding: 10px 14px; border-bottom: 1px solid var(--line); background: var(--surface-2); }
+.chrome i { width: 9px; height: 9px; border-radius: 50%; background: var(--line); }
+.chrome i:nth-child(1) { background: #ff6b6b; }
+.chrome i:nth-child(2) { background: #ffc34d; }
+.chrome i:nth-child(3) { background: #3ddbb4; }
+.chrome span { margin-left: 8px; font-size: 11px; font-weight: 700; color: var(--muted); }
+
+.app { position: relative; display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 12px; padding: 14px; height: 390px; }
+
+/* Question card */
+.question { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.meta { font-size: 10px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.text { font-size: 12.5px; line-height: 1.6; }
+.text mark { color: inherit; background: transparent; padding: 0 1px; }
+.markOn, .markDone { background: linear-gradient(transparent 55%, color-mix(in srgb, var(--warn) 55%, transparent) 55%) no-repeat 0 0 / 100% 100% !important; font-weight: 700; }
+.markOn { background-size: 0% 100% !important; animation: mark .6s var(--d, 0s) ease-out forwards; }
+.prompt { font-size: 12.5px; font-weight: 800; }
+.options { display: grid; gap: 6px; list-style: none; margin: 0; padding: 0; }
+.options li { position: relative; display: flex; align-items: center; gap: 8px; padding: 7px 9px; border: 1px solid var(--line); border-radius: 9px; font-size: 12px; font-weight: 600; background: var(--surface); }
+.options b { display: grid; place-items: center; width: 18px; height: 18px; flex: none; border: 1.5px solid var(--muted); border-radius: 50%; font-size: 10px; color: var(--soft); }
+.cWin { animation: pick 0s .95s forwards, win .4s 2s ease-out forwards; }
+.qFoot { margin-top: auto; display: flex; align-items: center; justify-content: space-between; gap: 8px; padding-top: 4px; }
+.check { padding: 6px 12px; border-radius: 9px; background: color-mix(in srgb, var(--brand) 45%, transparent); color: var(--on-brand); font-size: 11.5px; font-weight: 800; }
+.checkReady { animation: ready 0s .95s forwards; }
+.correct { font-size: 12px; font-weight: 800; color: var(--ok); }
+
+/* Fireworks around the right option */
+.burst { position: absolute; left: 70%; top: 50%; pointer-events: none; }
+.burst i { position: absolute; width: 6px; height: 6px; border-radius: 50%; background: var(--brand); opacity: 0; animation: spark .9s 2.05s ease-out forwards; }
+.burst i:nth-child(3n) { background: #3ddbb4; }
+.burst i:nth-child(3n+1) { background: #ffc34d; }
+
+/* Mia's panel: like a real chat, the newest message sits at the bottom and older ones scroll off the top. */
+.mia { display: flex; flex-direction: column; gap: 8px; min-width: 0; min-height: 0; padding: 10px; border: 1px solid var(--line); border-radius: 12px; background: var(--bg); }
+.miaHead { display: flex; align-items: center; gap: 7px; font-size: 12px; }
+.timeline { display: flex; flex-direction: column; justify-content: flex-end; gap: 7px; flex: 1; min-height: 0; overflow: hidden; }
+.bubble { align-self: flex-start; max-width: 95%; padding: 7px 10px; border-radius: 12px 12px 12px 3px; background: var(--brand-soft); font-size: 11.5px; line-height: 1.45; animation: rise .4s .2s ease-out both; }
+.cta { display: flex; align-items: center; gap: 7px; padding: 7px 10px; border: 1px solid color-mix(in srgb, var(--brand) 50%, transparent); border-radius: 10px; background: var(--brand-soft); font-size: 11.5px; font-weight: 800; animation: rise .4s .5s ease-out both; }
+.ctaGone { animation: press .25s .2s ease-out, gone .3s .5s ease-in forwards; }
+.blink { position: relative; width: 8px; height: 8px; flex: none; border-radius: 50%; background: var(--ok); }
+.blink::after { content: ""; position: absolute; inset: 0; border-radius: 50%; background: var(--ok); animation: ping 1.2s ease-out infinite; }
+.thinking { display: flex; align-items: center; gap: 8px; font-size: 11px; color: var(--soft); opacity: 0; animation: show 0s .6s forwards, hide 0s 2s forwards; }
+.card { padding: 8px; border: 1px solid color-mix(in srgb, var(--brand) 30%, transparent); border-radius: 10px; background: var(--surface); }
+.cardIn { opacity: 0; animation: rise .4s 2s ease-out forwards; }
+.cardTitle { font-size: 10.5px; font-weight: 800; color: var(--brand); margin-bottom: 5px; }
+.reqs { display: grid; gap: 4px; list-style: none; margin: 0; padding: 0; }
+.reqs li { display: flex; align-items: center; gap: 5px; padding: 4px 6px; border: 1px solid var(--line); border-radius: 7px; font-size: 10.5px; font-weight: 700; line-height: 1.25; }
+.reqs b { display: grid; place-items: center; width: 14px; height: 14px; flex: none; border-radius: 50%; background: var(--brand); color: var(--on-brand); font-size: 9px; }
+.me { align-self: flex-end; max-width: 90%; padding: 6px 10px; border-radius: 12px 12px 3px 12px; background: var(--brand); color: var(--on-brand); font-size: 11.5px; font-weight: 700; }
+.dots { align-self: flex-start; display: flex; gap: 3px; padding: 7px 10px; border-radius: 12px; background: var(--surface-2); opacity: 0; animation: show 0s 2.4s forwards, hide 0s 3.3s forwards; }
+.dots i { width: 5px; height: 5px; border-radius: 50%; background: var(--muted); animation: bounce 1s infinite; }
+.dots i:nth-child(2) { animation-delay: .15s; }
+.dots i:nth-child(3) { animation-delay: .3s; }
+.reply { display: flex; align-items: flex-start; gap: 6px; }
+.reply table { width: 100%; border-collapse: collapse; overflow: hidden; border-radius: 8px; background: var(--surface-2); font-size: 10.5px; }
+.reply th, .reply td { padding: 4px 6px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); }
+.reply tr:last-child th, .reply tr:last-child td { border-bottom: 0; }
+.reply th { width: 36%; font-weight: 800; color: var(--brand); }
+.composer { padding: 8px 10px; border: 1px solid var(--line); border-radius: 10px; font-size: 11.5px; background: var(--surface); white-space: nowrap; overflow: hidden; }
+.placeholder { color: var(--muted); }
+.typing { display: inline-block; max-width: 0; overflow: hidden; vertical-align: bottom; border-right: 2px solid var(--brand); animation: type 1.4s .4s steps(26) forwards, hide 0s 1.95s forwards; }
+
+.toast { position: absolute; left: 50%; bottom: 14px; translate: -50% 0; padding: 7px 14px; border-radius: 999px; background: var(--ink); color: var(--surface); font-size: 11.5px; font-weight: 800; white-space: nowrap; box-shadow: 0 10px 30px -10px rgb(0 0 0 / .5); }
+
+.cursor { position: absolute; left: 0; top: 0; z-index: 3; pointer-events: none; transform: translate(-40px, -40px); filter: drop-shadow(0 2px 3px rgb(0 0 0 / .4)); }
+.cursor path { fill: #fff; stroke: #17153a; stroke-width: 1.2; stroke-linejoin: round; }
+
+/* Shared pop-in (delay from --d) */
+.pop { opacity: 0; animation: pop .45s var(--d, 0s) cubic-bezier(.2, 1.4, .4, 1) forwards; }
+
+/* Caption and scene dots */
+.footer { padding: 4px 16px 14px; }
+.caption { display: flex; align-items: center; justify-content: center; gap: 9px; font-size: 15px; font-weight: 800; letter-spacing: -.02em; animation: rise .4s ease-out both; }
+.caption span { display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: var(--brand); color: var(--on-brand); font-size: 12px; }
+.nav { display: flex; justify-content: center; gap: 8px; padding-top: 10px; }
+.navDot, .navOn { position: relative; width: 26px; height: 6px; border-radius: 3px; background: var(--line); overflow: hidden; }
+.navOn { width: 42px; background: var(--brand-soft); }
+.navFill { position: absolute; inset: 0; background: var(--brand); transform-origin: left; animation: fill linear both; }
+
+@keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@keyframes pop { from { opacity: 0; transform: scale(.85); } to { opacity: 1; transform: none; } }
+@keyframes show { to { opacity: 1; } }
+@keyframes hide { to { opacity: 0; height: 0; padding: 0; margin: 0; overflow: hidden; } }
+@keyframes gone { to { opacity: 0; height: 0; padding: 0; border-width: 0; margin: 0; } }
+@keyframes press { 50% { transform: scale(.96); } }
+@keyframes mark { to { background-size: 100% 100%; } }
+@keyframes pick { to { border-color: var(--brand); background: var(--brand-soft); } }
+@keyframes win { to { border-color: var(--ok); background: var(--ok-soft); color: var(--ok); } }
+@keyframes ready { to { background: var(--brand); } }
+@keyframes type { to { max-width: 100%; } }
+@keyframes ping { from { transform: scale(1); opacity: .7; } to { transform: scale(2.6); opacity: 0; } }
+@keyframes bounce { 0%, 60%, 100% { transform: translateY(0); } 30% { transform: translateY(-3px); } }
+@keyframes spark { 0% { opacity: 1; transform: rotate(var(--a)) translateX(0); } 100% { opacity: 0; transform: rotate(var(--a)) translateX(46px); } }
+@keyframes fill { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+@media (max-width: 560px) {
+  .app { grid-template-columns: 1fr; height: auto; }
+  .mia { height: 280px; }
+}
+
+/* Reduced motion: every scene shows its finished frame, no cursor. */
+@media (prefers-reduced-motion: reduce) {
+  .frame *, .frame { animation: none !important; }
+  .pop, .cardIn, .bubble, .cta { opacity: 1 !important; }
+  .markOn { background-size: 100% 100% !important; }
+  .thinking, .dots, .typing, .ctaGone, .cursor { display: none !important; }
+  .cWin { border-color: var(--ok); background: var(--ok-soft); color: var(--ok); }
+  .checkReady { background: var(--brand); }
+}
