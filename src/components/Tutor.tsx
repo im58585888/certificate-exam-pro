@@ -3,7 +3,7 @@
 import { Fragment, useRef, useState, type ReactNode } from "react";
 import type { Breakdown, BreakdownLevel } from "@/lib/ai";
 import { ChatMarkdown } from "./ChatMarkdown";
-import { Mia, MiaPose } from "./Mia";
+import { Mia, MiaPose, MiaThinking } from "./Mia";
 import { cluesMarkdown, optionsMarkdown, pictureMarkdown, SaveToSheet, tableMarkdown, termsMarkdown } from "./SaveToSheet";
 import type { SheetAccess } from "@/lib/sheetAccess";
 
@@ -95,8 +95,7 @@ function BreakdownView({ b, save }: { b: Breakdown; save: (title: string, body: 
       </div>
 
       <Section n={++n} title="What is the question really asking?">
-        <div className="space-y-2.5 leading-relaxed">{b.story.split(/\n\s*\n/).map((p, i) => <p key={i}>{p}</p>)}</div>
-        <ol className="mt-3 grid gap-2 sm:grid-cols-2">
+        <ol className="grid gap-2 sm:grid-cols-2">
           {b.requirements.map((r, i) => (
             <li key={i} className="rounded-xl border border-line bg-bg p-3">
               <b className="text-ink">{i + 1}. {r.label}</b>
@@ -188,7 +187,7 @@ export function ChatThread({ heading, suggestions, placeholder, send, saveTarget
   /** Streams the reply to `turns` (which end with the new user message), calling onText as text arrives. */
   send: (turns: Turn[], onText: (text: string) => void) => Promise<string>;
   /** Where saved replies go: a question (exam and topic come from it), or an exam plus a topic or a topic picker (study tutor). */
-  saveTarget: { questionId?: string; exam?: string; target?: { topic?: string; sectionId?: number }; destinations?: { value: string; label: string }[] };
+  saveTarget: { questionId?: string; exam?: string; target?: { topic?: string; sectionId?: number }; destinations?: { value: string; label: string }[]; backHref?: string };
   saveLabel?: string;
   access: SheetAccess;
   emptyHint?: ReactNode;
@@ -249,13 +248,13 @@ export function ChatThread({ heading, suggestions, placeholder, send, saveTarget
   );
 }
 
-function Chat({ sessionId, questionId, answered, access }: { sessionId: string; questionId: string; answered: boolean; access: SheetAccess }) {
+function Chat({ sessionId, questionId, answered, access, backHref }: { sessionId: string; questionId: string; answered: boolean; access: SheetAccess; backHref?: string }) {
   const suggestions = answered
     ? ["Why exactly is my choice wrong?", "Give me a real-world example", "How would the exam try to trick me here?", "Show it as a table or diagram"]
     : ["Explain the scenario even more simply", "What should I look for in the options?", "Give me a real-world analogy", "Show it as a table or diagram"];
   return (
     <div className="mt-6 border-t border-line pt-5">
-      <ChatThread heading="Still confused? Ask Mia" suggestions={suggestions} access={access} saveTarget={{ questionId }}
+      <ChatThread heading="Still confused? Ask Mia" suggestions={suggestions} access={access} saveTarget={{ questionId, backHref }}
         placeholder={answered ? "Ask anything about this question…" : "Ask about a term or requirement (the tutor won't reveal the answer)"}
         send={(turns, onText) => streamPost("/api/ai/chat", { sessionId, questionId, turns }, onText)} />
     </div>
@@ -270,10 +269,12 @@ interface TutorProps {
   answered: boolean;
   /** Pass holders can save tutor content to their study sheet; others see the button as an upsell. */
   sheetAccess: SheetAccess;
+  /** The page to come back to from the study sheet after saving (this question in its session, or the results). */
+  backHref?: string;
 }
 
 /** "Break it down" (before answering) and "Explain the answer" (after), with follow-up questions. */
-export function Tutor({ sessionId, questionId, answered, sheetAccess }: TutorProps) {
+export function Tutor({ sessionId, questionId, answered, sheetAccess, backHref }: TutorProps) {
   const [view, setView] = useState<"none" | "breakdown" | "answer">("none");
   const [level, setLevel] = useState<BreakdownLevel>("standard");
   const [breakdowns, setBreakdowns] = useState<Partial<Record<BreakdownLevel, Breakdown>>>({});
@@ -337,7 +338,7 @@ export function Tutor({ sessionId, questionId, answered, sheetAccess }: TutorPro
           <div className="mt-3">
             {loading && !current && !answer ? (
               <div className="flex items-start gap-4" aria-live="polite">
-                <MiaPose pose="thinking" height={96} className="-mb-2 hidden sm:block" />
+                <MiaThinking height={96} className="-mb-2 hidden sm:block" />
                 <div className="min-w-0 flex-1 space-y-3">
                   <p className="text-sm text-soft"><b className="text-ink">Mia is reading the question</b> and writing your {view === "answer" ? "walk-through" : "breakdown"}… The first time anyone opens a question this takes up to half a minute; after that it&apos;s instant.</p>
                   {[80, 95, 60, 90].map((w, i) => <div key={i} className="h-3.5 animate-pulse rounded bg-line" style={{ width: `${w}%` }} />)}
@@ -346,7 +347,7 @@ export function Tutor({ sessionId, questionId, answered, sheetAccess }: TutorPro
             ) : error ? (
               <p className="rounded-xl bg-bad-soft px-4 py-2 text-sm font-semibold text-bad">{error}</p>
             ) : view === "breakdown" && current ? (
-              <BreakdownView b={current} save={(title, body) => <SaveToSheet small title={title} body={body} questionId={questionId} access={sheetAccess} />} />
+              <BreakdownView b={current} save={(title, body) => <SaveToSheet small title={title} body={body} questionId={questionId} access={sheetAccess} backHref={backHref} />} />
             ) : view === "answer" && answer ? (
               <>
                 <div className="mb-3 flex items-center gap-3">
@@ -354,12 +355,12 @@ export function Tutor({ sessionId, questionId, answered, sheetAccess }: TutorPro
                   <p className="font-extrabold">Mia walks you through it</p>
                 </div>
                 <MiniMarkdown text={answer} />
-                {answerDone && <div className="mt-3"><SaveToSheet title="Answer walk-through" body={answer} questionId={questionId} access={sheetAccess} /></div>}
+                {answerDone && <div className="mt-3"><SaveToSheet title="Answer walk-through" body={answer} questionId={questionId} access={sheetAccess} backHref={backHref} /></div>}
               </>
             ) : null}
           </div>
 
-          {(current || answer) && !error && <Chat sessionId={sessionId} questionId={questionId} answered={answered} access={sheetAccess} />}
+          {(current || answer) && !error && <Chat sessionId={sessionId} questionId={questionId} answered={answered} access={sheetAccess} backHref={backHref} />}
           <p className="mt-4 text-xs text-muted">AI-written explanations can make mistakes. When in doubt, check the linked AWS documentation.</p>
         </div>
       )}

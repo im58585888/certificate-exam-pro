@@ -10,11 +10,13 @@ import { upsellHref, type SheetAccess } from "@/lib/sheetAccess";
  * "📌 Save to study sheet" for a piece of tutor content (markdown in the chat format: tables and ```flow diagrams included).
  * It's a pass feature: without one the button still shows and leads to sign-up or the pass.
  */
-export function SaveToSheet({ body, title, questionId, exam, target, destinations, access, small, label = "Save to study sheet" }: {
+export function SaveToSheet({ body, title, questionId, exam, target, destinations, access, small, label = "Save to study sheet", backHref }: {
   body: string; title?: string; questionId?: string; exam?: string; target?: { topic?: string; sectionId?: number };
   /** Lets the learner pick the topic (study tutor answers that aren't tied to one topic). Values are "t:<topic>" or "s:<id>". */
   destinations?: { value: string; label: string }[];
   access: SheetAccess; small?: boolean; label?: string;
+  /** Where "View sheet" should offer to bring the learner back to (their practice question or results). */
+  backHref?: string;
 }) {
   const [state, setState] = useState<"idle" | "saved" | "error">("idle");
   const [message, setMessage] = useState("");
@@ -33,7 +35,7 @@ export function SaveToSheet({ body, title, questionId, exam, target, destination
   if (state === "saved") {
     return (
       <span className={`inline-flex items-center gap-1.5 font-semibold text-ok ${small ? "text-[11px]" : "text-xs"}`}>
-        ✓ Saved{savedExam && <Link href={`/study/${savedExam}`} className="font-bold text-brand underline">View sheet</Link>}
+        ✓ Saved{savedExam && <Link href={`/study/${savedExam}${backHref ? `?back=${encodeURIComponent(backHref)}` : ""}`} className="font-bold text-brand underline">View sheet</Link>}
       </span>
     );
   }

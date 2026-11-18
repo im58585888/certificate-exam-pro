@@ -35,7 +35,6 @@ const Table = z.object({ caption: z.string(), columns: z.array(z.string()), rows
 const BreakdownSchema = z.object({
   title: z.string().describe("Short name for the scenario, e.g. 'Private networking for SaaS providers'"),
   testing: z.array(z.string()).describe("2-5 services or concepts the question tests"),
-  story: z.string().describe("The scenario retold in plain words with a concrete example company, 2-4 short paragraphs separated by blank lines"),
   requirements: z.array(z.object({ label: z.string(), detail: z.string() })).describe("Every requirement and constraint, including ones hidden in phrases like LEAST operational overhead"),
   picture: z.object({ caption: z.string(), steps: z.array(z.object({ label: z.string(), note: z.string() })) }).nullable()
     .describe("3-6 boxes showing how the pieces of the scenario connect, left to right; null if a picture wouldn't help"),
@@ -48,12 +47,18 @@ const BreakdownSchema = z.object({
 });
 export type Breakdown = z.infer<typeof BreakdownSchema>;
 
+// Study-sheet cards are laid out as small tables and a diagram rather than bullet lists, so every field is short.
 const CardSchema = z.object({
   title: z.string(),
-  oneLiner: z.string().describe("What this concept is, in one sentence"),
-  keyPoints: z.array(z.string()).describe("3-5 facts that exam questions on this topic hinge on"),
-  compare: Table.nullable().describe("A small comparison of look-alike options (at most 4 rows), or null"),
-  traps: z.array(z.string()).describe("2-3 common wrong-answer traps on this topic"),
+  oneLiner: z.string().describe("What this concept is, in one short sentence"),
+  useWhen: z.array(z.object({ when: z.string(), notWhen: z.string() }))
+    .describe("2-4 rows. when: a situation where this is the right choice. notWhen: a look-alike situation where something else is, naming that something else. A few words each"),
+  facts: z.array(z.object({ label: z.string(), value: z.string() }))
+    .describe("3-5 exam-relevant facts as short label/value pairs, e.g. label 'Default retention', value '90 days'"),
+  flow: z.object({ caption: z.string(), steps: z.array(z.object({ label: z.string(), note: z.string() })) }).nullable()
+    .describe("3-5 boxes, left to right, showing how this service fits with others in a typical setup; null if there's no natural flow"),
+  compare: Table.nullable().describe("A small comparison of look-alike services (at most 4 rows, short cells), or null"),
+  traps: z.array(z.object({ trap: z.string(), truth: z.string() })).describe("2-3 common wrong-answer traps: the mistaken belief and the correct fact, one short line each"),
   remember: z.string().describe("One memorable rule of thumb"),
 });
 export type ConceptCard = z.infer<typeof CardSchema>;
@@ -191,6 +196,7 @@ Politely decline anything unrelated to AWS or studying for this exam.`;
 export type ChatTurn = { role: "user" | "assistant"; content: string };
 
 const STUDY_RULES = (examName: string, weak: string[], topic?: string) => `The learner is on their study sheet for the ${examName} exam and is asking you to help them study: explain concepts, compare services, draw how things connect, or quiz them. You are not discussing one specific practice question.${topic ? ` They opened the topic "${topic}", so keep answers focused on it unless they ask about something else.` : ""} Answer what they ask, briefly (under 250 words unless they ask for more), using "- " bullets and **bold** where they help, and stay accurate to current AWS behaviour.
+Prefer a table, matrix or diagram over long paragraphs whenever the answer compares, lists or connects things.
 ${weak.length ? `Their weakest topics so far: ${weak.join(", ")}. Lean on these when they ask what to study or want to be quizzed.` : "They haven't practised much yet."}
 If they ask to be quizzed, ask one question at a time and wait for their answer before explaining.
 ${VISUALS}
@@ -242,10 +248,12 @@ export function chat(q: Question, answered: boolean, turns: ChatTurn[]): AsyncGe
 
 // ---------- Study-sheet concept cards (one per exam topic, written from that topic's questions) ----------
 
-const CARD_RULES = `Write a study-sheet card for one exam topic, based on the practice questions below (with their correct answers, concepts and exam tips). Capture the ideas those questions test, so a learner can review the topic in under a minute. Keep each point to one short sentence.`;
+const CARD_RULES = `Write a study-sheet card for one exam topic, based on the practice questions below (with their correct answers, concepts and exam tips). Capture the ideas those questions test, so a learner can review the topic in under a minute. The card is shown as small tables and a diagram, so keep every field to a few words or one short line: no paragraphs.`;
 
 const topicKey = (exam: string, topic: string) => `topic:${exam}:${topic}`;
-const hashTopic = (qs: Question[]) => sha256(JSON.stringify([PROMPT_VERSION, qs.map((q) => [q.id, q.explanation.concept])])).slice(0, 16);
+/** Bump when the card format changes so existing cards are rewritten in the new shape the next time someone opens them. */
+const CARD_VERSION = 2;
+const hashTopic = (qs: Question[]) => sha256(JSON.stringify([PROMPT_VERSION, CARD_VERSION, qs.map((q) => [q.id, q.explanation.concept])])).slice(0, 16);
 
 export async function cachedCards(exam: string, topics: { topic: string; questions: Question[] }[]): Promise<Map<string, ConceptCard>> {
   if (!topics.length) return new Map();
@@ -286,7 +294,6 @@ function mockBreakdown(q: Question): Breakdown {
   return {
     title: `Sample breakdown: ${q.topic}`,
     testing: [q.topic, "Reading requirements"],
-    story: "This is sample content shown because no ANTHROPIC_API_KEY is set.\n\nWith a key, the tutor retells the scenario with a concrete example company.",
     requirements: [{ label: "First requirement", detail: "What the scenario needs most." }, { label: "Second requirement", detail: "A constraint hidden in the wording." }],
     picture: { caption: "How the pieces connect", steps: [{ label: "Users", note: "send requests" }, { label: "AWS service", note: "does the work" }, { label: "Data", note: "is stored" }] },
     clues: [{ phrase: "LEAST operational overhead", meaning: "Prefer managed services over building it yourself." }],
@@ -301,9 +308,11 @@ function mockCard(topic: string): ConceptCard {
   return {
     title: topic,
     oneLiner: "Sample card: add ANTHROPIC_API_KEY to generate real study notes.",
-    keyPoints: ["A key fact exam questions hinge on.", "Another fact to remember."],
+    useWhen: [{ when: "The situation it fits", notWhen: "A look-alike: use Service X" }, { when: "Another good fit", notWhen: "Another look-alike: use Y" }],
+    facts: [{ label: "Default", value: "A setting" }, { label: "Limit", value: "A number" }, { label: "Pricing", value: "How you pay" }],
+    flow: { caption: "How it fits", steps: [{ label: "Users", note: "make requests" }, { label: topic, note: "does the work" }, { label: "Storage", note: "keeps results" }] },
     compare: null,
-    traps: ["A common wrong-answer trap."],
+    traps: [{ trap: "A common mistaken belief", truth: "What's actually true" }],
     remember: "One rule of thumb.",
   };
 }

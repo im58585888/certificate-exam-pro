@@ -34,7 +34,7 @@ export default async function CheatSheetPage({ params, searchParams }: PageProps
   const sectionName = new Map(notebook.sections.map((s) => [s.id, s.name]));
   const saved = notebook.items.filter((i) => (!i.topic || !notebook.prefs.get(i.topic)?.hidden) && (!weakOnly || (i.topic && weakTopics.has(i.topic))));
   const cards = await cachedCards(slug, topics.map((t) => ({ topic: t.topic, questions: t.bank })));
-  const traps = topics.flatMap((t) => (cards.get(t.topic)?.traps.slice(0, 1) ?? []).map((trap) => ({ topic: t.topic, trap }))).slice(0, 6);
+  const traps = topics.flatMap((t) => (cards.get(t.topic)?.traps.slice(0, 1) ?? []).map((trap) => ({ topic: t.topic, trap: `${trap.trap}? No: ${trap.truth}` }))).slice(0, 6);
   const practised = all.reduce((s, t) => s + t.seen, 0);
   const today = new Date().toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
 

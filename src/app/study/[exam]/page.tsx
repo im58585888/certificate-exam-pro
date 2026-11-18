@@ -19,8 +19,20 @@ const toItem = (i: StudyItem) => ({
   savedOn: new Date(i.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric" }),
 });
 
-export default async function StudySheetPage({ params }: PageProps<"/study/[exam]">) {
+/** Only links back into the learner's own practice: a quiz or results page on this site. */
+const safeBack = (v: unknown) => (typeof v === "string" && /^\/(quiz|results)\/[0-9a-f-]{36}(\?[\w=&%.-]*)?(#[\w.-]*)?$/i.test(v) ? v : null);
+
+function BackBar({ href }: { href: string }) {
+  return (
+    <Link href={href} className="mb-5 flex w-fit items-center gap-2 rounded-full border border-brand/40 bg-brand-soft px-4 py-2 text-sm font-bold text-brand hover:border-brand">
+      ← {href.startsWith("/quiz/") ? "Back to your question" : "Back to your results"}
+    </Link>
+  );
+}
+
+export default async function StudySheetPage({ params, searchParams }: PageProps<"/study/[exam]">) {
   const { exam: slug } = await params;
+  const back = safeBack((await searchParams).back);
   const exam = getExam(slug);
   if (!exam) notFound();
   await ensureBank();
@@ -29,7 +41,7 @@ export default async function StudySheetPage({ params }: PageProps<"/study/[exam
   const access = user ? await getAccess(user.id, slug) : null;
 
   // The study sheet is part of the exam pass. Everyone else sees what it does and how to unlock it.
-  if (!access?.active) return <Locked exam={exam} practised={topics.length} access={user ? "no-pass" : "signed-out"} />;
+  if (!access?.active) return <Locked exam={exam} practised={topics.length} access={user ? "no-pass" : "signed-out"} back={back} />;
 
   const notebook = await loadNotebook(user!.id, slug);
   const bank = questionsFor(slug);
@@ -70,6 +82,7 @@ export default async function StudySheetPage({ params }: PageProps<"/study/[exam
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-10">
+      {back && <BackBar href={back} />}
       <p className="eyebrow">{exam.code} · Study sheet</p>
       <h1 className="mt-2 text-3xl font-extrabold tracking-tight">Your study sheet</h1>
       <p className="mt-2 max-w-2xl text-soft">
@@ -86,7 +99,7 @@ export default async function StudySheetPage({ params }: PageProps<"/study/[exam
   );
 }
 
-function Locked({ exam, practised, access }: { exam: NonNullable<ReturnType<typeof getExam>>; practised: number; access: "no-pass" | "signed-out" }) {
+function Locked({ exam, practised, access, back }: { exam: NonNullable<ReturnType<typeof getExam>>; practised: number; access: "no-pass" | "signed-out"; back: string | null }) {
   const features = [
     ["🎯", "Study these next", "Your weakest topics, picked for you every time you open it."],
     ["📌", "Save from the AI tutor", "Keep explanations, tables and diagrams from any practice question."],
@@ -95,6 +108,7 @@ function Locked({ exam, practised, access }: { exam: NonNullable<ReturnType<type
   ];
   return (
     <div className="mx-auto max-w-3xl px-4 py-12">
+      {back && <BackBar href={back} />}
       <MiaPose pose="welcoming" height={150} alt="Mia, your AI tutor" className="float-right ml-4 hidden sm:block" />
       <p className="eyebrow">{exam.code} · Study sheet</p>
       <h1 className="mt-2 text-3xl font-extrabold tracking-tight">Your personal study sheet <span className="pill ml-1 bg-brand-soft align-middle text-sm text-brand">Pass</span></h1>

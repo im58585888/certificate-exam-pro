@@ -16,6 +16,16 @@ export function Mia({ size, alt = "", className = "" }: { size: number; alt?: st
   return <Image src="/mia/avatar.webp" alt={alt} width={size} height={size} className={`${styles.avatar} ${className}`} style={{ width: size, height: size }} />;
 }
 
+/** Mia pondering with a pulsing thought bubble, shown while she writes. */
+export function MiaThinking({ height, className = "" }: { height: number; className?: string }) {
+  return (
+    <span className={`${styles.thinking} ${className}`} role="img" aria-label="Mia is thinking">
+      <MiaPose pose="thinking" height={height} priority />
+      <span className={styles.bubble} aria-hidden="true"><span /><span /><span /></span>
+    </span>
+  );
+}
+
 /** A transparent cut-out of Mia in one of her poses, sized by height. */
 export function MiaPose({ pose, height, alt = "", className = "", priority }: { pose: MiaPose; height: number; alt?: string; className?: string; priority?: boolean }) {
   const [w, h] = POSES[pose];

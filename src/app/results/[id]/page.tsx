@@ -16,9 +16,11 @@ import { studySheet } from "@/lib/studysheet";
 
 export const metadata: Metadata = { title: "Results", robots: { index: false } };
 
-export default async function ResultsPage({ params }: PageProps<"/results/[id]">) {
+export default async function ResultsPage({ params, searchParams }: PageProps<"/results/[id]">) {
   await ensureBank();
   const { id } = await params;
+  // Coming back from the study sheet: reopen the question the learner saved from.
+  const reopen = (await searchParams).open;
   const loaded = await loadOwnedSession(id);
   if (!loaded) notFound();
   const { session, owner } = loaded;
@@ -97,7 +99,7 @@ export default async function ResultsPage({ params }: PageProps<"/results/[id]">
               {newTopics ? `${newTopics} new concept${newTopics === 1 ? "" : "s"}` : "No new concepts"}{sheet.length > newTopics ? `, ${sheet.length - newTopics} updated` : ""}: {sheet.slice(0, 5).map((t) => t.topic).join(", ")}{sheet.length > 5 ? "…" : ""}
             </p>
           </div>
-          <Link className="btn-primary" href={`/study/${session.exam}`}>{access.active ? "Open study sheet" : "See your study sheet"}</Link>
+          <Link className="btn-primary" href={`/study/${session.exam}?back=${encodeURIComponent(`/results/${id}`)}`}>{access.active ? "Open study sheet" : "See your study sheet"}</Link>
         </div>
       )}
 
@@ -130,7 +132,7 @@ export default async function ResultsPage({ params }: PageProps<"/results/[id]">
           const pub = toPublic(q, id);
           const fb = a || access.active ? feedbackFor(q, a?.picks ?? []) : null;
           return (
-            <details key={q.id} className="card group p-5" open={i === 0 && !a?.correct}>
+            <details key={q.id} id={`q-${q.id}`} className="card group scroll-mt-4 p-5" open={q.id === reopen || (!reopen && i === 0 && !a?.correct)}>
               <summary className="flex cursor-pointer list-none items-start gap-3">
                 <span className={`pill mt-0.5 shrink-0 ${!a ? "bg-surface-2 text-muted" : a.correct ? "bg-ok-soft text-ok" : "bg-bad-soft text-bad"}`}>
                   {!a ? "Skipped" : a.correct ? "Correct" : "Missed"}
@@ -147,7 +149,7 @@ export default async function ResultsPage({ params }: PageProps<"/results/[id]">
                 {a || access.active ? (
                   <>
                     <div className="mt-4"><OptionList q={pub} picks={a?.picks ?? []} feedback={fb} /></div>
-                    {a && aiAvailable && <Tutor sessionId={id} questionId={q.id} answered sheetAccess={!owner.userId ? "signed-out" : access.active ? "ok" : "no-pass"} />}
+                    {a && aiAvailable && <Tutor sessionId={id} questionId={q.id} answered sheetAccess={!owner.userId ? "signed-out" : access.active ? "ok" : "no-pass"} backHref={`/results/${id}?open=${encodeURIComponent(q.id)}#q-${q.id}`} />}
                     <ExplanationPanel feedback={fb!} />
                     <ReportQuestion questionId={q.id} />
                   </>

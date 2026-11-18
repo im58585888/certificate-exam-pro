@@ -30,6 +30,8 @@ export interface QuizPlayerProps {
   canSave?: boolean;
   /** Study sheet saving: pass holders can save; others see the button as an upsell. */
   sheetAccess: SheetAccess;
+  /** Question to open on (coming back from the study sheet); otherwise the first unanswered one. */
+  startAt?: string;
 }
 
 const MODE_LABEL: Record<Mode, string> = { trial: "Free trial", practice: "Practice", reinforce: "Strengthen weak areas", review: "Review mistakes", flagged: "Flagged questions", exam: "Timed mock exam" };
@@ -40,11 +42,14 @@ function formatClock(ms: number) {
   return `${h ? `${h}:` : ""}${String(m).padStart(h ? 2 : 1, "0")}:${String(sec).padStart(2, "0")}`;
 }
 
-export function QuizPlayer({ sessionId, mode, questions, initialFlags, initial, deadline, signedIn, waitlist, examCode, tutor, canSave, sheetAccess }: QuizPlayerProps) {
+export function QuizPlayer({ sessionId, mode, questions, initialFlags, initial, deadline, signedIn, waitlist, examCode, tutor, canSave, sheetAccess, startAt }: QuizPlayerProps) {
   const isExam = mode === "exam";
   const [answers, setAnswers] = useState(initial);
-  const [index, setIndex] = useState(() => Math.max(0, questions.findIndex((q) => !initial[q.id])));
-  const [draft, setDraft] = useState<string[]>(() => initial[questions[Math.max(0, questions.findIndex((q) => !initial[q.id]))]?.id]?.picks ?? []);
+  const [index, setIndex] = useState(() => {
+    const asked = startAt ? questions.findIndex((q) => q.id === startAt) : -1;
+    return asked >= 0 ? asked : Math.max(0, questions.findIndex((q) => !initial[q.id]));
+  });
+  const [draft, setDraft] = useState<string[]>(() => initial[questions[index]?.id]?.picks ?? []);
   const [flags, setFlags] = useState<Set<string>>(() => new Set(initialFlags));
   const [stillWeak, setStillWeak] = useState<string | null>(null); // question id showing the "still weak?" prompt
   const [paywall, setPaywall] = useState(false);
@@ -170,7 +175,7 @@ export function QuizPlayer({ sessionId, mode, questions, initialFlags, initial, 
           <FlagButton flagged={flags.has(q.id)} onChange={(on) => setFlag(q.id, on)} />
         </div>
         <QuestionText q={q} />
-        {tutor && !isExam && <Tutor key={`tutor-${q.id}`} sessionId={sessionId} questionId={q.id} answered={!!feedback} sheetAccess={sheetAccess} />}
+        {tutor && !isExam && <Tutor key={`tutor-${q.id}`} sessionId={sessionId} questionId={q.id} answered={!!feedback} sheetAccess={sheetAccess} backHref={`/quiz/${sessionId}?q=${encodeURIComponent(q.id)}`} />}
         {feedback && <div className="mt-4"><Verdict correct={feedback.correct} /></div>}
         <div className="mt-4"><OptionList q={q} picks={picks} feedback={feedback} onToggle={toggle} disabled={pending} /></div>
         {feedback && stillWeak === q.id && flags.has(q.id) && (

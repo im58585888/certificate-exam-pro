@@ -310,16 +310,8 @@ function TutorPanel({ exam, examCode, focus, destinations, open, setOpen, onClea
 }
 
 function Summary({ t, exam }: { t: TopicView; exam: string }) {
-  const [more, setMore] = useState(false);
   if (!t.card) return t.topic ? <CardLoader exam={exam} topic={t.topic} /> : null;
-  if (more) return <div><ConceptCardBody card={t.card} /><button className="mt-2 text-xs font-bold text-brand" onClick={() => setMore(false)}>Show less</button></div>;
-  return (
-    <div className="text-sm">
-      <p className="rounded-lg bg-brand-soft px-3 py-2 font-semibold text-brand">Remember: {t.card.remember}</p>
-      <p className="mt-2 text-soft">{t.card.oneLiner}</p>
-      <button className="mt-2 text-xs font-bold text-brand" onClick={() => setMore(true)}>Show key points and traps ›</button>
-    </div>
-  );
+  return <ConceptCardBody card={t.card} />;
 }
 
 function Mistakes({ t, exam }: { t: TopicView; exam: string }) {
@@ -327,14 +319,26 @@ function Mistakes({ t, exam }: { t: TopicView; exam: string }) {
     return <p className="text-sm text-soft">{t.practised ? "No open mistakes in this topic. 🎉" : <>Not practised yet. <Link className="font-bold text-brand" href={`/practice/${exam}`}>Practise questions</Link></>}</p>;
   }
   return (
-    <ul className="space-y-3 text-sm">
-      {t.mistakes.map((m) => (
-        <li key={m.questionId} className="rounded-xl border border-line p-3">
-          <p className="text-soft">{m.prompt}</p>
-          <p className="mt-1">You chose <b className="text-bad">{m.picked.join(" + ")}</b>; the answer was <b className="text-ok">{m.correct.join(" + ")}</b>.</p>
-        </li>
-      ))}
-    </ul>
+    <div className="overflow-x-auto rounded-lg border border-line">
+      <table className="w-full min-w-[480px] table-fixed text-left text-xs">
+        <thead>
+          <tr className="bg-brand-soft text-ink">
+            <th className="w-[46%] px-2.5 py-1.5 font-bold">Question</th>
+            <th className="px-2.5 py-1.5 font-bold">✗ You chose</th>
+            <th className="px-2.5 py-1.5 font-bold">✓ Answer</th>
+          </tr>
+        </thead>
+        <tbody>
+          {t.mistakes.map((m) => (
+            <tr key={m.questionId} className="border-t border-line align-top">
+              <td className="px-2.5 py-2 text-soft">{m.prompt}</td>
+              <td className="px-2.5 py-2 font-semibold text-bad">{m.picked.join(" + ")}</td>
+              <td className="px-2.5 py-2 font-semibold text-ok">{m.correct.join(" + ")}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 }
 

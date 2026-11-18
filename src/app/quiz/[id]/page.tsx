@@ -11,7 +11,7 @@ import { deadlineOf, isExpired, loadOwnedSession, resumeSession, sessionAttempts
 
 export const metadata: Metadata = { title: "Practice", robots: { index: false } };
 
-export default async function QuizPage({ params }: PageProps<"/quiz/[id]">) {
+export default async function QuizPage({ params, searchParams }: PageProps<"/quiz/[id]">) {
   await ensureBank();
   const { id } = await params;
   const loaded = await loadOwnedSession(id);
@@ -44,6 +44,7 @@ export default async function QuizPage({ params }: PageProps<"/quiz/[id]">) {
       initial={initial}
       deadline={deadlineOf(session)}
       canSave={!!owner.userId && session.mode !== "trial" && passActive}
+      startAt={typeof (await searchParams).q === "string" ? ((await searchParams).q as string) : undefined}
       sheetAccess={!owner.userId ? "signed-out" : passActive ? "ok" : "no-pass"}
       signedIn={!!owner.userId}
       examCode={getExam(session.exam)?.code ?? session.exam.toUpperCase()}

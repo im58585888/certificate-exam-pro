@@ -78,7 +78,7 @@ function ChatTable({ rows }: { rows: string[][] }) {
   );
 }
 
-function ChatFlow({ title, steps }: { title?: string; steps: { label: string; note?: string }[] }) {
+export function ChatFlow({ title, steps }: { title?: string; steps: { label: string; note?: string }[] }) {
   if (!steps.length) return null;
   return (
     <figure className="rounded-xl border border-line bg-surface p-3">
