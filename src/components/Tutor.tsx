@@ -290,11 +290,11 @@ function Chat({ sessionId, questionId, answered, access, backHref }: { sessionId
 
 /** What Mia says while she writes. One per question (picked from its id), so it doesn't change mid-wait. */
 const WAIT_LINES = [
-  "is reading the question twice, like the exam wants you to. ☕ Fresh ones take up to 30 seconds; after that they're instant.",
-  "is sketching boxes and arrows on a napkin. ✏️ Give her up to 30 seconds; next time it's instant.",
-  "is cracking her knuckles. 💪 New questions take up to 30 seconds to break down, then they're saved for everyone.",
-  "is untangling the AWS jargon so you don't have to. 🧶 Up to 30 seconds the first time, instant after that.",
-  "is circling the sneaky words in the question. 🔍 First look takes up to 30 seconds; after that it's instant.",
+  "is reviewing this one. She reads every question twice, which is more than most exam takers. ☕",
+  "is reviewing this one. Somewhere, an S3 bucket is still public. Not on her watch. 🔒",
+  "is reviewing this one. She asked the cloud, but it's a bit foggy today. ☁️",
+  "is reviewing this one. 'Least operational overhead' is her love language. 💜",
+  "is reviewing this one. Don't worry, she's billed per second, not per hour. ⏱️",
 ];
 function waitLine(id: string) {
   let n = 0;
