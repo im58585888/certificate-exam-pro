@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useRef, useState, type ReactNode } from "react";
+import { Fragment, useEffect, useRef, useState, type ReactNode } from "react";
 import type { Breakdown, BreakdownLevel } from "@/lib/ai";
 import { ChatMarkdown } from "./ChatMarkdown";
 import { Mia, MiaPose, MiaThinking } from "./Mia";
@@ -248,16 +248,96 @@ export function ChatThread({ heading, suggestions, placeholder, send, saveTarget
   );
 }
 
+const chatSuggestions = (answered: boolean) => answered
+  ? ["Why exactly is my choice wrong?", "Give me a real-world example", "How would the exam try to trick me here?", "Show it as a table or diagram"]
+  : ["Explain the scenario even more simply", "What should I look for in the options?", "Give me a real-world analogy", "Show it as a table or diagram"];
+
+const chatPlaceholder = (answered: boolean) => (answered ? "Ask anything about this question…" : "Ask about a term or requirement (Mia won't reveal the answer)");
+
 function Chat({ sessionId, questionId, answered, access, backHref }: { sessionId: string; questionId: string; answered: boolean; access: SheetAccess; backHref?: string }) {
-  const suggestions = answered
-    ? ["Why exactly is my choice wrong?", "Give me a real-world example", "How would the exam try to trick me here?", "Show it as a table or diagram"]
-    : ["Explain the scenario even more simply", "What should I look for in the options?", "Give me a real-world analogy", "Show it as a table or diagram"];
   return (
     <div className="mt-6 border-t border-line pt-5">
-      <ChatThread heading="Still confused? Ask Mia" suggestions={suggestions} access={access} saveTarget={{ questionId, backHref }}
-        placeholder={answered ? "Ask anything about this question…" : "Ask about a term or requirement (the tutor won't reveal the answer)"}
+      <ChatThread heading="Still confused? Ask Mia" suggestions={chatSuggestions(answered)} access={access} saveTarget={{ questionId, backHref }}
+        placeholder={chatPlaceholder(answered)}
         send={(turns, onText) => streamPost("/api/ai/chat", { sessionId, questionId, turns }, onText)} />
     </div>
+  );
+}
+
+/** Asks the side chat (MiaDock) to open and focus its input, e.g. from "Still confused? Ask Mia" in the tutor panel. */
+const openDock = () => window.dispatchEvent(new Event("mia:open"));
+
+/**
+ * Mia's chat beside a practice question, ready without opening Break it down. On wide screens it's a card under the
+ * question controls in the sticky right column (it can be collapsed); on phones it's a floating button that opens a
+ * half-height sheet, so it never covers the question, the options or Check / Next.
+ */
+export function MiaDock({ sessionId, questionId, questionNumber, answered, sheetAccess, backHref }: {
+  sessionId: string; questionId: string; questionNumber: number; answered: boolean; sheetAccess: SheetAccess; backHref?: string;
+}) {
+  const [collapsed, setCollapsed] = useState(false); // wide screens
+  const [open, setOpen] = useState(false); // phones
+  const [lift, setLift] = useState(16); // phones: the floating button's distance from the bottom
+  const boxRef = useRef<HTMLDivElement>(null);
+
+  // Phones: when the Check / Next row scrolls near the bottom of the screen, the floating button moves up above it.
+  useEffect(() => {
+    // One cheap measurement per event; React skips the re-render when the value doesn't change.
+    const place = () => {
+      const row = document.querySelector("[data-quiz-actions]")?.getBoundingClientRect();
+      const zone = window.innerHeight - 72;
+      setLift(row && row.bottom > zone && row.top < window.innerHeight ? Math.round(window.innerHeight - row.top + 10) : 16);
+    };
+    // Also re-check when the page changes size (fonts loading, a breakdown opening), not only on scroll.
+    const resized = new ResizeObserver(place);
+    resized.observe(document.body);
+    place();
+    window.addEventListener("scroll", place, { passive: true });
+    window.addEventListener("resize", place);
+    return () => { resized.disconnect(); window.removeEventListener("scroll", place); window.removeEventListener("resize", place); };
+  }, []);
+
+  useEffect(() => {
+    const onOpen = () => {
+      setCollapsed(false);
+      setOpen(true);
+      requestAnimationFrame(() => {
+        boxRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        boxRef.current?.querySelector<HTMLInputElement>("input")?.focus();
+      });
+    };
+    window.addEventListener("mia:open", onOpen);
+    return () => window.removeEventListener("mia:open", onOpen);
+  }, []);
+
+  return (
+    <>
+      {!open && (
+        <button type="button" onClick={() => setOpen(true)} aria-label="Ask Mia about this question"
+          style={{ bottom: lift }}
+          className="fixed right-4 z-40 flex items-center gap-2 rounded-full bg-brand py-1.5 pr-4 pl-1.5 text-sm font-bold text-on-brand shadow-lg transition-[bottom] duration-150 lg:hidden">
+          <Mia size={34} /> Ask Mia
+        </button>
+      )}
+      <div ref={boxRef} role="complementary" aria-label="Chat with Mia"
+        className={`${open ? "flex" : "hidden"} fixed inset-x-0 bottom-0 z-50 h-[58vh] flex-col rounded-t-2xl border-t border-line bg-surface p-4 shadow-2xl
+          lg:static lg:z-auto lg:flex lg:h-auto lg:rounded-2xl lg:border lg:p-4 lg:shadow-none`}>
+        <div className="flex items-center gap-2">
+          <Mia size={26} />
+          <p className="flex-1 text-sm font-extrabold">Ask Mia about Q{questionNumber}</p>
+          <button type="button" className="text-xs font-bold text-soft hover:text-brand lg:hidden" onClick={() => setOpen(false)}>Minimise</button>
+          <button type="button" className="hidden h-6 w-6 place-items-center rounded-md text-soft hover:bg-surface-2 lg:grid" aria-expanded={!collapsed}
+            aria-label={collapsed ? "Show Mia's chat" : "Collapse Mia's chat"} onClick={() => setCollapsed(!collapsed)}>{collapsed ? "+" : "–"}</button>
+        </div>
+        <div className={`${collapsed ? "lg:hidden" : ""} mt-2 min-h-0 flex-1 overflow-y-auto lg:max-h-[46vh] lg:flex-none`}>
+          {/* A fresh conversation for each question; the dock itself (collapsed or not) stays as it is. */}
+          <ChatThread key={questionId} suggestions={chatSuggestions(answered).slice(0, 3)} access={sheetAccess} saveTarget={{ questionId, backHref }}
+            placeholder={chatPlaceholder(answered)}
+            emptyHint={<p className="text-xs text-muted">{answered ? "Ask why an option is right or wrong, or for a table or diagram." : "Ask about any term or requirement. I won't give the answer away."}</p>}
+            send={(turns, onText) => streamPost("/api/ai/chat", { sessionId, questionId, turns }, onText)} />
+        </div>
+      </div>
+    </>
   );
 }
 
@@ -271,10 +351,12 @@ interface TutorProps {
   sheetAccess: SheetAccess;
   /** The page to come back to from the study sheet after saving (this question in its session, or the results). */
   backHref?: string;
+  /** A MiaDock is on the page, so the panel links to it instead of showing a second chat. */
+  sideChat?: boolean;
 }
 
 /** "Break it down" (before answering) and "Explain the answer" (after), with follow-up questions. */
-export function Tutor({ sessionId, questionId, answered, sheetAccess, backHref }: TutorProps) {
+export function Tutor({ sessionId, questionId, answered, sheetAccess, backHref, sideChat }: TutorProps) {
   const [view, setView] = useState<"none" | "breakdown" | "answer">("none");
   const [level, setLevel] = useState<BreakdownLevel>("standard");
   const [breakdowns, setBreakdowns] = useState<Partial<Record<BreakdownLevel, Breakdown>>>({});
@@ -360,7 +442,12 @@ export function Tutor({ sessionId, questionId, answered, sheetAccess, backHref }
             ) : null}
           </div>
 
-          {(current || answer) && !error && <Chat sessionId={sessionId} questionId={questionId} answered={answered} access={sheetAccess} backHref={backHref} />}
+          {(current || answer) && !error && (sideChat ? (
+            <div className="mt-6 flex flex-wrap items-center gap-3 border-t border-line pt-4">
+              <p className="font-extrabold">Still confused?</p>
+              <button type="button" className="btn-ghost !py-1.5 !text-sm" onClick={openDock}><Mia size={20} /> Ask Mia</button>
+            </div>
+          ) : <Chat sessionId={sessionId} questionId={questionId} answered={answered} access={sheetAccess} backHref={backHref} />)}
           <p className="mt-4 text-xs text-muted">AI-written explanations can make mistakes. When in doubt, check the linked AWS documentation.</p>
         </div>
       )}

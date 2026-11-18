@@ -10,7 +10,7 @@ import { Fireworks, useCelebrationSound } from "./Fireworks";
 import { FlagButton } from "./FlagButton";
 import { ReportQuestion } from "./ReportQuestion";
 import type { SheetAccess } from "@/lib/sheetAccess";
-import { Tutor } from "./Tutor";
+import { MiaDock, Tutor } from "./Tutor";
 
 export interface QuizPlayerProps {
   sessionId: string;
@@ -157,7 +157,7 @@ export function QuizPlayer({ sessionId, mode, questions, initialFlags, initial, 
   const correctSoFar = Object.values(answers).filter((a) => a.feedback?.correct).length;
 
   return (
-    <div ref={topRef} className="mx-auto grid max-w-6xl gap-5 px-4 py-6 lg:grid-cols-[minmax(0,1fr)_280px]">
+    <div ref={topRef} className={`mx-auto grid max-w-6xl gap-5 px-4 py-6 lg:grid-cols-[minmax(0,1fr)_320px] ${tutor && !isExam ? "pb-24 lg:pb-6" : ""}`}>
       {!isExam && <Fireworks trigger={celebrate} sound={sound} />}
       <section className="card p-5 md:p-7" aria-live="polite">
         <div className="flex items-center gap-3">
@@ -175,7 +175,7 @@ export function QuizPlayer({ sessionId, mode, questions, initialFlags, initial, 
           <FlagButton flagged={flags.has(q.id)} onChange={(on) => setFlag(q.id, on)} />
         </div>
         <QuestionText q={q} />
-        {tutor && !isExam && <Tutor key={`tutor-${q.id}`} sessionId={sessionId} questionId={q.id} answered={!!feedback} sheetAccess={sheetAccess} backHref={`/quiz/${sessionId}?q=${encodeURIComponent(q.id)}`} />}
+        {tutor && !isExam && <Tutor key={`tutor-${q.id}`} sessionId={sessionId} questionId={q.id} answered={!!feedback} sheetAccess={sheetAccess} backHref={`/quiz/${sessionId}?q=${encodeURIComponent(q.id)}`} sideChat />}
         {feedback && <div className="mt-4"><Verdict correct={feedback.correct} /></div>}
         <div className="mt-4"><OptionList q={q} picks={picks} feedback={feedback} onToggle={toggle} disabled={pending} /></div>
         {feedback && stillWeak === q.id && flags.has(q.id) && (
@@ -191,7 +191,7 @@ export function QuizPlayer({ sessionId, mode, questions, initialFlags, initial, 
         {feedback && <ReportQuestion key={q.id} questionId={q.id} />}
         {error && <p className="mt-4 rounded-xl bg-bad-soft px-4 py-2 text-sm font-semibold text-bad">{error}</p>}
 
-        <div className="mt-6 flex flex-wrap items-center justify-between gap-3">
+        <div data-quiz-actions className="mt-6 flex flex-wrap items-center justify-between gap-3">
           <div className="flex gap-2">
             <button className="btn-ghost" onClick={() => jump(index - 1)} disabled={index === 0 || pending}>Previous</button>
           </div>
@@ -212,7 +212,9 @@ export function QuizPlayer({ sessionId, mode, questions, initialFlags, initial, 
         </div>
       </section>
 
-      <aside className="card h-fit p-5 lg:sticky lg:top-4">
+      {/* The right column (sticky on wide screens): question controls, then Mia's chat underneath so it never covers them. */}
+      <div className="h-fit space-y-4 lg:sticky lg:top-4 lg:max-h-[calc(100vh-2rem)] lg:overflow-y-auto">
+      <aside className="card p-5">
         <p className="eyebrow">{MODE_LABEL[mode]}</p>
         <div className="mt-3 grid grid-cols-2 gap-2">
           <div className="rounded-xl border border-line p-3"><b className="block text-xl">{answeredCount}</b><span className="text-xs text-muted">Answered</span></div>
@@ -259,6 +261,11 @@ export function QuizPlayer({ sessionId, mode, questions, initialFlags, initial, 
           </button>
         )}
       </aside>
+      {tutor && !isExam && (
+        <MiaDock sessionId={sessionId} questionId={q.id} questionNumber={index + 1} answered={!!feedback}
+          sheetAccess={sheetAccess} backHref={`/quiz/${sessionId}?q=${encodeURIComponent(q.id)}`} />
+      )}
+      </div>
 
       {paywall && (
         <div className="fixed inset-0 z-50 grid place-items-center bg-black/50 p-4" role="dialog" aria-modal="true" aria-labelledby="pw-title">
