@@ -288,38 +288,20 @@ function Chat({ sessionId, questionId, answered, access, backHref }: { sessionId
 
 // ---------- Mia's panel (practice) ----------
 
-/** One thing in Mia's timeline for a question: a chat turn, or a breakdown / walk-through card. */
+/** One thing in Mia's timeline for a question: a chat turn, or the breakdown card. */
 type Entry =
   | { kind: "user" | "assistant"; content: string }
-  | { kind: "breakdown"; breakdown: Breakdown }
-  | { kind: "walkthrough"; content: string; done: boolean };
-
-type Action = { id: string; title: string; note: string; prompt?: string };
-
-const ACTIONS_BEFORE: Action[] = [
-  { id: "breakdown", title: "Break it down", note: "What it's testing, step by step" },
-  { id: "look", title: "What to look for", note: "In the options", prompt: "What should I look for in the options?" },
-  { id: "analogy", title: "Real-world analogy", note: "Picture it simply", prompt: "Give me a real-world analogy" },
-  { id: "table", title: "Table or diagram", note: "See it visually", prompt: "Show it as a table or diagram" },
-];
-const ACTIONS_AFTER: Action[] = [
-  { id: "walkthrough", title: "Walk me through it", note: "Why the answer works" },
-  { id: "why", title: "Why was I wrong?", note: "About my choice", prompt: "Why exactly is my choice wrong?" },
-  { id: "trick", title: "Exam tricks", note: "How they'd catch me", prompt: "How would the exam try to trick me here?" },
-  { id: "breakdown", title: "Break it down", note: "What it was testing" },
-  { id: "table", title: "Table or diagram", note: "See it visually", prompt: "Show it as a table or diagram" },
-];
+  | { kind: "breakdown"; breakdown: Breakdown };
 
 /**
- * Mia beside a practice question. Everything about the question lives in one timeline: the breakdown, the answer
- * walk-through and the chat. A carousel of action cards starts each of them, so there's no separate button under
- * the question. Wide screens: it fills the sticky right column. Phones: a floating button that opens a sheet.
+ * Mia beside a practice question. Everything about the question lives in one timeline: the breakdown and the chat. One "Break it down for me" button starts the breakdown, so there's no separate button
+ * under the question. Wide screens: it fills the sticky right column. Phones: a floating button that opens a sheet.
  */
 export function MiaPanel({ sessionId, questionId, questionNumber, answered, sheetAccess, backHref }: {
   sessionId: string; questionId: string; questionNumber: number; answered: boolean; sheetAccess: SheetAccess; backHref?: string;
 }) {
   const [entries, setEntries] = useState<Entry[]>([]);
-  const [busy, setBusy] = useState<null | "breakdown" | "walkthrough" | "chat">(null);
+  const [busy, setBusy] = useState<null | "breakdown" | "chat">(null);
   const [error, setError] = useState<string | null>(null);
   const [draft, setDraft] = useState("");
   const [open, setOpen] = useState(false); // phones
@@ -344,15 +326,15 @@ export function MiaPanel({ sessionId, questionId, questionNumber, answered, shee
     return () => { resized.disconnect(); window.removeEventListener("scroll", place); window.removeEventListener("resize", place); };
   }, []);
 
-  // Chat replies: follow the newest line as it streams in. A breakdown or walk-through: show it from its top so it can be
-  // read from the start (once, when it arrives, so streaming doesn't pull the reader back).
+  // Chat replies: follow the newest line as it streams in. A breakdown: show it from its top so it can be read from the
+  // start (once, when it arrives).
   const anchored = useRef(-1);
   useEffect(() => {
     const el = scrollRef.current;
     if (!el) return;
     const last = entries.length - 1;
     const kind = entries[last]?.kind;
-    if (kind === "breakdown" || kind === "walkthrough") {
+    if (kind === "breakdown") {
       if (anchored.current === last) return;
       anchored.current = last;
       const card = el.querySelector<HTMLElement>(`[data-entry="${last}"]`);
@@ -360,8 +342,7 @@ export function MiaPanel({ sessionId, questionId, questionNumber, answered, shee
     } else el.scrollTop = el.scrollHeight;
   }, [entries, busy]);
 
-  const used = new Set(entries.flatMap((e) => (e.kind === "breakdown" ? ["breakdown"] : e.kind === "walkthrough" ? ["walkthrough"] : [])));
-  const actions = (answered ? ACTIONS_AFTER : ACTIONS_BEFORE).filter((a) => !used.has(a.id));
+  const brokenDown = entries.some((e) => e.kind === "breakdown");
   const replace = (i: number, e: Entry) => setEntries((list) => list.map((x, j) => (j === i ? e : x)));
 
   const breakdown = async () => {
@@ -374,23 +355,10 @@ export function MiaPanel({ sessionId, questionId, questionNumber, answered, shee
     } catch (e) { setError((e as Error).message); } finally { setBusy(null); }
   };
 
-  const walkthrough = async () => {
-    setBusy("walkthrough"); setError(null);
-    const i = entriesRef.current.length;
-    setEntries((list) => [...list, { kind: "walkthrough", content: "", done: false }]);
-    try {
-      const text = await streamPost("/api/ai/explain", { sessionId, questionId }, (t) => replace(i, { kind: "walkthrough", content: t, done: false }));
-      replace(i, { kind: "walkthrough", content: text, done: true });
-    } catch (e) {
-      setEntries((list) => list.filter((_, j) => j !== i));
-      setError((e as Error).message);
-    } finally { setBusy(null); }
-  };
-
   const ask = async (text: string) => {
     const q = text.trim();
     if (!q || busy) return;
-    // Only the chat turns go to the model; the breakdown and walk-through cards are for the learner.
+    // Only the chat turns go to the model; the breakdown card is for the learner.
     const turns: Turn[] = [...entriesRef.current.filter((e): e is Extract<Entry, { kind: "user" | "assistant" }> => e.kind === "user" || e.kind === "assistant")
       .map((e) => ({ role: e.kind, content: e.content })), { role: "user", content: q }];
     const i = entriesRef.current.length;
@@ -405,7 +373,6 @@ export function MiaPanel({ sessionId, questionId, questionNumber, answered, shee
     } finally { setBusy(null); }
   };
 
-  const run = (a: Action) => (a.id === "breakdown" ? breakdown() : a.id === "walkthrough" ? walkthrough() : a.prompt ? ask(a.prompt) : undefined);
   const save = (title: string, body: string) => <SaveToSheet small title={title} body={body} questionId={questionId} access={sheetAccess} backHref={backHref} />;
 
   return (
@@ -428,16 +395,12 @@ export function MiaPanel({ sessionId, questionId, questionNumber, answered, shee
           <button type="button" className="text-xs font-bold text-soft hover:text-brand lg:hidden" onClick={() => setOpen(false)}>Minimise</button>
         </div>
 
-        {actions.length > 0 && (
-          <div className="-mx-1 mt-3 flex flex-none snap-x gap-2 overflow-x-auto px-1 pb-1 [scrollbar-width:thin]" role="list" aria-label="Things Mia can do">
-            {actions.map((a, i) => (
-              <button key={a.id} type="button" role="listitem" disabled={!!busy} onClick={() => run(a)}
-                className={`w-36 flex-none snap-start rounded-xl border p-2.5 text-left transition hover:border-brand disabled:opacity-60 ${i === 0 ? "border-brand/50 bg-brand-soft" : "border-line bg-bg"}`}>
-                <span className="block text-sm font-bold leading-tight">{a.title}</span>
-                <span className="mt-0.5 block text-[11px] text-muted">{a.note}</span>
-              </button>
-            ))}
-          </div>
+        {!brokenDown && (
+          <button type="button" disabled={!!busy} onClick={breakdown}
+            className="mt-3 flex flex-none items-center gap-2.5 rounded-xl border border-brand/50 bg-brand-soft px-3 py-2.5 text-left transition hover:border-brand disabled:opacity-60">
+            <Mia size={26} />
+            <span><span className="block text-sm font-bold leading-tight">Break it down for me</span><span className="block text-[11px] text-muted">What it&apos;s testing, step by step</span></span>
+          </button>
         )}
 
         <div ref={scrollRef} className="mt-3 min-h-0 flex-1 space-y-3 overflow-y-auto pr-1">
@@ -445,7 +408,7 @@ export function MiaPanel({ sessionId, questionId, questionNumber, answered, shee
             <div className="flex items-end gap-2">
               <MiaPose pose="welcoming" height={88} className="-ml-1" />
               <p className="mb-2 rounded-2xl rounded-bl-sm bg-brand-soft px-3 py-2 text-sm">
-                {answered ? "Want me to walk you through it, or ask me anything about this question." : "Stuck? Tap Break it down, or ask me about any term or requirement."}
+                {answered ? "Ask me anything about this question, or tap Break it down for me." : "Stuck? Tap Break it down for me, or ask me about any term or requirement."}
               </p>
             </div>
           )}
@@ -456,15 +419,6 @@ export function MiaPanel({ sessionId, questionId, questionNumber, answered, shee
                 <div key={i} data-entry={i} className="rounded-2xl border border-brand/30 bg-bg p-3">
                   <p className="mb-1 flex items-center gap-2 text-xs font-bold text-brand"><Mia size={18} />Mia&apos;s breakdown</p>
                   <BreakdownView b={e.breakdown} save={save} narrow />
-                </div>
-              );
-            }
-            if (e.kind === "walkthrough") {
-              return (
-                <div key={i} data-entry={i} className="rounded-2xl border border-brand/30 bg-bg p-3">
-                  <p className="mb-2 flex items-center gap-2 font-extrabold"><MiaPose pose="reviewing" height={44} />Mia walks you through it</p>
-                  {e.content ? <MiniMarkdown text={e.content} /> : null}
-                  {e.done && <div className="mt-3">{save("Answer walk-through", e.content)}</div>}
                 </div>
               );
             }
@@ -480,7 +434,7 @@ export function MiaPanel({ sessionId, questionId, questionNumber, answered, shee
               </div>
             );
           })}
-          {(busy === "breakdown" || (busy === "walkthrough" && !(entries.at(-1) as { content?: string })?.content)) && (
+          {busy === "breakdown" && (
             <div className="flex items-center gap-3" aria-live="polite">
               <MiaThinking height={72} />
               <p className="text-sm text-soft"><b className="text-ink">Mia is reading the question</b>… the first time anyone asks this takes up to half a minute; after that it&apos;s instant.</p>
