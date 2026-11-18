@@ -14,7 +14,6 @@
 .miaIntro b { color: var(--ink); }
 .meetMia { max-width: 860px; margin: 40px auto 0; padding: 20px 32px 0; display: flex; align-items: flex-end; gap: 28px; overflow: hidden; border: 1px solid var(--line); border-radius: 24px; background: var(--surface); }
 .meetMia > div { padding-bottom: 26px; }
-.miaPortrait { margin-bottom: -2px; }
 .miaQuote { margin: 8px 0 4px; font-size: 20px; font-weight: 750; line-height: 1.45; letter-spacing: -.02em; text-wrap: balance; }
 .miaSign { color: var(--muted); font-size: 12px; font-weight: 700; }
 .miaPromises { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; list-style: none; padding: 0; }

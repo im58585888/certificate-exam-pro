@@ -4,8 +4,7 @@ import { startQuizAction } from "./actions";
 import { EXAM_LIST, FREE_TRIAL_QUESTIONS, PASS_DAYS, PASS_PRICE_CENTS } from "@/lib/exams";
 import { ensureBank, questionsFor } from "@/lib/questions";
 import { TrialPicker } from "@/components/LandingDemos";
-import { MiaPose } from "@/components/Mia";
-import { HeroTutorAnimation, MemoryFlow, Mia, TutorFlow } from "@/components/TutorVisuals";
+import { HeroTutorAnimation, MemoryFlow, Mia, MiaSpotlight, TutorFlow } from "@/components/TutorVisuals";
 import styles from "./landing.module.css";
 
 const PRICE = `$${(PASS_PRICE_CENTS / 100).toFixed(2)}`;
@@ -52,7 +51,7 @@ export default async function Home() {
       </section>
 
       <section className={styles.meetMia} aria-labelledby="mia-title">
-        <MiaPose pose="confident" height={200} alt="Mia, your AI tutor" className={styles.miaPortrait} />
+        <MiaSpotlight />
         <div>
           <p className={styles.eyebrow} id="mia-title">Meet your tutor</p>
           <p className={styles.miaQuote}>&ldquo;Bring me the question that confused you. I&apos;ll show you what it&apos;s really asking.&rdquo;</p>

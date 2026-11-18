@@ -147,7 +147,19 @@
   .flowStep:not(:last-child)::after, .memStep:not(:last-child)::after { content: "↓"; top: auto; bottom: -38px; right: calc(50% - 7px); display: block; }
 }
 /* Reduced motion: no animation at all (the landing page also strips it), so show every final frame. */
+/* Meet your tutor: Mia over a breathing glow. Visible by default; hidden only until the section scrolls into view. */
+.spot { position: relative; flex: none; display: flex; align-items: flex-end; justify-content: center; width: 230px; height: 214px; opacity: 0; transform: translateY(18px); transition: opacity .7s ease, transform .8s cubic-bezier(.2, .9, .3, 1.15); }
+.spotIn { opacity: 1; transform: none; }
+.spotGlow { position: absolute; left: 50%; top: 62%; width: 250px; height: 250px; border-radius: 50%; transform: translate(-50%, -50%);
+  background: radial-gradient(circle, color-mix(in srgb, var(--brand) 72%, transparent) 0%, color-mix(in srgb, #3ddbb4 30%, transparent) 52%, transparent 72%);
+  filter: blur(6px); animation: spotBreathe 4.5s ease-in-out infinite; }
+.spotSway { position: relative; display: block; transform-origin: 50% 100%; animation: spotSway 6s ease-in-out infinite; }
+@keyframes spotBreathe { 0%, 100% { opacity: .75; transform: translate(-50%, -50%) scale(.94); } 50% { opacity: 1; transform: translate(-50%, -50%) scale(1.05); } }
+@keyframes spotSway { 0%, 100% { transform: rotate(0deg); } 30% { transform: rotate(-1.2deg); } 70% { transform: rotate(.9deg); } }
+
 @media (prefers-reduced-motion: reduce) {
+  .spotGlow, .spotSway { animation: none !important; }
+  .spot { opacity: 1 !important; transform: none !important; }
   .hero *, .hero::before, .flow *, .memory *, .flowStep, .memStep { animation: none !important; }
   .flowStep, .memStep, .pop1, .pop2, .pop3, .pop4, .pop5, .fadeIn0, .fadeIn1, .stamp, .okTag, .botShow, .resOk, .resBad, .bubbleMe, .bubbleBot, .optRight i { opacity: 1 !important; }
   .qText mark, .lineHi { background-size: 100% 100% !important; }

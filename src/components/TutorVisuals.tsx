@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Mia } from "./Mia";
+import { Mia, MiaPose } from "./Mia";
 import styles from "./TutorVisuals.module.css";
 
 export { Mia };
@@ -172,6 +172,21 @@ const MEMORY = [
   { title: "Weak spots first", caption: "Your study sheet sorts them" },
   { title: "Print a cheat sheet", caption: "One page for exam day" },
 ];
+
+/**
+ * Mia for the "Meet your tutor" strip: the white-blazer pose (it stands out on the dark background) over a soft
+ * purple-to-mint glow. She rises in once when the section scrolls into view, then the glow breathes and she sways
+ * very slightly. Still for people who prefer reduced motion.
+ */
+export function MiaSpotlight() {
+  const [ref, seen] = useInView<HTMLDivElement>();
+  return (
+    <div ref={ref} className={`${styles.spot} ${seen ? styles.spotIn : ""}`}>
+      <span className={styles.spotGlow} aria-hidden="true" />
+      <span className={styles.spotSway}><MiaPose pose="welcoming" height={210} alt="Mia, your AI tutor" /></span>
+    </div>
+  );
+}
 
 export function MemoryFlow() {
   const [ref, seen] = useInView<HTMLOListElement>();
