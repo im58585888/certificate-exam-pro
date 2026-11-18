@@ -307,8 +307,10 @@ type Entry =
  * Mia beside a practice question. Everything about the question lives in one timeline: the breakdown and the chat. One "Break it down for me" button starts the breakdown, so there's no separate button
  * under the question. Wide screens: it fills the sticky right column. Phones: a floating button that opens a sheet.
  */
-export function MiaPanel({ sessionId, questionId, questionNumber, answered, sheetAccess, backHref }: {
+export function MiaPanel({ sessionId, questionId, questionNumber, answered, sheetAccess, backHref, height }: {
   sessionId: string; questionId: string; questionNumber: number; answered: boolean; sheetAccess: SheetAccess; backHref?: string;
+  /** Wide screens: the panel's height (80% of the question card); it never goes below 440px or above the screen. */
+  height?: number;
 }) {
   const [entries, setEntries] = useState<Entry[]>([]);
   const [busy, setBusy] = useState<null | "breakdown" | "chat">(null);
@@ -393,9 +395,9 @@ export function MiaPanel({ sessionId, questionId, questionNumber, answered, shee
           <Mia size={34} /> Ask Mia
         </button>
       )}
-      <aside aria-label="Mia, your AI tutor"
+      <aside aria-label="Mia, your AI tutor" style={{ "--mia-h": `${Math.max(height ?? 0, 440)}px` } as React.CSSProperties}
         className={`${open ? "flex" : "hidden"} fixed inset-x-0 bottom-0 z-50 h-[78vh] flex-col rounded-t-2xl border-t border-line bg-surface p-4 shadow-2xl
-          lg:sticky lg:top-4 lg:z-auto lg:flex lg:h-[calc(100dvh-6rem)] lg:min-h-[480px] lg:rounded-2xl lg:border lg:shadow-none`}>
+          lg:sticky lg:top-4 lg:z-auto lg:flex lg:h-[min(var(--mia-h),calc(100dvh-2rem))] lg:self-start lg:rounded-2xl lg:border lg:shadow-none`}>
         <div className="flex items-center gap-2">
           <p className="flex-1 text-sm"><b>Ask Mia about Q{questionNumber}</b> <span className="text-xs text-muted">· AI tutor{answered ? "" : " · won't give the answer away"}</span></p>
           <button type="button" className="text-xs font-bold text-soft hover:text-brand lg:hidden" onClick={() => setOpen(false)}>Minimise</button>

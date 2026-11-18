@@ -69,6 +69,16 @@ export function QuizPlayer({ sessionId, mode, questions, initialFlags, initial, 
   const complete = draft.length === q.selectCount;
   const isLast = index === questions.length - 1;
   const mia = tutor && !isExam;
+  // Mia's panel is 80% as tall as the question card (wide screens), so it follows the card as it grows or shrinks.
+  const cardRef = useRef<HTMLElement>(null);
+  const [cardHeight, setCardHeight] = useState(0);
+  useEffect(() => {
+    const el = cardRef.current;
+    if (!el) return;
+    const measure = new ResizeObserver(() => setCardHeight(el.offsetHeight));
+    measure.observe(el);
+    return () => measure.disconnect();
+  }, []);
 
   const go = useCallback((i: number) => {
     setIndex(i);
@@ -160,7 +170,7 @@ export function QuizPlayer({ sessionId, mode, questions, initialFlags, initial, 
   return (
     <div ref={topRef} className={`mx-auto grid gap-5 px-4 py-6 ${mia ? "max-w-7xl pb-24 lg:grid-cols-[minmax(0,1fr)_400px] lg:pb-6" : "max-w-4xl"}`}>
       {!isExam && <Fireworks trigger={celebrate} sound={sound} />}
-      <section className="card min-w-0 p-5 md:p-7" aria-live="polite">
+      <section ref={cardRef} className="card min-w-0 p-5 md:p-7" aria-live="polite">
         {/* Session controls in one slim bar above the progress bar, so Mia can have the whole right column. */}
         <div className="mb-5 flex flex-wrap items-center gap-x-4 gap-y-2.5 border-b border-line pb-4">
           <p className="text-sm whitespace-nowrap">
@@ -260,7 +270,8 @@ export function QuizPlayer({ sessionId, mode, questions, initialFlags, initial, 
       {/* Mia fills the right column (sticky on wide screens; a floating button and sheet on phones). Not in mock exams. */}
       {mia && (
         <MiaPanel key={q.id} sessionId={sessionId} questionId={q.id} questionNumber={index + 1} answered={!!feedback}
-          sheetAccess={sheetAccess} backHref={`/quiz/${sessionId}?q=${encodeURIComponent(q.id)}`} />
+          sheetAccess={sheetAccess} backHref={`/quiz/${sessionId}?q=${encodeURIComponent(q.id)}`}
+          height={cardHeight ? Math.round(cardHeight * 0.8) : undefined} />
       )}
 
       {paywall && (
