@@ -1,50 +1,52 @@
 @import "tailwindcss";
 
 :root {
-  --bg: #f7f6fc;
-  --surface: #ffffff;
-  --surface-2: #f1effa;
-  --ink: #17153a;
-  --soft: #4f4d6b;
-  --muted: #7e7c99;
-  --line: #e4e2f0;
-  --brand: #5b3fe0;
-  --brand-2: #9333ea;
-  --brand-soft: #ede9fe;
-  --on-brand: #ffffff;
-  --ok: #0c8f60;
-  --ok-soft: #e2f6ed;
-  --bad: #cf2d55;
-  --bad-soft: #fde8ee;
-  --warn: #8a5a00;
-  --warn-soft: #fff3d9;
-  --mint: #34d399;
-  --chart: #5b3fe0;
-  --grid: #e9e7f3;
+  /* Light: warm paper and a muted plum (calmer than bright white and electric violet). */
+  --bg: #f6f2ec;
+  --surface: #fffcf7;
+  --surface-2: #f3eee6;
+  --ink: #2b2433;
+  --soft: #5c5463;
+  --muted: #7b7381;
+  --line: #e8e0d4;
+  --brand: #6a55a8;
+  --brand-2: #8d62b5;
+  --brand-soft: #ece5f2;
+  --on-brand: #fffaf3;
+  --ok: #2c8064;
+  --ok-soft: #e3f1ea;
+  --bad: #b5405b;
+  --bad-soft: #f8e6ea;
+  --warn: #85601a;
+  --warn-soft: #f8eedb;
+  --mint: #5fb894;
+  --chart: #6a55a8;
+  --grid: #ebe4da;
   color-scheme: light;
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #0c0b1b;
-    --surface: #15142a;
-    --surface-2: #1c1a36;
-    --ink: #f2f1ff;
-    --soft: #bdbbd9;
-    --muted: #8a88ab;
-    --line: #2a2848;
-    --brand: #a08cff;
-    --brand-2: #c084fc;
-    --brand-soft: #2a2358;
-    --on-brand: #0c0b1b;
-    --ok: #3fd79b;
-    --ok-soft: #0f3328;
-    --bad: #ff7394;
-    --bad-soft: #3b1626;
-    --warn: #ffc766;
-    --warn-soft: #33290f;
-    --chart: #8f78fb;
-    --grid: #25233f;
+    /* Dark: a warmer plum-charcoal and a softer lavender, so it matches the mellow light theme. */
+    --bg: #121016;
+    --surface: #1a1720;
+    --surface-2: #221e2a;
+    --ink: #f1edf5;
+    --soft: #c3bccb;
+    --muted: #958e9f;
+    --line: #2e2936;
+    --brand: #b3a2e6;
+    --brand-2: #c9a7e3;
+    --brand-soft: #2d2640;
+    --on-brand: #121016;
+    --ok: #6fcfa6;
+    --ok-soft: #16302a;
+    --bad: #ef8aa0;
+    --bad-soft: #3a1c26;
+    --warn: #e6c07a;
+    --warn-soft: #33291a;
+    --chart: #a593e0;
+    --grid: #26222e;
     color-scheme: dark;
   }
 }
