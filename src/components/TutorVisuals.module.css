@@ -148,7 +148,7 @@
 }
 /* Reduced motion: no animation at all (the landing page also strips it), so show every final frame. */
 /* Hero: Mia beside "Meet Mia." (positioned against that line; em units follow the heading size). */
-.heroMia { position: absolute; left: calc(100% + .2em); bottom: -.42em; height: 2.9em; aspect-ratio: 448 / 440; pointer-events: none; animation: heroMiaIn .8s .25s cubic-bezier(.2, .9, .3, 1.15) both; }
+.heroMia { position: absolute; left: calc(100% + .3em); bottom: -.42em; height: 3em; aspect-ratio: 308 / 440; pointer-events: none; animation: heroMiaIn .8s .25s cubic-bezier(.2, .9, .3, 1.15) both; }
 .heroMiaGlow { position: absolute; inset: 6% -6% 4%; border-radius: 50%; background: radial-gradient(circle, color-mix(in srgb, var(--brand) 62%, transparent) 0%, color-mix(in srgb, #3ddbb4 26%, transparent) 50%, transparent 70%); filter: blur(10px); animation: heroGlow 4.5s ease-in-out infinite; }
 .heroMiaImg { position: relative; width: auto; height: 100%; transform-origin: 50% 100%; animation: spotSway 6s ease-in-out infinite;
   -webkit-mask-image: linear-gradient(to bottom, #000 70%, transparent 97%); mask-image: linear-gradient(to bottom, #000 70%, transparent 97%); }
