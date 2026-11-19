@@ -8,7 +8,8 @@ import { one, query } from "./db";
 // can't be followed across days, and raw IPs are never stored. Conversions (trial, sign-up, waitlist, checkout) are tied to
 // the same-day visitor, so each one can be credited to the ad, post or site that brought the visit.
 
-export type ConversionKind = "trial" | "signup" | "waitlist" | "checkout";
+/** offer = claimed the trial discount; nudge_signup / nudge_offer = saw the trial sign-up / discount pop-up. */
+export type ConversionKind = "trial" | "signup" | "waitlist" | "checkout" | "offer" | "nudge_signup" | "nudge_offer";
 
 const BOT = /bot|crawl|spider|slurp|preview|facebookexternalhit|meta-external|embedly|headless|lighthouse|python|curl|wget|httpclient|axios|node-fetch|vercel/i;
 const VISIT_GAP_MIN = 30;

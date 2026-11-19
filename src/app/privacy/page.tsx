@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = { title: "Privacy Policy" };
 
 const CONTACT = process.env.SUPPORT_EMAIL || "im58585888@gmail.com";
-const UPDATED = "November 15, 2026";
+const UPDATED = "November 19, 2026";
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
@@ -36,7 +36,7 @@ export default function Privacy() {
           </li>
           <li><b>Practice history.</b> The questions you answer, the options you pick, whether they were correct, time spent, and your practice and exam sessions.</li>
           <li><b>Free-trial visitors.</b> A random identifier in a cookie so your trial progress is saved without an account. If you later sign up, this history moves into your account.</li>
-          <li><b>Network information.</b> To limit abuse (for example repeated login attempts or free-trial resets) we store a one-way keyed hash of your IP address, never the IP address itself.</li>
+          <li><b>Network and device information.</b> To limit abuse (for example repeated login attempts, or using the free trial more than once) we store one-way keyed hashes of your IP address, and of your IP address combined with your browser type, never the IP address itself. We keep these for about 30 days for the free-trial check.</li>
           <li><b>Things you send us.</b> Question reports you submit, questions you type to the AI tutor, tutor content you save to your study sheet and notes you write there, messages you send through the contact form (with the name, email address and topic you give), and, if you join the waitlist, your email address.</li>
           <li><b>Payments.</b> When paid passes are available, payments are handled by Stripe. We receive a payment reference, the amount and the pass dates. We never see or store your card details.</li>
         </ul>
@@ -88,7 +88,8 @@ export default function Privacy() {
 
       <Section title="Cookies">
         <p>
-          We use only strictly necessary cookies: one to keep you signed in, one to save free-trial progress, and a short-lived one that protects Google sign-in
+          We use only strictly necessary cookies: one to keep you signed in, one to save free-trial progress, one that remembers which exams you&apos;ve used
+          your free trial for (also kept in your browser&apos;s local storage, so the trial is one per person), and a short-lived one that protects Google sign-in
           from forgery. We do not use advertising or third-party tracking cookies. Our visit statistics don&apos;t use cookies at all (see below).
         </p>
       </Section>

@@ -4,6 +4,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { Suspense } from "react";
 import { SiteFooter } from "@/components/SiteFooter";
 import { Tracker } from "@/components/Tracker";
+import { TrialMemory } from "@/components/TrialMemory";
 import "./globals.css";
 
 const jakarta = Plus_Jakarta_Sans({ variable: "--font-jakarta", subsets: ["latin"] });
@@ -23,6 +24,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <main className="flex-1">{children}</main>
         <SiteFooter />
         <Suspense fallback={null}><Tracker /></Suspense>
+        <TrialMemory />
       </body>
     </html>
   );

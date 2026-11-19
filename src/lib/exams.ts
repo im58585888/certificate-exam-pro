@@ -81,7 +81,7 @@ export const DEFAULT_EXAM = "saa-c03";
 
 export const FREE_TRIAL_QUESTIONS = 10;
 /** Free questions allowed per network (hashed IP) per exam per 30 days across all visitors and free accounts. */
-export const TRIAL_NETWORK_CAP = Number(process.env.TRIAL_NETWORK_CAP) || 40;
+export const TRIAL_NETWORK_CAP = Number(process.env.TRIAL_NETWORK_CAP) || 20;
 /** One pass unlocks one exam. */
 export const PASS_PRICE_CENTS = 999;
 export const PASS_DAYS = 30;

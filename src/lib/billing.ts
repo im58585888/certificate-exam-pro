@@ -72,5 +72,8 @@ export async function fulfillCheckout(session: Stripe.Checkout.Session) {
   const exam = session.metadata?.exam;
   if (!userId || !exam || !getExam(exam) || session.payment_status !== "paid") return false;
   await grantPass(userId, exam, session.id, session.amount_total ?? 0, "stripe");
+  // A discounted pass uses up the learner's trial offer.
+  const offerId = Number(session.metadata?.offerId);
+  if (offerId) await query(`update offers set redeemed_at = now() where id = $1 and user_id = $2 and redeemed_at is null`, [offerId, userId]);
   return true;
 }

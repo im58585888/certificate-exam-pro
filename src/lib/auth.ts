@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { createHash, randomBytes, randomUUID, scrypt as scryptCb, timingSafeEqual } from "node:crypto";
 import { promisify } from "node:util";
 import { one, query } from "./db";
+import { moveTrialClaims } from "./trial";
 
 const scrypt = promisify(scryptCb) as (pw: string, salt: Buffer, len: number) => Promise<Buffer>;
 const SESSION_COOKIE = "cep_session";
@@ -60,6 +61,7 @@ export async function signIn(userId: string): Promise<void> {
       [userId, anon],
     );
     await query(`update flags set user_id = $1 where anon_id = $2 and user_id is null`, [userId, anon]);
+    await moveTrialClaims(anon, userId);
   }
 }
 

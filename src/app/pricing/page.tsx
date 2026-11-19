@@ -5,6 +5,7 @@ import { getUser } from "@/lib/auth";
 import { getAccess, paymentsMode } from "@/lib/billing";
 import { MiaPose } from "@/components/Mia";
 import { WaitlistForm } from "@/components/WaitlistForm";
+import { activeOffer, discountedCents, hadOffer, money, OFFER_PERCENT } from "@/lib/offers";
 import { EXAM_LIST, FREE_TRIAL_QUESTIONS, PASS_DAYS, PASS_PRICE_CENTS } from "@/lib/exams";
 
 export const metadata: Metadata = { title: "Pricing" };
@@ -23,18 +24,43 @@ const PAID = [
 const fmt = (d: Date) => d.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
 
 export default async function PricingPage({ searchParams }: PageProps<"/pricing">) {
-  const { reason } = await searchParams;
+  const { reason, offer: offerParam, exam: examParam } = await searchParams;
   const user = await getUser();
+  const offer = await activeOffer(user?.id);
+  const offerExam = EXAM_LIST.find((e) => e.slug === (offer?.exam ?? examParam));
+  // Visitors who used up their trial and haven't had the offer yet can still claim it here.
+  const canClaim = !!offerExam && !offer && (!user || !(await hadOffer(user.id))) && (reason === "trial" || reason === "trial-used");
   const price = `$${(PASS_PRICE_CENTS / 100).toFixed(2)}`;
   const exams = await Promise.all(EXAM_LIST.map(async (exam) => ({ exam, access: await getAccess(user?.id, exam.slug) })));
   const waitlist = paymentsMode === "waitlist";
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-14">
-      {reason === "trial" && (
+      {(reason === "trial" || reason === "trial-used") && (
         <p className="mx-auto mb-6 max-w-2xl rounded-xl bg-brand-soft px-4 py-3 text-center font-semibold text-brand">
-          You&apos;ve used your {FREE_TRIAL_QUESTIONS} free questions for this exam. Nice work getting started.
+          {reason === "trial"
+            ? <>You&apos;ve used your {FREE_TRIAL_QUESTIONS} free questions for this exam. Nice work getting started.</>
+            : <>You&apos;ve already used your free {offerExam?.code ?? ""} questions on this device or network.</>}
         </p>
+      )}
+      {offer && offerExam && (
+        <div className="mx-auto mb-8 max-w-2xl rounded-2xl border-2 border-ok/50 bg-ok-soft px-5 py-4 text-center">
+          <p className="font-extrabold text-ok">🎉 {offerParam === "claimed" ? "Your" : "You have a"} {offer.percent}% off {offerExam.code} {waitlist ? "is reserved" : "is ready"}</p>
+          <p className="mt-1 text-sm text-soft">
+            {money(discountedCents(offer.percent))} instead of {price} for a {PASS_DAYS}-day pass.{" "}
+            {waitlist ? "Passes launch soon: we'll email you, and this price is held for you." : offer.expires_at ? `Use it by ${fmt(new Date(offer.expires_at))}.` : ""}
+          </p>
+        </div>
+      )}
+      {offerParam === "used" && !offer && (
+        <p className="mx-auto mb-6 max-w-2xl rounded-xl bg-surface-2 px-4 py-3 text-center text-sm text-soft">The free-trial offer is once per person, and you&apos;ve already had yours.</p>
+      )}
+      {canClaim && offerExam && (
+        <div className="mx-auto mb-8 max-w-2xl rounded-2xl border-2 border-ok/50 bg-ok-soft px-5 py-4 text-center">
+          <p className="font-extrabold text-ok">Trial offer: {OFFER_PERCENT}% off your {offerExam.code} pass</p>
+          <p className="mt-1 text-sm text-soft">{money(discountedCents())} instead of {price} for {PASS_DAYS} days, once per person.</p>
+          <a className="btn-primary mt-3 !py-2.5" href={`/offer/claim?exam=${offerExam.slug}`}>{waitlist ? `Reserve ${OFFER_PERCENT}% off` : `Claim ${OFFER_PERCENT}% off`}</a>
+        </div>
       )}
       <h1 className="text-center text-4xl font-extrabold tracking-tight">Simple, one-time pricing</h1>
       <p className="mx-auto mt-2 max-w-xl text-center text-soft">
@@ -67,7 +93,11 @@ export default async function PricingPage({ searchParams }: PageProps<"/pricing"
             <span className="pill absolute -top-3 left-7 bg-brand text-on-brand">{exam.code}</span>
             <h2 className="text-lg font-extrabold">{exam.shortName} pass</h2>
             <p className="text-sm text-muted">{exam.name}</p>
-            <p className="mt-2 text-4xl font-extrabold">{price}<span className="text-base font-bold text-muted"> / {PASS_DAYS} days</span></p>
+            {offer?.exam === exam.slug ? (
+              <p className="mt-2 text-4xl font-extrabold">{money(discountedCents(offer.percent))}<span className="ml-2 text-xl font-bold text-muted line-through">{price}</span><span className="text-base font-bold text-muted"> / {PASS_DAYS} days</span></p>
+            ) : (
+              <p className="mt-2 text-4xl font-extrabold">{price}<span className="text-base font-bold text-muted"> / {PASS_DAYS} days</span></p>
+            )}
             <p className="text-sm text-muted">One-time payment · doesn&apos;t auto-renew</p>
             <ul className="mt-6 flex-1 space-y-2 text-soft">{PAID.map((f) => <li key={f}>✓ {f}</li>)}</ul>
             <div className="mt-7">
@@ -81,7 +111,7 @@ export default async function PricingPage({ searchParams }: PageProps<"/pricing"
                   <form action={checkoutAction}><input type="hidden" name="exam" value={exam.slug} /><button className="btn-ghost w-full">Add {PASS_DAYS} more days</button></form>
                 </div>
               ) : user ? (
-                <form action={checkoutAction}><input type="hidden" name="exam" value={exam.slug} /><button className="btn-primary w-full !py-3">Unlock {exam.code} for {price}</button></form>
+                <form action={checkoutAction}><input type="hidden" name="exam" value={exam.slug} /><button className="btn-primary w-full !py-3">Unlock {exam.code} for {offer?.exam === exam.slug ? money(discountedCents(offer.percent)) : price}</button></form>
               ) : (
                 <Link href="/register?next=/pricing" className="btn-primary w-full !py-3">Create account to unlock</Link>
               )}

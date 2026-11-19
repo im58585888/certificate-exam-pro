@@ -248,4 +248,32 @@ create table if not exists study_topic_prefs (
 alter table study_sections enable row level security;
 alter table study_items enable row level security;
 alter table study_topic_prefs enable row level security;
+
+-- One free trial per person and exam: each trial start records who started it (an account or anonymous visitor),
+-- the device (hashed IP + browser) and the network (hashed IP). Never raw IPs.
+create table if not exists trial_claims (
+  id bigserial primary key,
+  exam text not null,
+  owner text not null,
+  device text not null,
+  network text not null,
+  created_at timestamptz not null default now(),
+  unique (exam, owner)
+);
+create index if not exists trial_claims_device_idx on trial_claims (exam, device, created_at);
+create index if not exists trial_claims_network_idx on trial_claims (exam, network, created_at);
+alter table trial_claims enable row level security;
+
+-- The free-trial discount: one per person, for one exam. expires_at is null while passes aren't on sale yet
+-- (a launch reservation); once checkout is live it runs 72 hours from the claim.
+create table if not exists offers (
+  id bigserial primary key,
+  user_id uuid not null unique references users(id) on delete cascade,
+  exam text not null,
+  percent int not null,
+  created_at timestamptz not null default now(),
+  expires_at timestamptz,
+  redeemed_at timestamptz
+);
+alter table offers enable row level security;
 `;

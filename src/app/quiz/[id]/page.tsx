@@ -3,6 +3,9 @@ import type { Metadata } from "next";
 import { aiAvailable } from "@/lib/ai";
 import { getAccess, paymentsMode } from "@/lib/billing";
 import { getExam } from "@/lib/exams";
+import { googleConfigured } from "@/lib/google";
+import { discountedCents, hadOffer, money, OFFER_HOURS, OFFER_PERCENT } from "@/lib/offers";
+import { PASS_PRICE_CENTS } from "@/lib/exams";
 import { QuizPlayer, type QuizPlayerProps } from "@/components/QuizPlayer";
 import { query } from "@/lib/db";
 import { flagsFor } from "@/lib/flags";
@@ -32,6 +35,14 @@ export default async function QuizPage({ params, searchParams }: PageProps<"/qui
   }
 
   const passActive = !!owner.userId && (await getAccess(owner.userId, session.exam)).active;
+  // Free trial: the sign-up and half-price pop-ups (the offer is once per person, and not for pass holders).
+  const examInfo = getExam(session.exam);
+  const trialOffer = session.mode === "trial" && examInfo ? {
+    exam: session.exam, examCode: examInfo.code, percent: OFFER_PERCENT,
+    price: money(discountedCents()), fullPrice: money(PASS_PRICE_CENTS),
+    reserve: paymentsMode === "waitlist", hours: OFFER_HOURS, google: googleConfigured,
+    eligible: !passActive && !(owner.userId && (await hadOffer(owner.userId))),
+  } : undefined;
   const inSession = new Set(session.question_ids);
   const flagged = (await flagsFor(owner, session.exam)).map((f) => f.question_id).filter((qid) => inSession.has(qid));
 
@@ -45,6 +56,7 @@ export default async function QuizPage({ params, searchParams }: PageProps<"/qui
       deadline={deadlineOf(session)}
       canSave={!!owner.userId && session.mode !== "trial" && passActive}
       startAt={typeof (await searchParams).q === "string" ? ((await searchParams).q as string) : undefined}
+      trialOffer={trialOffer}
       sheetAccess={!owner.userId ? "signed-out" : passActive ? "ok" : "no-pass"}
       signedIn={!!owner.userId}
       examCode={getExam(session.exam)?.code ?? session.exam.toUpperCase()}

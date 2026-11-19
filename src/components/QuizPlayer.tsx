@@ -11,6 +11,8 @@ import { FlagButton } from "./FlagButton";
 import { ReportQuestion } from "./ReportQuestion";
 import type { SheetAccess } from "@/lib/sheetAccess";
 import { MiaPanel } from "./Tutor";
+import { markNudgeSeen, nudgeSeen, OfferCard, OfferNudge, SignupNudge, type TrialOffer } from "./TrialNudges";
+import { trialNudgeShownAction } from "@/app/actions";
 
 export interface QuizPlayerProps {
   sessionId: string;
@@ -32,6 +34,8 @@ export interface QuizPlayerProps {
   sheetAccess: SheetAccess;
   /** Question to open on (coming back from the study sheet); otherwise the first unanswered one. */
   startAt?: string;
+  /** Free trial only: the half-price offer and sign-up pop-ups. */
+  trialOffer?: TrialOffer;
 }
 
 const MODE_LABEL: Record<Mode, string> = { trial: "Free trial", practice: "Practice", reinforce: "Strengthen weak areas", review: "Review mistakes", flagged: "Flagged questions", exam: "Timed mock exam" };
@@ -42,7 +46,7 @@ function formatClock(ms: number) {
   return `${h ? `${h}:` : ""}${String(m).padStart(h ? 2 : 1, "0")}:${String(sec).padStart(2, "0")}`;
 }
 
-export function QuizPlayer({ sessionId, mode, questions, initialFlags, initial, deadline, signedIn, waitlist, examCode, tutor, canSave, sheetAccess, startAt }: QuizPlayerProps) {
+export function QuizPlayer({ sessionId, mode, questions, initialFlags, initial, deadline, signedIn, waitlist, examCode, tutor, canSave, sheetAccess, startAt, trialOffer }: QuizPlayerProps) {
   const isExam = mode === "exam";
   const [answers, setAnswers] = useState(initial);
   const [index, setIndex] = useState(() => {
@@ -129,9 +133,23 @@ export function QuizPlayer({ sessionId, mode, questions, initialFlags, initial, 
   };
 
   const check = () => startTransition(async () => { await submit(q.id, draft); });
+  // Free trial: after question 2 a sign-up pop-up; after question 3 (if they skipped it) the half-price offer. Once each.
+  const [nudge, setNudge] = useState<null | "signup" | "offer">(null);
+  const showNudge = (k: "signup" | "offer") => {
+    markNudgeSeen(k);
+    setNudge(k);
+    trialNudgeShownAction(k === "signup" ? "nudge_signup" : "nudge_offer").catch(() => {});
+  };
+  const maybeNudge = () => {
+    if (mode !== "trial" || !trialOffer) return;
+    const done = Object.keys(answers).length;
+    if (!signedIn && done >= 2 && !nudgeSeen("signup")) showNudge("signup");
+    else if (trialOffer.eligible && done >= 3 && !nudgeSeen("offer") && (signedIn || nudgeSeen("signup"))) showNudge("offer");
+  };
+
   const next = () => startTransition(async () => {
     if (!(await saveExamDraft())) return;
-    if (isLast) { if (!isExam) finish(); } else go(index + 1);
+    if (isLast) { if (!isExam) finish(); } else { go(index + 1); maybeNudge(); }
   });
   const jump = (i: number) => startTransition(async () => { if (await saveExamDraft()) go(i); });
 
@@ -274,15 +292,30 @@ export function QuizPlayer({ sessionId, mode, questions, initialFlags, initial, 
           height={cardHeight ? Math.round(cardHeight * 0.8) : undefined} />
       )}
 
+      {nudge === "signup" && trialOffer && (
+        <SignupNudge answered={Object.keys(answers).length} correct={correctSoFar} google={trialOffer.google}
+          back={`/quiz/${sessionId}?q=${encodeURIComponent(q.id)}`} onClose={() => setNudge(null)} />
+      )}
+      {nudge === "offer" && trialOffer && <OfferNudge offer={trialOffer} signedIn={signedIn} onClose={() => setNudge(null)} />}
+
       {paywall && (
         <div className="fixed inset-0 z-50 grid place-items-center bg-black/50 p-4" role="dialog" aria-modal="true" aria-labelledby="pw-title">
           <div className="card max-w-md p-7 text-center">
             <h2 id="pw-title" className="text-2xl font-extrabold">You&apos;ve used your free {examCode} questions</h2>
-            <p className="mt-2 text-soft">Unlock unlimited practice, timed mock exams, adaptive review of your mistakes and full analytics for 30 days.</p>
-            <div className="mt-5 flex flex-col gap-2">
-              <Link className="btn-primary !py-3" href={waitlist || signedIn ? "/pricing" : "/register?next=/pricing"}>{waitlist ? "Get notified when passes launch" : `Unlock ${examCode} for $9.99`}</Link>
-              <button className="btn-ghost" onClick={finish}>See my trial results</button>
-            </div>
+            {trialOffer?.eligible ? (
+              <div className="mt-4">
+                <OfferCard offer={trialOffer} signedIn={signedIn} compact />
+                <button className="btn-ghost mt-3 w-full" onClick={finish}>See my trial results</button>
+              </div>
+            ) : (
+              <>
+                <p className="mt-2 text-soft">Unlock unlimited practice, timed mock exams, adaptive review of your mistakes and full analytics for 30 days.</p>
+                <div className="mt-5 flex flex-col gap-2">
+                  <Link className="btn-primary !py-3" href={waitlist || signedIn ? "/pricing" : "/register?next=/pricing"}>{waitlist ? "Get notified when passes launch" : `Unlock ${examCode} for $9.99`}</Link>
+                  <button className="btn-ghost" onClick={finish}>See my trial results</button>
+                </div>
+              </>
+            )}
           </div>
         </div>
       )}

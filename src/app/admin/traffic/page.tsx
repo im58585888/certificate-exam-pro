@@ -137,6 +137,11 @@ export default async function TrafficPage({ searchParams }: PageProps<"/admin/tr
     breakdown("referrer", days, "v.referrer_host is not null", 10),
     breakdown("device", days, "true", 10),
   ]);
+  const nudgeRows = await query<{ kind: string; n: number }>(
+    `select kind, count(distinct visitor)::int as n from conversions where kind in ('nudge_signup', 'nudge_offer', 'offer') and created_at >= ${SINCE} group by kind`,
+    [days, STATS_TZ],
+  );
+  const nudges = Object.fromEntries(["nudge_signup", "nudge_offer", "offer"].map((k) => [k, nudgeRows.find((r) => r.kind === k)?.n ?? 0])) as Record<"nudge_signup" | "nudge_offer" | "offer", number>;
   const pages = await query<{ path: string; views: number }>(
     `select p.path, count(*)::int as views from page_views p join visits v on v.id = p.visit_id where v.started_at >= ${SINCE} group by 1 order by 2 desc limit 10`,
     [days, STATS_TZ],
@@ -164,6 +169,14 @@ export default async function TrafficPage({ searchParams }: PageProps<"/admin/tr
         <Stat label="Sign-ups" value={t.signups.toLocaleString()} note={`${pct(t.signups, t.visits)} of visits${unlinked(t.signups_unlinked)}`} />
         <Stat label="Waitlist joins" value={t.waitlist.toLocaleString()} note={t.waitlist_unlinked ? unlinked(t.waitlist_unlinked).slice(3) : "Full list: Admin → Overview"} />
         <Stat label="Top source" value={sources[0] ? `${SOURCE_ICON[sources[0].label] ?? "🔗"} ${sources[0].label}` : "–"} note={sources[0] ? `${sources[0].visits} visits` : undefined} />
+      </section>
+
+      {/* Free-trial pop-ups: people who saw each one, and how many claimed the half-price offer. */}
+      <section className="card flex flex-wrap items-center gap-x-8 gap-y-2 p-5 text-sm">
+        <h2 className="w-full font-extrabold sm:w-auto">Trial pop-ups</h2>
+        <span><b className="text-lg tabular-nums">{nudges.nudge_signup}</b> <span className="text-soft">saw the sign-up pop-up</span></span>
+        <span><b className="text-lg tabular-nums">{nudges.nudge_offer}</b> <span className="text-soft">saw the 50% off offer</span></span>
+        <span><b className="text-lg tabular-nums">{nudges.offer}</b> <span className="text-soft">claimed it</span> <span className="text-muted">({pct(nudges.offer, nudges.nudge_offer)})</span></span>
       </section>
 
       <section className="card p-5">

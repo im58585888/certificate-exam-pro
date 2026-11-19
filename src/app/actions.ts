@@ -16,6 +16,8 @@ import { ensureBank, feedbackFor, getQuestion, grade, type Feedback } from "@/li
 import { isExpired, loadOwnedSession } from "@/lib/quiz";
 import { REPORT_REASONS } from "@/lib/reports";
 import { recordConversion } from "@/lib/traffic";
+import { activeOffer, discountedCents } from "@/lib/offers";
+import { recordTrial, trialBlocked } from "@/lib/trial";
 import { CONTACT_TOPICS, isContactTopic } from "@/lib/contact";
 
 // ---------- Auth ----------
@@ -167,8 +169,10 @@ export async function startQuizAction(form: FormData) {
   if (!access.active) {
     if (mode !== "trial") redirect(user ? "/pricing" : `/register?next=${encodeURIComponent("/pricing")}`);
     const left = FREE_TRIAL_QUESTIONS - (await answeredCount(owner, examSlug));
-    if (left <= 0) redirect("/pricing?reason=trial");
-    if ((await networkTrialUsage(await clientIpHash(), examSlug)) >= TRIAL_NETWORK_CAP) redirect("/pricing?reason=trial");
+    if (left <= 0) redirect(`/pricing?reason=trial&exam=${examSlug}`);
+    // One free trial per person: a second one from this browser, device or (beyond two people) network is refused.
+    if (await trialBlocked(owner, examSlug)) redirect(`/pricing?reason=trial-used&exam=${examSlug}`);
+    if ((await networkTrialUsage(await clientIpHash(), examSlug)) >= TRIAL_NETWORK_CAP) redirect(`/pricing?reason=trial-used&exam=${examSlug}`);
     // Resume an unfinished trial rather than dealing a fresh set (otherwise skipping would reveal unlimited questions).
     const [clause, param] = ownerClause(owner, 2);
     const open = await one<{ id: string }>(
@@ -190,7 +194,10 @@ export async function startQuizAction(form: FormData) {
     `insert into quiz_sessions (user_id, anon_id, exam, mode, question_ids, time_limit_sec) values ($1, $2, $3, $4, $5, $6) returning id`,
     [owner.userId ?? null, owner.anonId ?? null, examSlug, mode, picked.map((q) => q.id), mode === "exam" ? exam.examMinutes * 60 : null],
   );
-  if (mode === "trial") await recordConversion("trial");
+  if (mode === "trial") {
+    await recordTrial(owner, examSlug);
+    await recordConversion("trial");
+  }
   redirect(`/quiz/${row!.id}`);
 }
 
@@ -298,16 +305,18 @@ export async function checkoutAction(form: FormData) {
   }
   await recordConversion("checkout");
   const origin = await appOrigin();
+  // The free-trial discount applies when the learner has one for this exam.
+  const offer = await activeOffer(user.id, exam.slug);
   const session = await stripe.checkout.sessions.create({
     mode: "payment",
     customer_email: user.email,
     client_reference_id: user.id,
-    metadata: { userId: user.id, exam: exam.slug },
+    metadata: { userId: user.id, exam: exam.slug, ...(offer ? { offerId: String(offer.id) } : {}) },
     line_items: [{
       quantity: 1,
       price_data: {
         currency: "usd",
-        unit_amount: PASS_PRICE_CENTS,
+        unit_amount: offer ? discountedCents(offer.percent) : PASS_PRICE_CENTS,
         product_data: { name: `${exam.code} pass (${PASS_DAYS} days)`, description: `Unlimited ${exam.name} practice, mock exams, adaptive review and analytics.` },
       },
     }],
@@ -324,7 +333,10 @@ export async function devGrantAction(form: FormData) {
   if (!exam) redirect("/pricing");
   const user = await getUser();
   if (!user) redirect("/login");
-  await grantPass(user.id, exam.slug, `dev_${Date.now()}`, PASS_PRICE_CENTS, "dev");
+  // Mirrors Stripe: the trial offer discounts the pass and is then used up.
+  const offer = await activeOffer(user.id, exam.slug);
+  await grantPass(user.id, exam.slug, `dev_${Date.now()}`, offer ? discountedCents(offer.percent) : PASS_PRICE_CENTS, "dev");
+  if (offer) await query(`update offers set redeemed_at = now() where id = $1 and user_id = $2`, [offer.id, user.id]);
   redirect(`/dashboard?exam=${exam.slug}&welcome=1`);
 }
 
@@ -417,4 +429,11 @@ export async function sendContactAction(_: ContactState, form: FormData): Promis
     }
   }
   return { sent: true };
+}
+
+// ---------- Free-trial pop-ups ----------
+
+/** Counts that a trial pop-up was shown (once per visitor per day), for the Traffic page. */
+export async function trialNudgeShownAction(kind: "nudge_signup" | "nudge_offer"): Promise<void> {
+  if (kind === "nudge_signup" || kind === "nudge_offer") await recordConversion(kind);
 }
