@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { Mia, MiaPose } from "./Mia";
 import styles from "./TutorVisuals.module.css";
@@ -77,6 +78,20 @@ export function MiaSpotlight() {
       <span className={styles.spotGlow} aria-hidden="true" />
       <span className={styles.spotSway}><MiaPose pose="welcoming" height={210} alt="Mia, your AI tutor" /></span>
     </div>
+  );
+}
+
+/**
+ * Mia's upper body beside "Meet Mia." in the hero headline, sized in em so she scales with the heading. The white
+ * blazer stands out on the dark background; a soft glow sits behind her and her lower edge fades out above the next
+ * line. Decorative (the heading already says who she is).
+ */
+export function HeroMia() {
+  return (
+    <span className={styles.heroMia} aria-hidden="true">
+      <span className={styles.heroMiaGlow} />
+      <Image src="/mia/welcoming.webp" alt="" width={448} height={440} priority className={styles.heroMiaImg} />
+    </span>
   );
 }
 

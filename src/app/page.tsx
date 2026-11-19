@@ -5,7 +5,7 @@ import { EXAM_LIST, FREE_TRIAL_QUESTIONS, PASS_DAYS, PASS_PRICE_CENTS } from "@/
 import { ensureBank, questionsFor } from "@/lib/questions";
 import { TrialPicker } from "@/components/LandingDemos";
 import { HeroMiaDemo } from "@/components/HeroMiaDemo";
-import { MemoryFlow, Mia, MiaSpotlight, TutorFlow } from "@/components/TutorVisuals";
+import { HeroMia, MemoryFlow, Mia, MiaSpotlight, TutorFlow } from "@/components/TutorVisuals";
 import styles from "./landing.module.css";
 
 const PRICE = `$${(PASS_PRICE_CENTS / 100).toFixed(2)}`;
@@ -35,7 +35,7 @@ export default async function Home() {
         <div className={styles.heroInner}>
           <div className={styles.heroCopy}>
             <p className={styles.eyebrow}>✨ Your AI tutor for AWS certification</p>
-            <h1 id="hero-title">Meet Mia.<br /><span>She&apos;ll get you through your AWS exam.</span></h1>
+            <h1 id="hero-title"><span className={styles.meetLine}>Meet Mia.<HeroMia /></span><br /><span className={styles.overMia}>She&apos;ll get you through your AWS exam.</span></h1>
             <p className={styles.heroDescription}>Stuck? Mia breaks it down. Curious? Ask her anything. Ready? Prove it on a timed mock exam.</p>
             <TrialPicker exams={EXAM_LIST.map((exam) => ({ slug: exam.slug, name: exam.shortName, code: exam.code }))} count={FREE_TRIAL_QUESTIONS} />
             <a className={styles.textLink} href="#how-it-works">See what the tutor does <span aria-hidden="true">↓</span></a>
