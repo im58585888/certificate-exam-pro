@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import type { ConceptCard } from "@/lib/ai";
-import { ChatFlow } from "./ChatMarkdown";
+import { ArchFigure } from "./ArchDiagram";
 
 function Label({ children }: { children: ReactNode }) {
   return <p className="mt-3 mb-1 text-[11px] font-bold tracking-wide text-muted uppercase">{children}</p>;
@@ -41,10 +41,11 @@ export function ConceptCardBody({ card, compact = false }: { card: ConceptCard; 
         </>
       )}
 
-      {!compact && card.flow && card.flow.steps.length > 1 && (
-        <div className="mt-3">
-          <ChatFlow title={card.flow.caption || "How it fits"} steps={card.flow.steps} />
-        </div>
+      {!compact && card.diagram && (
+        <>
+          <Label>How it fits</Label>
+          <ArchFigure diagram={card.diagram} />
+        </>
       )}
 
       {card.compare && card.compare.rows.length > 0 && (

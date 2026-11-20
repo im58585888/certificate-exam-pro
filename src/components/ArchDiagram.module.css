@@ -25,10 +25,6 @@
 
 /* Boxes inside boxes: a row that wraps on wide screens, a column in narrow ones (Mia's panel, phones). */
 .row { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 40px 44px; }
-@container (max-width: 520px) {
-  .row { flex-direction: column; align-items: stretch; gap: 36px; }
-  .node { max-width: none; }
-}
 
 .zone {
   position: relative;
@@ -92,3 +88,9 @@
 .key { margin-top: 14px; display: grid; gap: 5px; font-size: 12.5px; color: var(--soft); }
 .keyRow { display: flex; align-items: flex-start; gap: 8px; }
 .keyRow .badge { position: static; transform: none; flex-shrink: 0; }
+
+/* Narrow (Mia's panel, study cards, phones): stack top to bottom at full width. Last so it wins over the rules above. */
+@container (max-width: 520px) {
+  .row { flex-direction: column; align-items: stretch; gap: 36px; }
+  .node { max-width: none; }
+}

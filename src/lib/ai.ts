@@ -71,8 +71,8 @@ const CardSchema = z.object({
     .describe("2-4 rows. when: a situation where this is the right choice. notWhen: a look-alike situation where something else is, naming that something else. A few words each"),
   facts: z.array(z.object({ label: z.string(), value: z.string() }))
     .describe("3-5 exam-relevant facts as short label/value pairs, e.g. label 'Default retention', value '90 days'"),
-  flow: z.object({ caption: z.string(), steps: z.array(z.object({ label: z.string(), note: z.string() })) }).nullable()
-    .describe("3-5 boxes, left to right, showing how this service fits with others in a typical setup; null if there's no natural flow"),
+  diagram: Diagram.nullable()
+    .describe("An architecture diagram of a typical setup using this service: boundaries such as AWS Region, VPC or subnets as zones, the service and its usual neighbours as 3-6 nodes, links showing what flows; no decision links or nodes. Null if there's no natural setup to draw"),
   compare: Table.nullable().describe("A small comparison of look-alike services (at most 4 rows, short cells), or null"),
   traps: z.array(z.object({ trap: z.string(), truth: z.string() })).describe("2-3 common wrong-answer traps: the mistaken belief and the correct fact, one short line each"),
   remember: z.string().describe("One memorable rule of thumb"),
@@ -264,11 +264,11 @@ export function chat(q: Question, answered: boolean, turns: ChatTurn[]): AsyncGe
 
 // ---------- Study-sheet concept cards (one per exam topic, written from that topic's questions) ----------
 
-const CARD_RULES = `Write a study-sheet card for one exam topic, based on the practice questions below (with their correct answers, concepts and exam tips). Capture the ideas those questions test, so a learner can review the topic in under a minute. The card is shown as small tables and a diagram, so keep every field to a few words or one short line: no paragraphs.`;
+const CARD_RULES = `Write a study-sheet card for one exam topic, based on the practice questions below (with their correct answers, concepts and exam tips). Capture the ideas those questions test, so a learner can review the topic in under a minute. The card is shown as small tables and a diagram, so keep every field to a few words or one short line: no paragraphs. In the diagram, put a key setting or limit the questions test in the relevant node's note or tag (e.g. tag "Max concurrency 50").`;
 
 const topicKey = (exam: string, topic: string) => `topic:${exam}:${topic}`;
 /** Bump when the card format changes so existing cards are rewritten in the new shape the next time someone opens them. */
-const CARD_VERSION = 2;
+const CARD_VERSION = 3;
 const hashTopic = (qs: Question[]) => sha256(JSON.stringify([PROMPT_VERSION, CARD_VERSION, qs.map((q) => [q.id, q.explanation.concept])])).slice(0, 16);
 
 export async function cachedCards(exam: string, topics: { topic: string; questions: Question[] }[]): Promise<Map<string, ConceptCard>> {
@@ -288,10 +288,17 @@ export async function cachedCards(exam: string, topics: { topic: string; questio
 
 export async function writeCard(exam: string, topic: string, questions: Question[]): Promise<ConceptCard> {
   const sample = questions.slice(0, 12);
-  const content = mock ? mockCard(topic) : await parse(CardSchema, CARD_RULES, [
+  const raw = mock ? mockCard(topic) : await parse(CardSchema, CARD_RULES, [
     `Exam: ${getExam(exam)?.name ?? exam}. Topic: ${topic}.`,
     ...sample.map((q, i) => `\nQuestion ${i + 1}: ${q.prompt}\nCorrect: ${q.options.filter((o) => o.correct).map((o) => o.text).join("; ")}\nConcept: ${q.explanation.concept}\nExam tip: ${q.explanation.examTip}`),
-  ].join("\n"), 4000);
+  ].join("\n"), 6000);
+  // A study card explains the whole setup, so nothing in it is drawn as an open question.
+  const diagram = cleanDiagram(raw.diagram);
+  if (diagram) {
+    diagram.links.forEach((l) => { l.decision = false; });
+    diagram.nodes.forEach((n) => { if (n.kind === "decision") n.kind = "other"; });
+  }
+  const content = { ...raw, diagram };
   await store(topicKey(exam, topic), "card", hashTopic(questions), content);
   return content;
 }
@@ -343,7 +350,16 @@ function mockCard(topic: string): ConceptCard {
     oneLiner: "Sample card: add ANTHROPIC_API_KEY to generate real study notes.",
     useWhen: [{ when: "The situation it fits", notWhen: "A look-alike: use Service X" }, { when: "Another good fit", notWhen: "Another look-alike: use Y" }],
     facts: [{ label: "Default", value: "A setting" }, { label: "Limit", value: "A number" }, { label: "Pricing", value: "How you pay" }],
-    flow: { caption: "How it fits", steps: [{ label: "Users", note: "make requests" }, { label: topic, note: "does the work" }, { label: "Storage", note: "keeps results" }] },
+    diagram: {
+      caption: "A queue feeds Lambda at a capped rate so the downstream system isn't overloaded.",
+      zones: [{ id: "region", label: "AWS Region", kind: "region", parent: null }, { id: "vpc", label: "VPC", kind: "vpc", parent: "region" }],
+      nodes: [
+        { id: "sqs", label: "SQS queue", note: "Buffers messages", kind: "integration", zone: "region", tag: "" },
+        { id: "fn", label: "Lambda function", note: "Event source mapping", kind: "compute", zone: "region", tag: "Max concurrency 50" },
+        { id: "db", label: "Downstream database", note: "Protected from overload", kind: "database", zone: "vpc", tag: "" },
+      ],
+      links: [{ from: "sqs", to: "fn", label: "Batches of messages", decision: false }, { from: "fn", to: "db", label: "Writes", decision: false }],
+    },
     compare: null,
     traps: [{ trap: "A common mistaken belief", truth: "What's actually true" }],
     remember: "One rule of thumb.",
