@@ -5,6 +5,7 @@ import * as z from "zod/v4";
 import { sha256, type Owner } from "./auth";
 import { one, query } from "./db";
 import { getExam } from "./exams";
+import { cleanDiagram, NODE_KINDS, ZONE_KINDS } from "./arch";
 import { examOf, type Question } from "./questions";
 import { allowAttempt, clientIpHash, recordAttempt } from "./request";
 
@@ -32,14 +33,29 @@ export const aiAvailable = !!client || mock;
 
 const Table = z.object({ caption: z.string(), columns: z.array(z.string()), rows: z.array(z.array(z.string())) });
 
+const Diagram = z.object({
+  caption: z.string().describe("One sentence on what the diagram shows"),
+  zones: z.array(z.object({
+    id: z.string(), label: z.string().describe("e.g. 'On-premises data center', 'AWS Region', 'VPC', 'Private subnet'"),
+    kind: z.enum(ZONE_KINDS), parent: z.string().nullable().describe("id of the zone this one sits inside, or null"),
+  })).describe("0-5 boundaries that hold components; only ones the scenario implies; at most 3 levels deep"),
+  nodes: z.array(z.object({
+    id: z.string(), label: z.string().describe("2-4 words"), note: z.string().describe("A few words, or empty"),
+    kind: z.enum(NODE_KINDS), zone: z.string().nullable().describe("id of the innermost zone it sits in, or null"),
+    tag: z.string().describe("A requirement that applies to this piece in 2-4 words (e.g. 'Must stay private'), or empty"),
+  })).describe("3-8 components"),
+  links: z.array(z.object({
+    from: z.string(), to: z.string(), label: z.string().describe("2-5 words on what flows, or empty"),
+    decision: z.boolean().describe("true only for the one connection the question asks the learner to choose"),
+  })),
+});
+
 const BreakdownSchema = z.object({
   title: z.string().describe("Short name for the scenario, e.g. 'Private networking for SaaS providers'"),
   testing: z.array(z.string()).describe("2-5 services or concepts the question tests"),
   requirements: z.array(z.object({ label: z.string(), detail: z.string() })).describe("Every requirement and constraint, including ones hidden in phrases like LEAST operational overhead"),
-  picture: z.object({ caption: z.string(), steps: z.array(z.object({ label: z.string(), note: z.string() })) }).nullable()
-    .describe("3-6 boxes showing how the pieces of the scenario connect, left to right; null if a picture wouldn't help"),
-  clues: z.array(z.object({ phrase: z.string(), meaning: z.string() })).describe("Exact phrases from the question that matter, and what each signals"),
-  terms: z.array(z.object({ term: z.string(), plain: z.string(), example: z.string() })).describe("3-7 terms a beginner may not know"),
+  diagram: Diagram.nullable()
+    .describe("An architecture diagram of the scenario as the question describes it, with the piece being decided marked as unknown; null when the question isn't about how things are set up (a pure fact, limit or price)"),
   options: z.array(z.object({ name: z.string(), what: z.string(), analogy: z.string(), keyFacts: z.array(z.string()) }))
     .describe("One entry per technology, approach or concept in the answer options, described on its own terms; keyFacts must never confirm or contradict an option's claim"),
   table: Table.nullable().describe("A small reference table only when it makes a concept clearer (at most 5 rows), never one that settles the answer; otherwise null"),
@@ -78,6 +94,10 @@ You are not told the correct answer and must not suggest one: don't rank options
 
 Some options are claims rather than technologies (for example "Standard-IA has a 90-day minimum storage duration"). For those, explain the concept the claim is about and what the learner would need to know to judge it, but never state whether the claim is true or give the fact that settles it. Likewise, don't do the calculation or comparison that decides the question: set up the arithmetic or the comparison and leave the final step to the learner.`;
 
+const DIAGRAM_RULES = `The diagram is an architecture picture of the scenario: boundaries (on-premises, AWS Region, account, VPC, public or private subnet) as zones, and the users, services and data the scenario mentions as nodes inside them, with links showing how requests or data flow.
+Draw only what the scenario says exists or clearly implies. Never draw a technology that appears only in the answer options. Mark the one thing the question asks the learner to choose: if it is how two pieces connect, add that link with decision true and a label naming the need (e.g. "Private path, no internet"); if it is a missing component, add a node of kind "decision" whose label names its job (e.g. "Cache for sessions"), never a technology. Put requirements from the scenario on the pieces they apply to as tags.
+Keep it small and readable: 3-8 nodes, short labels. Use null when the question is about a fact, limit, price or definition rather than how things are set up.`;
+
 const BREAKDOWN_LEVEL = "Pitch it at someone who knows basic IT but is new to this AWS topic.";
 
 function questionText(q: Question, withAnswer: boolean): string {
@@ -95,7 +115,7 @@ function questionText(q: Question, withAnswer: boolean): string {
 }
 
 // Bump when the prompts change so saved explanations are rewritten with the new instructions.
-const PROMPT_VERSION = 2;
+const PROMPT_VERSION = 3;
 const hashQuestion = (q: Question) => sha256(JSON.stringify([PROMPT_VERSION, q.stem, q.prompt, q.options])).slice(0, 16);
 
 // ---------- Cache ----------
@@ -157,7 +177,8 @@ export async function cachedBreakdown(q: Question): Promise<Breakdown | null> {
 }
 
 export async function writeBreakdown(q: Question): Promise<Breakdown> {
-  const content = mock ? mockBreakdown(q) : await parse(BreakdownSchema, `${BREAKDOWN_RULES}\n\n${BREAKDOWN_LEVEL}`, questionText(q, false));
+  const raw = mock ? mockBreakdown(q) : await parse(BreakdownSchema, `${BREAKDOWN_RULES}\n\n${DIAGRAM_RULES}\n\n${BREAKDOWN_LEVEL}`, questionText(q, false));
+  const content = { ...raw, diagram: cleanDiagram(raw.diagram) };
   await store(q.id, "breakdown", hashQuestion(q), content);
   return content;
 }
@@ -290,9 +311,26 @@ function mockBreakdown(q: Question): Breakdown {
     title: `Sample breakdown: ${q.topic}`,
     testing: [q.topic, "Reading requirements"],
     requirements: [{ label: "First requirement", detail: "What the scenario needs most." }, { label: "Second requirement", detail: "A constraint hidden in the wording." }],
-    picture: { caption: "How the pieces connect", steps: [{ label: "Users", note: "send requests" }, { label: "AWS service", note: "does the work" }, { label: "Data", note: "is stored" }] },
-    clues: [{ phrase: "LEAST operational overhead", meaning: "Prefer managed services over building it yourself." }],
-    terms: [{ term: "Managed service", plain: "AWS runs the servers for you.", example: "Amazon RDS patches the database engine." }],
+    diagram: {
+      caption: "App servers in a private subnet need to reach a bucket outside the VPC.",
+      zones: [
+        { id: "region", label: "AWS Region", kind: "region", parent: null },
+        { id: "vpc", label: "VPC", kind: "vpc", parent: "region" },
+        { id: "pub", label: "Public subnet", kind: "public", parent: "vpc" },
+        { id: "priv", label: "Private subnet", kind: "private", parent: "vpc" },
+      ],
+      nodes: [
+        { id: "users", label: "Users", note: "", kind: "users", zone: null, tag: "" },
+        { id: "alb", label: "Load balancer", note: "", kind: "network", zone: "pub", tag: "" },
+        { id: "app", label: "App servers", note: "EC2, no public IP", kind: "compute", zone: "priv", tag: "" },
+        { id: "s3", label: "S3 bucket", note: "Reports", kind: "storage", zone: "region", tag: "Lowest cost" },
+      ],
+      links: [
+        { from: "users", to: "alb", label: "HTTPS requests", decision: false },
+        { from: "alb", to: "app", label: "", decision: false },
+        { from: "app", to: "s3", label: "Private path, no internet", decision: true },
+      ],
+    },
     options: q.options.map((o) => ({ name: o.text.slice(0, 40), what: "What this technology does.", analogy: "An everyday comparison.", keyFacts: ["A general strength.", "A general limit."] })),
     table: { caption: "Sample table", columns: ["Destination", "Where traffic goes"], rows: [["10.0.0.0/16", "Local VPC"], ["0.0.0.0/0", "Internet gateway"]] },
     yourMove: "Check each option against every requirement above.",

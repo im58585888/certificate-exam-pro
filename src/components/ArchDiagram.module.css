@@ -1,0 +1,94 @@
+.wrap {
+  container-type: inline-size;
+  --c-users: #6f6878;
+  --c-compute: #c4612f;
+  --c-storage: #a8741a;
+  --c-database: #2f6fb5;
+  --c-network: var(--brand);
+  --c-security: var(--bad);
+  --c-integration: #a8436f;
+  --c-analytics: var(--ok);
+  --c-other: var(--muted);
+  --c-decision: var(--bad);
+}
+@media (prefers-color-scheme: dark) {
+  :global(:root:not([data-theme="light"])) .wrap {
+    --c-users: #b9b1c4;
+    --c-compute: #f0997b;
+    --c-storage: #e6c07a;
+    --c-database: #85b7eb;
+    --c-integration: #ed93b1;
+  }
+}
+
+.canvas { position: relative; }
+
+/* Boxes inside boxes: a row that wraps on wide screens, a column in narrow ones (Mia's panel, phones). */
+.row { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 40px 44px; }
+@container (max-width: 520px) {
+  .row { flex-direction: column; align-items: stretch; gap: 36px; }
+  .node { max-width: none; }
+}
+
+.zone {
+  position: relative;
+  border: 1.5px dashed color-mix(in oklab, var(--muted) 60%, transparent);
+  border-radius: 16px;
+  padding: 30px 16px 16px;
+  min-width: 0;
+}
+.zoneLabel {
+  position: absolute; top: 8px; left: 12px;
+  font-size: 11px; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted);
+}
+.zone[data-kind="onprem"] { border-color: color-mix(in oklab, var(--warn) 55%, transparent); background: color-mix(in oklab, var(--warn-soft) 45%, transparent); }
+.zone[data-kind="onprem"] > .zoneLabel { color: var(--warn); }
+.zone[data-kind="vpc"] { border-style: solid; border-color: color-mix(in oklab, var(--brand) 55%, transparent); background: color-mix(in oklab, var(--brand-soft) 45%, transparent); }
+.zone[data-kind="vpc"] > .zoneLabel { color: var(--brand); }
+.zone[data-kind="public"] { border-style: solid; border-color: color-mix(in oklab, var(--ok) 45%, transparent); background: color-mix(in oklab, var(--ok-soft) 70%, transparent); }
+.zone[data-kind="public"] > .zoneLabel { color: var(--ok); }
+.zone[data-kind="private"] { border-style: solid; border-color: color-mix(in oklab, var(--brand) 40%, transparent); background: color-mix(in oklab, var(--brand-soft) 80%, transparent); }
+.zone[data-kind="private"] > .zoneLabel { color: var(--brand); }
+
+.node {
+  --c: var(--c-other);
+  position: relative; z-index: 2;
+  display: flex; align-items: center; gap: 9px;
+  min-width: 128px; max-width: 200px;
+  padding: 8px 11px;
+  border: 1.5px solid color-mix(in oklab, var(--c) 55%, var(--line));
+  border-radius: 12px;
+  background: var(--surface);
+}
+.icon {
+  display: grid; place-items: center; flex-shrink: 0;
+  width: 30px; height: 30px; border-radius: 8px;
+  color: var(--c); background: color-mix(in oklab, var(--c) 14%, var(--surface));
+}
+.label { display: block; font-size: 13.5px; font-weight: 800; line-height: 1.2; color: var(--ink); }
+.note { display: block; margin-top: 1px; font-size: 11.5px; line-height: 1.3; color: var(--soft); }
+.tag {
+  display: inline-block; margin-top: 4px; padding: 1px 7px; border-radius: 999px;
+  font-size: 10.5px; font-weight: 700; color: var(--bad); background: var(--bad-soft);
+}
+.node[data-kind="decision"] { border-style: dashed; background: color-mix(in oklab, var(--bad-soft) 50%, var(--surface)); }
+.node[data-kind="decision"] .icon { font-size: 17px; font-weight: 900; }
+
+.wires { position: absolute; inset: 0; z-index: 1; overflow: visible; pointer-events: none; }
+.wire { fill: none; stroke: var(--muted); stroke-width: 1.5; }
+.wire[data-decision="true"] { stroke: var(--c-decision); stroke-dasharray: 5 4; }
+.headNormal { fill: var(--muted); }
+.headDecision { fill: var(--c-decision); }
+
+.badge {
+  position: absolute; z-index: 3; transform: translate(-50%, -50%);
+  display: grid; place-items: center;
+  width: 20px; height: 20px; border-radius: 999px;
+  font-size: 11px; font-weight: 800; color: var(--soft);
+  background: var(--surface); border: 1.5px solid var(--muted);
+}
+.badge[data-decision="true"] { width: 26px; height: 26px; font-size: 14px; color: var(--c-decision); border: 1.5px dashed var(--c-decision); background: var(--bad-soft); }
+
+.key { margin-top: 14px; display: grid; gap: 5px; font-size: 12.5px; color: var(--soft); }
+.keyRow { display: flex; align-items: flex-start; gap: 8px; }
+.keyRow .badge { position: static; transform: none; flex-shrink: 0; }

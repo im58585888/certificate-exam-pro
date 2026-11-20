@@ -70,18 +70,6 @@ export function tableMarkdown(t: NonNullable<Breakdown["table"]>): string {
   return [`| ${t.columns.map(cell).join(" | ")} |`, `|${t.columns.map(() => "---").join("|")}|`, ...t.rows.map((r) => `| ${r.map(cell).join(" | ")} |`)].join("\n");
 }
 
-export function pictureMarkdown(p: NonNullable<Breakdown["picture"]>): string {
-  return ["```flow", `title: ${p.caption}`, ...p.steps.map((s) => `${s.label} | ${s.note}`), "```"].join("\n");
-}
-
-export function cluesMarkdown(clues: Breakdown["clues"]): string {
-  return clues.map((c) => `- **"${c.phrase}"** ${c.meaning}`).join("\n");
-}
-
-export function termsMarkdown(terms: Breakdown["terms"]): string {
-  return terms.map((t) => `- **${t.term}:** ${t.plain}${t.example ? ` Example: ${t.example}` : ""}`).join("\n");
-}
-
 export function optionsMarkdown(options: Breakdown["options"]): string {
   return options.map((o) => `- **${o.name}:** ${o.what} Think of it as: ${o.analogy}`).join("\n");
 }

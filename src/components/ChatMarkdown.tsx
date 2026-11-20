@@ -2,6 +2,8 @@
 
 import { Fragment, type ReactNode } from "react";
 import { MiniMarkdown } from "./Tutor";
+import { ArchDiagram } from "./ArchDiagram";
+import type { ArchDiagram as ArchDiagramData } from "@/lib/arch";
 
 // The follow-up chat's renderer: the tutor's light markdown plus markdown tables (comparisons, matrices) and ```flow
 // diagrams. It copes with half-streamed input, so tables and diagrams build up as the answer arrives.
@@ -10,6 +12,7 @@ type Block =
   | { kind: "text"; text: string }
   | { kind: "table"; rows: string[][] }
   | { kind: "flow"; title?: string; steps: { label: string; note?: string }[] }
+  | { kind: "arch"; diagram: ArchDiagramData | null }
   | { kind: "code"; text: string };
 
 const cells = (line: string) => line.trim().replace(/^\|/, "").replace(/\|$/, "").split("|").map((c) => c.trim());
@@ -28,6 +31,12 @@ function parse(text: string): Block[] {
       flushProse();
       const body: string[] = [];
       for (i++; i < lines.length && !lines[i].trim().startsWith("```"); i++) body.push(lines[i]);
+      if (fence[1].toLowerCase() === "arch") {
+        let diagram: ArchDiagramData | null = null;
+        try { diagram = JSON.parse(body.join("\n")); } catch { /* still streaming or damaged: draw nothing */ }
+        blocks.push({ kind: "arch", diagram });
+        continue;
+      }
       if (["flow", "diagram"].includes(fence[1].toLowerCase())) {
         let title: string | undefined;
         const steps = body.map((l) => l.trim()).filter(Boolean).flatMap((l) => {
@@ -105,6 +114,7 @@ export function ChatMarkdown({ text }: { text: string }) {
         b.kind === "text" ? <MiniMarkdown key={i} text={b.text} />
         : b.kind === "table" ? <ChatTable key={i} rows={b.rows} />
         : b.kind === "flow" ? <ChatFlow key={i} title={b.title} steps={b.steps} />
+        : b.kind === "arch" ? (b.diagram ? <ArchDiagram key={i} diagram={b.diagram} /> : null)
         : <pre key={i} className="overflow-x-auto rounded-xl bg-surface p-3 text-xs">{b.text}</pre>)}
     </div>
   );

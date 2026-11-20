@@ -4,7 +4,9 @@ import { Fragment, useEffect, useRef, useState, type ReactNode } from "react";
 import type { Breakdown } from "@/lib/ai";
 import { ChatMarkdown } from "./ChatMarkdown";
 import { Mia, MiaPose, MiaThinking } from "./Mia";
-import { cluesMarkdown, optionsMarkdown, pictureMarkdown, SaveToSheet, tableMarkdown, termsMarkdown } from "./SaveToSheet";
+import { optionsMarkdown, SaveToSheet, tableMarkdown } from "./SaveToSheet";
+import { ArchFigure } from "./ArchDiagram";
+import { archMarkdown } from "@/lib/arch";
 import type { SheetAccess } from "@/lib/sheetAccess";
 
 // ---------- Small helpers ----------
@@ -106,46 +108,9 @@ function BreakdownView({ b, save, narrow }: { b: Breakdown; save: (title: string
         </ol>
       </Section>
 
-      {b.picture && b.picture.steps.length > 0 && (
-        <Section n={++n} title="Picture the scenario" action={save(`${b.title}: picture`, pictureMarkdown(b.picture))}>
-          <div className="flex flex-wrap items-stretch gap-2">
-            {b.picture.steps.map((s, i) => (
-              <Fragment key={i}>
-                {i > 0 && <span className="self-center text-xl font-bold text-brand" aria-hidden>→</span>}
-                <div className="min-w-[8rem] flex-1 rounded-xl border-[1.5px] border-brand bg-brand-soft px-3 py-2 text-center">
-                  <b className="block text-sm text-ink">{s.label}</b>
-                  <span className="text-xs text-soft">{s.note}</span>
-                </div>
-              </Fragment>
-            ))}
-          </div>
-          <p className="mt-2 text-sm text-muted">{b.picture.caption}</p>
-        </Section>
-      )}
-
-      {b.clues.length > 0 && (
-        <Section n={++n} title="Key phrases to notice" action={save(`${b.title}: key phrases`, cluesMarkdown(b.clues))}>
-          <ul className="space-y-2">
-            {b.clues.map((c, i) => (
-              <li key={i} className="rounded-xl bg-warn-soft px-3 py-2 text-sm">
-                <b className="text-warn">&ldquo;{c.phrase}&rdquo;</b> <span className="text-ink">{c.meaning}</span>
-              </li>
-            ))}
-          </ul>
-        </Section>
-      )}
-
-      {b.terms.length > 0 && (
-        <Section n={++n} title="Terms you need" action={save(`${b.title}: terms`, termsMarkdown(b.terms))}>
-          <dl className={`grid gap-2 ${two}`}>
-            {b.terms.map((t) => (
-              <div key={t.term} className="rounded-xl border border-line bg-bg p-3 text-sm">
-                <dt className="font-extrabold text-ink">{t.term}</dt>
-                <dd className="mt-0.5 text-soft">{t.plain}</dd>
-                {t.example && <dd className="mt-1 text-xs text-muted">Example: {t.example}</dd>}
-              </div>
-            ))}
-          </dl>
+      {b.diagram && (
+        <Section n={++n} title="Picture the scenario" action={save(`${b.title}: diagram`, archMarkdown(b.diagram))}>
+          <ArchFigure diagram={b.diagram} />
         </Section>
       )}
 
