@@ -196,7 +196,7 @@ export function QuizPlayer({ sessionId, mode, questions, initialFlags, initial, 
             <b>{answeredCount}</b> <span className="text-soft">answered</span>
             {!isExam && answeredCount > 0 && <> · <b>{Math.round((correctSoFar / answeredCount) * 100)}%</b> <span className="text-soft">right</span></>}
           </p>
-          <div className="order-last flex w-full gap-1 overflow-x-auto py-1 [scrollbar-width:thin]" role="list" aria-label="Questions">
+          <div className="order-last flex w-full gap-1 overflow-x-auto p-1 [scrollbar-width:thin]" role="list" aria-label="Questions">
             {questions.map((x, i) => {
               const a = answers[x.id];
               const tone = !a ? "bg-surface text-soft border-line" : isExam ? "bg-brand-soft text-brand border-transparent" : a.feedback?.correct ? "bg-ok-soft text-ok border-transparent" : "bg-bad-soft text-bad border-transparent";
