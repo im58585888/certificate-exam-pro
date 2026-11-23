@@ -12,7 +12,10 @@ export function SiteFooter() {
             AWS and related marks are trademarks of Amazon.com, Inc. or its affiliates. All practice questions are original.
           </p>
         </div>
-        <nav className="flex gap-4 font-semibold">
+        <nav className="flex flex-wrap gap-x-4 gap-y-2 font-semibold">
+          <Link href="/exams/clf-c02" className="hover:text-ink">CLF-C02 guide</Link>
+          <Link href="/exams/aif-c01" className="hover:text-ink">AIF-C01 guide</Link>
+          <Link href="/exams/saa-c03" className="hover:text-ink">SAA-C03 guide</Link>
           <Link href="/pricing" className="hover:text-ink">Pricing</Link>
           <Link href="/contact" className="hover:text-ink">Contact</Link>
           <Link href="/terms" className="hover:text-ink">Terms</Link>

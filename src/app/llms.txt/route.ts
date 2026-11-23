@@ -9,7 +9,7 @@ export async function GET() {
   await ensureBank();
   const exams = EXAM_LIST.map((e) => {
     const domains = e.domains.map((d) => `${d.name} ${Math.round(d.weight * 100)}%`).join(", ");
-    return `- [${e.name} (${e.code}) practice exam](${SITE_URL}/practice/${e.slug}): ${questionsFor(e.slug).length} original practice questions. The real exam has ${e.examQuestions} questions in ${e.examMinutes} minutes, passing score ${e.passingScaled}/1000. Domains: ${domains}.`;
+    return `- [${e.name} (${e.code}) exam guide and free sample questions](${SITE_URL}/exams/${e.slug}): ${questionsFor(e.slug).length} original practice questions. The real exam has ${e.examQuestions} questions in ${e.examMinutes} minutes, passing score ${e.passingScaled}/1000. Domains: ${domains}.`;
   }).join("\n");
   const body = `# ${SITE_NAME}
 

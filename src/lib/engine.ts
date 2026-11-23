@@ -5,6 +5,12 @@ import { areaOf } from "./areas";
 import { getExam, type DomainId } from "./exams";
 import type { FlagRow } from "./flags";
 import { questionsFor, type Question } from "./questions";
+import { sampleIds } from "./samples";
+
+const withoutSamples = (bank: Question[], exam: string) => {
+  const ids = sampleIds(exam);
+  return bank.filter((q) => !ids.has(q.id));
+};
 
 export type Mode = "trial" | "practice" | "reinforce" | "review" | "flagged" | "exam";
 
@@ -212,7 +218,8 @@ export function selectQuestions({ exam, mode, count, scope = FULL_SCOPE, attempt
   const lastSeen = new Map<string, number>();
   for (const a of attempts) lastSeen.set(a.question_id, new Date(a.created_at).getTime());
   // The mock exam always uses the whole bank, like the real test.
-  const pool = mode === "exam" || mode === "trial" ? bank : bank.filter((q) => inScope(q, scope, exam));
+  // The free trial skips the sample questions already public on the exam guide.
+  const pool = mode === "exam" ? bank : mode === "trial" ? withoutSamples(bank, exam) : bank.filter((q) => inScope(q, scope, exam));
 
   if (mode === "trial" || mode === "exam" || mode === "practice") return blueprintPick(pool, count, exam, lastSeen);
 
