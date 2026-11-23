@@ -7,15 +7,18 @@ import { TrialPicker } from "@/components/LandingDemos";
 import { HeroMiaDemo } from "@/components/HeroMiaDemo";
 import { HeroMia, MemoryFlow, Mia, MiaSpotlight, TutorFlow } from "@/components/TutorVisuals";
 import styles from "./landing.module.css";
+import { JsonLd } from "@/components/JsonLd";
+import { examProduct, faqPage, graph, organization, website } from "@/lib/seo";
 
 const PRICE = `$${(PASS_PRICE_CENTS / 100).toFixed(2)}`;
 
 export const metadata: Metadata = {
-  title: "Meet Mia, your AI tutor for AWS exams · Certificate Exam Pro",
+  title: { absolute: "AWS Practice Exams with an AI Tutor (CLF-C02, AIF-C01, SAA-C03) · Certificate Exam Pro" },
+  alternates: { canonical: "/" },
   description: "An AI tutor on every practice question: it breaks the question down, shows what it's testing, walks you through how to answer, and answers your follow-up questions. Practice CLF-C02, AIF-C01 and SAA-C03.",
 };
 
-const FAQ = [
+const FAQ: [string, string][] = [
   ["What does the AI tutor do?", "It breaks each question down, shows what it's testing, explains the answer step by step and answers your follow-up questions."],
   ["Does it give away the answer?", "No. Before you answer, it explains the question but leaves the choice to you. The answer walk-through unlocks after."],
   ["Can I use it during a mock exam?", "Mock exams stay realistic, so the tutor switches on after you submit."],
@@ -31,6 +34,7 @@ export default async function Home() {
   const totalQuestions = exams.reduce((n, e) => n + e.bank, 0);
   return (
     <div className={styles.landing}>
+      <JsonLd data={graph(organization, website, faqPage(FAQ), ...exams.map((e) => examProduct(e.exam, e.bank)))} />
       <section className={styles.hero} aria-labelledby="hero-title">
         <div className={styles.heroInner}>
           <div className={styles.heroCopy}>

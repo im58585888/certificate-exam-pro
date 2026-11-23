@@ -8,7 +8,11 @@ import { WaitlistForm } from "@/components/WaitlistForm";
 import { activeOffer, discountedCents, hadOffer, money, OFFER_PERCENT } from "@/lib/offers";
 import { EXAM_LIST, FREE_TRIAL_QUESTIONS, PASS_DAYS, PASS_PRICE_CENTS } from "@/lib/exams";
 
-export const metadata: Metadata = { title: "Pricing" };
+export const metadata: Metadata = {
+  title: "Pricing",
+  description: `$${(PASS_PRICE_CENTS / 100).toFixed(2)} unlocks one AWS practice exam (CLF-C02, AIF-C01 or SAA-C03) for ${PASS_DAYS} days: every question, detailed explanations, the AI tutor and timed mock exams. One payment, no auto-renewal. Try ${FREE_TRIAL_QUESTIONS} questions free.`,
+  alternates: { canonical: "/pricing" },
+};
 
 const PAID = [
   "Unlimited practice on the full question bank",

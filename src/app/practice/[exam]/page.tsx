@@ -10,8 +10,16 @@ import { answeredCount, attemptsFor, dueCount, reviewQueue } from "@/lib/engine"
 import { FREE_TRIAL_QUESTIONS, getExam } from "@/lib/exams";
 import { flagsFor } from "@/lib/flags";
 import { ensureBank, questionsFor } from "@/lib/questions";
+import { JsonLd } from "@/components/JsonLd";
+import { examDescription, examProduct, examTitle, graph } from "@/lib/seo";
 
-export const metadata: Metadata = { title: "Practice" };
+export async function generateMetadata({ params }: PageProps<"/practice/[exam]">): Promise<Metadata> {
+  const exam = getExam((await params).exam);
+  if (!exam) return { title: "Practice" };
+  await ensureBank();
+  const description = examDescription(exam, questionsFor(exam.slug).length);
+  return { title: examTitle(exam), description, alternates: { canonical: `/practice/${exam.slug}` }, openGraph: { title: examTitle(exam), description } };
+}
 
 function ModeCard({ title, body, locked, children }: { title: string; body: string; locked?: boolean; children: React.ReactNode }) {
   return (
@@ -62,6 +70,7 @@ export default async function PracticeHub({ params, searchParams }: PageProps<"/
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-10">
+      <JsonLd data={graph(examProduct(exam, bank))} />
       <p className="eyebrow">{exam.vendor} · {exam.code}</p>
       <h1 className="mt-1 text-3xl font-extrabold tracking-tight">{exam.name}</h1>
       <p className="mt-2 text-soft">{bank} questions · {exam.examQuestions}-question exam in {exam.examMinutes} minutes · passing score {exam.passingScaled}/1000</p>
