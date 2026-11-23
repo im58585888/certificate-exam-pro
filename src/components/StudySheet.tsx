@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Fragment, useState, useTransition, type ReactNode } from "react";
 import {
   addNoteAction, createSectionAction, deleteSectionAction, editNoteAction, moveItemAction, removeItemAction,
-  renameSectionAction, setTopicPrefAction, type NotebookResult,
+  renameSectionAction, retryMistakesAction, setTopicPrefAction, type NotebookResult,
 } from "@/app/study/actions";
 import type { ConceptCard } from "@/lib/ai";
 import { CardLoader } from "./CardLoader";
@@ -25,7 +25,14 @@ export interface SheetItem {
   savedOn: string;
 }
 
-export interface SheetMistake { questionId: string; prompt: string; picked: string[]; correct: string[] }
+export interface SheetMistake {
+  questionId: string;
+  stem: string;
+  prompt: string;
+  multi: boolean;
+  options: { text: string; correct: boolean; picked: boolean; why: string }[];
+  answer: string;
+}
 
 export interface TopicView {
   /** "t:<exam topic>" or "s:<own topic id>". */
@@ -98,6 +105,8 @@ export function StudySheet({ exam, examCode, domains, topics, addable, tutorOn }
   const [filter, setFilter] = useState(counts.fix ? "fix" : "all");
   const [domain, setDomain] = useState<string | null>(null);
   const [search, setSearch] = useState("");
+  // A–Z by default; "Weakest first" keeps the order the server sends (topics with mistakes, then lowest accuracy).
+  const [sort, setSort] = useState<"az" | "weak">("az");
   const [open, setOpen] = useState<string | null>(null);
   const [tab, setTab] = useState<Record<string, string>>({});
   const [showHidden, setShowHidden] = useState(false);
@@ -109,7 +118,7 @@ export function StudySheet({ exam, examCode, domains, topics, addable, tutorOn }
   const q = search.trim().toLowerCase();
   const shown = visible
     .filter((t) => matches(t, filter) && (!domain || t.domain === domain) && (!q || t.name.toLowerCase().includes(q) || (t.topic ?? "").toLowerCase().includes(q)))
-    .sort((a, b) => Number(b.pinned) - Number(a.pinned));
+    .sort((a, b) => Number(b.pinned) - Number(a.pinned) || (sort === "az" ? a.name.localeCompare(b.name) : topics.indexOf(a) - topics.indexOf(b)));
 
   const openTopic = (key: string) => {
     setOpen(open === key ? null : key);
@@ -150,8 +159,13 @@ export function StudySheet({ exam, examCode, domains, topics, addable, tutorOn }
               {label} · {counts[f]}
             </button>
           ))}
+          <select value={sort} onChange={(e) => setSort(e.target.value as "az" | "weak")} aria-label="Sort topics"
+            className="ml-auto rounded-full border border-line bg-surface px-3 py-1 text-xs font-bold text-soft">
+            <option value="az">Sort: A–Z</option>
+            <option value="weak">Sort: Weakest first</option>
+          </select>
           <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search topics" aria-label="Search topics"
-            className="ml-auto w-40 rounded-full border border-line bg-surface px-3 py-1 text-xs" />
+            className="w-40 rounded-full border border-line bg-surface px-3 py-1 text-xs" />
         </div>
         {domain && (
           <p className="mt-2 text-xs text-muted">Showing {domains.find((d) => d.id === domain)?.name}. <button className="font-bold text-brand" onClick={() => setDomain(null)}>Show all domains</button></p>
@@ -319,26 +333,60 @@ function Mistakes({ t, exam }: { t: TopicView; exam: string }) {
     return <p className="text-sm text-soft">{t.practised ? "No open mistakes in this topic. 🎉" : <>Not practised yet. <Link className="font-bold text-brand" href={`/practice/${exam}`}>Practise questions</Link></>}</p>;
   }
   return (
-    <div className="overflow-x-auto rounded-lg border border-line">
-      <table className="w-full min-w-[480px] table-fixed text-left text-xs">
-        <thead>
-          <tr className="bg-brand-soft text-ink">
-            <th className="w-[46%] px-2.5 py-1.5 font-bold">Question</th>
-            <th className="px-2.5 py-1.5 font-bold">✗ You chose</th>
-            <th className="px-2.5 py-1.5 font-bold">✓ Answer</th>
-          </tr>
-        </thead>
-        <tbody>
-          {t.mistakes.map((m) => (
-            <tr key={m.questionId} className="border-t border-line align-top">
-              <td className="px-2.5 py-2 text-soft">{m.prompt}</td>
-              <td className="px-2.5 py-2 font-semibold text-bad">{m.picked.join(" + ")}</td>
-              <td className="px-2.5 py-2 font-semibold text-ok">{m.correct.join(" + ")}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <div className="space-y-3">
+      {t.mistakes.length > 1 && (
+        <form action={retryMistakesAction} className="flex items-center justify-between gap-2">
+          <p className="text-xs text-muted">{t.mistakes.length} questions you last got wrong in this topic.</p>
+          <input type="hidden" name="exam" value={exam} />
+          {t.mistakes.map((m) => <input key={m.questionId} type="hidden" name="id" value={m.questionId} />)}
+          <button className="btn-ghost !py-1 text-xs">Practise all {t.mistakes.length} again</button>
+        </form>
+      )}
+      {t.mistakes.map((m, n) => <MistakeCard key={m.questionId} m={m} n={n + 1} total={t.mistakes.length} exam={exam} />)}
     </div>
+  );
+}
+
+/** One missed question in full: the scenario, every option marked, why the learner's pick was wrong and the answer right. */
+function MistakeCard({ m, n, total, exam }: { m: SheetMistake; n: number; total: number; exam: string }) {
+  const [open, setOpen] = useState(n === 1);
+  const yours = m.options.filter((o) => o.picked && !o.correct);
+  const right = m.options.filter((o) => o.correct);
+  return (
+    <article className="rounded-xl border border-line p-3.5 text-sm">
+      <button className="flex w-full items-start gap-2 text-left" onClick={() => setOpen(!open)} aria-expanded={open}>
+        <span className="mt-0.5 text-xs text-muted">{open ? "▾" : "▸"}</span>
+        <span className="min-w-0 flex-1">
+          <span className="block text-[11px] font-bold tracking-wide text-muted uppercase">Mistake {n} of {total}</span>
+          <span className={`block leading-relaxed text-ink ${open ? "" : "line-clamp-2"}`}>{m.stem}</span>
+        </span>
+      </button>
+      {open && (
+        <div className="mt-2 pl-5">
+          <p className="font-semibold leading-relaxed text-ink">{m.prompt}{m.multi ? ` (Choose ${right.length}.)` : ""}</p>
+          <ul className="mt-2 space-y-1.5">
+            {m.options.map((o) => (
+              <li key={o.text}
+                className={`rounded-lg border px-3 py-1.5 ${o.correct ? "border-ok/50 bg-ok-soft font-semibold text-ok" : o.picked ? "border-bad/50 bg-bad-soft font-semibold text-bad" : "border-line text-soft"}`}>
+                <span aria-hidden className="mr-1.5">{o.correct ? "✓" : o.picked ? "✗" : "·"}</span>
+                {o.text}
+                {o.picked && <span className="ml-1.5 text-xs font-normal">(your answer)</span>}
+                {o.correct && !o.picked && <span className="ml-1.5 text-xs font-normal">(correct answer)</span>}
+              </li>
+            ))}
+          </ul>
+          <div className="mt-3 space-y-1.5 leading-relaxed">
+            {yours.map((o) => <p key={o.text}><span className="font-bold text-bad">Why yours was wrong:</span> <span className="text-soft">{o.why}</span></p>)}
+            {right.map((o) => <p key={o.text}><span className="font-bold text-ok">Why the answer is right:</span> <span className="text-soft">{o.why}</span></p>)}
+            {m.answer && <p className="text-soft">{m.answer}</p>}
+          </div>
+          <form action={retryMistakesAction} className="mt-3">
+            <input type="hidden" name="exam" value={exam} /><input type="hidden" name="id" value={m.questionId} />
+            <button className="btn-ghost !py-1 text-xs">Practise this question again</button>
+          </form>
+        </div>
+      )}
+    </article>
   );
 }
 

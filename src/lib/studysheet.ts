@@ -6,11 +6,15 @@ import { questionsFor, type Question } from "./questions";
 // The study sheet is built from attempt history: every topic the learner has practised, weakest first.
 // Nothing is stored per learner beyond attempts, so each finished session automatically adds to it.
 
+/** A question the learner last got wrong, in full: the scenario, every option with whether it's right, whether they picked
+ *  it and why, and the explanation. Shown on the study sheet once the learner has already answered it. */
 export interface Mistake {
   questionId: string;
+  stem: string;
   prompt: string;
-  picked: string[];
-  correct: string[];
+  multi: boolean;
+  options: { text: string; correct: boolean; picked: boolean; why: string }[];
+  answer: string;
 }
 
 export interface SheetTopic {
@@ -71,8 +75,10 @@ export async function studySheet(owner: Owner, exam: string): Promise<SheetTopic
       lastAt: new Date(t.rows.at(-1)!.created_at),
       mistakes: wrong.map((r) => {
         const q = byId.get(r.question_id)!;
-        const text = (k: string) => q.options.find((o) => o.key === k)?.text ?? k;
-        return { questionId: q.id, prompt: q.prompt, picked: r.picks.map(text), correct: q.options.filter((o) => o.correct).map((o) => o.text) };
+        return {
+          questionId: q.id, stem: q.stem, prompt: q.prompt, multi: q.type === "multi", answer: q.explanation.answer,
+          options: q.options.map((o) => ({ text: o.text, correct: o.correct, picked: r.picks.includes(o.key), why: o.why })),
+        };
       }),
     });
   }

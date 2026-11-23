@@ -34,7 +34,6 @@ export default async function CheatSheetPage({ params, searchParams }: PageProps
   const sectionName = new Map(notebook.sections.map((s) => [s.id, s.name]));
   const saved = notebook.items.filter((i) => (!i.topic || !notebook.prefs.get(i.topic)?.hidden) && (!weakOnly || (i.topic && weakTopics.has(i.topic))));
   const cards = await cachedCards(slug, topics.map((t) => ({ topic: t.topic, questions: t.bank })));
-  const traps = topics.flatMap((t) => (cards.get(t.topic)?.traps.slice(0, 1) ?? []).map((trap) => ({ topic: t.topic, trap: `${trap.trap}? No: ${trap.truth}` }))).slice(0, 6);
   const practised = all.reduce((s, t) => s + t.seen, 0);
   const today = new Date().toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
 
@@ -86,15 +85,6 @@ export default async function CheatSheetPage({ params, searchParams }: PageProps
               </article>
             ))}
           </div>
-        </section>
-      )}
-
-      {traps.length > 0 && (
-        <section className="card mt-4 break-inside-avoid p-5">
-          <h2 className="font-extrabold">Common exam traps</h2>
-          <ul className="mt-2 grid gap-2 text-sm md:grid-cols-2 lg:grid-cols-3 print:grid-cols-3">
-            {traps.map((t) => <li key={t.topic} className="rounded-lg bg-warn-soft px-3 py-2 text-warn"><b>{t.topic}:</b> {t.trap}</li>)}
-          </ul>
         </section>
       )}
 

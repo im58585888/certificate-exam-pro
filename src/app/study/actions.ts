@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import { getUser } from "@/lib/auth";
 import { getAccess } from "@/lib/billing";
 import { one, query } from "@/lib/db";
@@ -172,4 +173,19 @@ export async function deleteSectionAction(id: number): Promise<NotebookResult> {
   await query(`update study_items set deleted_at = now() where section_id = $1 and user_id = $2`, [id, o.userId]);
   await query(`delete from study_sections where id = $1 and user_id = $2`, [id, o.userId]);
   return done(o.exam);
+}
+
+/** "Practise again" on a study-sheet mistake: a short review session with just those questions (up to 20). */
+export async function retryMistakesAction(form: FormData): Promise<void> {
+  const exam = String(form.get("exam") ?? "");
+  const m = await member(exam);
+  if (!("userId" in m)) redirect(`/study/${exam}`);
+  await ensureBank();
+  const ids = [...new Set(form.getAll("id").map(String))].filter((id) => examOf(id) === exam && getQuestion(id)).slice(0, 20);
+  if (!ids.length) redirect(`/study/${exam}`);
+  const row = await one<{ id: string }>(
+    `insert into quiz_sessions (user_id, exam, mode, question_ids) values ($1, $2, 'review', $3) returning id`,
+    [m.userId, exam, ids],
+  );
+  redirect(`/quiz/${row!.id}`);
 }
