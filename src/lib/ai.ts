@@ -69,7 +69,7 @@ const CardSchema = z.object({
   whatItIs: z.string().describe("2-4 plain-English sentences on what this topic is, for someone meeting it for the first time. Explain any acronym"),
   whyUseful: z.array(z.string()).describe("2-4 short points, one line each, on the problem it solves or the benefit it brings, each with a concrete example"),
   diagram: Diagram.nullable()
-    .describe("An architecture diagram of a typical setup for this topic: boundaries such as AWS Region, VPC or subnets as zones, the services involved as 3-6 nodes, links showing what flows; no decision links or nodes. Null unless the topic is about how things are set up or connected (null for pricing, support plans, definitions, limits, responsibility models and similar)"),
+    .describe("An architecture diagram of a typical setup for this topic: boundaries such as AWS Region, VPC or subnets as zones, the services involved as 3-6 nodes, links showing what flows; no decision links or nodes. Draw one whenever the topic involves AWS services, accounts, users or data connecting to each other (pipelines, networking, identity and access, security controls, storage, databases, compute, messaging, migration). Null only for topics with nothing to connect: pricing models, billing, support plans, responsibility models, pure definitions"),
 });
 export type ConceptCard = z.infer<typeof CardSchema>;
 
@@ -258,11 +258,11 @@ export function chat(q: Question, answered: boolean, turns: ChatTurn[]): AsyncGe
 
 // ---------- Study-sheet concept cards (one per exam topic, written from that topic's questions) ----------
 
-const CARD_RULES = `Write a short study-sheet lesson for one exam topic, based on the practice questions below (with their correct answers, concepts and exam tips). Teach the ideas those questions test to someone who may be new to the topic: first what it is, then why it's useful. Only draw a diagram when the topic is about how services are set up or connected; otherwise set it to null. In a diagram, put a key setting or limit the questions test in the relevant node's note or tag (e.g. tag "Max concurrency 50").`;
+const CARD_RULES = `Write a short study-sheet lesson for one exam topic, based on the practice questions below (with their correct answers, concepts and exam tips). Teach the ideas those questions test to someone who may be new to the topic: first what it is, then why it's useful. Then draw a diagram of a typical setup for the topic, showing the pieces those questions involve and how they connect (for CI/CD security, for example: the code repository, the build stage, the deploy role and the production account). Skip the diagram only when the topic has nothing to connect, such as pricing or support plans. In a diagram, put a key setting or limit the questions test in the relevant node's note or tag (e.g. tag "Max concurrency 50").`;
 
 const topicKey = (exam: string, topic: string) => `topic:${exam}:${topic}`;
 /** Bump when the card format changes so existing cards are rewritten in the new shape the next time someone opens them. */
-const CARD_VERSION = 4;
+const CARD_VERSION = 5;
 const hashTopic = (qs: Question[]) => sha256(JSON.stringify([PROMPT_VERSION, CARD_VERSION, qs.map((q) => [q.id, q.explanation.concept])])).slice(0, 16);
 
 export async function cachedCards(exam: string, topics: { topic: string; questions: Question[] }[]): Promise<Map<string, ConceptCard>> {
