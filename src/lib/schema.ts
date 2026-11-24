@@ -196,6 +196,12 @@ create index if not exists conversions_created_idx on conversions (created_at);
 alter table visits enable row level security;
 alter table page_views enable row level security;
 alter table conversions enable row level security;
+-- v8: networks the owner browsed from (salted IP hash, never the raw IP). Visits from them aren't counted for 30 days.
+create table if not exists stats_owner_networks (
+  ip_hash text primary key,
+  seen_at timestamptz not null default now()
+);
+alter table stats_owner_networks enable row level security;
 
 create table if not exists contact_messages (
   id bigserial primary key,

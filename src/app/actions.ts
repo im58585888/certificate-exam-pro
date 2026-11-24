@@ -46,7 +46,7 @@ export async function registerAction(_: FormState, form: FormData): Promise<Form
     `insert into users (email, name, password_hash) values ($1, $2, $3) returning id`,
     [email, name, await hashPassword(password)],
   );
-  await recordConversion("signup");
+  await recordConversion("signup", email);
   await signIn(user!.id);
   redirect(safeNext(form.get("next")));
 }

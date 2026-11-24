@@ -1,7 +1,7 @@
 import "server-only";
 import { createHash } from "node:crypto";
-import { headers } from "next/headers";
-import { getUser, isAdmin } from "./auth";
+import { cookies, headers } from "next/headers";
+import { getUser, isAdmin, isAdminEmail } from "./auth";
 import { one, query } from "./db";
 
 // Cookie-free traffic analytics. A visitor is a hash of IP + browser + today's date, so the same person counts once a day,
@@ -11,7 +11,10 @@ import { one, query } from "./db";
 /** offer = claimed the trial discount; nudge_signup / nudge_offer = saw the trial sign-up / discount pop-up. */
 export type ConversionKind = "trial" | "signup" | "waitlist" | "checkout" | "offer" | "nudge_signup" | "nudge_offer";
 
-const BOT = /bot|crawl|spider|slurp|preview|facebookexternalhit|meta-external|embedly|headless|lighthouse|python|curl|wget|httpclient|axios|node-fetch|vercel/i;
+const BOT = /bot|crawl|spider|slurp|preview|facebookexternalhit|meta-external|embedly|headless|lighthouse|inspectiontool|googleother|google-|scan|monitor|uptime|python|curl|wget|httpclient|axios|node-fetch|go-http|java\/|okhttp|vercel/i;
+/** Set on the owner's browsers so they stay uncounted after signing out. */
+export const OWNER_COOKIE = "dtp_owner";
+const OWNER_NETWORK_DAYS = 30;
 const VISIT_GAP_MIN = 30;
 /** Days (the "once a day" visitor count, the daily chart, the date ranges) follow this time zone, not UTC. */
 export const STATS_TZ = process.env.STATS_TIMEZONE || "America/Los_Angeles";
@@ -80,11 +83,38 @@ function deviceOf(ua: string, width?: number): { device: string; os: string } {
   return { device, os };
 }
 
+async function clientIp(): Promise<string> {
+  const h = await headers();
+  return h.get("x-forwarded-for")?.split(",")[0]?.trim() || h.get("x-real-ip") || "unknown";
+}
+
+const ipHash = (ip: string) => createHash("sha256").update(`${process.env.AUTH_SECRET ?? "dev-secret"}:owner-net:${ip}`).digest("hex").slice(0, 32);
+
+/** Remembers the owner's current network (as a salted hash) so other devices and tools on it, phones, test browsers,
+ *  aren't counted as visitors either. Call only for the signed-in admin. */
+export async function markOwnerNetwork(): Promise<void> {
+  try {
+    const ip = await clientIp();
+    if (ip === "unknown") return;
+    await query(`insert into stats_owner_networks (ip_hash) values ($1) on conflict (ip_hash) do update set seen_at = now()`, [ipHash(ip)]);
+  } catch (err) {
+    console.error("[traffic] owner network not saved", err);
+  }
+}
+
+/** The owner's own traffic: a browser marked with the owner cookie, or a network the owner used in the last 30 days. */
+async function isOwnerTraffic(ip: string): Promise<boolean> {
+  if ((await cookies()).get(OWNER_COOKIE)?.value === "1") return true;
+  if (ip === "unknown") return false;
+  return !!(await one(`select 1 from stats_owner_networks where ip_hash = $1 and seen_at > now() - interval '${OWNER_NETWORK_DAYS} days'`, [ipHash(ip)]));
+}
+
 async function visitorKey(): Promise<{ visitor: string; ua: string } | null> {
   const h = await headers();
   const ua = h.get("user-agent") ?? "";
   if (!ua || BOT.test(ua)) return null;
-  const ip = h.get("x-forwarded-for")?.split(",")[0]?.trim() || h.get("x-real-ip") || "unknown";
+  const ip = await clientIp();
+  if (await isOwnerTraffic(ip)) return null;
   const day = new Intl.DateTimeFormat("en-CA", { timeZone: STATS_TZ }).format(new Date());
   const visitor = createHash("sha256").update(`${process.env.AUTH_SECRET ?? "dev-secret"}:visit:${day}:${ip}:${ua}`).digest("hex").slice(0, 32);
   return { visitor, ua };
@@ -128,12 +158,13 @@ export async function recordHit(hit: Hit): Promise<void> {
 
 /** Credits a conversion to the visitor's latest visit today that came from somewhere (falling back to a direct visit).
  *  Each kind counts once per visitor per day, so starting several trial quizzes is still one trial. Never throws: analytics must not break sign-up or checkout. */
-export async function recordConversion(kind: ConversionKind): Promise<void> {
+export async function recordConversion(kind: ConversionKind, email?: string): Promise<void> {
   try {
+    // Like page views, the owner's own testing isn't counted. At sign-up the new user isn't signed in yet, so check the email.
+    if (email && isAdminEmail(email, true)) return;
+    if (isAdmin(await getUser())) return;
     const key = await visitorKey();
     if (!key) return;
-    // Like page views, the owner's own testing isn't counted.
-    if (isAdmin(await getUser())) return;
     if (await one(`select 1 from conversions where visitor = $1 and kind = $2`, [key.visitor, kind])) return;
     const visit = await one<{ id: number }>(`select id from visits where visitor = $1 order by (source <> 'direct') desc, last_at desc limit 1`, [key.visitor]);
     await query(`insert into conversions (visit_id, visitor, kind) values ($1, $2, $3)`, [visit?.id ?? null, key.visitor, kind]);

@@ -3,7 +3,8 @@
 import { usePathname, useSearchParams } from "next/navigation";
 import { useEffect, useRef } from "react";
 
-// Sends one anonymous page-view beacon per page. No cookies or storage; honors Global Privacy Control and Do Not Track.
+// Sends one anonymous page-view beacon per page. No cookies or storage; honors Global Privacy Control and Do Not Track,
+// and skips automated browsers.
 export function Tracker() {
   const path = usePathname();
   const params = useSearchParams();
@@ -12,6 +13,8 @@ export function Tracker() {
   useEffect(() => {
     const nav = navigator as Navigator & { globalPrivacyControl?: boolean };
     if (nav.globalPrivacyControl || nav.doNotTrack === "1") return;
+    // Automated browsers (scanners, uptime checks, test tools) aren't visitors.
+    if (nav.webdriver) return;
     const get = (k: string) => params.get(k) ?? undefined;
     const clickId = ["fbclid", "gclid", "rdt_cid"].find((k) => params.has(k));
     const body = JSON.stringify({

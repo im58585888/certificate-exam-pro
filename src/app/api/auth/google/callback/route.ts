@@ -46,7 +46,7 @@ export async function GET(req: Request) {
       `insert into users (email, name, google_sub, email_verified) values ($1, $2, $3, true) returning id`,
       [profile.email.toLowerCase(), profile.name, profile.sub],
     );
-    await recordConversion("signup");
+    await recordConversion("signup", profile.email);
   }
   await query(`update users set email_verified = true where id = $1`, [user!.id]);
   await signIn(user!.id);
