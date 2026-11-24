@@ -10,6 +10,7 @@ export default function Terms() {
       <p className="rounded-xl bg-warn-soft px-4 py-3 text-sm font-semibold text-warn">Draft: to be finalized before launch.</p>
       <p>Certificate Exam Pro provides original practice questions and study tools. We are not affiliated with any certification body, and practice results do not guarantee exam outcomes.</p>
       <p>A pass grants personal, non-transferable access to one exam for 30 days from purchase (or from the end of any active pass for that exam). Each exam is purchased separately. Passes do not renew automatically.</p>
+      <p>Refunds: if you&apos;re not happy with a pass, email us from the address on your account within 7 days of purchase and we&apos;ll refund it in full. Nothing needs to be returned; access ends when the refund is issued.</p>
       <p>Question content is our copyrighted material. You may not copy, scrape, resell or redistribute it.</p>
     </article>
   );

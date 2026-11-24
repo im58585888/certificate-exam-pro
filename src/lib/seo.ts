@@ -26,13 +26,44 @@ export const website = {
   publisher: { "@id": `${SITE_URL}/#org` },
 };
 
+/** Refund window for passes. Keep in sync with the Terms and Pricing pages. */
+export const REFUND_DAYS = 7;
+
+/**
+ * Google's merchant listing fields for a digital pass: refunds within REFUND_DAYS of purchase (no item to send back)
+ * and instant, free online delivery in the US.
+ */
+const offerPolicies = {
+  hasMerchantReturnPolicy: {
+    "@type": "MerchantReturnPolicy",
+    applicableCountry: "US",
+    returnPolicyCategory: "https://schema.org/MerchantReturnFiniteReturnWindow",
+    merchantReturnDays: REFUND_DAYS,
+    returnFees: "https://schema.org/FreeReturn",
+    refundType: "https://schema.org/FullRefund",
+    merchantReturnLink: `${SITE_URL}/terms`,
+  },
+  shippingDetails: {
+    "@type": "OfferShippingDetails",
+    shippingRate: { "@type": "MonetaryAmount", value: 0, currency: "USD" },
+    shippingDestination: { "@type": "DefinedRegion", addressCountry: "US" },
+    deliveryTime: {
+      "@type": "ShippingDeliveryTime",
+      handlingTime: { "@type": "QuantitativeValue", minValue: 0, maxValue: 0, unitCode: "DAY" },
+      transitTime: { "@type": "QuantitativeValue", minValue: 0, maxValue: 0, unitCode: "DAY" },
+    },
+  },
+};
+
 export const examProduct = (e: ExamInfo, bank: number) => ({
   "@type": "Product",
   name: `${e.code} practice exam (${PASS_DAYS}-day pass)`,
   description: examDescription(e, bank),
-  brand: { "@id": `${SITE_URL}/#org` },
+  brand: { "@type": "Brand", name: SITE_NAME },
+  // Google requires an image for merchant listings: the site's share card.
+  image: `${SITE_URL}/opengraph-image`,
   url: `${SITE_URL}/practice/${e.slug}`,
-  offers: { "@type": "Offer", price: PRICE, priceCurrency: "USD", availability: "https://schema.org/InStock", url: `${SITE_URL}/pricing` },
+  offers: { "@type": "Offer", price: PRICE, priceCurrency: "USD", availability: "https://schema.org/InStock", url: `${SITE_URL}/pricing`, ...offerPolicies },
 });
 
 export const faqPage = (faq: [string, string][]) => ({

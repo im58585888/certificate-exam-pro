@@ -145,7 +145,7 @@ export default async function PricingPage({ searchParams }: PageProps<"/pricing"
           <div className="mt-4"><WaitlistForm signedInEmail={user?.email} /></div>
         </div>
       ) : (
-        <p className="mt-4 text-center text-xs text-muted">Secure checkout by Stripe. Extra time stacks on any days you have left on that exam.</p>
+        <p className="mt-4 text-center text-xs text-muted">Secure checkout by Stripe. Extra time stacks on any days you have left on that exam. Not happy? Full refund within 7 days of purchase.</p>
       )}
     </div>
   );
