@@ -5,7 +5,7 @@ import * as z from "zod/v4";
 import { sha256, type Owner } from "./auth";
 import { one, query } from "./db";
 import { getExam } from "./exams";
-import { cleanDiagram, NODE_KINDS, ZONE_KINDS } from "./arch";
+import { cleanDiagram, NODE_KINDS, ZONE_KINDS, type ArchDiagram } from "./arch";
 import { examOf, type Question } from "./questions";
 import { allowAttempt, clientIpHash, recordAttempt } from "./request";
 
@@ -43,11 +43,13 @@ const Diagram = z.object({
     id: z.string(), label: z.string().describe("2-4 words"), note: z.string().describe("A few words, or empty"),
     kind: z.enum(NODE_KINDS), zone: z.string().nullable().describe("id of the innermost zone it sits in, or null"),
     tag: z.string().describe("A requirement that applies to this piece in 2-4 words (e.g. 'Must stay private'), or empty"),
+    role: z.string().describe("What this piece does in this particular setup, in one plain sentence"),
   })).describe("3-8 components"),
   links: z.array(z.object({
     from: z.string(), to: z.string(), label: z.string().describe("2-5 words on what flows, or empty"),
     decision: z.boolean().describe("true only for the one connection the question asks the learner to choose"),
-  })),
+    explain: z.string().describe("How this step works: what starts it, what passes across, and how the two pieces connect"),
+  })).describe("In the order things happen, so they read as steps 1, 2, 3"),
 });
 
 const BreakdownSchema = z.object({
@@ -61,7 +63,8 @@ const BreakdownSchema = z.object({
   table: Table.nullable().describe("A small reference table only when it makes a concept clearer (at most 5 rows), never one that settles the answer; otherwise null"),
   yourMove: z.string().describe("1-2 sentences on how to check each option against the requirements, without naming the answer"),
 });
-export type Breakdown = z.infer<typeof BreakdownSchema>;
+// Saved diagrams go through cleanDiagram, and older ones may lack role/explain, so store and render them as ArchDiagram.
+export type Breakdown = Omit<z.infer<typeof BreakdownSchema>, "diagram"> & { diagram: ArchDiagram | null };
 
 // Study-sheet cards teach the topic: what it is, why it's useful, and (when the topic is a setup) how the pieces fit.
 const CardSchema = z.object({
@@ -71,7 +74,7 @@ const CardSchema = z.object({
   diagram: Diagram.nullable()
     .describe("An architecture diagram of a typical setup for this topic: boundaries such as AWS Region, VPC or subnets as zones, the services involved as 3-6 nodes, links showing what flows; no decision links or nodes. Draw one whenever the topic involves AWS services, accounts, users or data connecting to each other (pipelines, networking, identity and access, security controls, storage, databases, compute, messaging, migration). Null only for topics with nothing to connect: pricing models, billing, support plans, responsibility models, pure definitions"),
 });
-export type ConceptCard = z.infer<typeof CardSchema>;
+export type ConceptCard = Omit<z.infer<typeof CardSchema>, "diagram"> & { diagram: ArchDiagram | null };
 
 
 // ---------- Prompts (stable text first so it can be cached) ----------
@@ -90,7 +93,9 @@ Some options are claims rather than technologies (for example "Standard-IA has a
 
 const DIAGRAM_RULES = `The diagram is an architecture picture of the scenario: boundaries (on-premises, AWS Region, account, VPC, public or private subnet) as zones, and the users, services and data the scenario mentions as nodes inside them, with links showing how requests or data flow.
 Draw only what the scenario says exists or clearly implies. Never draw a technology that appears only in the answer options. Mark the one thing the question asks the learner to choose: if it is how two pieces connect, add that link with decision true and a label naming the need (e.g. "Private path, no internet"); if it is a missing component, add a node of kind "decision" whose label names its job (e.g. "Cache for sessions"), never a technology. Put requirements from the scenario on the pieces they apply to as tags.
-Keep it small and readable: 3-8 nodes, short labels. Use null when the question is about a fact, limit, price or definition rather than how things are set up.`;
+Keep it small and readable: 3-8 nodes, short labels. Use null when the question is about a fact, limit, price or definition rather than how things are set up.
+List the links in the order things happen. For each link, explain in 1-2 plain sentences what happens in that step and how the two pieces talk to each other, using only what the scenario says. For each node, give its role in one sentence.
+The decision link or node is the open question: its explanation must only describe what that step needs to achieve (the requirement, e.g. "Traffic has to reach S3 without leaving the AWS network"), never a technology, service, feature or setting that could do it, and never a hint that points to one option.`;
 
 const BREAKDOWN_LEVEL = "Pitch it at someone who knows basic IT but is new to this AWS topic.";
 
@@ -111,6 +116,9 @@ function questionText(q: Question, withAnswer: boolean): string {
 // Bump when the prompts change so saved explanations are rewritten with the new instructions.
 const PROMPT_VERSION = 3;
 const hashQuestion = (q: Question) => sha256(JSON.stringify([PROMPT_VERSION, q.stem, q.prompt, q.options])).slice(0, 16);
+/** Bump when the breakdown's shape changes; kept apart from PROMPT_VERSION so answer walk-throughs aren't rewritten too. */
+const BREAKDOWN_VERSION = 2;
+const hashBreakdown = (q: Question) => sha256(JSON.stringify([PROMPT_VERSION, BREAKDOWN_VERSION, q.stem, q.prompt, q.options])).slice(0, 16);
 
 // ---------- Cache ----------
 
@@ -167,14 +175,41 @@ async function parse<T>(schema: z.ZodType<T>, system: string, user: string, maxT
 
 /** Pre-answer breakdown. Never given the correct answer, so it can't leak it. */
 export async function cachedBreakdown(q: Question): Promise<Breakdown | null> {
-  return cached<Breakdown>(q.id, "breakdown", hashQuestion(q));
+  return cached<Breakdown>(q.id, "breakdown", hashBreakdown(q));
 }
 
 export async function writeBreakdown(q: Question): Promise<Breakdown> {
   const raw = mock ? mockBreakdown(q) : await parse(BreakdownSchema, `${BREAKDOWN_RULES}\n\n${DIAGRAM_RULES}\n\n${BREAKDOWN_LEVEL}`, questionText(q, false));
-  const content = { ...raw, diagram: cleanDiagram(raw.diagram) };
-  await store(q.id, "breakdown", hashQuestion(q), content);
+  const content = { ...raw, diagram: guardOpenStep(cleanDiagram(raw.diagram), q, raw.options.map((o) => o.name)) };
+  await store(q.id, "breakdown", hashBreakdown(q), content);
   return content;
+}
+
+const STOP_WORDS = new Set(["amazon", "aws", "the", "and", "with", "for", "use", "using", "from", "into", "that", "this", "each", "only", "data", "your", "service", "services"]);
+
+/**
+ * Safety net for the breakdown: the explanation of the step the learner has to choose (the "?" arrow or box) may only
+ * restate the requirement. If it mentions a technology from the answer options, or an option's distinctive words, it is
+ * replaced with a neutral line so the diagram can't give the answer away even when the model slips.
+ */
+function guardOpenStep(d: ArchDiagram | null, q: Question, optionNames: string[]): ArchDiagram | null {
+  if (!d) return d;
+  // Technology names: the breakdown's names for each option, plus product-style words in the option text (capitalised
+  // after the first word, or containing a digit, e.g. "PrivateLink", "Gateway", "S3"). Words the scenario itself uses are fine.
+  const scenario = `${q.stem} ${q.prompt}`.toLowerCase();
+  // Words, keeping dotted or hyphenated names (e.g. "s3.amazonaws.com", "cross-region") but not a trailing full stop.
+  const tokens = (t: string) => (t.toLowerCase().match(/[a-z0-9]+(?:[.-][a-z0-9]+)*/g) ?? []);
+  const product = (t: string) => t.split(/\s+/).slice(1).filter((w) => /^[A-Z]|\d/.test(w)).join(" ");
+  const words = new Set(
+    [...optionNames, ...q.options.map((o) => product(o.text))]
+      .flatMap(tokens)
+      .filter((w) => w.length > 1 && !STOP_WORDS.has(w) && !scenario.includes(w)),
+  );
+  const leaks = (text?: string) => !!text && tokens(text).some((w) => words.has(w));
+  const neutral = "This is the step the question asks you to choose. Work out what it has to achieve from the requirements above, then check each option against them.";
+  for (const l of d.links) if (l.decision && leaks(l.explain)) l.explain = neutral;
+  for (const n of d.nodes) if (n.kind === "decision" && leaks(n.role)) n.role = "The piece the question asks you to choose.";
+  return d;
 }
 
 const ANSWER_RULES = `The learner has just answered this question and wants the solution explained from scratch. You are given the correct answer and the reason each option is right or wrong.
@@ -258,11 +293,12 @@ export function chat(q: Question, answered: boolean, turns: ChatTurn[]): AsyncGe
 
 // ---------- Study-sheet concept cards (one per exam topic, written from that topic's questions) ----------
 
-const CARD_RULES = `Write a short study-sheet lesson for one exam topic, based on the practice questions below (with their correct answers, concepts and exam tips). Teach the ideas those questions test to someone who may be new to the topic: first what it is, then why it's useful. Then draw a diagram of a typical setup for the topic, showing the pieces those questions involve and how they connect (for CI/CD security, for example: the code repository, the build stage, the deploy role and the production account). Skip the diagram only when the topic has nothing to connect, such as pricing or support plans. In a diagram, put a key setting or limit the questions test in the relevant node's note or tag (e.g. tag "Max concurrency 50").`;
+const CARD_RULES = `Write a short study-sheet lesson for one exam topic, based on the practice questions below (with their correct answers, concepts and exam tips). Teach the ideas those questions test to someone who may be new to the topic: first what it is, then why it's useful. Then draw a diagram of a typical setup for the topic, showing the pieces those questions involve and how they connect (for CI/CD security, for example: the code repository, the build stage, the deploy role and the production account). Skip the diagram only when the topic has nothing to connect, such as pricing or support plans. In a diagram, put a key setting or limit the questions test in the relevant node's note or tag (e.g. tag "Max concurrency 50").
+The diagram is the heart of the lesson, so explain it in detail. List the links in the order things happen. For each link, write 2-4 plain sentences: what starts this step, what passes across (a request, an event, data, a token, credentials), and exactly how the two services connect, such as the permission, role, policy, endpoint, protocol or setting that makes it work, plus any limit or default the exam likes to test. For each node, give one sentence on the job it does in this setup.`;
 
 const topicKey = (exam: string, topic: string) => `topic:${exam}:${topic}`;
 /** Bump when the card format changes so existing cards are rewritten in the new shape the next time someone opens them. */
-const CARD_VERSION = 5;
+const CARD_VERSION = 6;
 const hashTopic = (qs: Question[]) => sha256(JSON.stringify([PROMPT_VERSION, CARD_VERSION, qs.map((q) => [q.id, q.explanation.concept])])).slice(0, 16);
 
 export async function cachedCards(exam: string, topics: { topic: string; questions: Question[] }[]): Promise<Map<string, ConceptCard>> {
@@ -321,15 +357,15 @@ function mockBreakdown(q: Question): Breakdown {
         { id: "priv", label: "Private subnet", kind: "private", parent: "vpc" },
       ],
       nodes: [
-        { id: "users", label: "Users", note: "", kind: "users", zone: null, tag: "" },
-        { id: "alb", label: "Load balancer", note: "", kind: "network", zone: "pub", tag: "" },
-        { id: "app", label: "App servers", note: "EC2, no public IP", kind: "compute", zone: "priv", tag: "" },
-        { id: "s3", label: "S3 bucket", note: "Reports", kind: "storage", zone: "region", tag: "Lowest cost" },
+        { id: "users", label: "Users", note: "", kind: "users", zone: null, tag: "", role: "People using the web app from the internet." },
+        { id: "alb", label: "Load balancer", note: "", kind: "network", zone: "pub", tag: "", role: "Takes requests from the internet and spreads them across the app servers." },
+        { id: "app", label: "App servers", note: "EC2, no public IP", kind: "compute", zone: "priv", tag: "", role: "Run the application and write reports; they can't be reached from the internet." },
+        { id: "s3", label: "S3 bucket", note: "Reports", kind: "storage", zone: "region", tag: "Lowest cost", role: "Stores the reports the app servers produce." },
       ],
       links: [
-        { from: "users", to: "alb", label: "HTTPS requests", decision: false },
-        { from: "alb", to: "app", label: "", decision: false },
-        { from: "app", to: "s3", label: "Private path, no internet", decision: true },
+        { from: "users", to: "alb", label: "HTTPS requests", decision: false, explain: "Users open the app in a browser. Their HTTPS requests arrive at the load balancer, the only part with a public address." },
+        { from: "alb", to: "app", label: "", decision: false, explain: "The load balancer forwards each request to a healthy app server inside the private subnet." },
+        { from: "app", to: "s3", label: "Private path, no internet", decision: true, explain: "Sample: this is the step the question asks you to choose. It has to get report files to S3 without the traffic going over the internet." },
       ],
     },
     options: q.options.map((o) => ({ name: o.text.slice(0, 40), what: "What this technology does.", analogy: "An everyday comparison.", keyFacts: ["A general strength.", "A general limit."] })),
@@ -347,11 +383,14 @@ function mockCard(topic: string): ConceptCard {
       caption: "A queue feeds Lambda at a capped rate so the downstream system isn't overloaded.",
       zones: [{ id: "region", label: "AWS Region", kind: "region", parent: null }, { id: "vpc", label: "VPC", kind: "vpc", parent: "region" }],
       nodes: [
-        { id: "sqs", label: "SQS queue", note: "Buffers messages", kind: "integration", zone: "region", tag: "" },
-        { id: "fn", label: "Lambda function", note: "Event source mapping", kind: "compute", zone: "region", tag: "Max concurrency 50" },
-        { id: "db", label: "Downstream database", note: "Protected from overload", kind: "database", zone: "vpc", tag: "" },
+        { id: "sqs", label: "SQS queue", note: "Buffers messages", kind: "integration", zone: "region", tag: "", role: "Holds incoming orders until something is ready to process them." },
+        { id: "fn", label: "Lambda function", note: "Event source mapping", kind: "compute", zone: "region", tag: "Max concurrency 50", role: "Processes each batch of orders and writes the results." },
+        { id: "db", label: "Downstream database", note: "Protected from overload", kind: "database", zone: "vpc", tag: "", role: "Stores processed orders; it can only handle a limited number of connections." },
       ],
-      links: [{ from: "sqs", to: "fn", label: "Batches of messages", decision: false }, { from: "fn", to: "db", label: "Writes", decision: false }],
+      links: [
+        { from: "sqs", to: "fn", label: "Batches of messages", decision: false, explain: "Sample step: Lambda's event source mapping polls the queue and hands the function up to 10 messages at a time. Maximum concurrency caps how many copies run at once, so the queue absorbs spikes instead of the database." },
+        { from: "fn", to: "db", label: "Writes", decision: false, explain: "Sample step: the function connects to the database inside the VPC through its security group and writes each order. Because concurrency is capped at 50, the database never sees more than 50 connections from it." },
+      ],
     },
   };
 }

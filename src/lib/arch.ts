@@ -9,8 +9,10 @@ export type ZoneKind = (typeof ZONE_KINDS)[number];
 export type NodeKind = (typeof NODE_KINDS)[number];
 
 export interface ArchZone { id: string; label: string; kind: ZoneKind; parent: string | null }
-export interface ArchNode { id: string; label: string; note: string; kind: NodeKind; zone: string | null; tag: string }
-export interface ArchLink { from: string; to: string; label: string; decision: boolean }
+/** role: what this piece does in this setup (shown under the diagram). Older saved diagrams don't have it. */
+export interface ArchNode { id: string; label: string; note: string; kind: NodeKind; zone: string | null; tag: string; role?: string }
+/** explain: how this step works, shown as a numbered step under the diagram. Older saved diagrams don't have it. */
+export interface ArchLink { from: string; to: string; label: string; decision: boolean; explain?: string }
 export interface ArchDiagram { caption: string; zones: ArchZone[]; nodes: ArchNode[]; links: ArchLink[] }
 
 const LIMITS = { nodes: 9, zones: 6, links: 10, depth: 3 };
@@ -40,7 +42,7 @@ export function cleanDiagram(d: ArchDiagram | null | undefined): ArchDiagram | n
   }
   const nodes = d.nodes.slice(0, LIMITS.nodes)
     .map((n) => ({
-      id: short(n.id, 40), label: short(n.label, 40), note: short(n.note, 50), tag: short(n.tag, 40),
+      id: short(n.id, 40), label: short(n.label, 40), note: short(n.note, 50), tag: short(n.tag, 40), role: short(n.role, 300),
       kind: (NODE_KINDS as readonly string[]).includes(n.kind) ? n.kind : "other",
       zone: n.zone && zoneIds.has(n.zone) ? n.zone : null,
     }))
@@ -48,7 +50,7 @@ export function cleanDiagram(d: ArchDiagram | null | undefined): ArchDiagram | n
   if (nodes.length < 2) return null;
   const nodeIds = new Set(nodes.map((n) => n.id));
   const links = (Array.isArray(d.links) ? d.links : [])
-    .map((l) => ({ from: short(l.from, 40), to: short(l.to, 40), label: short(l.label, 50), decision: !!l.decision }))
+    .map((l) => ({ from: short(l.from, 40), to: short(l.to, 40), label: short(l.label, 50), decision: !!l.decision, explain: short(l.explain, 900) }))
     .filter((l) => nodeIds.has(l.from) && nodeIds.has(l.to) && l.from !== l.to)
     .slice(0, LIMITS.links);
   // Keep only boundaries that end up holding something.

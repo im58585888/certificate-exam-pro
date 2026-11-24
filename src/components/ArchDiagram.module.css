@@ -85,9 +85,13 @@
 }
 .badge[data-decision="true"] { width: 26px; height: 26px; font-size: 14px; color: var(--c-decision); border: 1.5px dashed var(--c-decision); background: var(--bad-soft); }
 
-.key { margin-top: 14px; display: grid; gap: 5px; font-size: 12.5px; color: var(--soft); }
-.keyRow { display: flex; align-items: flex-start; gap: 8px; }
-.keyRow .badge { position: static; transform: none; flex-shrink: 0; }
+.badge { cursor: pointer; padding: 0; }
+.badge[data-active="true"] { color: var(--brand); border-color: var(--brand); background: var(--brand-soft); }
+.key { margin-top: 14px; display: grid; gap: 6px; font-size: 13px; color: var(--soft); }
+.keyTitle { margin-top: 6px; font-size: 11px; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); }
+.keyRow { display: flex; align-items: flex-start; gap: 8px; border-radius: 10px; padding: 4px 6px; margin: 0 -6px; scroll-margin: 12px; transition: background-color 0.2s; }
+.keyRow[data-active="true"] { background: var(--brand-soft); }
+.keyRow .badge { position: static; transform: none; flex-shrink: 0; cursor: default; }
 
 /* Narrow (Mia's panel, study cards, phones): stack top to bottom at full width. Last so it wins over the rules above. */
 @container (max-width: 520px) {

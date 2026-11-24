@@ -75,7 +75,7 @@ function Items({ items }: { items: Item[] }) {
   );
 }
 
-type Wire = { d: string; x: number; y: number; decision: boolean; badge: string };
+type Wire = { d: string; x: number; y: number; decision: boolean; badge: string; step: number };
 
 /** An elbow route between two boxes: leaves and enters on the sides facing each other. */
 function route(a: DOMRect, b: DOMRect, origin: DOMRect): { d: string; x: number; y: number } {
@@ -101,11 +101,18 @@ export function ArchDiagram({ diagram }: { diagram: Diagram }) {
   const canvas = useRef<HTMLDivElement>(null);
   const [wires, setWires] = useState<Wire[]>([]);
 
-  // Numbered arrows get a key below; the decision arrow gets a "?".
+  // Arrows with a label or an explanation are numbered and explained below as steps; the decision arrow gets a "?".
   const labelled = useMemo(() => {
     let n = 0;
-    return (d?.links ?? []).map((l) => ({ ...l, badge: l.decision ? "?" : l.label ? String(++n) : "" }));
+    return (d?.links ?? []).map((l) => ({ ...l, badge: l.decision ? "?" : l.label || l.explain ? String(++n) : "" }));
   }, [d]);
+  // Tapping a numbered badge on the diagram highlights its step below and scrolls it into view.
+  const [active, setActive] = useState<number | null>(null);
+  const stepRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const pick = (i: number) => {
+    setActive(i);
+    stepRefs.current[i]?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  };
 
   const measure = useMemo(() => () => {
     const el = canvas.current;
@@ -114,7 +121,7 @@ export function ArchDiagram({ diagram }: { diagram: Diagram }) {
     const box = (id: string) => el.querySelector<HTMLElement>(`[data-node="${CSS.escape(id)}"]`)?.getBoundingClientRect();
     setWires(labelled.flatMap((l) => {
       const a = box(l.from), b = box(l.to);
-      return a && b ? [{ ...route(a, b, origin), decision: l.decision, badge: l.badge }] : [];
+      return a && b ? [{ ...route(a, b, origin), decision: l.decision, badge: l.badge, step: labelled.indexOf(l) }] : [];
     }));
   }, [labelled]);
 
@@ -140,20 +147,45 @@ export function ArchDiagram({ diagram }: { diagram: Diagram }) {
           </defs>
           {wires.map((w, i) => <path key={i} d={w.d} className={s.wire} data-decision={w.decision} markerEnd={`url(#${w.decision ? "arch-head-q" : "arch-head"})`} />)}
         </svg>
-        {wires.map((w, i) => w.badge && <span key={i} className={s.badge} data-decision={w.decision} style={{ left: w.x, top: w.y }} aria-hidden>{w.badge}</span>)}
+        {wires.map((w, i) => w.badge && (
+          <button key={i} type="button" className={s.badge} data-decision={w.decision} data-active={active === w.step} style={{ left: w.x, top: w.y }}
+            onClick={() => pick(w.step)} aria-label={`Show step ${w.badge}`} tabIndex={-1}>{w.badge}</button>
+        ))}
       </div>
       {(key.length > 0 || d.caption) && (
         <div className={s.key}>
-          {key.map((l, i) => (
-            <div key={i} className={s.keyRow}>
-              <span className={s.badge} data-decision={l.decision} aria-hidden>{l.badge}</span>
-              <span>{l.decision ? <><b className="text-ink">{l.label || "This connection"}</b>: the piece the question asks you to choose</> : l.label}</span>
-            </div>
-          ))}
+          {d.caption && <p className="text-muted">{d.caption}</p>}
+          {key.length > 0 && <p className={s.keyTitle}>Step by step</p>}
+          {key.map((l) => {
+            const i = labelled.indexOf(l);
+            const from = d.nodes.find((n) => n.id === l.from)?.label ?? l.from;
+            const to = d.nodes.find((n) => n.id === l.to)?.label ?? l.to;
+            return (
+              <div key={i} ref={(el) => { stepRefs.current[i] = el; }} className={s.keyRow} data-active={active === i} onClick={() => setActive(i)}>
+                <span className={s.badge} data-decision={l.decision} aria-hidden>{l.badge}</span>
+                <span className="min-w-0">
+                  <span className="block">
+                    <b className="text-ink">{from} → {to}</b>
+                    {l.decision ? <> · <b className="text-ink">{l.label || "This connection"}</b>: the piece the question asks you to choose</> : l.label && <> · {l.label}</>}
+                  </span>
+                  {l.explain && <span className="mt-0.5 block leading-relaxed">{l.explain}</span>}
+                </span>
+              </div>
+            );
+          })}
           {d.nodes.some((n) => n.kind === "decision") && !key.some((l) => l.decision) && (
             <div className={s.keyRow}><span className={s.badge} data-decision aria-hidden>?</span><span>The dashed box is the piece the question asks you to choose</span></div>
           )}
-          {d.caption && <p className="mt-1 text-muted">{d.caption}</p>}
+          {d.nodes.some((n) => n.role) && (
+            <>
+              <p className={s.keyTitle}>The pieces</p>
+              <ul className="grid gap-1">
+                {d.nodes.filter((n) => n.role).map((n) => (
+                  <li key={n.id}><b className="text-ink">{n.label}</b>: {n.role}</li>
+                ))}
+              </ul>
+            </>
+          )}
         </div>
       )}
     </div>
