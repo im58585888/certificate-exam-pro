@@ -94,6 +94,7 @@ Some options are claims rather than technologies (for example "Standard-IA has a
 const DIAGRAM_RULES = `The diagram is an architecture picture of the scenario: boundaries (on-premises, AWS Region, account, VPC, public or private subnet) as zones, and the users, services and data the scenario mentions as nodes inside them, with links showing how requests or data flow.
 Draw only what the scenario says exists or clearly implies. Never draw a technology that appears only in the answer options. Mark the one thing the question asks the learner to choose: if it is how two pieces connect, add that link with decision true and a label naming the need (e.g. "Private path, no internet"); if it is a missing component, add a node of kind "decision" whose label names its job (e.g. "Cache for sessions"), never a technology. Put requirements from the scenario on the pieces they apply to as tags.
 Keep it small and readable: 3-8 nodes, short labels. Use null when the question is about a fact, limit, price or definition rather than how things are set up.
+Each link must join two pieces that talk to each other directly: a request that passes through a service goes through it (users to CloudFront to the app, not users straight to a cache or database behind the app).
 List the links in the order things happen. For each link, explain in 1-2 plain sentences what happens in that step and how the two pieces talk to each other, using only what the scenario says. For each node, give its role in one sentence.
 The decision link or node is the open question: its explanation must only describe what that step needs to achieve (the requirement, e.g. "Traffic has to reach S3 without leaving the AWS network"), never a technology, service, feature or setting that could do it, and never a hint that points to one option.`;
 
@@ -117,7 +118,7 @@ function questionText(q: Question, withAnswer: boolean): string {
 const PROMPT_VERSION = 3;
 const hashQuestion = (q: Question) => sha256(JSON.stringify([PROMPT_VERSION, q.stem, q.prompt, q.options])).slice(0, 16);
 /** Bump when the breakdown's shape changes; kept apart from PROMPT_VERSION so answer walk-throughs aren't rewritten too. */
-const BREAKDOWN_VERSION = 2;
+const BREAKDOWN_VERSION = 3;
 const hashBreakdown = (q: Question) => sha256(JSON.stringify([PROMPT_VERSION, BREAKDOWN_VERSION, q.stem, q.prompt, q.options])).slice(0, 16);
 
 // ---------- Cache ----------
@@ -294,11 +295,11 @@ export function chat(q: Question, answered: boolean, turns: ChatTurn[]): AsyncGe
 // ---------- Study-sheet concept cards (one per exam topic, written from that topic's questions) ----------
 
 const CARD_RULES = `Write a short study-sheet lesson for one exam topic, based on the practice questions below (with their correct answers, concepts and exam tips). Teach the ideas those questions test to someone who may be new to the topic: first what it is, then why it's useful. Then draw a diagram of a typical setup for the topic, showing the pieces those questions involve and how they connect (for CI/CD security, for example: the code repository, the build stage, the deploy role and the production account). Skip the diagram only when the topic has nothing to connect, such as pricing or support plans. In a diagram, put a key setting or limit the questions test in the relevant node's note or tag (e.g. tag "Max concurrency 50").
-The diagram is the heart of the lesson, so explain it in detail. List the links in the order things happen. For each link, write 2-4 plain sentences: what starts this step, what passes across (a request, an event, data, a token, credentials), and exactly how the two services connect, such as the permission, role, policy, endpoint, protocol or setting that makes it work, plus any limit or default the exam likes to test. For each node, give one sentence on the job it does in this setup.`;
+The diagram is the heart of the lesson, so explain it in detail. Each link must join two pieces that talk to each other directly: a request that passes through a service goes through it (users to CloudFront to the app servers, never users straight to a cache or database that only the app uses). List the links in the order things happen. For each link, write 2-4 plain sentences: what starts this step, what passes across (a request, an event, data, a token, credentials), and exactly how the two services connect, such as the permission, role, policy, endpoint, protocol or setting that makes it work, plus any limit or default the exam likes to test. For each node, give one sentence on the job it does in this setup.`;
 
 const topicKey = (exam: string, topic: string) => `topic:${exam}:${topic}`;
 /** Bump when the card format changes so existing cards are rewritten in the new shape the next time someone opens them. */
-const CARD_VERSION = 6;
+const CARD_VERSION = 7;
 const hashTopic = (qs: Question[]) => sha256(JSON.stringify([PROMPT_VERSION, CARD_VERSION, qs.map((q) => [q.id, q.explanation.concept])])).slice(0, 16);
 
 export async function cachedCards(exam: string, topics: { topic: string; questions: Question[] }[]): Promise<Map<string, ConceptCard>> {
@@ -380,16 +381,24 @@ function mockCard(topic: string): ConceptCard {
     whatItIs: "Sample lesson: add ANTHROPIC_API_KEY to generate real study notes. This part explains what the topic is in plain English.",
     whyUseful: ["The first problem it solves, with an example", "A second benefit, with an example"],
     diagram: {
-      caption: "A queue feeds Lambda at a capped rate so the downstream system isn't overloaded.",
-      zones: [{ id: "region", label: "AWS Region", kind: "region", parent: null }, { id: "vpc", label: "VPC", kind: "vpc", parent: "region" }],
+      caption: "Sample: a cache in front of the database so most reads never reach it.",
+      zones: [
+        { id: "region", label: "AWS Region", kind: "region", parent: null },
+        { id: "vpc", label: "VPC", kind: "vpc", parent: "region" },
+        { id: "priv", label: "Private subnet", kind: "private", parent: "vpc" },
+      ],
       nodes: [
-        { id: "sqs", label: "SQS queue", note: "Buffers messages", kind: "integration", zone: "region", tag: "", role: "Holds incoming orders until something is ready to process them." },
-        { id: "fn", label: "Lambda function", note: "Event source mapping", kind: "compute", zone: "region", tag: "Max concurrency 50", role: "Processes each batch of orders and writes the results." },
-        { id: "db", label: "Downstream database", note: "Protected from overload", kind: "database", zone: "vpc", tag: "", role: "Stores processed orders; it can only handle a limited number of connections." },
+        { id: "users", label: "Users", note: "Browsers and apps", kind: "users", zone: null, tag: "", role: "Sample: people loading pages and calling the API." },
+        { id: "cf", label: "CloudFront", note: "Caches whole responses", kind: "network", zone: null, tag: "", role: "Sample: serves cached pages from the edge and forwards the rest to the app." },
+        { id: "app", label: "App servers", note: "Check the cache first", kind: "compute", zone: "priv", tag: "", role: "Sample: run the application and decide where each read comes from." },
+        { id: "cache", label: "ElastiCache", note: "Valkey, replicas across AZs", kind: "database", zone: "priv", tag: "Set a TTL on keys", role: "Sample: keeps recently read rows in memory." },
+        { id: "db", label: "Primary database", note: "Source of truth", kind: "database", zone: "priv", tag: "Must stay private", role: "Sample: holds the real data." },
       ],
       links: [
-        { from: "sqs", to: "fn", label: "Batches of messages", decision: false, explain: "Sample step: Lambda's event source mapping polls the queue and hands the function up to 10 messages at a time. Maximum concurrency caps how many copies run at once, so the queue absorbs spikes instead of the database." },
-        { from: "fn", to: "db", label: "Writes", decision: false, explain: "Sample step: the function connects to the database inside the VPC through its security group and writes each order. Because concurrency is capped at 50, the database never sees more than 50 connections from it." },
+        { from: "users", to: "cf", label: "Web requests", decision: false, explain: "Sample step: requests go to the nearest CloudFront edge location." },
+        { from: "cf", to: "app", label: "Cache misses only", decision: false, explain: "Sample step: only requests CloudFront can't answer from its cache reach the app servers." },
+        { from: "app", to: "cache", label: "Look up copy first", decision: false, explain: "Sample step: the app asks ElastiCache for the key first." },
+        { from: "app", to: "db", label: "Miss: read database", decision: false, explain: "Sample step: on a miss the app reads the database, then stores the result in the cache with a TTL. This arrow should go over the cache box, not through it." },
       ],
     },
   };

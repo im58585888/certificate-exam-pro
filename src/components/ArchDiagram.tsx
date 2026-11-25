@@ -77,8 +77,23 @@ function Items({ items }: { items: Item[] }) {
 
 type Wire = { d: string; x: number; y: number; decision: boolean; badge: string; step: number };
 
-/** An elbow route between two boxes: leaves and enters on the sides facing each other. */
-function route(a: DOMRect, b: DOMRect, origin: DOMRect): { d: string; x: number; y: number } {
+/** Whether a horizontal (y fixed, x1..x2) or vertical (x fixed, y1..y2) segment crosses any of the boxes. */
+function crosses(boxes: DOMRect[], origin: DOMRect, horizontal: boolean, fixed: number, from: number, to: number): DOMRect[] {
+  const lo = Math.min(from, to), hi = Math.max(from, to);
+  return boxes.filter((r) => {
+    const l = r.left - origin.left, t = r.top - origin.top;
+    return horizontal
+      ? fixed > t && fixed < t + r.height && hi > l + 2 && lo < l + r.width - 2
+      : fixed > l && fixed < l + r.width && hi > t + 2 && lo < t + r.height - 2;
+  });
+}
+
+/**
+ * An elbow route between two boxes: leaves and enters on the sides facing each other. When a box sits in the way (for
+ * example App servers → database with a cache between them), the arrow goes over the top of it instead of through it,
+ * so it never hides another box's text.
+ */
+function route(a: DOMRect, b: DOMRect, origin: DOMRect, others: DOMRect[] = []): { d: string; x: number; y: number } {
   const ax = a.left - origin.left, ay = a.top - origin.top, bx = b.left - origin.left, by = b.top - origin.top;
   const acx = ax + a.width / 2, acy = ay + a.height / 2, bcx = bx + b.width / 2, bcy = by + b.height / 2;
   const gapX = Math.max(bx - (ax + a.width), ax - (bx + b.width));
@@ -87,11 +102,24 @@ function route(a: DOMRect, b: DOMRect, origin: DOMRect): { d: string; x: number;
     const right = bcx > acx;
     const sx = right ? ax + a.width : ax, ex = right ? bx - 2 : bx + b.width + 2;
     const mx = (sx + ex) / 2;
+    const blocked = crosses(others, origin, true, acy, sx, mx).length + crosses(others, origin, true, bcy, mx, ex).length
+      + crosses(others, origin, false, mx, acy, bcy).length > 0;
+    if (blocked) {
+      const tops = [ay, by, ...crosses(others, origin, true, (acy + bcy) / 2, sx, ex).map((r) => r.top - origin.top)];
+      const y = Math.max(4, Math.min(...tops) - 9);
+      return { d: `M${acx},${ay} V${y} H${bcx} V${by - 2}`, x: (acx + bcx) / 2, y };
+    }
     return { d: `M${sx},${acy} H${mx} V${bcy} H${ex}`, x: mx, y: (acy + bcy) / 2 };
   }
   const down = bcy > acy;
   const sy = down ? ay + a.height : ay, ey = down ? by - 2 : by + b.height + 2;
   const my = (sy + ey) / 2;
+  const between = crosses(others, origin, false, (acx + bcx) / 2, sy, ey);
+  if (between.length) {
+    // Stacked boxes with another one in between: run down the right-hand side instead of through it.
+    const x = Math.max(ax + a.width, bx + b.width, ...between.map((r) => r.right - origin.left)) + 8;
+    return { d: `M${ax + a.width},${acy} H${x} V${bcy} H${bx + b.width + 2}`, x, y: (acy + bcy) / 2 };
+  }
   return { d: `M${acx},${sy} V${my} H${bcx} V${ey}`, x: (acx + bcx) / 2, y: my };
 }
 
@@ -119,9 +147,11 @@ export function ArchDiagram({ diagram }: { diagram: Diagram }) {
     if (!el) return;
     const origin = el.getBoundingClientRect();
     const box = (id: string) => el.querySelector<HTMLElement>(`[data-node="${CSS.escape(id)}"]`)?.getBoundingClientRect();
+    const all = [...el.querySelectorAll<HTMLElement>("[data-node]")].map((n) => ({ id: n.dataset.node, r: n.getBoundingClientRect() }));
     setWires(labelled.flatMap((l) => {
       const a = box(l.from), b = box(l.to);
-      return a && b ? [{ ...route(a, b, origin), decision: l.decision, badge: l.badge, step: labelled.indexOf(l) }] : [];
+      const others = all.filter((n) => n.id !== l.from && n.id !== l.to).map((n) => n.r);
+      return a && b ? [{ ...route(a, b, origin, others), decision: l.decision, badge: l.badge, step: labelled.indexOf(l) }] : [];
     }));
   }, [labelled]);
 
