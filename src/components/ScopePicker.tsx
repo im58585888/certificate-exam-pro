@@ -20,6 +20,10 @@ interface Props {
   counts: number[];
   submitLabel: string;
   disabled?: boolean;
+  /** Domains to start with (for example from a "work on your weakest domain" link); overrides the saved choice. */
+  initialDomains?: string[];
+  /** Show the difficulty filter (practice sets). */
+  difficulty?: boolean;
 }
 
 const chip = (on: boolean) =>
@@ -29,14 +33,16 @@ const chip = (on: boolean) =>
  * Multi-select scope for a session: exam domains as chips (all on = everything), plus an optional
  * study-area picker. The last choice is remembered on this device.
  */
-export function ScopePicker({ exam, mode, domains, areas, cells, counts, submitLabel, disabled }: Props) {
+export function ScopePicker({ exam, mode, domains, areas, cells, counts, submitLabel, disabled, initialDomains, difficulty }: Props) {
   const storageKey = `cep-scope:${exam}:${mode}`;
-  const [picked, setPicked] = useState<string[]>(() => domains.map((d) => d.id));
+  const preset = initialDomains?.filter((id) => domains.some((d) => d.id === id));
+  const [picked, setPicked] = useState<string[]>(() => (preset?.length ? preset : domains.map((d) => d.id)));
   const [pickedAreas, setPickedAreas] = useState<string[]>([]); // empty = all areas
   const [showAreas, setShowAreas] = useState(false);
 
   // Restore after mount (localStorage isn't available during server rendering).
   useEffect(() => {
+    if (preset?.length) return;
     try {
       const saved = JSON.parse(localStorage.getItem(storageKey) ?? "null");
       if (!saved) return;
@@ -48,6 +54,7 @@ export function ScopePicker({ exam, mode, domains, areas, cells, counts, submitL
       if (a.length) setShowAreas(true);
       /* eslint-enable react-hooks/set-state-in-effect */
     } catch {}
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- preset only matters on first render
   }, [storageKey, domains, areas]);
 
   const remember = (d: string[], a: string[]) => {
@@ -117,8 +124,16 @@ export function ScopePicker({ exam, mode, domains, areas, cells, counts, submitL
 
       <div className="flex flex-wrap gap-2">
         <select name="count" className="input !w-auto" aria-label="Number of questions">
-          {counts.map((n) => <option key={n} value={n}>{n} questions</option>)}
+          {counts.map((n) => <option key={n} value={n}>{n === 5 ? "Quick 5" : `${n} questions`}</option>)}
         </select>
+        {difficulty && (
+          <select name="difficulty" className="input !w-auto" aria-label="Difficulty" defaultValue="">
+            <option value="">Any difficulty</option>
+            <option value="easy">Easy</option>
+            <option value="medium">Medium</option>
+            <option value="hard">Hard</option>
+          </select>
+        )}
         <button className="btn-primary flex-1" disabled={disabled || !total}>{submitLabel}</button>
       </div>
     </form>

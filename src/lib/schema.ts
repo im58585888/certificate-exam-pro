@@ -282,4 +282,8 @@ create table if not exists offers (
   redeemed_at timestamptz
 );
 alter table offers enable row level security;
+
+-- Pass expiry reminders: when each reminder email went out, so a pass is reminded at most once per stage.
+alter table entitlements add column if not exists reminded_7d_at timestamptz;
+alter table entitlements add column if not exists reminded_1d_at timestamptz;
 `;

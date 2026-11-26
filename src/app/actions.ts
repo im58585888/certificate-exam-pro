@@ -143,7 +143,7 @@ async function networkTrialUsage(ipHash: string, exam: string): Promise<number> 
 
 const COUNTS: Record<Mode, number[]> = {
   trial: [FREE_TRIAL_QUESTIONS],
-  practice: [10, 20, 30],
+  practice: [10, 20, 30, 5],
   reinforce: [10, 20],
   review: [10, 20, 50],
   flagged: [10, 20, 50],
@@ -158,7 +158,12 @@ export async function startQuizAction(form: FormData) {
   if (!exam || !(mode in COUNTS)) redirect("/practice");
   // Scope: checked domains and study areas. All or none checked both mean "everything".
   const domains = form.getAll("domains").map(String).filter((v): v is DomainId => exam.domains.some((d) => d.id === v));
-  const scope: Scope = { domains: [...new Set(domains)], areas: [...new Set(form.getAll("areas").map(String).filter((a) => isArea(examSlug, a)))] };
+  const diff = String(form.get("difficulty") ?? "");
+  const scope: Scope = {
+    domains: [...new Set(domains)],
+    areas: [...new Set(form.getAll("areas").map(String).filter((a) => isArea(examSlug, a)))],
+    ...(diff === "easy" || diff === "medium" || diff === "hard" ? { difficulty: diff } : {}),
+  };
   const requested = Number(form.get("count")) || COUNTS[mode][0];
   let count = COUNTS[mode].includes(requested) ? requested : COUNTS[mode][0];
 

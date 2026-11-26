@@ -7,6 +7,8 @@ import { MiaPose } from "@/components/Mia";
 import { WaitlistForm } from "@/components/WaitlistForm";
 import { activeOffer, discountedCents, hadOffer, money, OFFER_PERCENT } from "@/lib/offers";
 import { EXAM_LIST, FREE_TRIAL_QUESTIONS, PASS_DAYS, PASS_PRICE_CENTS } from "@/lib/exams";
+import { AI_DAILY } from "@/lib/ai";
+import { REFUND_DAYS } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Pricing",
@@ -21,7 +23,9 @@ const PAID = [
   "Spaced review that brings missed questions back until you've got them",
   "Timed 65-question mock exams with an estimated score",
   "Save any session and finish later; a mock exam's clock pauses while you're away",
-  "Analytics: domain mastery, readiness, accuracy trend, pace",
+  "Unseen questions first, so scores reflect understanding, not memory",
+  "Readiness check built on first-attempt scores, every domain, a recent mock exam and pace",
+  "Analytics: domain mastery, accuracy trend, pace",
   "Personal study sheet with your notes, and Mia, your AI tutor, beside it",
 ];
 
@@ -137,6 +141,19 @@ export default async function PricingPage({ searchParams }: PageProps<"/pricing"
           </ul>
         </div>
       </div>
+
+      <section className="card mx-auto mt-8 max-w-3xl p-7" aria-labelledby="no-surprises">
+        <p className="eyebrow">No surprises</p>
+        <h2 id="no-surprises" className="mt-1 text-xl font-extrabold">Exactly what a pass includes</h2>
+        <ul className="mt-4 grid gap-2 text-[15px] sm:grid-cols-2">
+          <li>✓ <b>{PASS_DAYS} days</b> from purchase. The end date is on your dashboard and account page{process.env.PASS_REMINDERS === "on" ? ", and we email you 7 days and 1 day before" : ""}.</li>
+          <li>✓ <b>Never renews automatically.</b> Need longer? Add {PASS_DAYS} days; they stack on the days you have left.</li>
+          <li>✓ <b>One pass, every device:</b> laptop, phone, tablet, or the installed app. No separate app purchase.</li>
+          <li>✓ <b>Mia, the AI tutor:</b> up to {AI_DAILY.paid} messages a day with a pass ({AI_DAILY.free} on the free trial).</li>
+          <li>✓ <b>Your progress stays saved</b> after a pass ends, so you can pick up where you left off.</li>
+          <li>✓ <b>No ads</b>, ever, and full refund within {REFUND_DAYS} days of purchase.</li>
+        </ul>
+      </section>
 
       {waitlist ? (
         <div className="card mx-auto mt-8 max-w-xl p-7">

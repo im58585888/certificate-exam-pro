@@ -236,8 +236,8 @@ export function ChatThread({ heading, suggestions, placeholder, send, saveTarget
 }
 
 const chatSuggestions = (answered: boolean) => answered
-  ? ["Why exactly is my choice wrong?", "Give me a real-world example", "How would the exam try to trick me here?", "Show it as a table or diagram"]
-  : ["What should I look for in the options?", "Give me a real-world analogy", "Show it as a table or diagram"];
+  ? ["Why exactly is my choice wrong?", "Explain it simply", "Explain it technically", "Draw it as a diagram", "What concept is this testing?", "Give me a similar question to try"]
+  : ["What concept is this testing?", "Explain the key terms simply", "What should I look for in the options?", "Draw the scenario as a diagram"];
 
 const chatPlaceholder = (answered: boolean) => (answered ? "Ask anything about this question…" : "Ask about a term or requirement (Mia won't reveal the answer)");
 

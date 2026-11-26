@@ -37,7 +37,8 @@ function ModeCard({ title, body, locked, children }: { title: string; body: stri
 export default async function PracticeHub({ params, searchParams }: PageProps<"/practice/[exam]">) {
   await ensureBank();
   const { exam: slug } = await params;
-  const { empty } = await searchParams;
+  const { empty, domain } = await searchParams;
+  const initialDomains = typeof domain === "string" ? [domain] : undefined;
   const exam = getExam(slug);
   if (!exam) notFound();
   const user = await getUser();
@@ -76,6 +77,14 @@ export default async function PracticeHub({ params, searchParams }: PageProps<"/
       <p className="mt-2 text-soft">{bank} questions · {exam.examQuestions}-question exam in {exam.examMinutes} minutes · passing score {exam.passingScaled}/1000</p>
       {empty && <p className="mt-4 rounded-xl bg-warn-soft px-4 py-3 font-semibold text-warn">Nothing to review yet. Missed questions will appear here after you practice.</p>}
 
+      {owner && attempts.length > 0 && (
+        <section className="mt-6 grid gap-3 sm:grid-cols-3" aria-label="Smart practice summary">
+          <div className="card p-4"><p className="text-2xl font-extrabold">{bank - seen.size}</p><p className="text-sm text-soft">questions you haven&apos;t seen yet. Practice sets serve these first, so scores reflect understanding, not memory.</p></div>
+          <div className="card p-4"><p className="text-2xl font-extrabold">{queue.length}</p><p className="text-sm text-soft">mistakes and flags to retry, answered fresh (the answer stays hidden until you choose).</p></div>
+          <div className="card p-4"><p className="text-2xl font-extrabold">{liveFlags}</p><p className="text-sm text-soft">flagged as weak. Flag any question with 🚩, even ones you got right.</p></div>
+        </section>
+      )}
+
       <div className="mt-8 grid items-start gap-5 md:grid-cols-2">
         {!access.active && (
           <ModeCard title="Free trial" body={used >= FREE_TRIAL_QUESTIONS ? "You've used all your free questions. Get a pass to keep practicing." : `${FREE_TRIAL_QUESTIONS - used} of ${FREE_TRIAL_QUESTIONS} free questions left, with full explanations.`}>
@@ -90,15 +99,15 @@ export default async function PracticeHub({ params, searchParams }: PageProps<"/
           </ModeCard>
         )}
 
-        <ModeCard title="Practice set" body="Fresh questions you haven't seen yet, with instant feedback. Choose any mix of domains, and narrow to specific topics if you like." locked={!access.active}>
+        <ModeCard title="Practice set" body="Fresh questions you haven't seen yet, with instant feedback. Choose any mix of domains, narrow to specific topics or a difficulty, or do a Quick 5 on a short break." locked={!access.active}>
           {access.active ? (
-            <ScopePicker exam={slug} mode="practice" domains={domainChips} areas={areaList} cells={cells} counts={[10, 20, 30]} submitLabel="Start" />
+            <ScopePicker exam={slug} mode="practice" domains={domainChips} areas={areaList} cells={cells} counts={[10, 20, 30, 5]} submitLabel="Start" initialDomains={initialDomains} difficulty />
           ) : unlock}
         </ModeCard>
 
         <ModeCard title="Strengthen weak areas" body={`Built from your history: due mistakes, your flagged topics, new questions on your weakest topics, and a mixed set to catch regressions.${attempts.length < 5 && !liveFlags && access.active ? " Answer a few more questions (or flag some) first so we can find your weak spots." : ""}`} locked={!access.active}>
           {access.active ? (
-            <ScopePicker exam={slug} mode="reinforce" domains={domainChips} areas={areaList} cells={cells} counts={[10, 20]} submitLabel="Start targeted session" disabled={attempts.length < 5 && !liveFlags} />
+            <ScopePicker exam={slug} mode="reinforce" domains={domainChips} areas={areaList} cells={cells} counts={[10, 20]} submitLabel="Start targeted session" disabled={attempts.length < 5 && !liveFlags} initialDomains={initialDomains} />
           ) : unlock}
         </ModeCard>
 

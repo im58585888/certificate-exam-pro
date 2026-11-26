@@ -139,6 +139,8 @@ async function store(key: string, kind: string, hash: string, content: unknown, 
 // ---------- Usage limits (only live model calls count; cached content is free) ----------
 
 const DAILY = { paid: 300, free: 25, network: 80 };
+/** Daily AI tutor messages for pass holders and free users, shown on the pricing page. */
+export const AI_DAILY = { paid: DAILY.paid, free: DAILY.free };
 
 /** Returns false when this visitor (or their network, for free users) has used today's AI allowance. Records the use otherwise. */
 export async function spendAllowance(owner: Owner, paid: boolean, admin: boolean): Promise<boolean> {
@@ -237,6 +239,9 @@ ${answered
     ? "They have already answered it, so you may discuss the correct answer."
     : "They have NOT answered it yet. You are not told the correct answer; don't suggest which option is correct or rank the options, even if asked. Help them understand the concepts and requirements so they can decide."}
 ${VISUALS}${answered ? "" : " A table or diagram must describe each option on its own terms and never rank the options or show which one fits best."}
+Explanation styles: "simply" means plain words, an everyday analogy and no jargon; "technically" means precise AWS terms, the exact settings, permissions and limits involved; "as a diagram" means draw it.
+${answered ? `If they ask for a similar question, write ONE new multiple-choice question (A-D) that tests the same concept in a different scenario, don't reveal its answer, and wait for their reply before explaining.` : ""}
+If they ask what the question is testing, name the concept and the clue words in the scenario that point to it${answered ? "" : ", without saying which option matches"}.
 Politely decline anything unrelated to AWS or studying for this exam.`;
 
 export type ChatTurn = { role: "user" | "assistant"; content: string };
