@@ -5,7 +5,8 @@ import { EXAM_LIST, FREE_TRIAL_QUESTIONS, PASS_DAYS, PASS_PRICE_CENTS } from "@/
 import { ensureBank, questionsFor } from "@/lib/questions";
 import { TrialPicker } from "@/components/LandingDemos";
 import { HeroMiaDemo } from "@/components/HeroMiaDemo";
-import { HeroMia, MemoryFlow, Mia, MiaSpotlight, TutorFlow } from "@/components/TutorVisuals";
+import { HeroMia, MemoryFlow, Mia, MiaSpotlight } from "@/components/TutorVisuals";
+import { MiaStory } from "@/components/MiaStory";
 import styles from "./landing.module.css";
 import { JsonLd } from "@/components/JsonLd";
 import { examProduct, faqPage, graph, organization, website } from "@/lib/seo";
@@ -27,13 +28,6 @@ const FAQ: [string, string][] = [
   ["Are these real AWS exam questions?", "No. They're original questions that follow the official AWS exam guides. We're not affiliated with AWS."],
   ["Are the questions up to date?", "We check every question against AWS's service lifecycle notices. When AWS retires, renames or closes a service a question mentions, the explanation says so with the date and source, and every change is listed on our What changed page."],
   ["How does pricing work?", `${PRICE} unlocks one exam for ${PASS_DAYS} days. One payment, no auto-renewal.`],
-];
-
-const STORY: [string, string][] = [
-  ["Practice exam questions", "Original questions written to the official AWS exam guides, with the ones you haven't seen first."],
-  ["Mia breaks it down", "Confused by a term or the question itself? Mia explains what it's testing, draws the architecture, and covers each service in depth."],
-  ["Mia reads your results", "After every session she reviews what you missed and recommends the topics to deep dive, with a few tips to raise your score."],
-  ["Review your study sheet", "Everything you need to revisit lands on one study sheet, and Mia can explain any topic on it further."],
 ];
 
 const PROOF: [string, string][] = [
@@ -58,7 +52,7 @@ export default async function Home() {
           <div className={styles.heroCopy}>
             <p className={styles.eyebrow}>✨ Your AI tutor for AWS certification</p>
             <h1 id="hero-title"><span className={styles.meetLine}>Meet Mia.<HeroMia /></span><br /><span className={styles.overMia}>She&apos;ll get you through your AWS exam.</span></h1>
-            <p className={styles.heroDescription}>Mia breaks down every question, draws the real AWS architecture behind it, and explains each service in depth. Then she reads your results and tells you exactly what to study next.</p>
+            <p className={styles.heroDescription}>Every question explained. Every architecture drawn. Every gap found.</p>
             <TrialPicker exams={EXAM_LIST.map((exam) => ({ slug: exam.slug, name: exam.shortName, code: exam.code }))} count={FREE_TRIAL_QUESTIONS} />
             <a className={styles.textLink} href="#how-it-works">See what the tutor does <span aria-hidden="true">↓</span></a>
           </div>
@@ -67,18 +61,10 @@ export default async function Home() {
         <div className={styles.heroFootnote}><span>{totalQuestions.toLocaleString()} practice questions · {PRICE} per exam for {PASS_DAYS} days · no auto-renewal</span><span>CLF-C02 <i aria-hidden="true">/</i> AIF-C01 <i aria-hidden="true">/</i> SAA-C03</span></div>
       </section>
 
-      <section className={styles.visualSection} aria-labelledby="story-title" style={{ paddingBottom: 0 }}>
+      <section id="how-it-works" className={styles.visualSection} aria-labelledby="learning-title">
         <p className={styles.eyebrow}>How you&apos;ll study with Mia</p>
-        <h2 id="story-title">Practice. Understand.<br /><span>Know what to study next.</span></h2>
-        <ol className="mx-auto -mt-6 grid max-w-5xl gap-3 text-left sm:grid-cols-2 lg:grid-cols-4">
-          {STORY.map(([title, body], i) => (
-            <li key={title} className="rounded-2xl border border-line bg-bg p-5">
-              <p className="text-sm font-extrabold text-brand">Step {i + 1}</p>
-              <p className="mt-1 font-extrabold">{title}</p>
-              <p className="mt-1 text-sm leading-relaxed text-soft">{body}</p>
-            </li>
-          ))}
-        </ol>
+        <h2 id="learning-title">From stuck to <span>“got it”</span><br />to exam ready.</h2>
+        <MiaStory />
       </section>
 
       <section className={styles.visualSection} aria-labelledby="concepts-title" style={{ paddingBottom: 0 }}>
@@ -95,12 +81,6 @@ export default async function Home() {
         <p className="mt-6 text-sm text-soft">
           <Link href="/features" className="font-bold text-brand hover:underline">See every feature</Link> · <Link href="/aws" className="font-bold text-brand hover:underline">Free AWS cheat sheets</Link> · <Link href="/changelog" className="font-bold text-brand hover:underline">What changed this month</Link>
         </p>
-      </section>
-
-      <section id="how-it-works" className={styles.visualSection} aria-labelledby="learning-title">
-        <p className={styles.eyebrow}>How the tutor works</p>
-        <h2 id="learning-title">From stuck to <span>“got it”</span><br />in four taps.</h2>
-        <TutorFlow />
       </section>
 
       <section className={styles.meetMia} aria-labelledby="mia-title">

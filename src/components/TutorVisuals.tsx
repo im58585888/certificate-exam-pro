@@ -24,42 +24,6 @@ function useInView<T extends HTMLElement>() {
   return [ref, seen] as const;
 }
 
-const STEPS: { title: string; caption: string; art: React.ReactNode }[] = [
-  { title: "Stuck?", caption: "Tap “Break it down”", art: <ArtStuck /> },
-  { title: "See the point", caption: "What it's really testing", art: <ArtPoint /> },
-  { title: "Answer it", caption: "Then learn the why", art: <ArtAnswer /> },
-  { title: "Ask anything", caption: "Until it clicks", art: <ArtAsk /> },
-];
-
-export function TutorFlow() {
-  const [ref, seen] = useInView<HTMLOListElement>();
-  return (
-    <ol ref={ref} className={`${styles.flow} ${seen ? styles.visible : ""}`}>
-      {STEPS.map((s, i) => (
-        <li key={s.title} className={styles.flowStep} style={{ animationDelay: `${i * 180}ms` }}>
-          <div className={styles.art} aria-hidden="true">{s.art}</div>
-          <span className={styles.stepNum}>{i + 1}</span>
-          <h3>{s.title}</h3>
-          <p>{s.caption}</p>
-        </li>
-      ))}
-    </ol>
-  );
-}
-
-function ArtStuck() {
-  return <div className={styles.artStuck}><span className={styles.line} /><span className={styles.line} /><span className={styles.lineShort} /><b className={styles.bigQ}>?</b><span className={styles.btn}>✨ Break it down</span></div>;
-}
-function ArtPoint() {
-  return <div className={styles.artPoint}><span className={styles.line} /><span className={styles.lineHi} /><span className={styles.line} /><b className={styles.target}>🎯</b></div>;
-}
-function ArtAnswer() {
-  return <div className={styles.artAnswer}><span className={styles.opt}>A</span><span className={styles.optRight}>B <i>✓</i></span><span className={styles.opt}>C</span></div>;
-}
-function ArtAsk() {
-  return <div className={styles.artAsk}><span className={styles.bubbleMe}>Why?</span><span className={styles.bubbleBot}>Because…</span></div>;
-}
-
 const MEMORY = [
   { title: "Finish a session", caption: "Every answer counts" },
   { title: "Weak spots first", caption: "Your study sheet sorts them" },
