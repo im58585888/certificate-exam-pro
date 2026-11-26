@@ -4,6 +4,8 @@ import clfC02 from "../../content/clf-c02";
 import saaC03 from "../../content/saa-c03";
 import { query } from "./db";
 import type { DomainId } from "./exams";
+import { questionUpdated } from "./changelog";
+import { statusNotesFor, type StatusNote } from "./lifecycle";
 
 export interface Option {
   key: string;
@@ -51,6 +53,12 @@ export interface Feedback {
   correctKeys: string[];
   options: { key: string; why: string }[];
   explanation: Question["explanation"];
+  /** Question id, shown so learners can quote it when they report a problem. */
+  id?: string;
+  /** Dated AWS lifecycle notes for services the question mentions. */
+  status?: StatusNote[];
+  /** Date the question was last rewritten (from the public changelog). */
+  updated?: string;
 }
 
 const BANK: Record<string, Question[]> = {
@@ -144,5 +152,8 @@ export function feedbackFor(q: Question, picks: string[]): Feedback {
     correctKeys: q.options.filter((o) => o.correct).map((o) => o.key),
     options: q.options.map((o) => ({ key: o.key, why: o.why })),
     explanation: q.explanation,
+    id: q.id,
+    status: statusNotesFor(q, examOf(q.id)),
+    updated: questionUpdated(q.id),
   };
 }

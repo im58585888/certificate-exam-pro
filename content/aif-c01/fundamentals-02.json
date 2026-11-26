@@ -404,7 +404,8 @@
     "domain": "fundamentals",
     "topic": "AWS AI Services",
     "tags": [
-      "kendra",
+      "bedrock-knowledge-bases",
+      "rag",
       "enterprise-search"
     ],
     "difficulty": "medium",
@@ -414,37 +415,41 @@
     "options": [
       {
         "key": "A",
-        "text": "Amazon Personalize",
+        "text": "Amazon Comprehend",
         "correct": false,
-        "why": "Personalize produces recommendations based on user behavior. It is not a question-answering search engine over documents."
+        "why": "Comprehend finds entities, key phrases and sentiment in text. It doesn't index the firm's repositories or answer questions from them."
       },
       {
         "key": "B",
         "text": "Amazon Textract",
         "correct": false,
-        "why": "Textract extracts text from scanned documents but does not index multiple repositories or answer questions."
+        "why": "Textract pulls text and tables out of scanned documents. It doesn't connect to SharePoint or answer questions across sources."
       },
       {
         "key": "C",
-        "text": "Amazon Kendra",
+        "text": "Amazon Bedrock Knowledge Bases",
         "correct": true,
-        "why": "Amazon Kendra is an intelligent enterprise search service with connectors for sources such as SharePoint and file shares, and it answers natural language questions with relevant passages."
+        "why": "A Bedrock knowledge base connects to sources such as SharePoint, Amazon S3 and web pages, indexes them, and lets a foundation model answer natural language questions grounded in the retrieved passages, with citations."
       },
       {
         "key": "D",
-        "text": "Amazon Polly",
+        "text": "Amazon Lex",
         "correct": false,
-        "why": "Polly converts text to speech. It cannot search content."
+        "why": "Lex builds conversational bots around predefined intents. On its own it can't search thousands of documents for an answer."
       }
     ],
     "explanation": {
-      "answer": "Amazon Kendra uses machine learning to index content from many enterprise sources through built-in connectors and returns precise answers and ranked documents for natural language questions. It also respects document access controls.",
-      "concept": "Kendra can serve as the retriever in a Retrieval Augmented Generation (RAG) application, supplying relevant passages to a foundation model that then writes the answer.",
-      "examTip": "Enterprise search across many sources with natural language questions = Amazon Kendra.",
+      "answer": "Amazon Bedrock Knowledge Bases is AWS's managed Retrieval Augmented Generation (RAG) service. Connectors bring in content from SharePoint, S3, Confluence and other sources, the content is split into chunks and stored as embeddings in a vector store, and at question time the most relevant passages are retrieved and passed to a foundation model, which writes an answer that cites its sources.",
+      "concept": "RAG grounds a model's answer in your own documents instead of what it learned in training, which reduces hallucinations and keeps answers current without retraining.",
+      "examTip": "Natural language answers drawn from your company's documents = RAG with Amazon Bedrock Knowledge Bases.",
       "references": [
         {
-          "title": "What is Amazon Kendra?",
-          "url": "https://docs.aws.amazon.com/kendra/latest/dg/what-is-kendra.html"
+          "title": "Retrieve data and generate responses with Amazon Bedrock Knowledge Bases",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/knowledge-base.html"
+        },
+        {
+          "title": "Connect to Microsoft SharePoint for your knowledge base",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/sharepoint-data-source-connector.html"
         }
       ]
     }

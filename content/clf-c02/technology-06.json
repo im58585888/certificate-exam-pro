@@ -445,7 +445,8 @@
     "domain": "technology",
     "topic": "AI & ML Services",
     "tags": [
-      "kendra"
+      "amazon-quick",
+      "enterprise-search"
     ],
     "difficulty": "medium",
     "type": "single",
@@ -456,35 +457,39 @@
         "key": "A",
         "text": "Amazon Lex",
         "correct": false,
-        "why": "Lex builds chatbots, so it doesn't meet this requirement."
+        "why": "Lex builds chatbots around predefined intents; it doesn't index company documents to answer open questions."
       },
       {
         "key": "B",
-        "text": "Amazon Kendra",
+        "text": "Amazon Quick",
         "correct": true,
-        "why": "Kendra is an intelligent enterprise search service."
+        "why": "Amazon Quick connects to company content such as SharePoint and Amazon S3, and its chat agents answer natural language questions from that content."
       },
       {
         "key": "C",
-        "text": "Amazon OpenSearch Service",
+        "text": "Amazon Polly",
         "correct": false,
-        "why": "OpenSearch provides keyword and log search, but Kendra is built for natural-language answers over enterprise content."
+        "why": "Polly turns text into speech. It can't search documents."
       },
       {
         "key": "D",
         "text": "Amazon Textract",
         "correct": false,
-        "why": "Textract extracts text from scanned documents."
+        "why": "Textract extracts text from scanned documents but doesn't answer questions across them."
       }
     ],
     "explanation": {
-      "answer": "Amazon Kendra uses machine learning to provide intelligent search across enterprise content.",
-      "concept": "Kendra connects to many repositories, such as SharePoint and S3.",
-      "examTip": "Smart enterprise search = Kendra.",
+      "answer": "Amazon Quick is AWS's AI assistant for business users. It indexes connected company knowledge (for example SharePoint sites and S3 buckets) and lets employees ask questions in plain language, get answers with sources, and build dashboards.",
+      "concept": "AWS offers ready-made AI assistants (Amazon Quick for business users, Amazon Q Developer and Kiro for developers) as well as building blocks (Amazon Bedrock) for teams that build their own AI apps.",
+      "examTip": "Employees asking questions about company documents in plain language = Amazon Quick.",
       "references": [
         {
-          "title": "What is Amazon Kendra?",
-          "url": "https://docs.aws.amazon.com/kendra/latest/dg/what-is-kendra.html"
+          "title": "Create, customize, and deploy AI-powered chat agents in Amazon Quick",
+          "url": "https://docs.aws.amazon.com/quick/latest/userguide/working-with-agents.html"
+        },
+        {
+          "title": "Microsoft SharePoint knowledge base integration",
+          "url": "https://docs.aws.amazon.com/quick/latest/userguide/sharepoint-knowledge-base.html"
         }
       ]
     }

@@ -935,7 +935,7 @@
     "topic": "AWS AI Services",
     "tags": [
       "lex",
-      "kendra",
+      "bedrock-knowledge-bases",
       "service-selection"
     ],
     "difficulty": "hard",
@@ -947,13 +947,13 @@
         "key": "A",
         "text": "Amazon Lex for both, with an intent for each policy",
         "correct": false,
-        "why": "Defining intents for thousands of pages of policies is impractical; open questions need document search."
+        "why": "Defining intents for thousands of pages of policies is impractical; open questions need retrieval over the documents."
       },
       {
         "key": "B",
-        "text": "Amazon Kendra for both needs",
+        "text": "Amazon Bedrock Knowledge Bases for both needs",
         "correct": false,
-        "why": "Kendra can answer policy questions but cannot run a booking conversation that collects details."
+        "why": "A knowledge base answers questions from the handbooks, but it doesn't run a structured booking conversation that collects and validates an ID, date and time."
       },
       {
         "key": "C",
@@ -963,23 +963,23 @@
       },
       {
         "key": "D",
-        "text": "Amazon Lex for booking, Amazon Kendra for handbook answers",
+        "text": "Amazon Lex for booking, Amazon Bedrock Knowledge Bases for handbook answers",
         "correct": true,
-        "why": "Lex handles intents and collects slots such as ID, date and time; Kendra searches the handbooks for answers."
+        "why": "Lex handles intents and collects slots such as ID, date and time; a Bedrock knowledge base retrieves the relevant handbook passages so a model can answer policy questions."
       }
     ],
     "explanation": {
-      "answer": "Amazon Lex manages structured conversations (intents, slots and fulfillment), and Amazon Kendra provides intelligent search over document collections. Lex can fall back to Kendra (or to a generative AI answer grounded in documents) for questions outside its defined intents.",
-      "concept": "Many solutions mix services: one for conversation management and another for knowledge retrieval. Today the knowledge side is often implemented with RAG using Amazon Bedrock Knowledge Bases.",
-      "examTip": "Collect details and complete a task = Lex. Find answers in many documents = Kendra (or a Bedrock knowledge base).",
+      "answer": "Amazon Lex manages structured conversations (intents, slots and fulfillment), and Amazon Bedrock Knowledge Bases answers open questions with Retrieval Augmented Generation over the handbooks. Lex can hand questions that match no intent to the knowledge base for a grounded answer.",
+      "concept": "Many solutions mix services: one for conversation management and another for knowledge retrieval.",
+      "examTip": "Collect details and complete a task = Lex. Answer questions from many documents = RAG with a Bedrock knowledge base.",
       "references": [
         {
           "title": "What is Amazon Lex V2?",
           "url": "https://docs.aws.amazon.com/lexv2/latest/dg/what-is.html"
         },
         {
-          "title": "What is Amazon Kendra?",
-          "url": "https://docs.aws.amazon.com/kendra/latest/dg/what-is-kendra.html"
+          "title": "Retrieve data and generate responses with Amazon Bedrock Knowledge Bases",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/knowledge-base.html"
         }
       ]
     }

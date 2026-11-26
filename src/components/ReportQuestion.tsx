@@ -11,11 +11,11 @@ export function ReportQuestion({ questionId }: { questionId: string }) {
   const [status, setStatus] = useState<"idle" | "sent" | string>("idle");
   const [pending, start] = useTransition();
 
-  if (status === "sent") return <p className="mt-4 text-sm font-semibold text-ok">Thanks. We&apos;ll review this question.</p>;
+  if (status === "sent") return <p className="mt-4 text-sm font-semibold text-ok">Thanks. We review every report within 48 hours, and fixes are listed on the <a href="/changelog" className="underline">What changed</a> page.</p>;
   if (!open) {
     return (
       <button type="button" onClick={() => setOpen(true)} className="mt-4 text-sm font-semibold text-muted underline-offset-2 hover:text-ink hover:underline">
-        Report a problem with this question
+        Report a problem with this question · reviewed within 48 hours
       </button>
     );
   }

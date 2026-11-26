@@ -10,8 +10,8 @@ export default async function AdminReports({ searchParams }: PageProps<"/admin/r
   await ensureBank();
   const { status: s } = await searchParams;
   const status = s === "resolved" || s === "dismissed" ? s : "open";
-  const reports = await query<{ id: number; question_id: string; reason: string; message: string | null; created_at: Date; email: string | null }>(
-    `select r.id, r.question_id, r.reason, r.message, r.created_at, u.email
+  const reports = await query<{ id: number; question_id: string; reason: string; message: string | null; created_at: Date; email: string | null; overdue: boolean }>(
+    `select r.id, r.question_id, r.reason, r.message, r.created_at, u.email, (now() - r.created_at) > interval '48 hours' as overdue
      from question_reports r left join users u on u.id = r.user_id where r.status = $1 order by r.created_at desc limit 200`, [status]);
 
   return (
@@ -29,7 +29,10 @@ export default async function AdminReports({ searchParams }: PageProps<"/admin/r
             <li key={r.id} className="card p-4">
               <div className="flex flex-wrap items-baseline justify-between gap-2">
                 <Link href={`/admin/questions/${encodeURIComponent(r.question_id)}`} className="font-bold text-brand">{r.question_id}</Link>
-                <span className="text-xs text-muted">{r.email ?? "Anonymous"} · {new Date(r.created_at).toLocaleString("en-US")}</span>
+                <span className="text-xs text-muted">
+                  {status === "open" && r.overdue && <span className="pill mr-2 bg-bad-soft text-bad">Over 48h: promised review time passed</span>}
+                  {r.email ?? "Anonymous"} · {new Date(r.created_at).toLocaleString("en-US")}
+                </span>
               </div>
               <p className="mt-1 line-clamp-1 text-sm text-soft">{getQuestion(r.question_id)?.prompt}</p>
               <p className="mt-2 font-semibold">{REPORT_REASONS[r.reason as keyof typeof REPORT_REASONS] ?? r.reason}</p>

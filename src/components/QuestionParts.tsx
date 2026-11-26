@@ -1,5 +1,7 @@
 import { DOMAIN_SHORT } from "@/lib/exams";
 import type { Feedback, PublicQuestion } from "@/lib/questions";
+import { fmtMonthYear } from "@/lib/changelog";
+import { StatusNotes } from "./StatusNotes";
 
 export const DOMAIN_LABEL = DOMAIN_SHORT;
 
@@ -100,6 +102,7 @@ export function ExplanationPanel({ feedback }: { feedback: Feedback }) {
         <p className="mt-1.5 leading-relaxed">{e.concept}</p>
       </section>
       <div className="rounded-xl bg-warn-soft px-4 py-3 font-semibold text-warn">Exam tip: {e.examTip}</div>
+      <StatusNotes notes={feedback.status} />
       <section>
         <h3 className="eyebrow">Read more on AWS docs</h3>
         <ul className="mt-1.5 list-disc space-y-1 pl-5">
@@ -108,6 +111,11 @@ export function ExplanationPanel({ feedback }: { feedback: Feedback }) {
           ))}
         </ul>
       </section>
+      {feedback.id && (
+        <p className="text-xs text-muted">
+          Question {feedback.id}{feedback.updated ? ` · Updated ${fmtMonthYear(feedback.updated)}` : ""} · <a href="/changelog" className="underline-offset-2 hover:underline">What changed</a>
+        </p>
+      )}
     </div>
   );
 }

@@ -6,7 +6,10 @@ import { JsonLd } from "@/components/JsonLd";
 import { EXAM_LIST, FREE_TRIAL_QUESTIONS, PASS_DAYS, getExam } from "@/lib/exams";
 import { GUIDES, GUIDE_UPDATED } from "@/lib/guides";
 import { ensureBank, questionsFor } from "@/lib/questions";
-import { SAMPLE_COUNT, samplesFor } from "@/lib/samples";
+import { FREE_PAGE_COUNT, SAMPLE_COUNT, samplesFor } from "@/lib/samples";
+import { SampleQuestion } from "@/components/SampleQuestion";
+import { CHANGELOG, fmtDate } from "@/lib/changelog";
+import { COMPARISONS, SERVICES } from "@/lib/library";
 import { PRICE, SITE_URL, examProduct, faqPage, graph } from "@/lib/seo";
 
 // Public exam guide: the page people land on from search and AI answers. Answer first, facts in a table, real
@@ -42,7 +45,8 @@ export default async function ExamGuide({ params }: PageProps<"/exams/[exam]">) 
   const bank = questionsFor(slug).length;
   const samples = samplesFor(slug);
   const others = EXAM_LIST.filter((e) => e.slug !== slug);
-  const domainName = new Map(exam.domains.map((d) => [d.id, d.short]));
+  const sheets = SERVICES.filter((sh) => slug in sh.exams);
+  const comps = COMPARISONS.filter((c) => (slug === "aif-c01" ? c.category === "AI and ML" : slug === "saa-c03" ? c.category !== "AI and ML" : true));
 
   const facts: [string, string][] = [
     ["Questions", `${exam.examQuestions} (50 scored, 15 unscored)`],
@@ -134,37 +138,9 @@ export default async function ExamGuide({ params }: PageProps<"/exams/[exam]">) 
         <h2 id="samples-title" className="text-2xl font-extrabold">{samples.length} free {exam.code} practice questions</h2>
         <p className="mt-2 text-soft">Original questions in the style of the real exam. Pick your answer, then open the explanation to see why each option is right or wrong.</p>
         <ol className="mt-5 grid gap-4">
-          {samples.map((q, i) => {
-            const right = q.options.find((o) => o.correct);
-            return (
-              <li key={q.id} className="card p-5">
-                <p className="flex flex-wrap items-center gap-2 text-xs font-bold text-muted">
-                  <span>Question {i + 1}</span><span className="pill bg-brand-soft text-brand">{domainName.get(q.domain)}</span><span className="pill bg-surface-2 text-soft">{q.topic}</span>
-                </p>
-                <p className="mt-3 leading-relaxed">{q.stem}</p>
-                <p className="mt-2 font-bold">{q.prompt}</p>
-                <ul className="mt-3 grid gap-1.5">
-                  {q.options.map((o) => (
-                    <li key={o.key} className="flex gap-2.5 rounded-lg border border-line bg-surface px-3 py-2 text-[15px]"><b className="text-muted">{o.key}.</b><span>{o.text}</span></li>
-                  ))}
-                </ul>
-                <details className="group mt-3">
-                  <summary className="cursor-pointer font-bold text-brand">Show answer and explanation</summary>
-                  <div className="mt-3 rounded-xl bg-ok-soft p-4">
-                    <p className="font-extrabold text-ok">Answer: {right?.key}. {right?.text}</p>
-                    <p className="mt-1.5 text-[15px]">{q.explanation.answer}</p>
-                  </div>
-                  <ul className="mt-3 grid gap-2 text-[15px]">
-                    {q.options.filter((o) => !o.correct).map((o) => (
-                      <li key={o.key}><b>Why not {o.key}?</b> <span className="text-soft">{o.why}</span></li>
-                    ))}
-                  </ul>
-                  {q.explanation.examTip && <p className="mt-3 rounded-lg bg-surface-2 px-3 py-2 text-sm"><b>Exam tip:</b> {q.explanation.examTip}</p>}
-                </details>
-              </li>
-            );
-          })}
+          {samples.map((q, i) => <SampleQuestion key={q.id} q={q} n={i + 1} exam={slug} />)}
         </ol>
+        <p className="mt-4"><Link href={`/exams/${slug}/free-questions`} className="font-bold text-brand hover:underline">See {FREE_PAGE_COUNT} more free {exam.code} questions, grouped by domain →</Link></p>
         <div className="card mt-5 flex flex-col items-start gap-3 p-6 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <p className="text-lg font-extrabold">Want more? There are {bank} {exam.code} questions.</p>
@@ -172,6 +148,26 @@ export default async function ExamGuide({ params }: PageProps<"/exams/[exam]">) 
           </div>
           <TrialButton slug={slug} label="Start free practice" />
         </div>
+      </section>
+
+      {/* Library */}
+      <section className="mt-12" aria-labelledby="sheets">
+        <h2 id="sheets" className="text-2xl font-extrabold">AWS services to know for {exam.code}</h2>
+        <p className="mt-2 text-soft">Cheat sheets with a diagram, the exam&apos;s decision rules and practice questions for each service.</p>
+        <div className="mt-4 grid gap-3 sm:grid-cols-2">
+          {sheets.map((sh) => (
+            <Link key={sh.slug} href={`/aws/${sh.slug}`} className="card p-4 hover:border-brand">
+              <span className="block font-extrabold">{sh.service}</span>
+              <span className="mt-1 block text-sm text-soft">{sh.exams[slug as keyof typeof sh.exams]}</span>
+            </Link>
+          ))}
+        </div>
+        <p className="mt-4 text-[15px]"><b>Commonly confused:</b>{" "}
+          {comps.map((c, i) => <span key={c.slug}>{i > 0 && " · "}<Link href={`/aws/compare/${c.slug}`} className="text-brand hover:underline">{c.items.join(" vs ")}</Link></span>)}
+        </p>
+        <p className="mt-4 rounded-xl bg-surface-2 px-4 py-3 text-sm text-soft">
+          Our {exam.code} questions were last checked against AWS service changes on {fmtDate(CHANGELOG[0].date)}. Questions that mention a retired or renamed service say so, with the date and source. <Link href="/changelog" className="font-bold text-brand hover:underline">See what changed</Link>
+        </p>
       </section>
 
       {/* Plan */}
@@ -195,7 +191,8 @@ export default async function ExamGuide({ params }: PageProps<"/exams/[exam]">) 
           <li>✓ A detailed explanation for every option, right and wrong</li>
           <li>✓ Mia, an AI tutor that breaks questions down without giving the answer away</li>
           <li>✓ Timed {exam.examQuestions}-question mock exams with an estimated score</li>
-          <li>✓ Automatic review of your mistakes and weakest domains</li>
+          <li>✓ Retry only your mistakes, unseen questions first, and a readiness check built on first-attempt scores</li>
+          <li>✓ Questions checked against AWS service changes, with a public <Link href="/changelog" className="font-bold text-brand hover:underline">changelog</Link></li>
         </ul>
         <p className="mt-4 text-[15px]"><b>${PRICE}</b> for {PASS_DAYS} days. One payment, no auto-renewal. <Link href="/pricing" className="font-bold text-brand hover:underline">See pricing</Link></p>
       </section>
