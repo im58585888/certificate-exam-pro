@@ -11,6 +11,7 @@ export async function SiteHeader() {
     <>
       <Link href="/practice">Practice</Link>
       <Link href="/study">Study sheet</Link>
+      <Link href="/aws">Cheat sheets</Link>
       {user && <Link href="/dashboard">Dashboard</Link>}
       <Link href="/pricing">Pricing</Link>
       {user ? (

@@ -16,7 +16,12 @@ export function SiteFooter() {
           <Link href="/exams/clf-c02" className="hover:text-ink">CLF-C02 guide</Link>
           <Link href="/exams/aif-c01" className="hover:text-ink">AIF-C01 guide</Link>
           <Link href="/exams/saa-c03" className="hover:text-ink">SAA-C03 guide</Link>
+          <Link href="/aws" className="hover:text-ink">AWS cheat sheets</Link>
+          <Link href="/guides" className="hover:text-ink">Guides</Link>
+          <Link href="/features" className="hover:text-ink">Features</Link>
+          <Link href="/changelog" className="hover:text-ink">What changed</Link>
           <Link href="/pricing" className="hover:text-ink">Pricing</Link>
+          <Link href="/about" className="hover:text-ink">About</Link>
           <Link href="/contact" className="hover:text-ink">Contact</Link>
           <Link href="/terms" className="hover:text-ink">Terms</Link>
           <Link href="/privacy" className="hover:text-ink">Privacy</Link>

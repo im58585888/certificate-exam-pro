@@ -25,7 +25,17 @@ const FAQ: [string, string][] = [
   ["What is the study sheet?", "Every session adds to it: your weakest topics first, the questions you missed, and a printable cheat sheet."],
   ["What can I try for free?", `${FREE_TRIAL_QUESTIONS} questions per exam, AI tutor included. No account or card needed.`],
   ["Are these real AWS exam questions?", "No. They're original questions that follow the official AWS exam guides. We're not affiliated with AWS."],
+  ["Are the questions up to date?", "We check every question against AWS's service lifecycle notices. When AWS retires, renames or closes a service a question mentions, the explanation says so with the date and source, and every change is listed on our What changed page."],
   ["How does pricing work?", `${PRICE} unlocks one exam for ${PASS_DAYS} days. One payment, no auto-renewal.`],
+];
+
+const PROOF: [string, string][] = [
+  ["Updated for 2026", "Every question is checked against AWS's service changes. Retired or renamed services get a dated note, and changes are public."],
+  ["Unseen questions first", "Practice serves questions you haven't seen, so your score measures understanding, not memory."],
+  ["Retry only your mistakes", "Missed and flagged questions come back on their own, answered fresh, until you've got them."],
+  ["Ask Mia why", "Disagree with an answer? Mia explains any option simply, technically or as a diagram, right away."],
+  ["An honest readiness check", "Judged on first-attempt scores, every domain, a recent mock exam and your pace. Never a pass guarantee."],
+  ["Pause anytime, any device", "Save and finish later, even mid mock exam. One pass works on every device. No ads."],
 ];
 
 export default async function Home() {
@@ -47,6 +57,22 @@ export default async function Home() {
           <HeroMiaDemo />
         </div>
         <div className={styles.heroFootnote}><span>{totalQuestions.toLocaleString()} practice questions · {PRICE} per exam for {PASS_DAYS} days · no auto-renewal</span><span>CLF-C02 <i aria-hidden="true">/</i> AIF-C01 <i aria-hidden="true">/</i> SAA-C03</span></div>
+      </section>
+
+      <section className={styles.visualSection} aria-labelledby="concepts-title" style={{ paddingBottom: 0 }}>
+        <p className={styles.eyebrow}>Practice that builds real understanding</p>
+        <h2 id="concepts-title">Don&apos;t just memorize AWS answers.<br /><span>Master the concepts.</span></h2>
+        <ul className="mx-auto -mt-6 grid max-w-5xl gap-3 text-left sm:grid-cols-2 lg:grid-cols-3">
+          {PROOF.map(([title, body]) => (
+            <li key={title} className="rounded-2xl border border-line bg-bg p-5">
+              <p className="font-extrabold">{title}</p>
+              <p className="mt-1 text-sm leading-relaxed text-soft">{body}</p>
+            </li>
+          ))}
+        </ul>
+        <p className="mt-6 text-sm text-soft">
+          <Link href="/features" className="font-bold text-brand hover:underline">See every feature</Link> · <Link href="/aws" className="font-bold text-brand hover:underline">Free AWS cheat sheets</Link> · <Link href="/changelog" className="font-bold text-brand hover:underline">What changed this month</Link>
+        </p>
       </section>
 
       <section id="how-it-works" className={styles.visualSection} aria-labelledby="learning-title">
