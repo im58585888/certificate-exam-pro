@@ -14,7 +14,7 @@ const PRICE = `$${(PASS_PRICE_CENTS / 100).toFixed(2)}`;
 
 export const metadata: Metadata = {
   title: { absolute: "Tutorials Dojo Alternative for AWS Exams (2026): An Honest Comparison" },
-  description: "Looking for a Tutorials Dojo alternative for SAA-C03, CLF-C02 or AIF-C01? An honest, dated comparison: when Tutorials Dojo is the better pick, and when Certificate Exam Pro's AI tutor, unseen-first practice and readiness check fit better.",
+  description: "Looking for a Tutorials Dojo alternative for SAA-C03, CLF-C02 or AIF-C01? An honest, dated comparison: when Tutorials Dojo is the better pick, and when Certificate Exam Pro's AI tutor and unseen-first practice fit better.",
   alternates: { canonical: "/compare/tutorials-dojo-alternative" },
 };
 
@@ -28,7 +28,7 @@ const OURS: [string, string][] = [
   ["Ask the AI tutor about any option", "Mia explains why an answer is right or wrong right away: simply, technically or as a diagram. You don't need to post in a forum or switch to a separate chatbot."],
   ["Retry only the questions you missed", "Missed and flagged questions come back on a spaced schedule and are answered fresh, without the answer showing."],
   ["Unseen questions first", "Practice sets serve questions you haven't seen, so repeat familiarity doesn't inflate your score."],
-  ["Readiness judged on first attempts", "The dashboard checks first-attempt accuracy, every domain, a recent timed mock exam and pace, and warns you about a memorization gap."],
+  ["500 questions per exam", "A large bank per exam, with unseen questions served first, so you keep meeting new scenarios."],
   ["Real pause", "Save any session and finish later; a mock exam's clock stops while you're away."],
   ["Dated AWS status notes", "Questions that mention a retired, renamed or closed AWS service say so, with the date and source, and every bank change is public."],
 ];
@@ -46,7 +46,7 @@ export default function TutorialsDojoAlternative() {
         <p className="mt-2 text-[17px] leading-relaxed">
           Tutorials Dojo is a well-established, widely recommended provider with a huge catalog of practice exams, cheat sheets, video courses and eBooks across AWS, Azure, Google Cloud and more.
           Certificate Exam Pro is smaller and focused on three AWS exams. It&apos;s built around an AI tutor you can question about any option, practice that serves unseen questions first,
-          and a readiness check based on first attempts. If you&apos;re preparing for CLF-C02, AIF-C01 or SAA-C03 and want those things, try us free; otherwise Tutorials Dojo is a strong choice.
+          and 500 original questions per exam. If you&apos;re preparing for CLF-C02, AIF-C01 or SAA-C03 and want those things, try us free; otherwise Tutorials Dojo is a strong choice.
         </p>
       </div>
 
@@ -73,7 +73,7 @@ export default function TutorialsDojoAlternative() {
       <section className="mt-12" aria-labelledby="price">
         <h2 id="price" className="text-2xl font-extrabold">Price and access</h2>
         <p className="mt-2 leading-relaxed">
-          Certificate Exam Pro: {PRICE} per exam for {PASS_DAYS} days, a one-time payment that never auto-renews, AI tutor included, on every device. {FREE_TRIAL_QUESTIONS} questions per exam free with no account.
+          Certificate Exam Pro: {PRICE} per exam for {PASS_DAYS} days, a one-time payment that never auto-renews, AI tutor included, on laptop, phone and tablet. {FREE_TRIAL_QUESTIONS} questions per exam free with no account.
           For Tutorials Dojo&apos;s current prices and access periods, see their store.
         </p>
       </section>

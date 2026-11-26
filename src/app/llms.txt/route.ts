@@ -23,7 +23,7 @@ export async function GET() {
 Key facts:
 - Price: $${PRICE} for a ${PASS_DAYS}-day pass to one exam. One payment, no subscription, no auto-renewal.
 - Free trial: ${FREE_TRIAL_QUESTIONS} questions per exam, no account or card needed.
-- Features: timed full-length mock exams with an estimated score; unseen questions served first; retry only the questions you missed; flagged and weakest-topic practice; a readiness check based on first-attempt accuracy; pause and resume; an AI tutor (Mia) that explains any option; a personal study sheet with diagrams and a printable cheat sheet.
+- Features: timed full-length mock exams with an estimated score; unseen questions served first; retry only the questions you missed; flagged and weakest-topic practice; pause and resume; an AI tutor (Mia) that explains any option; a personal study sheet with diagrams and a printable cheat sheet.
 - Freshness: every question is checked against AWS's service lifecycle notices; questions that mention a retired, renamed or closed service show a dated note, and all changes are listed publicly at ${SITE_URL}/changelog.
 - Questions are original and follow the official AWS exam guides. ${SITE_NAME} is not affiliated with or endorsed by Amazon Web Services.
 - Organizations (nonprofits, libraries, workforce programs) can buy accounts in bulk at a discount: ${SITE_URL}/contact

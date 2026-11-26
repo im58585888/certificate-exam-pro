@@ -34,8 +34,8 @@ const PROOF: [string, string][] = [
   ["Unseen questions first", "Practice serves questions you haven't seen, so your score measures understanding, not memory."],
   ["Retry only your mistakes", "Missed and flagged questions come back on their own, answered fresh, until you've got them."],
   ["Ask Mia why", "Disagree with an answer? Mia explains any option simply, technically or as a diagram, right away."],
-  ["An honest readiness check", "Judged on first-attempt scores, every domain, a recent mock exam and your pace. Never a pass guarantee."],
-  ["Pause anytime, any device", "Save and finish later, even mid mock exam. One pass works on every device. No ads."],
+  ["Timed mock exams", "65 questions with the real time limit, weighted like the real exam, then a full scored review of every option."],
+  ["Pause anytime", "Save and finish later, even mid mock exam. One pass works on laptop, phone and tablet. No ads."],
 ];
 
 export default async function Home() {

@@ -9,8 +9,8 @@ import { EXAM_LIST, FREE_TRIAL_QUESTIONS, PASS_DAYS, PASS_PRICE_CENTS } from "@/
 import { faqPage, graph } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: { absolute: "Features: AI Tutor, Smart Practice & Readiness Check · Certificate Exam Pro" },
-  description: "How Certificate Exam Pro helps you pass AWS exams: an AI tutor that explains any option, unseen-first practice, retrying only your mistakes, an honest readiness check, questions kept current with AWS changes, and one pass on every device.",
+  title: { absolute: "Features: AI Tutor, Smart Practice & Mock Exams · Certificate Exam Pro" },
+  description: "How Certificate Exam Pro helps you pass AWS exams: an AI tutor that explains any option, unseen-first practice, retrying only your mistakes, timed mock exams with analytics, and questions kept current with AWS changes.",
   alternates: { canonical: "/features" },
 };
 
@@ -38,12 +38,11 @@ const GROUPS: { id: string; eyebrow: string; title: string; items: [string, stri
     ],
   },
   {
-    id: "readiness", eyebrow: "Measure smarter", title: "An honest readiness check",
+    id: "progress", eyebrow: "Measure smarter", title: "See where you stand",
     items: [
-      ["Judged on first attempts", "Your readiness is based on questions you're seeing for the first time, because scores on repeated questions measure memory."],
-      ["Four clear checks", "80%+ on new questions, no domain below 70%, a recent timed mock exam at 80%+, and a pace within the real exam's time per question."],
-      ["Memorization gap warning", "If you score much higher on questions you've seen before than on new ones, the dashboard tells you."],
+      ["Estimated readiness", "An estimated score on the 1,000-point scale, weighted by exam domain and favouring your recent answers, against the passing line."],
       ["Domain and topic analytics", "Mastery by exam domain and topic, accuracy trend, pace and a study streak, with your weakest topics first."],
+      ["A big question bank", "500 original questions per exam, so you keep meeting new scenarios instead of repeating the same few."],
     ],
   },
   {
@@ -56,10 +55,9 @@ const GROUPS: { id: string; eyebrow: string; title: string; items: [string, stri
     ],
   },
   {
-    id: "mobile", eyebrow: "Anywhere", title: "One account, one pass, every device",
+    id: "anywhere", eyebrow: "Anywhere", title: "One account, one pass, every device",
     items: [
-      ["Install it like an app", "Add Certificate Exam Pro to your phone's home screen (or install it on your computer). It opens full screen like an app."],
-      ["Same pass everywhere", "Your pass works on the web and the installed app. No separate app purchase."],
+      ["Works in any browser", "Laptop, phone or tablet, with the same account and the same pass."],
       ["Progress follows you", "Every answer is saved as you go, so you can start on your laptop and finish on your phone."],
     ],
   },
@@ -68,8 +66,8 @@ const GROUPS: { id: string; eyebrow: string; title: string; items: [string, stri
 const FAQ: [string, string][] = [
   ["Is the AI tutor included in the pass?", `Yes. Mia is included with every pass, up to ${AI_DAILY.paid} messages a day, and on the free trial (${AI_DAILY.free} a day).`],
   ["Can I retake only the questions I got wrong?", "Yes. Missed questions go into your review queue automatically and come back on a spaced schedule, answered fresh. You can also flag any question to practise it again."],
-  ["How do I know my practice scores are real?", "Practice serves unseen questions first, and the readiness check is based on first attempts only, so it reflects understanding rather than memory."],
-  ["Is there a mobile app?", "You can install the site on your phone's home screen from your browser. It uses the same account and the same pass."],
+  ["How do I know my practice scores are real?", "Practice serves questions you haven't seen first, from a bank of 500 per exam, so your score reflects understanding rather than memory."],
+  ["Can I study on my phone?", "Yes. The site works in any mobile browser with the same account and pass."],
 ];
 
 export default function Features() {

@@ -54,7 +54,7 @@ export const ARTICLES: Guide[] = [
     kind: "guide", slug: "how-to-know-you-are-ready-for-aws-exam", exams: ["saa-c03", "clf-c02", "aif-c01"],
     title: "How Do I Know I'm Ready for My AWS Exam?",
     metaTitle: "How to Know You're Ready for an AWS Exam (SAA-C03, CLF-C02, AIF-C01)",
-    description: "Why practice exam scores can mislead, and four checks that show you're ready for an AWS certification exam: first-attempt scores, every domain, timing and explaining wrong answers.",
+    description: "Why practice exam scores can mislead, and four checks that show you're ready for an AWS certification exam: scores on fresh questions, every domain, timing and explaining wrong answers.",
     published: P, reviewed: P,
     answer: "You're likely ready when you score 80% or more on questions you're seeing for the first time, in every exam domain, within the time limit, and you can explain why each wrong option is wrong. Retaking the same practice tests inflates scores because you start remembering answers, so judge yourself on fresh questions.",
     sections: [
@@ -64,12 +64,12 @@ export const ARTICLES: Guide[] = [
         "Untimed practice hides pacing problems; long scenarios on SAA-C03 take real time to read.",
       ] },
       { id: "checks", heading: "Four checks before you book", table: { head: ["Check", "Target", "Why"], rows: [
-        ["First-attempt score", "80%+ on questions you haven't seen", "Measures understanding, not memory"],
+        ["Fresh questions", "80%+ on questions you haven't memorized", "Measures understanding, not memory"],
         ["Every domain", "No domain below 70%", "The real exam samples every domain by weight"],
         ["Timing", "A full mock exam finished with time to review", "Running out of time costs easy points"],
         ["Explain the wrong options", "You can say why each distractor fails", "Real questions reword the same ideas"],
       ] } },
-      { id: "how", heading: "How Certificate Exam Pro measures readiness", lead: "Your dashboard shows a readiness check for each exam built from these signals: your first-attempt accuracy, your weakest domain, how many questions you've seen, and your latest timed mock exam. It tells you what's holding the estimate down, and it's never a pass guarantee." },
+      { id: "how", heading: "How Certificate Exam Pro helps", lead: "Each exam has 500 original questions, and practice serves the ones you haven't seen first, so you keep meeting new scenarios. Your dashboard shows an estimated readiness score by exam domain, and timed mock exams show how you do under real conditions. It's a study signal, never a pass guarantee." },
     ],
     rules: [],
     faq: [

@@ -191,7 +191,7 @@ export default async function ExamGuide({ params }: PageProps<"/exams/[exam]">) 
           <li>✓ A detailed explanation for every option, right and wrong</li>
           <li>✓ Mia, an AI tutor that breaks questions down without giving the answer away</li>
           <li>✓ Timed {exam.examQuestions}-question mock exams with an estimated score</li>
-          <li>✓ Retry only your mistakes, unseen questions first, and a readiness check built on first-attempt scores</li>
+          <li>✓ Retry only your mistakes, with unseen questions served first</li>
           <li>✓ Questions checked against AWS service changes, with a public <Link href="/changelog" className="font-bold text-brand hover:underline">changelog</Link></li>
         </ul>
         <p className="mt-4 text-[15px]"><b>${PRICE}</b> for {PASS_DAYS} days. One payment, no auto-renewal. <Link href="/pricing" className="font-bold text-brand hover:underline">See pricing</Link></p>

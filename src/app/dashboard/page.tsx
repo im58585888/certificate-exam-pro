@@ -6,8 +6,7 @@ import { AccuracyLine, DailyColumns, DomainBars, type DayPoint } from "@/compone
 import { getUser } from "@/lib/auth";
 import { getAccess } from "@/lib/billing";
 import { query } from "@/lib/db";
-import { InstallApp } from "@/components/InstallApp";
-import { attemptsFor, dueCount, masteryBy, readiness, readinessCheck, reviewQueue, weakestTopics, type ReadinessCheck } from "@/lib/engine";
+import { attemptsFor, dueCount, masteryBy, readiness, reviewQueue, weakestTopics } from "@/lib/engine";
 import { DEFAULT_EXAM, EXAM_LIST, getExam } from "@/lib/exams";
 import { flagsFor } from "@/lib/flags";
 import { ensureBank, questionsFor } from "@/lib/questions";
@@ -102,14 +101,6 @@ export default async function Dashboard({ searchParams }: PageProps<"/dashboard"
     [user.id, EXAM],
   );
   const passRatio = (exam.passingScaled - 100) / 900;
-  const mockRows = await query<{ ok: number; total: number; finished_at: Date }>(
-    `select count(a.id) filter (where a.correct)::int as ok, cardinality(s.question_ids) as total, s.finished_at
-     from quiz_sessions s left join attempts a on a.session_id = s.id
-     where s.user_id = $1 and s.exam = $2 and s.mode = 'exam' and s.finished_at is not null
-     group by s.id order by s.finished_at desc limit 1`,
-    [user.id, EXAM],
-  );
-  const check = readinessCheck(attempts, EXAM, mockRows[0] ? { correct: mockRows[0].ok, total: mockRows[0].total, at: new Date(mockRows[0].finished_at) } : null);
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-10">
@@ -207,9 +198,6 @@ export default async function Dashboard({ searchParams }: PageProps<"/dashboard"
             </div>
           </div>
 
-          <ReadinessCard check={check} exam={EXAM} />
-          <InstallApp />
-
           <div className="mt-4 grid gap-4 lg:grid-cols-2">
             <section className="card p-6">
               <h2 className="font-extrabold">Mastery by exam domain</h2>
@@ -287,46 +275,3 @@ export default async function Dashboard({ searchParams }: PageProps<"/dashboard"
   );
 }
 
-const VERDICT: Record<ReadinessCheck["verdict"], { title: string; tone: string; body: string }> = {
-  "too-early": { title: "Too early to tell", tone: "bg-surface-2 text-soft", body: "Answer at least 20 new questions and this check will start reading your readiness." },
-  "not-yet": { title: "Not ready yet", tone: "bg-bad-soft text-bad", body: "Keep practising new questions and work on the checks below before you book." },
-  close: { title: "Getting close", tone: "bg-warn-soft text-warn", body: "You're passing most checks. Close the gaps below, then take a fresh timed mock exam." },
-  ready: { title: "Likely ready", tone: "bg-ok-soft text-ok", body: "You pass every check. Book your exam while it's fresh, and keep a light review going." },
-};
-
-function ReadinessCard({ check, exam }: { check: ReadinessCheck; exam: string }) {
-  const v = VERDICT[check.verdict];
-  const icon = { pass: "✓", fail: "✗", unknown: "…" } as const;
-  const tone = { pass: "text-ok", fail: "text-bad", unknown: "text-muted" } as const;
-  return (
-    <section className="card mt-4 p-6" aria-labelledby="ready-check">
-      <div className="flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <h2 id="ready-check" className="font-extrabold">Readiness check</h2>
-          <p className="text-sm text-muted">Judged on questions you&apos;re seeing for the first time, because repeat scores measure memory.</p>
-        </div>
-        <span className={`pill px-3 py-1 text-sm ${v.tone}`}>{v.title}</span>
-      </div>
-      <p className="mt-3 text-[15px]">{v.body}</p>
-      <ul className="mt-4 grid gap-2 sm:grid-cols-2">
-        {check.checks.map((c) => (
-          <li key={c.key} className="rounded-xl border border-line px-4 py-3">
-            <p className="font-bold"><span className={`mr-1.5 ${tone[c.state]}`} aria-label={c.state}>{icon[c.state]}</span>{c.label}</p>
-            <p className="mt-0.5 text-sm text-soft">{c.detail}</p>
-          </li>
-        ))}
-      </ul>
-      {check.gap !== null && check.gap >= 15 && (
-        <p className="mt-4 rounded-xl bg-warn-soft px-4 py-3 text-sm text-warn">
-          <b>Memorization gap:</b> you score {check.gap} points higher on questions you&apos;ve seen before than on new ones. That gap is memory, not understanding, so judge yourself on new questions.
-        </p>
-      )}
-      <div className="mt-4 flex flex-wrap gap-2 text-sm">
-        <Link href={`/practice/${exam}`} className="btn-ghost !px-3 !py-1.5 !text-xs">Practise unseen questions</Link>
-        {check.weakestDomain && <Link href={`/practice/${exam}?domain=${check.weakestDomain.id}`} className="btn-ghost !px-3 !py-1.5 !text-xs">Work on {check.weakestDomain.name}</Link>}
-        <Link href="/guides/how-to-know-you-are-ready-for-aws-exam" className="btn-ghost !px-3 !py-1.5 !text-xs">How this works</Link>
-      </div>
-      <p className="mt-3 text-xs text-muted">A study signal, not a prediction of your official score.</p>
-    </section>
-  );
-}
