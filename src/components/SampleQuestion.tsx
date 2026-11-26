@@ -1,6 +1,8 @@
 import { DOMAIN_SHORT, EXAMS } from "@/lib/exams";
+import { solutionDiagram } from "@/lib/diagrams";
 import { statusNotesFor } from "@/lib/lifecycle";
 import type { Question } from "@/lib/questions";
+import { ArchFigure } from "./ArchDiagram";
 import { StatusNotes } from "./StatusNotes";
 
 // A public practice question with its full explanation behind a "Show answer" toggle. The answer is in the HTML, so
@@ -8,6 +10,7 @@ import { StatusNotes } from "./StatusNotes";
 export function SampleQuestion({ q, n, exam, showExam = false }: { q: Question; n: number; exam: string; showExam?: boolean }) {
   const right = q.options.filter((o) => o.correct);
   const notes = statusNotesFor(q, exam);
+  const diagram = solutionDiagram(q);
   return (
     <li className="card p-5">
       <p className="flex flex-wrap items-center gap-2 text-xs font-bold text-muted">
@@ -29,6 +32,12 @@ export function SampleQuestion({ q, n, exam, showExam = false }: { q: Question; 
           <p className="font-extrabold text-ok">Answer: {right.map((o) => `${o.key}. ${o.text}`).join("; ")}</p>
           <p className="mt-1.5 text-[15px]">{q.explanation.answer}</p>
         </div>
+        {diagram && (
+          <div className="mt-3">
+            <p className="mb-2 text-sm font-bold">Picture the solution</p>
+            <ArchFigure diagram={diagram} />
+          </div>
+        )}
         <ul className="mt-3 grid gap-2 text-[15px]">
           {q.options.filter((o) => !o.correct).map((o) => (
             <li key={o.key}><b>Why not {o.key}?</b> <span className="text-soft">{o.why}</span></li>

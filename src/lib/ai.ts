@@ -339,6 +339,45 @@ export async function writeCard(exam: string, topic: string, questions: Question
   return content;
 }
 
+// ---------- Session review ("Mia reviewed your results") ----------
+
+const CoachSchema = z.object({
+  summary: z.string().describe("2 sentences: what the results show, naming the specific weak spots, encouraging but honest"),
+  tips: z.array(z.string()).describe("2-3 specific, actionable suggestions to raise the score, each one sentence, tied to the topics and patterns in these results"),
+});
+export type CoachNote = z.infer<typeof CoachSchema>;
+
+export interface SessionReview {
+  sessionId: string;
+  examName: string;
+  mode: string;
+  score: string;
+  avgSeconds: number;
+  domains: string[];
+  missed: { topic: string; concept: string }[];
+}
+
+const COACH_RULES = `The learner just finished a practice session. Review their results like a tutor would: say what the results show and what to deep dive, then give 2-3 concrete suggestions to raise their score (for example a misunderstanding the missed concepts share, a keyword habit, pacing, or which comparison to study). Speak to them directly as "you". Don't list every topic back; pick out patterns. No markdown.`;
+
+const reviewHash = (r: SessionReview) => sha256(JSON.stringify([PROMPT_VERSION, r.score, r.missed])).slice(0, 16);
+
+export async function cachedCoach(r: SessionReview): Promise<CoachNote | null> {
+  return cached<CoachNote>(`session:${r.sessionId}`, "coach", reviewHash(r));
+}
+
+export async function writeCoach(r: SessionReview): Promise<CoachNote> {
+  const input = [
+    `Exam: ${r.examName}. Session: ${r.mode}. Score: ${r.score}. Average time per question: ${r.avgSeconds}s.`,
+    `By domain: ${r.domains.join("; ")}`,
+    r.missed.length ? `Missed questions (topic: core concept):\n${r.missed.map((m) => `- ${m.topic}: ${m.concept}`).join("\n")}` : "They missed nothing.",
+  ].join("\n");
+  const note = mock
+    ? { summary: "Sample review: add ANTHROPIC_API_KEY to .env.local to get Mia's real review of your results.", tips: ["A first specific suggestion.", "A second specific suggestion."] }
+    : await parse(CoachSchema, COACH_RULES, input, 2000);
+  await store(`session:${r.sessionId}`, "coach", reviewHash(r), note);
+  return note;
+}
+
 // ---------- Local development stand-ins (no API key) ----------
 
 const MOCK_TEXT = `## What it's really asking

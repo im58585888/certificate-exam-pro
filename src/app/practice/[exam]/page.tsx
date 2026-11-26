@@ -57,8 +57,8 @@ export default async function PracticeHub({ params, searchParams }: PageProps<"/
   const cellMap = new Map<string, ScopeCell>();
   for (const q of questions) {
     const area = areaOf(slug, q.topic);
-    const key = `${q.domain}|${area}`;
-    const c = cellMap.get(key) ?? { domain: q.domain, area, total: 0, unseen: 0 };
+    const key = `${q.domain}|${area}|${q.difficulty}`;
+    const c = cellMap.get(key) ?? { domain: q.domain, area, difficulty: q.difficulty, total: 0, unseen: 0 };
     c.total++;
     if (!seen.has(q.id)) c.unseen++;
     cellMap.set(key, c);
@@ -99,15 +99,9 @@ export default async function PracticeHub({ params, searchParams }: PageProps<"/
           </ModeCard>
         )}
 
-        <ModeCard title="Practice set" body="Fresh questions you haven't seen yet, with instant feedback. Choose any mix of domains, narrow to specific topics or a difficulty, or do a Quick 5 on a short break." locked={!access.active}>
+        <ModeCard title="Practice set" body="Fresh questions you haven't seen yet, with instant feedback. Choose any mix of domains, narrow to specific topics or difficulty levels, or do a Quick 5 on a short break." locked={!access.active}>
           {access.active ? (
             <ScopePicker exam={slug} mode="practice" domains={domainChips} areas={areaList} cells={cells} counts={[10, 20, 30, 5]} submitLabel="Start" initialDomains={initialDomains} difficulty />
-          ) : unlock}
-        </ModeCard>
-
-        <ModeCard title="Strengthen weak areas" body={`Built from your history: due mistakes, your flagged topics, new questions on your weakest topics, and a mixed set to catch regressions.${attempts.length < 5 && !liveFlags && access.active ? " Answer a few more questions (or flag some) first so we can find your weak spots." : ""}`} locked={!access.active}>
-          {access.active ? (
-            <ScopePicker exam={slug} mode="reinforce" domains={domainChips} areas={areaList} cells={cells} counts={[10, 20]} submitLabel="Start targeted session" disabled={attempts.length < 5 && !liveFlags} initialDomains={initialDomains} />
           ) : unlock}
         </ModeCard>
 

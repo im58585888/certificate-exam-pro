@@ -12,7 +12,7 @@ import { isArea } from "@/lib/areas";
 import { answeredCount, attemptsFor, selectQuestions, type Mode, type Scope } from "@/lib/engine";
 import { flagPromptDue, flagsFor, keepFlag, setFlag } from "@/lib/flags";
 import { FREE_TRIAL_QUESTIONS, getExam, TRIAL_NETWORK_CAP, PASS_DAYS, PASS_PRICE_CENTS, type DomainId } from "@/lib/exams";
-import { ensureBank, feedbackFor, getQuestion, grade, type Feedback } from "@/lib/questions";
+import { ensureBank, feedbackFor, getQuestion, grade, type Feedback, type Question } from "@/lib/questions";
 import { isExpired, loadOwnedSession } from "@/lib/quiz";
 import { REPORT_REASONS } from "@/lib/reports";
 import { recordConversion } from "@/lib/traffic";
@@ -158,11 +158,11 @@ export async function startQuizAction(form: FormData) {
   if (!exam || !(mode in COUNTS)) redirect("/practice");
   // Scope: checked domains and study areas. All or none checked both mean "everything".
   const domains = form.getAll("domains").map(String).filter((v): v is DomainId => exam.domains.some((d) => d.id === v));
-  const diff = String(form.get("difficulty") ?? "");
+  const levels = [...new Set(form.getAll("difficulty").map(String))].filter((v): v is Question["difficulty"] => v === "easy" || v === "medium" || v === "hard");
   const scope: Scope = {
     domains: [...new Set(domains)],
     areas: [...new Set(form.getAll("areas").map(String).filter((a) => isArea(examSlug, a)))],
-    ...(diff === "easy" || diff === "medium" || diff === "hard" ? { difficulty: diff } : {}),
+    ...(levels.length && levels.length < 3 ? { difficulty: levels } : {}),
   };
   const requested = Number(form.get("count")) || COUNTS[mode][0];
   let count = COUNTS[mode].includes(requested) ? requested : COUNTS[mode][0];

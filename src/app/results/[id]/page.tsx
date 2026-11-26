@@ -5,6 +5,8 @@ import { SessionFlagButton } from "@/components/FlagButton";
 import { ReportQuestion } from "@/components/ReportQuestion";
 import { MiaPose } from "@/components/Mia";
 import { Tutor } from "@/components/Tutor";
+import { MiaReview } from "@/components/MiaReview";
+import { deepDive } from "@/lib/deepdive";
 import { DOMAIN_LABEL, ExplanationPanel, OptionList, QuestionMeta, QuestionText } from "@/components/QuestionParts";
 import { aiAvailable } from "@/lib/ai";
 import { getAccess, paymentsMode } from "@/lib/billing";
@@ -47,6 +49,9 @@ export default async function ResultsPage({ params, searchParams }: PageProps<"/
   const sessionTopics = new Set(answered.map((x) => x.q.topic));
   const sheet = (await studySheet(owner, session.exam)).filter((t) => sessionTopics.has(t.topic));
   const newTopics = sheet.filter((t) => t.firstSessionId === id).length;
+  const missedQs = answered.filter((x) => !x.a!.correct).map((x) => x.q);
+  if (session.mode === "exam") missedQs.push(...items.filter((x) => !x.a).map((x) => x.q));
+  const dive = deepDive(missedQs);
 
   const ordered = [...items].sort((x, y) => Number(x.a?.correct ?? false) - Number(y.a?.correct ?? false));
 
@@ -89,18 +94,51 @@ export default async function ResultsPage({ params, searchParams }: PageProps<"/
         </div>
       )}
 
-      {sheet.length > 0 && (
-        <div className="card mt-8 flex flex-wrap items-center justify-between gap-4 p-5">
-          <MiaPose pose="reviewing" height={72} />
-          <div className="min-w-0 flex-1">
-            <p className="text-xs font-bold text-brand">Mia reviewed your session</p>
-            <h2 className="font-extrabold">{access.active ? "Added to your study sheet" : "🔒 Ready for your study sheet"}</h2>
-            <p className="mt-1 text-sm text-soft">
-              {newTopics ? `${newTopics} new concept${newTopics === 1 ? "" : "s"}` : "No new concepts"}{sheet.length > newTopics ? `, ${sheet.length - newTopics} updated` : ""}: {sheet.slice(0, 5).map((t) => t.topic).join(", ")}{sheet.length > 5 ? "…" : ""}
-            </p>
+      {answered.length > 0 && (
+        <section className="card mt-8 p-5" aria-labelledby="mia-review">
+          <div className="flex gap-4">
+            <MiaPose pose="reviewing" height={72} className="shrink-0" />
+            <div className="min-w-0 flex-1">
+              <p className="text-xs font-bold text-brand">Your AI tutor</p>
+              <h2 id="mia-review" className="font-extrabold">Mia reviewed your results</h2>
+              {aiAvailable && <MiaReview sessionId={id} />}
+            </div>
           </div>
-          <Link className="btn-primary" href={`/study/${session.exam}?back=${encodeURIComponent(`/results/${id}`)}`}>{access.active ? "Open study sheet" : "See your study sheet"}</Link>
-        </div>
+
+          {dive.length > 0 ? (
+            <div className="mt-5 border-t border-line pt-4">
+              <h3 className="font-extrabold">Deep dive these topics</h3>
+              <p className="text-sm text-soft">What you missed, most missed first, with what to read for each.</p>
+              <ul className="mt-3 grid gap-3">
+                {dive.map((t) => (
+                  <li key={t.topic} className="rounded-xl border border-line bg-surface px-4 py-3">
+                    <p className="font-bold">{t.topic} <span className="text-sm font-normal text-muted">· missed {t.missed}</span></p>
+                    <p className="mt-1 flex flex-wrap gap-x-3 gap-y-1 text-sm">
+                      {t.pages.map((p) => (
+                        <Link key={p.href} href={p.href} className="font-semibold text-brand hover:underline">{p.kind === "service" ? `${p.label} cheat sheet` : p.label}</Link>
+                      ))}
+                      {t.docs.map((d) => (
+                        <a key={d.url} href={d.url} target="_blank" rel="noopener noreferrer" className="text-soft hover:text-ink hover:underline">AWS docs: {d.title} ↗</a>
+                      ))}
+                    </p>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ) : (
+            <p className="mt-4 border-t border-line pt-4 text-sm text-soft">You didn&apos;t miss anything this time. Your study sheet shows your weakest topics overall.</p>
+          )}
+
+          {sheet.length > 0 && (
+            <div className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-xl bg-surface-2 px-4 py-3">
+              <p className="min-w-0 flex-1 text-sm text-soft">
+                <b className="text-ink">{access.active ? "Added to your study sheet" : "🔒 Ready for your study sheet"}:</b>{" "}
+                {newTopics ? `${newTopics} new concept${newTopics === 1 ? "" : "s"}` : "no new concepts"}{sheet.length > newTopics ? `, ${sheet.length - newTopics} updated` : ""}. Ask Mia to explain any of them further.
+              </p>
+              <Link className="btn-primary" href={`/study/${session.exam}?back=${encodeURIComponent(`/results/${id}`)}`}>{access.active ? "Open study sheet" : "See your study sheet"}</Link>
+            </div>
+          )}
+        </section>
       )}
 
       {!access.active ? (

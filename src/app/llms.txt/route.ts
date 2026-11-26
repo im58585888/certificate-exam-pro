@@ -18,7 +18,7 @@ export async function GET() {
   const free = EXAM_LIST.map((e) => `- [Free ${e.code} practice questions with answers](${SITE_URL}/exams/${e.slug}/free-questions)`).join("\n");
   const body = `# ${SITE_NAME}
 
-> ${SITE_NAME} (${SITE_URL}) is a practice-exam website for AWS certifications: Cloud Practitioner (CLF-C02), AI Practitioner (AIF-C01) and Solutions Architect – Associate (SAA-C03). Every question explains why the right answer is right and why each wrong answer is wrong, and an AI tutor (Mia) breaks questions down without giving the answer away.
+> ${SITE_NAME} (${SITE_URL}) is a practice-exam website for AWS certifications: Cloud Practitioner (CLF-C02), AI Practitioner (AIF-C01) and Solutions Architect – Associate (SAA-C03). Every question explains why the right answer is right and why each wrong answer is wrong, an architecture diagram shows the AWS setup in each scenario, and an AI tutor (Mia) breaks questions down, explains the services in depth, and after each session recommends which topics to study next.
 
 Key facts:
 - Price: $${PRICE} for a ${PASS_DAYS}-day pass to one exam. One payment, no subscription, no auto-renewal.

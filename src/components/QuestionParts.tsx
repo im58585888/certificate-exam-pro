@@ -2,6 +2,7 @@ import { DOMAIN_SHORT } from "@/lib/exams";
 import type { Feedback, PublicQuestion } from "@/lib/questions";
 import { fmtMonthYear } from "@/lib/changelog";
 import { StatusNotes } from "./StatusNotes";
+import { ArchFigure } from "./ArchDiagram";
 
 export const DOMAIN_LABEL = DOMAIN_SHORT;
 
@@ -97,6 +98,12 @@ export function ExplanationPanel({ feedback }: { feedback: Feedback }) {
         <h3 className="eyebrow">Why the answer is correct</h3>
         <p className="mt-1.5 leading-relaxed">{e.answer}</p>
       </section>
+      {feedback.diagram && (
+        <section>
+          <h3 className="eyebrow">Picture the solution</h3>
+          <div className="mt-1.5"><ArchFigure diagram={feedback.diagram} /></div>
+        </section>
+      )}
       <section>
         <h3 className="eyebrow">Core concept</h3>
         <p className="mt-1.5 leading-relaxed">{e.concept}</p>

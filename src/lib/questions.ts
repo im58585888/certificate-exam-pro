@@ -6,6 +6,8 @@ import { query } from "./db";
 import type { DomainId } from "./exams";
 import { questionUpdated } from "./changelog";
 import { statusNotesFor, type StatusNote } from "./lifecycle";
+import type { ArchDiagram } from "./arch";
+import { solutionDiagram } from "./diagrams";
 
 export interface Option {
   key: string;
@@ -57,6 +59,8 @@ export interface Feedback {
   id?: string;
   /** Dated AWS lifecycle notes for services the question mentions. */
   status?: StatusNote[];
+  /** Architecture of the solved scenario, when the question is about how things connect. */
+  diagram?: ArchDiagram | null;
   /** Date the question was last rewritten (from the public changelog). */
   updated?: string;
 }
@@ -155,5 +159,6 @@ export function feedbackFor(q: Question, picks: string[]): Feedback {
     id: q.id,
     status: statusNotesFor(q, examOf(q.id)),
     updated: questionUpdated(q.id),
+    diagram: solutionDiagram(q),
   };
 }

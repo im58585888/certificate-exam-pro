@@ -86,7 +86,7 @@ export default async function Dashboard({ searchParams }: PageProps<"/dashboard"
 
   const domainM = new Map(masteryBy(attempts, bank, "domain").map((m) => [m.key, m]));
   const domainRows = exam.domains.map((d) => ({ id: d.id, label: d.short, weight: d.weight, score: domainM.get(d.id)?.score ?? null, attempts: domainM.get(d.id)?.attempts ?? 0 }));
-  // Same order "Strengthen weak areas" uses: flagged topics first, then lowest mastery.
+  // Weakest-first order: flagged topics first, then lowest mastery.
   const topicMastery = new Map(masteryBy(attempts, bank, "topic").map((m) => [m.key, m]));
   const topicOf = new Map(bank.map((q) => [q.id, q.topic]));
   const flagsByTopic = new Map<string, number>();
@@ -206,7 +206,7 @@ export default async function Dashboard({ searchParams }: PageProps<"/dashboard"
             </section>
             <section className="card p-6">
               <h2 className="font-extrabold">Weakest topics</h2>
-              <p className="mb-4 text-sm text-muted">Flagged topics first, then lowest mastery. &ldquo;Strengthen weak areas&rdquo; sessions pull from the top of this list.</p>
+              <p className="mb-4 text-sm text-muted">Flagged topics first, then lowest mastery. Practise them with a practice set: open Pick topics.</p>
               <table className="w-full text-left text-sm">
                 <thead className="text-xs text-muted"><tr><th className="pb-2 font-semibold">Topic</th><th className="pb-2 font-semibold">Mastery</th><th className="pb-2 text-right font-semibold">Flagged</th><th className="pb-2 text-right font-semibold">Answered</th></tr></thead>
                 <tbody>

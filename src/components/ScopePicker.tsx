@@ -6,6 +6,7 @@ import { startQuizAction } from "@/app/actions";
 export interface ScopeCell {
   domain: string;
   area: string;
+  difficulty?: string;
   total: number;
   unseen: number;
 }
@@ -26,6 +27,8 @@ interface Props {
   difficulty?: boolean;
 }
 
+const LEVELS = [["easy", "Easy"], ["medium", "Medium"], ["hard", "Hard"]] as const;
+
 const chip = (on: boolean) =>
   `rounded-full border px-3 py-1.5 text-sm font-semibold transition ${on ? "border-brand bg-brand-soft text-brand" : "border-line bg-surface text-muted hover:text-ink"}`;
 
@@ -39,6 +42,7 @@ export function ScopePicker({ exam, mode, domains, areas, cells, counts, submitL
   const [picked, setPicked] = useState<string[]>(() => (preset?.length ? preset : domains.map((d) => d.id)));
   const [pickedAreas, setPickedAreas] = useState<string[]>([]); // empty = all areas
   const [showAreas, setShowAreas] = useState(false);
+  const [levels, setLevels] = useState<string[]>([]); // empty = any difficulty
 
   // Restore after mount (localStorage isn't available during server rendering).
   useEffect(() => {
@@ -80,7 +84,8 @@ export function ScopePicker({ exam, mode, domains, areas, cells, counts, submitL
     for (const c of inDomains) m.set(c.area, (m.get(c.area) ?? 0) + c.total);
     return m;
   }, [inDomains]);
-  const pool = inDomains.filter((c) => !pickedAreas.length || pickedAreas.includes(c.area));
+  const pool = inDomains.filter((c) => (!pickedAreas.length || pickedAreas.includes(c.area)) && (!levels.length || !c.difficulty || levels.includes(c.difficulty)));
+  const toggleLevel = (id: string) => setLevels((l) => (l.includes(id) ? l.filter((x) => x !== id) : [...l, id]));
   const total = pool.reduce((s, c) => s + c.total, 0);
   const unseen = pool.reduce((s, c) => s + c.unseen, 0);
   const allDomains = picked.length === domains.length;
@@ -91,6 +96,7 @@ export function ScopePicker({ exam, mode, domains, areas, cells, counts, submitL
       <input type="hidden" name="mode" value={mode} />
       {!allDomains && picked.map((d) => <input key={d} type="hidden" name="domains" value={d} />)}
       {pickedAreas.map((a) => <input key={a} type="hidden" name="areas" value={a} />)}
+      {levels.map((l) => <input key={l} type="hidden" name="difficulty" value={l} />)}
 
       <div className="flex flex-wrap gap-2" role="group" aria-label="Exam domains">
         {domains.map((d) => (
@@ -118,6 +124,18 @@ export function ScopePicker({ exam, mode, domains, areas, cells, counts, submitL
         )}
       </div>
 
+      {difficulty && (
+        <div className="flex flex-wrap items-center gap-2" role="group" aria-label="Difficulty">
+          <span className="text-sm font-bold text-muted">Difficulty:</span>
+          <button type="button" aria-pressed={!levels.length} onClick={() => setLevels([])} className={chip(!levels.length)}>Any</button>
+          {LEVELS.map(([id, label]) => (
+            <button key={id} type="button" aria-pressed={levels.includes(id)} onClick={() => toggleLevel(id)} className={chip(levels.includes(id))}>
+              {levels.includes(id) ? "✓ " : ""}{label}
+            </button>
+          ))}
+        </div>
+      )}
+
       <p className="text-sm text-muted" aria-live="polite">
         {total ? <><b className="text-ink">{total}</b> questions in scope · {unseen} you haven&apos;t seen</> : "No questions in this scope. Pick more topics or domains."}
       </p>
@@ -126,14 +144,6 @@ export function ScopePicker({ exam, mode, domains, areas, cells, counts, submitL
         <select name="count" className="input !w-auto" aria-label="Number of questions">
           {counts.map((n) => <option key={n} value={n}>{n === 5 ? "Quick 5" : `${n} questions`}</option>)}
         </select>
-        {difficulty && (
-          <select name="difficulty" className="input !w-auto" aria-label="Difficulty" defaultValue="">
-            <option value="">Any difficulty</option>
-            <option value="easy">Easy</option>
-            <option value="medium">Medium</option>
-            <option value="hard">Hard</option>
-          </select>
-        )}
         <button className="btn-primary flex-1" disabled={disabled || !total}>{submitLabel}</button>
       </div>
     </form>

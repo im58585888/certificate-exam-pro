@@ -196,15 +196,15 @@ function blueprintPick(pool: Question[], n: number, examSlug: string, lastSeen: 
 export interface Scope {
   domains: DomainId[];
   areas: string[];
-  /** Optional difficulty filter for practice sets. */
-  difficulty?: Question["difficulty"];
+  /** Optional difficulty filter for practice sets: any of these levels. Empty or missing means all. */
+  difficulty?: Question["difficulty"][];
 }
 
 export const FULL_SCOPE: Scope = { domains: [], areas: [] };
 
 export function inScope(q: Question, scope: Scope, exam: string): boolean {
   return (!scope.domains.length || scope.domains.includes(q.domain)) && (!scope.areas.length || scope.areas.includes(areaOf(exam, q.topic)))
-    && (!scope.difficulty || q.difficulty === scope.difficulty);
+    && (!scope.difficulty?.length || scope.difficulty.includes(q.difficulty));
 }
 
 export interface SelectOptions {
