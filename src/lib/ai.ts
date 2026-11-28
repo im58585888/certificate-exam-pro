@@ -378,38 +378,58 @@ export async function writeCoach(r: SessionReview): Promise<CoachNote> {
   return note;
 }
 
-// ---------- Study sheet diagnosis ("Your gaps") ----------
+// ---------- Study sheet plan (Mia's take and mistakes by AWS service) ----------
 
-export interface GapInput {
+const PlanSchema = z.object({
+  summary: z.string().describe("1-2 short sentences to the learner: the pattern behind their mistakes and that fixing the focus services will raise their score most. Plain words, no lists"),
+  focus: z.array(z.object({
+    service: z.string().describe("An AWS service name exactly as used in groups"),
+    why: z.string().describe("What to learn about it, 4-8 words, e.g. 'Key policies, customer managed keys, rotation'"),
+  })).describe("The 3 services (fewer if there are fewer groups) to work on first: most points to gain"),
+  groups: z.array(z.object({
+    service: z.string().describe("The official AWS service name, e.g. 'AWS KMS', 'Amazon S3', 'AWS CloudHSM'"),
+    ids: z.array(z.string()).describe("Ids of the missed questions about this service"),
+  })).describe("Every missed question id exactly once, grouped by the AWS service it really tests"),
+});
+export type StudyPlan = z.infer<typeof PlanSchema>;
+
+export interface PlanInput {
   ownerKey: string;
   exam: string;
   examName: string;
-  mistakeIds: string[];
-  services: string[];
-  mixups: string[];
-  concepts: string[];
+  mistakes: { id: string; topic: string; question: string; you: string; answer: string }[];
 }
 
-const GAPS_RULES = `The learner opened their study sheet. Below is what their open mistakes show: the AWS services involved, services they mix up, and the core concepts they missed. Diagnose the pattern like a tutor: in "summary", 2-3 sentences naming the specific services and the underlying misunderstanding that links several mistakes (for example confusing push and pull messaging, or not knowing when a managed option beats a self-built one). In "tips", 2-3 concrete study steps in priority order, each one sentence (what to compare, which rule to learn, which kind of question to practise). Speak to them as "you". No markdown.`;
+const PLAN_RULES = `You are reviewing every question the learner currently has wrong on their study sheet. Do two things.
+1. Group the questions by the AWS service each one really tests: the service whose behaviour or setting decides the answer, not just a service the scenario mentions. Encryption questions belong to the service being encrypted or to the key service, whichever the answer is about (enforcing SSE-KMS on a bucket is Amazon S3; key policies and rotation are AWS KMS; a dedicated single-tenant HSM is AWS CloudHSM, its own service). Use official names ("Amazon S3", "AWS KMS"). When a question tests no particular service (a pricing model, an ML concept), group it under a short concept name such as "Prompt engineering" or "Pricing models". Every id appears exactly once.
+2. Write the learner's focus: the 3 groups where studying gains the most points (most misses, and misses that share one misunderstanding), and a 1-2 sentence summary of the pattern. Speak to them as "you". No markdown.`;
 
-const gapsHash = (g: GapInput) => sha256(JSON.stringify([PROMPT_VERSION, g.mistakeIds])).slice(0, 16);
+const planHash = (p: PlanInput) => sha256(JSON.stringify([PROMPT_VERSION, 1, p.mistakes.map((m) => m.id)])).slice(0, 16);
+const planKey = (p: PlanInput) => `plan:${p.ownerKey}:${p.exam}`;
 
-export async function cachedGaps(g: GapInput): Promise<CoachNote | null> {
-  return cached<CoachNote>(`gaps:${g.ownerKey}:${g.exam}`, "gaps", gapsHash(g));
+export async function cachedPlan(p: PlanInput): Promise<StudyPlan | null> {
+  return cached<StudyPlan>(planKey(p), "plan", planHash(p));
 }
 
-export async function writeGaps(g: GapInput): Promise<CoachNote> {
+export async function writePlan(p: PlanInput): Promise<StudyPlan> {
   const input = [
-    `Exam: ${g.examName}. Open mistakes: ${g.mistakeIds.length}.`,
-    `Services in the missed questions (most missed first): ${g.services.join("; ") || "none named"}`,
-    `Services they picked instead of the right one: ${g.mixups.join("; ") || "none"}`,
-    `Core concepts behind the missed questions:\n${g.concepts.map((c) => `- ${c}`).join("\n")}`,
+    `Exam: ${p.examName}. Questions the learner has wrong: ${p.mistakes.length}.`,
+    ...p.mistakes.map((m) => `[${m.id}] (${m.topic}) ${m.question} | They chose: ${m.you} | Correct: ${m.answer}`),
   ].join("\n");
-  const note = mock
-    ? { summary: "Sample diagnosis: add ANTHROPIC_API_KEY to .env.local to get Mia's real read on your gaps.", tips: ["A first study step.", "A second study step."] }
-    : await parse(CoachSchema, GAPS_RULES, input, 2000);
-  await store(`gaps:${g.ownerKey}:${g.exam}`, "gaps", gapsHash(g), note);
-  return note;
+  const plan = mock ? mockPlan(p) : await parse(PlanSchema, PLAN_RULES, input, 8000);
+  await store(planKey(p), "plan", planHash(p), plan);
+  return plan;
+}
+
+function mockPlan(p: PlanInput): StudyPlan {
+  const by = new Map<string, string[]>();
+  for (const m of p.mistakes) by.set(m.topic, [...(by.get(m.topic) ?? []), m.id]);
+  const groups = [...by.entries()].map(([service, ids]) => ({ service, ids })).sort((a, b) => b.ids.length - a.ids.length);
+  return {
+    summary: "Sample take: add ANTHROPIC_API_KEY to .env.local and Mia will sort your mistakes by AWS service and tell you what to focus on.",
+    focus: groups.slice(0, 3).map((g) => ({ service: g.service, why: "Sample focus line" })),
+    groups,
+  };
 }
 
 // ---------- Local development stand-ins (no API key) ----------

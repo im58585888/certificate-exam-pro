@@ -1,118 +1,130 @@
 import "server-only";
-import { COMPARE_PAIRS, servicesIn, type AwsService } from "./awsServices";
+import { servicesIn, type AwsService } from "./awsServices";
 import type { SheetTopic } from "./studysheet";
 
-// The study sheet's "Your gaps" panel: which AWS services to deep dive, which ones the learner mixes up, and the core
-// concepts behind their open mistakes. Built from the study sheet's own data (latest answer per question), no AI.
+// The study sheet's data: every open mistake (latest answer wrong) in a compact form, the learner's record per AWS
+// service, and a word-matching grouping by service that stands in until (or if) Mia's own grouping arrives.
 
-export interface ServiceGap {
+export interface GapMistake {
   id: string;
-  name: string;
-  /** Open mistakes where this service is (part of) the right answer, or the subject when the answer names none. */
-  missed: number;
-  /** Latest answers on questions about this service: right / total. */
-  right: number;
-  total: number;
-  sheet?: string;
-  doc?: { title: string; url: string };
-  topics: string[];
-}
-
-export interface MixUp {
-  picked: string;
-  answer: string;
-  count: number;
-  compare?: string;
-}
-
-export interface ConceptGap {
   topic: string;
-  missed: number;
-  concepts: string[];
+  question: string;
+  you: string;
+  answer: string;
+  remember: string;
+  doc?: { title: string; url: string };
+  /** Service for the word-matching fallback: the first one the scenario names, else the answer's, else the topic. */
+  fallback: string;
 }
 
-export interface GapReport {
-  services: ServiceGap[];
-  mixups: MixUp[];
-  concepts: ConceptGap[];
-  /** Open mistake ids, so a saved AI diagnosis can tell when it's out of date. */
-  mistakeIds: string[];
+export interface ServiceGroup {
+  service: string;
+  ids: string[];
 }
 
-const answerText = (opts: { text: string; correct: boolean }[]) => opts.filter((o) => o.correct).map((o) => o.text).join(" ");
-
-/** Services a question is about: the ones its right answer names, else the ones its scenario names. */
-function subjectOf(q: { stem: string; prompt: string; options: { text: string; correct: boolean }[] }): AwsService[] {
-  const inAnswer = servicesIn(answerText(q.options));
-  return inAnswer.length ? inAnswer : servicesIn(`${q.stem} ${q.prompt}`);
+export interface ServiceRecord {
+  name: string;
+  sheet?: string;
+  /** Questions about this service answered right (latest answer). */
+  right: number;
+  /** Ids answered wrong (latest answer). */
+  wrong: string[];
 }
 
-export function gapReport(topics: SheetTopic[]): GapReport {
-  const answered = new Map(topics.flatMap((t) => t.results));
-  const svc = new Map<string, ServiceGap>();
-  const touch = (s: AwsService) => {
-    const g = svc.get(s.id) ?? { id: s.id, name: s.name, missed: 0, right: 0, total: 0, sheet: s.sheet, topics: [] };
-    svc.set(s.id, g);
-    return g;
-  };
+export interface StudyData {
+  mistakes: GapMistake[];
+  /** Keyed by service name. */
+  records: Record<string, ServiceRecord>;
+  fallbackGroups: ServiceGroup[];
+}
 
-  // Accuracy per service over every question answered (latest answer).
+const short = (s: string, n: number) => (s.length > n ? `${s.slice(0, n - 1).trimEnd()}…` : s);
+const answerOf = (q: { options: { text: string; correct: boolean }[] }) => q.options.filter((o) => o.correct).map((o) => o.text).join(" ");
+
+/** Services a question is about, for the per-service record: the scenario's, plus the answer's. */
+function servicesOf(q: { stem: string; prompt: string; options: { text: string; correct: boolean }[] }): AwsService[] {
+  const all = [...servicesIn(`${q.stem} ${q.prompt}`), ...servicesIn(answerOf(q))];
+  return all.filter((s, i) => all.findIndex((x) => x.id === s.id) === i);
+}
+
+export function studyData(topics: SheetTopic[]): StudyData {
+  const records: Record<string, ServiceRecord> = {};
+  const mistakes: GapMistake[] = [];
   for (const t of topics) {
+    const results = new Map(t.results);
     for (const q of t.bank) {
-      const ok = answered.get(q.id);
+      const ok = results.get(q.id);
       if (ok === undefined) continue;
-      for (const s of subjectOf(q)) {
-        const g = touch(s);
-        g.total++;
-        if (ok) g.right++;
+      for (const s of servicesOf(q)) {
+        const r = (records[s.name] ??= { name: s.name, sheet: s.sheet, right: 0, wrong: [] });
+        if (ok) r.right++;
+        else r.wrong.push(q.id);
       }
     }
-  }
-
-  const mix = new Map<string, MixUp>();
-  const concepts: ConceptGap[] = [];
-  const mistakeIds: string[] = [];
-  for (const t of topics) {
-    if (!t.mistakes.length) continue;
     const byId = new Map(t.bank.map((q) => [q.id, q]));
-    const seen = new Set<string>();
-    const lines: string[] = [];
     for (const m of t.mistakes) {
-      mistakeIds.push(m.questionId);
       const q = byId.get(m.questionId);
-      for (const s of subjectOf(m)) {
-        const g = touch(s);
-        g.missed++;
-        if (!g.topics.includes(t.topic)) g.topics.push(t.topic);
-        const ref = q?.explanation.references[0];
-        if (!g.doc && ref) g.doc = ref;
-      }
-      // Mix-ups: the main service (first one named) in a wrong option the learner picked, versus the right answer's
-      // main service. Services both options name aren't the difference, so they're skipped.
-      const rightAll = m.options.filter((o) => o.correct).flatMap((o) => servicesIn(o.text));
-      const rightIds = new Set(rightAll.map((s) => s.id));
-      for (const o of m.options.filter((x) => x.picked && !x.correct)) {
-        const pickedAll = servicesIn(o.text);
-        const p = pickedAll.find((s) => !rightIds.has(s.id));
-        const a = rightAll.find((s) => !pickedAll.some((x) => x.id === s.id));
-        if (p && a) {
-          const key = `${p.id}>${a.id}`;
-          const x = mix.get(key) ?? { picked: p.name, answer: a.name, count: 0, compare: COMPARE_PAIRS.find((c) => c.ids.includes(p.id) && c.ids.includes(a.id))?.slug };
-          x.count++;
-          mix.set(key, x);
-        }
-      }
-      const c = q?.explanation.concept;
-      if (c && !seen.has(c)) { seen.add(c); lines.push(c); }
+      if (!q) continue;
+      const main = servicesIn(`${q.stem} ${q.prompt}`)[0] ?? servicesIn(answerOf(q))[0];
+      mistakes.push({
+        id: q.id,
+        topic: t.topic,
+        question: short(q.stem, 220),
+        you: m.options.filter((o) => o.picked).map((o) => o.text).join("; ") || "No answer",
+        answer: m.options.filter((o) => o.correct).map((o) => o.text).join("; "),
+        remember: q.explanation.examTip,
+        doc: q.explanation.references[0],
+        fallback: main?.name ?? t.topic,
+      });
     }
-    concepts.push({ topic: t.topic, missed: t.mistakes.length, concepts: lines.slice(0, 2) });
   }
-
+  const groups = new Map<string, string[]>();
+  for (const m of mistakes) groups.set(m.fallback, [...(groups.get(m.fallback) ?? []), m.id]);
   return {
-    services: [...svc.values()].filter((g) => g.missed > 0)
-      .sort((a, b) => b.missed - a.missed || a.right / a.total - b.right / b.total || a.name.localeCompare(b.name)).slice(0, 8),
-    mixups: [...mix.values()].sort((a, b) => b.count - a.count || a.picked.localeCompare(b.picked)).slice(0, 6),
-    concepts: concepts.sort((a, b) => b.missed - a.missed || a.topic.localeCompare(b.topic)).slice(0, 6),
-    mistakeIds: mistakeIds.sort(),
+    mistakes: mistakes.sort((a, b) => a.id.localeCompare(b.id)),
+    records,
+    fallbackGroups: [...groups.entries()].map(([service, ids]) => ({ service, ids }))
+      .sort((a, b) => b.ids.length - a.ids.length || a.service.localeCompare(b.service)),
+  };
+}
+
+/** Puts a service name Mia wrote into our canonical form when we know the service ("KMS" → "AWS KMS"). */
+export function canonicalService(name: string): string {
+  const found = servicesIn(name);
+  return found.length === 1 ? found[0].name : name.trim();
+}
+
+export interface ResolvedPlan {
+  summary: string;
+  focus: { service: string; why: string }[];
+  groups: ServiceGroup[];
+  /** True when Mia wrote it; false for the word-matching stand-in. */
+  byMia: boolean;
+}
+
+/**
+ * Checks Mia's grouping against the real mistakes: names in one canonical form (same-named groups merged), each
+ * mistake exactly once, unknown ids dropped, and any she missed put in their word-matching group.
+ */
+export function resolvePlan(plan: { summary: string; focus: { service: string; why: string }[]; groups: ServiceGroup[] } | null, data: StudyData): ResolvedPlan {
+  const valid = new Set(data.mistakes.map((m) => m.id));
+  const used = new Set<string>();
+  const groups = new Map<string, string[]>();
+  const add = (service: string, id: string) => {
+    if (!valid.has(id) || used.has(id)) return;
+    used.add(id);
+    groups.set(service, [...(groups.get(service) ?? []), id]);
+  };
+  for (const g of plan?.groups ?? []) for (const id of g.ids) add(canonicalService(g.service), id);
+  for (const m of data.mistakes) add(m.fallback, m.id);
+  const list = [...groups.entries()].map(([service, ids]) => ({ service, ids }))
+    .sort((a, b) => b.ids.length - a.ids.length || a.service.localeCompare(b.service));
+  const names = new Set(list.map((g) => g.service));
+  const focus = (plan?.focus ?? []).map((f) => ({ service: canonicalService(f.service), why: f.why })).filter((f) => names.has(f.service)).slice(0, 3);
+  return {
+    summary: plan?.summary ?? "",
+    focus: focus.length ? focus : list.slice(0, 3).map((g) => ({ service: g.service, why: "" })),
+    groups: list,
+    byMia: !!plan,
   };
 }

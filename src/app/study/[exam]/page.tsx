@@ -3,15 +3,16 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { upsellHref } from "@/lib/sheetAccess";
 import { MiaPose } from "@/components/Mia";
-import { StudySheet, type TopicView } from "@/components/StudySheet";
-import { aiAvailable, cachedCards } from "@/lib/ai";
+import { StudyByService } from "@/components/StudyByService";
+import { aiAvailable } from "@/lib/ai";
 import { currentOwner, getUser } from "@/lib/auth";
 import { getAccess, paymentsMode } from "@/lib/billing";
-import { DOMAIN_NAME, DOMAIN_SHORT, getExam } from "@/lib/exams";
+import { getExam } from "@/lib/exams";
 import { loadNotebook, type StudyItem } from "@/lib/notebook";
-import { ensureBank, questionsFor } from "@/lib/questions";
+import { ensureBank } from "@/lib/questions";
 import { studySheet } from "@/lib/studysheet";
-import { gapReport } from "@/lib/gaps";
+import { studyData } from "@/lib/gaps";
+import { planFrom } from "@/lib/studyplan";
 
 export const metadata: Metadata = { title: "Study sheet", robots: { index: false } };
 
@@ -45,56 +46,26 @@ export default async function StudySheetPage({ params, searchParams }: PageProps
   if (!access?.active) return <Locked exam={exam} practised={topics.length} access={user ? "no-pass" : "signed-out"} back={back} />;
 
   const notebook = await loadNotebook(user!.id, slug);
-  const bank = questionsFor(slug);
-  const domainOf = new Map(bank.map((q) => [q.topic, q.domain]));
-  const practised = new Map(topics.map((t) => [t.topic, t]));
-  // Exam topics on the sheet: practised ones, ones the learner added, pinned or saved something to.
-  const names = new Set([
-    ...topics.map((t) => t.topic),
-    ...[...notebook.prefs.values()].filter((p) => p.added || p.pinned || p.hidden).map((p) => p.topic),
-    ...notebook.items.filter((i) => i.topic && !i.section_id).map((i) => i.topic!),
-  ].filter((t) => domainOf.has(t)));
-  const cards = await cachedCards(slug, [...names].map((topic) => ({ topic, questions: bank.filter((q) => q.topic === topic) })));
+  const data = studyData(topics);
+  const plan = await planFrom(user!.id, exam, data);
 
-  const examTopics: TopicView[] = [...names].map((topic) => {
-    const p = practised.get(topic);
-    const pref = notebook.prefs.get(topic);
-    return {
-      key: `t:${topic}`, name: cards.get(topic)?.title ?? topic, topic, domain: domainOf.get(topic),
-      practised: !!p, seen: p?.seen ?? 0, missed: p?.missed ?? 0, accuracy: p ? p.accuracy : null,
-      pinned: !!pref?.pinned, hidden: !!pref?.hidden, card: cards.get(topic) ?? null,
-      items: notebook.items.filter((i) => i.topic === topic && !i.section_id).map(toItem),
-      mistakes: p?.mistakes ?? [],
-    };
-  });
-  // Practised topics keep the weakest-first order from studySheet; added ones follow.
-  const order = new Map(topics.map((t, i) => [t.topic, i]));
-  examTopics.sort((a, b) => (order.get(a.topic!) ?? 1e6) - (order.get(b.topic!) ?? 1e6) || a.name.localeCompare(b.name));
-  const ownTopics: TopicView[] = notebook.sections.map((s) => ({
-    key: `s:${s.id}`, name: s.name, sectionId: s.id, practised: false, seen: 0, missed: 0, accuracy: null,
-    pinned: false, hidden: false, card: null, items: notebook.items.filter((i) => i.section_id === s.id).map(toItem), mistakes: [],
-  }));
-
-  const allBankTopics = [...new Set(bank.map((q) => q.topic))];
-  const addable = allBankTopics.filter((t) => !names.has(t)).sort()
-    .map((topic) => ({ topic, domainName: exam.domains.find((d) => d.id === domainOf.get(topic))?.name ?? "" }));
-  const missed = topics.reduce((s, t) => s + t.missed, 0);
-  const saved = notebook.items.length;
+  // Notes are filed under an exam topic or one of the learner's own topics; "Move to…" lists both.
+  const examTopics = [...new Set([...topics.map((t) => t.topic), ...notebook.items.filter((i) => i.topic && !i.section_id).map((i) => i.topic!)])].sort();
+  const destinations = [
+    ...examTopics.map((t) => ({ value: `t:${t}`, label: t })),
+    ...notebook.sections.map((sec) => ({ value: `s:${sec.id}`, label: sec.name })),
+  ];
+  const notes = notebook.items.map((i) => ({ ...toItem(i), where: i.section_id ? `s:${i.section_id}` : `t:${i.topic ?? ""}` }));
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-10">
       {back && <BackBar href={back} />}
       <p className="eyebrow">{exam.code} · Study sheet</p>
       <h1 className="mt-2 text-3xl font-extrabold tracking-tight">Your study sheet</h1>
-      <p className="mt-2 max-w-2xl text-soft">
-        {names.size || ownTopics.length
-          ? `${names.size + ownTopics.length} topic${names.size + ownTopics.length === 1 ? "" : "s"}${missed ? `, ${missed} question${missed === 1 ? "" : "s"} to fix` : ""}${saved ? `, ${saved} saved note${saved === 1 ? "" : "s"}` : ""}. Open a topic for its summary, your notes and mistakes; the AI tutor follows the topic you open.`
-          : "Empty for now. Practise some questions and their topics appear here, or add a topic yourself."}
-      </p>
-      {!names.size && !ownTopics.length && <Link className="btn-primary mt-4" href={`/practice/${slug}`}>Start practising</Link>}
       <div className="mt-5">
-        <StudySheet exam={slug} examCode={exam.code} domains={exam.domains.map((d) => ({ id: d.id, name: DOMAIN_NAME[d.id] ?? d.name, short: DOMAIN_SHORT[d.id] ?? d.name }))}
-          topics={[...examTopics, ...ownTopics]} addable={addable} tutorOn={aiAvailable} gaps={gapReport(topics)} />
+        <StudyByService exam={slug} examCode={exam.code} mistakes={data.mistakes} records={data.records}
+          initialPlan={plan === "limit" ? { summary: "", focus: [], groups: data.fallbackGroups, byMia: false } : plan}
+          tutorOn={aiAvailable} notes={notes} destinations={destinations} />
       </div>
     </div>
   );
