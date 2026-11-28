@@ -29,6 +29,8 @@ export interface SheetTopic {
   firstSessionId: string;
   lastAt: Date;
   mistakes: Mistake[];
+  /** Latest answer per question practised in this topic: id → right. */
+  results: [string, boolean][];
 }
 
 interface Row {
@@ -69,6 +71,7 @@ export async function studySheet(owner: Owner, exam: string): Promise<SheetTopic
       domain: qs[0]?.domain ?? "",
       bank: qs,
       seen: t.latest.size,
+      results: [...t.latest.values()].map((r) => [r.question_id, r.correct] as [string, boolean]),
       missed: wrong.length,
       accuracy: t.rows.filter((r) => r.correct).length / t.rows.length,
       firstSessionId: t.rows[0].session_id,

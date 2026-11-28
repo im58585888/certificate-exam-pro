@@ -171,7 +171,7 @@ export function Composer({ value, onChange, onSend, busy, placeholder, className
 }
 
 /** A tutor conversation: renders replies (tables and diagrams included) and lets each reply be saved to the study sheet. */
-export function ChatThread({ heading, suggestions, placeholder, send, saveTarget, saveLabel, access, emptyHint }: {
+export function ChatThread({ heading, suggestions, placeholder, send, saveTarget, saveLabel, access, emptyHint, pending }: {
   heading?: string;
   suggestions: string[];
   placeholder: string;
@@ -182,6 +182,8 @@ export function ChatThread({ heading, suggestions, placeholder, send, saveTarget
   saveLabel?: string;
   access: SheetAccess;
   emptyHint?: ReactNode;
+  /** A question sent from elsewhere on the page (e.g. an "Ask Mia" button); a new `n` sends it. */
+  pending?: { text: string; n: number };
 }) {
   const [turns, setTurns] = useState<Turn[]>([]);
   const [draft, setDraft] = useState("");
@@ -202,6 +204,14 @@ export function ChatThread({ heading, suggestions, placeholder, send, saveTarget
       setError((e as Error).message);
     } finally { setBusy(false); }
   };
+
+  const sent = useRef(0);
+  useEffect(() => {
+    if (!pending || pending.n === sent.current) return;
+    sent.current = pending.n;
+    void ask(pending.text);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- send only when a new question arrives
+  }, [pending]);
 
   return (
     <div>

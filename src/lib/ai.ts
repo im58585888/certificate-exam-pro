@@ -378,6 +378,40 @@ export async function writeCoach(r: SessionReview): Promise<CoachNote> {
   return note;
 }
 
+// ---------- Study sheet diagnosis ("Your gaps") ----------
+
+export interface GapInput {
+  ownerKey: string;
+  exam: string;
+  examName: string;
+  mistakeIds: string[];
+  services: string[];
+  mixups: string[];
+  concepts: string[];
+}
+
+const GAPS_RULES = `The learner opened their study sheet. Below is what their open mistakes show: the AWS services involved, services they mix up, and the core concepts they missed. Diagnose the pattern like a tutor: in "summary", 2-3 sentences naming the specific services and the underlying misunderstanding that links several mistakes (for example confusing push and pull messaging, or not knowing when a managed option beats a self-built one). In "tips", 2-3 concrete study steps in priority order, each one sentence (what to compare, which rule to learn, which kind of question to practise). Speak to them as "you". No markdown.`;
+
+const gapsHash = (g: GapInput) => sha256(JSON.stringify([PROMPT_VERSION, g.mistakeIds])).slice(0, 16);
+
+export async function cachedGaps(g: GapInput): Promise<CoachNote | null> {
+  return cached<CoachNote>(`gaps:${g.ownerKey}:${g.exam}`, "gaps", gapsHash(g));
+}
+
+export async function writeGaps(g: GapInput): Promise<CoachNote> {
+  const input = [
+    `Exam: ${g.examName}. Open mistakes: ${g.mistakeIds.length}.`,
+    `Services in the missed questions (most missed first): ${g.services.join("; ") || "none named"}`,
+    `Services they picked instead of the right one: ${g.mixups.join("; ") || "none"}`,
+    `Core concepts behind the missed questions:\n${g.concepts.map((c) => `- ${c}`).join("\n")}`,
+  ].join("\n");
+  const note = mock
+    ? { summary: "Sample diagnosis: add ANTHROPIC_API_KEY to .env.local to get Mia's real read on your gaps.", tips: ["A first study step.", "A second study step."] }
+    : await parse(CoachSchema, GAPS_RULES, input, 2000);
+  await store(`gaps:${g.ownerKey}:${g.exam}`, "gaps", gapsHash(g), note);
+  return note;
+}
+
 // ---------- Local development stand-ins (no API key) ----------
 
 const MOCK_TEXT = `## What it's really asking

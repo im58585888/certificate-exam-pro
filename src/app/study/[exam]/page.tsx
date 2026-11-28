@@ -11,6 +11,7 @@ import { DOMAIN_NAME, DOMAIN_SHORT, getExam } from "@/lib/exams";
 import { loadNotebook, type StudyItem } from "@/lib/notebook";
 import { ensureBank, questionsFor } from "@/lib/questions";
 import { studySheet } from "@/lib/studysheet";
+import { gapReport } from "@/lib/gaps";
 
 export const metadata: Metadata = { title: "Study sheet", robots: { index: false } };
 
@@ -93,7 +94,7 @@ export default async function StudySheetPage({ params, searchParams }: PageProps
       {!names.size && !ownTopics.length && <Link className="btn-primary mt-4" href={`/practice/${slug}`}>Start practising</Link>}
       <div className="mt-5">
         <StudySheet exam={slug} examCode={exam.code} domains={exam.domains.map((d) => ({ id: d.id, name: DOMAIN_NAME[d.id] ?? d.name, short: DOMAIN_SHORT[d.id] ?? d.name }))}
-          topics={[...examTopics, ...ownTopics]} addable={addable} tutorOn={aiAvailable} />
+          topics={[...examTopics, ...ownTopics]} addable={addable} tutorOn={aiAvailable} gaps={gapReport(topics)} />
       </div>
     </div>
   );
@@ -101,7 +102,7 @@ export default async function StudySheetPage({ params, searchParams }: PageProps
 
 function Locked({ exam, practised, access, back }: { exam: NonNullable<ReturnType<typeof getExam>>; practised: number; access: "no-pass" | "signed-out"; back: string | null }) {
   const features = [
-    ["🎯", "Study these next", "Your weakest topics, picked for you every time you open it."],
+    ["🎯", "Your gaps, diagnosed", "The AWS services to deep dive, the ones you mix up, and the concepts you keep missing, with Mia's read on the pattern."],
     ["📌", "Save from the AI tutor", "Keep explanations, tables and diagrams from any practice question."],
     ["📝", "Your own notes and topics", "Write notes in your own words, add topics, hide what you've mastered."],
     ["✨", "Ask Mia anything", "Your AI tutor compares services, draws how things connect, or quizzes you, and you save the answers."],

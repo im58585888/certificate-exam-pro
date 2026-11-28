@@ -1,5 +1,7 @@
 "use client";
 
+import { GapsPanel } from "./GapsPanel";
+import type { GapReport } from "@/lib/gaps";
 import Link from "next/link";
 import { Fragment, useState, useTransition, type ReactNode } from "react";
 import {
@@ -87,7 +89,7 @@ const FILTERS: [string, string][] = [["fix", "To fix"], ["shaky", "Shaky"], ["so
 
 const notesLabel = (n: number) => (n ? `${n} note${n === 1 ? "" : "s"}` : "");
 
-export function StudySheet({ exam, examCode, domains, topics, addable, tutorOn }: {
+export function StudySheet({ exam, examCode, domains, topics, addable, tutorOn, gaps }: {
   exam: string;
   examCode: string;
   domains: { id: string; name: string; short: string }[];
@@ -95,6 +97,7 @@ export function StudySheet({ exam, examCode, domains, topics, addable, tutorOn }
   /** Exam topics that aren't on the sheet yet. */
   addable: { topic: string; domainName: string }[];
   tutorOn: boolean;
+  gaps?: GapReport;
 }) {
   const visible = topics.filter((t) => !t.hidden);
   const hidden = topics.filter((t) => t.hidden);
@@ -112,6 +115,8 @@ export function StudySheet({ exam, examCode, domains, topics, addable, tutorOn }
   const [showHidden, setShowHidden] = useState(false);
   const [adding, setAdding] = useState(false);
   const [tutorOpen, setTutorOpen] = useState(false); // phones only; the tutor is always shown on wide screens
+  const [pending, setPending] = useState<{ text: string; n: number } | undefined>();
+  const askMia = (text: string) => { setPending((p) => ({ text, n: (p?.n ?? 0) + 1 })); setTutorOpen(true); };
 
   const destinations = visible.map((t) => ({ value: t.sectionId ? `s:${t.sectionId}` : `t:${t.topic}`, label: t.name }));
   const focus = topics.find((t) => t.key === open) ?? null;
@@ -144,6 +149,15 @@ export function StudySheet({ exam, examCode, domains, topics, addable, tutorOn }
   return (
     <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_380px]">
       <div className="min-w-0">
+        {gaps && (
+          <GapsPanel exam={exam} examCode={examCode} gaps={gaps} tutorOn={tutorOn} onAsk={askMia}
+            onOpenTopic={(topic) => {
+              const t = topics.find((x) => x.topic === topic);
+              if (!t) return;
+              setFilter("all"); setDomain(null); setSearch(""); setOpen(t.key);
+              setTimeout(() => document.getElementById(`topic-${t.key}`)?.scrollIntoView({ behavior: "smooth", block: "start" }), 50);
+            }} />
+        )}
         <div className="flex flex-wrap gap-2">
           <button className={adding ? "btn-primary" : "btn-ghost"} onClick={() => setAdding(!adding)}>+ Add topic</button>
           <Link className="btn-ghost" href={`/study/${exam}/cheatsheet`}>Cheat sheet</Link>
@@ -203,7 +217,7 @@ export function StudySheet({ exam, examCode, domains, topics, addable, tutorOn }
         )}
       </div>
 
-      {tutorOn && <TutorPanel exam={exam} examCode={examCode} focus={focus} destinations={destinations} open={tutorOpen} setOpen={setTutorOpen} onClearFocus={() => setOpen(null)} />}
+      {tutorOn && <TutorPanel exam={exam} examCode={examCode} focus={focus} destinations={destinations} open={tutorOpen} setOpen={setTutorOpen} onClearFocus={() => setOpen(null)} pending={pending} />}
     </div>
   );
 }
@@ -283,9 +297,9 @@ function TopicDetail({ t, exam, tab, setTab, destinations, onAsk }: {
 }
 
 /** The study tutor: docked on the right and kept in view on wide screens, a bottom sheet behind a button on phones. */
-function TutorPanel({ exam, examCode, focus, destinations, open, setOpen, onClearFocus }: {
+function TutorPanel({ exam, examCode, focus, destinations, open, setOpen, onClearFocus, pending }: {
   exam: string; examCode: string; focus: TopicView | null; destinations: { value: string; label: string }[];
-  open: boolean; setOpen: (v: boolean) => void; onClearFocus: () => void;
+  open: boolean; setOpen: (v: boolean) => void; onClearFocus: () => void; pending?: { text: string; n: number };
 }) {
   const suggestions = focus
     ? [`Explain ${focus.name} simply`, `Quiz me on ${focus.name}`, "Show it as a table or diagram"]
@@ -304,7 +318,7 @@ function TutorPanel({ exam, examCode, focus, destinations, open, setOpen, onClea
           {focus ? <>Focused on <b className="text-ink">{focus.name}</b> · <button className="font-bold text-brand" onClick={onClearFocus}>Any topic</button></> : <>Ask about anything in {examCode}, or open a topic to focus on it.</>}
         </p>
         <div className="mt-2">
-          <ChatThread access="ok" suggestions={suggestions}
+          <ChatThread access="ok" suggestions={suggestions} pending={pending}
             emptyHint={
               <div className="mt-2 flex items-end gap-2">
                 <MiaPose pose="welcoming" height={104} className="-ml-2" />
