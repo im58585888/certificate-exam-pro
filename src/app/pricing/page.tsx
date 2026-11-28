@@ -25,7 +25,7 @@ const PAID = [
   "Save any session and finish later; a mock exam's clock pauses while you're away",
   "Unseen questions first, so scores reflect understanding, not memory",
   "Analytics: estimated readiness, domain mastery, accuracy trend, pace",
-  "Personal study sheet with your notes, and Mia, your AI tutor, beside it",
+  "Interactive study sheet: a heat map of your gaps by AWS service, with Mia's focus list and your notes",
 ];
 
 const fmt = (d: Date) => d.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });

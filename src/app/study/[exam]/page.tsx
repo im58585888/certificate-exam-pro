@@ -73,7 +73,7 @@ export default async function StudySheetPage({ params, searchParams }: PageProps
 
 function Locked({ exam, practised, access, back }: { exam: NonNullable<ReturnType<typeof getExam>>; practised: number; access: "no-pass" | "signed-out"; back: string | null }) {
   const features = [
-    ["🎯", "Your gaps, diagnosed", "The AWS services to deep dive, the ones you mix up, and the concepts you keep missing, with Mia's read on the pattern."],
+    ["🗺️", "A heat map of your gaps", "Every AWS service you've missed questions on, sized by how much there is to fix, with Mia's top three to fix first."],
     ["📌", "Save from the AI tutor", "Keep explanations, tables and diagrams from any practice question."],
     ["📝", "Your own notes and topics", "Write notes in your own words, add topics, hide what you've mastered."],
     ["✨", "Ask Mia anything", "Your AI tutor compares services, draws how things connect, or quizzes you, and you save the answers."],

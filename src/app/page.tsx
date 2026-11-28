@@ -5,7 +5,8 @@ import { EXAM_LIST, FREE_TRIAL_QUESTIONS, PASS_DAYS, PASS_PRICE_CENTS } from "@/
 import { ensureBank, questionsFor } from "@/lib/questions";
 import { TrialPicker } from "@/components/LandingDemos";
 import { HeroMiaDemo } from "@/components/HeroMiaDemo";
-import { HeroMia, MemoryFlow, Mia, MiaSpotlight } from "@/components/TutorVisuals";
+import { HeroMia, Mia, MiaSpotlight } from "@/components/TutorVisuals";
+import { StudyMapShowcase } from "@/components/StudyMapShowcase";
 import { MiaStory } from "@/components/MiaStory";
 import styles from "./landing.module.css";
 import { JsonLd } from "@/components/JsonLd";
@@ -23,7 +24,7 @@ const FAQ: [string, string][] = [
   ["What does the AI tutor do?", "Mia breaks each question down, draws the AWS architecture in the scenario, explains the services in depth and answers your follow-up questions. After each session she reads your results and tells you which topics to study next."],
   ["Does it give away the answer?", "No. Before you answer, it explains the question but leaves the choice to you. The answer walk-through unlocks after."],
   ["Can I use it during a mock exam?", "Mock exams stay realistic, so the tutor switches on after you submit."],
-  ["What is the study sheet?", "Every session adds to it: your weakest topics first, the questions you missed, and a printable cheat sheet."],
+  ["What is the study sheet?", "An interactive heat map of every AWS service you've missed questions on: tile size shows how much there is to fix, color shows how often you get it right. Mia marks the three services to focus on next, and tapping a tile shows each question, your answer and the rule to remember."],
   ["What can I try for free?", `${FREE_TRIAL_QUESTIONS} questions per exam, AI tutor included. No account or card needed.`],
   ["Are these real AWS exam questions?", "No. They're original questions that follow the official AWS exam guides. We're not affiliated with AWS."],
   ["Are the questions up to date?", "We check every question against AWS's service lifecycle notices. When AWS retires, renames or closes a service a question mentions, the explanation says so with the date and source, and every change is listed on our What changed page."],
@@ -35,6 +36,7 @@ const PROOF: [string, string][] = [
   ["Unseen questions first", "Practice serves questions you haven't seen, so your score measures understanding, not memory."],
   ["Retry only your mistakes", "Missed and flagged questions come back on their own, answered fresh, until you've got them."],
   ["See the architecture", "Every explanation comes with a diagram of the real AWS setup in the scenario, so you see how the services fit together instead of memorizing names."],
+  ["Your gaps on a heat map", "The study sheet maps every miss by AWS service, so you see at a glance where your points are, and Mia tells you what to fix first."],
   ["Ask Mia why", "Disagree with an answer? Mia explains any option simply or technically, right away."],
   ["Timed mock exams", "65 questions with the real time limit, weighted like the real exam, then a full scored review of every option."],
   ["Pause anytime", "Save and finish later, even mid mock exam. One pass works on laptop, phone and tablet. No ads."],
@@ -98,9 +100,10 @@ export default async function Home() {
       </section>
 
       <section className={`${styles.visualSection} ${styles.memorySection}`} aria-labelledby="library-title">
-        <p className={styles.eyebrow}>It remembers, too</p>
-        <h2 id="library-title">Every mistake becomes<br /><span>your study sheet.</span></h2>
-        <MemoryFlow />
+        <p className={styles.eyebrow}>Your interactive study sheet</p>
+        <h2 id="library-title">See exactly where<br /><span>your points are.</span></h2>
+        <p className="mx-auto -mt-6 mb-8 max-w-2xl text-soft">Every question you miss lands on a heat map of AWS services: bigger tiles mean more to fix, red means you keep getting it wrong. Mia reads it after every session and tells you the three services to fix first.</p>
+        <StudyMapShowcase />
       </section>
 
       <section id="exams" className={styles.exams} aria-labelledby="exams-title">

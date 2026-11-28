@@ -70,6 +70,23 @@
 .diveRow u { margin-left: auto; text-decoration: none; color: var(--brand); font-weight: 800; font-size: 12px; }
 .tip { padding: 8px 12px; border-radius: 10px; background: var(--warn-soft); color: var(--warn); font-size: 12.5px; font-weight: 700; opacity: 0; animation: rise .4s 2.3s ease-out forwards; }
 
+.heat { display: grid; gap: 8px; max-width: 420px; padding: 14px; border-radius: 18px; background: var(--bg); border: 1px solid var(--line); box-shadow: 0 18px 40px -28px rgba(40, 30, 80, .55); }
+.heatGrid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); grid-auto-rows: 38px; gap: 5px; }
+.heatTile { position: relative; display: flex; flex-direction: column; justify-content: space-between; overflow: hidden; padding: 5px 7px; border-radius: 9px; opacity: 0; animation: pop .45s cubic-bezier(.2, 1.4, .4, 1) forwards; }
+.heatTile b { font-size: 11.5px; font-weight: 800; line-height: 1.1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.heatTile small { font-size: 10px; font-weight: 600; opacity: .85; }
+.heatTile em { position: absolute; top: 4px; right: 4px; display: grid; place-items: center; width: 17px; height: 17px; border-radius: 50%; background: var(--brand); color: var(--on-brand); font-size: 9.5px; font-style: normal; font-weight: 800; }
+.heatGrid { grid-auto-flow: dense; }
+.heatTile:nth-child(1) { grid-column: 1 / span 3; grid-row: 1 / span 3; }
+.heatTile:nth-child(2) { grid-column: 4 / span 3; grid-row: 1 / span 2; }
+.heatTile:nth-child(3) { grid-column: 4 / span 2; grid-row: 3; }
+.heatTile:nth-child(4) { grid-column: 6; grid-row: 3; }
+.heatTile:nth-child(5), .heatTile:nth-child(6), .heatTile:nth-child(7) { grid-column: span 2; grid-row: 4; }
+.heatTile:nth-child(8), .heatTile:nth-child(9) { grid-column: span 3; grid-row: 5; }
+.t0 { background: #ebb9c4; color: #6f1c31; }
+.t1 { background: #f4d6dc; color: #8f2c45; }
+.t2 { background: #f6e4c0; color: #6a4b10; }
+.t3 { background: #d8ece1; color: #1d5c46; }
 .sheet { display: grid; gap: 8px; max-width: 380px; padding: 16px; border-radius: 18px; background: var(--bg); border: 1px solid var(--line); box-shadow: 0 18px 40px -28px rgba(40, 30, 80, .55); }
 .sheetRow { display: grid; grid-template-columns: 120px 1fr; align-items: center; gap: 10px; font-size: 12.5px; opacity: 0; animation: rise .4s ease-out forwards; }
 .sheetRow i { height: 7px; border-radius: 4px; background: var(--brand); transform-origin: left; transform: scaleX(0); animation: grow .6s ease-out forwards; }

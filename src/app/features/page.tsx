@@ -25,7 +25,7 @@ const GROUPS: { id: string; eyebrow: string; title: string; items: [string, stri
       ["Ask why your answer is wrong", "After you answer, ask anything: why your choice fails, what the question is testing, or for a real-world example. No forum posts, no waiting for staff."],
       ["Your explanation style", "One tap for a simple explanation, a technical one with the exact settings and permissions, a diagram, or a similar question to try."],
       ["Mia reads your results", "After every session Mia reviews what you missed, recommends the topics to deep dive with cheat sheets and AWS docs to read, and gives a few tips to raise your score."],
-      ["Visual study sheet", "Every topic you practise becomes a lesson: what it is, why it's useful, and an architecture diagram with each connection explained step by step."],
+      ["An interactive study sheet", "A heat map of every AWS service you've missed questions on: bigger tiles mean more to fix, red means you keep getting it wrong. Mia marks the three services to fix first, and each tile opens the questions, your answers and the rule to remember."],
     ],
   },
   {

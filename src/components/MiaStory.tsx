@@ -15,7 +15,7 @@ const SCENES: { title: string; caption: string; say: string; pose: Pose; art: ()
   { title: "Mia breaks it down", caption: "Stuck on a term or the question itself? She shows what it's really testing.", say: "See these words? They're the whole question.", pose: "thinking", art: ArtBreakdown },
   { title: "She draws the architecture", caption: "See how the AWS services connect, step by step, with the answer in place.", say: "Here's how it fits together.", pose: "friendly", art: ArtDiagram },
   { title: "Mia reads your results", caption: "After each session: the topics to deep dive and a few tips to raise your score.", say: "Two topics to deep dive, then you're close.", pose: "reviewing", art: ArtResults },
-  { title: "Your study sheet grows", caption: "Every gap lands on one sheet. Ask Mia to explain any topic further.", say: "Ask me anything on your sheet.", pose: "welcoming", art: ArtSheet },
+  { title: "See where your points are", caption: "Your study sheet maps every miss by AWS service. Mia marks what to fix first.", say: "Start with S3. That's your biggest win.", pose: "welcoming", art: ArtSheet },
 ];
 
 const SCENE_MS = 5200;
@@ -144,14 +144,19 @@ function ArtResults() {
 }
 
 function ArtSheet() {
+  const tiles: [string, string, string, number?][] = [
+    ["Amazon S3", "7 to fix", "t0", 1], ["VPC", "6 to fix", "t1", 2], ["DynamoDB", "5", "t0", 3], ["KMS", "3", "t1"], ["EBS", "3", "t0"], ["RDS", "3", "t2"], ["IAM", "2", "t3"], ["Lambda", "2", "t2"], ["SQS", "2", "t3"],
+  ];
   return (
-    <div className={s.sheet}>
-      <p className={s.diveTitle}>Your study sheet</p>
-      {["VPC endpoints", "S3 replication", "IAM policies"].map((t, i) => (
-        <span key={t} className={s.sheetRow} style={{ animationDelay: `${0.3 + i * 0.3}s` }}><b>{t}</b><i style={{ width: `${[35, 60, 90][i]}%`, animationDelay: `${0.6 + i * 0.3}s` }} /></span>
-      ))}
-      <span className={s.ask}>Explain VPC endpoints simply</span>
-      <span className={s.reply}>Think of it as a private door from your VPC straight to S3…</span>
+    <div className={s.heat}>
+      <p className={s.diveTitle}>Where your points are</p>
+      <div className={s.heatGrid}>
+        {tiles.map(([n, k, tone, f], i) => (
+          <span key={n} className={`${s.heatTile} ${s[tone]}`} style={{ animationDelay: `${0.25 + i * 0.12}s` }}>
+            <b>{n}</b><small>{k}</small>{f && <em>{f}</em>}
+          </span>
+        ))}
+      </div>
     </div>
   );
 }
